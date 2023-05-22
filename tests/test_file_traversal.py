@@ -1,5 +1,6 @@
 import pytest
-from tree_plus import traverse_directory
+
+from src import traverse_directory
 
 
 def test_valid_directory():
