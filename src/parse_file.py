@@ -1,4 +1,4 @@
-# file_parsing.py
+# src/parse_file.py
 
 import os
 
@@ -7,6 +7,9 @@ def parse_file(file_path):
     """
     Parse a file and return a list of its major components.
     Only supports Python, JavaScript, and Markdown files.
+        - Python components: class, method, function, type
+        - JavaScript/TypeScript components: class, function
+        - Markdown components: heading, subheading
     """
     file_extension = os.path.splitext(file_path)[-1].lower()
 

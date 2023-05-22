@@ -1,4 +1,4 @@
-# file_traversal.py
+# src/traverse_directory.py
 
 import os
 

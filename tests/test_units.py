@@ -1,3 +1,4 @@
+# tests/test_units.py
 import pytest
 
 from src import traverse_directory
@@ -7,7 +8,7 @@ from src import parse_file
 
 # test traversal
 def test_valid_directory():
-    result = traverse_directory("/path_to_test/directory")
+    result = traverse_directory("path_to_test")
     assert isinstance(result, list)
 
 
