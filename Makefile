@@ -2,7 +2,7 @@ init:
 	conda activate py310
 
 test:
-	pytest tests/
+	pytest tests/ -vv
 
 run:
 	python3 -m tree_plus.cli
