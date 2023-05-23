@@ -1,6 +1,7 @@
 # src/cli.py
 import os
-import io
+import re
+
 
 from rich.console import Console
 from rich import print as rprint
@@ -22,7 +23,20 @@ def main(directories):
         rprint(tree)
 
 
-def tree_plus(directory):
+def tree_plus(directory: str) -> Tree:
+    # If the directory argument is a comma-separated string of multiple directories,
+    # recursively call tree_plus on each directory and return a combined tree.
+    if "," in directory:
+        directories = directory.split(",")
+        combined_tree = Tree(
+            "Multiple Directories:", guide_style="bold cyan", highlight=True
+        )
+        for dir in directories:
+            dir_tree = tree_plus(
+                dir.strip()
+            )  # strip to remove any leading/trailing whitespaces
+            combined_tree.add(dir_tree)
+        return combined_tree
     root_tree = Tree(
         f"{directory} ({0} tokens, {0} lines)", guide_style="bold cyan", highlight=True
     )
@@ -65,9 +79,12 @@ def tree_plus(directory):
 
 
 def tree_to_string(tree: Tree) -> str:
-    console = Console(file=io.StringIO(), force_terminal=True)
-    console.print(tree)
-    return console.file.getvalue()
+    console = Console(force_terminal=True, no_color=True)
+    with console.capture() as capture:
+        console.print(tree)
+    captured_str = capture.get()
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+    return ansi_escape.sub("", captured_str)
 
 
 if __name__ == "__main__":

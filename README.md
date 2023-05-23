@@ -19,42 +19,28 @@
 
 # 1. Discuss the Problem, Users, and Ethical Considerations
 
-### Problem: 
-
-Current tools for displaying directory and file hierarchies (like the tree command in Linux) do not offer a detailed look into the content of files specifically related to popular programming and markup languages like Python, JavaScript, and Markdown. There's also no easy way to convey a software project's architecture to language model (LLM) systems, such as GPT-3 by OpenAI, at a high level.
-
-### Users: 
-
-Your users will be software developers, software architects, or any individuals who need to get an overview of the structure and content of their projects. This will also include those who need to understand the number of OpenAI tokens in each file, which would be particularly relevant for developers using LLMs.
-
-### Ethical Considerations: 
-The tool should provide clear, accurate, and meaningful information, supporting user empowerment and aiding in efficient utilization of LLMs. There should be safeguards against possible misuse, such as respecting directory or file read permissions to avoid exposing sensitive information.
-
-# 2. Create and Refine the High-Level Design
-
-## Initial Design Document**
-
 ### Problem:
-Extend the Linux `tree` command to provide a deeper look into the contents of Python, JavaScript, Markdown files, and more. It should display software project architecture, major components in the output, and display the number of lines of code and number of OpenAI tokens within each directory and file.
+Extend Linux `tree` util to provide a deeper look into contents of Python, JavaScript, Markdown files, and more. It should display software project architecture, major components in the output, and display the number of lines of code and number of OpenAI tokens within each directory and file.
 
 ### Goals:
 - Extend the capabilities of the existing `tree` command.
 - Parse Python, JavaScript, and Markdown files to identify and display major components.
-- Calculate and display the number of lines of code in each file and directory.
-- Calculate and display the number of OpenAI tokens in each file and directory.
+- Calculate and display the number of OpenAI tokens and lines of code in each file and directory.
 
 ### Components:
-1. **File Traversal Module:** Responsible for traversing through directories and files in a specified location. This will form the base operation similar to the `tree` command.
+1. **`traverse_directory` Module:** Responsible for traversing through directories and files in a specified location. This will form the base operation similar to the `tree` command.
 
-2. **File Parsing Module:** Responsible for parsing Python, JavaScript, and Markdown files. It will identify major components in these files.
+2. **`parse_file` Module:** Responsible for parsing Python, JavaScript, and Markdown files. It will identify major components in these files.
 
-3. **Token Counting Module:** Responsible for counting the number of lines and OpenAI tokens in each file and directory.
+3. **`count_tokens_lines` Module:** Responsible for counting the number of lines and OpenAI tokens in each file and directory.
+
+3. **`cli` Module:** Responsible for the `click` cli and the `tree_plus` function it invokes to build a `rich.tree.Tree`, and print the tree.
 
 ### Data Flow:
-- The user provides one or more directory as input.
-- The File Traversal Module traverses the directories and identifies files and subdirectories.
-- For each identified Python, JavaScript, or Markdown file, the File Parsing Module identifies major components and the Token Counting Module counts the lines of code and OpenAI tokens.
-- The output is then organized and displayed to the user.
+- The user provides one or more directories as input.
+- `traverse_directory` traverses directories and identifies subdirectories and files.
+- For each identified Python, JavaScript, or Markdown file, `parse_file` identifies major components and  `count_tokens_lines`  counts the lines of code and OpenAI tokens.
+- The output is organized and displayed to the user by `cli`.
 
 ### Potential Refinements Based on Feedback:
 This design assumes that the primary goal is to parse specific file types and calculate specific metrics. Feedback might suggest that the tool should be extensible to support more languages, include more metrics, or provide filtering capabilities. Adjustments to the design would be made accordingly.
@@ -86,5 +72,3 @@ To ensure illegal states are unrepresentable, we'll validate input paths, handle
 3. **End-to-End Tests**: These tests will be written to ensure that the entire system works from the user's perspective. They will simulate real user scenarios, such as passing in multiple directories at once.
 
 4. **Performance Tests**: We will also test how the tool performs with large directory structures to ensure it remains performant and doesn't consume excessive resources.
-
-Next, we can move onto writing the code and continuously integrating it with the existing codebase.
