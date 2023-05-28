@@ -1,8 +1,8 @@
 # tests/test_e2e.py
-import pytest
+import pytest  # noqa: F401
 import rich
 
-from src import tree_plus, tree_to_string
+from src.cli import tree_plus, tree_to_string
 
 test_directory = "tests/path_to_test"
 
@@ -38,6 +38,7 @@ def test_e2e_single_directory():
     assert tree_to_string(result) == EXPECTATION_1
 
 
+# Test multiple directories
 EXPECTATION_2 = """Multiple Directories:
 ┣━━ tests/path_to_test (153 tokens, 38 lines)
 ┃   ┗━━ 📁 path_to_test (153 tokens, 38 lines)
@@ -91,3 +92,20 @@ def test_e2e_multiple_directories():
     result_str = tree_to_string(result)
     print(result_str)
     assert result_str == EXPECTATION_2
+
+
+# Test ignore parameter
+def test_e2e_ignore_parameter_filetype():
+    result = tree_plus("tests/more_languages/group1", ignore={"*.kt"})
+    assert isinstance(result, rich.tree.Tree)
+    result_str = tree_to_string(result)
+    print(result_str)
+    assert ".kt" not in result_str
+
+
+def test_e2e_ignore_parameter_directory():
+    result = tree_plus("tests/more_languages", ignore={"group2"})
+    assert isinstance(result, rich.tree.Tree)
+    result_str = tree_to_string(result)
+    print(result_str)
+    assert "group2" not in result_str

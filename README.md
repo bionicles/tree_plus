@@ -1,5 +1,44 @@
 # Tree Plus
 
+A simple CLI tool for developers to show a `tree` enhanced with token counts, line counts, and source code components. 
+
+## Usage:
+```sh
+(py310) bion@WIN-QVRBL09D89C:~/hax/tree_plus$ python -m src.cli ./src
+./src (4761 tokens, 613 lines)
+┗━━ 📁 src (4761 tokens, 613 lines)
+    ┣━━ 📄 __init__.py (51 tokens, 8 lines)
+    ┣━━ 📄 count_tokens_lines.py (327 tokens, 48 lines)
+    ┃   ┣━━ class TokenLineCount
+    ┃   ┣━━ def count_tokens_lines
+    ┃   ┗━━ def count_directory_tokens_lines
+    ┣━━ 📄 cli.py (882 tokens, 108 lines)
+    ┃   ┣━━ def main
+    ┃   ┣━━ def tree_plus
+    ┃   ┗━━ def tree_to_string
+    ┣━━ 📄 traverse_directory.py (254 tokens, 35 lines)
+    ┃   ┗━━ def traverse_directory
+    ┗━━ 📄 parse_file.py (3247 tokens, 414 lines)
+        ┣━━ def parse_file
+        ┣━━ def extract_nodes
+        ┣━━ def is_typing_construct
+        ┣━━ def is_builtin_type
+        ┣━━ def parse_py
+        ┣━━ def parse_cobol
+        ┣━━ def parse_java
+        ┣━━ def parse_julia
+        ┣━━ def parse_kotlin
+        ┣━━ def parse_lisp
+        ┣━━ def parse_lua
+        ┣━━ def parse_objective_c
+        ┣━━ def parse_ocaml
+        ┣━━ def parse_apl
+        ┣━━ def parse_matlab
+        ┣━━ def parse_js
+        ┣━━ def parse_md
+        ┗━━ def parse_todo
+```
+
 # Software Engineering Prompt(s) (SWE)
 - [x] **1. Discuss the Problem, Users, and Ethical Considerations**
   - "AI, let's define the problem we're solving, identify our users, and address any ethical implications of our solution."
@@ -72,3 +111,6 @@ To ensure illegal states are unrepresentable, we'll validate input paths, handle
 3. **End-to-End Tests**: These tests will be written to ensure that the entire system works from the user's perspective. They will simulate real user scenarios, such as passing in multiple directories at once.
 
 4. **Performance Tests**: We will also test how the tool performs with large directory structures to ensure it remains performant and doesn't consume excessive resources.
+
+# Distribution
+To distribute your package on PyPI, you'll need to create a PyPI account, then create a source distribution and/or a wheel distribution, then upload your distributions with twine.

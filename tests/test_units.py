@@ -4,6 +4,7 @@ import pytest
 from src import (
     traverse_directory,
     parse_file,
+    parse_todo,
     TokenLineCount,
     count_tokens_lines,
     count_directory_tokens_lines,
@@ -53,6 +54,14 @@ def test_file_parsing(file, expected):
     print(f"{result=}")
     print(f"{expected=}")
     assert result == expected
+
+
+def test_parse_todo():
+    content = open("tests/more_languages/group4/rust_test.rs", "r").read()
+    result = parse_todo(content)
+    assert result == [
+        "TODO (Line 23): This todo tests parse_todo",
+    ]
 
 
 # test counting

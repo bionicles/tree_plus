@@ -1,0 +1,21 @@
+(* mathematica_test.nb *)
+
+(* Define a custom type (as much as Mathematica supports this concept) *)
+person[name_] := <|"Name" -> name|>
+
+(* Define a Module *)
+BeginPackage["TestModule`"]
+
+sayHello::usage = "sayHello[] prints a hello world message"
+
+Begin["`Private`"] (* Begin Private Context *) 
+
+sayHello[] := Print["Hello, World!"]
+
+(* Define a function to sum a list *)
+sumList::usage = "sumList[list] returns the sum of the elements in the list"
+sumList[list_List] := Total[list]
+
+End[] (* End Private Context *)
+
+EndPackage[]

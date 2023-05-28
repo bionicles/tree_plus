@@ -1,7 +1,7 @@
 # src/cli.py
+from typing import Optional, Union
 import os
 import re
-
 
 from rich.console import Console
 from rich import print as rprint
@@ -16,14 +16,31 @@ console = Console()
 
 
 @click.command()
-@click.argument("directories", nargs=-1)
-def main(directories):
-    for directory in directories:
-        tree = tree_plus(directory)
+@click.argument("directories", default=".")
+@click.option(
+    "--ignore", "-I", multiple=True, help="Names of files or directories to ignore."
+)
+@click.option("--color/--no-color", default=True)
+def main(directories, ignore, color):
+    ignore = set(ignore)
+    ignore |= {"__pycache__", ".git"}  # always ignore these
+    tree = tree_plus(directories, ignore)
+    if color:
         rprint(tree)
+    else:
+        print(tree_to_string(tree))
 
 
-def tree_plus(directory: str) -> Tree:
+def tree_plus(directory: str, ignore: Optional[Union[str, set]] = None) -> Tree:
+    if ignore is None:
+        ignore = {"__pycache__", ".git"}
+    elif isinstance(ignore, str):
+        ignore = set(ignore.split(","))
+        ignore |= {"__pycache__", ".git"}
+    elif isinstance(ignore, set):
+        ignore |= {"__pycache__", ".git"}
+    else:
+        raise TypeError("tree_plus ignore arg must be a string, set or None")
     # If the directory argument is a comma-separated string of multiple directories,
     # recursively call tree_plus on each directory and return a combined tree.
     if "," in directory:
@@ -41,7 +58,7 @@ def tree_plus(directory: str) -> Tree:
         f"{directory} ({0} tokens, {0} lines)", guide_style="bold cyan", highlight=True
     )
 
-    file_paths = traverse_directory(directory)
+    file_paths = traverse_directory(directory, ignore)
     total_count = TokenLineCount(n_tokens=0, n_lines=0)
 
     # Group files by their directories
