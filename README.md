@@ -46,10 +46,10 @@ A simple CLI tool for developers to show a `tree` enhanced with token counts, li
   - "AI, help me create a design document. We need to ensure illegal states are unrepresentable and refine our design based on potential feedback."
 - [x] **3. Setup Tools and Define Testing Strategy**
   - "AI, let's identify the tools we need and write unit tests that focus on important behaviors and edge cases."
-- [] **4. Write, Review, and Integrate Code**
-  - "AI, let's start writing SOLID code, review it together, and commit it frequently to integrate with the existing codebase."
-- [] **5. Validate System with End-to-End Tests**
+- [x] **4. Validate System with End-to-End Tests**
   - "AI, let's write end-to-end tests to validate the entire system works from the user's perspective."
+- [] **5. Write, Review, and Integrate Code**
+  - "AI, let's start writing SOLID code, review it together, and commit it frequently to integrate with the existing codebase."
 - [] **6. Document and Get Feedback**
   - "AI, let's update our design document with final details, write user-level documentation, and actively seek out feedback."
 - [] **7. Reflect and Learn**

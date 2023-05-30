@@ -81,76 +81,84 @@ from src import parse_file
 #     assert result == expected
 
 
-# @pytest.mark.parametrize(
-#     "file,expected",
-#     [
-# (
-#     "tests/more_languages/group2/apl_test.apl",
-#     [
-#         ":Namespace HelloWorld",
-#         ":Namespace HelloWorld -> hello ← 'Hello, World!'",
-#         ":Namespace HelloWorld -> plus ← {⍺+⍵}",
-#     ],
-# ),
-# (
-#     "tests/more_languages/group2/PerlTest.pl",
-#     [
-#         "package PerlTest -> sub new",
-#         "package PerlTest -> sub hello",
-#         "package PerlTest -> sub say_hello",
-#     ],
-# ),
-#         (
-#             "tests/more_languages/group2/PhpTest.php",
-#             [
-#                 "class HelloWorld -> function sayHello",
-#                 "function greet",
-#                 "class Person -> function __construct",
-#             ],
-#         ),
-#         (
-#             "tests/more_languages/group2/PowershellTest.ps1",
-#             [
-#                 "class Person -> Person([string]$name)",
-#                 "class Person -> [string]Greet()",
-#                 "function Say-Hello",
-#             ],
-#         ),
-#         (
-#             "tests/more_languages/group2/RTest.R",
-#             [
-#                 "person <- list(name = 'John Doe', age = 50)",
-#                 "greet.Person <- function(p)",
-#             ],
-#         ),
-#         (
-#             "tests/more_languages/group2/ScalaTest.scala",
-#             [
-#                 "case class Person(name: String)",
-#                 "object HelloWorld -> def greet(person: Person)",
-#                 "object HelloWorld -> def main(args: Array[String])",
-#             ],
-#         ),
-#         (
-#             "tests/more_languages/group2/bash_test.sh",
-#             [
-#                 "echo_hello_world()",
-#             ],
-#         ),
-#         (
-#             "tests/more_languages/group2/c_test.c",
-#             [
-#                 "typedef struct -> greet(Person p)",
-#                 "main()",
-#             ],
-#         ),
-#     ],
-# )
-# def test_more_languages_group2(file, expected):
-#     result = parse_file(file)
-#     print(f"{result=}")
-#     print(f"{expected=}")
-#     assert result == expected
+@pytest.mark.parametrize(
+    "file,expected",
+    [
+        # (
+        #     "tests/more_languages/group2/apl_test.apl",
+        #     [
+        #         ":Namespace HelloWorld",
+        #         ":Namespace HelloWorld -> hello ← 'Hello, World!'",
+        #         ":Namespace HelloWorld -> plus ← {⍺+⍵}",
+        #     ],
+        # ),
+        # (
+        #     "tests/more_languages/group2/PerlTest.pl",
+        #     [
+        #         "package PerlTest",
+        #         "package PerlTest -> sub new",
+        #         "package PerlTest -> sub hello",
+        #         "package PerlTest -> sub say_hello",
+        #     ],
+        # ),
+        # (
+        #     "tests/more_languages/group2/PhpTest.php",
+        #     [
+        #         "class HelloWorld",
+        #         "class HelloWorld -> function sayHello",
+        #         "function greet",
+        #         "class Person",
+        #         "class Person -> function __construct",
+        #     ],
+        # ),
+        #         (
+        #             "tests/more_languages/group2/RTest.R",
+        #             [
+        #                 "person <- list(name = 'John Doe', age = 50)",
+        #                 "greet.Person <- function(p)",
+        #             ],
+        #         ),
+        #         (
+        #             "tests/more_languages/group2/ScalaTest.scala",
+        #             [
+        #                 "case class Person(name: String)",
+        #                 "object HelloWorld -> def greet(person: Person)",
+        #                 "object HelloWorld -> def main(args: Array[String])",
+        #             ],
+        #         ),
+        #         (
+        #             "tests/more_languages/group2/bash_test.sh",
+        #             [
+        #                 "echo_hello_world()",
+        #             ],
+        #         ),
+        #         (
+        #             "tests/more_languages/group2/c_test.c",
+        #             [
+        #                 "typedef struct -> greet(Person p)",
+        #                 "main()",
+        #             ],
+        #         ),
+        (
+            "tests/more_languages/group2/PowershellTest.ps1",
+            [
+                "function Test-Ordering([string]$foo)",
+                "class Person",
+                "class Person -> Person([string]$name)",
+                "class Person -> [string]Greet()",
+                "class Person -> [string]GreetMany([int]$times)",
+                "class Person -> NoReturn([int]$times)",
+                "class Person -> NoReturnNoArgs()",
+                "function Say-Hello([Person]$person)",
+            ],
+        ),
+    ],
+)
+def test_more_languages_group2(file, expected):
+    result = parse_file(file)
+    print(f"{result=}")
+    print(f"{expected=}")
+    assert result == expected
 
 
 # @pytest.mark.parametrize(
@@ -205,69 +213,69 @@ from src import parse_file
 #     assert result == expected
 
 
-@pytest.mark.parametrize(
-    "file,expected",
-    [
-        #         (
-        #             "tests/more_languages/group4/fsharp_test.fs",
-        #             ["type Person -> member this.SayHello", "let person"],
-        #         ),
-        #         (
-        #             "tests/more_languages/group4/go_test.go",
-        #             ["type Greeting -> func (g Greeting) sayHello", "func createGreeting"],
-        #         ),
-        #         (
-        #             "tests/more_languages/group4/haskell_test.hs",
-        #             ["data Person", "greet :: Person -> String"],
-        #         ),
-        #         (
-        #             "tests/more_languages/group4/mathematica_test.nb",
-        #             [
-        #                 "person[name_]",
-        #                 'BeginPackage["TestModule"] -> sayHello::usage',
-        #                 'BeginPackage["TestModule"] -> sumList::usage',
-        #             ],
-        #         ),
-        # (
-        #     "tests/more_languages/group4/matlab_test.m",
-        #     ["classdef HelloWorld -> function greet", "function loneFun"],
-        # ),
-        #         (
-        #             "tests/more_languages/group4/ruby_test.rb",
-        #             [
-        #                 "module Greeter -> def self.say_hello",
-        #                 "class HelloWorld -> def say_hello",
-        #             ],
-        #         ),
-        #         (
-        #             "tests/more_languages/group4/rust_test.rs",
-        #             [
-        #                 "TODO (Line 23): This todo tests parse_todo",
-        #                 "enum Color",
-        #                 "struct Point",
-        #                 "impl Drawable for Point -> fn draw",
-        #             ],
-        #         ),
-        #         (
-        #             "tests/more_languages/group4/sas_test.sas",
-        #             ["data work.testData", "%macro sayHello", "PROC SQL"],
-        #         ),
-        #         (
-        #             "tests/more_languages/group4/swift_test.swift",
-        #             ["class Person -> func greet", "struct CustomType"],
-        #         ),
-        #         (
-        #             "tests/more_languages/group4/vba_test.bas",
-        #             [
-        #                 "Class CPerson -> Public Property Get Name",
-        #                 "Class CPerson -> Public Property Let Name",
-        #                 "Class CPerson -> Public Sub Greet",
-        #             ],
-        #         ),
-    ],
-)
-def test_more_languages_group4(file, expected):
-    result = parse_file(file)
-    print(f"{result=}")
-    print(f"{expected=}")
-    assert result == expected
+# @pytest.mark.parametrize(
+#     "file,expected",
+#     [
+#         (
+#             "tests/more_languages/group4/fsharp_test.fs",
+#             ["type Person -> member this.SayHello", "let person"],
+#         ),
+#         (
+#             "tests/more_languages/group4/go_test.go",
+#             ["type Greeting -> func (g Greeting) sayHello", "func createGreeting"],
+#         ),
+#         (
+#             "tests/more_languages/group4/haskell_test.hs",
+#             ["data Person", "greet :: Person -> String"],
+#         ),
+#         (
+#             "tests/more_languages/group4/mathematica_test.nb",
+#             [
+#                 "person[name_]",
+#                 'BeginPackage["TestModule"] -> sayHello::usage',
+#                 'BeginPackage["TestModule"] -> sumList::usage',
+#             ],
+#         ),
+# (
+#     "tests/more_languages/group4/matlab_test.m",
+#     ["classdef HelloWorld -> function greet", "function loneFun"],
+# ),
+#         (
+#             "tests/more_languages/group4/ruby_test.rb",
+#             [
+#                 "module Greeter -> def self.say_hello",
+#                 "class HelloWorld -> def say_hello",
+#             ],
+#         ),
+#         (
+#             "tests/more_languages/group4/rust_test.rs",
+#             [
+#                 "TODO (Line 23): This todo tests parse_todo",
+#                 "enum Color",
+#                 "struct Point",
+#                 "impl Drawable for Point -> fn draw",
+#             ],
+#         ),
+#         (
+#             "tests/more_languages/group4/sas_test.sas",
+#             ["data work.testData", "%macro sayHello", "PROC SQL"],
+#         ),
+#         (
+#             "tests/more_languages/group4/swift_test.swift",
+#             ["class Person -> func greet", "struct CustomType"],
+#         ),
+#         (
+#             "tests/more_languages/group4/vba_test.bas",
+#             [
+#                 "Class CPerson -> Public Property Get Name",
+#                 "Class CPerson -> Public Property Let Name",
+#                 "Class CPerson -> Public Sub Greet",
+#             ],
+#         ),
+#     ],
+# )
+# def test_more_languages_group4(file, expected):
+#     result = parse_file(file)
+#     print(f"{result=}")
+#     print(f"{expected=}")
+#     assert result == expected

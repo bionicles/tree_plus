@@ -50,6 +50,12 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_ocaml(contents)
     elif file_extension == ".apl":
         components = parse_apl(contents)
+    elif file_extension == ".pl":
+        components = parse_perl(contents)
+    elif file_extension == ".php":
+        components = parse_php(contents)
+    elif file_extension == ".ps1":
+        components = parse_powershell(contents)
     return components
 
 
@@ -355,6 +361,138 @@ def parse_apl(content: str) -> List[str]:
     )
 
     return components
+
+
+def parse_perl(content: str) -> List[str]:
+    # Regular expression to find package name and subroutine names
+    package_regex = r"^package\s+([\w\d_]+);"
+    subroutine_regex = r"^sub\s+([\w\d_]+)"
+
+    # Extract package names
+    package_names = [
+        "package " + match.group(1)
+        for match in re.finditer(package_regex, content, re.MULTILINE)
+    ]
+
+    # Extract subroutine names
+    subroutine_names = [
+        package_names[0] + " -> sub " + match.group(1)
+        for match in re.finditer(subroutine_regex, content, re.MULTILINE)
+    ]
+
+    return package_names + subroutine_names
+
+
+def parse_php(content: str) -> List[str]:
+    # Regular expression to find class names and their bodies, function names
+    class_regex = r"(class\s+([\w\d_]+)\s*{([^}]*)})"
+    function_regex = r"function\s+([\w\d_]+)"
+
+    components = []
+
+    # Extract classes and their methods
+    for match in re.finditer(class_regex, content, re.MULTILINE):
+        start_pos = match.start()
+        full_class, class_name, class_body = match.groups()
+        components.append((start_pos, f"class {class_name}"))
+
+        # Find methods within the class body
+        method_names = re.findall(function_regex, class_body)
+        components.extend(
+            [
+                (start_pos, f"class {class_name} -> function {method_name}")
+                for method_name in method_names
+            ]
+        )
+
+    # Remove the classes from the content
+    content_without_classes = re.sub(class_regex, "", content)
+
+    # Extract standalone functions
+    for match in re.finditer(function_regex, content_without_classes, re.MULTILINE):
+        start_pos = match.start()
+        function_name = match.group(1)
+        components.append((start_pos, f"function {function_name}"))
+
+    # Sort the components based on their start position and return the component list
+    components.sort()
+    return [component for _, component in components]
+
+
+def parse_powershell(contents: str) -> List[str]:
+    # Split the contents into lines
+    lines = contents.split("\n")
+
+    # Create an empty result list
+    result = []
+
+    # Initialize the current class name to None
+    current_class_name = None
+
+    # Iterate over the lines in the contents
+    for line in lines:
+        # Check if the line matches a function
+        function_match = re.match(r"function\s+([\w-]+)\s*\((.*?)\)\s*\{", line)
+        if function_match:
+            result.append(
+                "function {}({})".format(
+                    function_match.group(1), function_match.group(2)
+                )
+            )
+            continue
+
+        # Check if the line matches a class
+        class_match = re.match(r"class\s+([\w]+)\s*\{", line)
+        if class_match:
+            current_class_name = class_match.group(1)
+            result.append("class {}".format(current_class_name))
+            continue
+
+        # Check if the line matches a constructor
+        constructor_match = re.match(rf"{current_class_name}\s*\((.*?)\)\s*\{{", line)
+        if constructor_match and current_class_name:
+            arguments = constructor_match.group(1)
+            result.append(
+                "class {} -> {}({})".format(
+                    current_class_name, current_class_name, arguments
+                )
+            )
+
+        # Check if the line matches a method
+        method_match = re.match(r"\s*(?:\[(\w+)\])?\s*([\w-]+)\s*\((.*?)\)\s*\{", line)
+        if method_match and current_class_name:
+            method_name = method_match.group(2)
+            arguments = method_match.group(3)
+
+            if method_match.group(1):  # if return type is present
+                return_type = method_match.group(1)
+                result.append(
+                    "class {} -> [{}]{}({})".format(
+                        current_class_name, return_type, method_name, arguments
+                    )
+                )
+            else:  # if return type is not present
+                result.append(
+                    "class {} -> {}({})".format(
+                        current_class_name, method_name, arguments
+                    )
+                )
+
+        # Check if the line matches a function with a class type argument
+        function_with_class_type_arg_match = re.match(
+            r"function\s+([\w-]+)\s*\(\[([\w]+)\]\s*([\w-]+)\)\s*\{", line
+        )
+        if function_with_class_type_arg_match:
+            result.append(
+                "function {}([{}] {})".format(
+                    function_with_class_type_arg_match.group(1),
+                    function_with_class_type_arg_match.group(2),
+                    function_with_class_type_arg_match.group(3),
+                )
+            )
+            continue
+
+    return result
 
 
 def parse_matlab(content: str) -> List[str]:
