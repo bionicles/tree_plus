@@ -1,10 +1,32 @@
 # Tree Plus
 
-A simple CLI tool for developers to show a `tree` enhanced with token counts, line counts, and source code components. 
+A simple command line interface (CLI) tool for developers to show a `tree` enhanced with token counts, line counts, and source code components.
 
-## Usage:
+## Start Quick!
+
 ```sh
-(py310) bion@WIN-QVRBL09D89C:~/hax/tree_plus$ python -m src.cli ./src
+# Install Tree Plus
+# Note: This assumes you already have conda (miniconda3) and GitHub CLI (gh) installed on your machine. 
+
+# Clone the repository
+gh repo https://github.com/bionicles/tree_plus.git
+cd tree_plus
+
+# Create and activate a conda environment
+conda create --name py310 python=3.10
+conda activate py310
+
+# If you have `make` installed, you can use the Makefile to install `tree_plus`
+make cli
+
+# If `make` is not installed, use `pip` instead
+# pip install -e .
+```
+
+## Usage
+
+```sh
+(py310) bion@WIN-QVRBL09D89C:~/hax/tree_plus$ tree_plus tree_plus_src
 ./src (4761 tokens, 613 lines)
 ┗━━ 📁 src (4761 tokens, 613 lines)
     ┣━━ 📄 __init__.py (51 tokens, 8 lines)

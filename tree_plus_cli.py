@@ -8,11 +8,16 @@ from rich import print as rprint
 from rich.tree import Tree
 import click
 
-from .count_tokens_lines import count_tokens_lines, TokenLineCount
-from .traverse_directory import traverse_directory
-from .parse_file import parse_file
+from tree_plus_src import (
+    count_tokens_lines,
+    TokenLineCount,
+    traverse_directory,
+    parse_file,
+)
 
 console = Console()
+
+DEFAULT_IGNORE = {"__pycache__", ".git", "*.egg-info"}
 
 
 @click.command()
@@ -23,7 +28,7 @@ console = Console()
 @click.option("--color/--no-color", default=True)
 def main(directories, ignore, color):
     ignore = set(ignore)
-    ignore |= {"__pycache__", ".git"}  # always ignore these
+    ignore |= DEFAULT_IGNORE  # always ignore these
     tree = tree_plus(directories, ignore)
     if color:
         rprint(tree)
@@ -33,12 +38,12 @@ def main(directories, ignore, color):
 
 def tree_plus(directory: str, ignore: Optional[Union[str, set]] = None) -> Tree:
     if ignore is None:
-        ignore = {"__pycache__", ".git"}
+        ignore = DEFAULT_IGNORE
     elif isinstance(ignore, str):
         ignore = set(ignore.split(","))
-        ignore |= {"__pycache__", ".git"}
+        ignore |= DEFAULT_IGNORE
     elif isinstance(ignore, set):
-        ignore |= {"__pycache__", ".git"}
+        ignore |= DEFAULT_IGNORE
     else:
         raise TypeError("tree_plus ignore arg must be a string, set or None")
     # If the directory argument is a comma-separated string of multiple directories,

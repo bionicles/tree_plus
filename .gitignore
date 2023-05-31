@@ -1,1 +1,28 @@
-__pycache__
+# .gitignore
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+
+# Egg info
+*.egg-info/
+
+# If you are using any database
+*.db
+*.sqlite3
+
+# If you are using any logging files
+*.log
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# For MacOS
+.DS_Store
+
+# For other IDEs
+.vscode/
+.idea/

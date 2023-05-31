@@ -2,7 +2,7 @@
 import pytest  # noqa: F401
 import rich
 
-from src.cli import tree_plus, tree_to_string
+from tree_plus_cli import tree_plus, tree_to_string
 
 test_directory = "tests/path_to_test"
 

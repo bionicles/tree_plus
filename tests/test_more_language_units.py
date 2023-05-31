@@ -1,7 +1,7 @@
 # tests/test_more_language_units.py
 import pytest
 
-from src import parse_file
+from tree_plus_src import parse_file
 
 
 # @pytest.mark.parametrize(

@@ -1,7 +1,9 @@
-# src/traverse_directory.py
+# tree_plus_src/traverse_directory.py
 from typing import Optional, List, Set
 import fnmatch
 import os
+
+DEFAULT_IGNORE = {"__pycache__", ".git", "*.egg-info"}
 
 
 def traverse_directory(directory_path: str, ignore: Optional[Set] = None) -> List[str]:
@@ -12,9 +14,9 @@ def traverse_directory(directory_path: str, ignore: Optional[Set] = None) -> Lis
         raise NotADirectoryError(f"{directory_path} is not a directory")
 
     if ignore is None:
-        ignore = {"__pycache__", ".git"}
+        ignore = DEFAULT_IGNORE
     elif isinstance(ignore, set):
-        ignore = ignore | {"__pycache__", ".git"}
+        ignore = ignore | DEFAULT_IGNORE
     else:
         raise TypeError("traverse_directory ignore arg must be a set or None")
 

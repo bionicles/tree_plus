@@ -1,7 +1,7 @@
 # tests/test_units.py
 import pytest
 
-from src import (
+from tree_plus_src import (
     traverse_directory,
     parse_file,
     parse_todo,

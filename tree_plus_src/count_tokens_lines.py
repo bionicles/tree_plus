@@ -1,8 +1,8 @@
-# src/count_tokens.py
+# tree_plus_src/count_tokens.py
 from dataclasses import dataclass
 import tiktoken
 
-from src.traverse_directory import traverse_directory
+from tree_plus_src.traverse_directory import traverse_directory
 
 
 encoder = tiktoken.encoding_for_model("gpt-4")

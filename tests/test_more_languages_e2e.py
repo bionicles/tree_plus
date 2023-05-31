@@ -2,7 +2,7 @@
 # import pytest  # noqa: F401
 # import rich
 
-# from src.cli import tree_plus, tree_to_string
+# from cli import tree_plus, tree_to_string
 
 # EXPECTATION_GROUP1 = """tests/more_languages/group1 (N tokens, N lines)
 # ┗━━ 📁 group1 (N tokens, N lines)
