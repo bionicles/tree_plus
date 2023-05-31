@@ -2,6 +2,8 @@
 
 A simple command line interface (CLI) tool for developers to show a `tree` enhanced with token counts, line counts, and source code components.
 
+Disclaimer: More languages remain to add, you can find the test cases in the `tests/more_languages` directory.
+
 ## Start Quick!
 
 ```sh
@@ -59,6 +61,78 @@ make cli
         ┣━━ def parse_js
         ┣━━ def parse_md
         ┗━━ def parse_todo
+```
+
+Multiple directories:
+
+```sh
+(py310) bion@WIN-QVRBL09D89C:~/hax/tree_plus$ tree_plus tests/more_languages/group1,tests/more_languages/group2
+Multiple Directories:
+┣━━ tests/more_languages/group1 (402 tokens, 88 lines)
+┃   ┗━━ 📁 group1 (402 tokens, 88 lines)
+┃       ┣━━ 📄 KotlinTest.kt (29 tokens, 4 lines)
+┃       ┃   ┣━━ data class Person(val name: String)
+┃       ┃   ┗━━ fun greet(person: Person)
+┃       ┣━━ 📄 JavaTest.java (47 tokens, 12 lines)
+┃       ┃   ┣━━ class Person
+┃       ┃   ┣━━ class Person -> Person(String name)
+┃       ┃   ┗━━ class Person -> void greet()
+┃       ┣━━ 📄 LispTest.lisp (31 tokens, 5 lines)
+┃       ┃   ┣━━ defstruct person
+┃       ┃   ┗━━ defun greet
+┃       ┣━━ 📄 ObjectiveCTest.m (59 tokens, 16 lines)
+┃       ┃   ┣━━ @interface HelloWorld
+┃       ┃   ┣━━ @interface HelloWorld -> (void) sayHello
+┃       ┃   ┣━━ @implementation HelloWorld
+┃       ┃   ┣━━ @implementation HelloWorld -> (void) sayHello
+┃       ┃   ┗━━ void sayHelloWorld()
+┃       ┣━━ 📄 LuaTest.lua (84 tokens, 16 lines)
+┃       ┃   ┣━━ function HelloWorld.new
+┃       ┃   ┣━━ function HelloWorld.greet
+┃       ┃   ┗━━ function say_hello
+┃       ┣━━ 📄 JuliaTest.jl (42 tokens, 12 lines)
+┃       ┃   ┣━━ module JuliaTest
+┃       ┃   ┣━━ module JuliaTest -> struct Person
+┃       ┃   ┗━━ module JuliaTest -> greet(p::Person)
+┃       ┣━━ 📄 OcamlTest.ml (53 tokens, 12 lines)
+┃       ┃   ┣━━ type color
+┃       ┃   ┣━━ class hello
+┃       ┃   ┣━━ class hello -> method say_hello
+┃       ┃   ┗━━ let main ()
+┃       ┗━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
+┃           ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO
+┃           ┣━━ DATA DIVISION -> 01 GREETING
+┃           ┗━━ PROCEDURE DIVISION
+┗━━ tests/more_languages/group2 (562 tokens, 117 lines)
+    ┗━━ 📁 group2 (562 tokens, 117 lines)
+        ┣━━ 📄 ScalaTest.scala (57 tokens, 12 lines)
+        ┣━━ 📄 c_test.c (68 tokens, 20 lines)
+        ┣━━ 📄 apl_test.apl (44 tokens, 5 lines)
+        ┃   ┣━━ :Namespace HelloWorld
+        ┃   ┣━━ :Namespace HelloWorld -> hello ← 'Hello, World!'
+        ┃   ┗━━ :Namespace HelloWorld -> plus ← {⍺+⍵}
+        ┣━━ 📄 RTest.R (53 tokens, 9 lines)
+        ┣━━ 📄 PowershellTest.ps1 (169 tokens, 27 lines)
+        ┃   ┣━━ function Test-Ordering($foo)
+        ┃   ┣━━ class Person
+        ┃   ┣━━ class Person -> Person($name)
+        ┃   ┣━━ class Person -> Greet()
+        ┃   ┣━━ class Person -> GreetMany($times)
+        ┃   ┣━━ class Person -> NoReturn($times)
+        ┃   ┣━━ class Person -> NoReturnNoArgs()
+        ┃   ┗━━ function Say-Hello([Person]$person)
+        ┣━━ 📄 PhpTest.php (74 tokens, 19 lines)
+        ┃   ┣━━ class HelloWorld
+        ┃   ┣━━ class HelloWorld -> function sayHello
+        ┃   ┣━━ function greet
+        ┃   ┣━━ class Person
+        ┃   ┗━━ class Person -> function __construct
+        ┣━━ 📄 PerlTest.pl (75 tokens, 20 lines)
+        ┃   ┣━━ package PerlTest
+        ┃   ┣━━ package PerlTest -> sub new
+        ┃   ┣━━ package PerlTest -> sub hello
+        ┃   ┗━━ package PerlTest -> sub say_hello
+        ┗━━ 📄 bash_test.sh (22 tokens, 5 lines)
 ```
 
 # Software Engineering Prompt(s) (SWE)
