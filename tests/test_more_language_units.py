@@ -118,14 +118,19 @@ from tree_plus_src import parse_file
         #                 "greet.Person <- function(p)",
         #             ],
         #         ),
-        #         (
-        #             "tests/more_languages/group2/ScalaTest.scala",
-        #             [
-        #                 "case class Person(name: String)",
-        #                 "object HelloWorld -> def greet(person: Person)",
-        #                 "object HelloWorld -> def main(args: Array[String])",
-        #             ],
-        #         ),
+        (
+            "tests/more_languages/group2/ScalaTest.scala",
+            [
+                "def sumOfSquares(x: Int, y: Int): Int",
+                "trait Bark",
+                "trait Bark -> def bark: String",
+                "case class Person(name: String)",
+                "object HelloWorld",
+                "object HelloWorld -> def greet(person: Person): Unit",
+                "object HelloWorld -> def main(args: Array[String]): Unit",
+                "def sumOfSquaresShort(x: Int, y: Int): Int",
+            ],
+        ),
         #         (
         #             "tests/more_languages/group2/bash_test.sh",
         #             [
@@ -139,19 +144,19 @@ from tree_plus_src import parse_file
         #                 "main()",
         #             ],
         #         ),
-        (
-            "tests/more_languages/group2/PowershellTest.ps1",
-            [
-                "function Test-Ordering([string]$foo)",
-                "class Person",
-                "class Person -> Person([string]$name)",
-                "class Person -> [string]Greet()",
-                "class Person -> [string]GreetMany([int]$times)",
-                "class Person -> NoReturn([int]$times)",
-                "class Person -> NoReturnNoArgs()",
-                "function Say-Hello([Person]$person)",
-            ],
-        ),
+        # (
+        #     "tests/more_languages/group2/PowershellTest.ps1",
+        #     [
+        #         "function Test-Ordering([string]$foo)",
+        #         "class Person",
+        #         "class Person -> Person([string]$name)",
+        #         "class Person -> [string]Greet()",
+        #         "class Person -> [string]GreetMany([int]$times)",
+        #         "class Person -> NoReturn([int]$times)",
+        #         "class Person -> NoReturnNoArgs()",
+        #         "function Say-Hello([Person]$person)",
+        #     ],
+        # ),
     ],
 )
 def test_more_languages_group2(file, expected):

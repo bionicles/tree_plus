@@ -56,6 +56,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_php(contents)
     elif file_extension == ".ps1":
         components = parse_powershell(contents)
+    elif file_extension == ".scala":
+        components = parse_scala(contents)
     return components
 
 
@@ -522,6 +524,68 @@ def parse_matlab(content: str) -> List[str]:
         components.append(f"function {function_match}")
 
     return components
+
+
+def parse_scala(contents: str) -> list[str]:
+    lines = contents.split("\n")
+    result = []
+    current_scope = None
+    scope_type = None
+
+    brace_count = 0  # Count braces to keep track of scope
+
+    for line in lines:
+        line = line.strip()
+
+        function_match = re.match(r"def (\w+)\((.*)\): (\w+)", line)
+        trait_match = re.match(r"trait (\w+)", line)
+        trait_func_match = re.match(r"def (\w+): (\w+) =", line)
+        object_match = re.match(r"object (\w+)", line)
+        case_class_match = re.match(r"case class (\w+)\((.*)\)", line)
+        opening_brace_match = re.search(r"\{", line)
+        closing_brace_match = re.search(r"\}", line)
+
+        # Increase or decrease brace_count based on opening or closing braces
+        if opening_brace_match:
+            brace_count += 1
+        if closing_brace_match:
+            brace_count -= 1
+
+        if function_match:
+            function_name, params, return_type = function_match.groups()
+            if current_scope:
+                result.append(
+                    f"{scope_type} {current_scope} -> def {function_name}({params}): {return_type}"
+                )
+            else:
+                result.append(f"def {function_name}({params}): {return_type}")
+        elif trait_match:
+            trait_name = trait_match.group(1)
+            result.append(f"trait {trait_name}")
+            current_scope = trait_name
+            scope_type = "trait"
+        elif trait_func_match and current_scope:
+            func_name, return_type = trait_func_match.groups()
+            result.append(
+                f"{scope_type} {current_scope} -> def {func_name}: {return_type}"
+            )
+        elif object_match:
+            object_name = object_match.group(1)
+            result.append(f"object {object_name}")
+            current_scope = object_name
+            scope_type = "object"
+        elif case_class_match:
+            case_class_name, params = case_class_match.groups()
+            result.append(f"case class {case_class_name}({params})")
+            current_scope = None
+            scope_type = None
+
+        # If brace_count reaches 0, we are outside of current scope
+        if brace_count == 0:
+            current_scope = None
+            scope_type = None
+
+    return result
 
 
 def parse_js(content: str) -> List[str]:
