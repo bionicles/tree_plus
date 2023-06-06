@@ -36,6 +36,16 @@ make cli
 # pip install -e .
 ```
 
+```.bash_profile
+# if you want, you can alias tree_plus to tp like this
+alias tp="tree_plus"
+# usage: tp
+
+# to reinstall tree_plus quickly after making changes, use this alias
+alias tpcli="(cd ~/hax/tree_plus && make cli)"
+# usage: tpcli
+```
+
 ## Usage
 
 ```sh
