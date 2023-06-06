@@ -661,8 +661,16 @@ def parse_js(content: str) -> List[str]:
 
 
 def parse_md(content: str) -> List[str]:
+    in_code_block = False
     lines = content.splitlines()
-    headers = [line for line in lines if line.startswith("#")]
+    headers = []
+
+    for line in lines:
+        if line.strip().startswith("```"):
+            in_code_block = not in_code_block
+        elif not in_code_block and line.startswith("#"):
+            headers.append(line)
+
     return headers
 
 
