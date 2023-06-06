@@ -17,7 +17,7 @@ def parse_file(file_path: str) -> List[str]:
     components = []
 
     # handle sqlite databases before trying to open the file
-    if file_extension == ".db":
+    if file_extension == ".db" or file_extension == ".sqlite":
         components = parse_db(file_path)
         return components
 
