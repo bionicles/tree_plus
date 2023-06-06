@@ -9,6 +9,7 @@ from rich.tree import Tree
 import click
 
 from tree_plus_src import (
+    DEFAULT_IGNORE,
     count_tokens_lines,
     TokenLineCount,
     traverse_directory,
@@ -16,8 +17,6 @@ from tree_plus_src import (
 )
 
 console = Console()
-
-DEFAULT_IGNORE = {"__pycache__", ".git", "*.egg-info"}
 
 
 @click.command()

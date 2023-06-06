@@ -3,7 +3,7 @@ from typing import Optional, List, Set
 import fnmatch
 import os
 
-DEFAULT_IGNORE = {"__pycache__", ".git", "*.egg-info"}
+from tree_plus_src.default_ignore import DEFAULT_IGNORE
 
 
 def traverse_directory(directory_path: str, ignore: Optional[Set] = None) -> List[str]:

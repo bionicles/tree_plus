@@ -58,6 +58,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_powershell(contents)
     elif file_extension == ".scala":
         components = parse_scala(contents)
+    elif file_extension == ".c":
+        components = parse_c(contents)
     return components
 
 
@@ -586,6 +588,42 @@ def parse_scala(contents: str) -> list[str]:
             scope_type = None
 
     return result
+
+
+def parse_c(content: str) -> List[str]:
+    # Define the regular expressions for function, struct, enum, and typedef
+    # regex_function = r"((?:\w+\s+)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})"
+    regex_function = r"((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})"
+    regex_struct = r"(struct\s+\w+\s*\{[^}]*\})"
+    regex_enum = r"(enum\s+\w+\s*\{[^}]*\})"
+    regex_typedef = r"(typedef\s+struct\s*\{[^}]*\}\s*\w+;)"
+
+    # Combine all regexes into a single one, each separated by '|'
+    regex = f"{regex_function}|{regex_struct}|{regex_enum}|{regex_typedef}"
+
+    # Find all matches
+    matches = re.findall(regex, content, re.DOTALL)
+
+    # Initialize the list to hold the parsed elements
+    parsed = []
+
+    # Iterate through the matches
+    for match in matches:
+        # Only one of the groups will be non-empty
+        # Iterate through the match groups
+        for group in match:
+            # Append the non-empty match to the list
+            if group:
+                # Check if the group is a typedef
+                if "typedef" in group:
+                    # Extract only the typedef struct name
+                    typedef_name = group.split("}")[1].split(";")[0].strip()
+                    parsed.append(f"typedef struct {typedef_name}")
+                else:
+                    # Extract only the first line for each component
+                    parsed.append(group.split("{")[0].strip())
+
+    return parsed
 
 
 def parse_js(content: str) -> List[str]:

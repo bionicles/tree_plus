@@ -51,8 +51,8 @@ def test_file_as_directory():
 )
 def test_file_parsing(file, expected):
     result = parse_file(file)
-    print(f"{result=}")
     print(f"{expected=}")
+    print(f"{result=}")
     assert result == expected
 
 

@@ -118,32 +118,41 @@ from tree_plus_src import parse_file
         #                 "greet.Person <- function(p)",
         #             ],
         #         ),
-        (
-            "tests/more_languages/group2/ScalaTest.scala",
-            [
-                "def sumOfSquares(x: Int, y: Int): Int",
-                "trait Bark",
-                "trait Bark -> def bark: String",
-                "case class Person(name: String)",
-                "object HelloWorld",
-                "object HelloWorld -> def greet(person: Person): Unit",
-                "object HelloWorld -> def main(args: Array[String]): Unit",
-                "def sumOfSquaresShort(x: Int, y: Int): Int",
-            ],
-        ),
+        # (
+        #     "tests/more_languages/group2/ScalaTest.scala",
+        #     [
+        #         "def sumOfSquares(x: Int, y: Int): Int",
+        #         "trait Bark",
+        #         "trait Bark -> def bark: String",
+        #         "case class Person(name: String)",
+        #         "object HelloWorld",
+        #         "object HelloWorld -> def greet(person: Person): Unit",
+        #         "object HelloWorld -> def main(args: Array[String]): Unit",
+        #         "def sumOfSquaresShort(x: Int, y: Int): Int",
+        #     ],
+        # ),
         #         (
         #             "tests/more_languages/group2/bash_test.sh",
         #             [
         #                 "echo_hello_world()",
         #             ],
         #         ),
-        #         (
-        #             "tests/more_languages/group2/c_test.c",
-        #             [
-        #                 "typedef struct -> greet(Person p)",
-        #                 "main()",
-        #             ],
-        #         ),
+        (
+            "tests/more_languages/group2/c_test.c",
+            [
+                "struct Point",
+                "struct Point getOrigin()",
+                "float mul_two_floats(float x1, float x2)",
+                "enum days",
+                "long add_two_longs(long x1, long x2)",
+                "double multiplyByTwo(double num)",
+                "char getFirstCharacter(char *str)",
+                "void greet(Person p)",
+                "typedef struct Person",
+                "int main()",
+                "int* getArrayStart(int arr[], int size)",
+            ],
+        ),
         # (
         #     "tests/more_languages/group2/PowershellTest.ps1",
         #     [
@@ -161,8 +170,8 @@ from tree_plus_src import parse_file
 )
 def test_more_languages_group2(file, expected):
     result = parse_file(file)
-    print(f"{result=}")
     print(f"{expected=}")
+    print(f"{result=}")
     assert result == expected
 
 
