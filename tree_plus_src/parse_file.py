@@ -2,6 +2,7 @@
 from typing import List
 import collections
 import builtins
+import sqlite3
 import typing
 import ast
 import os
@@ -14,6 +15,12 @@ def parse_file(file_path: str) -> List[str]:
     """
     file_extension = os.path.splitext(file_path)[-1].lower()
     components = []
+
+    # handle sqlite databases before trying to open the file
+    if file_extension == ".db":
+        components = parse_db(file_path)
+        return components
+
     try:
         with open(file_path, "r") as file:
             contents = file.read()
@@ -119,6 +126,21 @@ def parse_py(content: str) -> List[str]:
     ]
 
     return types + classnames + methods + funcnames
+
+
+def parse_db(db_path: str) -> list[str]:
+    # Connect to the SQLite database
+    conn = sqlite3.connect(db_path)
+    # Create a cursor object
+    cursor = conn.cursor()
+    # Execute the query that retrieves all table names
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    # Fetch all results of the query
+    tables = cursor.fetchall()
+    # Close the connection
+    conn.close()
+    # Extract the table names from the tuples and return them
+    return [f"CREATE TABLE {table[0]}" for table in tables]
 
 
 def parse_cobol(content: str) -> List[str]:

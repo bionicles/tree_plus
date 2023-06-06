@@ -1,5 +1,5 @@
 # src/__init__.py
-from .default_ignore import DEFAULT_IGNORE
+from .default_ignore import DEFAULT_IGNORE  # noqa F401
 from .traverse_directory import traverse_directory
 from .parse_file import parse_file, parse_todo
 from .count_tokens_lines import (

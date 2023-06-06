@@ -18,6 +18,11 @@ def count_tokens_lines(file_path):
     """
     Count the number of lines and OpenAI tokens in a file.
     """
+    # Ignore binary files like images, executables, and databases
+    ignored_extensions = [".db", ".png", ".jpg", ".exe", ".dll", ".so", ".o"]
+    if any(file_path.endswith(ext) for ext in ignored_extensions):
+        return TokenLineCount(n_tokens=0, n_lines=0)
+
     try:
         with open(file_path, "r") as f:
             contents = f.read()
