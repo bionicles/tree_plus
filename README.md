@@ -8,15 +8,26 @@ Disclaimer: More languages remain to add, you can find the test cases in the `te
 
 ```sh
 # Install Tree Plus
-# Note: This assumes you already have conda (miniconda3) and GitHub CLI (gh) installed on your machine. 
+# Note: This assumes you already have installed on your machine:
+# conda (miniconda3: https://docs.conda.io/en/latest/miniconda.html)
+# GitHub CLI (gh: https://cli.github.com/manual/installation)
 
-# Clone the repository
-gh repo https://github.com/bionicles/tree_plus.git
-cd tree_plus
-
-# Create and activate a conda environment
+# Create and activate a conda environment for Python 3.10
 conda create --name py310 python=3.10
 conda activate py310
+```
+
+```sh
+# TLDR one liner to install tree_plus:
+gh repo clone https://github.com/bionicles/tree_plus.git && cd tree_plus && make cli
+```
+
+```sh
+# The above is equivalent to:
+
+# Clone the repository
+gh repo clone https://github.com/bionicles/tree_plus.git
+cd tree_plus
 
 # If you have `make` installed, you can use the Makefile to install `tree_plus`
 make cli
