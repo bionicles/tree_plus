@@ -22,7 +22,11 @@ console = Console()
 @click.command()
 @click.argument("directories", default=".")
 @click.option(
-    "--ignore", "-I", multiple=True, help="Names of files or directories to ignore."
+    "--ignore",
+    "-I",
+    "-i",
+    multiple=True,
+    help="Names of files or directories to ignore.",
 )
 @click.option("--color/--no-color", default=True)
 def main(directories, ignore, color):
