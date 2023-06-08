@@ -69,6 +69,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_c(contents)
     elif file_extension == ".rs":
         components = parse_rs(contents)
+    elif file_extension == ".tf":
+        components = parse_tf(contents)
     return components
 
 
@@ -718,6 +720,12 @@ def parse_rs(contents: str) -> list[str, ...]:
         i += 1
 
     return components
+
+
+def parse_tf(contents: str) -> List[str]:
+    pattern = r'(provider|resource|data|variable|output|locals|module)\s+("[^"]*"\s*"[^"]*"|"[^"]*"|\'[^\']*\'|[^\s]*)\s*[{"{]'
+    matches = re.findall(pattern, contents, re.MULTILINE)
+    return [f"{match[0]} {match[1]}" if match[1] else match[0] for match in matches]
 
 
 def parse_js(content: str) -> List[str]:

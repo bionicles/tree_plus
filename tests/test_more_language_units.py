@@ -284,6 +284,18 @@ def test_more_languages_group2(file, expected):
                 "macro_rules! say_hello",
             ],
         ),
+        (
+            "tests/more_languages/group4/tf_test.tf",
+            [
+                'provider "aws"',
+                'resource "aws_instance" "example"',
+                'data "aws_ami" "ubuntu"',
+                'variable "instance_type"',
+                'output "instance_public_ip"',
+                "locals",
+                'module "vpc"',
+            ],
+        )
         #         (
         #             "tests/more_languages/group4/sas_test.sas",
         #             ["data work.testData", "%macro sayHello", "PROC SQL"],
