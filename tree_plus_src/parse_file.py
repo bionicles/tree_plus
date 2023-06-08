@@ -67,6 +67,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_scala(contents)
     elif file_extension == ".c":
         components = parse_c(contents)
+    elif file_extension == ".rs":
+        components = parse_rs(contents)
     return components
 
 
@@ -646,6 +648,138 @@ def parse_c(content: str) -> List[str]:
                     parsed.append(group.split("{")[0].strip())
 
     return parsed
+
+
+def parse_rs(contents: str) -> list[str, ...]:
+    enum_pattern = r"((pub\s+)?enum\s+[A-Z]\w*)"
+    struct_pattern = r"((pub\s+)?struct\s+[A-Z]\w*)"
+    trait_pattern = r"((pub\s+)?trait\s+[A-Z]\w*)"
+    impl_pattern = r"((pub\s+)?impl\s+([A-Z]\w*)(\s+for\s+([A-Z]\w*))?)"
+    fn_pattern = r"(fn\s+[a-z_][a-z_0-9]*\([^)]*\)\s*(->\s*[^{]*)?)"
+    mod_pattern = r"(mod\s+[a-z_][a-z_0-9]*)"
+    macro_pattern = r"(macro_rules!\s+[a-z_][a-z_0-9]*)"
+
+    components = []
+    lines = contents.splitlines()
+
+    # Helper function to handle impl and trait blocks
+    def handle_block(start_index, owner, block_type, struct_name=None):
+        i = start_index
+        while i < len(lines):
+            line = lines[i]
+            match_fn = re.search(fn_pattern, line)
+            if match_fn:
+                # Remove newlines and 'fn' from the method signature and add the owner
+                method = match_fn.group(1).replace("\n", " ").replace("fn ", "").strip()
+                if struct_name:
+                    components.append(
+                        f"{block_type} {owner} for {struct_name}::{method}"
+                    )
+                else:
+                    components.append(f"{block_type} {owner}::{method}")
+            elif line.strip() == "}":  # end of the block
+                break
+            i += 1
+        return i  # return the index to continue the processing from
+
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        match_enum = re.search(enum_pattern, line)
+        match_struct = re.search(struct_pattern, line)
+        match_trait = re.search(trait_pattern, line)
+        match_impl = re.search(impl_pattern, line)
+        match_mod = re.search(mod_pattern, line)
+        match_macro = re.search(macro_pattern, line)
+
+        if match_enum:
+            components.append(match_enum.group(1))
+        elif match_struct:
+            components.append(match_struct.group(1))
+        elif match_trait:
+            components.append(match_trait.group(1))
+            i = handle_block(i + 1, match_trait.group(1).split()[-1], "trait")
+        elif match_impl:
+            if " for " in match_impl.group(1):
+                struct_name = match_impl.group(5)
+                components.append(match_impl.group(1))
+                i = handle_block(i + 1, match_impl.group(3), "impl", struct_name)
+            else:
+                components.append(match_impl.group(1))
+                i = handle_block(i + 1, match_impl.group(3), "impl")
+        elif match_mod:
+            components.append(match_mod.group(0))
+        elif match_macro:
+            components.append(match_macro.group(0))
+        else:
+            match_fn = re.search(fn_pattern, line)
+            if match_fn:
+                components.append(match_fn.group(1).replace("\n", " ").strip())
+        i += 1
+
+    return components
+
+
+# def parse_rs(contents: str) -> list[str, ...]:
+#     enum_pattern = r"(enum\s+[A-Z]\w*)"
+#     struct_pattern = r"(struct\s+[A-Z]\w*)"
+#     trait_pattern = r"(trait\s+[A-Z]\w*)"
+#     impl_pattern = r"(impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?)"
+#     fn_pattern = r"(fn\s+[a-z_][a-z_0-9]*\([^)]*\)\s*(->\s*[^{]*)?)"
+
+#     components = []
+#     lines = contents.splitlines()
+
+#     # Helper function to handle impl and trait blocks
+#     def handle_block(start_index, owner, block_type, struct_name=None):
+#         i = start_index
+#         while i < len(lines):
+#             line = lines[i]
+#             match_fn = re.search(fn_pattern, line)
+#             if match_fn:
+#                 # Remove newlines and 'fn' from the method signature and add the owner
+#                 method = match_fn.group(1).replace("\n", " ").replace("fn ", "").strip()
+#                 if struct_name:
+#                     components.append(
+#                         f"{block_type} {owner} for {struct_name}::{method}"
+#                     )
+#                 else:
+#                     components.append(f"{block_type} {owner}::{method}")
+#             elif line.strip() == "}":  # end of the block
+#                 break
+#             i += 1
+#         return i  # return the index to continue the processing from
+
+#     i = 0
+#     while i < len(lines):
+#         line = lines[i]
+#         match_enum = re.search(enum_pattern, line)
+#         match_struct = re.search(struct_pattern, line)
+#         match_trait = re.search(trait_pattern, line)
+#         match_impl = re.search(impl_pattern, line)
+
+#         if match_enum:
+#             components.append(match_enum.group(1))
+#         elif match_struct:
+#             components.append(match_struct.group(1))
+#         elif match_trait:
+#             components.append(match_trait.group(1))
+#             i = handle_block(i + 1, match_trait.group(1).split()[-1], "trait")
+#         elif match_impl:
+#             if " for " in match_impl.group(1):
+#                 struct_name = match_impl.group(1).split()[-1]
+#                 components.append(match_impl.group(1))
+#                 i = handle_block(i + 1, match_impl.group(2), "impl", struct_name)
+#             else:
+#                 components.append(match_impl.group(1))
+#                 i = handle_block(i + 1, match_impl.group(2), "impl")
+#         else:
+#             match_fn = re.search(fn_pattern, line)
+#             if match_fn:
+#                 components.append(match_fn.group(1).replace("\n", " ").strip())
+#         i += 1
+
+#     return components
 
 
 def parse_js(content: str) -> List[str]:

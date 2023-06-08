@@ -57,7 +57,7 @@ def test_file_parsing(file, expected):
 
 
 def test_parse_todo():
-    content = open("tests/more_languages/group4/rust_test.rs", "r").read()
+    content = open("tests/more_languages/group5/rust_todo_test.rs", "r").read()
     result = parse_todo(content)
     assert result == [
         "TODO (Line 23): This todo tests parse_todo",
