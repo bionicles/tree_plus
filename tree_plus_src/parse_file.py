@@ -851,13 +851,13 @@ def parse_txt(content: str) -> List[str]:
         match = re.search(checkbox_pattern, line)
         # If there is a match, normalize the checkbox. If not, print a message for debugging.
         if match:
-            print(f"Matched line: {line}")
+            # print(f"Matched line: {line}")
             normalized_checkbox = (
                 "- [ ] " + match.group(2).strip()
             )  # Use the second group to get checkbox content.
             parsed_checkboxes.append(normalized_checkbox)
-        else:
-            print(f"Did not match line: {line}")
+        # else:
+        #   print(f"Did not match line: {line}")
 
     return parsed_checkboxes
 
