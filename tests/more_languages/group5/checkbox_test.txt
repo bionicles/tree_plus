@@ -1,0 +1,33 @@
+  - register
+    - [ ] fix phone number format +1
+    - [ ] add forgot password
+- [ ] ? add email verification
+
+  - login
+    - [ ] store token the right way
+        - [ ] test nesting of checkboxes
+
+  - deploy to cloud
+    - aws ec2 or apigw + lambda function?
+    - aws rds
+    - [x] aws cognito pool
+    - [x] aws s3 bucket for frontend hosting, [x] SSL cloudfront distribution
+    - [x] aws domain registration, [x] ssl
+
+
+  - Enhancements:
+    - give discount on referral code/link
+      - or extra points, discount on next ticket, etc
+      - points for hot social media posts
+    - points earned for more going
+    - account history of purchases, refunds, latest activity (invited going)
+    - wallets!!!
+
+03/18/2022: 
+  p2:
+    - [x] on register success route back to login 
+    - [x] made stripe account https://dashboard.stripe.com/dashboard
+  enhance:
+    - [   ] user can use option to buy ticket at 2-referred price initially
+                - [  ] CTA refer 2 people to get instant lower price, and generate 2 promocodes for ($2 off)? tickets
+    - [] form to send refers to those two people, buy at $65 before they buy their own ticket

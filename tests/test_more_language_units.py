@@ -388,6 +388,19 @@ def test_more_languages_group4(file, expected):
                 "        - [ ] Handle edge cases",
             ],
         ),
+        (
+            "tests/more_languages/group5/checkbox_test.txt",
+            [
+                "- [ ] fix phone number format +1",
+                "- [ ] add forgot password",
+                "- [ ] ? add email verification",
+                "- [ ] store token the right way",
+                "- [ ] test nesting of checkboxes",
+                "- [ ] user can use option to buy ticket at 2-referred price initially",
+                "- [ ] CTA refer 2 people to get instant lower price, and generate 2 promocodes for ($2 off)? tickets",
+                "- [ ] form to send refers to those two people, buy at $65 before they buy their own ticket",
+            ],
+        ),
     ],
 )
 def test_more_languages_group5(file, expected):

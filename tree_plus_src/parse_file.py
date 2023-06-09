@@ -35,6 +35,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_js(contents)
     elif file_extension == ".md":
         components = parse_md(contents)
+    elif file_extension == ".txt":
+        components = parse_txt(contents)
     elif file_extension == ".cbl":
         components = parse_cobol(contents)
     elif file_extension == ".java":
@@ -837,150 +839,27 @@ def parse_md(content: str) -> List[str]:
     return headers_and_tasks
 
 
-# def parse_md(content: str) -> List[str]:
-#     in_code_block = False
-#     lines = content.splitlines()
-#     headers_and_tasks = []
-#     task_pattern = re.compile(r"(-\s*\[ *[xX]?\])\s*(.*)")
-#     checked_parents = []
+def parse_txt(content: str) -> List[str]:
+    # Update the regex pattern to exclude lines with checked boxes.
+    # The [\s*] will match spaces or '*', but not 'x' or 'X'.
+    checkbox_pattern = r"-\s*\[\s*([^Xx])?\s*\]\s*(.+)"
 
-#     for line in lines:
-#         if line.strip().startswith("```"):
-#             in_code_block = not in_code_block
-#         elif not in_code_block:
-#             if line.startswith("#"):
-#                 headers_and_tasks.append(line.lstrip())
-#             elif task_pattern.match(line.lstrip()):
-#                 indent_level = len(line) - len(line.lstrip())
-#                 task_match = task_pattern.match(line.lstrip())
-#                 task_text = task_match.group(2)
-#                 is_checked = "[x]" in line or "[X]" in line
+    lines = content.split("\n")
+    parsed_checkboxes = []
 
-#                 task = (
-#                     indent_level * " "
-#                     + ("- [x] " if is_checked else "- [ ] ")
-#                     + task_text
-#                 )
+    for line in lines:
+        match = re.search(checkbox_pattern, line)
+        # If there is a match, normalize the checkbox. If not, print a message for debugging.
+        if match:
+            print(f"Matched line: {line}")
+            normalized_checkbox = (
+                "- [ ] " + match.group(2).strip()
+            )  # Use the second group to get checkbox content.
+            parsed_checkboxes.append(normalized_checkbox)
+        else:
+            print(f"Did not match line: {line}")
 
-#                 if is_checked:
-#                     checked_parents.append(task)
-#                 else:
-#                     headers_and_tasks.extend(checked_parents)
-#                     headers_and_tasks.append(task)
-#                     checked_parents = [p for p in checked_parents if len(p) > len(line)]
-
-#     # Add any remaining checked parents
-#     if checked_parents:
-#         headers_and_tasks.extend(checked_parents)
-
-#     return headers_and_tasks
-
-
-# def parse_md(content: str) -> List[str]:
-#     in_code_block = False
-#     lines = content.splitlines()
-#     headers_and_tasks = []
-#     task_pattern = re.compile(r"(-\s*\[ *[xX]?\])\s*(.*)")
-#     checked_parents = []
-
-#     for line in lines:
-#         if line.strip().startswith("```"):
-#             in_code_block = not in_code_block
-#         elif not in_code_block:
-#             if line.startswith("#"):
-#                 headers_and_tasks.append(line.lstrip())
-#             elif task_pattern.match(line.lstrip()):
-#                 indent_level = len(line) - len(line.lstrip())
-#                 task_match = task_pattern.match(line.lstrip())
-#                 task_text = task_match.group(2)
-#                 is_checked = "[x]" in line or "[X]" in line
-
-#                 print(f"Checked: {is_checked} Line: {line}")
-
-#                 task = (
-#                     indent_level * " "
-#                     + ("- [x] " if is_checked else "- [ ] ")
-#                     + task_text
-#                 )
-
-#                 if is_checked:
-#                     checked_parents.append(task)
-#                 else:
-#                     headers_and_tasks.extend(checked_parents)
-#                     headers_and_tasks.append(task)
-#                     checked_parents = []
-
-#                 print(f"Checked Parents: {checked_parents}")
-
-#                 # Pop checked parents that are at the same or higher level
-#                 checked_parents = [p for p in checked_parents if len(p) > len(line)]
-
-#                 print(f"Headers and Tasks: {headers_and_tasks}")
-
-#     return headers_and_tasks
-
-
-# def parse_md(content: str) -> List[str]:
-#     in_code_block = False
-#     lines = content.splitlines()
-#     headers_and_tasks = []
-#     task_pattern = re.compile(r"(-\s*\[ *[xX]?\])\s*(.*)")
-#     checked_ancestors = []
-
-#     for line in lines:
-#         if line.strip().startswith("```"):
-#             in_code_block = not in_code_block
-#         elif not in_code_block:
-#             if line.startswith("#"):
-#                 headers_and_tasks.append(line.lstrip())
-#             elif task_pattern.match(line.lstrip()):
-#                 indent_level = len(line) - len(line.lstrip())
-#                 task_match = task_pattern.match(line.lstrip())
-#                 task_text = task_match.group(2)
-#                 is_checked = "[x]" in line or "[X]" in line
-
-#                 print(f"Checked: {is_checked} Line: {line}")
-
-#                 if is_checked:
-#                     checked_task = indent_level * " " + "- [x] " + task_text
-#                     checked_ancestors.append(checked_task)
-#                 else:
-#                     unchecked_task = indent_level * " " + "- [ ] " + task_text
-#                     headers_and_tasks.append(unchecked_task)
-
-#                     # add checked ancestors with unchecked subtasks
-#                     for parent in checked_ancestors:
-#                         if parent not in headers_and_tasks:
-#                             headers_and_tasks.append(parent)
-
-#                 print(f"Checked ancestors: {checked_ancestors}")
-
-#                 while checked_ancestors and len(checked_ancestors[-1]) >= len(line):
-#                     checked_ancestors.pop()
-
-#                 print(f"Headers and Tasks: {headers_and_tasks}")
-
-#     return headers_and_tasks
-
-
-# def parse_md(content: str) -> List[str]:
-#     in_code_block = False
-#     lines = content.splitlines()
-#     headers_and_tasks = []
-
-#     for line in lines:
-#         if line.strip().startswith("```"):
-#             in_code_block = not in_code_block
-#         elif not in_code_block:
-#             if line.startswith("#"):
-#                 headers_and_tasks.append(line.lstrip())
-#             elif line.lstrip().startswith("- [ ]"):
-#                 indent_level = len(line) - len(line.lstrip())
-#                 headers_and_tasks.append(
-#                     indent_level * " " + line.replace("- [ ]", "").lstrip()
-#                 )
-
-#     return headers_and_tasks
+    return parsed_checkboxes
 
 
 def parse_todo(content: str) -> List[str]:
