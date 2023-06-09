@@ -807,7 +807,7 @@ def parse_md(content: str) -> List[str]:
                 task_match = task_pattern.match(line.lstrip())
                 task_text = task_match.group(2)
                 is_checked = "[x]" in line or "[X]" in line
-                print(f"Checked: {is_checked} Line: {line}")
+                # print(f"Checked: {is_checked} Line: {line}")
                 task = (
                     indent_level * " "
                     + ("- [x] " if is_checked else "- [ ] ")
@@ -822,16 +822,16 @@ def parse_md(content: str) -> List[str]:
                 # The second element of the tuple is a flag to indicate whether this ancestor should be included in the output.
                 if is_checked:
                     ancestor_tuple = (task, False)
-                    print(f"ADD ANCESTOR: {ancestor_tuple=}")
+                    # print(f"ADD ANCESTOR: {ancestor_tuple=}")
                     checked_ancestors.append(ancestor_tuple)
                 # If the task is not checked, we update the flag for all ancestors as they should be included in the final output
                 # Then add these ancestors to the output and finally add the current task.
                 else:
                     checked_ancestors = [(a[0], True) for a in checked_ancestors]
                     ancestors_to_add = [a[0] for a in checked_ancestors if a[1]]
-                    print(f"ADD ANCESTOR(S) {ancestors_to_add=}")
+                    # print(f"ADD ANCESTOR(S) {ancestors_to_add=}")
                     headers_and_tasks.extend(ancestors_to_add)
-                    print(f"ADD TASK {task}")
+                    # print(f"ADD TASK {task}")
                     headers_and_tasks.append(task)
 
     return headers_and_tasks
