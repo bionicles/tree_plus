@@ -16,3 +16,7 @@ class Person {
 struct CustomType {
     var field: Int
 }
+
+func sayHello(to name: String, onDay day: String) -> String {
+    return "Hello \(name), the day is \(day)"
+}

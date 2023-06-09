@@ -4,6 +4,7 @@ import collections
 import builtins
 import sqlite3
 import typing
+import yaml
 import ast
 import os
 import re
@@ -71,7 +72,51 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_rs(contents)
     elif file_extension == ".tf":
         components = parse_tf(contents)
+    elif file_extension in (".yml", ".yaml"):
+        components = parse_yml(contents)
     return components
+
+
+def is_k8s_yml(contents: str) -> bool:
+    for doc in yaml.safe_load_all(contents):
+        if "apiVersion" in doc and "kind" in doc and "metadata" in doc:
+            return True
+    return False
+
+
+def is_ansible_yml(contents: str) -> bool:
+    try:
+        docs = list(yaml.safe_load_all(contents))
+        if isinstance(docs[0], list) and any(
+            isinstance(item, dict) and "name" in item for item in docs[0]
+        ):
+            return True
+    except Exception as e:
+        print("Exception in is_ansible_yml: ", e)
+        return False
+    return False
+
+
+def parse_k8s(contents: str) -> List[str]:
+    result = []
+    for doc in yaml.safe_load_all(contents):
+        result.append(f"{doc['apiVersion']}.{doc['kind']} -> {doc['metadata']['name']}")
+    return result
+
+
+def parse_ansible(contents: str) -> List[str]:
+    result = []
+    for doc in yaml.safe_load_all(contents):
+        result.extend(item.get("name", "") for item in doc if isinstance(item, dict))
+    return result
+
+
+def parse_yml(contents: str) -> List[str]:
+    if is_k8s_yml(contents):
+        return parse_k8s(contents)
+    elif is_ansible_yml(contents):
+        return parse_ansible(contents)
+    return ["Unsupported YAML Category"]
 
 
 def extract_nodes(node, node_type, parent=None):
@@ -743,15 +788,199 @@ def parse_js(content: str) -> List[str]:
 def parse_md(content: str) -> List[str]:
     in_code_block = False
     lines = content.splitlines()
-    headers = []
+    headers_and_tasks = []
+    task_pattern = re.compile(r"(-\s*\[ *[xX]?\])\s*(.*)")
+    checked_ancestors = []
 
     for line in lines:
+        # If we encounter a code block (indicated by ```), toggle in_code_block.
         if line.strip().startswith("```"):
             in_code_block = not in_code_block
-        elif not in_code_block and line.startswith("#"):
-            headers.append(line)
+        # Only process lines that are not within a code block.
+        elif not in_code_block:
+            # If the line is a header, add it to the output list.
+            if line.startswith("#"):
+                headers_and_tasks.append(line.lstrip())
+            # If the line is a task, process it accordingly.
+            elif task_pattern.match(line.lstrip()):
+                indent_level = len(line) - len(line.lstrip())
+                task_match = task_pattern.match(line.lstrip())
+                task_text = task_match.group(2)
+                is_checked = "[x]" in line or "[X]" in line
+                print(f"Checked: {is_checked} Line: {line}")
+                task = (
+                    indent_level * " "
+                    + ("- [x] " if is_checked else "- [ ] ")
+                    + task_text
+                )
+                # For every task, we first remove ancestors that are not parents of the current task
+                # This is identified by comparing their indentation level.
+                checked_ancestors = [
+                    a for a in checked_ancestors if len(a[0]) < len(task)
+                ]
+                # If the task is checked, we add it to the list of ancestors but don't add to the final output yet.
+                # The second element of the tuple is a flag to indicate whether this ancestor should be included in the output.
+                if is_checked:
+                    ancestor_tuple = (task, False)
+                    print(f"ADD ANCESTOR: {ancestor_tuple=}")
+                    checked_ancestors.append(ancestor_tuple)
+                # If the task is not checked, we update the flag for all ancestors as they should be included in the final output
+                # Then add these ancestors to the output and finally add the current task.
+                else:
+                    checked_ancestors = [(a[0], True) for a in checked_ancestors]
+                    ancestors_to_add = [a[0] for a in checked_ancestors if a[1]]
+                    print(f"ADD ANCESTOR(S) {ancestors_to_add=}")
+                    headers_and_tasks.extend(ancestors_to_add)
+                    print(f"ADD TASK {task}")
+                    headers_and_tasks.append(task)
 
-    return headers
+    return headers_and_tasks
+
+
+# def parse_md(content: str) -> List[str]:
+#     in_code_block = False
+#     lines = content.splitlines()
+#     headers_and_tasks = []
+#     task_pattern = re.compile(r"(-\s*\[ *[xX]?\])\s*(.*)")
+#     checked_parents = []
+
+#     for line in lines:
+#         if line.strip().startswith("```"):
+#             in_code_block = not in_code_block
+#         elif not in_code_block:
+#             if line.startswith("#"):
+#                 headers_and_tasks.append(line.lstrip())
+#             elif task_pattern.match(line.lstrip()):
+#                 indent_level = len(line) - len(line.lstrip())
+#                 task_match = task_pattern.match(line.lstrip())
+#                 task_text = task_match.group(2)
+#                 is_checked = "[x]" in line or "[X]" in line
+
+#                 task = (
+#                     indent_level * " "
+#                     + ("- [x] " if is_checked else "- [ ] ")
+#                     + task_text
+#                 )
+
+#                 if is_checked:
+#                     checked_parents.append(task)
+#                 else:
+#                     headers_and_tasks.extend(checked_parents)
+#                     headers_and_tasks.append(task)
+#                     checked_parents = [p for p in checked_parents if len(p) > len(line)]
+
+#     # Add any remaining checked parents
+#     if checked_parents:
+#         headers_and_tasks.extend(checked_parents)
+
+#     return headers_and_tasks
+
+
+# def parse_md(content: str) -> List[str]:
+#     in_code_block = False
+#     lines = content.splitlines()
+#     headers_and_tasks = []
+#     task_pattern = re.compile(r"(-\s*\[ *[xX]?\])\s*(.*)")
+#     checked_parents = []
+
+#     for line in lines:
+#         if line.strip().startswith("```"):
+#             in_code_block = not in_code_block
+#         elif not in_code_block:
+#             if line.startswith("#"):
+#                 headers_and_tasks.append(line.lstrip())
+#             elif task_pattern.match(line.lstrip()):
+#                 indent_level = len(line) - len(line.lstrip())
+#                 task_match = task_pattern.match(line.lstrip())
+#                 task_text = task_match.group(2)
+#                 is_checked = "[x]" in line or "[X]" in line
+
+#                 print(f"Checked: {is_checked} Line: {line}")
+
+#                 task = (
+#                     indent_level * " "
+#                     + ("- [x] " if is_checked else "- [ ] ")
+#                     + task_text
+#                 )
+
+#                 if is_checked:
+#                     checked_parents.append(task)
+#                 else:
+#                     headers_and_tasks.extend(checked_parents)
+#                     headers_and_tasks.append(task)
+#                     checked_parents = []
+
+#                 print(f"Checked Parents: {checked_parents}")
+
+#                 # Pop checked parents that are at the same or higher level
+#                 checked_parents = [p for p in checked_parents if len(p) > len(line)]
+
+#                 print(f"Headers and Tasks: {headers_and_tasks}")
+
+#     return headers_and_tasks
+
+
+# def parse_md(content: str) -> List[str]:
+#     in_code_block = False
+#     lines = content.splitlines()
+#     headers_and_tasks = []
+#     task_pattern = re.compile(r"(-\s*\[ *[xX]?\])\s*(.*)")
+#     checked_ancestors = []
+
+#     for line in lines:
+#         if line.strip().startswith("```"):
+#             in_code_block = not in_code_block
+#         elif not in_code_block:
+#             if line.startswith("#"):
+#                 headers_and_tasks.append(line.lstrip())
+#             elif task_pattern.match(line.lstrip()):
+#                 indent_level = len(line) - len(line.lstrip())
+#                 task_match = task_pattern.match(line.lstrip())
+#                 task_text = task_match.group(2)
+#                 is_checked = "[x]" in line or "[X]" in line
+
+#                 print(f"Checked: {is_checked} Line: {line}")
+
+#                 if is_checked:
+#                     checked_task = indent_level * " " + "- [x] " + task_text
+#                     checked_ancestors.append(checked_task)
+#                 else:
+#                     unchecked_task = indent_level * " " + "- [ ] " + task_text
+#                     headers_and_tasks.append(unchecked_task)
+
+#                     # add checked ancestors with unchecked subtasks
+#                     for parent in checked_ancestors:
+#                         if parent not in headers_and_tasks:
+#                             headers_and_tasks.append(parent)
+
+#                 print(f"Checked ancestors: {checked_ancestors}")
+
+#                 while checked_ancestors and len(checked_ancestors[-1]) >= len(line):
+#                     checked_ancestors.pop()
+
+#                 print(f"Headers and Tasks: {headers_and_tasks}")
+
+#     return headers_and_tasks
+
+
+# def parse_md(content: str) -> List[str]:
+#     in_code_block = False
+#     lines = content.splitlines()
+#     headers_and_tasks = []
+
+#     for line in lines:
+#         if line.strip().startswith("```"):
+#             in_code_block = not in_code_block
+#         elif not in_code_block:
+#             if line.startswith("#"):
+#                 headers_and_tasks.append(line.lstrip())
+#             elif line.lstrip().startswith("- [ ]"):
+#                 indent_level = len(line) - len(line.lstrip())
+#                 headers_and_tasks.append(
+#                     indent_level * " " + line.replace("- [ ]", "").lstrip()
+#                 )
+
+#     return headers_and_tasks
 
 
 def parse_todo(content: str) -> List[str]:

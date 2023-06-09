@@ -1,6 +1,8 @@
 # tests/test_more_language_units.py
 import pytest
 
+from rich import print
+
 from tree_plus_src import parse_file
 
 
@@ -175,56 +177,86 @@ def test_more_languages_group2(file, expected):
     assert result == expected
 
 
-# @pytest.mark.parametrize(
-#     "file,expected",
-#     [
-#         (
-#             "tests/more_languages/group3/clojure_test.clj",
-#             ["defprotocol P", "defrecord Person", "defn -main"],
-#         ),
-#         (
-#             "tests/more_languages/group3/cpp_test.cpp",
-#             ["class Person", "void Person::greet", "void globalGreet", "int main"],
-#         ),
-#         (
-#             "tests/more_languages/group3/crystal_test.cr",
-#             ["class Person -> def greet", "def say_hello"],
-#         ),
-#         (
-#             "tests/more_languages/group3/csharp_test.cs",
-#             [
-#                 "namespace HelloWorldApp -> class Person",
-#                 "namespace HelloWorldApp -> class HelloWorld",
-#                 "namespace HelloWorldApp -> static void Main",
-#             ],
-#         ),
-#         (
-#             "tests/more_languages/group3/dart_test.dart",
-#             ["enum GreetingType", "class HelloWorld -> void sayHello", "void main"],
-#         ),
-#         (
-#             "tests/more_languages/group3/elixir_test.exs",
-#             ["defmodule Person", "defmodule HelloWorld -> def hello"],
-#         ),
-#         (
-#             "tests/more_languages/group3/erl_test.erl",
-#             ["-module(hello_world)", "-record(person)", "hello_world/0"],
-#         ),
-#         (
-#             "tests/more_languages/group3/fortran_test.f90",
-#             [
-#                 "MODULE hello_mod -> TYPE person",
-#                 "MODULE hello_mod -> SUBROUTINE say_hello",
-#                 "PROGRAM HelloWorld",
-#             ],
-#         ),
-#     ],
-# )
-# def test_more_languages_group3(file, expected):
-#     result = parse_file(file)
-#     print(f"{result=}")
-#     print(f"{expected=}")
-#     assert result == expected
+@pytest.mark.parametrize(
+    "file,expected",
+    [
+        #         (
+        #             "tests/more_languages/group3/clojure_test.clj",
+        #             ["defprotocol P", "defrecord Person", "defn -main"],
+        #         ),
+        #         (
+        #             "tests/more_languages/group3/cpp_test.cpp",
+        #             ["class Person", "void Person::greet", "void globalGreet", "int main"],
+        #         ),
+        #         (
+        #             "tests/more_languages/group3/crystal_test.cr",
+        #             ["class Person -> def greet", "def say_hello"],
+        #         ),
+        # (
+        #     "tests/more_languages/group3/csharp_test.cs",
+        #     [
+        #         "public interface IExcelTemplate",
+        #         "public interface IExcelTemplate -> void LoadTemplate(string templateFilePath)",
+        #         "public interface IExcelTemplate -> void LoadData(Dictionary<string, string> data)",
+        #         "public interface IExcelTemplate -> void ModifyCell(string cellName, string value)",
+        #         "public interface IExcelTemplate -> void SaveToFile(string filePath)",
+        #         "public interface IGreet",
+        #         "public interface IGreet -> void Greet()",
+        #         "public enum WeekDays",
+        #         "public delegate void DisplayMessage(string message)",
+        #         "public struct Address",
+        #         "public static class HelperFunctions",
+        #         "public static class HelperFunctions -> public static void PrintMessage(string message)",
+        #         "public static class HelperFunctions -> public static int AddNumbers(int a, int b)",
+        #         "public static class HelperFunctions -> private static float CalculateAverage(float[] numbers)",
+        #         "namespace HelloWorldApp",
+        #         "namespace HelloWorldApp -> class Person : IGreet",
+        #         "namespace HelloWorldApp -> class Person -> public Person(string name, int age)",
+        #         "namespace HelloWorldApp -> class Person -> public void Greet()",
+        #         "namespace HelloWorldApp -> class Person -> private int GetAge()",
+        #         "namespace HelloWorldApp -> class HelloWorld",
+        #         "namespace HelloWorldApp -> class HelloWorld -> private static DisplayMessage displayDelegate",
+        #         "namespace HelloWorldApp -> class HelloWorld -> static void Main(string[] args)",
+        #         "namespace TemplateToExcelServer.Template",
+        #         "namespace TemplateToExcelServer.Template -> public interface ITemplateObject",
+        #         "namespace TemplateToExcelServer.Template -> public interface ITemplateObject -> string[,] GetContent()",
+        #         "namespace TemplateToExcelServer.Template -> public interface ITemplateObject -> string[] GetContentArray()",
+        #         "namespace TemplateToExcelServer.Template -> public interface ITemplateObject -> string[] GetFormat()",
+        #         "namespace TemplateToExcelServer.Template -> public interface ITemplateObject -> int? GetFormatLength()",
+        #         "namespace TemplateToExcelServer.Template -> public interface ITemplateObject -> TemplateObject SetContent(string[,] Content)",
+        #         "namespace TemplateToExcelServer.Template -> public interface ITemplateObject -> TemplateObject SetContentArray(string[] value)",
+        #         "namespace TemplateToExcelServer.Template -> public interface ITemplateObject -> TemplateObject SetFormaat(string[] Header)",
+        #         "namespace TemplateToExcelServer.Template -> public interface ITemplateObject -> TemplateObject SetNameOfReport(ReadOnlyMemory<byte> ReportName)",
+        #         "namespace TemplateToExcelServer.Template -> public interface ITemplateObject -> TemplateObject SetSheetName(ReadOnlyMemory<byte> SheetName)",
+        #     ],
+        # ),
+        #         (
+        #             "tests/more_languages/group3/dart_test.dart",
+        #             ["enum GreetingType", "class HelloWorld -> void sayHello", "void main"],
+        #         ),
+        #         (
+        #             "tests/more_languages/group3/elixir_test.exs",
+        #             ["defmodule Person", "defmodule HelloWorld -> def hello"],
+        #         ),
+        #         (
+        #             "tests/more_languages/group3/erl_test.erl",
+        #             ["-module(hello_world)", "-record(person)", "hello_world/0"],
+        #         ),
+        #         (
+        #             "tests/more_languages/group3/fortran_test.f90",
+        #             [
+        #                 "MODULE hello_mod -> TYPE person",
+        #                 "MODULE hello_mod -> SUBROUTINE say_hello",
+        #                 "PROGRAM HelloWorld",
+        #             ],
+        #         ),
+    ],
+)
+def test_more_languages_group3(file, expected):
+    result = parse_file(file)
+    print(f"{result=}")
+    print(f"{expected=}")
+    assert result == expected
 
 
 @pytest.mark.parametrize(
@@ -315,6 +347,50 @@ def test_more_languages_group2(file, expected):
     ],
 )
 def test_more_languages_group4(file, expected):
+    result = parse_file(file)
+    print(f"{result=}")
+    print(f"{expected=}")
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "file,expected",
+    [
+        (
+            "tests/more_languages/group5/ansible_test.yml",
+            [
+                "Install package",
+                "Start service",
+                "Create user",
+            ],
+        ),
+        (
+            "tests/more_languages/group5/k8s_test.yaml",
+            [
+                "apps/v1.Deployment -> my-app",
+                "v1.Service -> my-service",
+                "v1.ConfigMap -> my-config",
+            ],
+        ),
+        (
+            "tests/more_languages/group5/checkbox_test.md",
+            [
+                "# My Checkbox Test",
+                "- [ ] Task 1",
+                "    - [ ] No Space Task 1.1",
+                "    - [ ] Two Spaces Task 1.2",
+                "        - [ ] Subtask 1.2.1",
+                "- [ ] Task 2",
+                "- [x] Task 3",
+                "    - [ ] Subtask 3.1",
+                "- [x] Task 6",
+                "    - [x] Subtask 6.1",
+                "        - [ ] Handle edge cases",
+            ],
+        ),
+    ],
+)
+def test_more_languages_group5(file, expected):
     result = parse_file(file)
     print(f"{result=}")
     print(f"{expected=}")
