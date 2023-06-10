@@ -1,4 +1,4 @@
-# src/cli.py
+# tree_plus_cli.py
 from typing import Optional, Union
 from collections import defaultdict
 import platform
@@ -53,13 +53,13 @@ def tree_plus(directory: str, ignore: Optional[Union[str, set]] = None) -> Tree:
     "an enhanced tree util with file component leaves and token / line counts"
 
     # Check for platform and encoding
-    use_special_chars = not (
+    operate_normally = not (
         platform.system() == "Windows" and sys.stdout.encoding == "cp1252"
     )
 
     # Use special characters or alternatives based on the check
-    folder_char = "\U0001f4c1" if use_special_chars else ":file_folder:"
-    file_char = "\U0001f4c4" if use_special_chars else ":page_facing_up:"
+    folder_char = ":file_folder:" if operate_normally else "[folder]"
+    file_char = ":page_facing_up:" if operate_normally else "[file]"
 
     # QUESTION: Could this screw up the parent_dir_path in the path_to_tree dict?
     directory = os.path.abspath(directory)

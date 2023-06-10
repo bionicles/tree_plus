@@ -1,8 +1,19 @@
+# Tree Plus
+
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-brightgreen)](https://choosealicense.com/licenses/)
 [![Docs](https://img.shields.io/badge/docs-README-blue)](https://github.com/bionicles/tree_plus/blob/main/README.md)
 [![Tests](https://github.com/bionicles/tree_plus/actions/workflows/python-app.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/python-app.yml)
 
-# Tree Plus
+Supported Operating Systems:
+![Ubuntu](https://img.shields.io/badge/Supports-Ubuntu-orange)
+![MacOS](https://img.shields.io/badge/Supports-MacOS-orange)
+![Windows](https://img.shields.io/badge/Supports-Windows-orange)
+
+Supported Python Versions:
+![Python 3.8](https://img.shields.io/badge/Python-3.8-blue)
+![Python 3.9](https://img.shields.io/badge/Python-3.9-blue)
+![Python 3.10](https://img.shields.io/badge/Python-3.10-blue)
+![Python 3.11](https://img.shields.io/badge/Python-3.11-blue)
 
 A simple command line interface (CLI) tool for developers to show a `tree` enhanced with token counts, line counts, and source code components.
 
