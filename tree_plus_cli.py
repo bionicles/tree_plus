@@ -32,14 +32,38 @@ def tree_to_string(tree: Tree) -> str:
     return ansi_escape.sub("", captured_str)
 
 
+# another option would potentially lose information
+# def clean_string(input_str):
+#     return input_str.encode("ascii", errors="replace").decode("ascii")
+
+
+def clean_string(input_str):
+    return input_str.encode("unicode-escape").decode("ascii")
+
+
 def safe_print(tree):
-    if console.is_terminal:
+    try:
+        # Attempt to print the tree normally
+        rich_print(tree)
+    except UnicodeEncodeError:
         try:
-            rich_print(tree)
-        except UnicodeEncodeError:
-            print(unidecode(tree_to_string(tree)))
-    else:
-        print(tree_to_string(tree))
+            # Attempt to print a cleaned version of the tree
+            print(clean_string(tree_to_string(tree)))
+        except Exception as e:
+            # If all else fails, print an error message
+            print("An error occurred when attempting to print the tree.")
+            print(e)
+
+
+# passing on ubuntu and mac
+# def safe_print(tree):
+#     if console.is_terminal:
+#         try:
+#             rich_print(tree)
+#         except UnicodeEncodeError:
+#             print(unidecode(tree_to_string(tree)))
+#     else:
+#         print(tree_to_string(tree))
 
 
 @click.command()
