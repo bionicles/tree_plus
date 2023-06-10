@@ -1,5 +1,3 @@
-import unicodedata
-import subprocess
 import pytest  # noqa f401
 import re
 import os
@@ -11,12 +9,11 @@ from tree_plus_src import traverse_directory
 
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
-EXPECTATION_1 = """tests/dot_dot
+EXPECTATION_1 = """📁 dot_dot
 ┣━━ 📁 nested_dir
 ┃   ┗━━ 📄 test_tp_dotdot.py
 ┃       ┣━━ def ignore_tokens_lines_test
 ┃       ┣━━ def test_tree_plus_dotdot
-┃       ┣━━ def show_invisible_chars
 ┃       ┗━━ def test_tree_plus_dotdot_traverse
 ┗━━ 📄 my_test_file.py
     ┗━━ def dot_dot_dot
@@ -42,23 +39,10 @@ def test_tree_plus_dotdot():
     print("expectation")
     print(expectation)
 
-    print(
-        subprocess.run(
-            ["tree", "..", "-I", "__pycache__"], capture_output=True
-        ).stdout.decode()
-    )
+    tree_string_lines = set(line.rstrip() for line in tree_string.splitlines())
+    expectation_lines = set(expectation.splitlines())
 
-
-def show_invisible_chars(s):
-    return "".join(
-        c if unicodedata.category(c) != "Cc" else unicodedata.name(c) for c in s
-    )
-
-    tree_string = tree_string.replace(" ", " ")
-    expectation = expectation.replace(" ", " ")
-    print(show_invisible_chars(tree_string))
-    print(show_invisible_chars(expectation))
-    assert tree_string == expectation
+    assert tree_string_lines == expectation_lines
 
 
 def test_tree_plus_dotdot_traverse():

@@ -81,7 +81,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_yml(contents)
 
     todos = parse_todo(contents)
-    return todos + components
+    total_components = todos + components
+    return total_components
 
 
 def is_k8s_yml(contents: str) -> bool:
