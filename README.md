@@ -5,54 +5,83 @@ A simple command line interface (CLI) tool for developers to show a `tree` enhan
 Disclaimer: More languages remain to add, you can find the test cases in the `tests/more_languages` directory.
 
 ## Example Output:
-
+- [ ] Demonstrate Parsed Checkboxes
 ```sh
-(py310) bion@WIN-QVRBL09D89C:~/hax/tree_plus$ tree_plus tree_plus_src
-tree_plus_src (8217 tokens, 1008 lines)
-┗━━ 📁 tree_plus_src (8217 tokens, 1008 lines)
-    ┣━━ 📄 __init__.py (64 tokens, 9 lines)
-    ┣━━ 📄 count_tokens_lines.py (400 tokens, 53 lines)
-    ┃   ┣━━ class TokenLineCount
-    ┃   ┣━━ def count_tokens_lines
-    ┃   ┗━━ def count_directory_tokens_lines
-    ┣━━ 📄 traverse_directory.py (254 tokens, 37 lines)
-    ┃   ┗━━ def traverse_directory
-    ┣━━ 📄 default_ignore.py (158 tokens, 35 lines)
-    ┗━━ 📄 parse_file.py (7341 tokens, 874 lines)
-        ┣━━ def parse_file
-        ┣━━ def is_k8s_yml
-        ┣━━ def is_ansible_yml
-        ┣━━ def parse_k8s
-        ┣━━ def parse_ansible
-        ┣━━ def parse_yml
-        ┣━━ def extract_nodes
-        ┣━━ def is_typing_construct
-        ┣━━ def is_builtin_type
-        ┣━━ def parse_py
-        ┣━━ def parse_db
-        ┣━━ def parse_cobol
-        ┣━━ def parse_java
-        ┣━━ def parse_julia
-        ┣━━ def parse_kotlin
-        ┣━━ def parse_lisp
-        ┣━━ def parse_lua
-        ┣━━ def parse_objective_c
-        ┣━━ def parse_ocaml
-        ┣━━ def parse_apl
-        ┣━━ def parse_perl
-        ┣━━ def parse_php
-        ┣━━ def parse_powershell
-        ┣━━ def parse_matlab
-        ┣━━ def parse_scala
-        ┣━━ def parse_c
-        ┣━━ def parse_rs
-        ┣━━ def handle_block
-        ┣━━ def parse_tf
-        ┣━━ def parse_js
-        ┣━━ def parse_md
-        ┣━━ def parse_txt
-        ┗━━ def parse_todo
+(py310) bion@WIN-QVRBL09D89C:~/hax/tree_plus$ tree_plus -i tests
+📁 tree_plus (21768 tokens, 2113 lines)
+┣━━ 📁 .github
+┃   ┗━━ 📁 workflows (128 tokens, 26 lines)
+┃       ┗━━ 📄 python-app.yml (128 tokens, 26 lines)
+┃           ┣━━ Tree Plus CI
+┃           ┣━━   job: build
+┃           ┣━━     - Set up Python
+┃           ┣━━     - Install dependencies
+┃           ┗━━     - Run Tests
+┣━━ 📁 tree_plus_src (8776 tokens, 1088 lines)
+┃   ┣━━ 📄 __init__.py (64 tokens, 9 lines)
+┃   ┣━━ 📄 count_tokens_lines.py (461 tokens, 67 lines)
+┃   ┃   ┣━━ TODO (Line 11): show off how well we parse_todo!
+┃   ┃   ┣━━ class TokenLineCount
+┃   ┃   ┣━━ def count_tokens_lines
+┃   ┃   ┗━━ def count_directory_tokens_lines
+┃   ┣━━ 📄 traverse_directory.py (274 tokens, 39 lines)
+┃   ┃   ┗━━ def traverse_directory
+┃   ┣━━ 📄 default_ignore.py (248 tokens, 53 lines)
+┃   ┗━━ 📄 parse_file.py (7729 tokens, 920 lines)
+┃       ┣━━ def parse_file
+┃       ┣━━ def is_k8s_yml
+┃       ┣━━ def is_ansible_yml
+┃       ┣━━ def is_github_yml
+┃       ┣━━ def parse_github_yml
+┃       ┣━━ def parse_k8s
+┃       ┣━━ def parse_ansible
+┃       ┣━━ def parse_yml
+┃       ┣━━ def extract_nodes
+┃       ┣━━ def is_typing_construct
+┃       ┣━━ def is_builtin_type
+┃       ┣━━ def parse_py
+┃       ┣━━ def parse_db
+┃       ┣━━ def parse_cobol
+┃       ┣━━ def parse_java
+┃       ┣━━ def parse_julia
+┃       ┣━━ def parse_kotlin
+┃       ┣━━ def parse_lisp
+┃       ┣━━ def parse_lua
+┃       ┣━━ def parse_objective_c
+┃       ┣━━ def parse_ocaml
+┃       ┣━━ def parse_apl
+┃       ┣━━ def parse_perl
+┃       ┣━━ def parse_php
+┃       ┣━━ def parse_powershell
+┃       ┣━━ def parse_matlab
+┃       ┣━━ def parse_scala
+┃       ┣━━ def parse_c
+┃       ┣━━ def parse_rs
+┃       ┣━━ def handle_block
+┃       ┣━━ def parse_tf
+┃       ┣━━ def parse_js
+┃       ┣━━ def parse_md
+┃       ┣━━ def parse_txt
+┃       ┗━━ def parse_todo
+┣━━ 📄 Makefile (85 tokens, 16 lines)
+┣━━ 📄 README.md (4530 tokens, 319 lines)
+┃   ┣━━ # Tree Plus
+┃   ┣━━ ## Example Output:
+┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
+┃   ┣━━ ## Start Quick!
+┃   ┗━━ ## Moar Usage
+┣━━ 📄 tree_plus_cli.py (2586 tokens, 298 lines)
+┃   ┣━━ def main
+┃   ┣━━ def tree_plus
+┃   ┗━━ def tree_to_string
+┣━━ 📄 setup.py (393 tokens, 69 lines)
+┃   ┗━━ TODO (Line 16): automatically install tree-sitter-{language} grammars
+┣━━ 📄 requirements.txt (11 tokens, 4 lines)
+┣━━ 📄 LICENSE (2123 tokens, 81 lines)
+┣━━ 📄 .gitignore (97 tokens, 28 lines)
+┗━━ 📄 sample_output.sh (3039 tokens, 184 lines)
 ```
+- [x] Demonstrate Parsed Checkboxes
 
 ## Start Quick!
 

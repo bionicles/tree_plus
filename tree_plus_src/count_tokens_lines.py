@@ -8,6 +8,7 @@ from tree_plus_src.traverse_directory import traverse_directory
 encoder = tiktoken.encoding_for_model("gpt-4")
 
 
+# TODO: show off how well we parse_todo!
 @dataclass
 class TokenLineCount:
     n_tokens: int = 0
@@ -19,18 +20,31 @@ def count_tokens_lines(file_path):
     Count the number of lines and OpenAI tokens in a file.
     """
     # Ignore binary files like images, executables, and databases
-    ignored_extensions = [".db", ".png", ".jpg", ".exe", ".dll", ".so", ".o"]
+    ignored_extensions = [
+        ".db",
+        ".png",
+        ".jpg",
+        ".exe",
+        ".dll",
+        ".so",
+        ".o",
+        ".pdf",
+        ".pack",
+        ".jar",
+        ".odg",
+    ]
     if any(file_path.endswith(ext) for ext in ignored_extensions):
+        # if any(file_path.suffix == ext for ext in ignored_extensions):
         return TokenLineCount(n_tokens=0, n_lines=0)
 
     try:
         with open(file_path, "r") as f:
             contents = f.read()
-            n_tokens = len(encoder.encode(contents))
+            n_tokens = len(encoder.encode(contents, disallowed_special=()))
             n_lines = len(contents.splitlines())
             return TokenLineCount(n_tokens=n_tokens, n_lines=n_lines)
     except Exception as e:
-        print(f"Error reading {file_path}: {e}")
+        print(f"count_tokens_lines Error reading {file_path}: {e}")
         return TokenLineCount(n_tokens=0, n_lines=0)
 
 

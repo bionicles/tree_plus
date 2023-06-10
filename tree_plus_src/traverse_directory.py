@@ -10,6 +10,8 @@ def traverse_directory(directory_path: str, ignore: Optional[Set] = None) -> Lis
     """
     Traverse a directory and return a list of all file paths.
     """
+    # Convert relative path to absolute path
+    # directory_path = os.path.abspath(directory_path)
     if not os.path.isdir(directory_path):
         raise NotADirectoryError(f"{directory_path} is not a directory")
 

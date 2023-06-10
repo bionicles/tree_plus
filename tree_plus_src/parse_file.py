@@ -31,6 +31,9 @@ def parse_file(file_path: str) -> List[str]:
 
     if file_extension == ".py":
         components = parse_py(contents)
+        if isinstance(components, SyntaxError):
+            # print(f"SyntaxError @ {file_path}: {components}")
+            components = [f"SyntaxError: {components}"]
     elif file_extension in [".js", ".ts", ".jsx", ".tsx"]:
         components = parse_js(contents)
     elif file_extension == ".md":
@@ -76,7 +79,9 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_tf(contents)
     elif file_extension in (".yml", ".yaml"):
         components = parse_yml(contents)
-    return components
+
+    todos = parse_todo(contents)
+    return todos + components
 
 
 def is_k8s_yml(contents: str) -> bool:
@@ -99,6 +104,33 @@ def is_ansible_yml(contents: str) -> bool:
     return False
 
 
+def is_github_yml(contents: str) -> bool:
+    try:
+        doc = yaml.safe_load(contents)  # load YAML from string
+        if "name" in doc and "jobs" in doc:
+            return True
+    except Exception as e:
+        print("Exception in is_github_yml: ", e)
+    return False
+
+
+def parse_github_yml(contents: str) -> List[str]:
+    result = []
+    try:
+        doc = yaml.safe_load(contents)  # load YAML from string
+        if is_github_yml(contents):
+            result.append(doc["name"])
+            for job in doc["jobs"]:
+                result.append(f"  job: {job}")
+                if "steps" in doc["jobs"][job]:
+                    for step in doc["jobs"][job]["steps"]:
+                        if "name" in step:
+                            result.append(f"    - {step['name']}")
+    except Exception as e:
+        print("Exception in parse_github_yml: ", e)
+    return result
+
+
 def parse_k8s(contents: str) -> List[str]:
     result = []
     for doc in yaml.safe_load_all(contents):
@@ -118,6 +150,8 @@ def parse_yml(contents: str) -> List[str]:
         return parse_k8s(contents)
     elif is_ansible_yml(contents):
         return parse_ansible(contents)
+    elif is_github_yml(contents):
+        return parse_github_yml(contents)
     return ["Unsupported YAML Category"]
 
 
@@ -151,7 +185,10 @@ def is_builtin_type(node, parent):
 
 
 def parse_py(content: str) -> List[str]:
-    node = ast.parse(content)
+    try:
+        node = ast.parse(content)
+    except SyntaxError as se:
+        return se
     classes = extract_nodes(node, ast.ClassDef)
     types = [
         n[1].targets[0].id
@@ -796,6 +833,7 @@ def parse_md(content: str) -> List[str]:
 
     # Regex pattern to match URLs in Markdown.
     url_pattern = re.compile(r'\s*\(<a href=".*">.+</a>\)|<a href=".*">.+</a>')
+    link_pattern = re.compile(r"\(.*?\)")
 
     for line in lines:
         # If we encounter a code block (indicated by ```), toggle in_code_block.
@@ -808,6 +846,7 @@ def parse_md(content: str) -> List[str]:
                 line = line.lstrip()
                 # Remove URLs from headers.
                 clean_header = url_pattern.sub("", line)
+                clean_header = link_pattern.sub("", clean_header)
                 clean_header = clean_header.strip()
                 headers_and_tasks.append(clean_header)
             # If the line is a task, process it accordingly.
@@ -870,7 +909,7 @@ def parse_txt(content: str) -> List[str]:
 
 
 def parse_todo(content: str) -> List[str]:
-    todo_pattern = re.compile(r".*TODO: (.*)")
+    todo_pattern = re.compile(r'TODO(?![\'"]): (.*)')
     todos = []
 
     lines = content.splitlines()
