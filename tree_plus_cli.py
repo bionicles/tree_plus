@@ -7,7 +7,7 @@ import os
 import re
 
 from rich.console import Console
-from rich import print as rprint
+from rich import print as rich_print
 from rich.tree import Tree
 import click
 
@@ -20,6 +20,16 @@ from tree_plus_src import (
 )
 
 console = Console()
+
+
+def safe_print(tree):
+    if console.is_terminal:
+        try:
+            rich_print(tree)
+        except UnicodeEncodeError:
+            print(tree_to_string(tree))
+    else:
+        print(tree_to_string(tree))
 
 
 @click.command()
@@ -36,10 +46,7 @@ def main(directories, ignore, color):
     ignore = set(ignore)
     ignore |= DEFAULT_IGNORE  # always ignore these
     tree = tree_plus(directories, ignore)
-    if color:
-        rprint(tree)
-    else:
-        print(tree_to_string(tree))
+    safe_print(tree)
 
 
 def tree_plus(directory: str, ignore: Optional[Union[str, set]] = None) -> Tree:
