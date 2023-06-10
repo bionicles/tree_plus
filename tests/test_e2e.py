@@ -1,4 +1,5 @@
 # tests/test_e2e.py
+import platform
 import pytest  # noqa: F401
 import rich
 
@@ -7,6 +8,17 @@ from rich import print
 from tree_plus_cli import tree_plus, tree_to_string
 
 test_directory = "tests/path_to_test"
+
+
+def unify_tree_symbols(tree_string):
+    if platform.system() == "Windows":
+        # Map Windows tree symbols to Unix/MacOS tree symbols
+        tree_string = tree_string.replace("\u2523", "\u251C")  # '┣' in Ubuntu/MacOS
+        tree_string = tree_string.replace("\u2503", "\u2502")  # '┃' in Ubuntu/MacOS
+        tree_string = tree_string.replace("\u2517", "\u2514")  # '┗' in Ubuntu/MacOS
+        tree_string = tree_string.replace("\u2501", "\u2500")  # '━' in Ubuntu/MacOS
+    return tree_string
+
 
 EXPECTATION_1 = """📁 path_to_test (153 tokens, 38 lines)
 ┣━━ 📄 class_function.js (33 tokens, 9 lines)
@@ -36,7 +48,7 @@ def test_e2e_single_directory():
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
     print(result_str)
-    assert tree_to_string(result) == EXPECTATION_1
+    assert unify_tree_symbols(result_str) == unify_tree_symbols(EXPECTATION_1)
 
 
 # Test multiple directories
@@ -90,7 +102,7 @@ def test_e2e_multiple_directories():
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
     print(result_str)
-    assert result_str == EXPECTATION_2
+    assert unify_tree_symbols(result_str) == unify_tree_symbols(EXPECTATION_2)
 
 
 # def test_e2e_more_languages():
