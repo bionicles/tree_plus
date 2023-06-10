@@ -2,8 +2,6 @@
 
 A simple command line interface (CLI) tool for developers to show a `tree` enhanced with token counts, line counts, and source code components.
 
-Disclaimer: More languages remain to add, you can find the test cases in the `tests/more_languages` directory.
-
 ## Example Output:
 - [ ] Demonstrate Parsed Checkboxes
 ```sh
@@ -131,68 +129,63 @@ Multiple directories:
 
 ```sh
 (py310) bion@WIN-QVRBL09D89C:~/hax/tree_plus$ tree_plus tests/path_to_test,tests/more_languages
+(py310) bion@WIN-QVRBL09D89C:~/hax/tree_plus$ tp tests/path_to_test,tests/more_languages
 Multiple Directories:
-┣━━ tests/path_to_test (153 tokens, 38 lines)
-┃   ┗━━ 📁 path_to_test (153 tokens, 38 lines)
-┃       ┣━━ 📄 file.py (11 tokens, 2 lines)
-┃       ┃   ┗━━ def hello_world
-┃       ┣━━ 📄 file.txt (11 tokens, 2 lines)
-┃       ┣━━ 📄 class_function_type.ts (45 tokens, 12 lines)
-┃       ┃   ┣━━ type MyType
-┃       ┃   ┣━━ class TsClass
-┃       ┃   ┗━━ function tsFunction
-┃       ┣━━ 📄 file.js (14 tokens, 3 lines)
-┃       ┃   ┗━━ function helloWorld
-┃       ┣━━ 📄 empty.py (0 tokens, 0 lines)
-┃       ┣━━ 📄 file.md (12 tokens, 2 lines)
-┃       ┃   ┗━━ # Hello, world!
-┃       ┣━━ 📄 class_function.js (33 tokens, 9 lines)
-┃       ┃   ┣━━ class MyClass
-┃       ┃   ┗━━ function myFunction
-┃       ┗━━ 📄 class_method_type.py (27 tokens, 8 lines)
-┃           ┣━━ MyType
-┃           ┣━━ class MyClass
-┃           ┗━━ class MyClass -> def my_method
-┗━━ tests/more_languages (4185 tokens, 829 lines)
-    ┣━━ 📁 group4 (1224 tokens, 246 lines)
-    ┃   ┣━━ 📄 haskell_test.hs (34 tokens, 5 lines)
-    ┃   ┣━━ 📄 matlab_test.m (45 tokens, 12 lines)
-    ┃   ┃   ┣━━ classdef HelloWorld -> function greet
-    ┃   ┃   ┗━━ function loneFun
-    ┃   ┣━━ 📄 mathematica_test.nb (132 tokens, 21 lines)
-    ┃   ┣━━ 📄 swift_test.swift (92 tokens, 22 lines)
-    ┃   ┣━━ 📄 sas_test.sas (104 tokens, 22 lines)
-    ┃   ┣━━ 📄 ruby_test.rb (50 tokens, 13 lines)
-    ┃   ┣━━ 📄 fsharp_test.fs (44 tokens, 6 lines)
-    ┃   ┣━━ 📄 tf_test.tf (288 tokens, 39 lines)
-    ┃   ┃   ┣━━ provider "aws"
-    ┃   ┃   ┣━━ resource "aws_instance" "example"
-    ┃   ┃   ┣━━ data "aws_ami" "ubuntu"
-    ┃   ┃   ┣━━ variable "instance_type"
-    ┃   ┃   ┣━━ output "instance_public_ip"
-    ┃   ┃   ┣━━ locals
-    ┃   ┃   ┗━━ module "vpc"
-    ┃   ┣━━ 📄 go_test.go (59 tokens, 16 lines)
-    ┃   ┣━━ 📄 vba_test.bas (72 tokens, 16 lines)
-    ┃   ┗━━ 📄 rust_test.rs (304 tokens, 74 lines)
-    ┃       ┣━━ enum Days
-    ┃       ┣━━ struct Point
-    ┃       ┣━━ impl Point
-    ┃       ┣━━ impl Point :: get_origin() -> Point
-    ┃       ┣━━ struct Person
-    ┃       ┣━━ impl Person
-    ┃       ┣━━ impl Person :: greet(&self)
-    ┃       ┣━━ fn add_two_longs(x1: i64, x2: i64) -> i64
-    ┃       ┣━━ fn multiply_by_two(num: f64) -> f64
-    ┃       ┣━━ fn get_first_character(s: &str) -> Option<char>
-    ┃       ┣━━ trait Drawable
-    ┃       ┣━━ trait Drawable :: draw(&self)
-    ┃       ┣━━ impl Drawable for Point
-    ┃       ┣━━ impl Drawable for Point :: draw(&self)
-    ┃       ┣━━ fn main()
-    ┃       ┣━━ pub struct VisibleStruct
-    ┃       ┣━━ mod my_module
-    ┃       ┗━━ macro_rules! say_hello
+┣━━ 📁 path_to_test (153 tokens, 38 lines)
+┃   ┣━━ 📄 file.py (11 tokens, 2 lines)
+┃   ┃   ┗━━ def hello_world
+┃   ┣━━ 📄 file.txt (11 tokens, 2 lines)
+┃   ┣━━ 📄 class_function_type.ts (45 tokens, 12 lines)
+┃   ┃   ┣━━ type MyType
+┃   ┃   ┣━━ class TsClass
+┃   ┃   ┗━━ function tsFunction
+┃   ┣━━ 📄 file.js (14 tokens, 3 lines)
+┃   ┃   ┗━━ function helloWorld
+┃   ┣━━ 📄 empty.py (0 tokens, 0 lines)
+┃   ┣━━ 📄 file.md (12 tokens, 2 lines)
+┃   ┃   ┗━━ # Hello, world!
+┃   ┣━━ 📄 class_function.js (33 tokens, 9 lines)
+┃   ┃   ┣━━ class MyClass
+┃   ┃   ┗━━ function myFunction
+┃   ┗━━ 📄 class_method_type.py (27 tokens, 8 lines)
+┃       ┣━━ MyType
+┃       ┣━━ class MyClass
+┃       ┗━━ class MyClass -> def my_method
+┗━━ 📁 more_languages (4273 tokens, 835 lines)
+    ┣━━ 📁 group1 (402 tokens, 88 lines)
+    ┃   ┣━━ 📄 KotlinTest.kt (29 tokens, 4 lines)
+    ┃   ┃   ┣━━ data class Person(val name: String)
+    ┃   ┃   ┗━━ fun greet(person: Person)
+    ┃   ┣━━ 📄 JavaTest.java (47 tokens, 12 lines)
+    ┃   ┃   ┣━━ class Person
+    ┃   ┃   ┣━━ class Person -> Person(String name)
+    ┃   ┃   ┗━━ class Person -> void greet()
+    ┃   ┣━━ 📄 LispTest.lisp (31 tokens, 5 lines)
+    ┃   ┃   ┣━━ defstruct person
+    ┃   ┃   ┗━━ defun greet
+    ┃   ┣━━ 📄 ObjectiveCTest.m (59 tokens, 16 lines)
+    ┃   ┃   ┣━━ @interface HelloWorld
+    ┃   ┃   ┣━━ @interface HelloWorld -> (void) sayHello
+    ┃   ┃   ┣━━ @implementation HelloWorld
+    ┃   ┃   ┣━━ @implementation HelloWorld -> (void) sayHello
+    ┃   ┃   ┗━━ void sayHelloWorld()
+    ┃   ┣━━ 📄 LuaTest.lua (84 tokens, 16 lines)
+    ┃   ┃   ┣━━ function HelloWorld.new
+    ┃   ┃   ┣━━ function HelloWorld.greet
+    ┃   ┃   ┗━━ function say_hello
+    ┃   ┣━━ 📄 JuliaTest.jl (42 tokens, 12 lines)
+    ┃   ┃   ┣━━ module JuliaTest
+    ┃   ┃   ┣━━ module JuliaTest -> struct Person
+    ┃   ┃   ┗━━ module JuliaTest -> greet(p::Person)
+    ┃   ┣━━ 📄 OcamlTest.ml (53 tokens, 12 lines)
+    ┃   ┃   ┣━━ type color
+    ┃   ┃   ┣━━ class hello
+    ┃   ┃   ┣━━ class hello -> method say_hello
+    ┃   ┃   ┗━━ let main ()
+    ┃   ┗━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
+    ┃       ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO
+    ┃       ┣━━ DATA DIVISION -> 01 GREETING
+    ┃       ┗━━ PROCEDURE DIVISION
     ┣━━ 📁 group2 (829 tokens, 178 lines)
     ┃   ┣━━ 📄 ScalaTest.scala (136 tokens, 24 lines)
     ┃   ┃   ┣━━ def sumOfSquares(x: Int, y: Int): Int
@@ -250,78 +243,88 @@ Multiple Directories:
     ┃   ┣━━ 📄 csharp_test.cs (397 tokens, 72 lines)
     ┃   ┣━━ 📄 erl_test.erl (60 tokens, 9 lines)
     ┃   ┗━━ 📄 crystal_test.cr (56 tokens, 15 lines)
-    ┣━━ 📁 group5 (789 tokens, 129 lines)
-    ┃   ┣━━ 📄 rust_todo_test.rs (109 tokens, 27 lines)
-    ┃   ┃   ┣━━ enum Color
-    ┃   ┃   ┣━━ struct Point
-    ┃   ┃   ┣━━ trait Drawable
-    ┃   ┃   ┣━━ trait Drawable :: draw(&self)
-    ┃   ┃   ┣━━ impl Drawable for Point
-    ┃   ┃   ┣━━ impl Drawable for Point :: draw(&self)
-    ┃   ┃   ┗━━ fn main()
-    ┃   ┣━━ 📄 checkbox_test.md (143 tokens, 16 lines)
-    ┃   ┃   ┣━━ # My Checkbox Test
-    ┃   ┃   ┣━━ - [ ] Task 1
-    ┃   ┃   ┣━━     - [ ] No Space Task 1.1
-    ┃   ┃   ┣━━     - [ ] Two Spaces Task 1.2
-    ┃   ┃   ┣━━         - [ ] Subtask 1.2.1
-    ┃   ┃   ┣━━ - [ ] Task 2
-    ┃   ┃   ┣━━ -  Task 3
-    ┃   ┃   ┣━━     - [ ] Subtask 3.1
-    ┃   ┃   ┣━━ -  Task 6
-    ┃   ┃   ┣━━     -  Subtask 6.1
-    ┃   ┃   ┗━━         - [ ] Handle edge cases
-    ┃   ┣━━ 📄 k8s_test.yaml (171 tokens, 38 lines)
-    ┃   ┃   ┣━━ apps/v1.Deployment -> my-app
-    ┃   ┃   ┣━━ v1.Service -> my-service
-    ┃   ┃   ┗━━ v1.ConfigMap -> my-config
-    ┃   ┣━━ 📄 checkbox_test.txt (306 tokens, 33 lines)
-    ┃   ┃   ┣━━ - [ ] fix phone number format +1
-    ┃   ┃   ┣━━ - [ ] add forgot password
-    ┃   ┃   ┣━━ - [ ] ? add email verification
-    ┃   ┃   ┣━━ - [ ] store token the right way
-    ┃   ┃   ┣━━ - [ ] test nesting of checkboxes
-    ┃   ┃   ┣━━ - [ ] user can use option to buy ticket at 2-referred price initially
-    ┃   ┃   ┣━━ - [ ] CTA refer 2 people to get instant lower price, and generate 2 promocodes for ($2
-    ┃   ┃   ┃   off)? tickets
-    ┃   ┃   ┗━━ - [ ] form to send refers to those two people, buy at $65 before they buy their own
-    ┃   ┃       ticket
-    ┃   ┗━━ 📄 ansible_test.yml (60 tokens, 15 lines)
-    ┃       ┣━━ Install package
-    ┃       ┣━━ Start service
-    ┃       ┗━━ Create user
-    ┗━━ 📁 group1 (402 tokens, 88 lines)
-        ┣━━ 📄 KotlinTest.kt (29 tokens, 4 lines)
-        ┃   ┣━━ data class Person(val name: String)
-        ┃   ┗━━ fun greet(person: Person)
-        ┣━━ 📄 JavaTest.java (47 tokens, 12 lines)
-        ┃   ┣━━ class Person
-        ┃   ┣━━ class Person -> Person(String name)
-        ┃   ┗━━ class Person -> void greet()
-        ┣━━ 📄 LispTest.lisp (31 tokens, 5 lines)
-        ┃   ┣━━ defstruct person
-        ┃   ┗━━ defun greet
-        ┣━━ 📄 ObjectiveCTest.m (59 tokens, 16 lines)
-        ┃   ┣━━ @interface HelloWorld
-        ┃   ┣━━ @interface HelloWorld -> (void) sayHello
-        ┃   ┣━━ @implementation HelloWorld
-        ┃   ┣━━ @implementation HelloWorld -> (void) sayHello
-        ┃   ┗━━ void sayHelloWorld()
-        ┣━━ 📄 LuaTest.lua (84 tokens, 16 lines)
-        ┃   ┣━━ function HelloWorld.new
-        ┃   ┣━━ function HelloWorld.greet
-        ┃   ┗━━ function say_hello
-        ┣━━ 📄 JuliaTest.jl (42 tokens, 12 lines)
-        ┃   ┣━━ module JuliaTest
-        ┃   ┣━━ module JuliaTest -> struct Person
-        ┃   ┗━━ module JuliaTest -> greet(p::Person)
-        ┣━━ 📄 OcamlTest.ml (53 tokens, 12 lines)
-        ┃   ┣━━ type color
-        ┃   ┣━━ class hello
-        ┃   ┣━━ class hello -> method say_hello
-        ┃   ┗━━ let main ()
-        ┗━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
-            ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO
-            ┣━━ DATA DIVISION -> 01 GREETING
-            ┗━━ PROCEDURE DIVISION
+    ┣━━ 📁 group4 (1224 tokens, 246 lines)
+    ┃   ┣━━ 📄 haskell_test.hs (34 tokens, 5 lines)
+    ┃   ┣━━ 📄 matlab_test.m (45 tokens, 12 lines)
+    ┃   ┃   ┣━━ classdef HelloWorld -> function greet
+    ┃   ┃   ┗━━ function loneFun
+    ┃   ┣━━ 📄 mathematica_test.nb (132 tokens, 21 lines)
+    ┃   ┣━━ 📄 swift_test.swift (92 tokens, 22 lines)
+    ┃   ┣━━ 📄 sas_test.sas (104 tokens, 22 lines)
+    ┃   ┣━━ 📄 ruby_test.rb (50 tokens, 13 lines)
+    ┃   ┣━━ 📄 fsharp_test.fs (44 tokens, 6 lines)
+    ┃   ┣━━ 📄 tf_test.tf (288 tokens, 39 lines)
+    ┃   ┃   ┣━━ provider "aws"
+    ┃   ┃   ┣━━ resource "aws_instance" "example"
+    ┃   ┃   ┣━━ data "aws_ami" "ubuntu"
+    ┃   ┃   ┣━━ variable "instance_type"
+    ┃   ┃   ┣━━ output "instance_public_ip"
+    ┃   ┃   ┣━━ locals
+    ┃   ┃   ┗━━ module "vpc"
+    ┃   ┣━━ 📄 go_test.go (59 tokens, 16 lines)
+    ┃   ┣━━ 📄 vba_test.bas (72 tokens, 16 lines)
+    ┃   ┗━━ 📄 rust_test.rs (304 tokens, 74 lines)
+    ┃       ┣━━ enum Days
+    ┃       ┣━━ struct Point
+    ┃       ┣━━ impl Point
+    ┃       ┣━━ impl Point :: get_origin() -> Point
+    ┃       ┣━━ struct Person
+    ┃       ┣━━ impl Person
+    ┃       ┣━━ impl Person :: greet(&self)
+    ┃       ┣━━ fn add_two_longs(x1: i64, x2: i64) -> i64
+    ┃       ┣━━ fn multiply_by_two(num: f64) -> f64
+    ┃       ┣━━ fn get_first_character(s: &str) -> Option<char>
+    ┃       ┣━━ trait Drawable
+    ┃       ┣━━ trait Drawable :: draw(&self)
+    ┃       ┣━━ impl Drawable for Point
+    ┃       ┣━━ impl Drawable for Point :: draw(&self)
+    ┃       ┣━━ fn main()
+    ┃       ┣━━ pub struct VisibleStruct
+    ┃       ┣━━ mod my_module
+    ┃       ┗━━ macro_rules! say_hello
+    ┗━━ 📁 group5 (877 tokens, 135 lines)
+        ┣━━ 📄 rust_todo_test.rs (109 tokens, 27 lines)
+        ┃   ┣━━ TODO (Line 23): This todo tests parse_todo
+        ┃   ┣━━ enum Color
+        ┃   ┣━━ struct Point
+        ┃   ┣━━ trait Drawable
+        ┃   ┣━━ trait Drawable :: draw(&self)
+        ┃   ┣━━ impl Drawable for Point
+        ┃   ┣━━ impl Drawable for Point :: draw(&self)
+        ┃   ┗━━ fn main()
+        ┣━━ 📄 checkbox_test.md (261 tokens, 22 lines)
+        ┃   ┣━━ # My Checkbox Test
+        ┃   ┣━━ ## My No Parens Test
+        ┃   ┣━━ ## My Empty href Test
+        ┃   ┣━━ ## My other url Test [Q&A]
+        ┃   ┣━━ ## My other other url Test [Q&A]
+        ┃   ┣━━ ## My 2nd other url Test [Q&A]
+        ┃   ┣━━ ## My 3rd other url Test [Q&A]
+        ┃   ┣━━ - [ ] Task 1
+        ┃   ┣━━     - [ ] No Space Task 1.1
+        ┃   ┣━━     - [ ] Two Spaces Task 1.2
+        ┃   ┣━━         - [ ] Subtask 1.2.1
+        ┃   ┣━━ - [ ] Task 2
+        ┃   ┣━━ -  Task 3
+        ┃   ┣━━     - [ ] Subtask 3.1
+        ┃   ┣━━ -  Task 6
+        ┃   ┣━━     -  Subtask 6.1
+        ┃   ┗━━         - [ ] Handle edge cases
+        ┣━━ 📄 k8s_test.yaml (171 tokens, 38 lines)
+        ┃   ┣━━ apps/v1.Deployment -> my-app
+        ┃   ┣━━ v1.Service -> my-service
+        ┃   ┗━━ v1.ConfigMap -> my-config
+        ┣━━ 📄 checkbox_test.txt (276 tokens, 33 lines)
+        ┃   ┣━━ - [ ] fix phone number format +1
+        ┃   ┣━━ - [ ] add forgot password
+        ┃   ┣━━ - [ ] ? add email verification
+        ┃   ┣━━ - [ ] store token the right way
+        ┃   ┣━━ - [ ] test nesting of checkboxes
+        ┃   ┣━━ - [ ] user can use option to buy ticket at 2-referred price
+        ┃   ┣━━ - [ ] CTA refer 2 people to get instant lower price
+        ┃   ┗━━ - [ ] form to send referrals
+        ┗━━ 📄 ansible_test.yml (60 tokens, 15 lines)
+            ┣━━ Install package
+            ┣━━ Start service
+            ┗━━ Create user
 ```

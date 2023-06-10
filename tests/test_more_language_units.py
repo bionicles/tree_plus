@@ -402,9 +402,9 @@ def test_more_languages_group4(file, expected):
                 "- [ ] ? add email verification",
                 "- [ ] store token the right way",
                 "- [ ] test nesting of checkboxes",
-                "- [ ] user can use option to buy ticket at 2-referred price initially",
-                "- [ ] CTA refer 2 people to get instant lower price, and generate 2 promocodes for ($2 off)? tickets",
-                "- [ ] form to send refers to those two people, buy at $65 before they buy their own ticket",
+                "- [ ] user can use option to buy ticket at 2-referred price",
+                "- [ ] CTA refer 2 people to get instant lower price",
+                "- [ ] form to send referrals",
             ],
         ),
         (

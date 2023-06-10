@@ -28,6 +28,6 @@
     - [x] on register success route back to login 
     - [x] made stripe account https://dashboard.stripe.com/dashboard
   enhance:
-    - [   ] user can use option to buy ticket at 2-referred price initially
-                - [  ] CTA refer 2 people to get instant lower price, and generate 2 promocodes for ($2 off)? tickets
-    - [] form to send refers to those two people, buy at $65 before they buy their own ticket
+    - [   ] user can use option to buy ticket at 2-referred price
+                - [  ] CTA refer 2 people to get instant lower price
+    - [] form to send referrals
