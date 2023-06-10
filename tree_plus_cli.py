@@ -89,9 +89,9 @@ def tree_plus(directory: str, ignore: Optional[Union[str, set]] = None) -> Tree:
         directories[dir_path].append(file_name)
 
     # Process directories in lexicographical order of their paths
-    sorted_directories = sorted(directories.keys())
+    sorted_directories_keys = sorted(directories.keys())
     # Check if parent directories exist in path_to_tree, if not add them
-    for dir_path in sorted_directories:
+    for dir_path in sorted_directories_keys:
         current_path = dir_path
         path_parts = []
 
@@ -108,14 +108,11 @@ def tree_plus(directory: str, ignore: Optional[Union[str, set]] = None) -> Tree:
             path_to_tree[part] = dir_tree
 
     # Here, we sort directories like Linux tree utility
-    directories = dict(
-        sorted(
-            directories.items(),
-            key=lambda item: (item[0], sorted(item[1], key=str.lower)),
-        )
-    )
-
-    for dir_path, files in directories.items():
+    sorted_directories = {
+        dir_path: sorted(files, key=str.lower)
+        for dir_path, files in sorted(directories.items(), key=lambda item: item[0])
+    }
+    for dir_path, files in sorted_directories.items():
         dir_tree = path_to_tree[dir_path]
 
         dir_count = TokenLineCount(n_tokens=0, n_lines=0)

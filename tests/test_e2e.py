@@ -9,25 +9,25 @@ from tree_plus_cli import tree_plus, tree_to_string
 test_directory = "tests/path_to_test"
 
 EXPECTATION_1 = """📁 path_to_test (153 tokens, 38 lines)
-┣━━ 📄 file.py (11 tokens, 2 lines)
-┃   ┗━━ def hello_world
-┣━━ 📄 file.txt (11 tokens, 2 lines)
+┣━━ 📄 class_function.js (33 tokens, 9 lines)
+┃   ┣━━ class MyClass
+┃   ┗━━ function myFunction
 ┣━━ 📄 class_function_type.ts (45 tokens, 12 lines)
 ┃   ┣━━ type MyType
 ┃   ┣━━ class TsClass
 ┃   ┗━━ function tsFunction
+┣━━ 📄 class_method_type.py (27 tokens, 8 lines)
+┃   ┣━━ MyType
+┃   ┣━━ class MyClass
+┃   ┗━━ class MyClass -> def my_method
+┣━━ 📄 empty.py (0 tokens, 0 lines)
 ┣━━ 📄 file.js (14 tokens, 3 lines)
 ┃   ┗━━ function helloWorld
-┣━━ 📄 empty.py (0 tokens, 0 lines)
 ┣━━ 📄 file.md (12 tokens, 2 lines)
 ┃   ┗━━ # Hello, world!
-┣━━ 📄 class_function.js (33 tokens, 9 lines)
-┃   ┣━━ class MyClass
-┃   ┗━━ function myFunction
-┗━━ 📄 class_method_type.py (27 tokens, 8 lines)
-    ┣━━ MyType
-    ┣━━ class MyClass
-    ┗━━ class MyClass -> def my_method
+┣━━ 📄 file.py (11 tokens, 2 lines)
+┃   ┗━━ def hello_world
+┗━━ 📄 file.txt (11 tokens, 2 lines)
 """
 
 
@@ -42,45 +42,45 @@ def test_e2e_single_directory():
 # Test multiple directories
 EXPECTATION_2 = """Multiple Directories:
 ┣━━ 📁 path_to_test (153 tokens, 38 lines)
-┃   ┣━━ 📄 file.py (11 tokens, 2 lines)
-┃   ┃   ┗━━ def hello_world
-┃   ┣━━ 📄 file.txt (11 tokens, 2 lines)
+┃   ┣━━ 📄 class_function.js (33 tokens, 9 lines)
+┃   ┃   ┣━━ class MyClass
+┃   ┃   ┗━━ function myFunction
 ┃   ┣━━ 📄 class_function_type.ts (45 tokens, 12 lines)
 ┃   ┃   ┣━━ type MyType
 ┃   ┃   ┣━━ class TsClass
 ┃   ┃   ┗━━ function tsFunction
+┃   ┣━━ 📄 class_method_type.py (27 tokens, 8 lines)
+┃   ┃   ┣━━ MyType
+┃   ┃   ┣━━ class MyClass
+┃   ┃   ┗━━ class MyClass -> def my_method
+┃   ┣━━ 📄 empty.py (0 tokens, 0 lines)
 ┃   ┣━━ 📄 file.js (14 tokens, 3 lines)
 ┃   ┃   ┗━━ function helloWorld
-┃   ┣━━ 📄 empty.py (0 tokens, 0 lines)
 ┃   ┣━━ 📄 file.md (12 tokens, 2 lines)
 ┃   ┃   ┗━━ # Hello, world!
-┃   ┣━━ 📄 class_function.js (33 tokens, 9 lines)
-┃   ┃   ┣━━ class MyClass
-┃   ┃   ┗━━ function myFunction
-┃   ┗━━ 📄 class_method_type.py (27 tokens, 8 lines)
-┃       ┣━━ MyType
-┃       ┣━━ class MyClass
-┃       ┗━━ class MyClass -> def my_method
+┃   ┣━━ 📄 file.py (11 tokens, 2 lines)
+┃   ┃   ┗━━ def hello_world
+┃   ┗━━ 📄 file.txt (11 tokens, 2 lines)
 ┗━━ 📁 path_to_test (153 tokens, 38 lines)
-    ┣━━ 📄 file.py (11 tokens, 2 lines)
-    ┃   ┗━━ def hello_world
-    ┣━━ 📄 file.txt (11 tokens, 2 lines)
+    ┣━━ 📄 class_function.js (33 tokens, 9 lines)
+    ┃   ┣━━ class MyClass
+    ┃   ┗━━ function myFunction
     ┣━━ 📄 class_function_type.ts (45 tokens, 12 lines)
     ┃   ┣━━ type MyType
     ┃   ┣━━ class TsClass
     ┃   ┗━━ function tsFunction
+    ┣━━ 📄 class_method_type.py (27 tokens, 8 lines)
+    ┃   ┣━━ MyType
+    ┃   ┣━━ class MyClass
+    ┃   ┗━━ class MyClass -> def my_method
+    ┣━━ 📄 empty.py (0 tokens, 0 lines)
     ┣━━ 📄 file.js (14 tokens, 3 lines)
     ┃   ┗━━ function helloWorld
-    ┣━━ 📄 empty.py (0 tokens, 0 lines)
     ┣━━ 📄 file.md (12 tokens, 2 lines)
     ┃   ┗━━ # Hello, world!
-    ┣━━ 📄 class_function.js (33 tokens, 9 lines)
-    ┃   ┣━━ class MyClass
-    ┃   ┗━━ function myFunction
-    ┗━━ 📄 class_method_type.py (27 tokens, 8 lines)
-        ┣━━ MyType
-        ┣━━ class MyClass
-        ┗━━ class MyClass -> def my_method
+    ┣━━ 📄 file.py (11 tokens, 2 lines)
+    ┃   ┗━━ def hello_world
+    ┗━━ 📄 file.txt (11 tokens, 2 lines)
 """
 
 
