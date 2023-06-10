@@ -736,7 +736,7 @@ def parse_c(content: str) -> List[str]:
     return parsed
 
 
-def parse_rs(contents: str) -> list[str, ...]:
+def parse_rs(contents: str) -> List[str]:
     enum_pattern = r"((pub\s+)?enum\s+[A-Z]\w*)"
     struct_pattern = r"((pub\s+)?struct\s+[A-Z]\w*)"
     trait_pattern = r"((pub\s+)?trait\s+[A-Z]\w*)"
