@@ -8,9 +8,32 @@ on:
 
 jobs:
   build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.6, 3.7, 3.8, 3.9, 3.10, 3.11, 3.12]
 
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install tree_plus
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+    - name: Run generic tests
+      run: |
+        pytest tests/ -k "not test_tree_plus_dotdot" -vv
+    - name: Run specific test
+      run: |
+        cd tests/dot_dot/nested_dir && pytest -k test_tree_plus_dotdot -vv && cd ../../..
+
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
@@ -21,6 +44,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Run Tests
-      run: |
-        pytest tests/
+    - name: Build package
+      run: python -m build
+    - name: Publish package
+      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
