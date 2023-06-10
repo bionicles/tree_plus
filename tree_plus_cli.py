@@ -1,6 +1,7 @@
 # tree_plus_cli.py
-from typing import Optional, Union
 from collections import defaultdict
+from unidecode import unidecode
+from typing import Optional, Union
 import platform
 import sys
 import os
@@ -22,12 +23,21 @@ from tree_plus_src import (
 console = Console()
 
 
+def tree_to_string(tree: Tree) -> str:
+    console = Console(force_terminal=True, no_color=True)
+    with console.capture() as capture:
+        console.print(tree)
+    captured_str = capture.get()
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+    return ansi_escape.sub("", captured_str)
+
+
 def safe_print(tree):
     if console.is_terminal:
         try:
             rich_print(tree)
         except UnicodeEncodeError:
-            print(tree_to_string(tree))
+            print(unidecode(tree_to_string(tree)))
     else:
         print(tree_to_string(tree))
 
@@ -155,15 +165,6 @@ def tree_plus(directory: str, ignore: Optional[Union[str, set]] = None) -> Tree:
 
     root_tree.label = f"{folder_char} {os.path.basename(os.path.abspath(directory))} ({total_count.n_tokens} tokens, {total_count.n_lines} lines)"
     return root_tree
-
-
-def tree_to_string(tree: Tree) -> str:
-    console = Console(force_terminal=True, no_color=True)
-    with console.capture() as capture:
-        console.print(tree)
-    captured_str = capture.get()
-    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
-    return ansi_escape.sub("", captured_str)
 
 
 if __name__ == "__main__":
