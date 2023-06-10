@@ -38,7 +38,7 @@ def count_tokens_lines(file_path):
         return TokenLineCount(n_tokens=0, n_lines=0)
 
     try:
-        with open(file_path, "r") as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             contents = f.read()
             n_tokens = len(encoder.encode(contents, disallowed_special=()))
             n_lines = len(contents.splitlines())
