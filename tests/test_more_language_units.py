@@ -414,6 +414,7 @@ def test_more_languages_group4(file, expected):
                 "  job: build",
                 "    - Set up Python ${{ matrix.python-version }}",
                 "    - Install tree_plus",
+                "    - Set PYTHONUTF8 for Windows",
                 "    - Run generic tests",
                 "    - Run specific test",
                 "  job: deploy",

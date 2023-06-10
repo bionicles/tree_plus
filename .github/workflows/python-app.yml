@@ -26,6 +26,9 @@ jobs:
         pip install -r requirements.txt
         pip install pytest
         pip install -e .
+    - name: Set PYTHONUTF8 for Windows
+      if: runner.os == 'Windows'
+      run: echo "PYTHONUTF8=1" >> $GITHUB_ENV
     - name: Run generic tests
       run: |
         pytest tests/ -k "not test_tree_plus_dotdot" -vv
