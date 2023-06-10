@@ -216,7 +216,7 @@ def parse_py(content: str) -> List[str]:
     return types + classnames + methods + funcnames
 
 
-def parse_db(db_path: str) -> list[str]:
+def parse_db(db_path: str) -> List[str]:
     # Connect to the SQLite database
     conn = sqlite3.connect(db_path)
     # Create a cursor object
@@ -638,7 +638,7 @@ def parse_matlab(content: str) -> List[str]:
     return components
 
 
-def parse_scala(contents: str) -> list[str]:
+def parse_scala(contents: str) -> List[str]:
     lines = contents.split("\n")
     result = []
     current_scope = None
