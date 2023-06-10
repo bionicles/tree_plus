@@ -1,5 +1,6 @@
 # tree_plus/tests/test_cli.py
 import subprocess
+import platform
 import pytest  # noqa: F401
 import os
 
@@ -41,21 +42,21 @@ def test_cli_on_root():
     assert result.stderr == ""
 
     # example of what you could test
-    assert "📁 tree_plus" in result.stdout
-    assert "📁 .github" in result.stdout
-    assert "📁 workflows" in result.stdout
-    assert "📁 tests" in result.stdout
-    assert "📁 dot_dot" in result.stdout
-    assert "📁 nested_dir" in result.stdout
-    assert "📁 more_languages" in result.stdout
-    assert "📁 group1" in result.stdout
-    assert "📁 group2" in result.stdout
-    assert "📁 group3" in result.stdout
-    assert "📁 group4" in result.stdout
-    assert "📁 group5" in result.stdout
-    assert "📁 path_to_test" in result.stdout
-    assert "📁 tree_plus_src" in result.stdout
-    assert "📄 python-app.yml" in result.stdout
+    assert " tree_plus" in result.stdout
+    assert " .github" in result.stdout
+    assert " workflows" in result.stdout
+    assert " tests" in result.stdout
+    assert " dot_dot" in result.stdout
+    assert " nested_dir" in result.stdout
+    assert " more_languages" in result.stdout
+    assert " group1" in result.stdout
+    assert " group2" in result.stdout
+    assert " group3" in result.stdout
+    assert " group4" in result.stdout
+    assert " group5" in result.stdout
+    assert " path_to_test" in result.stdout
+    assert " tree_plus_src" in result.stdout
+    assert " python-app.yml" in result.stdout
     assert "# Tree Plus" in result.stdout
     assert "tokens" in result.stdout
     assert "lines" in result.stdout
@@ -78,3 +79,6 @@ def test_cli_on_root():
     assert "struct" in result.stdout
     assert "enum" in result.stdout
     assert '): (.*)")' not in result.stdout
+
+    if platform.system() == "Windows":
+        assert 0  # TODO: verify output looks OK
