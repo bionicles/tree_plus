@@ -1,3 +1,7 @@
+[![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-brightgreen)](https://choosealicense.com/licenses/)
+[![Docs](https://img.shields.io/badge/docs-README-blue)](https://github.com/bionicles/tree_plus/blob/main/README.md)
+[![Tests](https://github.com/bionicles/tree_plus/actions/workflows/python-app.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/python-app.yml)
+
 # Tree Plus
 
 A simple command line interface (CLI) tool for developers to show a `tree` enhanced with token counts, line counts, and source code components.
