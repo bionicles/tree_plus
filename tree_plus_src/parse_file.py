@@ -794,6 +794,9 @@ def parse_md(content: str) -> List[str]:
     task_pattern = re.compile(r"(-\s*\[ *[xX]?\])\s*(.*)")
     checked_ancestors = []
 
+    # Regex pattern to match URLs in Markdown.
+    url_pattern = re.compile(r'\s*\(<a href=".*">.+</a>\)|<a href=".*">.+</a>')
+
     for line in lines:
         # If we encounter a code block (indicated by ```), toggle in_code_block.
         if line.strip().startswith("```"):
@@ -802,7 +805,11 @@ def parse_md(content: str) -> List[str]:
         elif not in_code_block:
             # If the line is a header, add it to the output list.
             if line.startswith("#"):
-                headers_and_tasks.append(line.lstrip())
+                line = line.lstrip()
+                # Remove URLs from headers.
+                clean_header = url_pattern.sub("", line)
+                clean_header = clean_header.strip()
+                headers_and_tasks.append(clean_header)
             # If the line is a task, process it accordingly.
             elif task_pattern.match(line.lstrip()):
                 indent_level = len(line) - len(line.lstrip())

@@ -1,4 +1,6 @@
-# My Checkbox Test
+# My Checkbox Test (<a href="https://github.com/microsoft/guidance/blob/main/notebooks/chat.ipynb">notebook</a>)
+## My No Parens Test <a href="www.google.com">notebook</a>
+## My Empty href Test <a href="">notebook</a>
 
 - [ ] Task 1
     - [] No Space Task 1.1

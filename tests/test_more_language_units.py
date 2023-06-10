@@ -376,6 +376,8 @@ def test_more_languages_group4(file, expected):
             "tests/more_languages/group5/checkbox_test.md",
             [
                 "# My Checkbox Test",
+                "## My No Parens Test",
+                "## My Empty href Test",
                 "- [ ] Task 1",
                 "    - [ ] No Space Task 1.1",
                 "    - [ ] Two Spaces Task 1.2",
