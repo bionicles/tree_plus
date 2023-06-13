@@ -5,12 +5,12 @@
 [![Linux & MacOS](https://github.com/bionicles/tree_plus/actions/workflows/unix.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/unix.yml)
 [![Microsoft](https://github.com/bionicles/tree_plus/actions/workflows/microsoft.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/microsoft.yml)
 
-Supported Operating Systems:
+**Supported Operating Systems:**
 ![Ubuntu](https://img.shields.io/badge/Supports-Ubuntu-orange)
 ![MacOS](https://img.shields.io/badge/Supports-MacOS-orange)
 ![Windows](https://img.shields.io/badge/Supports-Windows-orange)
 
-Supported Python Versions:
+**Supported Python Versions:**
 ![Python 3.8](https://img.shields.io/badge/Python-3.8-blue)
 ![Python 3.9](https://img.shields.io/badge/Python-3.9-blue)
 ![Python 3.10](https://img.shields.io/badge/Python-3.10-blue)
@@ -26,7 +26,7 @@ A simple command line interface (CLI) tool for developers to show a `tree` enhan
 ┣━━ 📁 .github
 ┃   ┗━━ 📁 workflows (503 tokens, 70 lines)
 ┃       ┣━━ 📄 microsoft.yml (263 tokens, 36 lines)
-┃       ┃   ┣━━ Tree Plus CI
+┃       ┃   ┣━━ Microsoft
 ┃       ┃   ┣━━   job: build
 ┃       ┃   ┣━━     - Set up Python ${{ matrix.python-version }}
 ┃       ┃   ┣━━     - Install tree_plus

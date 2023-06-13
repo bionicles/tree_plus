@@ -24,9 +24,9 @@ setup(
     # platform and installation
     python_requires=">= 3.8",
     install_requires=[
-        "unidecode",
         "tiktoken",
         "PyYAML",
+        "pytest",
         "click",
         "rich",
     ],

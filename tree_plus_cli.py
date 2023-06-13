@@ -1,6 +1,5 @@
 # tree_plus_cli.py
 from collections import defaultdict
-from unidecode import unidecode
 from typing import Optional, Union
 import platform
 import sys

@@ -7,6 +7,9 @@ debug:
 
 debug_command: cli test
 
+move_powershell_profile:
+	cp mnt/c/Users/$(WIN_USERNAME)/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1 ./Microsoft.PowerShell_profile.ps1
+
 cli:
 	pip install -e .
 
