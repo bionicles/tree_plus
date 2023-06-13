@@ -2,10 +2,38 @@
 from setuptools import setup
 
 setup(
+    # general metadata
     name="tree_plus",
-    version="0.1",
+    version="1.0.0a1",
+    keywords="tree util cli",
+    description="tree util plus file components as leaves and token, line counts",
+    url="https://www.github.com/bionicles/tree_plus",
+    author="Bion A. Howard (BAH!)",
+    author_email="bion@atomiclogic.com",
+    license="MIT / Apache 2.0",
+    classifiers=[
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "License :: OSI Approved :: Apache Software License",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "Environment :: Console",
+        "Topic :: Utilities",
+    ],
+    # platform and installation
+    python_requires=">= 3.8",
+    install_requires=[
+        "unidecode",
+        "tiktoken",
+        "PyYAML",
+        "click",
+        "rich",
+    ],
+    # package structure
     py_modules=["tree_plus_cli"],
     packages=["tree_plus_src"],
+    # user interface
     entry_points={
         "console_scripts": [
             "tree_plus=tree_plus_cli:main",

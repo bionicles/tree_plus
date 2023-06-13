@@ -1,7 +1,4 @@
 # Do First
-- [ ] Upgrade CICD GitHub Action
-    - [ ] Add Grid testing to CI (windows, mac, linux) x (Python 3.9 ... 3.12 alpha)
-    - [ ] Build and deploy to PyPi if tests pass
 
 # Backlog
 - [ ] Fix ordering of leaves by line number consistently across languages
@@ -9,6 +6,8 @@
     - [ ] Fix JavaScript / TypeScript ordering
     - [ ] Review other language unit tests for ordering
 - [ ] expand test cases for the supported languages to verify ordering & completeness
+- [ ] Upgrade CICD GitHub Action
+    - [ ] Build and deploy to PyPi if tests pass
 - [ ] test file input instead of directory
 - [ ] measure test coverage
 - [ ] test named lambdas in python
@@ -37,3 +36,6 @@
     - [ ] Go
     - [ ] Dart
     - [ ] Swift
+
+# Done
+    - [x] Add Grid testing to CI (windows, mac, linux) x (Python 3.9 ... 3.12 alpha)

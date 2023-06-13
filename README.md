@@ -2,7 +2,8 @@
 
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-brightgreen)](https://choosealicense.com/licenses/)
 [![Docs](https://img.shields.io/badge/docs-README-blue)](https://github.com/bionicles/tree_plus/blob/main/README.md)
-[![Tests](https://github.com/bionicles/tree_plus/actions/workflows/python-app.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/python-app.yml)
+[![Linux & MacOS](https://github.com/bionicles/tree_plus/actions/workflows/unix.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/unix.yml)
+[![Microsoft](https://github.com/bionicles/tree_plus/actions/workflows/microsoft.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/microsoft.yml)
 
 Supported Operating Systems:
 ![Ubuntu](https://img.shields.io/badge/Supports-Ubuntu-orange)
@@ -21,15 +22,24 @@ A simple command line interface (CLI) tool for developers to show a `tree` enhan
 - [ ] Demonstrate Parsed Checkboxes
 ```sh
 (py310) bion@WIN-QVRBL09D89C:~/hax/tree_plus$ tree_plus -i tests
-📁 tree_plus (21768 tokens, 2113 lines)
+📁 tree_plus (20023 tokens, 2071 lines)
 ┣━━ 📁 .github
-┃   ┗━━ 📁 workflows (128 tokens, 26 lines)
-┃       ┗━━ 📄 python-app.yml (128 tokens, 26 lines)
-┃           ┣━━ Tree Plus CI
+┃   ┗━━ 📁 workflows (503 tokens, 70 lines)
+┃       ┣━━ 📄 microsoft.yml (263 tokens, 36 lines)
+┃       ┃   ┣━━ Tree Plus CI
+┃       ┃   ┣━━   job: build
+┃       ┃   ┣━━     - Set up Python ${{ matrix.python-version }}
+┃       ┃   ┣━━     - Install tree_plus
+┃       ┃   ┣━━     - Set PYTHONUTF8 for Windows
+┃       ┃   ┣━━     - Run generic tests
+┃       ┃   ┗━━     - Run specific test
+┃       ┗━━ 📄 unix.yml (240 tokens, 34 lines)
+┃           ┣━━ Ubuntu & MacOS
 ┃           ┣━━   job: build
-┃           ┣━━     - Set up Python
-┃           ┣━━     - Install dependencies
-┃           ┗━━     - Run Tests
+┃           ┣━━     - Set up Python ${{ matrix.python-version }}
+┃           ┣━━     - Install tree_plus
+┃           ┣━━     - Run generic tests
+┃           ┗━━     - Run specific test
 ┣━━ 📁 tree_plus_src (8776 tokens, 1088 lines)
 ┃   ┣━━ 📄 __init__.py (64 tokens, 9 lines)
 ┃   ┣━━ 📄 count_tokens_lines.py (461 tokens, 67 lines)

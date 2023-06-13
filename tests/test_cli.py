@@ -56,7 +56,8 @@ def test_cli_on_root():
     assert " group5" in result.stdout
     assert " path_to_test" in result.stdout
     assert " tree_plus_src" in result.stdout
-    assert " python-app.yml" in result.stdout
+    assert " unix.yml" in result.stdout
+    assert " microsoft.yml" in result.stdout
     assert "# Tree Plus" in result.stdout
     assert "tokens" in result.stdout
     assert "lines" in result.stdout
