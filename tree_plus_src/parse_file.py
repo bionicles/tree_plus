@@ -38,6 +38,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_js(contents)
     elif file_extension == ".md":
         components = parse_md(contents)
+    elif file_extension == ".sql":
+        components = parse_sql(contents)
     elif file_extension == ".txt":
         components = parse_txt(contents)
     elif file_extension == ".cbl":
@@ -83,6 +85,24 @@ def parse_file(file_path: str) -> List[str]:
     todos = parse_todo(contents)
     total_components = todos + components
     return total_components
+
+
+def parse_sql(contents: str) -> List[str]:
+    # Pattern to find the "CREATE TABLE" statements
+    pattern_create_table = re.compile(r"CREATE TABLE (\w+) \((.*?)\);", re.DOTALL)
+    # List to store the final output
+    output = []
+    # Find all "CREATE TABLE" statements
+    create_table_statements = pattern_create_table.findall(contents)
+    # For each "CREATE TABLE" statement
+    for table_name, table_body in create_table_statements:
+        output.append(f"CREATE TABLE {table_name}")
+        # Split the table body into lines and strip leading/trailing spaces
+        lines = table_body.strip().split("\n")
+        lines = [line.strip() for line in lines]
+        # Add each line to the output, with an indent
+        output.extend([f"   {line}" for line in lines])
+    return output
 
 
 def is_k8s_yml(contents: str) -> bool:
@@ -849,6 +869,9 @@ def parse_md(content: str) -> List[str]:
                 clean_header = url_pattern.sub("", line)
                 clean_header = link_pattern.sub("", clean_header)
                 clean_header = clean_header.strip()
+                # Skip headers that consist only of '#' and ' '.
+                if not clean_header.lstrip("#").strip():
+                    continue
                 headers_and_tasks.append(clean_header)
             # If the line is a task, process it accordingly.
             elif task_pattern.match(line.lstrip()):
