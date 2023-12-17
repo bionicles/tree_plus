@@ -134,7 +134,7 @@ def _parse_paths(path_or_paths: Union[str, Tuple[str]]) -> Tuple[str]:
 def flatten_to_str(collection: Collection):
     flat_list = []
     for item in collection:
-        if isinstance(item, Collection):
+        if isinstance(item, (list, tuple, set)):
             flat_list.extend(flatten_to_str(item))
         else:
             flat_list.append(str(item))
