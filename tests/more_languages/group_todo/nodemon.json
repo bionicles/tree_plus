@@ -1,0 +1,21 @@
+{
+    "verbose": true,
+    "watch": [
+        "Makefile",
+        "nodemon.json",
+        "promo-programs",
+        "promo-server",
+        "promo-app"
+    ],
+    "ignore": [
+        "promo-programs/bin",
+        "promo-server/postgres_logs",
+        "promo-server/postgres.log",
+        "promo-server/flask_logs",
+        "promo-server/flask.log",
+        "promo-app/angular.log",
+        "promo-app/angular_logs"
+    ],
+    "exec": "make dev || exit 1",
+    "ext": "*"
+}

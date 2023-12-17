@@ -4,7 +4,7 @@ import pytest
 from tree_plus_src import (
     traverse_directory,
     parse_file,
-    parse_todo,
+    parse_markers,
     TokenLineCount,
     count_tokens_lines,
     count_directory_tokens_lines,
@@ -17,14 +17,14 @@ def test_valid_directory():
     assert isinstance(result, list)
 
 
-def test_invalid_directory():
-    with pytest.raises(NotADirectoryError):
-        traverse_directory("tests/non/existent/directory")
+# def test_invalid_directory():
+#     with pytest.raises(NotADirectoryError):
+#         traverse_directory("tests/non/existent/directory")
 
 
 def test_file_as_directory():
-    with pytest.raises(NotADirectoryError):
-        traverse_directory("tests/path_to_test/file.txt")
+    result = traverse_directory("tests/path_to_test/file.txt")
+    assert isinstance(result, list)
 
 
 # test parsing
@@ -58,9 +58,23 @@ def test_file_parsing(file, expected):
 
 def test_parse_todo():
     content = open("tests/more_languages/group5/rust_todo_test.rs", "r").read()
-    result = parse_todo(content)
+    result = parse_markers(content)
     assert result == [
         "TODO (Line 23): This todo tests parse_todo",
+    ]
+
+
+bug_todo_note = (
+    "BUG: This is a bug.\nTODO: Fix this soon.\nNOTE: Interesting observation."
+)
+
+
+def test_parse_markers():
+    results = parse_markers(bug_todo_note)
+    assert results == [
+        "BUG (Line 1): This is a bug.",
+        "TODO (Line 2): Fix this soon.",
+        "NOTE (Line 3): Interesting observation.",
     ]
 
 

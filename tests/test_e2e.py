@@ -1,13 +1,29 @@
 # tests/test_e2e.py
+import subprocess
 import platform
-import pytest  # noqa: F401
 import rich
+import sys
+
+import pytest  # noqa: F401
 
 from rich import print
+from io import StringIO
 
-from tree_plus_cli import tree_plus, tree_to_string
+from tree_plus_cli import main as tree_plus_main, tree_plus, tree_to_string
 
 test_directory = "tests/path_to_test"
+
+EXPECTATION_0 = """📄 file.py (11 tokens, 2 lines)
+┗━━ def hello_world
+"""
+
+
+def test_e2e_single_file():
+    result = tree_plus(f"{test_directory}/file.py")
+    assert isinstance(result, rich.tree.Tree)
+    result_str = tree_to_string(result)
+    print(result_str)
+    assert result_str == EXPECTATION_0
 
 
 def unify_tree_symbols(tree_string):
@@ -95,6 +111,28 @@ EXPECTATION_2 = """Multiple Directories:
     ┗━━ 📄 file.txt (11 tokens, 2 lines)
 """
 
+EXPECTATION_3 = """📁 path_to_test (153 tokens, 38 lines)
+┣━━ 📄 class_function.js (33 tokens, 9 lines)
+┃   ┣━━ class MyClass
+┃   ┗━━ function myFunction
+┣━━ 📄 class_function_type.ts (45 tokens, 12 lines)
+┃   ┣━━ type MyType
+┃   ┣━━ class TsClass
+┃   ┗━━ function tsFunction
+┣━━ 📄 class_method_type.py (27 tokens, 8 lines)
+┃   ┣━━ MyType
+┃   ┣━━ class MyClass
+┃   ┗━━ class MyClass -> def my_method
+┣━━ 📄 empty.py (0 tokens, 0 lines)
+┣━━ 📄 file.js (14 tokens, 3 lines)
+┃   ┗━━ function helloWorld
+┣━━ 📄 file.md (12 tokens, 2 lines)
+┃   ┗━━ # Hello, world!
+┣━━ 📄 file.py (11 tokens, 2 lines)
+┃   ┗━━ def hello_world
+┗━━ 📄 file.txt (11 tokens, 2 lines)
+"""
+
 
 def test_e2e_multiple_directories():
     test_directory2 = "tests/path_to_test"
@@ -102,16 +140,7 @@ def test_e2e_multiple_directories():
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
     print(result_str)
-    assert unify_tree_symbols(result_str) == unify_tree_symbols(EXPECTATION_2)
-
-
-# def test_e2e_more_languages():
-#     test_directory3 = "tests/more_languages"
-#     result = tree_plus(test_directory3)
-#     assert isinstance(result, rich.tree.Tree)
-#     result_str = tree_to_string(result)
-#     print(result_str)
-#     assert result_str == ""
+    assert unify_tree_symbols(result_str) == unify_tree_symbols(EXPECTATION_3)
 
 
 # Test ignore parameter
@@ -129,3 +158,43 @@ def test_e2e_ignore_parameter_directory():
     result_str = tree_to_string(result)
     print(result_str)
     assert "group2" not in result_str
+
+
+def test_e2e_main_glob():
+    # Redirect stdout to capture the output for testing
+    old_stdout = sys.stdout
+    sys.stdout = StringIO()
+
+    # Simulate command-line arguments
+    test_args = ["tree_plus_cli.py", "tree_plus_src/*.py"]
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        tree_plus_main(test_args)
+
+    # Capture and process the output
+    output = sys.stdout.getvalue()
+    sys.stdout = old_stdout
+    print(output)
+
+    # Assertions to verify the output
+    # TODO: add more assertions here
+    # assert "Expected content" in output
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 0
+
+
+def test_e2e_subprocess_glob():
+    # Run the CLI command and capture the output
+    result = subprocess.run(
+        ["python", "tree_plus_cli.py", "tree_plus_src/*.py"],
+        capture_output=True,
+        text=True,
+    )
+
+    print("test_e2e_subprocess_glob", result)
+
+    # Check that the process exited successfully
+    assert result.returncode == 0
+
+    # Assertions to verify the output
+    # TODO: add more assertions here
+    # assert "Expected content" in result.stdout

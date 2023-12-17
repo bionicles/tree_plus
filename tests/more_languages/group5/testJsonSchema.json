@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "title": "random_test",
+    "description": "A promoter's activites related to events",
+    "properties": {
+        "activities": {
+            "type": "array",
+            "description": "A list of activities related to the promoter",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "event_name": {
+                        "type": "string",
+                        "description": "The name of the event",
+                        "enum": [
+                            "plan",
+                            "promote",
+                            "party"
+                        ]                    
+                    },
+                    "invited": {
+                        "type": "boolean",
+                        "description": "Whether the promoter was invited to the event"
+                    },
+                    "responded": {
+                        "type": "boolean",
+                        "description": "Whether the promoter responded to the event invite"
+                    },
+                    "commission": {
+                        "type": "integer",
+                        "description": "The commission rate at this tier (in percent [0..100])",
+                        "minimum": 0,
+                        "maximum": 100
+                    }
+                },
+                "required": [
+                    "event_name",
+                    "invited",
+                    "going",
+                    "responded"
+                ]
+            }
+        }
+    },
+    "required": [
+        "events"
+    ]
+}

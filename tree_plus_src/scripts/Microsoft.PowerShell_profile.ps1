@@ -1,6 +1,7 @@
 # C:\Users\[user]\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
 # Abstract Idempotent Provision of Requirements with PowerShell, or
 # "doing microsoft's job for them"
+# loop over lots of configuration commands and make sure they're all set up
 $SCOOP_REQUIREMENTS = @(
 	"make",
 	"rust",
@@ -9,6 +10,11 @@ $SCOOP_REQUIREMENTS = @(
 	"nodejs",
 	"go",
 	"fzf"
+)
+$NPM_GLOBAL_REQUIREMENTS = @(
+	"typescript",
+	"nodemon",
+	"ng",
 )
 $REQUIREMENTS = @(
 	"scoop",
@@ -24,6 +30,7 @@ $REQUIREMENTS = @(
 	"go",
 	"fzf"
 )
+
 
 function Log($message) {
 	$timestamp = Get-Date -Format o
@@ -53,10 +60,71 @@ Set-Alias -Name pp -Value Show-Path
 Log "Initial $env.Path:"
 Show-Path
 
-
 function Show-Error($err) {
 	Log "ERROR!: $($err.Exception.Message)"
 	Log "Continue provision..."
+}
+
+function Prepare-PackageManager {
+    param (
+        [Parameter(Mandatory=$true)]
+        [hashtable]$PackageManager
+    )
+
+    # Check if the package manager is in PATH
+    if (!(Get-Command $PackageManager["name"] -ErrorAction SilentlyContinue)) {
+        Write-Host "Package manager $($PackageManager["name"]) is not installed, installing"
+        Invoke-Expression $PackageManager["prepare"]
+    }
+
+    Write-Host "Updating package manager $($PackageManager["name"])"
+    Invoke-Expression $PackageManager["self_update"]
+}
+
+function InstallOrUpdate-Package {
+    param (
+        [Parameter(Mandatory=$true)]
+        [hashtable]$PackageManager,
+        [Parameter(Mandatory=$true)]
+        [string]$Package
+    )
+
+    if (& $PackageManager["list"] | Select-String -Quiet -Pattern "\b$Package\b") {
+        Write-Host "Package $Package is installed, updating"
+        & $PackageManager["update"] $Package
+    } else {
+        Write-Host "Package $Package is not installed, installing"
+        & $PackageManager["install"] $Package
+    }
+}
+
+# Then to use it:
+$managers_and_packages = @(
+    @{
+        "name" = "npm";
+        "prepare" = "npm install -g";
+        "self_update" = "npm update -g npm";
+        "list" = {npm list -g --depth 0};
+        "install" = {param($p) npm install -g $p};
+        "update" = {param($p) npm update -g $p};
+        "packages" = @("typescript", "nodemon", "ng")
+    };
+    @{
+        "name" = "scoop";
+        "prepare" = "Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')";
+        "self_update" = "scoop update";
+        "list" = {scoop list};
+        "install" = {param($p) scoop install $p};
+        "update" = {param($p) scoop update $p};
+        "packages" = @("git", "python")
+    }
+)
+
+foreach ($manager in $managers_and_packages) {
+    Prepare-PackageManager -PackageManager $manager
+    foreach ($package in $manager["packages"]) {
+        InstallOrUpdate-Package -PackageManager $manager -Package $package
+    }
 }
 
 function Get-ScoopPackagePath {
@@ -105,21 +173,28 @@ function Add-ToPath {
 }
 
 function Install-Scoop {
-	if (!(Test-Path "C:\ProgramData\scoop")) {
-		try {
-			Log "Installing Scoop"
-			Invoke-Expression "& {$(Invoke-RestMethod get.scoop.sh)} -RunAsAdmin"
-			Log "Scoop installed"
-		}
-		catch {
-			Log "Install-Scoop did not install scoop."
-		}
-	}
-	Add-ToPath -PathToAdd "C:\Users\$env:USERNAME\scoop\shims"
-	scoop bucket add extras
+    if (!(Test-Path "C:\ProgramData\scoop")) {
+		# Attempt to install Scoop
+        try {
+            Log "Installing Scoop"
+            $install_output = Invoke-Expression "& {$(Invoke-RestMethod get.scoop.sh)} -RunAsAdmin"
+            Log "Scoop installed"
+        }
+        catch {
+            Log "Install-Scoop did not install scoop."
+        }
+        
+        # If scoop is already installed and needs to be updated
+        if ($install_output -match "Scoop is already installed. Run 'scoop update' to get the latest version.") {
+            Log "Updating Scoop"
+            scoop update
+            Log "Scoop updated"
+        }
+    }
+    Add-ToPath -PathToAdd "C:\Users\$env:USERNAME\scoop\shims"
+    scoop bucket add extras
 }
 Install-Scoop
-
 
 
 function Scoop-Install {
@@ -164,6 +239,24 @@ foreach ($requirement in $SCOOP_REQUIREMENTS) {
 	}
 }
 
+function Install-UpdateNpmPackage {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string[]]$PackageNames = $NPM_GLOBAL_REQUIREMENTS
+    )
+    foreach ($package in $PackageNames) {
+        try {
+            Write-Host "Installing $package globally"
+            npm install -g $package
+        }
+        catch {
+            Write-Host "Updating $package globally"
+            npm update -g $package
+        }
+    }
+}
+Install-UpdateNpmPackage 
+
 
 
 # FUNCTION to install and activate conda environment
@@ -207,6 +300,7 @@ function Start-CondaEnv {
 	Log "Upgrade Pip"
 	python -m pip install --upgrade pip
 	Log "Pip Upgraded"
+	# Pip install the PIP
 	Log "Done Provisioning Conda & Python Env"
 }
 Start-CondaEnv

@@ -1,0 +1,10 @@
+psycopg2-binary
+pytest
+coverage
+flask[async]
+# omitted
+flask_cors
+stripe
+pyjwt[crypto]
+cognitojwt[async]
+flask-lambda

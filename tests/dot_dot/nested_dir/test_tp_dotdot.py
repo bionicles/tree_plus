@@ -1,9 +1,9 @@
+# tests/dot_dot/nested_dir/test_tp_dotdot
 import pytest  # noqa f401
 import re
 import os
 
 from rich import print
-
 from tree_plus_cli import tree_plus, tree_to_string
 from tree_plus_src import traverse_directory
 
@@ -31,7 +31,9 @@ def test_tree_plus_dotdot():
     tree_string = tree_to_string(tree)
 
     # Ignore tokens and lines count for tree_string
-    tree_string = ignore_tokens_lines_test(tree_string)
+    tree_string = ignore_tokens_lines_test(  # ONLY IGNORED FOR THIS ONE TEST
+        tree_string
+    )
     print("result")
     print(tree_string)
     # Do the same for EXPECTATION_1
@@ -39,6 +41,8 @@ def test_tree_plus_dotdot():
     print("expectation")
     print(expectation)
 
+    print("linux tree util (contains content tree_plus ignores)")
+    os.system(f"tree {dotdot_path}")
     tree_string_lines = set(line.rstrip() for line in tree_string.splitlines())
     expectation_lines = set(expectation.splitlines())
 
@@ -47,5 +51,6 @@ def test_tree_plus_dotdot():
 
 def test_tree_plus_dotdot_traverse():
     traversal = traverse_directory("..")
+    print("dotdot traversal")
     print(traversal)
     assert traversal == ["../my_test_file.py", "../nested_dir/test_tp_dotdot.py"]

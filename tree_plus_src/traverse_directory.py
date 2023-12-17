@@ -3,33 +3,31 @@ from typing import Optional, List, Set
 import fnmatch
 import os
 
-from tree_plus_src.default_ignore import DEFAULT_IGNORE
+from tree_plus_src.default_ignore import IgnoreInput, Ignore, make_ignore
 
 
-def traverse_directory(directory_path: str, ignore: Optional[Set] = None) -> List[str]:
+def traverse_directory(directory_path: str, ignore: IgnoreInput = None) -> List[str]:
     """
     Traverse a directory and return a list of all file paths.
     """
-    # Convert relative path to absolute path
-    # directory_path = os.path.abspath(directory_path)
-    if not os.path.isdir(directory_path):
-        raise NotADirectoryError(f"{directory_path} is not a directory")
+    # Correctly expand tilde to home directory path
+    directory_path = os.path.expanduser(directory_path)
+    if os.path.isfile(directory_path):
+        return [directory_path]
 
-    if ignore is None:
-        ignore = DEFAULT_IGNORE
-    elif isinstance(ignore, set):
-        ignore = ignore | DEFAULT_IGNORE
-    else:
-        raise TypeError("traverse_directory ignore arg must be a set or None")
-
+    ignore = make_ignore(ignore)
     file_paths = []
 
     for root, dirs, files in os.walk(directory_path):
+        # modify dirs in-place
         dirs[:] = [
             d
             for d in dirs
             if not any(fnmatch.fnmatch(d, pattern) for pattern in ignore)
-        ]  # modify dirs in-place
+        ]
+        # Add empty directories to file_paths
+        if not dirs and not files:
+            file_paths.append(root)
         for file in files:
             # skip files that are in the ignore list
             if any(fnmatch.fnmatch(file, pattern) for pattern in ignore):

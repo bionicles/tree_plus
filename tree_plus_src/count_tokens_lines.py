@@ -1,4 +1,4 @@
-# tree_plus_src/count_tokens.py
+# tree_plus_src/count_tokens_lines.py
 from dataclasses import dataclass
 import tiktoken
 
@@ -15,12 +15,20 @@ class TokenLineCount:
     n_lines: int = 0
 
 
-def count_tokens_lines(file_path):
+def add_tokens_lines(
+    lhs_count: TokenLineCount, rhs_count: TokenLineCount
+) -> TokenLineCount:
+    total_tokens = lhs_count.n_tokens + rhs_count.n_tokens
+    total_lines = lhs_count.n_lines + rhs_count.n_lines
+    return TokenLineCount(total_tokens, total_lines)
+
+
+def count_tokens_lines(file_path: str) -> TokenLineCount:
     """
     Count the number of lines and OpenAI tokens in a file.
     """
     # Ignore binary files like images, executables, and databases
-    ignored_extensions = [
+    ignored_extensions = {
         ".db",
         ".png",
         ".jpg",
@@ -32,7 +40,7 @@ def count_tokens_lines(file_path):
         ".pack",
         ".jar",
         ".odg",
-    ]
+    }
     if any(file_path.endswith(ext) for ext in ignored_extensions):
         # if any(file_path.suffix == ext for ext in ignored_extensions):
         return TokenLineCount(n_tokens=0, n_lines=0)
@@ -40,6 +48,9 @@ def count_tokens_lines(file_path):
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             contents = f.read()
+            # Handle empty files separately
+            if not contents.strip():
+                return TokenLineCount(n_tokens=0, n_lines=0)
             n_tokens = len(encoder.encode(contents, disallowed_special=()))
             n_lines = len(contents.splitlines())
             return TokenLineCount(n_tokens=n_tokens, n_lines=n_lines)
@@ -48,7 +59,7 @@ def count_tokens_lines(file_path):
         return TokenLineCount(n_tokens=0, n_lines=0)
 
 
-def count_directory_tokens_lines(directory_path):
+def count_directory_tokens_lines(directory_path: str) -> TokenLineCount:
     """
     Traverse a directory, count lines and OpenAI tokens in each file, sum the results.
     """

@@ -1,22 +1,37 @@
 # tree_plus_cli.py
 from collections import defaultdict
-from typing import Optional, Union
+from typing import Optional, Union, Tuple, Set, List, Dict
 import platform
+import glob
 import sys
 import os
 import re
 
+from rich.traceback import install
 from rich.console import Console
-from rich import print as rich_print
 from rich.tree import Tree
+from rich import print as rich_print
 import click
 
-from tree_plus_src import (
-    DEFAULT_IGNORE,
-    count_tokens_lines,
-    TokenLineCount,
+DEBUG = 0
+
+
+def debug_print(*args, **kwargs):
+    if DEBUG:
+        print("debug:", *args, **kwargs)
+
+
+install(show_locals=True)
+
+from tree_plus_src import (  # noqa E402
     traverse_directory,
+    count_tokens_lines,
+    add_tokens_lines,
+    TokenLineCount,
+    make_ignore,
     parse_file,
+    IgnoreInput,
+    Ignore,
 )
 
 console = Console()
@@ -29,11 +44,6 @@ def tree_to_string(tree: Tree) -> str:
     captured_str = capture.get()
     ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
     return ansi_escape.sub("", captured_str)
-
-
-# another option would potentially lose information
-# def clean_string(input_str):
-#     return input_str.encode("ascii", errors="replace").decode("ascii")
 
 
 def clean_string(input_str):
@@ -54,19 +64,20 @@ def safe_print(tree):
             print(e)
 
 
-# passing on ubuntu and mac
-# def safe_print(tree):
-#     if console.is_terminal:
-#         try:
-#             rich_print(tree)
-#         except UnicodeEncodeError:
-#             print(unidecode(tree_to_string(tree)))
-#     else:
-#         print(tree_to_string(tree))
+Collection = Union[List, Tuple, Set]
+PathOrPaths = Union[str, Tuple[str]]
+PathsInput = Optional[PathOrPaths]
+Paths = Tuple[str]
+
+operate_normally = platform.system() != "Windows" or sys.stdout.encoding != "cp1252"
+root_char = ":cactus:" if operate_normally else "[multiple paths]"
+folder_char = ":file_folder:" if operate_normally else "[folder]"
+file_char = ":page_facing_up:" if operate_normally else "[file]"
+glob_char = ":cyclone:" if operate_normally else "[glob]"
 
 
 @click.command()
-@click.argument("directories", default=".")
+@click.argument("paths", nargs=-1)  # Accepts multiple arguments
 @click.option(
     "--ignore",
     "-I",
@@ -74,120 +85,223 @@ def safe_print(tree):
     multiple=True,
     help="Names of files or directories to ignore.",
 )
-@click.option("--color/--no-color", default=True)
-def main(directories, ignore, color):
-    ignore = set(ignore)
-    ignore |= DEFAULT_IGNORE  # always ignore these
-    tree = tree_plus(directories, ignore)
+def main(paths: PathsInput, ignore: IgnoreInput):
+    debug_print(f"tree_plus main received {paths=} {ignore=}")
+    ignore = make_ignore(ignore)
+    path_or_paths = paths or "."
+    tree = tree_plus(path_or_paths, ignore)
     safe_print(tree)
 
 
-def tree_plus(directory: str, ignore: Optional[Union[str, set]] = None) -> Tree:
-    "an enhanced tree util with file component leaves and token / line counts"
+def tree_plus(
+    path_or_paths: Union[str, Tuple[str]], ignore: IgnoreInput = None
+) -> Tree:
+    """An enhanced tree util with file component leaves and token/line counts."""
+    ignore: Ignore = make_ignore(ignore)
+    paths: Paths = _parse_paths(path_or_paths)
+    tree: Tree = _handle_paths(paths, ignore)
+    return tree
 
-    # Check for platform and encoding
-    operate_normally = not (
-        platform.system() == "Windows" and sys.stdout.encoding == "cp1252"
-    )
 
-    # Use special characters or alternatives based on the check
-    folder_char = ":file_folder:" if operate_normally else "[folder]"
-    file_char = ":page_facing_up:" if operate_normally else "[file]"
+# Idea: instead of eagerly extending paths from globs,
+# we could use globs to signal the need to find their shared common ancestor
+def _parse_paths(path_or_paths: Union[str, Tuple[str]]) -> Tuple[str]:
+    """Expands globs and splits comma-separated paths using Path."""
+    paths = (path_or_paths,) if isinstance(path_or_paths, str) else path_or_paths
+    debug_print(f"_parse_paths 1st {paths=}")
+    # Flatten nested lists, tuples, and sets
+    paths = flatten_to_str(paths)
+    debug_print(f"_parse_paths 2nd {paths=}")
 
-    # QUESTION: Could this screw up the parent_dir_path in the path_to_tree dict?
-    directory = os.path.abspath(directory)
+    # Remove empty paths
+    paths = tuple(path.strip() for path in paths if path.strip())
+    debug_print(f"_parse_paths 3rd {paths=}")
 
-    if ignore is None:
-        ignore = DEFAULT_IGNORE
-    elif isinstance(ignore, str):
-        ignore = set(ignore.split(","))
-        ignore |= DEFAULT_IGNORE
-    elif isinstance(ignore, set):
-        ignore |= DEFAULT_IGNORE
-    else:
-        raise TypeError("tree_plus ignore arg must be a string, set or None")
+    parsed_paths = set()
+    for path in paths:
+        if "," in path:
+            debug_print(f", in path {path}")
+            # Split comma-separated paths
+            for split_path in path.split(","):
+                parsed_paths.add(split_path.strip())
+        else:
+            parsed_paths.add(path)
+    paths = tuple(parsed_paths)
+    rich_print(f"{paths=}")
+    return paths
 
-    # If the directory argument is a comma-separated string of multiple directories,
-    # recursively call tree_plus on each directory and return a combined tree.
-    if "," in directory:
-        directories = directory.split(",")
-        combined_tree = Tree(
-            "Multiple Directories:", guide_style="bold cyan", highlight=True
-        )
-        for dir in directories:
-            # strip to remove leading/trailing whitespaces
-            dir_tree = tree_plus(dir.strip())
-            combined_tree.add(dir_tree)
-        return combined_tree
 
-    root_tree = Tree(
-        f"{directory} ({0} tokens, {0} lines)",
+def flatten_to_str(collection: Collection):
+    flat_list = []
+    for item in collection:
+        if isinstance(item, Collection):
+            flat_list.extend(flatten_to_str(item))
+        else:
+            flat_list.append(str(item))
+    return flat_list
+
+
+def _handle_paths(paths: Tuple[str], ignore: Ignore) -> Tree:
+    """handle multiple paths to generate a tree with deduplicated intermediate folders"""
+    debug_print(f"_handle_paths {paths=} {ignore=}")
+
+    # guard for null input
+    if not paths:
+        raise TypeError("zero paths provided, cannot handle zero paths")
+
+    # single path case
+    if len(paths) == 1:
+        path = paths[0]
+        debug_print(f"only 1 path {path=}")
+        tree, _ = _handle_path(path, ignore, {})
+        return tree
+
+    # multiple path case
+    root = Tree(
+        f"{root_char} {'Multiple Paths'}",
         guide_style="bold cyan",
         highlight=True,
     )
+    total_count = TokenLineCount(0, 0)
 
-    # BUG: parent_dir_path is not in path_to_tree. Tests pass but the CLI doesn't run.
-    # why do we use this dictionary? what is a better name for path_to_tree?
-    path_to_tree = {directory: root_tree}  # Dictionary to map paths to Trees
+    # Create a dictionary of file paths to trees and counts
+    paths_to_trees = {"root": (root, total_count)}
 
-    file_paths = traverse_directory(directory, ignore)
-    total_count = TokenLineCount(n_tokens=0, n_lines=0)
+    for path in paths:
+        path_tree, path_count = _handle_path(path, ignore, paths_to_trees)
+        total_count = add_tokens_lines(total_count, path_count)
+        root.add(path_tree)
 
-    # Create a defaultdict to aggregate files under their parent directories
-    directories = defaultdict(list)
+    root.label = (
+        f"{root_char} Root ({total_count.n_tokens} tokens, {total_count.n_lines} lines)"
+    )
+    return root
 
-    for file_path in file_paths:
-        dir_path, file_name = os.path.split(file_path)
-        directories[dir_path].append(file_name)
 
-    # Process directories in lexicographical order of their paths
-    sorted_directories_keys = sorted(directories.keys())
-    # Check if parent directories exist in path_to_tree, if not add them
-    for dir_path in sorted_directories_keys:
-        current_path = dir_path
-        path_parts = []
+def _handle_path(
+    path: str, ignore: Ignore, paths_to_trees: dict
+) -> Tuple[Tree, TokenLineCount]:
+    """Handle a single path, generating a tree and calculating tokens/lines."""
+    debug_print(f"_handle_path {path=}  {ignore=}")
 
-        # Traverse up the directory path, building a list of parent directories
-        while current_path not in path_to_tree and current_path.startswith(directory):
-            path_parts.insert(0, current_path)
-            current_path = os.path.dirname(current_path)
+    # save the original path, just in case
+    og_path = path
+    # Normalize path to resolve '..' and similar relative paths
+    path = os.path.abspath(path)
 
-        # Now add each part from the list into path_to_tree
-        for part in path_parts:
-            parent_dir_path = os.path.dirname(part)
-            parent_tree = path_to_tree[parent_dir_path]
-            dir_tree = parent_tree.add(f"{folder_char} {os.path.basename(part)}")
-            path_to_tree[part] = dir_tree
+    # Handle glob paths
+    if "*" in path:
+        try:
+            glob_paths = glob.glob(path)
+            # glob_commonpath = os.path.commonpath(glob_paths)
+            glob_root_count = TokenLineCount(0, 0)
+            glob_root = Tree(
+                f"{glob_char} {og_path}",
+                guide_style="bold cyan",
+            )
+            for glob_focus in glob_paths:
+                glob_focus_tree, glob_node_count = _handle_path(
+                    glob_focus, ignore, paths_to_trees
+                )
+                glob_root.add(glob_focus_tree)
+                glob_root_count = add_tokens_lines(glob_root_count, glob_node_count)
+            glob_root.label += (
+                f" ({glob_root_count.n_tokens} tokens, {glob_root_count.n_lines} lines)"
+            )
+            return glob_root, glob_root_count
+        except ValueError:
+            raise ValueError(f"Invalid glob pattern: {path}")
 
-    # Here, we sort directories like Linux tree utility
-    sorted_directories = {
-        dir_path: sorted(files, key=str.lower)
-        for dir_path, files in sorted(directories.items(), key=lambda item: item[0])
-    }
-    for dir_path, files in sorted_directories.items():
-        dir_tree = path_to_tree[dir_path]
+    # Handle paths to files:
+    elif os.path.isfile(path):
+        file_path = path
+        if file_path in paths_to_trees:
+            return paths_to_trees[file_path]
+        # Handle file input
+        components = parse_file(file_path)
+        file_count = count_tokens_lines(file_path)
+        file_tree = Tree(
+            f"{file_char} {os.path.basename(file_path)} ({file_count.n_tokens} tokens, {file_count.n_lines} lines)",
+            guide_style="bold cyan",
+            highlight=True,
+        )
+        for component in components:
+            file_tree.add(component)
+        paths_to_trees[file_path] = (file_tree, file_count)
+        return file_tree, file_count
+    # Handle paths to folders:
+    else:
+        folder_path = path
 
-        dir_count = TokenLineCount(n_tokens=0, n_lines=0)
-        for file_name in files:
-            file_path = os.path.join(dir_path, file_name)
-            components = parse_file(file_path)
-            file_count = count_tokens_lines(file_path)
-            dir_count.n_tokens += file_count.n_tokens
-            dir_count.n_lines += file_count.n_lines
-            file_label = f"{file_char} {file_name}"
-            file_label += f" ({file_count.n_tokens} tokens, {file_count.n_lines} lines)"
-            file_tree = dir_tree.add(file_label)
-            for component in components:
-                file_tree.add(component)
+        if folder_path in paths_to_trees:
+            # Already processed, reuse existing tree
+            return paths_to_trees[folder_path]
 
-        dir_label = f"{folder_char} {os.path.basename(dir_path)}"
-        dir_label += f" ({dir_count.n_tokens} tokens, {dir_count.n_lines} lines)"
-        dir_tree.label = dir_label
-        total_count.n_tokens += dir_count.n_tokens
-        total_count.n_lines += dir_count.n_lines
+        root_tree = Tree(
+            f"{folder_path} ({0} tokens, {0} lines)",
+            guide_style="bold cyan",
+            highlight=True,
+        )
+        root_count = TokenLineCount(n_tokens=0, n_lines=0)
 
-    root_tree.label = f"{folder_char} {os.path.basename(os.path.abspath(directory))} ({total_count.n_tokens} tokens, {total_count.n_lines} lines)"
-    return root_tree
+        # Dictionary to map paths to Trees
+        paths_to_trees[folder_path] = (root_tree, root_count)
+
+        file_paths = traverse_directory(folder_path, ignore)
+
+        directories = defaultdict(list)
+
+        for file_path in file_paths:
+            dir_path, file_name = os.path.split(file_path)
+            directories[dir_path].append(file_name)
+
+        # Process directories in lexicographical order of their paths
+        sorted_directories_keys = sorted(directories.keys())
+        # Check if parent directories exist in paths_to_trees, if not add them
+        for dir_path in sorted_directories_keys:
+            current_path = dir_path
+            path_parts = []
+
+            # Traverse up the folder_path path, building a list of parent directories
+            while current_path not in paths_to_trees and current_path.startswith(
+                folder_path
+            ):
+                path_parts.insert(0, current_path)
+                current_path = os.path.dirname(current_path)
+
+            # Now add each part from the list into paths_to_trees
+            for part in path_parts:
+                parent_dir_path = os.path.dirname(part)
+                # NOTE: parent_count unused, is that ok?
+                parent_tree, _parent_count = paths_to_trees[parent_dir_path]
+                dir_tree = parent_tree.add(f"{folder_char} {os.path.basename(part)}")
+                dir_count = TokenLineCount(n_tokens=0, n_lines=0)
+                paths_to_trees[part] = (dir_tree, dir_count)
+
+        # Here, we sort the directories in a similar way to the Linux tree utility:
+        sorted_directories = {
+            dir_path: sorted(files, key=str.lower)
+            for dir_path, files in sorted(directories.items(), key=lambda item: item[0])
+        }
+        # Now, we build the tree:
+        for dir_path, files in sorted_directories.items():
+            dir_tree, dir_count = paths_to_trees[dir_path]
+
+            for file_name in files:
+                # handle a file with a recursive call
+                file_path = os.path.join(dir_path, file_name)
+                file_tree, file_count = _handle_path(file_path, ignore, paths_to_trees)
+                dir_count = add_tokens_lines(dir_count, file_count)
+                dir_tree.add(file_tree)
+
+            dir_label = f"{folder_char} {os.path.basename(dir_path)}"
+            dir_label += f" ({dir_count.n_tokens} tokens, {dir_count.n_lines} lines)"
+            dir_tree.label = dir_label
+            root_count = add_tokens_lines(root_count, dir_count)
+
+            paths_to_trees[dir_path] = (dir_tree, dir_count)
+
+        return root_tree, root_count
 
 
 if __name__ == "__main__":

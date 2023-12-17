@@ -1,5 +1,5 @@
 # tree_plus_src/parse_file.py
-from typing import List
+from typing import List, Tuple
 import collections
 import builtins
 import sqlite3
@@ -8,13 +8,27 @@ import yaml
 import ast
 import os
 import re
+import json
+
+from tree_plus_src.default_ignore import is_binary
+
+# TODO: convert this to an environment variable and share across the modules
+DEBUG = 0
+
+
+def debug_print(*args, **kwargs):
+    if DEBUG:
+        print(*args, **kwargs)
 
 
 def parse_file(file_path: str) -> List[str]:
     """
     Parse a file and return a List[str] of its major components.
     """
-    file_extension = os.path.splitext(file_path)[-1].lower()
+    base_file_path, file_extension = os.path.splitext(file_path)
+    file_name = os.path.basename(base_file_path)
+    file_extension = file_extension.lower()
+    # print(f"DEBUG(parse_file): {file_path=}, {file_extension=}\n{path_parts=}")
     components = []
 
     # handle sqlite databases before trying to open the file
@@ -22,11 +36,18 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_db(file_path)
         return components
 
+    # skip binary files
+    if is_binary(file_path):
+        return components
+
     try:
         with open(file_path, "r", encoding="utf-8") as file:
             contents = file.read()
     except UnicodeDecodeError as ude:
-        print(f"UnicodeDecodeError @ {file_path}: {ude}")
+        print(f"tree_plus.parse_file UnicodeDecodeError @ {file_path}: {ude}")
+        return components
+    except Exception as e:
+        print(f"tree_plus.parse_file Exception @ {file_path}: {e}")
         return components
 
     if file_extension == ".py":
@@ -34,14 +55,39 @@ def parse_file(file_path: str) -> List[str]:
         if isinstance(components, SyntaxError):
             # print(f"SyntaxError @ {file_path}: {components}")
             components = [f"SyntaxError: {components}"]
-    elif file_extension in [".js", ".ts", ".jsx", ".tsx"]:
+    elif file_extension == ".json":
+        if "package.json" in file_path.lower():
+            components = parse_package_json(contents)
+        elif "$schema" in contents:  # not great!
+            components = parse_json_schema(contents)
+    elif file_extension in [".js", ".jsx"]:
         components = parse_js(contents)
+    elif file_path.endswith(".d.ts"):
+        components = parse_d_dot_ts(contents)
+    elif file_extension in {".ts", ".tsx"}:
+        components = parse_ts(contents)
+        debug_print(f"{file_name=}")
+        if "app-routing.module" in file_path:
+            components = parse_angular_routes(contents) + components
+        elif "app.module" in file_path:
+            components = parse_angular_app_module(contents) + components
+        elif file_path.endswith("component.ts"):
+            components = components + parse_angular_component_ts(contents)
+        elif "environment" == file_name or "environment." in file_name:  # paranoid
+            components = parse_environment_ts(contents)
+        elif "spec.ts" in file_path:
+            components = parse_angular_spec(contents) + components
     elif file_extension == ".md":
         components = parse_md(contents)
+    elif file_extension == ".env":
+        components = parse_dot_env(contents)
     elif file_extension == ".sql":
         components = parse_sql(contents)
     elif file_extension == ".txt":
-        components = parse_txt(contents)
+        if "requirements" in file_name:
+            components = parse_requirements_txt(contents)
+        else:
+            components = parse_txt(contents)
     elif file_extension == ".cbl":
         components = parse_cobol(contents)
     elif file_extension == ".java":
@@ -81,10 +127,212 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_tf(contents)
     elif file_extension in (".yml", ".yaml"):
         components = parse_yml(contents)
+    elif file_name == "Makefile":
+        components = parse_makefile(contents)
 
-    todos = parse_todo(contents)
-    total_components = todos + components
+    bugs_todos_and_notes = parse_markers(contents)
+    total_components = bugs_todos_and_notes + components
     return total_components
+
+
+# (declare|export) (default)?(\w+ \w+(<.*>)?(\(.*\))?(: \w+)?)
+def parse_d_dot_ts(contents) -> List[str]:
+    debug_print(contents)
+    pattern = r"(declare|export) (default)?(\w+ \w+(<.*>)?(\(.*\))?(: \w+)?)"
+    keepers = []
+    if matches := re.findall(pattern, contents):
+        for matched in matches:
+            debug_print(matched)
+    return keepers
+
+
+def parse_angular_app_module(contents) -> List[str]:
+    debug_print("parse_angular_app_module")
+    pattern = r"(@NgModule\({\n\s*declarations: \[((\n\s*)[a-zA-Z]*,?)*)\n"
+    if matches := re.search(pattern, contents, re.DOTALL):
+        debug_print(f"{matches=}")
+        return [matches[1]]
+    return []
+
+
+def parse_angular_component_ts(contents) -> List[str]:
+    debug_print("parse_angular_component_ts")
+    keepers = []
+    title_pattern = r"title(: string)? = [\"|'](?P<title>.*)[\"|']"
+    title_leaf = "    title: string = '?'"
+    if title_match := re.search(title_pattern, contents):
+        debug_print(f"{title_match.groups()=}")
+        title_str = title_match.group("title")
+        title_leaf = f"    title: string = '{title_str}'"
+    keepers.append(title_leaf)
+    variable_pattern = r"[^(private|,)]\s(\w+\??:\s\w+)"
+    if variable_matches := re.findall(variable_pattern, contents, re.DOTALL):
+        debug_print(f"{variable_matches=}")
+        keepers.extend([f"    {v}" for v in variable_matches])
+    method_pattern = r"\n +((async)?\s+(?P<name>\w+)\((?P<args>(.|\s)*?)\))"
+    if method_matches := re.findall(method_pattern, contents, re.DOTALL):
+        for method_match in method_matches:
+            method_leaf = method_match[0].strip()
+            if "\n" in method_leaf:
+                method_leaf_lines = method_leaf.splitlines()
+                n = len(method_leaf_lines) - 1
+                method_leaf = "\n".join(
+                    [
+                        f"{'    ' if (i == 0 or i == n) else '        '}{method_leaf_line.strip()}"
+                        for i, method_leaf_line in enumerate(method_leaf_lines)
+                    ]
+                )
+            else:
+                method_leaf = f"    {method_leaf}"
+            keepers.append(method_leaf)
+    return keepers
+
+
+def parse_angular_routes(content) -> List[str]:
+    routes_pattern = r"(const routes: Routes = \[\n(?:.|\n)*?\];)"
+    routes_match = re.findall(routes_pattern, content)
+    if routes_match:
+        debug_print(f"{routes_match=}")
+        return [routes_match[0]]
+    return []
+
+
+def parse_angular_spec(content) -> List[str]:
+    describe_pattern = re.compile(r"(\t*| *)describe\('(.*)'")
+    it_pattern = re.compile(r"(\t*| *)it\(('|\")(.*)('|\")")
+    components = []
+    for line in content.splitlines():
+        if match := describe_pattern.search(line):
+            debug_print(f"{match.group()}")
+            debug_print(f"{match.groups()=}")
+            component = f"{match.group(1)}describe '{match.group(2)}'"
+        elif match := it_pattern.search(line):
+            debug_print(f"{match.group()}")
+            debug_print(f"{match.groups()=}")
+            debug_print(f"{match.group(3)=}")
+            statement = match.group(3).replace("\\", "").replace('"', "'")
+            debug_print(f"{statement=}")
+            component = f"{match.group(1)}it {statement}"
+        else:
+            continue
+        debug_print(f"{component=}")
+        components.append(component)
+    return components
+
+
+def parse_environment_ts(contents) -> List[str]:
+    debug_print("parse_environment_ts")
+    pattern = re.compile(r"(?P<key>\w+):")
+    lines = contents.splitlines()
+    parsing = False
+    keepers = []
+    for line in lines:
+        stripped_line = line.strip()
+        if stripped_line.startswith("export const environment = {"):
+            parsing = True
+            continue
+        if stripped_line.startswith("};"):
+            parsing = False
+            break
+        if (
+            stripped_line.startswith("//")
+            or stripped_line.startswith("/*")
+            or stripped_line.startswith("*")
+        ):
+            continue
+        if parsing:
+            if match := pattern.search(line):
+                debug_print(f"{match}")
+                keepers.append(f"   {match.group('key')}")
+    if keepers:
+        keepers = ["environment:"] + keepers
+    return keepers
+
+
+def parse_dot_env(contents) -> List[str]:
+    debug_print("parse_dot_env")
+    keepers = []
+    key_pattern = re.compile(r"([A-Z|_]*)=")
+    for line in contents.splitlines():
+        if line.startswith("#"):
+            continue
+        if match := key_pattern.search(line):
+            debug_print(match.groups())
+            keepers.append(match.group(1))
+    return keepers
+
+
+def parse_requirements_txt(contents) -> List[str]:
+    debug_print(f"parse_requirements_txt")
+    return [line for line in contents.splitlines() if not line.startswith("#")]
+
+
+def parse_json_schema(contents) -> List[str]:
+    debug_print("parse_json_schema")
+    parsed = json.loads(contents)
+    keepers = []
+    debug_print(parsed)
+    for key in ["$schema", "type", "title", "description"]:
+        if key in parsed:
+            keepers.append(f"{key}: {parsed[key]}")
+    return keepers
+
+
+def parse_package_json(contents) -> List[str]:
+    debug_print("parse_package_json")
+    keepers = []
+    package_json_dict = json.loads(contents)
+    debug_print(f"{package_json_dict=}")
+    package_json_name = "name: ?"
+    if "name" in package_json_dict:
+        package_json_name = f"name: '{package_json_dict['name']}'"
+    keepers.append(package_json_name)
+    package_json_version = "version: ?"
+    if "version" in package_json_dict:
+        package_json_version = f"version: {package_json_dict['version']}"
+    keepers.append(package_json_version)
+    package_json_scripts = []
+    if "scripts" in package_json_dict:
+        package_json_scripts_dict = package_json_dict["scripts"]
+        for key, value in package_json_scripts_dict.items():
+            package_json_script = f"    {key}: '{value}'"
+            package_json_scripts.append(package_json_script)
+    if package_json_scripts:
+        keepers.append(f"scripts:")
+        keepers.extend(package_json_scripts)
+    return keepers
+
+
+# same as js for now
+# (path: '(.*)',( |\n).*component: (.*)) }
+def parse_ts(content: str) -> List[str]:
+    func_pattern = r"\bfunction\s+(\w+)\s*\("
+    class_pattern = r"\bclass\s+(\w+)"
+    arrow_func_pattern = r"(\w+)\s*=\s*\([^)]*\)\s*=>"
+    type_pattern = r"\btype\s+(\w+)\s*="
+    funcs = ["function " + n for n in re.findall(func_pattern, content)]
+    classes = ["class " + n for n in re.findall(class_pattern, content)]
+    arrow_funcs = ["function " + n for n in re.findall(arrow_func_pattern, content)]
+    types = ["type " + n for n in re.findall(type_pattern, content)]
+    return types + classes + funcs + arrow_funcs
+
+
+def parse_makefile(contents: str) -> List[str]:
+    lines = contents.split("\n")
+    commands = [
+        line.strip().rstrip(":")
+        for line in lines
+        if line.strip()
+        and not line.startswith("\t")
+        and not line.strip().startswith("#")
+        and (
+            line.startswith(".PHONY")
+            or ":" in line
+            or line.startswith("include")
+            or line.startswith("define")
+        )
+    ]
+    return commands
 
 
 def parse_sql(contents: str) -> List[str]:
@@ -757,76 +1005,6 @@ def parse_c(content: str) -> List[str]:
     return parsed
 
 
-def parse_rs(contents: str) -> List[str]:
-    enum_pattern = r"((pub\s+)?enum\s+[A-Z]\w*)"
-    struct_pattern = r"((pub\s+)?struct\s+[A-Z]\w*)"
-    trait_pattern = r"((pub\s+)?trait\s+[A-Z]\w*)"
-    impl_pattern = r"((pub\s+)?impl\s+([A-Z]\w*)(\s+for\s+([A-Z]\w*))?)"
-    fn_pattern = r"(fn\s+[a-z_][a-z_0-9]*\([^)]*\)\s*(->\s*[^{]*)?)"
-    mod_pattern = r"(mod\s+[a-z_][a-z_0-9]*)"
-    macro_pattern = r"(macro_rules!\s+[a-z_][a-z_0-9]*)"
-
-    components = []
-    lines = contents.splitlines()
-
-    # Helper function to handle impl and trait blocks
-    def handle_block(start_index, owner, block_type, struct_name=None):
-        i = start_index
-        while i < len(lines):
-            line = lines[i]
-            match_fn = re.search(fn_pattern, line)
-            if match_fn:
-                # Remove newlines and 'fn' from the method signature and add the owner
-                method = match_fn.group(1).replace("\n", " ").replace("fn ", "").strip()
-                if struct_name:
-                    components.append(
-                        f"{block_type} {owner} for {struct_name} :: {method}"
-                    )
-                else:
-                    components.append(f"{block_type} {owner} :: {method}")
-            elif line.strip() == "}":  # end of the block
-                break
-            i += 1
-        return i  # return the index to continue the processing from
-
-    i = 0
-    while i < len(lines):
-        line = lines[i]
-        match_enum = re.search(enum_pattern, line)
-        match_struct = re.search(struct_pattern, line)
-        match_trait = re.search(trait_pattern, line)
-        match_impl = re.search(impl_pattern, line)
-        match_mod = re.search(mod_pattern, line)
-        match_macro = re.search(macro_pattern, line)
-
-        if match_enum:
-            components.append(match_enum.group(1))
-        elif match_struct:
-            components.append(match_struct.group(1))
-        elif match_trait:
-            components.append(match_trait.group(1))
-            i = handle_block(i + 1, match_trait.group(1).split()[-1], "trait")
-        elif match_impl:
-            if " for " in match_impl.group(1):
-                struct_name = match_impl.group(5)
-                components.append(match_impl.group(1))
-                i = handle_block(i + 1, match_impl.group(3), "impl", struct_name)
-            else:
-                components.append(match_impl.group(1))
-                i = handle_block(i + 1, match_impl.group(3), "impl")
-        elif match_mod:
-            components.append(match_mod.group(0))
-        elif match_macro:
-            components.append(match_macro.group(0))
-        else:
-            match_fn = re.search(fn_pattern, line)
-            if match_fn:
-                components.append(match_fn.group(1).replace("\n", " ").strip())
-        i += 1
-
-    return components
-
-
 def parse_tf(contents: str) -> List[str]:
     pattern = r'(provider|resource|data|variable|output|locals|module)\s+("[^"]*"\s*"[^"]*"|"[^"]*"|\'[^\']*\'|[^\s]*)\s*[{"{]'
     matches = re.findall(pattern, contents, re.MULTILINE)
@@ -932,13 +1110,224 @@ def parse_txt(content: str) -> List[str]:
     return parsed_checkboxes
 
 
-def parse_todo(content: str) -> List[str]:
-    todo_pattern = re.compile(r'TODO(?![\'"]): (.*)')
-    todos = []
-
+def parse_markers(content: str) -> List[str]:
+    marker_pattern = re.compile(r'(BUG|TODO|NOTE)(?![\'"]): (.*)')
+    markers = []
     lines = content.splitlines()
-    for line_num, line in enumerate(lines, start=1):
-        match = todo_pattern.search(line)
+    for line_n, line in enumerate(lines, start=1):
+        match = marker_pattern.search(line)
         if match:
-            todos.append(f"TODO (Line {line_num}): {match.group(1).strip()}")
-    return todos
+            marker, content = match.groups()
+            mark = f"{marker.upper()} (Line {line_n}): {content.strip()}"
+            markers.append(mark)
+    return markers
+
+
+def parse_rs(contents: str) -> List[str]:
+    debug_print("parse_rs")
+
+    # Combined regex pattern to match all components
+    combined_pattern = re.compile(
+        r"(pub\s+)?(fn\s+[a-z_][a-z_0-9]*\s*(<[^>]+>)?\s*\([^)]*\)\s*(->\s*[^{]*)?(where\s*[^{]*)?|"
+        r"struct\s+[A-Z]\w*|impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?|"
+        r"trait\s+[A-Z]\w*|enum\s+[A-Z]\w*|mod\s+[a-z_][a-z_0-9]*|"
+        r"macro_rules!\s+[a-z_][a-z_0-9]*)",
+        re.DOTALL,
+    )
+
+    components = []
+
+    for match in combined_pattern.finditer(contents):
+        component = match.group().strip()
+        components.append(component)
+
+    return components
+
+
+# ((pub\s+)?fn\s+[a-z_][a-z_0-9]*\s*(<[^>]+>)?\s*\([^)]*\)\s*(->\s*[^{]*)?(where\s*[^{]*)?)
+# def parse_rs(contents: str) -> List[str]:
+#     debug_print("parse_rs")
+
+#     # Adjusted regular expression pattern
+#     patterns = {
+#         "fn": re.compile(
+#             r"(pub\s+)?fn\s+[a-z_][a-z_0-9]*\s*(<[^>]+>)?\s*\([^)]*\)\s*(->\s*[^{]*)?(where\s*[^{]*)?",
+#             re.DOTALL,
+#         ),
+#         "struct": re.compile(r"(pub\s+)?struct\s+[A-Z]\w*"),
+#         "impl": re.compile(r"(pub\s+)?impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?"),
+#         "trait": re.compile(r"(pub\s+)?trait\s+[A-Z]\w*"),
+#         "enum": re.compile(r"(pub\s+)?enum\s+[A-Z]\w*"),
+#         "mod": re.compile(r"(pub\s+)?mod\s+[a-z_][a-z_0-9]*"),
+#         "macro": re.compile(r"macro_rules!\s+[a-z_][a-z_0-9]*"),
+#     }
+
+#     components = []
+#     lines = contents.splitlines()
+
+#     for line_number, line in enumerate(lines):
+#         for component_type, pattern in patterns.items():
+#             match = pattern.search(line)
+#             if match:
+#                 debug_print(f"{component_type} Match found: {match.group()}")
+#                 component = match.group().strip()
+#                 components.append(component)
+#                 break  # Skip further checks if a match is found
+
+#     return components
+
+
+# def handle_block(
+#     fn_pattern, lines, components, start_index, owner, block_type, struct_name=None
+# ):
+#     debug_print(f"handle_block {start_index=} {owner=} {block_type=}")
+#     line_number = start_index
+#     while line_number < len(lines):
+#         debug_print("handle_block line {line_number}")
+#         line = lines[line_number]
+#         match_fn = fn_pattern.search(line)
+#         if match_fn:
+#             method = match_fn.group().replace("\n", " ").strip()
+#             component = f"{block_type} {owner}"
+#             if struct_name:
+#                 component += f" for {struct_name}"
+#             component += f" :: {method}"
+#             components.append(component)
+#         elif line.strip() == "}":
+#             break
+#         line_number += 1
+#     return line_number
+
+
+# # 2.2
+# def parse_rs(contents: str) -> List[str]:
+#     debug_print(f"parse_rs")
+
+#     enum_pattern = re.compile(r"(pub\(.*?\)\s*)?enum\s+[A-Z]\w*")
+#     struct_pattern = re.compile(r"(pub\(.*?\)\s*)?struct\s+([A-Z]\w*)")
+#     trait_pattern = re.compile(r"(pub\(.*?\)\s*)?trait\s+[A-Z]\w*")
+#     impl_pattern = re.compile(
+#         r"(pub\(.*?\)\s*)?impl\s+([A-Z]\w*)(\s+for\s+([A-Z]\w*))?"
+#     )
+#     fn_pattern = re.compile(
+#         r"(pub\(.*?\)\s*)?fn\s+[a-z_][a-z_0-9]*\([^)]*\)\s*(->\s*[^{]*)?"
+#     )
+#     mod_pattern = re.compile(r"(pub\()?((?!\))?(.*?)\))?\s*mod\s+[a-z_][a-z_0-9]*")
+#     macro_pattern = re.compile(r"macro_rules!\s+[a-z_][a-z_0-9]*")
+
+#     components = []
+#     lines = contents.splitlines()
+
+#     line_number = 0
+#     while line_number < len(lines):
+#         debug_print(f"parse_rs line {line_number}")
+
+#         line = lines[line_number]
+
+#         for pattern, component_type in [
+#             (fn_pattern, "fn"),
+#             (struct_pattern, "struct"),
+#             (enum_pattern, "enum"),
+#             (trait_pattern, "trait"),
+#             (impl_pattern, "impl"),
+#             (mod_pattern, "mod"),
+#             (macro_pattern, "macro"),
+#         ]:
+#             match = pattern.search(line)
+#             if match:
+#                 print(f"{match=}")
+#                 if component_type in ["impl", "trait"]:
+#                     struct_name = match.group(4) if " for " in match.group() else None
+#                     owner = match.group(3)
+#                     line_number = handle_block(
+#                         fn_pattern,
+#                         lines,
+#                         components,
+#                         line_number + 1,
+#                         owner,
+#                         component_type,
+#                         struct_name,
+#                     )
+#                 else:
+#                     components.append(match.group().replace("\n", " ").strip())
+#                 break
+
+#         line_number += 1
+
+#     return components
+
+
+# After Bard:
+# def parse_rs(contents: str) -> List[str]:
+#     enum_pattern = re.compile(r"(pub\(.*?\)\s*)enum\s+[A-Z]\w*")
+#     struct_pattern = re.compile(r"(pub\(.*?\)\s*)struct\s+([A-Z]\w*)")
+#     trait_pattern = re.compile(r"(pub\(.*?\)\s*)trait\s+[A-Z]\w*")
+#     impl_pattern = re.compile(r"(pub\(.*?\)\s*)impl\s+([A-Z]\w*)(\s+for\s+([A-Z]\w*))?")
+#     fn_pattern = re.compile(
+#         r"(pub\(.*?\)\s*)?fn\s+[a-z_][a-z_0-9]*\([^)]*\)\s*(->\s*[^{]*)?"
+#     )
+#     mod_pattern = re.compile(r"(pub\()?((?!\))?(.*?)\))?\s*mod\s+[a-z_][a-z_0-9]*")
+#     macro_pattern = re.compile(r"macro_rules!\s+[a-z_][a-z_0-9]*")
+
+#     components = []
+#     lines = contents.splitlines()
+
+#     # Helper function to handle impl and trait blocks
+#     def handle_block(start_index, owner, block_type, struct_name=None):
+#         i = start_index
+#         while i < len(lines):
+#             line = lines[i]
+#             match_fn = re.search(fn_pattern, line)
+#             if match_fn:
+#                 # Remove newlines and 'fn' from the method signature and add the owner
+#                 method = match_fn.group(1).replace("\n", " ").strip()
+#                 if struct_name:
+#                     components.append(
+#                         f"{block_type} {owner} for {struct_name} :: {method}"
+#                     )
+#                 else:
+#                     components.append(f"{block_type} {owner} :: {method}")
+#             elif line.strip() == "}":  # end of the block
+#                 break
+#             i += 1
+#         return i  # return the index to continue the processing from
+
+#     i = 0
+#     while i < len(lines):
+#         line = lines[i]
+#         match_enum = enum_pattern.search(line)
+#         match_struct = struct_pattern.search(line)
+#         match_trait = trait_pattern.search(line)
+#         match_impl = impl_pattern.search(line)
+#         match_mod = mod_pattern.search(line)
+#         match_macro = macro_pattern.search(line)
+
+#         if match_enum:
+#             components.append(match_enum.group(1))
+#         elif match_struct:
+#             visibility = match_struct.group(2)
+#             struct_name = match_struct.group(3)
+#             block = f"{visibility or ''}struct {struct_name}"
+#             components.append(block)
+#         elif match_trait:
+#             components.append(match_trait.group(1))
+#             i = handle_block(i + 1, match_trait.group(1).split()[-1], "trait")
+#         elif match_impl:
+#             if " for " in match_impl.group(1):
+#                 struct_name = match_impl.group(5)
+#                 components.append(match_impl.group(1))
+#                 i = handle_block(i + 1, match_impl.group(3), "impl", struct_name)
+#             else:
+#                 components.append(match_impl.group(1))
+#                 i = handle_block(i + 1, match_impl.group(3), "impl")
+#         elif match_mod:
+#             components.append(match_mod.group(0))
+#         elif match_macro:
+#             components.append(match_macro.group(0))
+#         else:
+#             match_fn = re.search(fn_pattern, line)
+#             if match_fn:
+#                 components.append(match_fn.group(1).replace("\n", " ").strip())
+#         i += 1
+
+#     return components

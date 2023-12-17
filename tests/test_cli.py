@@ -29,6 +29,18 @@ def test_tree_plus_help():
     assert result.returncode == 0
 
 
+# def test_tree_plus_glob():
+#     result = subprocess.run(
+#         ["tree_plus", "-g !*.rs", "tests/more_language_units/group5"],
+#         capture_output=True,
+#     )
+#     assert result.returncode == 0
+#     assert result.stderr == ""
+#     assert "group5" in result.stdout
+#     assert ".rs" not in result.stdout
+#     assert "trait" not in result.stdout
+
+
 def test_cli_on_root():
     path_to_tests = os.path.dirname(os.path.abspath(__file__))
     root_path = os.path.join(path_to_tests, "..")
@@ -51,7 +63,7 @@ def test_cli_on_root():
     assert " more_languages" in result.stdout
     assert " group1" in result.stdout
     assert " group2" in result.stdout
-    assert " group3" in result.stdout
+    assert " group_todo" in result.stdout
     assert " group4" in result.stdout
     assert " group5" in result.stdout
     assert " path_to_test" in result.stdout

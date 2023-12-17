@@ -1,6 +1,7 @@
 # .gitignore
 
 # Python cache files
+tests/__pycache__
 __pycache__/
 *.pyc
 *.pyo
@@ -26,3 +27,6 @@ __pycache__/
 # For other IDEs
 .vscode/
 .idea/
+
+# Holds extra content
+detritus/
