@@ -1,0 +1,36 @@
+[project]
+name = "tree_plus_BIONICLES"
+version = "1.0.0a2"
+authors = [{ name = "Bion Howard", email = "bion@atomiclogic.com" }]
+description = "tree util plus file components as leaves and token, line counts"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords=["tree", "util", "cli"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: Apache 2.0 License",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Utilities",
+]
+dependencies = ["tiktoken", "PyYAML", "pytest", "click", "rich"]
+
+[project.urls]
+Homepage = "https://github.com/bionicles/tree_plus"
+Issues = "https://github.com/bionicles/tree_plus/issues"
+repository = "https://www.github.com/bionicles/tree_plus"
+documentation = "https://www.github.com/bionicles/tree_plus/README.md" 
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+tree_plus = "tree_plus_cli:main"
+
+[tool.setuptools]
+py-modules = ["tree_plus_cli"]
+packages = ["tree_plus_src"]
+
