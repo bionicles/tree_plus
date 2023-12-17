@@ -15,7 +15,7 @@
 ![Python 3.9](https://img.shields.io/badge/Python-3.9-blue)
 ![Python 3.10](https://img.shields.io/badge/Python-3.10-blue)
 ![Python 3.11](https://img.shields.io/badge/Python-3.11-blue)
-![Python 3.12](https://img.shields.io/badge/Python-3.11-blue)
+![Python 3.12](https://img.shields.io/badge/Python-3.12-blue)
 
 A simple command line interface (CLI) tool for developers to show a `tree` enhanced with token counts, line counts, and source code components.
 
