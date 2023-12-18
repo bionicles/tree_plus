@@ -13,7 +13,7 @@ import json
 from tree_plus_src.default_ignore import is_binary
 
 # TODO: convert this to an environment variable and share across the modules
-DEBUG = 0
+DEBUG = 1
 
 
 def debug_print(*args, **kwargs):
@@ -79,6 +79,14 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_angular_spec(contents) + components
     elif file_extension == ".md":
         components = parse_md(contents)
+    elif file_extension == ".c":
+        components = parse_c(contents)
+    elif file_extension in {".cpp", ".cc"}:
+        components = parse_cpp(contents)
+    elif file_extension == ".rs":
+        components = parse_rs(contents)
+    elif file_extension == ".go":
+        components = parse_go(contents)
     elif file_extension == ".env":
         components = parse_dot_env(contents)
     elif file_extension == ".sql":
@@ -119,12 +127,6 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_powershell(contents)
     elif file_extension == ".scala":
         components = parse_scala(contents)
-    elif file_extension == ".c":
-        components = parse_c(contents)
-    elif file_extension in {".cpp", ".cc"}:
-        components = parse_cpp(contents)
-    elif file_extension == ".rs":
-        components = parse_rs(contents)
     elif file_extension == ".tf":
         components = parse_tf(contents)
     elif file_extension in (".yml", ".yaml"):
@@ -156,6 +158,38 @@ def parse_cpp(contents) -> List[str]:
 
     for match in combined_pattern.finditer(contents):
         component = match.group().strip()
+        components.append(component)
+
+    return components
+
+
+def parse_go(contents) -> List[str]:
+    debug_print("parse_go")
+
+    # Combined regex pattern to match Go components
+    combined_pattern = re.compile(
+        # struct or type declarations without the body
+        r"\n(type \w+ (struct|interface)\s*)\{.*?\}\s*|"
+        # function declarations, including multiline, without the body
+        # r"\n(func[\s?\S?]*?){\n",
+        # r"\s(func [\s\S]+?){\s",
+        r"(func [\s\S]+?){\s",
+        re.DOTALL,
+    )
+
+    components = []
+
+    for match in combined_pattern.finditer(contents):
+        debug_print(f"{match=}")
+        debug_print(f"{match.groups()=}")
+        component = match.group().strip().replace(" {", "")
+        debug_print(f"{component=}")
+        # if component.startswith("func"):
+        #     component = match.group(2).strip()
+        #     component = component.replace(" {", "")
+        if component.startswith("type"):
+            component = match.group(1).strip()
+        debug_print(f"final {component=}")
         components.append(component)
 
     return components

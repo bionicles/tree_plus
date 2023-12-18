@@ -1,4 +1,5 @@
 # tests/test_more_language_units.py
+from typing import Literal
 import pytest
 
 from rich import print
@@ -76,7 +77,19 @@ from tree_plus_src import parse_file
         ),
     ],
 )
-def test_more_languages_group1(file, expected):
+def test_more_languages_group1(
+    file: Literal[
+        "tests/more_languages/group1/COBOL_TEST.CBL",
+        "tests/more_languages/group1/JavaTest.java",
+        "tests/more_languages/group1/JuliaTest.jl",
+        "tests/more_languages/group1/KotlinTest.kt",
+        "tests/more_languages/group1/LispTest.lisp",
+        "tests/more_languages/group1/LuaTest.lua",
+        "tests/more_languages/group1/ObjectiveCTest.m",
+        "tests/more_languages/group1/OcamlTest.ml",
+    ],
+    expected: list[str],
+):
     print(f"{file=}")
     result = parse_file(file)
     print(f"{result=}")
@@ -158,7 +171,17 @@ def test_more_languages_group1(file, expected):
         ),
     ],
 )
-def test_more_languages_group2(file, expected):
+def test_more_languages_group2(
+    file: Literal[
+        "tests/more_languages/group2/apl_test.apl",
+        "tests/more_languages/group2/PerlTest.pl",
+        "tests/more_languages/group2/PhpTest.php",
+        "tests/more_languages/group2/ScalaTest.scala",
+        "tests/more_languages/group2/c_test.c",
+        "tests/more_languages/group2/PowershellTest.ps1",
+    ],
+    expected: list[str],
+):
     print(f"{file=}")
     result = parse_file(file)
     print(f"{expected=}")
@@ -194,9 +217,29 @@ void printVector(const std::vector<T>& vec)""",
                 "void myFunction(string fname, int age)",
             ],
         ),
+        (
+            "tests/more_languages/group3/go_test.go",
+            [
+                "type Greeting struct",
+                "func (g Greeting) sayHello()",
+                "func createGreeting(m string) Greeting",
+                "type SomethingLong struct",
+                """func (s *SomethingLong) WithAReasonableName(
+	ctx context.Context,
+	param1 string,
+	param2 int,
+	param3 map[string]interface{},
+	callback func(int) error,
+) (resultType, error)""",
+                "type resultType struct",
+                "func main()",
+            ],
+        ),
     ],
 )
-def test_more_languages_group3(file, expected):
+def test_more_languages_group3(
+    file: Literal["tests/more_languages/group3/cpp_test.cpp"], expected: str
+):
     print(f"{file=}")
     result = parse_file(file)
     print(f"{result=}")
@@ -268,7 +311,13 @@ where
         ),
     ],
 )
-def test_more_languages_group4(file, expected):
+def test_more_languages_group4(
+    file: Literal[
+        "tests/more_languages/group4/rust_test.rs",
+        "tests/more_languages/group4/tf_test.tf",
+    ],
+    expected: list[str],
+):
     print(f"{file=}")
     result = parse_file(file)
     print(f"{result=}")
@@ -520,7 +569,27 @@ def test_more_languages_group4(file, expected):
         ),
     ],
 )
-def test_more_languages_group5(file, expected):
+def test_more_languages_group5(
+    file: Literal[
+        "tests/more_languages/group5/ansible_test.yml",
+        "tests/more_languages/group5/k8s_test.yaml",
+        "tests/more_languages/group5/checkbox_test.md",
+        "tests/more_languages/group5/checkbox_test.txt",
+        ".github/workflows/unix.yml",
+        "tests/more_languages/group5/sql_test.sql",
+        "tests/more_languages/group5/app.component.spec.ts",
+        "tests/more_languages/group5/app.component.ts",
+        "tests/more_languages/group5/app-routing.module.ts",
+        "tests/more_languages/group5/app.module.ts",
+        "tests/more_languages/group5/requirements_test.txt",
+        "tests/more_languages/group5/testJsonSchema.json",
+        "tests/more_languages/group5/Makefile",
+        "tests/more_languages/group5/test.env",
+        "tests/more_languages/group5/testPackage.json",
+        "tests/more_languages/group5/environment.test.ts",
+    ],
+    expected: list[str],
+):
     print(f"{file=}")
     result = parse_file(file)
     print(f"{result=}")
@@ -590,10 +659,7 @@ def test_more_languages_group5(file, expected):
 #     "tests/more_languages/group4/fsharp_test.fs",
 #     ["type Person -> member this.SayHello", "let person"],
 # ),
-# (
-#     "tests/more_languages/group4/go_test.go",
-#     ["type Greeting -> func (g Greeting) sayHello", "func createGreeting"],
-# ),
+
 # (
 #     "tests/more_languages/group4/haskell_test.hs",
 #     ["data Person", "greet :: Person -> String"],
