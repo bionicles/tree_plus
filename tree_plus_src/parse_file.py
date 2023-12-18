@@ -89,6 +89,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_swift(contents)
     elif file_extension == ".go":
         components = parse_go(contents)
+    elif file_extension == ".sh":
+        components = parse_bash(contents)
     elif file_extension == ".env":
         components = parse_dot_env(contents)
     elif file_extension == ".sql":
@@ -186,9 +188,6 @@ def parse_go(contents) -> List[str]:
         debug_print(f"{match.groups()=}")
         component = match.group().strip().replace(" {", "")
         debug_print(f"{component=}")
-        # if component.startswith("func"):
-        #     component = match.group(2).strip()
-        #     component = component.replace(" {", "")
         if component.startswith("type"):
             component = match.group(1).strip()
         debug_print(f"final {component=}")
@@ -217,11 +216,34 @@ def parse_swift(contents) -> List[str]:
         debug_print(f"{match.groups()=}")
         component = match.group().strip().replace(" {", "")
         debug_print(f"{component=}")
-        # if component.startswith("func"):
-        #     component = match.group(2).strip()
-        #     component = component.replace(" {", "")
-        if component.startswith("type"):
-            component = match.group(1).strip()
+        debug_print(f"final {component=}")
+        components.append(component)
+
+    return components
+
+def parse_bash(contents) -> List[str]:
+    debug_print("parse_bash")
+
+    # Combined regex pattern to match Go components
+    combined_pattern = re.compile(
+        # class, enum, enum class, with or without protocol
+        r"((function)? ?\w+\(\)) {|"
+        # protocols are that which is inherited
+        r"(export \w+)=|"
+        # functions with or without multiline signatures
+        r"(alias .*)",
+        re.DOTALL,
+    )
+
+    components = []
+
+    for match in combined_pattern.finditer(contents):
+        debug_print(f"{match=}")
+        debug_print(f"{match.groups()=}")
+        component = match.group().strip().replace(" {", "")
+        debug_print(f"{component=}")
+        if component.startswith("export"):
+            component = component[:-1]
         debug_print(f"final {component=}")
         components.append(component)
 

@@ -258,6 +258,15 @@ void printVector(const std::vector<T>& vec)""",
 )"""
             ],
         ),
+        (
+            "tests/more_languages/group3/bash_test.sh",
+            [
+                "echo_hello_world()",
+                "function fun_echo_hello_world()",
+                "export SECRET",
+                "alias md='make debug'",
+            ],
+        ),
     ],
 )
 def test_more_languages_group3(
@@ -672,12 +681,7 @@ def test_more_languages_group5(
 #         "greet.Person <- function(p)",
 #     ],
 # ),
-# (
-#     "tests/more_languages/group2/bash_test.sh",
-#     [
-#         "echo_hello_world()",
-#     ],
-# ),
+
 # (
 #     "tests/more_languages/group4/fsharp_test.fs",
 #     ["type Person -> member this.SayHello", "let person"],
