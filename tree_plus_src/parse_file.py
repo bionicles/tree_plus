@@ -13,7 +13,7 @@ import json
 from tree_plus_src.default_ignore import is_binary
 
 # TODO: convert this to an environment variable and share across the modules
-DEBUG = 1
+DEBUG = 0
 
 
 def debug_print(*args, **kwargs):
