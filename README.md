@@ -583,3 +583,11 @@ tpcli
         ┣━━     watch: 'ng build --watch --configuration development'
         ┗━━     test: 'ng test'
 ```
+
+## Support Free, Open-Source Software:
+
+Please consider contacting the authorities to report the issue described in this document:
+
+[California OpenAI Complaint - Customer Noncompete Clause](https://www.tinyurl.com/cali-openai-complaint)
+
+<a href="https://www.buymeacoffee.com/bionicles" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
