@@ -230,9 +230,32 @@ void printVector(const std::vector<T>& vec)""",
 	param2 int,
 	param3 map[string]interface{},
 	callback func(int) error,
-) (resultType, error)""",
+) (resultType, error)""", 
                 "type resultType struct",
                 "func main()",
+            ],
+        ),
+        (
+            "tests/more_languages/group3/swift_test.swift",
+            [
+                "class Person",
+                "func globalGreet()",
+                "struct Point",
+                "protocol Animal",
+                "struct Dog: Animal",
+                "class Cat: Animal",
+                "enum CarType",
+                "func getPreferredCarType() -> CarType",
+                "enum CarType: UInt8",
+                "enum class CarType: UInt8",
+                "func myFunction(fname: String, age: Int)",
+                """func myFunctionWithMultipleParameters(
+    fname: String, 
+    lname: String, 
+    age: Int, 
+    address: String, 
+    phoneNumber: String
+)"""
             ],
         ),
     ],
@@ -704,10 +727,7 @@ def test_more_languages_group5(
 #     "tests/more_languages/group4/sas_test.sas",
 #     ["data work.testData", "%macro sayHello", "PROC SQL"],
 # ),
-# (
-#     "tests/more_languages/group4/swift_test.swift",
-#     ["class Person -> func greet", "struct CustomType"],
-# ),
+
 # (
 #     "tests/more_languages/group4/vba_test.bas",
 #     [
