@@ -205,6 +205,13 @@ Ensure you have the following tools installed:
 
 ### Install Tree Plus
 
+#### PyPI
+
+```bash
+pip install tree_plus
+```
+
+
 #### Local Hackable Install
 
 1. Clone the repository and cd into the tree_plus directory

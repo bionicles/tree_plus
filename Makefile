@@ -36,3 +36,9 @@ test-publish: install-twine
 
 install-twine:
 	pip install --upgrade twine
+
+publish: install-twine clean-dist
+	python -m twine upload dist/*
+
+clean-dist:
+	rm -rf dist/*

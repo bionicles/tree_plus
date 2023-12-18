@@ -1,6 +1,6 @@
 [project]
-name = "tree_plus_BIONICLES"
-version = "1.0.0a2"
+name = "tree_plus"
+version = "1.0.1"
 authors = [{ name = "Bion Howard", email = "bion@atomiclogic.com" }]
 description = "tree util plus file components as leaves and token, line counts"
 readme = "README.md"
