@@ -33,3 +33,6 @@ dist
 
 # Holds extra content
 detritus/
+
+# testing stuff
+.hypothesis

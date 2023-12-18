@@ -121,6 +121,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_scala(contents)
     elif file_extension == ".c":
         components = parse_c(contents)
+    elif file_extension in {".cpp", ".cc"}:
+        components = parse_cpp(contents)
     elif file_extension == ".rs":
         components = parse_rs(contents)
     elif file_extension == ".tf":
@@ -133,6 +135,30 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def parse_cpp(contents) -> List[str]:
+    debug_print("parse_cpp")
+
+    # Combined regex pattern to match all components
+    combined_pattern = re.compile(
+        # class or struct
+        r"\n((class|struct)? \w+( : \w+( \w+)?)?)|"
+        # enums (maybe class)
+        r"\n((enum) (class )?\w+( : \w+)?)|"
+        # (maybe template) functions
+        # r"\n((template<.*?>)?\n(\w+::)?(\w+) \w+\([\s\S]*?\))",
+        r"((template<.*?>)?\n(\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
+        re.DOTALL,
+    )
+
+    components = []
+
+    for match in combined_pattern.finditer(contents):
+        component = match.group().strip()
+        components.append(component)
+
+    return components
 
 
 # (declare|export) (default)?(\w+ \w+(<.*>)?(\(.*\))?(: \w+)?)
@@ -1142,192 +1168,3 @@ def parse_rs(contents: str) -> List[str]:
         components.append(component)
 
     return components
-
-
-# ((pub\s+)?fn\s+[a-z_][a-z_0-9]*\s*(<[^>]+>)?\s*\([^)]*\)\s*(->\s*[^{]*)?(where\s*[^{]*)?)
-# def parse_rs(contents: str) -> List[str]:
-#     debug_print("parse_rs")
-
-#     # Adjusted regular expression pattern
-#     patterns = {
-#         "fn": re.compile(
-#             r"(pub\s+)?fn\s+[a-z_][a-z_0-9]*\s*(<[^>]+>)?\s*\([^)]*\)\s*(->\s*[^{]*)?(where\s*[^{]*)?",
-#             re.DOTALL,
-#         ),
-#         "struct": re.compile(r"(pub\s+)?struct\s+[A-Z]\w*"),
-#         "impl": re.compile(r"(pub\s+)?impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?"),
-#         "trait": re.compile(r"(pub\s+)?trait\s+[A-Z]\w*"),
-#         "enum": re.compile(r"(pub\s+)?enum\s+[A-Z]\w*"),
-#         "mod": re.compile(r"(pub\s+)?mod\s+[a-z_][a-z_0-9]*"),
-#         "macro": re.compile(r"macro_rules!\s+[a-z_][a-z_0-9]*"),
-#     }
-
-#     components = []
-#     lines = contents.splitlines()
-
-#     for line_number, line in enumerate(lines):
-#         for component_type, pattern in patterns.items():
-#             match = pattern.search(line)
-#             if match:
-#                 debug_print(f"{component_type} Match found: {match.group()}")
-#                 component = match.group().strip()
-#                 components.append(component)
-#                 break  # Skip further checks if a match is found
-
-#     return components
-
-
-# def handle_block(
-#     fn_pattern, lines, components, start_index, owner, block_type, struct_name=None
-# ):
-#     debug_print(f"handle_block {start_index=} {owner=} {block_type=}")
-#     line_number = start_index
-#     while line_number < len(lines):
-#         debug_print("handle_block line {line_number}")
-#         line = lines[line_number]
-#         match_fn = fn_pattern.search(line)
-#         if match_fn:
-#             method = match_fn.group().replace("\n", " ").strip()
-#             component = f"{block_type} {owner}"
-#             if struct_name:
-#                 component += f" for {struct_name}"
-#             component += f" :: {method}"
-#             components.append(component)
-#         elif line.strip() == "}":
-#             break
-#         line_number += 1
-#     return line_number
-
-
-# # 2.2
-# def parse_rs(contents: str) -> List[str]:
-#     debug_print(f"parse_rs")
-
-#     enum_pattern = re.compile(r"(pub\(.*?\)\s*)?enum\s+[A-Z]\w*")
-#     struct_pattern = re.compile(r"(pub\(.*?\)\s*)?struct\s+([A-Z]\w*)")
-#     trait_pattern = re.compile(r"(pub\(.*?\)\s*)?trait\s+[A-Z]\w*")
-#     impl_pattern = re.compile(
-#         r"(pub\(.*?\)\s*)?impl\s+([A-Z]\w*)(\s+for\s+([A-Z]\w*))?"
-#     )
-#     fn_pattern = re.compile(
-#         r"(pub\(.*?\)\s*)?fn\s+[a-z_][a-z_0-9]*\([^)]*\)\s*(->\s*[^{]*)?"
-#     )
-#     mod_pattern = re.compile(r"(pub\()?((?!\))?(.*?)\))?\s*mod\s+[a-z_][a-z_0-9]*")
-#     macro_pattern = re.compile(r"macro_rules!\s+[a-z_][a-z_0-9]*")
-
-#     components = []
-#     lines = contents.splitlines()
-
-#     line_number = 0
-#     while line_number < len(lines):
-#         debug_print(f"parse_rs line {line_number}")
-
-#         line = lines[line_number]
-
-#         for pattern, component_type in [
-#             (fn_pattern, "fn"),
-#             (struct_pattern, "struct"),
-#             (enum_pattern, "enum"),
-#             (trait_pattern, "trait"),
-#             (impl_pattern, "impl"),
-#             (mod_pattern, "mod"),
-#             (macro_pattern, "macro"),
-#         ]:
-#             match = pattern.search(line)
-#             if match:
-#                 print(f"{match=}")
-#                 if component_type in ["impl", "trait"]:
-#                     struct_name = match.group(4) if " for " in match.group() else None
-#                     owner = match.group(3)
-#                     line_number = handle_block(
-#                         fn_pattern,
-#                         lines,
-#                         components,
-#                         line_number + 1,
-#                         owner,
-#                         component_type,
-#                         struct_name,
-#                     )
-#                 else:
-#                     components.append(match.group().replace("\n", " ").strip())
-#                 break
-
-#         line_number += 1
-
-#     return components
-
-
-# After Bard:
-# def parse_rs(contents: str) -> List[str]:
-#     enum_pattern = re.compile(r"(pub\(.*?\)\s*)enum\s+[A-Z]\w*")
-#     struct_pattern = re.compile(r"(pub\(.*?\)\s*)struct\s+([A-Z]\w*)")
-#     trait_pattern = re.compile(r"(pub\(.*?\)\s*)trait\s+[A-Z]\w*")
-#     impl_pattern = re.compile(r"(pub\(.*?\)\s*)impl\s+([A-Z]\w*)(\s+for\s+([A-Z]\w*))?")
-#     fn_pattern = re.compile(
-#         r"(pub\(.*?\)\s*)?fn\s+[a-z_][a-z_0-9]*\([^)]*\)\s*(->\s*[^{]*)?"
-#     )
-#     mod_pattern = re.compile(r"(pub\()?((?!\))?(.*?)\))?\s*mod\s+[a-z_][a-z_0-9]*")
-#     macro_pattern = re.compile(r"macro_rules!\s+[a-z_][a-z_0-9]*")
-
-#     components = []
-#     lines = contents.splitlines()
-
-#     # Helper function to handle impl and trait blocks
-#     def handle_block(start_index, owner, block_type, struct_name=None):
-#         i = start_index
-#         while i < len(lines):
-#             line = lines[i]
-#             match_fn = re.search(fn_pattern, line)
-#             if match_fn:
-#                 # Remove newlines and 'fn' from the method signature and add the owner
-#                 method = match_fn.group(1).replace("\n", " ").strip()
-#                 if struct_name:
-#                     components.append(
-#                         f"{block_type} {owner} for {struct_name} :: {method}"
-#                     )
-#                 else:
-#                     components.append(f"{block_type} {owner} :: {method}")
-#             elif line.strip() == "}":  # end of the block
-#                 break
-#             i += 1
-#         return i  # return the index to continue the processing from
-
-#     i = 0
-#     while i < len(lines):
-#         line = lines[i]
-#         match_enum = enum_pattern.search(line)
-#         match_struct = struct_pattern.search(line)
-#         match_trait = trait_pattern.search(line)
-#         match_impl = impl_pattern.search(line)
-#         match_mod = mod_pattern.search(line)
-#         match_macro = macro_pattern.search(line)
-
-#         if match_enum:
-#             components.append(match_enum.group(1))
-#         elif match_struct:
-#             visibility = match_struct.group(2)
-#             struct_name = match_struct.group(3)
-#             block = f"{visibility or ''}struct {struct_name}"
-#             components.append(block)
-#         elif match_trait:
-#             components.append(match_trait.group(1))
-#             i = handle_block(i + 1, match_trait.group(1).split()[-1], "trait")
-#         elif match_impl:
-#             if " for " in match_impl.group(1):
-#                 struct_name = match_impl.group(5)
-#                 components.append(match_impl.group(1))
-#                 i = handle_block(i + 1, match_impl.group(3), "impl", struct_name)
-#             else:
-#                 components.append(match_impl.group(1))
-#                 i = handle_block(i + 1, match_impl.group(3), "impl")
-#         elif match_mod:
-#             components.append(match_mod.group(0))
-#         elif match_macro:
-#             components.append(match_macro.group(0))
-#         else:
-#             match_fn = re.search(fn_pattern, line)
-#             if match_fn:
-#                 components.append(match_fn.group(1).replace("\n", " ").strip())
-#         i += 1
-
-#     return components

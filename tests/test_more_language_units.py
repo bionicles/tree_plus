@@ -170,6 +170,44 @@ def test_more_languages_group2(file, expected):
     "file,expected",
     [
         (
+            "tests/more_languages/group3/cpp_test.cpp",
+            [
+                "class Person",
+                "void globalGreet()",
+                "int main()",
+                "void printMessage(const std::string &message)",
+                """template<typename T>
+void printVector(const std::vector<T>& vec)""",
+                "struct Point",
+                "class Animal",
+                "class Dog : public Animal",
+                "class Cat : public Animal",
+                """nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
+                             int batch_size, int max_seq_length, float dropout,
+                             bool bidirectional, bool cudnn_allow_tf32,
+			     int workspace_size, int reserve_space_size)""",
+                "int main()",
+                "enum ECarTypes",
+                "ECarTypes GetPreferredCarType()",
+                "enum ECarTypes : uint8_t",
+                "enum class ECarTypes : uint8_t",
+                "void myFunction(string fname, int age)",
+            ],
+        ),
+    ],
+)
+def test_more_languages_group3(file, expected):
+    print(f"{file=}")
+    result = parse_file(file)
+    print(f"{result=}")
+    print(f"{expected=}")
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "file,expected",
+    [
+        (
             "tests/more_languages/group4/rust_test.rs",
             [
                 "enum Days",
