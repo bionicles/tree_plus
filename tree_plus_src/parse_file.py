@@ -65,7 +65,7 @@ def parse_file(file_path: str) -> List[str]:
         elif "app.module" in file_path:
             components = parse_angular_app_module(contents) + components
         elif file_path.endswith("component.ts"):
-            components = components + parse_angular_component_ts(contents)
+            components = components
         elif "environment" == file_name or "environment." in file_name:  # paranoid
             components = parse_environment_ts(contents)
         elif "spec.ts" in file_path:
@@ -180,6 +180,9 @@ def remove_c_comments(multiline_string):
         line_comment_pattern, "", no_block_comments, flags=re.MULTILINE
     )
 
+    cleaned_string = re.sub(" ,", ",", cleaned_string)
+    cleaned_string = cleaned_string.replace(" )", ")")
+
     return cleaned_string
 
 
@@ -187,6 +190,8 @@ CPP_DENY = {"private", "public"}
 
 
 def parse_cpp(contents) -> List[str]:
+    var = os.environ.get("DEBUG_TREE_PLUS")
+    print(f"DEBUG_TREE_PLUS={var}")
     debug_print("parse_cpp")
     contents = remove_c_comments(contents)
 
@@ -203,7 +208,9 @@ def parse_cpp(contents) -> List[str]:
         # r"\n(template.*)\n|"
         r"\n(template ?<.*?>[^\{^;^=]*)|"
         # functions
-        r"\n(((\w+::)?(\w+))\s+\w+\([\s\S]*?\))",
+        # r"\n(((\w+::)?(\w+))\s+\w+\([\s\S]*?\))",
+        # r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\)\s*)\s*{",
+        r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\))\s*(?=\{)",
         re.DOTALL,
     )
 
@@ -213,15 +220,16 @@ def parse_cpp(contents) -> List[str]:
         debug_print(f"{match=}")
         component = match.group().strip()
         # fix a minor visual defect
-        try:
-            first_whitespace = component.index(" ")
-            first_chunk = component[:first_whitespace]
-            debug_print(f"{first_chunk=}")
-            if "::" in first_chunk:
-                debug_print("FOUND VISUAL DEFECT with ::")
-                component = f"'{first_chunk}' {component[first_whitespace + 1:]}"
-        except ValueError:
-            pass
+        # try:
+        #     first_whitespace = component.index(" ")
+        #     first_chunk = component[:first_whitespace]
+        #     debug_print(f"{first_chunk=}")
+        #     if "::" in first_chunk:
+        #         debug_print("FOUND VISUAL DEFECT with ::")
+        #         component = f"'{first_chunk}' {component[first_whitespace + 1:]}"
+        # except ValueError:
+        #     pass
+        component = component.replace("::", " :: ")
         if component in CPP_DENY:
             continue
         components.append(component)
@@ -383,26 +391,26 @@ def parse_angular_component_ts(contents) -> List[str]:
         title_str = title_match.group("title")
         title_leaf = f"    title: string = '{title_str}'"
     keepers.append(title_leaf)
-    variable_pattern = r"[^(private|,)]\s(\w+\??:\s\w+)"
-    if variable_matches := re.findall(variable_pattern, contents, re.DOTALL):
-        debug_print(f"{variable_matches=}")
-        keepers.extend([f"    {v}" for v in variable_matches])
-    method_pattern = r"\n +((async)?\s+(?P<name>\w+)\((?P<args>(.|\s)*?)\))"
-    if method_matches := re.findall(method_pattern, contents, re.DOTALL):
-        for method_match in method_matches:
-            method_leaf = method_match[0].strip()
-            if "\n" in method_leaf:
-                method_leaf_lines = method_leaf.splitlines()
-                n = len(method_leaf_lines) - 1
-                method_leaf = "\n".join(
-                    [
-                        f"{'    ' if (i == 0 or i == n) else '        '}{method_leaf_line.strip()}"
-                        for i, method_leaf_line in enumerate(method_leaf_lines)
-                    ]
-                )
-            else:
-                method_leaf = f"    {method_leaf}"
-            keepers.append(method_leaf)
+    # variable_pattern = r"[^(private|,)]\s(\w+\??:\s\w+)"
+    # if variable_matches := re.findall(variable_pattern, contents, re.DOTALL):
+    #     debug_print(f"{variable_matches=}")
+    #     keepers.extend([f"    {v}" for v in variable_matches])
+    # method_pattern = r"\n +((async)?\s+(?P<name>\w+)\((?P<args>(.|\s)*?)\))"
+    # if method_matches := re.findall(method_pattern, contents, re.DOTALL):
+    #     for method_match in method_matches:
+    #         method_leaf = method_match[0].strip()
+    #         if "\n" in method_leaf:
+    #             method_leaf_lines = method_leaf.splitlines()
+    #             n = len(method_leaf_lines) - 1
+    #             method_leaf = "\n".join(
+    #                 [
+    #                     f"{'    ' if (i == 0 or i == n) else '        '}{method_leaf_line.strip()}"
+    #                     for i, method_leaf_line in enumerate(method_leaf_lines)
+    #                 ]
+    #             )
+    #         else:
+    #             method_leaf = f"    {method_leaf}"
+    #         keepers.append(method_leaf)
     return keepers
 
 

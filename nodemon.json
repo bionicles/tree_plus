@@ -1,17 +1,17 @@
 {
-    "verbose": true,
-    "watch": [
-        "Makefile",
-        "nodemon.json",
-        "*.py",
-        "requirements.txt",
-        "tree_plus_src",
-        "tests"
-    ],
-    "exec": "make debug_command || exit 1",
-    "ext": "*",
-    "ignore": [
-        "**/*.pyc",
-        "tree_plus.egg-info"
-    ]
+  "verbose": true,
+  "watch": [
+    "Makefile",
+    "nodemon.json",
+    "*.py",
+    "requirements.txt",
+    "tree_plus_src",
+    "tests"
+  ],
+  "exec": "make debug_command || exit 1",
+  "env": {
+    "DEBUG_TREE_PLUS": "1"
+  },
+  "ext": "*",
+  "ignore": ["**/*.pyc", "tree_plus.egg-info"]
 }

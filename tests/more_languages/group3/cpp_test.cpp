@@ -244,6 +244,16 @@ template<typename T> class arr
     size_t size() const { return sz; }
   };
 
+// a couple of edge cases which led to issues, borrowed from MLX (c) Apple
 class Buffer {
  private:
   void* ptr_;
+
+std::tuple<array, array, array> quantize(
+    const array& w,
+    int group_size /* = 64 */,
+    int bits /* = 4 */,
+    StreamOrDevice s /* = {} */) {
+  if (w.ndim() != 2) {
+    throw std::invalid_argument("[quantize] Only matrices supported for now");
+  }

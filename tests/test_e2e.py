@@ -26,6 +26,19 @@ def test_e2e_single_file():
     assert result_str == EXPECTATION_0
 
 
+EXPECTATION_EMPTY = """📁 empty_folder (0 tokens, 0 lines)
+┗━━ 📁 is_empty (0 tokens, 0 lines)
+"""
+
+
+def test_e2e_empty_folder():
+    result = tree_plus(f"tests/empty_folder")
+    assert isinstance(result, rich.tree.Tree)
+    result_str = tree_to_string(result)
+    print(result_str)
+    assert result_str == EXPECTATION_EMPTY
+
+
 def unify_tree_symbols(tree_string):
     if platform.system() == "Windows":
         # Map Windows tree symbols to Unix/MacOS tree symbols

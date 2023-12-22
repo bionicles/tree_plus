@@ -54,6 +54,7 @@ DEFAULT_IGNORE = {
     "*.odg",
     "Anaconda3*.sh",
     "Miniconda3*.sh",
+    "*.gz",
 }
 
 IgnoreInput = Optional[Union[str, Set[str], Tuple[str]]]

@@ -1,6 +1,6 @@
 [project]
 name = "tree_plus"
-version = "1.0.3"
+version = "1.0.4"
 authors = [{ name = "Bion Howard", email = "bion@atomiclogic.com" }]
 description = "tree util plus file components as leaves and token, line counts"
 readme = "README.md"
@@ -15,7 +15,10 @@ classifiers = [
     "Intended Audience :: Developers",
     "Topic :: Utilities",
 ]
-dependencies = ["tiktoken", "PyYAML", "pytest", "click", "rich"]
+dependencies = ["tiktoken", "PyYAML", "click", "rich"]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-env"]
 
 [project.urls]
 Homepage = "https://github.com/bionicles/tree_plus"

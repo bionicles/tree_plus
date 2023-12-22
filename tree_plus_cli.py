@@ -90,7 +90,6 @@ glob_char = ":cyclone:" if operate_normally else "[glob]"
     help="flag to temporarily set DEBUG_TREE_PLUS",
 )
 def main(paths: PathsInput, ignore: IgnoreInput, debug: bool):
-    disable_debug()
     if debug:
         enable_debug()
     debug_print(f"tree_plus main received {paths=} {ignore=}")
@@ -98,8 +97,6 @@ def main(paths: PathsInput, ignore: IgnoreInput, debug: bool):
     path_or_paths = paths or "."
     tree = tree_plus(path_or_paths, ignore)
     safe_print(tree)
-    if debug:
-        disable_debug()
 
 
 def tree_plus(
@@ -249,19 +246,23 @@ def _handle_path(
         paths_to_trees[file_path] = (file_tree, file_count)
         return file_tree, file_count
     # Handle paths to folders:
-    else:
+    elif os.path.isdir(path):
         folder_path = path
 
         if folder_path in paths_to_trees:
             # Already processed, reuse existing tree
             return paths_to_trees[folder_path]
 
+        folder_name = os.path.basename(folder_path)
         root_tree = Tree(
-            f"{folder_path} ({0} tokens, {0} lines)",
+            f"{folder_char} {folder_name} ({0} tokens, {0} lines)",
             guide_style="bold cyan",
             highlight=True,
         )
+
         root_count = TokenLineCount(n_tokens=0, n_lines=0)
+        if not os.listdir(path):
+            return root_tree, root_count
 
         # Dictionary to map paths to Trees
         paths_to_trees[folder_path] = (root_tree, root_count)
