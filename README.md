@@ -246,7 +246,7 @@ tpcli
 ~/hax/tree_plus (main) $
 tree_plus -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-🌵 tests/more_languages (9056 tokens, 1459 lines)
+📁 tests/more_languages (9056 tokens, 1459 lines)
 ┣━━ 📁 group1 (402 tokens, 88 lines)
 ┃   ┣━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO
