@@ -164,8 +164,14 @@ def _handle_paths(paths: Tuple[str], ignore: Ignore) -> Tree:
         debug_print(f"[_handle_paths] ONLY ONE {path=}")
         tree, counts = _handle_path(path, ignore, {})
         debug_print(f"[_handle_paths] {counts=}")
+        path_label = os.path.basename(os.path.abspath(path))
+        char = None
+        if os.path.isdir(path):
+            char = folder_char
+        elif os.path.isfile(path):
+            char = file_char
         tree.label = (
-            f"{root_char} {path} ({counts.n_tokens} tokens, {counts.n_lines} lines)"
+            f"{char} {path_label} ({counts.n_tokens} tokens, {counts.n_lines} lines)"
         )
         return tree
 
