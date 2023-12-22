@@ -1,5 +1,5 @@
 # tests/test_more_language_units.py
-from typing import Literal, List
+from typing import List
 import pytest
 
 from rich import print
@@ -78,16 +78,7 @@ from tree_plus_src import parse_file
     ],
 )
 def test_more_languages_group1(
-    file: Literal[
-        "tests/more_languages/group1/COBOL_TEST.CBL",
-        "tests/more_languages/group1/JavaTest.java",
-        "tests/more_languages/group1/JuliaTest.jl",
-        "tests/more_languages/group1/KotlinTest.kt",
-        "tests/more_languages/group1/LispTest.lisp",
-        "tests/more_languages/group1/LuaTest.lua",
-        "tests/more_languages/group1/ObjectiveCTest.m",
-        "tests/more_languages/group1/OcamlTest.ml",
-    ],
+    file: str,
     expected: List[str],
 ):
     print(f"{file=}")
@@ -172,14 +163,7 @@ def test_more_languages_group1(
     ],
 )
 def test_more_languages_group2(
-    file: Literal[
-        "tests/more_languages/group2/apl_test.apl",
-        "tests/more_languages/group2/PerlTest.pl",
-        "tests/more_languages/group2/PhpTest.php",
-        "tests/more_languages/group2/ScalaTest.scala",
-        "tests/more_languages/group2/c_test.c",
-        "tests/more_languages/group2/PowershellTest.ps1",
-    ],
+    file: str,
     expected: List[str],
 ):
     print(f"{file=}")
@@ -205,7 +189,7 @@ void printVector(const std::vector<T>& vec)""",
                 "class Animal",
                 "class Dog : public Animal",
                 "class Cat : public Animal",
-                """nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
+                """'nb::bytes' BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
                              int batch_size, int max_seq_length, float dropout,
                              bool bidirectional, bool cudnn_allow_tf32,
 			     int workspace_size, int reserve_space_size)""",
@@ -270,6 +254,8 @@ void printVector(const std::vector<T>& vec)""",
                 "function fun_echo_hello_world()",
                 "export SECRET",
                 "alias md='make debug'",
+                "add_alias()",
+                "create_conda_env()",
             ],
         ),
         (
@@ -287,9 +273,7 @@ void printVector(const std::vector<T>& vec)""",
         ),
     ],
 )
-def test_more_languages_group3(
-    file: Literal["tests/more_languages/group3/cpp_test.cpp"], expected: List[str]
-):
+def test_more_languages_group3(file: str, expected: List[str]):
     print(f"{file=}")
     result = parse_file(file)
     print(f"{result=}")
@@ -362,10 +346,7 @@ where
     ],
 )
 def test_more_languages_group4(
-    file: Literal[
-        "tests/more_languages/group4/rust_test.rs",
-        "tests/more_languages/group4/tf_test.tf",
-    ],
+    file: str,
     expected: List[str],
 ):
     print(f"{file=}")
@@ -620,24 +601,7 @@ def test_more_languages_group4(
     ],
 )
 def test_more_languages_group5(
-    file: Literal[
-        "tests/more_languages/group5/ansible_test.yml",
-        "tests/more_languages/group5/k8s_test.yaml",
-        "tests/more_languages/group5/checkbox_test.md",
-        "tests/more_languages/group5/checkbox_test.txt",
-        ".github/workflows/unix.yml",
-        "tests/more_languages/group5/sql_test.sql",
-        "tests/more_languages/group5/app.component.spec.ts",
-        "tests/more_languages/group5/app.component.ts",
-        "tests/more_languages/group5/app-routing.module.ts",
-        "tests/more_languages/group5/app.module.ts",
-        "tests/more_languages/group5/requirements_test.txt",
-        "tests/more_languages/group5/testJsonSchema.json",
-        "tests/more_languages/group5/Makefile",
-        "tests/more_languages/group5/test.env",
-        "tests/more_languages/group5/testPackage.json",
-        "tests/more_languages/group5/environment.test.ts",
-    ],
+    file: str,
     expected: List[str],
 ):
     print(f"{file=}")

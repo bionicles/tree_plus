@@ -1,6 +1,6 @@
 # tree_plus_cli.py
 from collections import defaultdict
-from typing import Optional, Union, Tuple, Set, List, Dict
+from typing import Optional, Union, Tuple, Set, List
 import platform
 import glob
 import sys
@@ -13,17 +13,13 @@ from rich.tree import Tree
 from rich import print as rich_print
 import click
 
-DEBUG = 0
-
-
-def debug_print(*args, **kwargs):
-    if DEBUG:
-        print("debug:", *args, **kwargs)
-
 
 install(show_locals=True)
 
 from tree_plus_src import (  # noqa E402
+    enable_debug,
+    disable_debug,
+    debug_print,
     traverse_directory,
     count_tokens_lines,
     add_tokens_lines,
@@ -85,12 +81,25 @@ glob_char = ":cyclone:" if operate_normally else "[glob]"
     multiple=True,
     help="Names of files or directories to ignore.",
 )
-def main(paths: PathsInput, ignore: IgnoreInput):
+@click.option(
+    "--debug",
+    "-d",
+    "-d",
+    is_flag=True,
+    default=False,
+    help="flag to temporarily set DEBUG_TREE_PLUS",
+)
+def main(paths: PathsInput, ignore: IgnoreInput, debug: bool):
+    disable_debug()
+    if debug:
+        enable_debug()
     debug_print(f"tree_plus main received {paths=} {ignore=}")
     ignore = make_ignore(ignore)
     path_or_paths = paths or "."
     tree = tree_plus(path_or_paths, ignore)
     safe_print(tree)
+    if debug:
+        disable_debug()
 
 
 def tree_plus(

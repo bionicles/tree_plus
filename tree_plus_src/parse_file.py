@@ -1,5 +1,5 @@
 # tree_plus_src/parse_file.py
-from typing import List, Tuple
+from typing import List
 import collections
 import builtins
 import sqlite3
@@ -11,14 +11,7 @@ import re
 import json
 
 from tree_plus_src.default_ignore import is_binary
-
-# TODO: convert this to an environment variable and share across the modules
-DEBUG = 1
-
-
-def debug_print(*args, **kwargs):
-    if DEBUG:
-        print(*args, **kwargs)
+from tree_plus_src.debug import debug_print
 
 
 def parse_file(file_path: str) -> List[str]:
@@ -207,7 +200,7 @@ def parse_cpp(contents) -> List[str]:
         # r"\n(template.*)\n|"
         r"\n(template ?<.*?>[^\{^;^=]*)|"
         # functions
-        r"\n((\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
+        r"\n(((\w+::)?(\w+))\s+\w+\([\s\S]*?\))",
         re.DOTALL,
     )
 
@@ -216,6 +209,13 @@ def parse_cpp(contents) -> List[str]:
     for match in combined_pattern.finditer(contents):
         debug_print(f"{match=}")
         component = match.group().strip()
+        # fix a minor visual defect
+        first_whitespace = component.index(" ")
+        first_chunk = component[:first_whitespace]
+        debug_print(f"{first_chunk=}")
+        if "::" in first_chunk:
+            debug_print("FOUND VISUAL DEFECT with ::")
+            component = f"'{first_chunk}' {component[first_whitespace + 1:]}"
         components.append(component)
 
     return components
@@ -317,13 +317,13 @@ def parse_bash(contents) -> List[str]:
 
     # Combined regex pattern to match Go components
     combined_pattern = re.compile(
-        # class, enum, enum class, with or without protocol
-        r"((function)? ?\w+\(\)) {|"
-        # protocols are that which is inherited
-        r"(export \w+)=|"
-        # functions with or without multiline signatures
-        r"(alias .*)",
-        re.DOTALL,
+        # aliases
+        r"\n(alias .*)|"
+        # functions
+        r"\n?((function)?\s+\w+\(\))\n?|"
+        # exports without values
+        r"\n(export \w+)=",
+        # re.DOTALL, # this causes weird issues with the alias matching
     )
 
     components = []
@@ -334,7 +334,11 @@ def parse_bash(contents) -> List[str]:
         component = match.group().strip().replace(" {", "")
         debug_print(f"{component=}")
         if component.startswith("export"):
+            # remove equals signs
             component = component[:-1]
+        elif "\n" in component:
+            component_lines = component.splitlines()
+            component = component_lines[0].strip()
         debug_print(f"final {component=}")
         components.append(component)
 

@@ -9,5 +9,9 @@
         "tests"
     ],
     "exec": "make debug_command || exit 1",
-    "ext": "*"
+    "ext": "*",
+    "ignore": [
+        "**/*.pyc",
+        "tree_plus.egg-info"
+    ]
 }

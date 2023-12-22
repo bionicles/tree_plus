@@ -1,4 +1,5 @@
 # src/__init__.py
+from .debug import debug_print, enable_debug, disable_debug
 from .default_ignore import (  # noqa F401
     DEFAULT_IGNORE,
     Ignore,

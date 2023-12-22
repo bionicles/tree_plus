@@ -23,9 +23,9 @@ A simple command line interface (CLI) tool for developers to show a `tree` enhan
 - [ ] Demonstrate Parsed Checkboxes
 ```sh
 ~/hax/tree_plus (main) $
-> tp -i tests
+tree_plus -i tests
 paths=('.',)
-📁 tree_plus (11526 tokens, 1012 lines)
+📁 tree_plus (13222 tokens, 1133 lines)
 ┣━━ 📁 .github
 ┃   ┗━━ 📁 workflows (523 tokens, 70 lines)
 ┃       ┣━━ 📄 microsoft.yml (272 tokens, 36 lines)
@@ -43,9 +43,11 @@ paths=('.',)
 ┃           ┣━━     - Install tree_plus
 ┃           ┣━━     - Run generic tests
 ┃           ┗━━     - Run specific test
-┣━━ 📁 tree_plus_src (12997 tokens, 1542 lines)
+┣━━ 📁 tree_plus_src (12366 tokens, 1535 lines)
 ┃   ┣━━ 📁 scripts (6661 tokens, 861 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
+┃   ┃   ┃   ┣━━ add_alias()
+┃   ┃   ┃   ┗━━ create_conda_env()
 ┃   ┃   ┣━━ 📄 Microsoft.PowerShell_profile.ps1 (3238 tokens, 419 lines)
 ┃   ┃   ┃   ┣━━ function Log($message)
 ┃   ┃   ┃   ┗━━ function Show-Error($err)
@@ -62,10 +64,16 @@ paths=('.',)
 ┃   ┃   ┣━━ def make_ignore
 ┃   ┃   ┣━━ def is_binary_string
 ┃   ┃   ┗━━ def is_binary
-┃   ┣━━ 📄 parse_file.py (11631 tokens, 1333 lines)
-┃   ┃   ┣━━ TODO (Line 15): convert this to an environment variable and share across the modules
+┃   ┣━━ 📄 parse_file.py (11006 tokens, 1326 lines)
 ┃   ┃   ┣━━ def debug_print
 ┃   ┃   ┣━━ def parse_file
+┃   ┃   ┣━━ def parse_rb
+┃   ┃   ┣━━ def remove_c_comments
+┃   ┃   ┣━━ def parse_cpp
+┃   ┃   ┣━━ def parse_c
+┃   ┃   ┣━━ def parse_go
+┃   ┃   ┣━━ def parse_swift
+┃   ┃   ┣━━ def parse_bash
 ┃   ┃   ┣━━ def parse_d_dot_ts
 ┃   ┃   ┣━━ def parse_angular_app_module
 ┃   ┃   ┣━━ def parse_angular_component_ts
@@ -105,18 +113,17 @@ paths=('.',)
 ┃   ┃   ┣━━ def parse_powershell
 ┃   ┃   ┣━━ def parse_matlab
 ┃   ┃   ┣━━ def parse_scala
-┃   ┃   ┣━━ def parse_c
 ┃   ┃   ┣━━ def parse_tf
 ┃   ┃   ┣━━ def parse_js
 ┃   ┃   ┣━━ def parse_md
 ┃   ┃   ┣━━ def parse_txt
 ┃   ┃   ┣━━ def parse_markers
 ┃   ┃   ┗━━ def parse_rs
-┃   ┗━━ 📄 traverse_directory.py (253 tokens, 37 lines)
+┃   ┗━━ 📄 traverse_directory.py (247 tokens, 37 lines)
 ┃       ┗━━ def traverse_directory
-┣━━ 📄 .gitignore (111 tokens, 32 lines)
+┣━━ 📄 .gitignore (124 tokens, 38 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (193 tokens, 26 lines)
+┣━━ 📄 Makefile (306 tokens, 50 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
@@ -126,60 +133,31 @@ paths=('.',)
 ┃   ┣━━ test_tp_dotdot_s: test_tp_dotdot
 ┃   ┣━━ test: test_tp_dotdot
 ┃   ┣━━ test_tp_dotdot
-┃   ┗━━ move_powershell_profile
-┣━━ 📄 nodemon.json (64 tokens, 13 lines)
-┣━━ 📄 README.md (2682 tokens, 230 lines)
+┃   ┣━━ move_powershell_profile
+┃   ┣━━ build: install-build
+┃   ┣━━ install-build
+┃   ┣━━ test-publish: install-twine
+┃   ┣━━ install-twine
+┃   ┣━━ publish: install-twine clean-dist
+┃   ┣━━ clean-dist
+┃   ┣━━ readme-block1
+┃   ┗━━ readme-block2
+┣━━ 📄 nodemon.json (85 tokens, 17 lines)
+┣━━ 📄 pyproject.toml (293 tokens, 36 lines)
+┣━━ 📄 README.md (7961 tokens, 600 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
 ┃   ┣━━ ## Start Quick!
 ┃   ┣━━ ### Prerequisites
 ┃   ┣━━ ### Install Tree Plus
+┃   ┣━━ #### PyPI
 ┃   ┣━━ #### Local Hackable Install
 ┃   ┣━━ ### Usage
-┃   ┗━━ ## Moar Languages
-┣━━ 📄 sample_output.sh (3039 tokens, 184 lines)
-┣━━ 📄 setup.py (608 tokens, 97 lines)
-┃   ┗━━ TODO (Line 44): automatically install tree-sitter-{language} grammars
-┣━━ 📄 TODO.md (393 tokens, 41 lines)
-┃   ┣━━ # Do First
-┃   ┣━━ # Backlog
-┃   ┣━━ - [ ] Fix ordering of leaves by line number consistently across languages
-┃   ┣━━     - [ ] Fix Python ordering
-┃   ┣━━     - [ ] Fix JavaScript / TypeScript ordering
-┃   ┣━━     - [ ] Review other language unit tests for ordering
-┃   ┣━━ - [ ] expand test cases for the supported languages to verify ordering & completeness
-┃   ┣━━ - [ ] Upgrade CICD GitHub Action
-┃   ┣━━     - [ ] Build and deploy to PyPi if tests pass
-┃   ┣━━ - [ ] test file input instead of directory
-┃   ┣━━ - [ ] measure test coverage
-┃   ┣━━ - [ ] test named lambdas in python
-┃   ┣━━ - [ ] autoinstall tree-sitter grammars to enable real parsing instead of regex if available
-┃   ┣━━ - [ ] modularize the tree_plus function to separate index creation from tree creation
-┃   ┣━━ - [ ] brainstorm and integrate more flags / options to control results
-┃   ┣━━     - [ ] add a todo flag to only show todos and unchecked checkboxes
-┃   ┣━━     - [ ] add a search / filter input to filter results
-┃   ┣━━ - [ ] make a tree_scan to apply AI LLMs to the tree
-┃   ┣━━     - [ ] e.g. to suggest todos
-┃   ┣━━     - [ ] to write docs
-┃   ┣━━     - [ ] to write tests
-┃   ┣━━     - [ ] to write code
-┃   ┣━━     - [ ] to translate languages (e.g. 'rewrite it in rust' example)
-┃   ┣━━ # Nice to have
-┃   ┣━━ - [ ] Support more languages
-┃   ┣━━     - [ ] SQL (create tables, procedures)
-┃   ┣━━     - [ ] C#
-┃   ┣━━     - [ ] C++
-┃   ┣━━     - [ ] OpenAPI yaml
-┃   ┣━━     - [ ] Json RPC 2.0 schemas
-┃   ┣━━     - [ ] GRPC schemas
-┃   ┣━━     - [ ] GraphQL schemas
-┃   ┣━━     - [ ] Go
-┃   ┣━━     - [ ] Dart
-┃   ┣━━     - [ ] Swift
-┃   ┗━━ # Done
-┗━━ 📄 tree_plus_cli.py (2313 tokens, 308 lines)
-    ┣━━ NOTE (Line 275): parent_count unused, is that ok?
+┃   ┣━━ ## Moar Languages
+┃   ┗━━ ## Support Free, Open-Source Software:
+┗━━ 📄 tree_plus_cli.py (2330 tokens, 311 lines)
+    ┣━━ NOTE (Line 278): parent_count unused, is that ok?
     ┣━━ def debug_print
     ┣━━ def tree_to_string
     ┣━━ def clean_string
@@ -262,6 +240,9 @@ tpcli
 ## Moar Languages
 
 ```sh
+~/hax/tree_plus (main) $
+tree_plus -i group_todo tests/more_languages
+paths=('tests/more_languages',)
 /home/bion/hax/tree_plus/tests/more_languages (0 tokens, 0 lines)
 ┣━━ 📁 group1 (402 tokens, 88 lines)
 ┃   ┣━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
@@ -343,6 +324,86 @@ tpcli
 ┃       ┣━━ object HelloWorld -> def greet(person: Person): Unit
 ┃       ┣━━ object HelloWorld -> def main(args: Array[String]): Unit
 ┃       ┗━━ def sumOfSquaresShort(x: Int, y: Int): Int
+┣━━ 📁 group3 (2514 tokens, 441 lines)
+┃   ┣━━ 📄 bash_test.sh (154 tokens, 23 lines)
+┃   ┃   ┣━━ echo_hello_world()
+┃   ┃   ┣━━ function fun_echo_hello_world()
+┃   ┃   ┣━━ export SECRET
+┃   ┃   ┣━━ alias md='make debug'
+┃   ┃   ┣━━ add_alias()
+┃   ┃   ┗━━ create_conda_env()
+┃   ┣━━ 📄 cpp_test.cpp (1632 tokens, 245 lines)
+┃   ┃   ┣━━ class Person
+┃   ┃   ┣━━ void globalGreet()
+┃   ┃   ┣━━ int main()
+┃   ┃   ┣━━ void printMessage(const std::string &message)
+┃   ┃   ┣━━ template<typename T>
+┃   ┃   ┃   void printVector(const std::vector<T>& vec)
+┃   ┃   ┣━━ struct Point
+┃   ┃   ┣━━ class Animal
+┃   ┃   ┣━━ class Dog : public Animal
+┃   ┃   ┣━━ class Cat : public Animal
+┃   ┃   ┣━━ 'nb::bytes' BuildRnnDescriptor(int input_size, int hidden_size, int
+┃   ┃   ┃   num_layers,
+┃   ┃   ┃                                int batch_size, int max_seq_length,
+┃   ┃   ┃   float dropout,
+┃   ┃   ┃                                bool bidirectional, bool
+┃   ┃   ┃   cudnn_allow_tf32,
+┃   ┃   ┃                                int workspace_size, int
+┃   ┃   ┃   reserve_space_size)
+┃   ┃   ┣━━ int main()
+┃   ┃   ┣━━ enum ECarTypes
+┃   ┃   ┣━━ ECarTypes GetPreferredCarType()
+┃   ┃   ┣━━ enum ECarTypes : uint8_t
+┃   ┃   ┣━━ enum class ECarTypes : uint8_t
+┃   ┃   ┣━━ void myFunction(string fname, int age)
+┃   ┃   ┣━━ template <typename T> T cos(T)
+┃   ┃   ┣━━ template <typename T> T sin(T)
+┃   ┃   ┣━━ template <typename T> T sqrt(T)
+┃   ┃   ┣━━ template<typename T> struct VLEN
+┃   ┃   ┗━━ template<typename T> class arr
+┃   ┣━━ 📄 go_test.go (169 tokens, 46 lines)
+┃   ┃   ┣━━ type Greeting struct
+┃   ┃   ┣━━ func (g Greeting) sayHello()
+┃   ┃   ┣━━ func createGreeting(m string) Greeting
+┃   ┃   ┣━━ type SomethingLong struct
+┃   ┃   ┣━━ func (s *SomethingLong) WithAReasonableName(
+┃   ┃   ┃           ctx context.Context,
+┃   ┃   ┃           param1 string,
+┃   ┃   ┃           param2 int,
+┃   ┃   ┃           param3 mapinterface{},
+┃   ┃   ┃           callback func(int) error,
+┃   ┃   ┃   ) (resultType, error)
+┃   ┃   ┣━━ type resultType struct
+┃   ┃   ┗━━ func main()
+┃   ┣━━ 📄 ruby_test.rb (110 tokens, 28 lines)
+┃   ┃   ┣━━ module Greeter
+┃   ┃   ┣━━   def self.say_hello
+┃   ┃   ┣━━ class HelloWorld
+┃   ┃   ┣━━   def say_hello
+┃   ┃   ┣━━ class Human
+┃   ┃   ┣━━   def self.bar
+┃   ┃   ┣━━   def self.bar=(value)
+┃   ┃   ┗━━ class Doctor < Human
+┃   ┗━━ 📄 swift_test.swift (449 tokens, 99 lines)
+┃       ┣━━ class Person
+┃       ┣━━ func globalGreet()
+┃       ┣━━ struct Point
+┃       ┣━━ protocol Animal
+┃       ┣━━ struct Dog: Animal
+┃       ┣━━ class Cat: Animal
+┃       ┣━━ enum CarType
+┃       ┣━━ func getPreferredCarType() -> CarType
+┃       ┣━━ enum CarType: UInt8
+┃       ┣━━ enum class CarType: UInt8
+┃       ┣━━ func myFunction(fname: String, age: Int)
+┃       ┗━━ func myFunctionWithMultipleParameters(
+┃               fname: String,
+┃               lname: String,
+┃               age: Int,
+┃               address: String,
+┃               phoneNumber: String
+┃           )
 ┣━━ 📁 group4 (944 tokens, 166 lines)
 ┃   ┣━━ 📄 matlab_test.m (45 tokens, 12 lines)
 ┃   ┃   ┣━━ classdef HelloWorld -> function greet

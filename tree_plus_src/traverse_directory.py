@@ -1,9 +1,9 @@
 # tree_plus_src/traverse_directory.py
-from typing import Optional, List, Set
+from typing import List
 import fnmatch
 import os
 
-from tree_plus_src.default_ignore import IgnoreInput, Ignore, make_ignore
+from tree_plus_src.default_ignore import IgnoreInput, make_ignore
 
 
 def traverse_directory(directory_path: str, ignore: IgnoreInput = None) -> List[str]:
