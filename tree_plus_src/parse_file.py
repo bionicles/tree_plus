@@ -13,7 +13,7 @@ import json
 from tree_plus_src.default_ignore import is_binary
 
 # TODO: convert this to an environment variable and share across the modules
-DEBUG = 0
+DEBUG = 1
 
 
 def debug_print(*args, **kwargs):
@@ -85,8 +85,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_cpp(contents)
     elif file_extension == ".h":
         # harrumph!
-        components = parse_c(contents)
-        # components = parse_cpp(contents)
+        # components = parse_c(contents)
+        components = parse_cpp(contents)
     elif file_extension == ".rs":
         components = parse_rs(contents)
     elif file_extension == ".swift":
@@ -202,13 +202,19 @@ def parse_cpp(contents) -> List[str]:
         r"\n((enum) (class )?\w+( : \w+)?)|"
         # (maybe template) functions
         # r"\n((template<.*?>)?\n(\w+::)?(\w+) \w+\([\s\S]*?\))",
-        r"((template<.*?>)?\n(\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
+        # r"((template<.*?>)?\n(\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
+        # templates
+        # r"\n(template.*)\n|"
+        r"\n(template ?<.*?>[^\{^;^=]*)|"
+        # functions
+        r"\n((\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
         re.DOTALL,
     )
 
     components = []
 
     for match in combined_pattern.finditer(contents):
+        debug_print(f"{match=}")
         component = match.group().strip()
         components.append(component)
 
@@ -222,7 +228,8 @@ def parse_c(contents) -> List[str]:
     # Combined regex pattern to match functions (including pointer return types), structs, enums, and typedefs
     combined_pattern = re.compile(
         # Functions (including pointer return types)
-        r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})|"
+        # r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})|"
+        r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*)|"
         # Structs
         r"\nstruct\s+\w+\s*\{[^}]*\}|"
         # Enums
@@ -247,42 +254,6 @@ def parse_c(contents) -> List[str]:
         components.append(component)
 
     return components
-
-
-# def parse_c(content: str) -> List[str]:
-#     # Define the regular expressions for function, struct, enum, and typedef
-#     # regex_function = r"((?:\w+\s+)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})"
-#     regex_function = r"((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})"
-#     regex_struct = r"(struct\s+\w+\s*\{[^}]*\})"
-#     regex_enum = r"(enum\s+\w+\s*\{[^}]*\})"
-#     regex_typedef = r"(typedef\s+struct\s*\{[^}]*\}\s*\w+;)"
-
-#     # Combine all regexes into a single one, each separated by '|'
-#     regex = f"{regex_function}|{regex_struct}|{regex_enum}|{regex_typedef}"
-
-#     # Find all matches
-#     matches = re.findall(regex, content, re.DOTALL)
-
-#     # Initialize the list to hold the parsed elements
-#     parsed = []
-
-#     # Iterate through the matches
-#     for match in matches:
-#         # Only one of the groups will be non-empty
-#         # Iterate through the match groups
-#         for group in match:
-#             # Append the non-empty match to the list
-#             if group:
-#                 # Check if the group is a typedef
-#                 if "typedef" in group:
-#                     # Extract only the typedef struct name
-#                     typedef_name = group.split("}")[1].split(";")[0].strip()
-#                     parsed.append(f"typedef struct {typedef_name}")
-#                 else:
-#                     # Extract only the first line for each component
-#                     parsed.append(group.split("{")[0].strip())
-
-#     return parsed
 
 
 def parse_go(contents) -> List[str]:

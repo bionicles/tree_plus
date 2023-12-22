@@ -144,3 +144,102 @@ enum class ECarTypes : uint8_t
 void myFunction(string fname, int age) {
   cout << fname << " Refsnes. " << age << " years old. \n";
 }
+
+// Always use std:: for <cmath> functions
+template <typename T> T cos(T) = delete;
+template <typename T> T sin(T) = delete;
+template <typename T> T sqrt(T) = delete;
+
+template<typename T> struct VLEN { static constexpr size_t val=1; };
+
+// template class example from mlx/3rdparty/pocketfft.h
+// borrowed here because it caused a parsing bug which
+// included the entire file
+/*
+This file is part of pocketfft.
+
+Copyright (C) 2010-2022 Max-Planck-Society
+Copyright (C) 2019-2020 Peter Bell
+
+For the odd-sized DCT-IV transforms:
+  Copyright (C) 2003, 2007-14 Matteo Frigo
+  Copyright (C) 2003, 2007-14 Massachusetts Institute of Technology
+
+Authors: Martin Reinecke, Peter Bell
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice, this
+  list of conditions and the following disclaimer in the documentation and/or
+  other materials provided with the distribution.
+* Neither the name of the copyright holder nor the names of its contributors may
+  be used to endorse or promote products derived from this software without
+  specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+template<typename T> class arr
+  {
+  private:
+    T *p;
+    size_t sz;
+
+#if defined(POCKETFFT_NO_VECTORS)
+    static T *ralloc(size_t num)
+      {
+      if (num==0) return nullptr;
+      void *res = malloc(num*sizeof(T));
+      if (!res) throw std::bad_alloc();
+      return reinterpret_cast<T *>(res);
+      }
+    static void dealloc(T *ptr)
+      { free(ptr); }
+#else
+    static T *ralloc(size_t num)
+      {
+      if (num==0) return nullptr;
+      void *ptr = aligned_alloc(64, num*sizeof(T));
+      return static_cast<T*>(ptr);
+      }
+    static void dealloc(T *ptr)
+      { aligned_dealloc(ptr); }
+#endif
+
+  public:
+    arr() : p(0), sz(0) {}
+    arr(size_t n) : p(ralloc(n)), sz(n) {}
+    arr(arr &&other)
+      : p(other.p), sz(other.sz)
+      { other.p=nullptr; other.sz=0; }
+    ~arr() { dealloc(p); }
+
+    void resize(size_t n)
+      {
+      if (n==sz) return;
+      dealloc(p);
+      p = ralloc(n);
+      sz = n;
+      }
+
+    T &operator[](size_t idx) { return p[idx]; }
+    const T &operator[](size_t idx) const { return p[idx]; }
+
+    T *data() { return p; }
+    const T *data() const { return p; }
+
+    size_t size() const { return sz; }
+  };
