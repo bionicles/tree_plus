@@ -161,8 +161,12 @@ def _handle_paths(paths: Tuple[str], ignore: Ignore) -> Tree:
     # single path case
     if len(paths) == 1:
         path = paths[0]
-        debug_print(f"only 1 path {path=}")
-        tree, _ = _handle_path(path, ignore, {})
+        debug_print(f"[_handle_paths] ONLY ONE {path=}")
+        tree, counts = _handle_path(path, ignore, {})
+        debug_print(f"[_handle_paths] {counts=}")
+        tree.label = (
+            f"{root_char} {path} ({counts.n_tokens} tokens, {counts.n_lines} lines)"
+        )
         return tree
 
     # multiple path case

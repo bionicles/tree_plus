@@ -25,7 +25,7 @@ A simple command line interface (CLI) tool for developers to show a `tree` enhan
 ~/hax/tree_plus (main) $
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (13222 tokens, 1133 lines)
+🌵 . (33653 tokens, 3683 lines)
 ┣━━ 📁 .github
 ┃   ┗━━ 📁 workflows (523 tokens, 70 lines)
 ┃       ┣━━ 📄 microsoft.yml (272 tokens, 36 lines)
@@ -43,7 +43,7 @@ paths=('.',)
 ┃           ┣━━     - Install tree_plus
 ┃           ┣━━     - Run generic tests
 ┃           ┗━━     - Run specific test
-┣━━ 📁 tree_plus_src (12366 tokens, 1535 lines)
+┣━━ 📁 tree_plus_src (12442 tokens, 1548 lines)
 ┃   ┣━━ 📁 scripts (6661 tokens, 861 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -54,18 +54,22 @@ paths=('.',)
 ┃   ┃   ┣━━ 📄 profile.toml (1192 tokens, 126 lines)
 ┃   ┃   ┣━━ 📄 scratch.ps1 (1317 tokens, 197 lines)
 ┃   ┃   ┗━━ 📄 scratch.sh (637 tokens, 88 lines)
-┃   ┣━━ 📄 count_tokens_lines.py (575 tokens, 78 lines)
-┃   ┃   ┣━━ TODO (Line 11): show off how well we parse_todo!
+┃   ┣━━ 📄 count_tokens_lines.py (609 tokens, 81 lines)
+┃   ┃   ┣━━ TODO (Line 12): show off how well we parse_todo!
 ┃   ┃   ┣━━ class TokenLineCount
 ┃   ┃   ┣━━ def add_tokens_lines
 ┃   ┃   ┣━━ def count_tokens_lines
 ┃   ┃   ┗━━ def count_directory_tokens_lines
+┃   ┣━━ 📄 debug.py (78 tokens, 18 lines)
+┃   ┃   ┣━━ def enable_debug
+┃   ┃   ┣━━ def disable_debug
+┃   ┃   ┣━━ def debug_enabled
+┃   ┃   ┗━━ def debug_print
 ┃   ┣━━ 📄 default_ignore.py (538 tokens, 94 lines)
 ┃   ┃   ┣━━ def make_ignore
 ┃   ┃   ┣━━ def is_binary_string
 ┃   ┃   ┗━━ def is_binary
-┃   ┣━━ 📄 parse_file.py (11006 tokens, 1326 lines)
-┃   ┃   ┣━━ def debug_print
+┃   ┣━━ 📄 parse_file.py (10970 tokens, 1318 lines)
 ┃   ┃   ┣━━ def parse_file
 ┃   ┃   ┣━━ def parse_rb
 ┃   ┃   ┣━━ def remove_c_comments
@@ -144,7 +148,7 @@ paths=('.',)
 ┃   ┗━━ readme-block2
 ┣━━ 📄 nodemon.json (85 tokens, 17 lines)
 ┣━━ 📄 pyproject.toml (293 tokens, 36 lines)
-┣━━ 📄 README.md (7961 tokens, 600 lines)
+┣━━ 📄 README.md (8697 tokens, 661 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -156,9 +160,8 @@ paths=('.',)
 ┃   ┣━━ ### Usage
 ┃   ┣━━ ## Moar Languages
 ┃   ┗━━ ## Support Free, Open-Source Software:
-┗━━ 📄 tree_plus_cli.py (2330 tokens, 311 lines)
-    ┣━━ NOTE (Line 278): parent_count unused, is that ok?
-    ┣━━ def debug_print
+┗━━ 📄 tree_plus_cli.py (2399 tokens, 321 lines)
+    ┣━━ NOTE (Line 288): parent_count unused, is that ok?
     ┣━━ def tree_to_string
     ┣━━ def clean_string
     ┣━━ def safe_print
@@ -243,7 +246,7 @@ tpcli
 ~/hax/tree_plus (main) $
 tree_plus -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-/home/bion/hax/tree_plus/tests/more_languages (0 tokens, 0 lines)
+🌵 tests/more_languages (9056 tokens, 1459 lines)
 ┣━━ 📁 group1 (402 tokens, 88 lines)
 ┃   ┣━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO

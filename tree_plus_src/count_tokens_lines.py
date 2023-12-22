@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import tiktoken
 
 from tree_plus_src.traverse_directory import traverse_directory
+from tree_plus_src.debug import debug_print
 
 
 encoder = tiktoken.encoding_for_model("gpt-4")
@@ -20,7 +21,9 @@ def add_tokens_lines(
 ) -> TokenLineCount:
     total_tokens = lhs_count.n_tokens + rhs_count.n_tokens
     total_lines = lhs_count.n_lines + rhs_count.n_lines
-    return TokenLineCount(total_tokens, total_lines)
+    new_count = TokenLineCount(total_tokens, total_lines)
+    debug_print(f"{lhs_count} + {rhs_count} = {new_count}")
+    return new_count
 
 
 def count_tokens_lines(file_path: str) -> TokenLineCount:
