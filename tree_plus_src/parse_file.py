@@ -83,6 +83,10 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_c(contents)
     elif file_extension in {".cpp", ".cc"}:
         components = parse_cpp(contents)
+    elif file_extension == ".h":
+        # harrumph!
+        components = parse_c(contents)
+        # components = parse_cpp(contents)
     elif file_extension == ".rs":
         components = parse_rs(contents)
     elif file_extension == ".swift":
@@ -91,6 +95,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_go(contents)
     elif file_extension == ".sh":
         components = parse_bash(contents)
+    elif file_extension == ".rb":
+        components = parse_rb(contents)
     elif file_extension == ".env":
         components = parse_dot_env(contents)
     elif file_extension == ".sql":
@@ -143,8 +149,50 @@ def parse_file(file_path: str) -> List[str]:
     return total_components
 
 
+def parse_rb(contents) -> List[str]:
+    debug_print("parse_rb")
+
+    combined_pattern = re.compile(
+        # Match class and module definitions
+        r"\n(\bclass\s+\w+(?:\s*<\s*\w+)?|\bmodule\s+\w+)|"
+        # Match method definitions (instance and class methods) with parameters
+        r"\n(\s*def\s+(self\.)?\w+[\w=]*(?:\s*\([^)]*\))?)",
+        re.DOTALL,
+    )
+
+    components = []
+
+    for match in combined_pattern.finditer(contents):
+        component = match.group().strip()
+        if match.lastindex == 2:  # It's a method definition
+            component = match.group(2).rstrip().lstrip("\n")
+        components.append(component)
+
+    return components
+
+
+def remove_c_comments(multiline_string):
+    # Pattern for block comments (/* */)
+    block_comment_pattern = r"/\*.*?\*/"
+    # Pattern for line comments (// ...) including preceding whitespace
+    line_comment_pattern = r"\s*//.*?$"
+
+    # Removing block comments
+    no_block_comments = re.sub(
+        block_comment_pattern, "", multiline_string, flags=re.DOTALL
+    )
+
+    # Removing line comments and preceding whitespace
+    cleaned_string = re.sub(
+        line_comment_pattern, "", no_block_comments, flags=re.MULTILINE
+    )
+
+    return cleaned_string
+
+
 def parse_cpp(contents) -> List[str]:
     debug_print("parse_cpp")
+    contents = remove_c_comments(contents)
 
     # Combined regex pattern to match all components
     combined_pattern = re.compile(
@@ -165,6 +213,76 @@ def parse_cpp(contents) -> List[str]:
         components.append(component)
 
     return components
+
+
+def parse_c(contents) -> List[str]:
+    debug_print("parse_c")
+    contents = remove_c_comments(contents)
+
+    # Combined regex pattern to match functions (including pointer return types), structs, enums, and typedefs
+    combined_pattern = re.compile(
+        # Functions (including pointer return types)
+        r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})|"
+        # Structs
+        r"\nstruct\s+\w+\s*\{[^}]*\}|"
+        # Enums
+        r"\nenum\s+\w+\s*\{[^}]*\}|"
+        # Typedefs
+        r"\ntypedef\s+struct\s*\{[^}]*\}\s*\w+;",
+        re.DOTALL,
+    )
+
+    components = []
+
+    for match in combined_pattern.finditer(contents):
+        component = match.group().strip()
+        if component.startswith("typedef"):
+            # Extract only the typedef struct name
+            typedef_name = component.split("}")[1].split(";")[0].strip()
+            component = f"typedef struct {typedef_name}"
+        else:
+            # Extract only the first line for each component
+            component = component.split("{")[0].strip()
+
+        components.append(component)
+
+    return components
+
+
+# def parse_c(content: str) -> List[str]:
+#     # Define the regular expressions for function, struct, enum, and typedef
+#     # regex_function = r"((?:\w+\s+)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})"
+#     regex_function = r"((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})"
+#     regex_struct = r"(struct\s+\w+\s*\{[^}]*\})"
+#     regex_enum = r"(enum\s+\w+\s*\{[^}]*\})"
+#     regex_typedef = r"(typedef\s+struct\s*\{[^}]*\}\s*\w+;)"
+
+#     # Combine all regexes into a single one, each separated by '|'
+#     regex = f"{regex_function}|{regex_struct}|{regex_enum}|{regex_typedef}"
+
+#     # Find all matches
+#     matches = re.findall(regex, content, re.DOTALL)
+
+#     # Initialize the list to hold the parsed elements
+#     parsed = []
+
+#     # Iterate through the matches
+#     for match in matches:
+#         # Only one of the groups will be non-empty
+#         # Iterate through the match groups
+#         for group in match:
+#             # Append the non-empty match to the list
+#             if group:
+#                 # Check if the group is a typedef
+#                 if "typedef" in group:
+#                     # Extract only the typedef struct name
+#                     typedef_name = group.split("}")[1].split(";")[0].strip()
+#                     parsed.append(f"typedef struct {typedef_name}")
+#                 else:
+#                     # Extract only the first line for each component
+#                     parsed.append(group.split("{")[0].strip())
+
+#     return parsed
 
 
 def parse_go(contents) -> List[str]:
@@ -195,6 +313,7 @@ def parse_go(contents) -> List[str]:
 
     return components
 
+
 def parse_swift(contents) -> List[str]:
     debug_print("parse_swift")
 
@@ -220,6 +339,7 @@ def parse_swift(contents) -> List[str]:
         components.append(component)
 
     return components
+
 
 def parse_bash(contents) -> List[str]:
     debug_print("parse_bash")
@@ -1082,42 +1202,6 @@ def parse_scala(contents: str) -> List[str]:
             scope_type = None
 
     return result
-
-
-def parse_c(content: str) -> List[str]:
-    # Define the regular expressions for function, struct, enum, and typedef
-    # regex_function = r"((?:\w+\s+)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})"
-    regex_function = r"((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})"
-    regex_struct = r"(struct\s+\w+\s*\{[^}]*\})"
-    regex_enum = r"(enum\s+\w+\s*\{[^}]*\})"
-    regex_typedef = r"(typedef\s+struct\s*\{[^}]*\}\s*\w+;)"
-
-    # Combine all regexes into a single one, each separated by '|'
-    regex = f"{regex_function}|{regex_struct}|{regex_enum}|{regex_typedef}"
-
-    # Find all matches
-    matches = re.findall(regex, content, re.DOTALL)
-
-    # Initialize the list to hold the parsed elements
-    parsed = []
-
-    # Iterate through the matches
-    for match in matches:
-        # Only one of the groups will be non-empty
-        # Iterate through the match groups
-        for group in match:
-            # Append the non-empty match to the list
-            if group:
-                # Check if the group is a typedef
-                if "typedef" in group:
-                    # Extract only the typedef struct name
-                    typedef_name = group.split("}")[1].split(";")[0].strip()
-                    parsed.append(f"typedef struct {typedef_name}")
-                else:
-                    # Extract only the first line for each component
-                    parsed.append(group.split("{")[0].strip())
-
-    return parsed
 
 
 def parse_tf(contents: str) -> List[str]:

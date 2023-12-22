@@ -230,7 +230,7 @@ void printVector(const std::vector<T>& vec)""",
 	param2 int,
 	param3 map[string]interface{},
 	callback func(int) error,
-) (resultType, error)""", 
+) (resultType, error)""",
                 "type resultType struct",
                 "func main()",
             ],
@@ -255,7 +255,7 @@ void printVector(const std::vector<T>& vec)""",
     age: Int, 
     address: String, 
     phoneNumber: String
-)"""
+)""",
             ],
         ),
         (
@@ -265,6 +265,19 @@ void printVector(const std::vector<T>& vec)""",
                 "function fun_echo_hello_world()",
                 "export SECRET",
                 "alias md='make debug'",
+            ],
+        ),
+        (
+            "tests/more_languages/group3/ruby_test.rb",
+            [
+                "module Greeter",
+                "  def self.say_hello",
+                "class HelloWorld",
+                "  def say_hello",
+                "class Human",
+                "  def self.bar",
+                "  def self.bar=(value)",
+                "class Doctor < Human",
             ],
         ),
     ],
@@ -662,11 +675,6 @@ def test_more_languages_group5(
 #     ["defprotocol P", "defrecord Person", "defn -main"],
 # ),
 # (
-#     "tests/more_languages/group3/cpp_test.cpp",
-#     ["class Person", "void Person::greet", "void globalGreet", "int main"],
-# ),
-# (
-# (
 #     "tests/more_languages/group3/fortran_test.f90",
 #     [
 #         "MODULE hello_mod -> TYPE person",
@@ -703,13 +711,7 @@ def test_more_languages_group5(
 #     "tests/more_languages/group4/matlab_test.m",
 #     ["classdef HelloWorld -> function greet", "function loneFun"],
 # ),
-# (
-#     "tests/more_languages/group4/ruby_test.rb",
-#     [
-#         "module Greeter -> def self.say_hello",
-#         "class HelloWorld -> def say_hello",
-#     ],
-# ),
+
 # ( # unclear how to / what to include here, might be good to skip
 #     "tests/more_languages/group5/nodemon.json",
 #     [
