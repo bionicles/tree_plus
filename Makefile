@@ -25,7 +25,7 @@ test_tp_dotdot:
 move_powershell_profile:
 	cp mnt/c/Users/$(WIN_USERNAME)/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1 ./Microsoft.PowerShell_profile.ps1
 
-build: install-build
+build: install-build clean-dist
 	python -m build
 
 install-build:
@@ -37,7 +37,7 @@ test-publish: install-twine
 install-twine:
 	pip install --upgrade twine
 
-publish: install-twine clean-dist
+publish: install-twine
 	python -m twine upload dist/*
 
 clean-dist:

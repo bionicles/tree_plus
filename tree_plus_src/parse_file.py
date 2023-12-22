@@ -183,6 +183,9 @@ def remove_c_comments(multiline_string):
     return cleaned_string
 
 
+CPP_DENY = {"private", "public"}
+
+
 def parse_cpp(contents) -> List[str]:
     debug_print("parse_cpp")
     contents = remove_c_comments(contents)
@@ -210,12 +213,17 @@ def parse_cpp(contents) -> List[str]:
         debug_print(f"{match=}")
         component = match.group().strip()
         # fix a minor visual defect
-        first_whitespace = component.index(" ")
-        first_chunk = component[:first_whitespace]
-        debug_print(f"{first_chunk=}")
-        if "::" in first_chunk:
-            debug_print("FOUND VISUAL DEFECT with ::")
-            component = f"'{first_chunk}' {component[first_whitespace + 1:]}"
+        try:
+            first_whitespace = component.index(" ")
+            first_chunk = component[:first_whitespace]
+            debug_print(f"{first_chunk=}")
+            if "::" in first_chunk:
+                debug_print("FOUND VISUAL DEFECT with ::")
+                component = f"'{first_chunk}' {component[first_whitespace + 1:]}"
+        except ValueError:
+            pass
+        if component in CPP_DENY:
+            continue
         components.append(component)
 
     return components

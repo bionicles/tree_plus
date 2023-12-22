@@ -243,3 +243,7 @@ template<typename T> class arr
 
     size_t size() const { return sz; }
   };
+
+class Buffer {
+ private:
+  void* ptr_;

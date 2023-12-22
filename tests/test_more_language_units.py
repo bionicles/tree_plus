@@ -204,6 +204,7 @@ void printVector(const std::vector<T>& vec)""",
                 "template <typename T> T sqrt(T)",
                 "template<typename T> struct VLEN",
                 "template<typename T> class arr",
+                "class Buffer",
             ],
         ),
         (
