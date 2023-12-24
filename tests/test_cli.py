@@ -94,4 +94,4 @@ def test_cli_on_root():
     assert '): (.*)")' not in result.stdout
 
     if platform.system() == "Windows":
-        assert 0  # always fails, because of the visual defect
+        assert 0, "Windows always fails because of extensive visual defects"
