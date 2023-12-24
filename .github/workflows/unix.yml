@@ -26,6 +26,10 @@ jobs:
         # pip install -r requirements.txt # moved into setup.py
         pip install pytest
         pip install -e .
+    - name: Create .env file
+      run: |
+        echo "DEBUG_TREE_PLUS=1" > .env.test
+        echo "DEBUG_TREE_PLUS=1" > tests/dot_dot/nested_dir/.env.test
     - name: Run generic tests
       run: |
         pytest tests/ -k "not test_tree_plus_dotdot" -vv
