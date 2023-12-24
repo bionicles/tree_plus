@@ -42,3 +42,4 @@ export class AppComponent {
   async goToEvent(event_id: string) {}
   valInvitedBy(event: any, event_id: string) {}
 }
+

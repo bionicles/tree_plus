@@ -1,5 +1,6 @@
 # tree_plus_src/debug.py
 import os
+from rich import print
 
 
 def enable_debug():
@@ -16,4 +17,4 @@ def debug_enabled():
 
 def debug_print(*args, **kwargs):
     if debug_enabled():
-        print("debug:", *args, **kwargs)
+        print(*args, **kwargs)

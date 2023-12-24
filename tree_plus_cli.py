@@ -203,7 +203,11 @@ def _handle_path(
     # save the original path, just in case
     og_path = path
     # Normalize path to resolve '..' and similar relative paths
+
+    path = os.path.expanduser(path)
+    debug_print(f"[_handle_path] 2 {path=}")
     path = os.path.abspath(path)
+    debug_print(f"[_handle_path] 3 {path=}")
 
     # Handle glob paths
     if "*" in path:
@@ -246,9 +250,9 @@ def _handle_path(
         paths_to_trees[file_path] = (file_tree, file_count)
         return file_tree, file_count
     # Handle paths to folders:
-    elif os.path.isdir(path):
+    else:
         folder_path = path
-
+        debug_print(f"{path=}")
         if folder_path in paths_to_trees:
             # Already processed, reuse existing tree
             return paths_to_trees[folder_path]

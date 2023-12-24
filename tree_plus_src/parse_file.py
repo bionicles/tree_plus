@@ -21,6 +21,7 @@ def parse_file(file_path: str) -> List[str]:
     base_file_path, file_extension = os.path.splitext(file_path)
     file_name = os.path.basename(base_file_path)
     file_extension = file_extension.lower()
+    debug_print(f"{file_path=} {file_name=} {file_extension=}")
     # print(f"DEBUG(parse_file): {file_path=}, {file_extension=}\n{path_parts=}")
     components = []
 
@@ -54,18 +55,17 @@ def parse_file(file_path: str) -> List[str]:
         elif "$schema" in contents:  # not great!
             components = parse_json_schema(contents)
     elif file_extension in [".js", ".jsx"]:
-        components = parse_js(contents)
+        components = parse_ts(contents)
     elif file_path.endswith(".d.ts"):
         components = parse_d_dot_ts(contents)
     elif file_extension in {".ts", ".tsx"}:
         components = parse_ts(contents)
-        debug_print(f"{file_name=}")
         if "app-routing.module" in file_path:
             components = parse_angular_routes(contents) + components
         elif "app.module" in file_path:
             components = parse_angular_app_module(contents) + components
-        elif file_path.endswith("component.ts"):
-            components = components
+        # elif file_path.endswith("component.ts"): # just moving title into parse_ts
+        #     components = parse_angular_component_ts(contents) + components
         elif "environment" == file_name or "environment." in file_name:  # paranoid
             components = parse_environment_ts(contents)
         elif "spec.ts" in file_path:
@@ -220,15 +220,6 @@ def parse_cpp(contents) -> List[str]:
         debug_print(f"{match=}")
         component = match.group().strip()
         # fix a minor visual defect
-        # try:
-        #     first_whitespace = component.index(" ")
-        #     first_chunk = component[:first_whitespace]
-        #     debug_print(f"{first_chunk=}")
-        #     if "::" in first_chunk:
-        #         debug_print("FOUND VISUAL DEFECT with ::")
-        #         component = f"'{first_chunk}' {component[first_whitespace + 1:]}"
-        # except ValueError:
-        #     pass
         component = component.replace("::", " :: ")
         if component in CPP_DENY:
             continue
@@ -381,39 +372,6 @@ def parse_angular_app_module(contents) -> List[str]:
     return []
 
 
-def parse_angular_component_ts(contents) -> List[str]:
-    debug_print("parse_angular_component_ts")
-    keepers = []
-    title_pattern = r"title(: string)? = [\"|'](?P<title>.*)[\"|']"
-    title_leaf = "    title: string = '?'"
-    if title_match := re.search(title_pattern, contents):
-        debug_print(f"{title_match.groups()=}")
-        title_str = title_match.group("title")
-        title_leaf = f"    title: string = '{title_str}'"
-    keepers.append(title_leaf)
-    # variable_pattern = r"[^(private|,)]\s(\w+\??:\s\w+)"
-    # if variable_matches := re.findall(variable_pattern, contents, re.DOTALL):
-    #     debug_print(f"{variable_matches=}")
-    #     keepers.extend([f"    {v}" for v in variable_matches])
-    # method_pattern = r"\n +((async)?\s+(?P<name>\w+)\((?P<args>(.|\s)*?)\))"
-    # if method_matches := re.findall(method_pattern, contents, re.DOTALL):
-    #     for method_match in method_matches:
-    #         method_leaf = method_match[0].strip()
-    #         if "\n" in method_leaf:
-    #             method_leaf_lines = method_leaf.splitlines()
-    #             n = len(method_leaf_lines) - 1
-    #             method_leaf = "\n".join(
-    #                 [
-    #                     f"{'    ' if (i == 0 or i == n) else '        '}{method_leaf_line.strip()}"
-    #                     for i, method_leaf_line in enumerate(method_leaf_lines)
-    #                 ]
-    #             )
-    #         else:
-    #             method_leaf = f"    {method_leaf}"
-    #         keepers.append(method_leaf)
-    return keepers
-
-
 def parse_angular_routes(content) -> List[str]:
     routes_pattern = r"(const routes: Routes = \[\n(?:.|\n)*?\];)"
     routes_match = re.findall(routes_pattern, content)
@@ -529,18 +487,84 @@ def parse_package_json(contents) -> List[str]:
     return keepers
 
 
-# same as js for now
-# (path: '(.*)',( |\n).*component: (.*)) }
-def parse_ts(content: str) -> List[str]:
-    func_pattern = r"\bfunction\s+(\w+)\s*\("
-    class_pattern = r"\bclass\s+(\w+)"
-    arrow_func_pattern = r"(\w+)\s*=\s*\([^)]*\)\s*=>"
-    type_pattern = r"\btype\s+(\w+)\s*="
-    funcs = ["function " + n for n in re.findall(func_pattern, content)]
-    classes = ["class " + n for n in re.findall(class_pattern, content)]
-    arrow_funcs = ["function " + n for n in re.findall(arrow_func_pattern, content)]
-    types = ["type " + n for n in re.findall(type_pattern, content)]
-    return types + classes + funcs + arrow_funcs
+def remove_ts_comments_and_private_blocks(contents: str) -> str:
+    # Remove multi-line comments (no change)
+    # contents = re.sub(r"/\*.*?\*/", "", contents, flags=re.DOTALL)
+
+    # Remove single line comments
+    contents = re.sub(r"//.*", "", contents)
+
+    # Remove private closures (not effective)
+    # contents = re.sub(r"private\s+.*?\{.*?\}", "", contents, flags=re.DOTALL)
+
+    return contents
+
+
+def extract_groups(match) -> dict:
+    numbered_groups = {}
+    for i in range(len(match.groups())):
+        group = match.group(i)
+        if group:
+            numbered_groups[i] = group
+    debug_print(numbered_groups)
+    return numbered_groups
+
+
+def parse_ts(contents: str) -> List[str]:
+    contents = remove_ts_comments_and_private_blocks(contents)
+    # Combined regex pattern to match all components and title pattern
+    combined_pattern = re.compile(
+        # Types
+        r"\btype\s+(\w+)|"
+        # Interfaces
+        r"\binterface\s+(\w+)(?:\s+extends\s+\w+)?|"
+        # Classes
+        r"\bclass\s+(\w+)(?:\s+implements\s+\w+)?|"
+        # Functions
+        r"\b(async )?function\s+(\w+)\b|"
+        # Arrow functions (both async and regular)
+        # this version missed return types
+        # r"\n( *\b(const|let)\s+(\w+)\s*=\s*(async\s+)?)\(\s*([^)]*)\)\s*=>|"
+        r"\n( *\b(const|let)\s+(\w+)\s*=\s*(async\s+)?)\([^)]*\)\s*(?::\s*[\w<>\[\]]+\s*)?=>|"
+        # Class and async methods, capturing indentation
+        r"\n( *((async\s+)?\w+)\([^)]*\)\s*(?::\s*[\w<>\[\]|\s]+)?\s*\{)",
+        re.DOTALL,
+    )
+    components = []
+    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+        component = match.group()
+        debug_print(f"[parse_ts] {match_number=} {component=}")
+        groups = extract_groups(match)
+
+        # Skip control structures within class methods
+        if any(
+            kw in component
+            for kw in ["if (", "catch (", "for (", "switch (", "return ", "constructor"]
+        ):
+            debug_print("skipping a control structure!")
+            continue
+
+        # handle visual defects with methods
+        if component.endswith("{"):
+            n_spaces = len(groups[10]) - len(groups[10].lstrip())
+            indentation = " " * n_spaces
+            component = indentation + groups[11]
+
+        # custom arrow function format
+        if "=>" in component:
+            # skip indented arrow functions which are usually helpers inside methods
+            if component.startswith("\n "):
+                continue
+            const_or_let = match.group(7)
+            fun_name = match.group(8)
+            maybe_async = " async" if match.group(9) else ""
+            component = f"{const_or_let} {fun_name}:{maybe_async} =>"
+
+        if component:
+            debug_print(f"{match_number=} final {component=}")
+            components.append(component)
+
+    return components
 
 
 def parse_makefile(contents: str) -> List[str]:
@@ -594,7 +618,7 @@ def is_ansible_yml(contents: str) -> bool:
         ):
             return True
     except Exception as e:
-        print("Exception in is_ansible_yml: ", e)
+        debug_print("Exception in is_ansible_yml: ", e)
         return False
     return False
 
@@ -605,7 +629,7 @@ def is_github_yml(contents: str) -> bool:
         if "name" in doc and "jobs" in doc:
             return True
     except Exception as e:
-        print("Exception in is_github_yml: ", e)
+        debug_print("Exception in is_github_yml: ", e)
     return False
 
 
@@ -683,32 +707,50 @@ def parse_py(content: str) -> List[str]:
     try:
         node = ast.parse(content)
     except SyntaxError as se:
-        return se
-    classes = extract_nodes(node, ast.ClassDef)
-    types = [
-        n[1].targets[0].id
-        for n in extract_nodes(node, ast.Assign)
-        if isinstance(n[1].value, ast.Call)
-        and (
-            is_typing_construct(n[1].value.func)
-            or is_builtin_type(n[1].value.func, n[0])
-        )
-        and not isinstance(n[0], ast.ClassDef)
-    ]
-    classnames = ["class " + n[1].name for n in classes]
-    methods = [
-        f"class {n[1].name} -> def {m[1].name}"
-        for n in classes
-        for m in extract_nodes(n[1], ast.FunctionDef)
-    ]
-    funcs = extract_nodes(node, ast.FunctionDef)
-    funcnames = [
-        "def " + n[1].name
-        for n in funcs
-        if not any(n[1].name == m.split()[-1] for m in methods)
-    ]
+        return [str(se)]
 
-    return types + classnames + methods + funcnames
+    # Extract classes and functions
+    classes = extract_nodes(node, ast.ClassDef)
+    funcs = extract_nodes(node, ast.FunctionDef)
+
+    all_items = []
+    method_names = set()  # To keep track of method names
+
+    # Handling type annotations
+    for n in extract_nodes(node, ast.Assign):
+        if (
+            isinstance(n[1].value, ast.Call)
+            and (
+                is_typing_construct(n[1].value.func)
+                or is_builtin_type(n[1].value.func, n[0])
+            )
+            and not isinstance(n[0], ast.ClassDef)
+        ):
+            all_items.append((n[1].lineno, f"type {n[1].targets[0].id}"))
+
+    # Handling classes and methods
+    for cls in classes:
+        class_name = f"class {cls[1].name}"
+        all_items.append((cls[1].lineno, class_name))
+
+        # Extracting methods within the class
+        methods = extract_nodes(cls[1], ast.FunctionDef)
+        for m in methods:
+            method_name = f"    def {m[1].name}"  # Indentation for method under class
+            all_items.append((m[1].lineno, method_name))
+            method_names.add(m[1].name)  # Add method name to the set
+
+    # Handling standalone functions
+    for func in funcs:
+        if func[1].name not in method_names:  # Check if the function is not a method
+            func_name = f"def {func[1].name}"
+            all_items.append((func[1].lineno, func_name))
+
+    # Sorting all items by their line number to preserve order
+    sorted_items = sorted(all_items, key=lambda x: x[0])
+
+    # Return only the formatted names
+    return [item[1] for item in sorted_items]
 
 
 def parse_db(db_path: str) -> List[str]:
@@ -1199,18 +1241,6 @@ def parse_tf(contents: str) -> List[str]:
     pattern = r'(provider|resource|data|variable|output|locals|module)\s+("[^"]*"\s*"[^"]*"|"[^"]*"|\'[^\']*\'|[^\s]*)\s*[{"{]'
     matches = re.findall(pattern, contents, re.MULTILINE)
     return [f"{match[0]} {match[1]}" if match[1] else match[0] for match in matches]
-
-
-def parse_js(content: str) -> List[str]:
-    func_pattern = r"\bfunction\s+(\w+)\s*\("
-    class_pattern = r"\bclass\s+(\w+)"
-    arrow_func_pattern = r"(\w+)\s*=\s*\([^)]*\)\s*=>"
-    type_pattern = r"\btype\s+(\w+)\s*="
-    funcs = ["function " + n for n in re.findall(func_pattern, content)]
-    classes = ["class " + n for n in re.findall(class_pattern, content)]
-    arrow_funcs = ["function " + n for n in re.findall(arrow_func_pattern, content)]
-    types = ["type " + n for n in re.findall(type_pattern, content)]
-    return types + classes + funcs + arrow_funcs
 
 
 def parse_md(content: str) -> List[str]:

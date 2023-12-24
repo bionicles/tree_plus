@@ -11,15 +11,20 @@ from tree_plus_src import (
 )
 
 
+def test_directory_token_line_counting():
+    dir_path = "tests/path_to_test/"
+    expected = TokenLineCount(
+        n_tokens=277, n_lines=66
+    )  # Manually calculated total counts.
+    result = count_directory_tokens_lines(dir_path)
+    assert isinstance(result, TokenLineCount)
+    assert result == expected
+
+
 # test traversal
 def test_valid_directory():
     result = traverse_directory("tests/path_to_test")
     assert isinstance(result, list)
-
-
-# def test_invalid_directory():
-#     with pytest.raises(NotADirectoryError):
-#         traverse_directory("tests/non/existent/directory")
 
 
 def test_file_as_directory():
@@ -37,19 +42,33 @@ def test_file_as_directory():
         ("tests/path_to_test/file.txt", []),
         (
             "tests/path_to_test/class_method_type.py",
-            ["MyType", "class MyClass", "class MyClass -> def my_method"],
+            ["type MyType", "class MyClass", "    def my_method"],
         ),
         (
             "tests/path_to_test/class_function.js",
-            ["class MyClass", "function myFunction"],
+            ["class MyClass", "    myMethod", "function myFunction"],
         ),
         (
             "tests/path_to_test/class_function_type.ts",
-            ["type MyType", "class TsClass", "function tsFunction"],
+            [
+                "type MyType",
+                "interface MyInterface",
+                "class TsClass",
+                "    myMethod",
+                "class TicketsComponent implements AfterViewInit",
+                "    async myAsyncMethod",
+                "function tsFunction",
+                "const myArrowFunction: =>",
+                "const myArrow: =>",
+                "const myAsyncArrowFunction: async =>",
+                "const myAsyncArrow: async =>",
+                "let myWeirdArrow: =>",
+            ],
         ),
     ],
 )
 def test_file_parsing(file, expected):
+    print(f"{file=}")
     result = parse_file(file)
     print(f"{expected=}")
     print(f"{result=}")
@@ -88,15 +107,5 @@ def test_parse_markers():
 )
 def test_token_counting(file, expected):
     result = count_tokens_lines(file)
-    assert isinstance(result, TokenLineCount)
-    assert result == expected
-
-
-def test_directory_token_line_counting():
-    dir_path = "tests/path_to_test/"
-    expected = TokenLineCount(
-        n_tokens=153, n_lines=38
-    )  # Manually calculated total counts.
-    result = count_directory_tokens_lines(dir_path)
     assert isinstance(result, TokenLineCount)
     assert result == expected
