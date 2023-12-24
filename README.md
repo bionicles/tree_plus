@@ -210,7 +210,7 @@ make cli
 
 Alternatively, if `make` is not installed, use `pip`:
 ```bash
-pip install -e .
+pip install -e .[dev]
 ```
 
 Now, you can use the `tree_plus` command.
