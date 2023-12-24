@@ -22,26 +22,27 @@ A simple command line interface (CLI) tool for developers to show a `tree` enhan
 ## Example Output:
 - [ ] Demonstrate Parsed Checkboxes
 ```sh
-(py310) [2023-12-24T11:11:49-0500]
-~/hax/tree_plus (main) $ 
+~/hax/tree_plus (main) $
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (34141 tokens, 3755 lines)
+📁 tree_plus (34535 tokens, 3796 lines)
 ┣━━ 📁 .github
-┃   ┗━━ 📁 workflows (523 tokens, 70 lines)
-┃       ┣━━ 📄 microsoft.yml (272 tokens, 36 lines)
+┃   ┗━━ 📁 workflows (625 tokens, 78 lines)
+┃       ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
 ┃       ┃   ┣━━ Microsoft
 ┃       ┃   ┣━━   job: build
 ┃       ┃   ┣━━     - Set up Python ${{ matrix.python-version }}
 ┃       ┃   ┣━━     - Install tree_plus
+┃       ┃   ┣━━     - Create .env file
 ┃       ┃   ┣━━     - Set PYTHONUTF8 for Windows
 ┃       ┃   ┣━━     - Run generic tests
 ┃       ┃   ┗━━     - Run specific test
-┃       ┗━━ 📄 unix.yml (251 tokens, 34 lines)
+┃       ┗━━ 📄 unix.yml (302 tokens, 38 lines)
 ┃           ┣━━ Ubuntu & MacOS
 ┃           ┣━━   job: build
 ┃           ┣━━     - Set up Python ${{ matrix.python-version }}
 ┃           ┣━━     - Install tree_plus
+┃           ┣━━     - Create .env file
 ┃           ┣━━     - Run generic tests
 ┃           ┗━━     - Run specific test
 ┣━━ 📁 tree_plus_src (12736 tokens, 1597 lines)
@@ -149,9 +150,9 @@ paths=('.',)
 ┃   ┣━━ t1
 ┃   ┗━━ t2
 ┣━━ 📄 nodemon.json (97 tokens, 17 lines)
-┣━━ 📄 pyproject.toml (305 tokens, 39 lines)
+┣━━ 📄 pyproject.toml (306 tokens, 39 lines)
 ┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (8744 tokens, 664 lines)
+┣━━ 📄 README.md (9035 tokens, 697 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
