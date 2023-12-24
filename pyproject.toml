@@ -18,7 +18,7 @@ classifiers = [
 dependencies = ["tiktoken", "PyYAML", "click", "rich"]
 
 [project.optional-dependencies]
-dev = ["pytest", "pytest-env"]
+dev = ["pytest", "pytest-dotenv"]
 
 [project.urls]
 Homepage = "https://github.com/bionicles/tree_plus"
