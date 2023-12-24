@@ -419,7 +419,7 @@ def test_more_languages_group4(
         (
             ".github/workflows/unix.yml",
             [
-                "Ubuntu & MacOS",
+                "Linux & MacOS",
                 "  job: build",
                 "    - Set up Python ${{ matrix.python-version }}",
                 "    - Install tree_plus",
