@@ -6,6 +6,7 @@
 [![Microsoft](https://github.com/bionicles/tree_plus/actions/workflows/microsoft.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/microsoft.yml)
 
 **Supported Python Versions:**
+
 ![Python 3.8](https://img.shields.io/badge/Python-3.8-blue)
 ![Python 3.9](https://img.shields.io/badge/Python-3.9-blue)
 ![Python 3.10](https://img.shields.io/badge/Python-3.10-blue)
@@ -13,6 +14,7 @@
 ![Python 3.12](https://img.shields.io/badge/Python-3.12-blue)
 
 **Supported Operating Systems:**
+
 ![Ubuntu](https://img.shields.io/badge/Supports-Ubuntu-orange)
 ![MacOS](https://img.shields.io/badge/Supports-MacOS-orange)
 ![Windows](https://img.shields.io/badge/Supports-Windows-orange)
