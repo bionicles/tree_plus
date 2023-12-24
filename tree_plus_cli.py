@@ -2,7 +2,7 @@
 from collections import defaultdict
 from typing import Optional, Union, Tuple, Set, List
 import platform
-import glob
+import glob as glob_lib
 import sys
 import os
 import re
@@ -90,48 +90,20 @@ def handle_version():
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h", "-H"])
 
 
-@click.command(
-    context_settings=CONTEXT_SETTINGS,
-    epilog="""Examples:
-
-  Analyze a specific directory:
-    $ tp src/
-
-  Analyze multiple directories:
-    $ tp src/ tests/
-
-  Use glob patterns (wrap in quotes to avoid shell expansion):
-    $ tp "src/*.py" "tests/*.py"
-
-  Ignore specific patterns:
-    $ tp src/ -i "*.test.js" -i "__pycache__"
-
-  Combine glob patterns and ignore options:
-    $ tp "src/**/*.py" -i "tests/"
-
-Remember to wrap glob patterns in quotes to prevent shell expansion by the shell.""",
-)
-@click.option(
-    "--globs",
-    "-g",
-    "-G",
-    multiple=True,
-    help="Patterns to seek.",
-)
+@click.command(context_settings=CONTEXT_SETTINGS)
 @click.option(
     "--ignore",
     "-i",
     "-I",
     multiple=True,
-    help="Patterns to ignore.",
+    help='Patterns to ignore, in quotes: -i "*.java"',
 )
 @click.option(
-    "--debug",
-    "-d",
-    "-D",
-    is_flag=True,
-    default=False,
-    help="DEBUG_TREE_PLUS",
+    "--glob",
+    "-g",
+    "-G",
+    multiple=True,
+    help='Patterns to find, in quotes: -g "*.rs"',
 )
 @click.option(
     "--version",
@@ -139,11 +111,19 @@ Remember to wrap glob patterns in quotes to prevent shell expansion by the shell
     "-V",
     is_flag=True,
     default=False,
-    help="flag to print the version",
+    help="Print the version and exit.",
+)
+@click.option(
+    "--debug",
+    "-d",
+    "-D",
+    is_flag=True,
+    default=False,
+    help="Enables $DEBUG_TREE_PLUS.",
 )
 @click.argument("paths", nargs=-1, type=click.UNPROCESSED)  # Accepts multiple arguments
 def main(
-    globs: IgnoreInput,
+    glob: IgnoreInput,
     paths: PathsInput,
     ignore: IgnoreInput,
     debug: bool,
@@ -151,15 +131,19 @@ def main(
 ):
     """A `tree` util enhanced with tokens, lines, and components.
 
-    Wrap glob patterns in quotes: -i "*.py"
+    Wrap glob patterns in quotes: -i "*.py" / -g "*.rs"
 
     Examples:
+
+        \b
         Show tree_plus_src and tests simultaneously
             > tree_plus tree_plus_src tests
 
-        Show Python files in tree_plus_src
-            > tree_plus tree_plus_src/*.py
+        \b
+        Show files matching "*.*s" tests/more_languages
+            > tree_plus -g "*.*s" tests/more_languages
 
+        \b
         Ignore Java files
             > tree_plus tests -i "*.java"
     """
@@ -168,8 +152,8 @@ def main(
     if version:
         handle_version()
         return
-    debug_print(f"tree_plus main received {paths=} {ignore=} {globs=}")
-    globs = make_globs(globs)
+    debug_print(f"tree_plus main received {paths=} {ignore=} {glob=}")
+    globs = make_globs(glob)
     ignore = make_ignore(ignore)
     path_or_paths = paths or "."
     tree = tree_plus(path_or_paths, ignore, globs)
@@ -316,7 +300,7 @@ def _handle_path(
         debug_print(f"[_handle_path] GLOB")
 
         try:
-            glob_paths = glob.glob(path)
+            glob_paths = glob_lib.glob(path)
             debug_print(f"[_handle_path] glob.glob : {glob_paths=}")
 
             # glob_commonpath = os.path.commonpath(glob_paths)
