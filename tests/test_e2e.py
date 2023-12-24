@@ -3,6 +3,7 @@ import subprocess
 import platform
 import rich
 import sys
+import os
 
 import pytest  # noqa: F401
 
@@ -30,9 +31,13 @@ EXPECTATION_EMPTY = """📁 empty_folder (0 tokens, 0 lines)
 ┗━━ 📁 is_empty (0 tokens, 0 lines)
 """
 
+EMPTY = "tests/empty_folder"
+
 
 def test_e2e_empty_folder():
-    result = tree_plus(f"tests/empty_folder")
+    if not os.path.exists(EMPTY):
+        os.makedirs(EMPTY)
+    result = tree_plus(EMPTY)
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
     print(result_str)
