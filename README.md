@@ -5,11 +5,6 @@
 [![Linux & MacOS](https://github.com/bionicles/tree_plus/actions/workflows/unix.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/unix.yml)
 [![Microsoft](https://github.com/bionicles/tree_plus/actions/workflows/microsoft.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/microsoft.yml)
 
-**Supported Operating Systems:**
-![Ubuntu](https://img.shields.io/badge/Supports-Ubuntu-orange)
-![MacOS](https://img.shields.io/badge/Supports-MacOS-orange)
-![Windows](https://img.shields.io/badge/Supports-Windows-orange)
-
 **Supported Python Versions:**
 ![Python 3.8](https://img.shields.io/badge/Python-3.8-blue)
 ![Python 3.9](https://img.shields.io/badge/Python-3.9-blue)
@@ -17,15 +12,24 @@
 ![Python 3.11](https://img.shields.io/badge/Python-3.11-blue)
 ![Python 3.12](https://img.shields.io/badge/Python-3.12-blue)
 
+**Supported Operating Systems:**
+![Ubuntu](https://img.shields.io/badge/Supports-Ubuntu-orange)
+![MacOS](https://img.shields.io/badge/Supports-MacOS-orange)
+![Windows](https://img.shields.io/badge/Supports-Windows-orange)
+
+
 A `tree` util enhanced with tokens, lines, and components.
+
+`pip install -U tree_plus`
 
 ## Example Output:
 - [ ] Demonstrate Parsed Checkboxes
 ```sh
 ~/hax/tree_plus (main) $
+> make t1
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (34535 tokens, 3796 lines)
+📁 tree_plus (38289 tokens, 4157 lines)
 ┣━━ 📁 .github
 ┃   ┗━━ 📁 workflows (625 tokens, 78 lines)
 ┃       ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
@@ -45,7 +49,7 @@ paths=('.',)
 ┃           ┣━━     - Create .env file
 ┃           ┣━━     - Run generic tests
 ┃           ┗━━     - Run specific test
-┣━━ 📁 tree_plus_src (12736 tokens, 1597 lines)
+┣━━ 📁 tree_plus_src (13306 tokens, 1668 lines)
 ┃   ┣━━ 📁 scripts (6661 tokens, 861 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -67,11 +71,13 @@ paths=('.',)
 ┃   ┃   ┣━━ def disable_debug
 ┃   ┃   ┣━━ def debug_enabled
 ┃   ┃   ┗━━ def debug_print
-┃   ┣━━ 📄 default_ignore.py (542 tokens, 95 lines)
+┃   ┣━━ 📄 ignore.py (931 tokens, 145 lines)
 ┃   ┃   ┣━━ def make_ignore
+┃   ┃   ┣━━ def make_globs
 ┃   ┃   ┣━━ def is_binary_string
-┃   ┃   ┗━━ def is_binary
-┃   ┣━━ 📄 parse_file.py (11251 tokens, 1364 lines)
+┃   ┃   ┣━━ def is_binary
+┃   ┃   ┗━━ def should_ignore
+┃   ┣━━ 📄 parse_file.py (11250 tokens, 1364 lines)
 ┃   ┃   ┣━━ def parse_file
 ┃   ┃   ┣━━ def parse_rb
 ┃   ┃   ┣━━ def remove_c_comments
@@ -125,11 +131,11 @@ paths=('.',)
 ┃   ┃   ┣━━ def parse_txt
 ┃   ┃   ┣━━ def parse_markers
 ┃   ┃   ┗━━ def parse_rs
-┃   ┗━━ 📄 traverse_directory.py (247 tokens, 37 lines)
+┃   ┗━━ 📄 traverse_directory.py (429 tokens, 58 lines)
 ┃       ┗━━ def traverse_directory
 ┣━━ 📄 .gitignore (124 tokens, 38 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (311 tokens, 53 lines)
+┣━━ 📄 Makefile (327 tokens, 56 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
@@ -148,11 +154,12 @@ paths=('.',)
 ┃   ┣━━ publish: install-twine
 ┃   ┣━━ clean-dist
 ┃   ┣━━ t1
-┃   ┗━━ t2
+┃   ┣━━ t2
+┃   ┗━━ t3
 ┣━━ 📄 nodemon.json (97 tokens, 17 lines)
-┣━━ 📄 pyproject.toml (306 tokens, 39 lines)
+┣━━ 📄 pyproject.toml (307 tokens, 39 lines)
 ┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (9035 tokens, 697 lines)
+┣━━ 📄 README.md (11225 tokens, 871 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -163,13 +170,17 @@ paths=('.',)
 ┃   ┣━━ #### Local Hackable Install
 ┃   ┣━━ ### Usage
 ┃   ┣━━ ## Moar Languages
+┃   ┣━━ ## Got Globs?
 ┃   ┗━━ ## Support Free, Open-Source Software:
-┗━━ 📄 tree_plus_cli.py (2506 tokens, 332 lines)
-    ┣━━ NOTE (Line 299): parent_count unused, is that ok?
+┗━━ 📄 tree_plus_cli.py (3483 tokens, 445 lines)
+    ┣━━ NOTE (Line 405): parent_count unused, is that ok?
     ┣━━ def tree_to_string
     ┣━━ def clean_string
     ┣━━ def safe_print
+    ┣━━ def handle_version
     ┣━━ def main
+    ┣━━ def subtree
+    ┣━━ def clean_tree
     ┣━━ def tree_plus
     ┣━━ def _parse_paths
     ┣━━ def flatten_to_str
@@ -687,6 +698,172 @@ DEBUG_TREE_PLUS=None
         ┣━━ async function mockMoreTickets
         ┣━━ const mockTickets: async =>
         ┗━━ const renderQRCode: async =>
+```
+
+## Got Globs?
+
+```sh
+~/hax/tree_plus (main) $
+tree_plus -g "*.*s" tests/more_languages
+paths=('tests/more_languages',)
+📁 more_languages (9866 tokens, 1399 lines)
+┣━━ 📁 group4 (611 tokens, 115 lines)
+┃   ┗━━ 📄 rust_test.rs (611 tokens, 115 lines)
+┃       ┣━━ enum Days
+┃       ┣━━ struct Point
+┃       ┣━━ impl Point
+┃       ┣━━ fn get_origin() -> Point
+┃       ┣━━ struct Person
+┃       ┣━━ impl Person
+┃       ┣━━ fn greet(&self)
+┃       ┣━━ fn add_two_longs(x1: i64, x2: i64) -> i64
+┃       ┣━━ fn add_two_longs_longer(
+┃       ┃       x1: i64,
+┃       ┃       x2: i64,
+┃       ┃   ) -> i64
+┃       ┣━━ fn multiply_by_two(num: f64) -> f64
+┃       ┣━━ fn get_first_character(s: &str) -> Option<char>
+┃       ┣━━ trait Drawable
+┃       ┣━━ fn draw(&self)
+┃       ┣━━ impl Drawable for Point
+┃       ┣━━ fn draw(&self)
+┃       ┣━━ fn main()
+┃       ┣━━ pub struct VisibleStruct
+┃       ┣━━ mod my_module
+┃       ┣━━ macro_rules! say_hello
+┃       ┣━━ pub mod lib
+┃       ┣━━ pub mod interfaces
+┃       ┣━━ mod engine
+┃       ┗━━ pub fn flow<S1, S2, S3, S4, E, T, L>(
+┃               source: S1,
+┃               extractor: E,
+┃               inbox: S2,
+┃               transformer: T,
+┃               outbox: S3,
+┃               loader: L,
+┃               sink: &mut S4,
+┃           ) -> Result<(), Box<dyn Error>>
+┃           where
+┃               S1: Extractable,
+┃               S2: Extractable + Loadable,
+┃               S3: Extractable + Loadable,
+┃               S4: Loadable,
+┃               E: Extractor<S1, S2>,
+┃               T: Transformer<S2, S3>,
+┃               L: Loader<S3, S4>,
+┣━━ 📁 group5 (8406 tokens, 1130 lines)
+┃   ┣━━ 📄 app-routing.module.ts (242 tokens, 28 lines)
+┃   ┃   ┣━━ const routes: Routes = [
+┃   ┃   ┃       { path: '', redirectTo: 'login', pathMatch: 'full' },
+┃   ┃   ┃       { path: '*', redirectTo: 'login' },
+┃   ┃   ┃       { path: 'home', component: HomeComponent },
+┃   ┃   ┃       { path: 'login', component: LoginComponent },
+┃   ┃   ┃       { path: 'register', component: RegisterComponent },
+┃   ┃   ┃       { path: 'events', component: EventsComponent },
+┃   ┃   ┃       { path: 'invites', component: InvitesComponent },
+┃   ┃   ┃       { path: 'rewards', component: RewardsComponent },
+┃   ┃   ┃       { path: 'profile', component: ProfileComponent },
+┃   ┃   ┃   ];
+┃   ┃   ┗━━ class AppRoutingModule
+┃   ┣━━ 📄 app.component.spec.ts (307 tokens, 48 lines)
+┃   ┃   ┣━━ describe 'AppComponent'
+┃   ┃   ┣━━     it should create the app
+┃   ┃   ┣━━     it should welcome the user
+┃   ┃   ┣━━     it should welcome 'Jimbo'
+┃   ┃   ┗━━     it should request login if not logged in
+┃   ┣━━ 📄 app.component.ts (243 tokens, 45 lines)
+┃   ┃   ┣━━ class AppComponent
+┃   ┃   ┣━━   checkSession
+┃   ┃   ┣━━   async goToEvent
+┃   ┃   ┗━━   valInvitedBy
+┃   ┣━━ 📄 app.module.ts (269 tokens, 43 lines)
+┃   ┃   ┣━━ @NgModule({
+┃   ┃   ┃       declarations: [
+┃   ┃   ┃           AppComponent,
+┃   ┃   ┃           HomeComponent,
+┃   ┃   ┃           LoginComponent,
+┃   ┃   ┃           RegisterComponent,
+┃   ┃   ┃           EventsComponent,
+┃   ┃   ┃           InvitesComponent,
+┃   ┃   ┃           RewardsComponent,
+┃   ┃   ┃           ProfileComponent
+┃   ┃   ┗━━ class AppModule
+┃   ┣━━ 📄 environment.test.ts (193 tokens, 19 lines)
+┃   ┃   ┣━━ environment:
+┃   ┃   ┣━━    production
+┃   ┃   ┣━━    cognitoUserPoolId
+┃   ┃   ┣━━    cognitoAppClientId
+┃   ┃   ┗━━    apiurl
+┃   ┣━━ 📄 rust_todo_test.rs (109 tokens, 27 lines)
+┃   ┃   ┣━━ TODO (Line 23): This todo tests parse_todo
+┃   ┃   ┣━━ enum Color
+┃   ┃   ┣━━ struct Point
+┃   ┃   ┣━━ trait Drawable
+┃   ┃   ┣━━ fn draw(&self)
+┃   ┃   ┣━━ impl Drawable for Point
+┃   ┃   ┣━━ fn draw(&self)
+┃   ┃   ┗━━ fn main()
+┃   ┣━━ 📄 standard-app-routing.module.ts (93 tokens, 17 lines)
+┃   ┃   ┗━━ const routes: Routes = [
+┃   ┃         { path: '', component: HomeComponent },
+┃   ┃         {
+┃   ┃           path: 'heroes',
+┃   ┃           component: HeroesListComponent,
+┃   ┃           children: [
+┃   ┃             { path: ':id', component: HeroDetailComponent },
+┃   ┃             { path: 'new', component: HeroFormComponent },
+┃   ┃           ],
+┃   ┃         },
+┃   ┃         { path: '**', component: PageNotFoundComponent },
+┃   ┃       ];
+┃   ┗━━ 📄 tickets.component.ts (6950 tokens, 903 lines)
+┃       ┣━━ interface EnrichedTicket extends Ticket
+┃       ┣━━ interface SpinConfig
+┃       ┣━━ interface RotationState
+┃       ┣━━ interface SpeakInput
+┃       ┣━━ const formatSpeakInput: =>
+┃       ┣━━ function hourToSpeech
+┃       ┣━━ class TicketsComponent implements AfterViewInit
+┃       ┣━━   speak
+┃       ┣━━   speakEvent
+┃       ┣━━   formatEvent
+┃       ┣━━   speakVenue
+┃       ┣━━   formatDate
+┃       ┣━━   formatDateForSpeech
+┃       ┣━━   async spinQRCode
+┃       ┣━━   ngAfterViewInit
+┃       ┣━━   ngOnDestroy
+┃       ┣━━   toggleColumn
+┃       ┣━━   adjustColumns
+┃       ┣━━   onResize
+┃       ┣━━   async ngOnInit
+┃       ┣━━   async loadTickets
+┃       ┣━━   onDateRangeChange
+┃       ┣━━   applyFilter
+┃       ┣━━   formatDateForComparison
+┃       ┣━━   onFilterChange
+┃       ┣━━   onLatitudeChange
+┃       ┣━━   onLongitudeChange
+┃       ┣━━   onRadiusChange
+┃       ┣━━   sortData
+┃       ┣━━   onRowClick
+┃       ┣━━ function isDate
+┃       ┣━━ function isNonNullNumber
+┃       ┣━━ function hasLocation
+┃       ┣━━ const create_faker_ticket: async =>
+┃       ┣━━ function compare
+┃       ┣━━ function compare_dates
+┃       ┣━━ async function mockMoreTickets
+┃       ┣━━ const mockTickets: async =>
+┃       ┗━━ const renderQRCode: async =>
+┗━━ 📁 group_todo (849 tokens, 154 lines)
+    ┣━━ 📄 csharp_test.cs (397 tokens, 72 lines)
+    ┣━━ 📄 elixir_test.exs (49 tokens, 10 lines)
+    ┣━━ 📄 fsharp_test.fs (44 tokens, 6 lines)
+    ┣━━ 📄 haskell_test.hs (34 tokens, 5 lines)
+    ┣━━ 📄 sas_test.sas (104 tokens, 22 lines)
+    ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
+    ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 ```
 
 ## Support Free, Open-Source Software:

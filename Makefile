@@ -51,3 +51,6 @@ t1:
 
 t2:
 	tree_plus -i group_todo tests/more_languages
+
+t3:
+	tree_plus -g "*.*s" tests/more_languages
