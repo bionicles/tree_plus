@@ -46,8 +46,8 @@ publish: install-twine
 clean-dist:
 	rm -rf dist/*
 
-readme-block1:
+t1:
 	tree_plus -i tests
 
-readme-block2:
+t2:
 	tree_plus -i group_todo tests/more_languages

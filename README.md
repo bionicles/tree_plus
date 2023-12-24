@@ -22,10 +22,11 @@ A simple command line interface (CLI) tool for developers to show a `tree` enhan
 ## Example Output:
 - [ ] Demonstrate Parsed Checkboxes
 ```sh
-~/hax/tree_plus (main) $
+(py310) [2023-12-24T11:11:49-0500]
+~/hax/tree_plus (main) $ 
 tree_plus -i tests
 paths=('.',)
-🌵 . (33653 tokens, 3683 lines)
+📁 tree_plus (34141 tokens, 3755 lines)
 ┣━━ 📁 .github
 ┃   ┗━━ 📁 workflows (523 tokens, 70 lines)
 ┃       ┣━━ 📄 microsoft.yml (272 tokens, 36 lines)
@@ -43,7 +44,7 @@ paths=('.',)
 ┃           ┣━━     - Install tree_plus
 ┃           ┣━━     - Run generic tests
 ┃           ┗━━     - Run specific test
-┣━━ 📁 tree_plus_src (12442 tokens, 1548 lines)
+┣━━ 📁 tree_plus_src (12736 tokens, 1597 lines)
 ┃   ┣━━ 📁 scripts (6661 tokens, 861 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -60,16 +61,16 @@ paths=('.',)
 ┃   ┃   ┣━━ def add_tokens_lines
 ┃   ┃   ┣━━ def count_tokens_lines
 ┃   ┃   ┗━━ def count_directory_tokens_lines
-┃   ┣━━ 📄 debug.py (78 tokens, 18 lines)
+┃   ┣━━ 📄 debug.py (87 tokens, 20 lines)
 ┃   ┃   ┣━━ def enable_debug
 ┃   ┃   ┣━━ def disable_debug
 ┃   ┃   ┣━━ def debug_enabled
 ┃   ┃   ┗━━ def debug_print
-┃   ┣━━ 📄 default_ignore.py (538 tokens, 94 lines)
+┃   ┣━━ 📄 default_ignore.py (542 tokens, 95 lines)
 ┃   ┃   ┣━━ def make_ignore
 ┃   ┃   ┣━━ def is_binary_string
 ┃   ┃   ┗━━ def is_binary
-┃   ┣━━ 📄 parse_file.py (10970 tokens, 1318 lines)
+┃   ┣━━ 📄 parse_file.py (11251 tokens, 1364 lines)
 ┃   ┃   ┣━━ def parse_file
 ┃   ┃   ┣━━ def parse_rb
 ┃   ┃   ┣━━ def remove_c_comments
@@ -80,7 +81,6 @@ paths=('.',)
 ┃   ┃   ┣━━ def parse_bash
 ┃   ┃   ┣━━ def parse_d_dot_ts
 ┃   ┃   ┣━━ def parse_angular_app_module
-┃   ┃   ┣━━ def parse_angular_component_ts
 ┃   ┃   ┣━━ def parse_angular_routes
 ┃   ┃   ┣━━ def parse_angular_spec
 ┃   ┃   ┣━━ def parse_environment_ts
@@ -88,6 +88,8 @@ paths=('.',)
 ┃   ┃   ┣━━ def parse_requirements_txt
 ┃   ┃   ┣━━ def parse_json_schema
 ┃   ┃   ┣━━ def parse_package_json
+┃   ┃   ┣━━ def remove_ts_comments_and_private_blocks
+┃   ┃   ┣━━ def extract_groups
 ┃   ┃   ┣━━ def parse_ts
 ┃   ┃   ┣━━ def parse_makefile
 ┃   ┃   ┣━━ def parse_sql
@@ -118,7 +120,6 @@ paths=('.',)
 ┃   ┃   ┣━━ def parse_matlab
 ┃   ┃   ┣━━ def parse_scala
 ┃   ┃   ┣━━ def parse_tf
-┃   ┃   ┣━━ def parse_js
 ┃   ┃   ┣━━ def parse_md
 ┃   ┃   ┣━━ def parse_txt
 ┃   ┃   ┣━━ def parse_markers
@@ -127,7 +128,7 @@ paths=('.',)
 ┃       ┗━━ def traverse_directory
 ┣━━ 📄 .gitignore (124 tokens, 38 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (306 tokens, 50 lines)
+┣━━ 📄 Makefile (311 tokens, 53 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
@@ -136,19 +137,21 @@ paths=('.',)
 ┃   ┣━━ test_s: test_tp_dotdot_s
 ┃   ┣━━ test_tp_dotdot_s: test_tp_dotdot
 ┃   ┣━━ test: test_tp_dotdot
+┃   ┣━━ test_dotenv
 ┃   ┣━━ test_tp_dotdot
 ┃   ┣━━ move_powershell_profile
-┃   ┣━━ build: install-build
+┃   ┣━━ build: install-build clean-dist
 ┃   ┣━━ install-build
 ┃   ┣━━ test-publish: install-twine
 ┃   ┣━━ install-twine
-┃   ┣━━ publish: install-twine clean-dist
+┃   ┣━━ publish: install-twine
 ┃   ┣━━ clean-dist
-┃   ┣━━ readme-block1
-┃   ┗━━ readme-block2
-┣━━ 📄 nodemon.json (85 tokens, 17 lines)
-┣━━ 📄 pyproject.toml (293 tokens, 36 lines)
-┣━━ 📄 README.md (8697 tokens, 661 lines)
+┃   ┣━━ t1
+┃   ┗━━ t2
+┣━━ 📄 nodemon.json (97 tokens, 17 lines)
+┣━━ 📄 pyproject.toml (305 tokens, 39 lines)
+┣━━ 📄 pytest.ini (11 tokens, 3 lines)
+┣━━ 📄 README.md (8744 tokens, 664 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -160,8 +163,8 @@ paths=('.',)
 ┃   ┣━━ ### Usage
 ┃   ┣━━ ## Moar Languages
 ┃   ┗━━ ## Support Free, Open-Source Software:
-┗━━ 📄 tree_plus_cli.py (2399 tokens, 321 lines)
-    ┣━━ NOTE (Line 288): parent_count unused, is that ok?
+┗━━ 📄 tree_plus_cli.py (2506 tokens, 332 lines)
+    ┣━━ NOTE (Line 299): parent_count unused, is that ok?
     ┣━━ def tree_to_string
     ┣━━ def clean_string
     ┣━━ def safe_print
@@ -246,7 +249,8 @@ tpcli
 ~/hax/tree_plus (main) $
 tree_plus -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-📁 tests/more_languages (9056 tokens, 1459 lines)
+DEBUG_TREE_PLUS=None
+📁 more_languages (16111 tokens, 2377 lines)
 ┣━━ 📁 group1 (402 tokens, 88 lines)
 ┃   ┣━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO
@@ -327,7 +331,7 @@ paths=('tests/more_languages',)
 ┃       ┣━━ object HelloWorld -> def greet(person: Person): Unit
 ┃       ┣━━ object HelloWorld -> def main(args: Array[String]): Unit
 ┃       ┗━━ def sumOfSquaresShort(x: Int, y: Int): Int
-┣━━ 📁 group3 (2514 tokens, 441 lines)
+┣━━ 📁 group3 (2619 tokens, 455 lines)
 ┃   ┣━━ 📄 bash_test.sh (154 tokens, 23 lines)
 ┃   ┃   ┣━━ echo_hello_world()
 ┃   ┃   ┣━━ function fun_echo_hello_world()
@@ -335,25 +339,21 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━ alias md='make debug'
 ┃   ┃   ┣━━ add_alias()
 ┃   ┃   ┗━━ create_conda_env()
-┃   ┣━━ 📄 cpp_test.cpp (1632 tokens, 245 lines)
+┃   ┣━━ 📄 cpp_test.cpp (1737 tokens, 259 lines)
 ┃   ┃   ┣━━ class Person
 ┃   ┃   ┣━━ void globalGreet()
 ┃   ┃   ┣━━ int main()
-┃   ┃   ┣━━ void printMessage(const std::string &message)
+┃   ┃   ┣━━ void printMessage(const std :: string &message)
 ┃   ┃   ┣━━ template<typename T>
-┃   ┃   ┃   void printVector(const std::vector<T>& vec)
+┃   ┃   ┃   void printVector(const std :: vector<T>& vec)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ class Animal
 ┃   ┃   ┣━━ class Dog : public Animal
 ┃   ┃   ┣━━ class Cat : public Animal
-┃   ┃   ┣━━ 'nb::bytes' BuildRnnDescriptor(int input_size, int hidden_size, int
-┃   ┃   ┃   num_layers,
-┃   ┃   ┃                                int batch_size, int max_seq_length,
-┃   ┃   ┃   float dropout,
-┃   ┃   ┃                                bool bidirectional, bool
-┃   ┃   ┃   cudnn_allow_tf32,
-┃   ┃   ┃                                int workspace_size, int
-┃   ┃   ┃   reserve_space_size)
+┃   ┃   ┣━━ nb :: bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
+┃   ┃   ┃                                int batch_size, int max_seq_length, float dropout,
+┃   ┃   ┃                                bool bidirectional, bool cudnn_allow_tf32,
+┃   ┃   ┃                                int workspace_size, int reserve_space_size)
 ┃   ┃   ┣━━ int main()
 ┃   ┃   ┣━━ enum ECarTypes
 ┃   ┃   ┣━━ ECarTypes GetPreferredCarType()
@@ -364,7 +364,13 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━ template <typename T> T sin(T)
 ┃   ┃   ┣━━ template <typename T> T sqrt(T)
 ┃   ┃   ┣━━ template<typename T> struct VLEN
-┃   ┃   ┗━━ template<typename T> class arr
+┃   ┃   ┣━━ template<typename T> class arr
+┃   ┃   ┣━━ class Buffer
+┃   ┃   ┗━━ std :: tuple<array, array, array> quantize(
+┃   ┃           const array& w,
+┃   ┃           int group_size,
+┃   ┃           int bits,
+┃   ┃           StreamOrDevice s)
 ┃   ┣━━ 📄 go_test.go (169 tokens, 46 lines)
 ┃   ┃   ┣━━ type Greeting struct
 ┃   ┃   ┣━━ func (g Greeting) sayHello()
@@ -462,7 +468,7 @@ paths=('tests/more_languages',)
 ┃       ┣━━ output "instance_public_ip"
 ┃       ┣━━ locals
 ┃       ┗━━ module "vpc"
-┗━━ 📁 group5 (4442 tokens, 600 lines)
+┗━━ 📁 group5 (11392 tokens, 1504 lines)
     ┣━━ 📄 ansible_test.yml (60 tokens, 15 lines)
     ┃   ┣━━ Install package
     ┃   ┣━━ Start service
@@ -486,24 +492,11 @@ paths=('tests/more_languages',)
     ┃   ┣━━     it should welcome the user
     ┃   ┣━━     it should welcome 'Jimbo'
     ┃   ┗━━     it should request login if not logged in
-    ┣━━ 📄 app.component.ts (243 tokens, 44 lines)
+    ┣━━ 📄 app.component.ts (243 tokens, 45 lines)
     ┃   ┣━━ class AppComponent
-    ┃   ┣━━     title: string = 'promo-app'
-    ┃   ┣━━     user: any
-    ┃   ┣━━     events: any
-    ┃   ┣━━     events_list: any
-    ┃   ┣━━     clientSecret: string
-    ┃   ┣━━     card?: StripePaymentElementComponent
-    ┃   ┣━━     cardOptions: StripePaymentElementOptions
-    ┃   ┣━━     constructor(
-    ┃   ┃           private http: HttpClient,
-    ┃   ┃           private loginService: LoginService,
-    ┃   ┃           private stripeService: StripeService
-    ┃   ┃       )
-    ┃   ┣━━     constructor(private loginService: LoginService)
-    ┃   ┣━━     checkSession()
-    ┃   ┣━━     async goToEvent(event_id: string)
-    ┃   ┗━━     valInvitedBy(event: any, event_id: string)
+    ┃   ┣━━   checkSession
+    ┃   ┣━━   async goToEvent
+    ┃   ┗━━   valInvitedBy
     ┣━━ 📄 app.module.ts (269 tokens, 43 lines)
     ┃   ┣━━ @NgModule({
     ┃   ┃       declarations: [
@@ -644,15 +637,55 @@ paths=('tests/more_languages',)
     ┃   ┣━━ type: object
     ┃   ┣━━ title: random_test
     ┃   ┗━━ description: A promoter's activites related to events
-    ┗━━ 📄 testPackage.json (458 tokens, 44 lines)
-        ┣━━ name: 'promo-app'
-        ┣━━ version: 0.0.0
-        ┣━━ scripts:
-        ┣━━     ng: 'ng'
-        ┣━━     start: 'ng serve'
-        ┣━━     build: 'ng build'
-        ┣━━     watch: 'ng build --watch --configuration development'
-        ┗━━     test: 'ng test'
+    ┣━━ 📄 testPackage.json (458 tokens, 44 lines)
+    ┃   ┣━━ name: 'promo-app'
+    ┃   ┣━━ version: 0.0.0
+    ┃   ┣━━ scripts:
+    ┃   ┣━━     ng: 'ng'
+    ┃   ┣━━     start: 'ng serve'
+    ┃   ┣━━     build: 'ng build'
+    ┃   ┣━━     watch: 'ng build --watch --configuration development'
+    ┃   ┗━━     test: 'ng test'
+    ┗━━ 📄 tickets.component.ts (6950 tokens, 903 lines)
+        ┣━━ interface EnrichedTicket extends Ticket
+        ┣━━ interface SpinConfig
+        ┣━━ interface RotationState
+        ┣━━ interface SpeakInput
+        ┣━━ const formatSpeakInput: =>
+        ┣━━ function hourToSpeech
+        ┣━━ class TicketsComponent implements AfterViewInit
+        ┣━━   speak
+        ┣━━   speakEvent
+        ┣━━   formatEvent
+        ┣━━   speakVenue
+        ┣━━   formatDate
+        ┣━━   formatDateForSpeech
+        ┣━━   async spinQRCode
+        ┣━━   ngAfterViewInit
+        ┣━━   ngOnDestroy
+        ┣━━   toggleColumn
+        ┣━━   adjustColumns
+        ┣━━   onResize
+        ┣━━   async ngOnInit
+        ┣━━   async loadTickets
+        ┣━━   onDateRangeChange
+        ┣━━   applyFilter
+        ┣━━   formatDateForComparison
+        ┣━━   onFilterChange
+        ┣━━   onLatitudeChange
+        ┣━━   onLongitudeChange
+        ┣━━   onRadiusChange
+        ┣━━   sortData
+        ┣━━   onRowClick
+        ┣━━ function isDate
+        ┣━━ function isNonNullNumber
+        ┣━━ function hasLocation
+        ┣━━ const create_faker_ticket: async =>
+        ┣━━ function compare
+        ┣━━ function compare_dates
+        ┣━━ async function mockMoreTickets
+        ┣━━ const mockTickets: async =>
+        ┗━━ const renderQRCode: async =>
 ```
 
 ## Support Free, Open-Source Software:
