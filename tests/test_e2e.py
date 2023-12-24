@@ -32,11 +32,14 @@ EXPECTATION_EMPTY = """📁 empty_folder (0 tokens, 0 lines)
 """
 
 EMPTY = "tests/empty_folder"
+EMPTY_MEANS_EMPTY = "tests/empty_folder/is_empty"
 
 
 def test_e2e_empty_folder():
     if not os.path.exists(EMPTY):
         os.makedirs(EMPTY)
+    if not os.path.exists(EMPTY_MEANS_EMPTY):
+        os.makedirs(EMPTY_MEANS_EMPTY)
     result = tree_plus(EMPTY)
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
