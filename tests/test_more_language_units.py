@@ -1,6 +1,7 @@
 # tests/test_more_language_units.py
 from typing import List
 import pytest
+import os
 
 from rich import print
 
@@ -277,10 +278,41 @@ void printVector(const std :: vector<T>& vec)""",
                 "class Doctor < Human",
             ],
         ),
+        (
+            "tests/more_languages/group3/hallucination.tex",
+            [
+                "Harnessing the Master Algorithm: Strategies for AI Large Language Models to Mitigate Hallucinations",
+                "Hallucinated Pedro Domingos et al.",
+                "Christmas Eve 2023",
+                "1 Introduction",
+                "2 Representation in LLMs",
+                "  2.1 Current Representational Models",
+                "  2.2 Incorporating Cognitive Structures",
+                "  2.3 Conceptual Diagrams of Advanced Representational Models",
+                "3 Evaluation Strategies",
+                "  3.1 Existing Evaluation Metrics for LLMs",
+                "  3.2 Integrating Contextual and Ethical Considerations",
+                "  3.3 Case Studies: Evaluation in Practice",
+                "4 Optimization Techniques",
+                "  4.1 Continuous Learning Models",
+                "  4.2 Adaptive Algorithms for Real-time Adjustments",
+                "  4.3 Performance Metrics Pre- and Post-Optimization",
+                "5 Interdisciplinary Insights",
+                "  5.1 Cognitive Science and AI: A Symbiotic Relationship",
+                "  5.2 Learning from Human Cognitive Processes",
+                "6 Challenges and Future Directions",
+                "  6.1 Addressing Current Limitations",
+                "  6.2 The Road Ahead: Ethical and Practical Considerations",
+                "7 Conclusion",
+                "  7.1 Summarizing Key Findings",
+                "  7.2 The Next Steps in AI Development",
+            ],
+        ),
     ],
 )
 def test_more_languages_group3(file: str, expected: List[str]):
     print(f"{file=}")
+    os.environ.get("DEBUG_TREE_PLUS") == "1"
     result = parse_file(file)
     print(f"{result=}")
     print(f"{expected=}")

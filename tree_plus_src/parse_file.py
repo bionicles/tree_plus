@@ -99,6 +99,8 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_requirements_txt(contents)
         else:
             components = parse_txt(contents)
+    elif file_extension == ".tex":
+        components = parse_tex(contents)
     elif file_extension == ".cbl":
         components = parse_cobol(contents)
     elif file_extension == ".java":
@@ -140,6 +142,67 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def parse_tex(tex_content: str) -> List[str]:
+    debug_print("parse_tex")
+
+    # Regex for title, author, and date
+    title_re = r"\\title\{([^\}]+)\}"
+    author_re = r"\\author\{((?:[^{}]+|\{[^\}]*\})*)\}"
+    date_re = r"\\date\{([^\}]+)\}"
+
+    # Extract title, author, and date
+    title = re.search(title_re, tex_content)
+    author = re.search(author_re, tex_content)
+    date = re.search(date_re, tex_content)
+
+    components = []
+    if title:
+        components.append(title.group(1))
+
+    # Handling multiple authors
+
+    if author:
+        author = author.group(1)
+        debug_print(f"parse_tex: {author=}")
+        is_multi_author = author.count("\\and") > 0
+        # Remove emails
+        # author = re.sub(r"\\texttt\{[^\}]+\}", "", author)
+        # debug_print(f"parse_tex: Removed emails {author=}")
+        # (no change observed from this substitution)
+        # Remove LaTeX commands
+        author = re.sub(r"\\.*", "", author).strip()
+        debug_print(f"parse_tex: Removed LaTeX commands {author=}")
+        if is_multi_author:
+            debug_print(f"parse_tex: multi {author=}")
+            author = author.splitlines()[0]
+            first_author = author.split("\\and")[0]
+            author = re.sub(r"\\.*", "", first_author).strip() + " et al."
+        components.append(author)
+
+    if date:
+        components.append(date.group(1))
+
+    # Regex for sections and subsections
+    section_re = r"\\(sub)?section\{([^\}]+)\}"
+
+    # Extract sections and subsections
+    outline = []
+    section_count = 0
+    subsection_count = 0
+    # TODO: format hierarchical numbered outline
+    for match in re.finditer(section_re, tex_content):
+        if match.group(1):  # Subsection
+            subsection_count += 1
+            outline.append(f"  {section_count}.{subsection_count} {match.group(2)}")
+        else:
+            section_count += 1
+            subsection_count = 0  # Reset
+            outline.append(f"{section_count} {match.group(2)}")
+    debug_print("parse_tex outline:", outline)
+    components.extend(outline)
+    return components
 
 
 def parse_rb(contents) -> List[str]:
