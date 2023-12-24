@@ -423,6 +423,7 @@ def test_more_languages_group4(
                 "  job: build",
                 "    - Set up Python ${{ matrix.python-version }}",
                 "    - Install tree_plus",
+                "    - Create .env file",
                 "    - Run generic tests",
                 "    - Run specific test",
             ],
