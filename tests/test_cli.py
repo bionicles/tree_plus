@@ -25,8 +25,24 @@ def test_imports():
 
 
 def test_tree_plus_help():
-    result = subprocess.run(["tree_plus", "--help"], capture_output=True)
+    result = subprocess.run(["tree_plus", "--help"], capture_output=True, text=True)
     assert result.returncode == 0
+    assert "Usage: tree_plus" in result.stdout
+    result = subprocess.run(["tree_plus", "-h"], capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "Usage: tree_plus" in result.stdout
+
+
+def test_tree_plus_version():
+    result = subprocess.run(["tree_plus", "-v"], capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "version" in result.stdout
+    result = subprocess.run(["tree_plus", "-V"], capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "version" in result.stdout
+    result = subprocess.run(["tree_plus", "--version"], capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "version" in result.stdout
 
 
 # def test_tree_plus_glob():

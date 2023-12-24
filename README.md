@@ -17,7 +17,7 @@
 ![Python 3.11](https://img.shields.io/badge/Python-3.11-blue)
 ![Python 3.12](https://img.shields.io/badge/Python-3.12-blue)
 
-A simple command line interface (CLI) tool for developers to show a `tree` enhanced with token counts, line counts, and source code components.
+A `tree` util enhanced with tokens, lines, and components.
 
 ## Example Output:
 - [ ] Demonstrate Parsed Checkboxes

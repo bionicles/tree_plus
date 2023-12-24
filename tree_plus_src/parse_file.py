@@ -10,7 +10,7 @@ import os
 import re
 import json
 
-from tree_plus_src.default_ignore import is_binary
+from tree_plus_src.ignore import is_binary
 from tree_plus_src.debug import debug_print
 
 

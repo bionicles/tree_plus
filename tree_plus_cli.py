@@ -18,16 +18,17 @@ install(show_locals=True)
 
 from tree_plus_src import (  # noqa E402
     enable_debug,
-    disable_debug,
     debug_print,
     traverse_directory,
     count_tokens_lines,
     add_tokens_lines,
     TokenLineCount,
     make_ignore,
+    make_globs,
     parse_file,
     IgnoreInput,
     Ignore,
+    should_ignore,
 )
 
 console = Console()
@@ -72,40 +73,142 @@ file_char = ":page_facing_up:" if operate_normally else "[file]"
 glob_char = ":cyclone:" if operate_normally else "[glob]"
 
 
-@click.command()
-@click.argument("paths", nargs=-1)  # Accepts multiple arguments
+def handle_version():
+    parent_path = os.path.dirname(os.path.abspath(__file__))
+    debug_print(f"[handle_version] {parent_path=}")
+    pyproject_path = os.path.join(parent_path, "pyproject.toml")
+    debug_print(f"[handle_version] {pyproject_path=}")
+    with open(pyproject_path, "r") as f:
+        contents = f.readlines()
+    debug_print(f"[handle_version] {contents=}")
+    for line in contents:
+        if "version" in line:
+            rich_print(f"tree_plus {line}")
+            return
+
+
+CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h", "-H"])
+
+
+@click.command(
+    context_settings=CONTEXT_SETTINGS,
+    epilog="""Examples:
+
+  Analyze a specific directory:
+    $ tp src/
+
+  Analyze multiple directories:
+    $ tp src/ tests/
+
+  Use glob patterns (wrap in quotes to avoid shell expansion):
+    $ tp "src/*.py" "tests/*.py"
+
+  Ignore specific patterns:
+    $ tp src/ -i "*.test.js" -i "__pycache__"
+
+  Combine glob patterns and ignore options:
+    $ tp "src/**/*.py" -i "tests/"
+
+Remember to wrap glob patterns in quotes to prevent shell expansion by the shell.""",
+)
+@click.option(
+    "--globs",
+    "-g",
+    "-G",
+    multiple=True,
+    help="Patterns to seek.",
+)
 @click.option(
     "--ignore",
-    "-I",
     "-i",
+    "-I",
     multiple=True,
-    help="Names of files or directories to ignore.",
+    help="Patterns to ignore.",
 )
 @click.option(
     "--debug",
     "-d",
-    "-d",
+    "-D",
     is_flag=True,
     default=False,
-    help="flag to temporarily set DEBUG_TREE_PLUS",
+    help="DEBUG_TREE_PLUS",
 )
-def main(paths: PathsInput, ignore: IgnoreInput, debug: bool):
+@click.option(
+    "--version",
+    "-v",
+    "-V",
+    is_flag=True,
+    default=False,
+    help="flag to print the version",
+)
+@click.argument("paths", nargs=-1, type=click.UNPROCESSED)  # Accepts multiple arguments
+def main(
+    globs: IgnoreInput,
+    paths: PathsInput,
+    ignore: IgnoreInput,
+    debug: bool,
+    version: bool,
+):
+    """A `tree` util enhanced with tokens, lines, and components.
+
+    Wrap glob patterns in quotes: -i "*.py"
+
+    Examples:
+        Show tree_plus_src and tests simultaneously
+            > tree_plus tree_plus_src tests
+
+        Show Python files in tree_plus_src
+            > tree_plus tree_plus_src/*.py
+
+        Ignore Java files
+            > tree_plus tests -i "*.java"
+    """
     if debug:
         enable_debug()
-    debug_print(f"tree_plus main received {paths=} {ignore=}")
+    if version:
+        handle_version()
+        return
+    debug_print(f"tree_plus main received {paths=} {ignore=} {globs=}")
+    globs = make_globs(globs)
     ignore = make_ignore(ignore)
     path_or_paths = paths or "."
-    tree = tree_plus(path_or_paths, ignore)
+    tree = tree_plus(path_or_paths, ignore, globs)
     safe_print(tree)
 
 
+def subtree(label: str) -> Tree:
+    return Tree(label, guide_style="bold cyan", highlight=True)
+
+
+def clean_tree(input_tree: Tree, root_node: bool = False) -> Optional[Tree]:
+    if not root_node:
+        if "(0 tokens, 0 lines)" in str(input_tree.label):
+            return None
+    cleaned_tree = subtree(input_tree.label)
+    for child in input_tree.children:
+        maybe_subtree = clean_tree(child)
+        if maybe_subtree is not None:
+            cleaned_tree.add(maybe_subtree)
+    return cleaned_tree
+
+
 def tree_plus(
-    path_or_paths: Union[str, Tuple[str]], ignore: IgnoreInput = None
+    path_or_paths: Union[str, Tuple[str]],
+    ignore: IgnoreInput = None,
+    globs: IgnoreInput = None,
 ) -> Tree:
     """An enhanced tree util with file component leaves and token/line counts."""
+    debug_print(f"[tree_plus] {path_or_paths=} {ignore=} {globs=}")
     ignore: Ignore = make_ignore(ignore)
+    debug_print(f"[tree_plus] make_ignore made {ignore=}")
+    globs: Ignore = make_globs(globs)
+    debug_print(f"[tree_plus] make_globs made {globs=}")
     paths: Paths = _parse_paths(path_or_paths)
-    tree: Tree = _handle_paths(paths, ignore)
+    debug_print(f"[tree_plus] _parse_paths made {paths=}")
+    tree: Tree = _handle_paths(paths, ignore, globs)
+    debug_print(f"[tree_plus] _handle_paths made {tree=}")
+    tree: Tree = clean_tree(tree, root_node=True)
+    debug_print(f"[tree_plus] clean_tree made {tree=}")
     return tree
 
 
@@ -147,9 +250,9 @@ def flatten_to_str(collection: Collection):
     return flat_list
 
 
-def _handle_paths(paths: Tuple[str], ignore: Ignore) -> Tree:
+def _handle_paths(paths: Tuple[str], ignore: Ignore, globs: Ignore) -> Tree:
     """handle multiple paths to generate a tree with deduplicated intermediate folders"""
-    debug_print(f"_handle_paths {paths=} {ignore=}")
+    debug_print(f"_handle_paths {paths=} {ignore=} {globs=}")
 
     # guard for null input
     if not paths:
@@ -158,8 +261,8 @@ def _handle_paths(paths: Tuple[str], ignore: Ignore) -> Tree:
     # single path case
     if len(paths) == 1:
         path = paths[0]
-        debug_print(f"[_handle_paths] ONLY ONE {path=}")
-        tree, counts = _handle_path(path, ignore, {})
+        debug_print(f"[_handle_paths] ONLY ONE {path=} SO SKIPPING IGNORE HERE!")
+        tree, counts = _handle_path(path, ignore, globs, {})
         debug_print(f"[_handle_paths] {counts=}")
         path_label = os.path.basename(os.path.abspath(path))
         char = None
@@ -173,19 +276,18 @@ def _handle_paths(paths: Tuple[str], ignore: Ignore) -> Tree:
         return tree
 
     # multiple path case
-    root = Tree(
-        f"{root_char} {'Multiple Paths'}",
-        guide_style="bold cyan",
-        highlight=True,
-    )
+    root = subtree(f"{root_char} {'Multiple Paths'}")
     total_count = TokenLineCount(0, 0)
 
     # Create a dictionary of file paths to trees and counts
     paths_to_trees = {"root": (root, total_count)}
 
     for path in paths:
-        path_tree, path_count = _handle_path(path, ignore, paths_to_trees)
+        if should_ignore(path, ignore, globs):
+            continue
+        path_tree, path_count = _handle_path(path, ignore, globs, paths_to_trees)
         total_count = add_tokens_lines(total_count, path_count)
+        debug_print(f"[_handle_paths] add {path_tree.label=} to {root.label=}")
         root.add(path_tree)
 
     root.label = (
@@ -195,15 +297,15 @@ def _handle_paths(paths: Tuple[str], ignore: Ignore) -> Tree:
 
 
 def _handle_path(
-    path: str, ignore: Ignore, paths_to_trees: dict
+    path: str, ignore: Ignore, globs: Ignore, paths_to_trees: dict
 ) -> Tuple[Tree, TokenLineCount]:
     """Handle a single path, generating a tree and calculating tokens/lines."""
-    debug_print(f"_handle_path {path=}  {ignore=}")
+    debug_print(f"_handle_path {path=} {ignore=} {globs=}")
 
     # save the original path, just in case
     og_path = path
-    # Normalize path to resolve '..' and similar relative paths
 
+    # Normalize path to resolve '..' and similar relative paths
     path = os.path.expanduser(path)
     debug_print(f"[_handle_path] 2 {path=}")
     path = os.path.abspath(path)
@@ -211,8 +313,12 @@ def _handle_path(
 
     # Handle glob paths
     if "*" in path:
+        debug_print(f"[_handle_path] GLOB")
+
         try:
             glob_paths = glob.glob(path)
+            debug_print(f"[_handle_path] glob.glob : {glob_paths=}")
+
             # glob_commonpath = os.path.commonpath(glob_paths)
             glob_root_count = TokenLineCount(0, 0)
             glob_root = Tree(
@@ -220,8 +326,13 @@ def _handle_path(
                 guide_style="bold cyan",
             )
             for glob_focus in glob_paths:
+                if should_ignore(glob_focus, ignore, globs):
+                    continue
                 glob_focus_tree, glob_node_count = _handle_path(
-                    glob_focus, ignore, paths_to_trees
+                    glob_focus, ignore, globs, paths_to_trees
+                )
+                debug_print(
+                    f"[_handle_path] add {glob_focus_tree.label=} to {glob_root.label=}"
                 )
                 glob_root.add(glob_focus_tree)
                 glob_root_count = add_tokens_lines(glob_root_count, glob_node_count)
@@ -234,6 +345,7 @@ def _handle_path(
 
     # Handle paths to files:
     elif os.path.isfile(path):
+        debug_print(f"[_handle_path] FILE")
         file_path = path
         if file_path in paths_to_trees:
             return paths_to_trees[file_path]
@@ -252,7 +364,7 @@ def _handle_path(
     # Handle paths to folders:
     else:
         folder_path = path
-        debug_print(f"{path=}")
+        debug_print(f"[_handle_path] FOLDER {folder_path=}")
         if folder_path in paths_to_trees:
             # Already processed, reuse existing tree
             return paths_to_trees[folder_path]
@@ -271,7 +383,17 @@ def _handle_path(
         # Dictionary to map paths to Trees
         paths_to_trees[folder_path] = (root_tree, root_count)
 
+        # this line here causes a keyerror later `dir_tree, dir_count = paths_to_trees[dir_path]``
+        # file_paths = traverse_directory(folder_path, ignore, globs)
+        # back to this way
         file_paths = traverse_directory(folder_path, ignore)
+        debug_print(
+            f"[_handle_path] traverse_directory Ignore-Filtered file paths: {file_paths}"
+        )
+        # crashed
+        # if not any(not should_ignore(fp, ignore, globs) for fp in file_paths):
+        #     # If no files/subdirectories match the criteria, skip this directory
+        #     return None, TokenLineCount(0, 0)
 
         directories = defaultdict(list)
 
@@ -298,7 +420,10 @@ def _handle_path(
                 parent_dir_path = os.path.dirname(part)
                 # NOTE: parent_count unused, is that ok?
                 parent_tree, _parent_count = paths_to_trees[parent_dir_path]
-                dir_tree = parent_tree.add(f"{folder_char} {os.path.basename(part)}")
+                # WARNING: adding trees here, causes empty directories with no matches to show up in the final tree
+                label_prior = f"{folder_char} {os.path.basename(part)}"
+                dir_tree = parent_tree.add(label_prior)  # problem happened here
+                # dir_tree = Tree(label_prior)
                 dir_count = TokenLineCount(n_tokens=0, n_lines=0)
                 paths_to_trees[part] = (dir_tree, dir_count)
 
@@ -314,7 +439,11 @@ def _handle_path(
             for file_name in files:
                 # handle a file with a recursive call
                 file_path = os.path.join(dir_path, file_name)
-                file_tree, file_count = _handle_path(file_path, ignore, paths_to_trees)
+                if should_ignore(file_name, ignore, globs):
+                    continue
+                file_tree, file_count = _handle_path(
+                    file_path, ignore, globs, paths_to_trees
+                )
                 dir_count = add_tokens_lines(dir_count, file_count)
                 dir_tree.add(file_tree)
 

@@ -112,6 +112,25 @@ def test_e2e_multiple_directories():
     assert unify_tree_symbols(result_str) == unify_tree_symbols(EXPECTATION_1)
 
 
+def test_e2e_glob():
+    result = tree_plus("tests/more_languages", globs=("*.*s",))
+    assert isinstance(result, rich.tree.Tree)
+    result_str = tree_to_string(result)
+    print(result_str)
+    assert ".rs" in result_str
+    assert ".ts" in result_str
+    assert ".hs" in result_str
+    assert ".cs" in result_str
+    assert ".exs" in result_str
+    assert ".java" not in result_str
+    assert "group1" not in result_str
+    assert "group2" not in result_str
+    assert "group3" not in result_str
+    assert "group4" in result_str
+    assert "group5" in result_str
+    assert "group_todo" in result_str
+
+
 # Test ignore parameter
 def test_e2e_ignore_parameter_filetype():
     result = tree_plus("tests/more_languages/group1", ignore={"*.kt"})
