@@ -16,6 +16,9 @@ from tree_plus_src.ignore import is_binary
 from tree_plus_src.debug import debug_print
 
 
+LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
+
+
 def extract_groups(match: re.Match) -> dict:
     "filter and debug print non-None match groups"
     numbered_groups = {}
@@ -136,12 +139,18 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_kotlin(contents)
     elif file_extension == ".java":
         components = parse_java(contents)
+    elif file_extension == ".hs":
+        components = parse_hs(contents)
     elif file_extension == ".jl":
         components = parse_julia(contents)
     elif file_extension == ".scala":
         components = parse_scala(contents)
-    elif file_extension == ".lisp":
+    elif file_extension in LISP_EXTENSIONS:
         components = parse_lisp(contents)
+    elif file_extension == ".capnp":
+        components = parse_capnp(contents)
+    elif file_extension == ".proto":
+        components = parse_grpc(contents)
     elif file_extension == ".tf":
         components = parse_tf(contents)
     elif file_extension == ".lua":
@@ -169,6 +178,113 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def parse_hs(contents: str) -> List[str]:
+    components = []
+
+    # Combined regex pattern for Haskell components
+    combined_pattern = re.compile(
+        # Data type declarations
+        r"^data\s+([^\s]+)|"
+        # Function type signatures
+        r"^([\w']+\s*::(?:.|\n)*?)(?=\n\w|\n\n|\Z)",
+        re.MULTILINE,
+    )
+
+    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_hs match_number: {match_number}")
+        groups = extract_groups(match)
+        if groups:
+            component = groups[0].strip()
+            debug_print(component)
+            components.append(component)
+
+    return components
+
+
+def parse_lisp(content: str) -> List[str]:
+    components = []
+
+    # Combined regex pattern for various Lisp components
+    combined_pattern = re.compile(
+        # Common Lisp struct
+        # r"\(defstruct\s+(\w+)|"
+        # Common Lisp function
+        # r"\(defun\s+(\w+)|"
+        # Clojure protocol
+        # r"\(defprotocol\s+(\w+)|"
+        # Clojure record
+        # r"\(defrecord\s+(\w+)|"
+        # defn, means something other than def, clearly
+        # r"\(defn\s+-?\s*(\w+)|"
+        # just "def"
+        # r"\(def\s+-?\s*(\w+)|"
+        # Clojure namespace
+        # Scheme define
+        # r"\(define\s+\((\w+)|"
+        # Macros
+        # r"\(defmacro\s+(\w+)",
+        # namespace
+        r"\(ns\s+([^\s\(\)]+)|"
+        # def(______)?
+        r"( *\(def\w* \(?[\w_-]+)|"
+        # racket has a struct
+        r"\((struct \(?[\w_-]+)",
+        re.DOTALL,
+    )
+
+    for match_number, match in enumerate(combined_pattern.finditer(content)):
+        debug_print(f"parse_lisp match_number: {match_number}")
+        groups = extract_groups(match)
+        if groups:
+            components.append(groups[0].replace("(", ""))
+
+    return components
+
+
+def parse_capnp(contents: str) -> List[str]:
+    lines = contents.split("\n")
+    components = []
+
+    for line in lines:
+        line_stripped = line.strip()
+        leading_spaces = len(line) - len(line.lstrip())
+
+        if (
+            line_stripped.startswith("struct")
+            or line_stripped.startswith("enum")
+            or ":union" in line
+        ):
+            components.append(" " * leading_spaces + line_stripped.rstrip("{ "))
+        elif "@" in line:
+            field_info = " ".join(line_stripped.split()[:3]).rstrip(";")
+            components.append(" " * leading_spaces + field_info)
+
+    return components
+
+
+def parse_grpc(contents: str) -> List[str]:
+    lines = contents.split("\n")
+    components = []
+
+    for line in lines:
+        line_stripped = line.strip()
+        if line_stripped.startswith("syntax"):
+            components.append(line_stripped.rstrip(";"))
+        elif line_stripped.startswith("service") or line_stripped.startswith("message"):
+            components.append(line_stripped.rstrip("{ "))
+        elif line_stripped.startswith("rpc"):
+            components.append("    " + line_stripped.rstrip(" {}"))
+        elif (
+            line_stripped
+            and not line_stripped.startswith("//")
+            and "=" in line_stripped
+        ):
+            field_info = line_stripped.split(";")[0]  # Retain field numbers
+            components.append("    " + field_info)
+
+    return components
 
 
 def parse_openrpc_json(contents: str) -> List[str]:
@@ -1222,24 +1338,24 @@ def parse_kotlin(content: str) -> List[str]:
     return components
 
 
-def parse_lisp(content: str) -> List[str]:
-    components = []
+# def parse_lisp(content: str) -> List[str]:
+#     components = []
 
-    # Find struct declarations
-    struct_pattern = r"\(defstruct\s+(\w+)"
-    struct_matches = re.findall(struct_pattern, content)
+#     # Find struct declarations
+#     struct_pattern = r"\(defstruct\s+(\w+)"
+#     struct_matches = re.findall(struct_pattern, content)
 
-    for struct_match in struct_matches:
-        components.append(f"defstruct {struct_match}")
+#     for struct_match in struct_matches:
+#         components.append(f"defstruct {struct_match}")
 
-    # Find function declarations
-    function_pattern = r"\(defun\s+(\w+)"
-    function_matches = re.findall(function_pattern, content)
+#     # Find function declarations
+#     function_pattern = r"\(defun\s+(\w+)"
+#     function_matches = re.findall(function_pattern, content)
 
-    for function_match in function_matches:
-        components.append(f"defun {function_match}")
+#     for function_match in function_matches:
+#         components.append(f"defun {function_match}")
 
-    return components
+#     return components
 
 
 def parse_lua(content: str) -> List[str]:

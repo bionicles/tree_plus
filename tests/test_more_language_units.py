@@ -80,13 +80,6 @@ def create_sqlite_test_db(
             ],
         ),
         (
-            "tests/more_languages/group1/LispTest.lisp",
-            [
-                "defstruct person",
-                "defun greet",
-            ],
-        ),
-        (
             "tests/more_languages/group1/LuaTest.lua",
             [
                 "function HelloWorld.new",
@@ -503,6 +496,52 @@ void printVector(const std :: vector<T>& vec)""",
                 "id: 1",
             ],
         ),
+        (
+            "tests/more_languages/group3/test.capnp",
+            [
+                "struct Employee",
+                "  id @0 :Int32",
+                "  name @1 :Text",
+                "  role @2 :Text",
+                "  skills @3 :List(Skill)",
+                "  struct Skill",
+                "    name @0 :Text",
+                "    level @1 :Level",
+                "    enum Level",
+                "      beginner @0",
+                "      intermediate @1",
+                "      expert @2",
+                "  status :union",
+                "    active @4 :Void",
+                "    onLeave @5 :Void",
+                "    retired @6 :Void",
+                "struct Company",
+                "  employees @0 :List(Employee)",
+            ],
+        ),
+        (
+            "tests/more_languages/group3/test.proto",
+            [
+                'syntax = "proto3"',
+                "service EmployeeService",
+                "    rpc GetEmployee(EmployeeId) returns (EmployeeInfo)",
+                "    rpc AddEmployee(EmployeeData) returns (EmployeeInfo)",
+                "    rpc UpdateEmployee(EmployeeUpdate) returns (EmployeeInfo)",
+                "message EmployeeId",
+                "    int32 id = 1",
+                "message EmployeeInfo",
+                "    int32 id = 1",
+                "    string name = 2",
+                "    string role = 3",
+                "message EmployeeData",
+                "    string name = 1",
+                "    string role = 2",
+                "message EmployeeUpdate",
+                "    int32 id = 1",
+                "    string name = 2",
+                "    string role = 3",
+            ],
+        ),
     ],
 )
 def test_more_languages_group3(file: str, expected: List[str]):
@@ -576,6 +615,25 @@ where
                 'output "instance_public_ip"',
                 "locals",
                 'module "vpc"',
+            ],
+        ),
+        (
+            "tests/more_languages/group4/haskell_test.hs",
+            [
+                "data Person",
+                "greet :: Person -> String",
+                """resolveVariables ::
+  forall m fragments.
+  (MonadError QErr m, Traversable fragments) =>
+  Options.BackwardsCompatibleNullInNonNullableVariables ->
+  [G.VariableDefinition] ->
+  GH.VariableValues ->
+  [G.Directive G.Name] ->
+  G.SelectionSet fragments G.Name ->
+  m
+    ( [G.Directive Variable],
+      G.SelectionSet fragments Variable
+    )""",
             ],
         ),
     ],
@@ -878,6 +936,59 @@ def test_more_languages_group5(
     assert result == expected
 
 
+@pytest.mark.parametrize(
+    "file,expected",
+    [
+        (
+            "tests/more_languages/group_lisp/LispTest.lisp",
+            [
+                "defstruct person",
+                "defun greet",
+            ],
+        ),
+        (
+            "tests/more_languages/group_lisp/clojure_test.clj",
+            [
+                "defprotocol P",
+                "defrecord Person",
+                "defn -main",
+                "ns bion.likes_trees",
+                "def repo-url",
+                "defn config",
+                "defmacro with-os",
+                "defrecord SetFullElement",
+            ],
+        ),
+        (
+            "tests/more_languages/group_lisp/test_scheme.scm",
+            [
+                "define topological-sort",
+                "  define table",
+                "  define queue",
+                "  define result",
+                "  define set-up",
+                "  define traverse",
+            ],
+        ),
+        (
+            "tests/more_languages/group_lisp/racket_struct.rkt",
+            [
+                "struct point",
+            ],
+        ),
+    ],
+)
+def test_more_languages_group_lisp(
+    file: str,
+    expected: List[str],
+):
+    print(f"{file=}")
+    result = parse_file(file)
+    print(f"{result=}")
+    print(f"{expected=}")
+    assert result == expected
+
+
 # TODO:
 # @pytest.mark.parametrize(
 #     "file,expected",
@@ -931,10 +1042,7 @@ def test_more_languages_group5(
 #     ["type Person -> member this.SayHello", "let person"],
 # ),
 
-# (
-#     "tests/more_languages/group4/haskell_test.hs",
-#     ["data Person", "greet :: Person -> String"],
-# ),
+
 # (
 #     "tests/more_languages/group4/mathematica_test.nb",
 #     [

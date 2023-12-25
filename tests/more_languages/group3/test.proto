@@ -1,0 +1,34 @@
+# simplified.proto
+syntax = "proto3";
+
+package simplified;
+
+// Interface exported by the server.
+service EmployeeService {
+  rpc GetEmployee(EmployeeId) returns (EmployeeInfo) {}
+
+  rpc AddEmployee(EmployeeData) returns (EmployeeInfo) {}
+
+  rpc UpdateEmployee(EmployeeUpdate) returns (EmployeeInfo) {}
+}
+
+message EmployeeId {
+  int32 id = 1;
+}
+
+message EmployeeInfo {
+  int32 id = 1;
+  string name = 2;
+  string role = 3;
+}
+
+message EmployeeData {
+  string name = 1;
+  string role = 2;
+}
+
+message EmployeeUpdate {
+  int32 id = 1;
+  string name = 2;
+  string role = 3;
+}
