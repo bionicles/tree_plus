@@ -1,5 +1,7 @@
 # Tree Plus
 
+**A `tree` util enhanced with tokens, lines, and components.**
+
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-brightgreen)](https://choosealicense.com/licenses/)
 [![Docs](https://img.shields.io/badge/docs-README-blue)](https://github.com/bionicles/tree_plus/blob/main/README.md)
 [![Linux & MacOS](https://github.com/bionicles/tree_plus/actions/workflows/unix.yml/badge.svg)](https://github.com/bionicles/tree_plus/actions/workflows/unix.yml)
@@ -19,19 +21,21 @@
 ![MacOS](https://img.shields.io/badge/Supports-MacOS-orange)
 ![Windows](https://img.shields.io/badge/Supports-Windows-orange)
 
+**Support Free, Open-Source Software:**
 
-A `tree` util enhanced with tokens, lines, and components.
+[![Support Tree Plus](https://img.shields.io/badge/Support%20Tree%20Plus-8A2BE2)](https://www.buymeacoffee.com/bionicles)
+
 
 `pip install -U tree_plus`
 
 ## Example Output:
 - [ ] Demonstrate Parsed Checkboxes
 ```sh
+(py310) [2023-12-24T20:38:59-0500]
 ~/hax/tree_plus (main) $
-> make t1
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (38289 tokens, 4157 lines)
+📁 tree_plus (40413 tokens, 4382 lines)
 ┣━━ 📁 .github
 ┃   ┗━━ 📁 workflows (625 tokens, 78 lines)
 ┃       ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
@@ -44,14 +48,14 @@ paths=('.',)
 ┃       ┃   ┣━━     - Run generic tests
 ┃       ┃   ┗━━     - Run specific test
 ┃       ┗━━ 📄 unix.yml (302 tokens, 38 lines)
-┃           ┣━━ Ubuntu & MacOS
+┃           ┣━━ Linux & MacOS
 ┃           ┣━━   job: build
 ┃           ┣━━     - Set up Python ${{ matrix.python-version }}
 ┃           ┣━━     - Install tree_plus
 ┃           ┣━━     - Create .env file
 ┃           ┣━━     - Run generic tests
 ┃           ┗━━     - Run specific test
-┣━━ 📁 tree_plus_src (13306 tokens, 1668 lines)
+┣━━ 📁 tree_plus_src (14132 tokens, 1766 lines)
 ┃   ┣━━ 📁 scripts (6661 tokens, 861 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -79,8 +83,11 @@ paths=('.',)
 ┃   ┃   ┣━━ def is_binary_string
 ┃   ┃   ┣━━ def is_binary
 ┃   ┃   ┗━━ def should_ignore
-┃   ┣━━ 📄 parse_file.py (11250 tokens, 1364 lines)
+┃   ┣━━ 📄 parse_file.py (12076 tokens, 1462 lines)
+┃   ┃   ┣━━ TODO (Line 229): format hierarchical numbered outline
 ┃   ┃   ┣━━ def parse_file
+┃   ┃   ┣━━ def parse_lean
+┃   ┃   ┣━━ def parse_tex
 ┃   ┃   ┣━━ def parse_rb
 ┃   ┃   ┣━━ def remove_c_comments
 ┃   ┃   ┣━━ def parse_cpp
@@ -137,18 +144,16 @@ paths=('.',)
 ┃       ┗━━ def traverse_directory
 ┣━━ 📄 .gitignore (124 tokens, 38 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (327 tokens, 56 lines)
+┣━━ 📄 Makefile (298 tokens, 56 lines)
 ┃   ┣━━ SHELL := /bin/bash
+┃   ┣━━ cli
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
-┃   ┣━━ debug_command: cli test
-┃   ┣━━ cli
-┃   ┣━━ test_s: test_tp_dotdot_s
-┃   ┣━━ test_tp_dotdot_s: test_tp_dotdot
+┃   ┣━━ debug_command: test test_cli
 ┃   ┣━━ test: test_tp_dotdot
-┃   ┣━━ test_dotenv
 ┃   ┣━━ test_tp_dotdot
-┃   ┣━━ move_powershell_profile
+┃   ┣━━ test_cli: cli
+┃   ┣━━ test_dotenv
 ┃   ┣━━ build: install-build clean-dist
 ┃   ┣━━ install-build
 ┃   ┣━━ test-publish: install-twine
@@ -157,11 +162,12 @@ paths=('.',)
 ┃   ┣━━ clean-dist
 ┃   ┣━━ t1
 ┃   ┣━━ t2
-┃   ┗━━ t3
+┃   ┣━━ t3
+┃   ┗━━ t4
 ┣━━ 📄 nodemon.json (97 tokens, 17 lines)
 ┣━━ 📄 pyproject.toml (307 tokens, 39 lines)
 ┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (11225 tokens, 871 lines)
+┣━━ 📄 README.md (12552 tokens, 998 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -170,10 +176,12 @@ paths=('.',)
 ┃   ┣━━ ### Install Tree Plus
 ┃   ┣━━ #### PyPI
 ┃   ┣━━ #### Local Hackable Install
-┃   ┣━━ ### Usage
+┃   ┣━━ ### Alias Usage
 ┃   ┣━━ ## Moar Languages
 ┃   ┣━━ ## Got Globs?
-┃   ┗━━ ## Support Free, Open-Source Software:
+┃   ┣━━ ## Languages Todo:
+┃   ┣━━ ## Oppose Unfair Business Practices
+┃   ┗━━ ## License
 ┗━━ 📄 tree_plus_cli.py (3483 tokens, 445 lines)
     ┣━━ NOTE (Line 405): parent_count unused, is that ok?
     ┣━━ def tree_to_string
@@ -191,6 +199,34 @@ paths=('.',)
 ```
 - [x] Demonstrate Parsed Checkboxes
 
+Here's how `tree_plus --help` looks (`-h` and `-H` both  also work) 
+```sh
+~/hax/tree_plus (main) $
+> tp -h
+Usage: tree_plus [OPTIONS] [PATHS]...
+
+  A `tree` util enhanced with tokens, lines, and components.
+
+  Wrap glob patterns in quotes: -i "*.py" / -g "*.rs"
+
+  Examples:
+
+          Show tree_plus_src and tests simultaneously
+              > tree_plus tree_plus_src tests
+
+          Show files matching "*.*s" tests/more_languages
+              > tree_plus -g "*.*s" tests/more_languages
+
+          Ignore Java files
+              > tree_plus tests -i "*.java"
+
+Options:
+  -i, -I, --ignore TEXT  Patterns to ignore, in quotes: -i "*.java"
+  -g, -G, --glob TEXT    Patterns to find, in quotes: -g "*.rs"
+  -v, -V, --version      Print the version and exit.
+  -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
+  -h, -H, --help         Show this message and exit.
+```
 
 ## Start Quick!
 
@@ -208,7 +244,6 @@ Ensure you have the following tools installed:
 ```bash
 pip install tree_plus
 ```
-
 
 #### Local Hackable Install
 
@@ -230,7 +265,10 @@ pip install -e .[dev]
 Now, you can use the `tree_plus` command.
 
 3. Add slick aliases like `tp` to your RC file
+
 Typical RC_FILE values `~/.bash_profile`, `~/.bashrc`, or `~/.zshrc`
+
+Use our **idempotent aliasing script**: [alias_tree_plus.sh](https://github.com/bionicles/tree_plus/blob/main/tree_plus_src/scripts/alias_tree_plus.sh)
 ```bash
 RC_FILE=~/.bash_profile source alias_tree_plus.sh
 ```
@@ -241,30 +279,47 @@ RC_FILE=~/.bashrc source alias_tree_plus.sh
 RC_FILE=~/.zshrc source alias_tree_plus.sh
 ```
 
-Soon, you'll be able to simply run 'pip install tree_plus'. Stay tuned!
+### Alias Usage
 
-### Usage
+Run `tree_plus` with a shorter alias:
 
-```bash
-# Use tree_plus
+```sh
 tp
 ```
 
-If you make changes to `tree_plus` and need to reinstall it quickly, use the `tpcli` alias:
+Reinstall `tree_plus` quickly:
 
-```bash
-# Reinstall tree_plus quickly after making changes
+```sh
 tpcli
+```
+
+`cd` (change directory) to the `TREE_PLUS_PATH`:
+
+```sh
+cdtp
+```
+
+Run "debug mode" (test runner)
+
+Ensure your rig has a global install of [nodemon](https://www.npmjs.com/package/nodemon):
+```sh
+npm install -g nodemon
+```
+
+Watch for changes to auto re-test `tree_plus`:
+```sh
+make debug
 ```
 
 ## Moar Languages
 
 ```sh
+(py310) [2023-12-24T19:58:07-0500]
 ~/hax/tree_plus (main) $
 tree_plus -i group_todo tests/more_languages
 paths=('tests/more_languages',)
 DEBUG_TREE_PLUS=None
-📁 more_languages (16111 tokens, 2377 lines)
+📁 more_languages (17960 tokens, 2547 lines)
 ┣━━ 📁 group1 (402 tokens, 88 lines)
 ┃   ┣━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO
@@ -345,7 +400,7 @@ DEBUG_TREE_PLUS=None
 ┃       ┣━━ object HelloWorld -> def greet(person: Person): Unit
 ┃       ┣━━ object HelloWorld -> def main(args: Array[String]): Unit
 ┃       ┗━━ def sumOfSquaresShort(x: Int, y: Int): Int
-┣━━ 📁 group3 (2619 tokens, 455 lines)
+┣━━ 📁 group3 (4468 tokens, 625 lines)
 ┃   ┣━━ 📄 bash_test.sh (154 tokens, 23 lines)
 ┃   ┃   ┣━━ echo_hello_world()
 ┃   ┃   ┣━━ function fun_echo_hello_world()
@@ -399,6 +454,33 @@ DEBUG_TREE_PLUS=None
 ┃   ┃   ┃   ) (resultType, error)
 ┃   ┃   ┣━━ type resultType struct
 ┃   ┃   ┗━━ func main()
+┃   ┣━━ 📄 hallucination.tex (1465 tokens, 127 lines)
+┃   ┃   ┣━━ Harnessing the Master Algorithm: Strategies for AI Large Language Models to Mitigate
+┃   ┃   ┃   Hallucinations
+┃   ┃   ┣━━ Hallucinated Pedro Domingos et al.
+┃   ┃   ┣━━ Christmas Eve 2023
+┃   ┃   ┣━━ 1 Introduction
+┃   ┃   ┣━━ 2 Representation in LLMs
+┃   ┃   ┣━━   2.1 Current Representational Models
+┃   ┃   ┣━━   2.2 Incorporating Cognitive Structures
+┃   ┃   ┣━━   2.3 Conceptual Diagrams of Advanced Representational Models
+┃   ┃   ┣━━ 3 Evaluation Strategies
+┃   ┃   ┣━━   3.1 Existing Evaluation Metrics for LLMs
+┃   ┃   ┣━━   3.2 Integrating Contextual and Ethical Considerations
+┃   ┃   ┣━━   3.3 Case Studies: Evaluation in Practice
+┃   ┃   ┣━━ 4 Optimization Techniques
+┃   ┃   ┣━━   4.1 Continuous Learning Models
+┃   ┃   ┣━━   4.2 Adaptive Algorithms for Real-time Adjustments
+┃   ┃   ┣━━   4.3 Performance Metrics Pre- and Post-Optimization
+┃   ┃   ┣━━ 5 Interdisciplinary Insights
+┃   ┃   ┣━━   5.1 Cognitive Science and AI: A Symbiotic Relationship
+┃   ┃   ┣━━   5.2 Learning from Human Cognitive Processes
+┃   ┃   ┣━━ 6 Challenges and Future Directions
+┃   ┃   ┣━━   6.1 Addressing Current Limitations
+┃   ┃   ┣━━   6.2 The Road Ahead: Ethical and Practical Considerations
+┃   ┃   ┣━━ 7 Conclusion
+┃   ┃   ┣━━   7.1 Summarizing Key Findings
+┃   ┃   ┗━━   7.2 The Next Steps in AI Development
 ┃   ┣━━ 📄 ruby_test.rb (110 tokens, 28 lines)
 ┃   ┃   ┣━━ module Greeter
 ┃   ┃   ┣━━   def self.say_hello
@@ -408,25 +490,37 @@ DEBUG_TREE_PLUS=None
 ┃   ┃   ┣━━   def self.bar
 ┃   ┃   ┣━━   def self.bar=(value)
 ┃   ┃   ┗━━ class Doctor < Human
-┃   ┗━━ 📄 swift_test.swift (449 tokens, 99 lines)
-┃       ┣━━ class Person
-┃       ┣━━ func globalGreet()
-┃       ┣━━ struct Point
-┃       ┣━━ protocol Animal
-┃       ┣━━ struct Dog: Animal
-┃       ┣━━ class Cat: Animal
-┃       ┣━━ enum CarType
-┃       ┣━━ func getPreferredCarType() -> CarType
-┃       ┣━━ enum CarType: UInt8
-┃       ┣━━ enum class CarType: UInt8
-┃       ┣━━ func myFunction(fname: String, age: Int)
-┃       ┗━━ func myFunctionWithMultipleParameters(
-┃               fname: String,
-┃               lname: String,
-┃               age: Int,
-┃               address: String,
-┃               phoneNumber: String
-┃           )
+┃   ┣━━ 📄 swift_test.swift (449 tokens, 99 lines)
+┃   ┃   ┣━━ class Person
+┃   ┃   ┣━━ func globalGreet()
+┃   ┃   ┣━━ struct Point
+┃   ┃   ┣━━ protocol Animal
+┃   ┃   ┣━━ struct Dog: Animal
+┃   ┃   ┣━━ class Cat: Animal
+┃   ┃   ┣━━ enum CarType
+┃   ┃   ┣━━ func getPreferredCarType() -> CarType
+┃   ┃   ┣━━ enum CarType: UInt8
+┃   ┃   ┣━━ enum class CarType: UInt8
+┃   ┃   ┣━━ func myFunction(fname: String, age: Int)
+┃   ┃   ┗━━ func myFunctionWithMultipleParameters(
+┃   ┃           fname: String,
+┃   ┃           lname: String,
+┃   ┃           age: Int,
+┃   ┃           address: String,
+┃   ┃           phoneNumber: String
+┃   ┃       )
+┃   ┗━━ 📄 test.lean (384 tokens, 43 lines)
+┃       ┣━━ # Advanced Topics in Group Theory
+┃       ┣━━ section GroupDynamics
+┃       ┣━━ lemma group_stability (G : Type*) [Group G] (H : Subgroup G)
+┃       ┣━━ theorem subgroup_closure {G : Type*} [Group G] (S : Set G)
+┃       ┣━━ axiom group_homomorphism_preservation {G H : Type*} [Group G] [Group H] (f : G → H)
+┃       ┣━━ end GroupDynamics
+┃       ┣━━ section ConstructiveApproach
+┃       ┣━━ lemma finite_group_order (G : Type*) [Group G] [Fintype G]
+┃       ┣━━ lemma complex_lemma {X Y : Type*} [SomeClass X] [AnotherClass Y]
+┃       ┃     (f : X → Y) (g : Y → X)
+┃       ┗━━ end ConstructiveApproach
 ┣━━ 📁 group4 (944 tokens, 166 lines)
 ┃   ┣━━ 📄 matlab_test.m (45 tokens, 12 lines)
 ┃   ┃   ┣━━ classdef HelloWorld -> function greet
@@ -705,10 +799,11 @@ DEBUG_TREE_PLUS=None
 ## Got Globs?
 
 ```sh
+(py310) [2023-12-24T19:59:31-0500]
 ~/hax/tree_plus (main) $
-tree_plus -g "*.*s" tests/more_languages
+tree_plus -g "*.*s" -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-📁 more_languages (9866 tokens, 1399 lines)
+📁 more_languages (9017 tokens, 1245 lines)
 ┣━━ 📁 group4 (611 tokens, 115 lines)
 ┃   ┗━━ 📄 rust_test.rs (611 tokens, 115 lines)
 ┃       ┣━━ enum Days
@@ -753,125 +848,151 @@ paths=('tests/more_languages',)
 ┃               E: Extractor<S1, S2>,
 ┃               T: Transformer<S2, S3>,
 ┃               L: Loader<S3, S4>,
-┣━━ 📁 group5 (8406 tokens, 1130 lines)
-┃   ┣━━ 📄 app-routing.module.ts (242 tokens, 28 lines)
-┃   ┃   ┣━━ const routes: Routes = [
-┃   ┃   ┃       { path: '', redirectTo: 'login', pathMatch: 'full' },
-┃   ┃   ┃       { path: '*', redirectTo: 'login' },
-┃   ┃   ┃       { path: 'home', component: HomeComponent },
-┃   ┃   ┃       { path: 'login', component: LoginComponent },
-┃   ┃   ┃       { path: 'register', component: RegisterComponent },
-┃   ┃   ┃       { path: 'events', component: EventsComponent },
-┃   ┃   ┃       { path: 'invites', component: InvitesComponent },
-┃   ┃   ┃       { path: 'rewards', component: RewardsComponent },
-┃   ┃   ┃       { path: 'profile', component: ProfileComponent },
-┃   ┃   ┃   ];
-┃   ┃   ┗━━ class AppRoutingModule
-┃   ┣━━ 📄 app.component.spec.ts (307 tokens, 48 lines)
-┃   ┃   ┣━━ describe 'AppComponent'
-┃   ┃   ┣━━     it should create the app
-┃   ┃   ┣━━     it should welcome the user
-┃   ┃   ┣━━     it should welcome 'Jimbo'
-┃   ┃   ┗━━     it should request login if not logged in
-┃   ┣━━ 📄 app.component.ts (243 tokens, 45 lines)
-┃   ┃   ┣━━ class AppComponent
-┃   ┃   ┣━━   checkSession
-┃   ┃   ┣━━   async goToEvent
-┃   ┃   ┗━━   valInvitedBy
-┃   ┣━━ 📄 app.module.ts (269 tokens, 43 lines)
-┃   ┃   ┣━━ @NgModule({
-┃   ┃   ┃       declarations: [
-┃   ┃   ┃           AppComponent,
-┃   ┃   ┃           HomeComponent,
-┃   ┃   ┃           LoginComponent,
-┃   ┃   ┃           RegisterComponent,
-┃   ┃   ┃           EventsComponent,
-┃   ┃   ┃           InvitesComponent,
-┃   ┃   ┃           RewardsComponent,
-┃   ┃   ┃           ProfileComponent
-┃   ┃   ┗━━ class AppModule
-┃   ┣━━ 📄 environment.test.ts (193 tokens, 19 lines)
-┃   ┃   ┣━━ environment:
-┃   ┃   ┣━━    production
-┃   ┃   ┣━━    cognitoUserPoolId
-┃   ┃   ┣━━    cognitoAppClientId
-┃   ┃   ┗━━    apiurl
-┃   ┣━━ 📄 rust_todo_test.rs (109 tokens, 27 lines)
-┃   ┃   ┣━━ TODO (Line 23): This todo tests parse_todo
-┃   ┃   ┣━━ enum Color
-┃   ┃   ┣━━ struct Point
-┃   ┃   ┣━━ trait Drawable
-┃   ┃   ┣━━ fn draw(&self)
-┃   ┃   ┣━━ impl Drawable for Point
-┃   ┃   ┣━━ fn draw(&self)
-┃   ┃   ┗━━ fn main()
-┃   ┣━━ 📄 standard-app-routing.module.ts (93 tokens, 17 lines)
-┃   ┃   ┗━━ const routes: Routes = [
-┃   ┃         { path: '', component: HomeComponent },
-┃   ┃         {
-┃   ┃           path: 'heroes',
-┃   ┃           component: HeroesListComponent,
-┃   ┃           children: [
-┃   ┃             { path: ':id', component: HeroDetailComponent },
-┃   ┃             { path: 'new', component: HeroFormComponent },
-┃   ┃           ],
-┃   ┃         },
-┃   ┃         { path: '**', component: PageNotFoundComponent },
-┃   ┃       ];
-┃   ┗━━ 📄 tickets.component.ts (6950 tokens, 903 lines)
-┃       ┣━━ interface EnrichedTicket extends Ticket
-┃       ┣━━ interface SpinConfig
-┃       ┣━━ interface RotationState
-┃       ┣━━ interface SpeakInput
-┃       ┣━━ const formatSpeakInput: =>
-┃       ┣━━ function hourToSpeech
-┃       ┣━━ class TicketsComponent implements AfterViewInit
-┃       ┣━━   speak
-┃       ┣━━   speakEvent
-┃       ┣━━   formatEvent
-┃       ┣━━   speakVenue
-┃       ┣━━   formatDate
-┃       ┣━━   formatDateForSpeech
-┃       ┣━━   async spinQRCode
-┃       ┣━━   ngAfterViewInit
-┃       ┣━━   ngOnDestroy
-┃       ┣━━   toggleColumn
-┃       ┣━━   adjustColumns
-┃       ┣━━   onResize
-┃       ┣━━   async ngOnInit
-┃       ┣━━   async loadTickets
-┃       ┣━━   onDateRangeChange
-┃       ┣━━   applyFilter
-┃       ┣━━   formatDateForComparison
-┃       ┣━━   onFilterChange
-┃       ┣━━   onLatitudeChange
-┃       ┣━━   onLongitudeChange
-┃       ┣━━   onRadiusChange
-┃       ┣━━   sortData
-┃       ┣━━   onRowClick
-┃       ┣━━ function isDate
-┃       ┣━━ function isNonNullNumber
-┃       ┣━━ function hasLocation
-┃       ┣━━ const create_faker_ticket: async =>
-┃       ┣━━ function compare
-┃       ┣━━ function compare_dates
-┃       ┣━━ async function mockMoreTickets
-┃       ┣━━ const mockTickets: async =>
-┃       ┗━━ const renderQRCode: async =>
-┗━━ 📁 group_todo (849 tokens, 154 lines)
-    ┣━━ 📄 csharp_test.cs (397 tokens, 72 lines)
-    ┣━━ 📄 elixir_test.exs (49 tokens, 10 lines)
-    ┣━━ 📄 fsharp_test.fs (44 tokens, 6 lines)
-    ┣━━ 📄 haskell_test.hs (34 tokens, 5 lines)
-    ┣━━ 📄 sas_test.sas (104 tokens, 22 lines)
-    ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
-    ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
+┗━━ 📁 group5 (8406 tokens, 1130 lines)
+    ┣━━ 📄 app-routing.module.ts (242 tokens, 28 lines)
+    ┃   ┣━━ const routes: Routes = [
+    ┃   ┃       { path: '', redirectTo: 'login', pathMatch: 'full' },
+    ┃   ┃       { path: '*', redirectTo: 'login' },
+    ┃   ┃       { path: 'home', component: HomeComponent },
+    ┃   ┃       { path: 'login', component: LoginComponent },
+    ┃   ┃       { path: 'register', component: RegisterComponent },
+    ┃   ┃       { path: 'events', component: EventsComponent },
+    ┃   ┃       { path: 'invites', component: InvitesComponent },
+    ┃   ┃       { path: 'rewards', component: RewardsComponent },
+    ┃   ┃       { path: 'profile', component: ProfileComponent },
+    ┃   ┃   ];
+    ┃   ┗━━ class AppRoutingModule
+    ┣━━ 📄 app.component.spec.ts (307 tokens, 48 lines)
+    ┃   ┣━━ describe 'AppComponent'
+    ┃   ┣━━     it should create the app
+    ┃   ┣━━     it should welcome the user
+    ┃   ┣━━     it should welcome 'Jimbo'
+    ┃   ┗━━     it should request login if not logged in
+    ┣━━ 📄 app.component.ts (243 tokens, 45 lines)
+    ┃   ┣━━ class AppComponent
+    ┃   ┣━━   checkSession
+    ┃   ┣━━   async goToEvent
+    ┃   ┗━━   valInvitedBy
+    ┣━━ 📄 app.module.ts (269 tokens, 43 lines)
+    ┃   ┣━━ @NgModule({
+    ┃   ┃       declarations: [
+    ┃   ┃           AppComponent,
+    ┃   ┃           HomeComponent,
+    ┃   ┃           LoginComponent,
+    ┃   ┃           RegisterComponent,
+    ┃   ┃           EventsComponent,
+    ┃   ┃           InvitesComponent,
+    ┃   ┃           RewardsComponent,
+    ┃   ┃           ProfileComponent
+    ┃   ┗━━ class AppModule
+    ┣━━ 📄 environment.test.ts (193 tokens, 19 lines)
+    ┃   ┣━━ environment:
+    ┃   ┣━━    production
+    ┃   ┣━━    cognitoUserPoolId
+    ┃   ┣━━    cognitoAppClientId
+    ┃   ┗━━    apiurl
+    ┣━━ 📄 rust_todo_test.rs (109 tokens, 27 lines)
+    ┃   ┣━━ TODO (Line 23): This todo tests parse_todo
+    ┃   ┣━━ enum Color
+    ┃   ┣━━ struct Point
+    ┃   ┣━━ trait Drawable
+    ┃   ┣━━ fn draw(&self)
+    ┃   ┣━━ impl Drawable for Point
+    ┃   ┣━━ fn draw(&self)
+    ┃   ┗━━ fn main()
+    ┣━━ 📄 standard-app-routing.module.ts (93 tokens, 17 lines)
+    ┃   ┗━━ const routes: Routes = [
+    ┃         { path: '', component: HomeComponent },
+    ┃         {
+    ┃           path: 'heroes',
+    ┃           component: HeroesListComponent,
+    ┃           children: [
+    ┃             { path: ':id', component: HeroDetailComponent },
+    ┃             { path: 'new', component: HeroFormComponent },
+    ┃           ],
+    ┃         },
+    ┃         { path: '**', component: PageNotFoundComponent },
+    ┃       ];
+    ┗━━ 📄 tickets.component.ts (6950 tokens, 903 lines)
+        ┣━━ interface EnrichedTicket extends Ticket
+        ┣━━ interface SpinConfig
+        ┣━━ interface RotationState
+        ┣━━ interface SpeakInput
+        ┣━━ const formatSpeakInput: =>
+        ┣━━ function hourToSpeech
+        ┣━━ class TicketsComponent implements AfterViewInit
+        ┣━━   speak
+        ┣━━   speakEvent
+        ┣━━   formatEvent
+        ┣━━   speakVenue
+        ┣━━   formatDate
+        ┣━━   formatDateForSpeech
+        ┣━━   async spinQRCode
+        ┣━━   ngAfterViewInit
+        ┣━━   ngOnDestroy
+        ┣━━   toggleColumn
+        ┣━━   adjustColumns
+        ┣━━   onResize
+        ┣━━   async ngOnInit
+        ┣━━   async loadTickets
+        ┣━━   onDateRangeChange
+        ┣━━   applyFilter
+        ┣━━   formatDateForComparison
+        ┣━━   onFilterChange
+        ┣━━   onLatitudeChange
+        ┣━━   onLongitudeChange
+        ┣━━   onRadiusChange
+        ┣━━   sortData
+        ┣━━   onRowClick
+        ┣━━ function isDate
+        ┣━━ function isNonNullNumber
+        ┣━━ function hasLocation
+        ┣━━ const create_faker_ticket: async =>
+        ┣━━ function compare
+        ┣━━ function compare_dates
+        ┣━━ async function mockMoreTickets
+        ┣━━ const mockTickets: async =>
+        ┗━━ const renderQRCode: async =>
 ```
 
-## Support Free, Open-Source Software:
+## Languages Todo:
+
+Help me **add to** and **priorize** this list of languages to support!
+
+- [Open a `tree_plus` GitHub Issue](https://github.com/bionicles/tree_plus/issues/new), or
+- [Contact Bion on X](https://twitter.com/flesheatingemu)
+
+```sh
+(py310) [2023-12-24T20:00:51-0500]
+~/hax/tree_plus (main) $
+tree_plus tests/more_languages/group_todo
+paths=('tests/more_languages/group_todo',)
+📁 group_todo (1549 tokens, 284 lines)
+┣━━ 📄 clojure_test.clj (59 tokens, 10 lines)
+┣━━ 📄 crystal_test.cr (56 tokens, 15 lines)
+┣━━ 📄 csharp_test.cs (397 tokens, 72 lines)
+┣━━ 📄 dart_test.dart (106 tokens, 24 lines)
+┣━━ 📄 elixir_test.exs (49 tokens, 10 lines)
+┣━━ 📄 erl_test.erl (60 tokens, 9 lines)
+┣━━ 📄 fortran_test.f90 (114 tokens, 21 lines)
+┣━━ 📄 fsharp_test.fs (44 tokens, 6 lines)
+┣━━ 📄 haskell_test.hs (34 tokens, 5 lines)
+┣━━ 📄 mathematica_test.nb (132 tokens, 21 lines)
+┣━━ 📄 nodemon.json (120 tokens, 21 lines)
+┣━━ 📄 RTest.R (53 tokens, 9 lines)
+┣━━ 📄 sas_test.sas (104 tokens, 22 lines)
+┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
+┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
+```
+
+## Oppose Unfair Business Practices
 
 Please consider contacting the authorities to report the issue described in this document:
 
 [California OpenAI Complaint - Customer Noncompete Clause](https://www.tinyurl.com/cali-openai-complaint)
 
-<a href="https://www.buymeacoffee.com/bionicles" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+_Remember_: **Your Voice Matters!**
+
+## License
+
+MIT or Apache 2.0, at your option.

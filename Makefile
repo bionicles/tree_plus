@@ -22,13 +22,8 @@ test_tp_dotdot:
 test_cli: cli
 	pytest tests/ -k "cli" -vv
 
-
 test_dotenv:
 	pytest tests/ -k "dotenv"
-
-
-move_powershell_profile:
-	cp mnt/c/Users/$(WIN_USERNAME)/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1 ./Microsoft.PowerShell_profile.ps1
 
 build: install-build clean-dist
 	python -m build
@@ -55,4 +50,7 @@ t2:
 	tree_plus -i group_todo tests/more_languages
 
 t3:
-	tree_plus -g "*.*s" tests/more_languages
+	tree_plus -g "*.*s" -i group_todo tests/more_languages
+
+t4:
+	tree_plus tests/more_languages/group_todo
