@@ -120,6 +120,8 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_requirements_txt(contents)
         else:
             components = parse_txt(contents)
+    elif file_extension == ".graphql":
+        components = parse_graphql(contents)
     elif file_extension == ".tex":
         components = parse_tex(contents)
     elif file_extension == ".lean":
@@ -163,6 +165,19 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def parse_graphql(contents: str) -> List[str]:
+    components = []
+    for line in contents.splitlines():
+        line = line.strip()
+        if line == "}":  # Skip lines that only contain a closing brace
+            continue
+        if line.startswith("type") or line.startswith("enum"):
+            components.append(line.rstrip(" {"))  # Remove trailing '{'
+        elif line and not line.startswith("#"):
+            components.append("    " + line)
+    return components
 
 
 def format_dependency(name, details):
