@@ -125,7 +125,6 @@ def test_e2e_glob():
     assert ".java" not in result_str
     assert "group1" not in result_str
     assert "group2" not in result_str
-    assert "group3" not in result_str
     assert "group4" in result_str
     assert "group5" in result_str
     assert "group_todo" in result_str

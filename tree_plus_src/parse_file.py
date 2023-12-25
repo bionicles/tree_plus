@@ -14,6 +14,17 @@ from tree_plus_src.ignore import is_binary
 from tree_plus_src.debug import debug_print
 
 
+def extract_groups(match: re.Match) -> dict:
+    "filter and debug print non-None match groups"
+    numbered_groups = {}
+    for i in range(len(match.groups())):
+        group = match.group(i)
+        if group:
+            numbered_groups[i] = group
+    debug_print(numbered_groups)
+    return numbered_groups
+
+
 def parse_file(file_path: str) -> List[str]:
     """
     Parse a file and return a List[str] of its major components.
@@ -72,6 +83,8 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_angular_spec(contents) + components
     elif file_extension == ".md":
         components = parse_md(contents)
+    elif file_extension in (".yml", ".yaml"):
+        components = parse_yml(contents)
     elif file_extension == ".c":
         components = parse_c(contents)
     elif file_extension in {".cpp", ".cc"}:
@@ -94,6 +107,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_dot_env(contents)
     elif file_extension == ".sql":
         components = parse_sql(contents)
+    elif file_name == "Makefile":
+        components = parse_makefile(contents)
     elif file_extension == ".txt":
         if "requirements" in file_name:
             components = parse_requirements_txt(contents)
@@ -103,18 +118,24 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_tex(contents)
     elif file_extension == ".lean":
         components = parse_lean(contents)
-    elif file_extension == ".cbl":
-        components = parse_cobol(contents)
+    elif file_extension == ".cs":
+        components = parse_cs(contents)
+    elif file_extension == ".kt":
+        components = parse_kotlin(contents)
     elif file_extension == ".java":
         components = parse_java(contents)
     elif file_extension == ".jl":
         components = parse_julia(contents)
-    elif file_extension == ".kt":
-        components = parse_kotlin(contents)
+    elif file_extension == ".scala":
+        components = parse_scala(contents)
     elif file_extension == ".lisp":
         components = parse_lisp(contents)
+    elif file_extension == ".tf":
+        components = parse_tf(contents)
     elif file_extension == ".lua":
         components = parse_lua(contents)
+    elif file_extension == ".php":
+        components = parse_php(contents)
     elif file_extension == ".m":
         if "@interface" in contents or "@implementation" in contents:
             components = parse_objective_c(contents)
@@ -124,22 +145,14 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_matlab(contents)
     elif file_extension == ".ml":
         components = parse_ocaml(contents)
+    elif file_extension == ".cbl":
+        components = parse_cobol(contents)
     elif file_extension == ".apl":
         components = parse_apl(contents)
     elif file_extension == ".pl":
         components = parse_perl(contents)
-    elif file_extension == ".php":
-        components = parse_php(contents)
     elif file_extension == ".ps1":
         components = parse_powershell(contents)
-    elif file_extension == ".scala":
-        components = parse_scala(contents)
-    elif file_extension == ".tf":
-        components = parse_tf(contents)
-    elif file_extension in (".yml", ".yaml"):
-        components = parse_yml(contents)
-    elif file_name == "Makefile":
-        components = parse_makefile(contents)
 
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
@@ -179,6 +192,54 @@ def parse_lean(lean_content: str) -> List[str]:
     return components
 
 
+def parse_cs(contents: str) -> List[str]:
+    # Combined regex pattern to match all components
+    combined_pattern = re.compile(
+        # Interfaces, Enums, Delegates, Structs, Classes
+        r"\n( *(public )?(static )?(interface|enum|delegate|struct|class)\s+(\w+)( \w+)?( : \w+)?)|"
+        # Methods in Interfaces and Classes, capturing indentation
+        r"\n( *(public)?\s+(static\s+)?[\w<>\[\],]+\??\s+(\w+))\([^)]*\)|"
+        # Namespaces
+        r"\b(namespace\s+([\w\.]+))|"
+        # Method Arrow functions
+        r"\n( *(public\s+override\s+)?[\w<>\[\]]+\s+(\w+)\s*)\([^)]*\)\s*=>|"
+        # Arrow functions
+        # r"\n( *var\s+(\w+))\s*=\s*\([^)]*\)\s*=>|"
+        # Func<...> Lambda Expressions
+        # r"( *Func<[\w<>, ]+\s+\w+)\s*=\s*\([^)]*\)\s*=>|"
+        # Combined var and Func Lambda Expressions
+        r"\n( *(var|Func<[\w<>, ]+)\s+(\w+))\s*=\s*\([^)]*\)\s*=>|"
+        # Methods returning Lambda Expressions
+        r"\n( *(public\s+)?Func<[\w<>,\s]+\s+\w+)\([^)]*\)\s*\{|"
+        # Event Handler Arrow Functions
+        r"\n( *\w+(\.\w+)?\s*\+=)\s*\([^)]*\)\s*=>",
+        re.DOTALL,
+    )
+
+    components = []
+    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+        groups = extract_groups(match)
+        if 1 in groups:
+            component = groups[1]
+        elif 8 in groups:
+            component = groups[8].lstrip("\n")
+        elif 14 in groups:  # Method Lambda
+            component = groups[14] + ": =>"
+        elif 17 in groups:  # var / Func Lambda
+            component = groups[17] + ": =>"
+        elif 20 in groups:  # Method returning Lambda
+            component = groups[20] + ": =>"
+        elif 22 in groups:
+            component = groups[22] + ": =>"
+        else:
+            component = match.group().strip()
+        debug_print(f"parse_cs: {match_number=} {component=}")
+        if component:
+            components.append(component)
+
+    return components
+
+
 def parse_tex(tex_content: str) -> List[str]:
     debug_print("parse_tex")
 
@@ -196,16 +257,11 @@ def parse_tex(tex_content: str) -> List[str]:
     if title:
         components.append(title.group(1))
 
-    # Handling multiple authors
-
+    # Handle multiple authors
     if author:
         author = author.group(1)
         debug_print(f"parse_tex: {author=}")
         is_multi_author = author.count("\\and") > 0
-        # Remove emails
-        # author = re.sub(r"\\texttt\{[^\}]+\}", "", author)
-        # debug_print(f"parse_tex: Removed emails {author=}")
-        # (no change observed from this substitution)
         # Remove LaTeX commands
         author = re.sub(r"\\.*", "", author).strip()
         debug_print(f"parse_tex: Removed LaTeX commands {author=}")
@@ -226,7 +282,6 @@ def parse_tex(tex_content: str) -> List[str]:
     outline = []
     section_count = 0
     subsection_count = 0
-    # TODO: format hierarchical numbered outline
     for match in re.finditer(section_re, tex_content):
         if match.group(1):  # Subsection
             subsection_count += 1
@@ -596,16 +651,6 @@ def remove_ts_comments_and_private_blocks(contents: str) -> str:
     # contents = re.sub(r"private\s+.*?\{.*?\}", "", contents, flags=re.DOTALL)
 
     return contents
-
-
-def extract_groups(match) -> dict:
-    numbered_groups = {}
-    for i in range(len(match.groups())):
-        group = match.group(i)
-        if group:
-            numbered_groups[i] = group
-    debug_print(numbered_groups)
-    return numbered_groups
 
 
 def parse_ts(contents: str) -> List[str]:

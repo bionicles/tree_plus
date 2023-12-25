@@ -70,3 +70,24 @@ namespace TemplateToExcelServer.Template
         TemplateObject SetSheetName(ReadOnlyMemory<byte> SheetName);
     }
 }
+
+public class BankAccount(string accountID, string owner)
+{
+    public string AccountID { get; } = accountID;
+    public string Owner { get; } = owner;
+
+    public override string ToString() => $"Account ID: {AccountID}, Owner: {Owner}";
+}
+
+var IncrementBy = (int source, int increment = 1) => source + increment;
+
+Func<int, int, int> add = (x, y) => x + y;
+
+var filtered = list.Where(item => item.IsActive);
+
+button.Click += (sender, args) => MessageBox.Show("Button clicked!");
+
+public Func<int, int> GetMultiplier(int factor)
+{
+    return x => x * factor;
+}

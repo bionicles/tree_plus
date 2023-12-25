@@ -1,6 +1,6 @@
 [project]
 name = "tree_plus"
-version = "1.0.7"
+version = "1.0.8"
 authors = [{ name = "Bion Howard", email = "bion@atomiclogic.com" }]
 description = "A `tree` util enhanced with tokens, lines, and components."
 readme = "README.md"
