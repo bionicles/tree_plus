@@ -443,6 +443,22 @@ void printVector(const std :: vector<T>& vec)""",
                 "  sqlx 0.7 (features: runtime-tokio, tls-rustls)",
             ],
         ),
+        (
+            "tests/more_languages/group3/test_openapi.yaml",
+            [
+                "openapi: 3.0.1",
+                "    title: TODO Plugin",
+                "    description: A plugin that allows the user to create and manage a TODO list using ChatGPT.",
+                "    version: v1",
+                "servers:",
+                "    - url: PLUGIN_HOSTNAME",
+                "paths:",
+                "    '/todos/{username}':",
+                "        GET (getTodos): Get the list of todos",
+                "        POST (addTodo): Add a todo to the list",
+                "        DELETE (deleteTodo): Delete a todo from the list",
+            ],
+        ),
     ],
 )
 def test_more_languages_group3(file: str, expected: List[str]):

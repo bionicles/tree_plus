@@ -1,5 +1,5 @@
 # tree_plus_src/parse_file.py
-from typing import List
+from typing import List, Tuple
 import collections
 import builtins
 import sqlite3
@@ -817,88 +817,122 @@ def parse_sql(contents: str) -> List[str]:
     return output
 
 
-def is_k8s_yml(contents: str) -> bool:
-    for doc in yaml.safe_load_all(contents):
-        if "apiVersion" in doc and "kind" in doc and "metadata" in doc:
-            return True
+def is_openapi_yml(ymls: Tuple[dict]) -> bool:
+    yml = ymls[0]
+    return "openapi" in yml or "swagger" in yml
+
+
+def is_k8s_yml(ymls: Tuple[dict]) -> bool:
+    yml = ymls[0]
+    debug_print("is_k8s_yml yml:", yml)
+    if "apiVersion" in yml and "kind" in yml and "metadata" in yml:
+        return True
     return False
 
 
-def is_ansible_yml(contents: str) -> bool:
-    try:
-        docs = list(yaml.safe_load_all(contents))
-        if isinstance(docs[0], list) and any(
-            isinstance(item, dict) and "name" in item for item in docs[0]
-        ):
-            return True
-    except Exception as e:
-        debug_print("Exception in is_ansible_yml: ", e)
-        return False
+def is_ansible_yml(ymls: Tuple[dict]) -> bool:
+    yml = ymls[0]
+    if isinstance(yml, list) and any(
+        isinstance(item, dict) and "name" in item for item in yml
+    ):
+        return True
     return False
 
 
-def is_github_yml(contents: str) -> bool:
-    try:
-        doc = yaml.safe_load(contents)  # load YAML from string
-        if "name" in doc and "jobs" in doc:
-            return True
-    except Exception as e:
-        debug_print("Exception in is_github_yml: ", e)
+def is_github_yml(ymls: Tuple[dict]) -> bool:
+    yml = ymls[0]
+    if "name" in yml and "jobs" in yml:
+        return True
     return False
 
 
-def parse_github_yml(contents: str) -> List[str]:
+def parse_github_yml(ymls: Tuple[dict]) -> List[str]:
     result = []
-    try:
-        doc = yaml.safe_load(contents)  # load YAML from string
-        if is_github_yml(contents):
-            result.append(doc["name"])
-            for job in doc["jobs"]:
-                result.append(f"  job: {job}")
-                if "steps" in doc["jobs"][job]:
-                    for step in doc["jobs"][job]["steps"]:
-                        if "name" in step:
-                            result.append(f"    - {step['name']}")
-    except Exception as e:
-        print("Exception in parse_github_yml: ", e)
+    yml = ymls[0]
+    result.append(yml["name"])
+    for job in yml["jobs"]:
+        result.append(f"  job: {job}")
+        if "steps" in yml["jobs"][job]:
+            for step in yml["jobs"][job]["steps"]:
+                if "name" in step:
+                    result.append(f"    - {step['name']}")
     return result
 
 
-def parse_k8s(contents: str) -> List[str]:
+def parse_k8s(ymls: Tuple[dict]) -> List[str]:
     result = []
-    for doc in yaml.safe_load_all(contents):
-        result.append(f"{doc['apiVersion']}.{doc['kind']} -> {doc['metadata']['name']}")
+    for yml in ymls:
+        result.append(f"{yml['apiVersion']}.{yml['kind']} -> {yml['metadata']['name']}")
     return result
 
 
-def parse_ansible(contents: str) -> List[str]:
+def parse_ansible(ymls: Tuple[dict]) -> List[str]:
     result = []
-    for doc in yaml.safe_load_all(contents):
-        result.extend(item.get("name", "") for item in doc if isinstance(item, dict))
+    for yml in ymls:
+        result.extend(item.get("name", "") for item in yml if isinstance(item, dict))
     return result
 
 
-# TODO: Test OpenAPI yaml
-# def parse_openapi_yaml(file_path: str) -> list:
-#     with open(file_path, "r") as file:
-#         data = yaml.safe_load(file)
-#     components = []
-#     # Extracting routes and methods
-#     paths = data.get("paths", {})
-#     for path, methods in paths.items():
-#         components.append(f"Route: {path}")
-#         for method in methods:
-#             components.append(f"    - Method: {method.upper()}")
-#     return components
+def parse_openapi_yml(ymls: Tuple[dict]) -> List[str]:
+    components = []
+    yml = ymls[0]
+    # Extract OpenAPI version and info
+    components.append(f"openapi: {yml.get('openapi', yml.get('swagger', 'N/A'))}")
+    info = yml.get("info", {})
+    components.append(f"    title: {info.get('title', 'N/A')}")
+    description = info.get("description", "")
+    first_sentence = (
+        re.split(r"\.\s|\.\n", description, maxsplit=1)[0] + "."
+        if description
+        else "N/A"
+    )
+    components.append(f"    description: {first_sentence}")
+    components.append(f"    version: {info.get('version', 'N/A')}")
+
+    # Extracting servers
+    servers = yml.get("servers", [])
+    if servers:
+        components.append("servers:")
+        for server in servers:
+            components.append(f"    - url: {server.get('url', 'N/A')}")
+
+    # Extracting paths
+    paths = yml.get("paths", {})
+    if paths:
+        components.append("paths:")
+        for path, methods in paths.items():
+            components.append(f"    '{path}':")
+            for method, details in methods.items():
+                operation_id = details.get("operationId", "N/A")
+                summary = details.get("summary", "N/A")
+                components.append(
+                    f"        {method.upper()} ({operation_id}): {summary}"
+                )
+
+    return components
 
 
 def parse_yml(contents: str) -> List[str]:
-    if is_k8s_yml(contents):
-        return parse_k8s(contents)
-    elif is_ansible_yml(contents):
-        return parse_ansible(contents)
-    elif is_github_yml(contents):
-        return parse_github_yml(contents)
+    try:
+        ymls = tuple(yaml.safe_load_all(contents))
+    except Exception as e:
+        debug_print("parse_yml yaml.safe_load Exception:", e)
+        debug_print("parse_yml contents:", contents)
+        raise
+    debug_print("parse_yml loaded yml:", ymls)
+    if not ymls:
+        return []
+    try:
+        if is_k8s_yml(ymls):
+            return parse_k8s(ymls)
+        elif is_ansible_yml(ymls):
+            return parse_ansible(ymls)
+        elif is_github_yml(ymls):
+            return parse_github_yml(ymls)
+        elif is_openapi_yml(ymls):
+            return parse_openapi_yml(ymls)
+    except Exception as e:
+        debug_print("parse_yml transform Exception: ", e)
     return ["Unsupported YAML Category"]
 
 
