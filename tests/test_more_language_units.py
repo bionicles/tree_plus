@@ -308,6 +308,22 @@ void printVector(const std :: vector<T>& vec)""",
                 "  7.2 The Next Steps in AI Development",
             ],
         ),
+        (
+            "tests/more_languages/group3/test.lean",
+            [
+                "# Advanced Topics in Group Theory",
+                "section GroupDynamics",
+                "lemma group_stability (G : Type*) [Group G] (H : Subgroup G)",  # everything to the first `:` not inside parens, maybe?
+                "theorem subgroup_closure {G : Type*} [Group G] (S : Set G)",
+                "axiom group_homomorphism_preservation {G H : Type*} [Group G] [Group H] (f : G → H)",
+                "end GroupDynamics",
+                "section ConstructiveApproach",
+                "lemma finite_group_order (G : Type*) [Group G] [Fintype G]",
+                """lemma complex_lemma {X Y : Type*} [SomeClass X] [AnotherClass Y]
+  (f : X → Y) (g : Y → X)""",
+                "end ConstructiveApproach",
+            ],
+        ),
     ],
 )
 def test_more_languages_group3(file: str, expected: List[str]):

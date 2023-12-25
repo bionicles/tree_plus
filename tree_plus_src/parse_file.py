@@ -101,6 +101,8 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_txt(contents)
     elif file_extension == ".tex":
         components = parse_tex(contents)
+    elif file_extension == ".lean":
+        components = parse_lean(contents)
     elif file_extension == ".cbl":
         components = parse_cobol(contents)
     elif file_extension == ".java":
@@ -142,6 +144,39 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def parse_lean(lean_content: str) -> List[str]:
+    debug_print("parse_lean")
+    components = []
+
+    # Regex for title, sections, lemmas, theorems, and axioms
+    title_re = r"\/-!\n(# [^\n]+)"
+
+    # Extract title
+    title = re.search(title_re, lean_content)
+    if title:
+        title = title.group(1)
+        debug_print("parse_lean: title", title)
+        components.append(title)
+
+    combined_pattern = re.compile(
+        # organization
+        r"(section|end) ([^\n]+)|"
+        # content
+        # r"(lemma|theorem|axiom) ([^\n]+?):\n",
+        r"(lemma|theorem|axiom) ([^\n]+(?:\n\s+[^\n]+)*?)\s*:\n",
+        re.DOTALL,
+    )
+    # Extract sections, lemmas, theorems, and axioms
+    for i, match in enumerate(re.finditer(combined_pattern, lean_content)):
+        component = match.group()
+        debug_print(f"parse_lean component {i}:")
+        debug_print(component)
+        component = match.group(0).rstrip(" :\n")
+        components.append(component)
+
+    return components
 
 
 def parse_tex(tex_content: str) -> List[str]:
