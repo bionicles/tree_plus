@@ -43,6 +43,7 @@ def count_tokens_lines(file_path: str) -> TokenLineCount:
         ".pack",
         ".jar",
         ".odg",
+        ".sqlite",
     }
     if any(file_path.endswith(ext) for ext in ignored_extensions):
         # if any(file_path.suffix == ext for ext in ignored_extensions):

@@ -1312,37 +1312,45 @@ def parse_cobol(content: str) -> List[str]:
     return components
 
 
-def parse_java(content: str) -> List[str]:
-    components = []
-
-    # Find class declarations
-    class_pattern = r"\bclass\s+(\w+)\s*"
-    class_matches = re.findall(class_pattern, content)
-
-    for class_match in class_matches:
-        components.append(f"class {class_match}")
-
-    # Find methods (including constructors)
-    method_pattern = (
-        r"(public|protected|private|static)?\s*([\w\[\]<>,\s]*)\s+(\w+)\s*\((.*?)\)\s*{"
+def parse_java(contents: str) -> List[str]:
+    # Combined regex pattern to match Java components
+    combined_pattern = re.compile(
+        # Classes
+        r"\n( *(public )?(abstract )?class\s+(\w+)( extends \w+)?( implements [\w, ]+)?)\s*\{|"
+        # Methods, capturing indentation
+        # r"\n(( *(public|protected|private)?\s+(static\s+)?(abstract\s+)?[\w<>\[\],]+\??\s+(\w+))\([^)]*\))\s*(\{|;)|"
+        # r"(( *@[\w\"/()]+\n)*\n *(public|protected|private)? ?(abstract|static)? ?(\w+ )?\w+\([^{]*\))( {\n)|"
+        r"\n( *(public|protected|private)? ?(abstract|static)? ?(\w+ )?\w+\([^{]*\))( {\n)|"
+        # Interfaces
+        r"\n( *(public )?interface\s+(\w+))|"
+        # Annotations
+        # r"\n( *@\w+(\([^)]*\))?\s*)"
+        r"( *@[\w\"/()]+)|"
+        # Abstract and Interface methods
+        r"\n( *(abstract)? \w+ \w+\([^)]*\));",
+        re.DOTALL,
     )
-    method_matches = re.findall(method_pattern, content)
 
-    for method_match in method_matches:
-        modifier = method_match[0].strip() if method_match[0] else ""
-        return_type = method_match[1].strip()
-        method_name = method_match[2].strip()
-        params = method_match[3].strip()
-        for class_match in class_matches:
-            # If the method name matches the class name, it's a constructor
-            if class_match == method_name:
-                components.append(f"class {class_match} -> {class_match}({params})")
-            else:
-                leaf = f"class {class_match} -> "
-                # Only add a space after modifier if it's not empty
-                leaf += f"{modifier} " if modifier else ""
-                leaf += f"{return_type} {method_name}({params})"
-                components.append(leaf)
+    components = []
+    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_java: {match_number}")
+        groups = extract_groups(match)
+        if 1 in groups:  # Class
+            component = groups[1].rstrip()
+        elif 7 in groups:  # Method
+            component = groups[7].lstrip("\n")
+        elif 11 in groups:  # Interface
+            component = "interface " + groups[11]
+        elif 15 in groups:  # Annotation
+            component = groups[15]
+        elif 16 in groups:  # Abstract Method
+            component = groups[16]
+        else:
+            component = match.group().strip()
+
+        debug_print(f"parse_java component:\n{component}")
+        if component:
+            components.append(component)
 
     return components
 
