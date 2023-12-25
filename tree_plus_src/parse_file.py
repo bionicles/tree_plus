@@ -10,6 +10,8 @@ import os
 import re
 import json
 
+import tomli
+
 from tree_plus_src.ignore import is_binary
 from tree_plus_src.debug import debug_print
 
@@ -65,6 +67,10 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_package_json(contents)
         elif "$schema" in contents:  # not great!
             components = parse_json_schema(contents)
+    elif file_path.endswith("Cargo.toml"):
+        components = parse_cargo_toml(contents)
+    elif file_path.endswith("pyproject.toml"):
+        components = parse_pyproject_toml(contents)
     elif file_extension in [".js", ".jsx"]:
         components = parse_ts(contents)
     elif file_path.endswith(".d.ts"):
@@ -157,6 +163,71 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def format_dependency(name, details):
+    if isinstance(details, str):
+        return f"  {name} {details}"
+    elif isinstance(details, dict):
+        # Handle complex dependencies with additional properties
+        version = details.get("version", "")
+        features = ", ".join(details.get("features", []))
+        return (
+            f"  {name} {version} (features: {features})"
+            if features
+            else f"  {name} {version}"
+        )
+    return f"  {name}"
+
+
+def parse_cargo_toml(contents: str) -> List[str]:
+    data = tomli.loads(contents)
+    components = []
+
+    if "package" in data:
+        package_info = data["package"]
+        components.append(f"name: {package_info.get('name', 'N/A')}")
+        components.append(f"version: {package_info.get('version', 'N/A')}")
+        components.append(f"description: {package_info.get('description', 'N/A')}")
+        components.append(f"license: {package_info.get('license', 'N/A')}")
+
+    if "dependencies" in data:
+        dependencies = data["dependencies"]
+        components.append("dependencies:")
+        for dep, details in dependencies.items():
+            components.append(format_dependency(dep, details))
+
+    return components
+
+
+def parse_pyproject_toml(contents: str) -> List[str]:
+    data = tomli.loads(contents)
+    debug_print("parse_pyproject_toml data:", data)
+    components = []
+
+    if "project" in data:
+        project_info = data["project"]
+        debug_print("parse_pyproject_toml project_info:", project_info)
+        components.append(f"name: {project_info.get('name', 'N/A')}")
+        components.append(f"version: {project_info.get('version', 'N/A')}")
+        project_description = project_info.get("description", "N/A")
+
+        debug_print("parse_pyproject_toml project_description:", project_description)
+        components.append(f"description: {project_description}")
+
+        if "classifiers" in project_info:
+            classifiers = project_info["classifiers"]
+            for classifier in classifiers:
+                if "License ::" in classifier:
+                    components.append(classifier)
+
+    if "dependencies" in project_info:
+        dependencies = project_info["dependencies"]
+        components.append("dependencies:")
+        for dep in dependencies:
+            components.append(f"    {dep}")
+
+    return components
 
 
 def parse_lean(lean_content: str) -> List[str]:
@@ -807,20 +878,18 @@ def parse_ansible(contents: str) -> List[str]:
     return result
 
 
-def parse_openapi_yaml(file_path: str) -> list:
-    with open(file_path, "r") as file:
-        data = yaml.safe_load(file)
-
-    components = []
-
-    # Extracting routes and methods
-    paths = data.get("paths", {})
-    for path, methods in paths.items():
-        components.append(f"Route: {path}")
-        for method in methods:
-            components.append(f"    - Method: {method.upper()}")
-
-    return components
+# TODO: Test OpenAPI yaml
+# def parse_openapi_yaml(file_path: str) -> list:
+#     with open(file_path, "r") as file:
+#         data = yaml.safe_load(file)
+#     components = []
+#     # Extracting routes and methods
+#     paths = data.get("paths", {})
+#     for path, methods in paths.items():
+#         components.append(f"Route: {path}")
+#         for method in methods:
+#             components.append(f"    - Method: {method.upper()}")
+#     return components
 
 
 def parse_yml(contents: str) -> List[str]:

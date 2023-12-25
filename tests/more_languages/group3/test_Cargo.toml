@@ -1,0 +1,19 @@
+[package]
+name = "test_cargo"
+version = "0.1.0"
+edition = "2021"
+description = "A test Cargo.toml"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/bionicles/tree_plus"
+readme = "README.md"
+keywords = ["test", "driven", "development"]
+categories = ["tree", "plus", "is", "cool"]
+
+[dependencies]
+clap = "4.4"
+sqlx = { version = "0.7", features = [ "runtime-tokio", "tls-rustls" ] }
+
+[dev-dependencies]
+assert_cmd = "2.0.12"
+predicates = "3.0.4"
+mockall = "0.12.1"
