@@ -67,6 +67,10 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_package_json(contents)
         elif "$schema" in contents:  # not great!
             components = parse_json_schema(contents)
+        elif 'jsonrpc": "2' in contents:
+            components = parse_json_rpc(contents)
+        elif 'openrpc": "' in contents:
+            components = parse_openrpc_json(contents)
     elif file_path.endswith("Cargo.toml"):
         components = parse_cargo_toml(contents)
     elif file_path.endswith("pyproject.toml"):
@@ -165,6 +169,48 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def parse_openrpc_json(contents: str) -> List[str]:
+    data = json.loads(contents)
+    components = []
+
+    components.append(f"openrpc: {data.get('openrpc', 'N/A')}")
+    info = data.get("info", {})
+    components.append("info:")
+    components.append(f"    title: {info.get('title', 'N/A')}")
+    components.append(f"    version: {info.get('version', 'N/A')}")
+
+    methods = data.get("methods", [])
+    components.append("methods:")
+    for method in methods:
+        method_name = method.get("name")
+        method_desc = method.get("description", "No description")
+        components.append(f"    {method_name}: {method_desc}")
+        params = method.get("params", [])
+        components.append("        params:")
+        for param in params:
+            param_type = param.get("schema", {}).get("type", "N/A")
+            components.append(f"            - {param.get('name')}: {param_type}")
+        result = method.get("result", {}).get("name", "N/A")
+        result_desc = method.get("result", {}).get("description", "No description")
+        components.append(f"        result: {result} = {result_desc}")
+
+    return components
+
+
+def parse_json_rpc(contents: str) -> List[str]:
+    data = json.loads(contents)
+    components = []
+
+    components.append(f"jsonrpc: {data.get('jsonrpc', 'N/A')}")
+    components.append(f"method: {data.get('method', 'N/A')}")
+    components.append("params:")
+    for param, value in data.get("params", {}).items():
+        components.append(f"    {param}: {value}")
+    components.append(f"id: {data.get('id', 'N/A')}")
+
+    return components
 
 
 def parse_graphql(contents: str) -> List[str]:

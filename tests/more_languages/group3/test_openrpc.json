@@ -1,0 +1,44 @@
+{
+  "openrpc": "1.2.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Demo Petstore"
+  },
+  "methods": [
+    {
+      "name": "listPets",
+      "description": "List all pets",
+      "params": [
+        {
+          "name": "limit",
+          "description": "How many items to return at one time",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "result": {
+        "name": "pets",
+        "description": "An array of pets",
+        "schema": {
+          "type": "array",
+          "items": {
+            "title": "Pet",
+            "type": "object",
+            "properties": {
+              "uuid": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "breed": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

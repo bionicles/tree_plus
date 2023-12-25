@@ -478,6 +478,31 @@ void printVector(const std :: vector<T>& vec)""",
                 "    books: [Book]",
             ],
         ),
+        (
+            "tests/more_languages/group3/test_openrpc.json",
+            [
+                "openrpc: 1.2.1",
+                "info:",
+                "    title: Demo Petstore",
+                "    version: 1.0.0",
+                "methods:",
+                "    listPets: List all pets",
+                "        params:",
+                "            - limit: integer",
+                "        result: pets = An array of pets",
+            ],
+        ),
+        (
+            "tests/more_languages/group3/test_json_rpc_2_0.json",
+            [
+                "jsonrpc: 2.0",
+                "method: subtract",
+                "params:",
+                "    minuend: 42",
+                "    subtrahend: 23",
+                "id: 1",
+            ],
+        ),
     ],
 )
 def test_more_languages_group3(file: str, expected: List[str]):
