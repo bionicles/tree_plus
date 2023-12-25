@@ -1,0 +1,24 @@
+"a happy bot"
+# usage: pip install .
+
+from setuptools import setup
+import pkg_resources
+import pathlib
+
+with pathlib.Path("requirements.txt").open() as requirements_txt:
+    install_requires = [
+        str(requirement)
+        for requirement in pkg_resources.parse_requirements(requirements_txt)
+    ]
+
+setup(
+    name="happybot",
+    version="1.1.0",
+    py_modules=["happybot"],
+    packages=["src"],
+    install_requires=install_requires,
+    entry_points="""
+        [console_scripts]
+        happybot=happybot:cli
+    """,
+)

@@ -4,8 +4,45 @@ import pytest
 import os
 
 from rich import print
+import sqlite3
 
 from tree_plus_src import parse_file
+
+SQLITE_PATH = "tests/more_languages/group3/test.sqlite"
+
+# Define the SQL commands for table creation
+create_students_table = """
+CREATE TABLE IF NOT EXISTS students (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    age INTEGER NOT NULL
+);
+"""
+
+create_courses_table = """
+CREATE TABLE IF NOT EXISTS courses (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    credits INTEGER NOT NULL
+);
+"""
+
+SQLITE_TEST_QUERIES = (create_students_table, create_courses_table)
+
+
+def create_sqlite_test_db(
+    db_path: str = SQLITE_PATH,
+    test_queries: tuple = SQLITE_TEST_QUERIES,
+    force: bool = False,
+):
+    if os.path.exists(db_path) and force:
+        os.remove(db_path)
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    for query in test_queries:
+        cursor.execute(query)
+    conn.commit()
+    conn.close()
 
 
 @pytest.mark.parametrize(
@@ -365,10 +402,25 @@ void printVector(const std :: vector<T>& vec)""",
                 "public Func<int, int> GetMultiplier: =>",
             ],
         ),
+        (
+            "tests/more_languages/group3/test.sqlite",
+            [
+                "students table:",
+                "   id integer primary key",
+                "   name text not null",
+                "   age integer not null",
+                "courses table:",
+                "   id integer primary key",
+                "   title text not null",
+                "   credits integer not null",
+            ],
+        ),
     ],
 )
 def test_more_languages_group3(file: str, expected: List[str]):
     print(f"{file=}")
+    if file.endswith("test.sqlite"):
+        create_sqlite_test_db()
     os.environ.get("DEBUG_TREE_PLUS") == "1"
     result = parse_file(file)
     print(f"{result=}")

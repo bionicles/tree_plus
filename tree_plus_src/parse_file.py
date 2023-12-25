@@ -807,6 +807,22 @@ def parse_ansible(contents: str) -> List[str]:
     return result
 
 
+def parse_openapi_yaml(file_path: str) -> list:
+    with open(file_path, "r") as file:
+        data = yaml.safe_load(file)
+
+    components = []
+
+    # Extracting routes and methods
+    paths = data.get("paths", {})
+    for path, methods in paths.items():
+        components.append(f"Route: {path}")
+        for method in methods:
+            components.append(f"    - Method: {method.upper()}")
+
+    return components
+
+
 def parse_yml(contents: str) -> List[str]:
     if is_k8s_yml(contents):
         return parse_k8s(contents)
@@ -899,16 +915,38 @@ def parse_py(content: str) -> List[str]:
 def parse_db(db_path: str) -> List[str]:
     # Connect to the SQLite database
     conn = sqlite3.connect(db_path)
-    # Create a cursor object
     cursor = conn.cursor()
-    # Execute the query that retrieves all table names
+
+    # Get the list of table names
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    # Fetch all results of the query
     tables = cursor.fetchall()
+
+    components = []
+
+    # For each table, get the column details
+    for table in tables:
+        table_name = table[0]
+        components.append(f"{table_name} table:")
+
+        cursor.execute(f"PRAGMA table_info({table_name});")
+        columns = cursor.fetchall()
+        debug_print("parse_db columns:", columns)
+
+        for column in columns:
+            column_name = column[1]
+            column_type = column[2].lower()
+            is_primary_key = column[5] == 1
+            not_null = column[3] == 1
+            column_desc = f"   {column_name} {column_type}"
+            if is_primary_key:
+                column_desc += " primary key"
+            if not_null and not is_primary_key:
+                column_desc += " not null"
+            components.append(column_desc)
     # Close the connection
     conn.close()
-    # Extract the table names from the tuples and return them
-    return [f"CREATE TABLE {table[0]}" for table in tables]
+
+    return components
 
 
 def parse_cobol(content: str) -> List[str]:

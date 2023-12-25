@@ -6,7 +6,8 @@
     "*.py",
     "requirements.txt",
     "tree_plus_src",
-    "tests"
+    "tests",
+    "test.sqlite"
   ],
   "exec": "make debug_command || exit 1",
   "env": {
