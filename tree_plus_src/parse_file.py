@@ -108,6 +108,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_cpp(contents)
     elif file_extension == ".rs":
         components = parse_rs(contents)
+    elif file_extension == ".zig":
+        components = parse_zig(contents)
     elif file_extension == ".swift":
         components = parse_swift(contents)
     elif file_extension == ".go":
@@ -129,10 +131,6 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_txt(contents)
     elif file_extension == ".graphql":
         components = parse_graphql(contents)
-    elif file_extension == ".tex":
-        components = parse_tex(contents)
-    elif file_extension == ".lean":
-        components = parse_lean(contents)
     elif file_extension == ".cs":
         components = parse_cs(contents)
     elif file_extension == ".kt":
@@ -151,6 +149,10 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_capnp(contents)
     elif file_extension == ".proto":
         components = parse_grpc(contents)
+    elif file_extension == ".tex":
+        components = parse_tex(contents)
+    elif file_extension == ".lean":
+        components = parse_lean(contents)
     elif file_extension == ".tf":
         components = parse_tf(contents)
     elif file_extension == ".lua":
@@ -162,6 +164,10 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_objective_c(contents)
         elif "classdef" in contents or "methods" in contents:
             components = parse_matlab(contents)
+    elif file_extension.lower() == ".r":
+        components = parse_r(contents)
+    elif file_extension.lower() == ".nb":
+        components = parse_mathematica(contents)
     elif file_extension == ".matlab":
         components = parse_matlab(contents)
     elif file_extension == ".ml":
@@ -178,6 +184,63 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def parse_mathematica(contents: str) -> List[str]:
+    combined_pattern = re.compile(
+        r"((\w+\[.*?\]))\s*:=.*?(?=\n\n|\Z)",
+    )
+
+    components = []
+
+    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_mathematica match_number: {match_number}")
+        groups = extract_groups(match)
+        component = groups[1]
+        components.append(component)
+
+    return components
+
+
+def parse_r(contents: str) -> List[str]:
+    combined_pattern = re.compile(
+        # class and whatever's inside
+        r"class\(.*\)|"
+        # arrow or equals function
+        r".* ((<\-)|=) (function)\(",
+    )
+
+    components = []
+
+    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_r match_number: {match_number}")
+        groups = extract_groups(match)
+        component = match.group().strip().rstrip("(")
+        components.append(component)
+
+    return components
+
+
+def parse_zig(contents: str) -> List[str]:
+    combined_pattern = re.compile(
+        r"\n( *(pub )?fn \w+\([^)]*\) [^{]*) |"
+        r"const\s+\w+\s*=\s*struct|"
+        r"test\s+\"[^\"]+\"",
+        re.DOTALL,
+    )
+
+    components = []
+
+    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_zig match_number: {match_number}")
+        groups = extract_groups(match)  # this debug prints the matches
+        if 1 in groups:
+            component = groups[1]
+        else:
+            component = match.group().rstrip()
+        components.append(component)
+
+    return components
 
 
 def parse_hs(contents: str) -> List[str]:

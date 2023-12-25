@@ -636,6 +636,47 @@ where
     )""",
             ],
         ),
+        (
+            "tests/more_languages/group4/mathematica_test.nb",
+            [
+                "person[name_]",
+                "sayHello[]",
+                "sumList[list_List]",
+            ],
+        ),
+        (
+            "tests/more_languages/group4/test.zig",
+            [
+                "pub fn add(a: i32, b: i32) i32",
+                'test "add function"',
+                "const BunBuildOptions = struct",
+                "    pub fn updateRuntime(this: *BunBuildOptions) anyerror!void",
+                "    pub fn step(this: BunBuildOptions, b: anytype) *std.build.OptionsStep",
+                """pub fn sgemv(
+    order: Order,
+    trans: Trans,
+    m: usize,
+    n: usize,
+    alpha: f32,
+    a: []const f32,
+    lda: usize,
+    x: []const f32,
+    x_add: usize,
+    beta: f32,
+    y: []f32,
+    y_add: usize,
+) void""",
+            ],
+        ),
+        (
+            "tests/more_languages/group4/RTest.R",
+            [
+                "class(person)",
+                "greet.Person <- function",
+                "ensure_between = function",
+                "run_intermediate_annealing_process = function",
+            ],
+        ),
     ],
 )
 def test_more_languages_group4(
