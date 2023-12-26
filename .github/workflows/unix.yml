@@ -68,11 +68,13 @@ jobs:
       - name: Update README
         run: TREE_PLUS_UPDATE_README=YES python tree_plus_src/deploy.py
       - name: Commit Updates
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -am "cd: increment version.py; update readme [skip ci]"
-          git push
+          git push https://${GITHUB_TOKEN}@github.com/bionicles/tree_plus.git
       # - name: Publish to PyPI
       #   if: steps.test_again.outputs.success == 'true'
       #   uses: pypa/gh-action-pypi-publish@v1.4.2
