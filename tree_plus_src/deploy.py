@@ -180,14 +180,14 @@ def main():
         main_version_py_sink_path = MAIN_VERSION_PY_SOURCE_PATH
     else:
         # dry run: remove the sink files to keep tests honest
-        if os.environ.get("TREE_PLUS_UPDATE_README") == "YES" and os.path.exists(
-            main_readme_sink_path
-        ):
-            os.remove(main_readme_sink_path)
         if os.environ.get("TREE_PLUS_INCREMENT_VERSION") == "YES" and os.path.exists(
             main_version_py_sink_path
         ):
             os.remove(main_version_py_sink_path)
+        if os.environ.get("TREE_PLUS_UPDATE_README") == "YES" and os.path.exists(
+            main_readme_sink_path
+        ):
+            os.remove(main_readme_sink_path)
     # separate concerns since we need to increment, test, then update
     if os.environ.get("TREE_PLUS_INCREMENT_VERSION") == "YES":
         # 1. increment version first, because step 2 will show this version number

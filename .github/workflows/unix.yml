@@ -75,7 +75,9 @@ jobs:
         run: |
           git config --global user.email "bion@atomiclogic.com"
           git config --global user.name "Bion Howard"
-          git commit -am "cd: increment version.py; update readme [skip ci]"
+          git add .
+          git status
+          git commit -m "cd: increment version.py; update readme [skip ci]"
           git push https://github.com/bionicles/tree_plus.git
       # - name: Publish to PyPI
       #   if: steps.test_again.outputs.success == 'true'
