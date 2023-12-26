@@ -4,8 +4,6 @@ import subprocess
 import re
 import os
 
-from tree_plus_src.debug import debug_print
-
 
 def extract(path: str = None) -> str:
     assert path is not None
@@ -15,7 +13,7 @@ def extract(path: str = None) -> str:
             content = f.read()
         return content
     except Exception as e:
-        debug_print("extract Exception", e)
+        print("extract Exception", e)
         raise e
 
 
@@ -30,7 +28,7 @@ def load(content: str = None, path: str = None):
         with open(path, "w+") as f:
             f.write(content)
     except Exception as e:
-        debug_print("load Exception", e)
+        print("load Exception", e)
         raise e
 
 
@@ -56,26 +54,26 @@ def increment_version(
     assert os.path.exists(source_path)
     content = extract(source_path)
     content_lines = content.splitlines()
-    debug_print("increment_version content_lines", content_lines)
+    print("increment_version content_lines", content_lines)
     new_content_lines = []
     for line in content_lines:
         if not line.startswith("__version__"):
             new_content_lines.append(line)
             continue
         match = re.search(r"\"(.*)\"", line)
-        debug_print("increment_version match:", match)
+        print("increment_version match:", match)
         if not match:
             raise ValueError("Failed to match a version")
         version = match.group(1)
         major, minor, patch = map(int, version.split("."))
-        debug_print(f"increment_version extracted {major=} {minor=} {patch=}")
+        print(f"increment_version extracted {major=} {minor=} {patch=}")
         new_patch = patch + 1
         new_line = f'__version__ = "{major}.{minor}.{new_patch}"'
-        debug_print(f"increment_version new line:\n", new_line)
+        print(f"increment_version new line:\n", new_line)
         new_content_lines.append(new_line)
     new_content = "\n".join(new_content_lines)
     load(new_content, sink_path)
-    debug_print("increment_version complete")
+    print("increment_version complete")
 
 
 def run_command(command: str = None, debug: bool = False):
@@ -115,7 +113,7 @@ def replace_readme_section(
 
     # obtain new tree content to format into the readme
     new_tree_plus_output = run_command(command)
-    # debug_print("replace_section new_tree_plus_output:", new_tree_plus_output)
+    # print("replace_section new_tree_plus_output:", new_tree_plus_output)
     assert "Entering directory" not in new_tree_plus_output, "make logs in output"
     assert "Leaving directory" not in new_tree_plus_output, "make logs in output"
 
@@ -124,16 +122,16 @@ def replace_readme_section(
     # get the current readme string
     with open(source_path, "r") as file:
         content = file.read()
-    debug_print(f"read from '{source_path}'")
+    print(f"read from '{source_path}'")
 
     # update the readme string
     updated_content = re.sub(pattern, new_content, content)
-    # debug_print("replace_section updated_content", updated_content)
+    # print("replace_section updated_content", updated_content)
 
     # writing to file
     with open(sink_path, "w") as file:
         file.write(updated_content)
-    debug_print(f"wrote to '{sink_path}'")
+    print(f"wrote to '{sink_path}'")
 
 
 def update_readme(source_path: str = None, sink_path: str = None):
@@ -145,24 +143,24 @@ def update_readme(source_path: str = None, sink_path: str = None):
     replace_readme_section(
         source_path=source_path, sink_path=sink_path, marker="t1", command="make t1"
     )
-    debug_print("update_readme handled t1")
+    print("update_readme handled t1")
     replace_readme_section(
         source_path=sink_path, sink_path=sink_path, marker="t2", command="make t2"
     )
-    debug_print("update_readme handled t2")
+    print("update_readme handled t2")
     replace_readme_section(
         source_path=sink_path, sink_path=sink_path, marker="t3", command="make t3"
     )
-    debug_print("update_readme handled t3")
+    print("update_readme handled t3")
     replace_readme_section(
         source_path=sink_path, sink_path=sink_path, marker="t4", command="make t4"
     )
-    debug_print("update_readme handled t4")
+    print("update_readme handled t4")
     replace_readme_section(
         source_path=sink_path, sink_path=sink_path, marker="t5", command="make t5"
     )
-    debug_print("update_readme handled t5")
-    debug_print("deploy::update_readme done")
+    print("update_readme handled t5")
+    print("deploy::update_readme done")
 
 
 MAIN_VERSION_PY_SOURCE_PATH = os.path.join("tree_plus_src", "version.py")
