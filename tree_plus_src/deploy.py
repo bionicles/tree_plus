@@ -164,12 +164,44 @@ def update_readme(source_path: str = None, sink_path: str = None):
     print("deploy::update_readme done")
 
 
+# TODO: test this reset readme command so we can clean out the code blocks
+# def reset_readme(source_path: str = None, sink_path: str = None):
+#     assert source_path is not None
+#     assert source_path.endswith(".md")
+#     assert os.path.exists(source_path)
+#     assert sink_path is not None
+#     assert sink_path.endswith("md")
+#     replace_readme_section(
+#         source_path=source_path, sink_path=sink_path, marker="t1", command="make t1"
+#     )
+#     print("update_readme handled t1")
+#     replace_readme_section(
+#         source_path=sink_path, sink_path=sink_path, marker="t2", command="make t2"
+#     )
+#     print("update_readme handled t2")
+#     replace_readme_section(
+#         source_path=sink_path, sink_path=sink_path, marker="t3", command="make t3"
+#     )
+#     print("update_readme handled t3")
+#     replace_readme_section(
+#         source_path=sink_path, sink_path=sink_path, marker="t4", command="make t4"
+#     )
+#     print("update_readme handled t4")
+#     replace_readme_section(
+#         source_path=sink_path, sink_path=sink_path, marker="t5", command="make t5"
+#     )
+#     print("update_readme handled t5")
+#     print("deploy::update_readme done")
+
+
 MAIN_VERSION_PY_SOURCE_PATH = os.path.join("tree_plus_src", "version.py")
 MAIN_README_SOURCE_PATH = "README.md"
 
 
 def main():
     print("deploy::main start")
+    if os.environ.get("RESET_TREE_PLUS_README") == "1":
+        reset_readme(source_path="README.md", sink_path="README.md")
     # dry run: load new pyproject.toml into tests/version_increments
     main_version_py_sink_path = os.path.join(
         "tests", "version_increments", "dry_run_version.py"

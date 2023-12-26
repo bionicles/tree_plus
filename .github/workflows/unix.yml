@@ -80,7 +80,6 @@ jobs:
           git commit -m "cd: increment version.py; update readme [skip ci]"
           git push https://github.com/bionicles/tree_plus.git
       - name: Publish to PyPI
-        if: steps.test_again.outputs.success == 'true'
         uses: pypa/gh-action-pypi-publish@v1.4.2
         with:
           user: __token__
