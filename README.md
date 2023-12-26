@@ -41,6 +41,7 @@ Here's how `tree_plus --help` looks (`-h` and `-H` both also work)
 <!-- t5-start -->
 ```sh
 
+
 ```
 <!-- t5-end -->
 

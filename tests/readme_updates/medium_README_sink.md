@@ -4,9 +4,9 @@
 ```sh
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (31865 tokens, 3865 lines)
+📁 tree_plus (32207 tokens, 3896 lines)
 ┣━━ 📁 .github (107 tokens, 11 lines)
-┃   ┣━━ 📁 workflows (1049 tokens, 127 lines)
+┃   ┣━━ 📁 workflows (1037 tokens, 126 lines)
 ┃   ┃   ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
 ┃   ┃   ┃   ┣━━ Microsoft
 ┃   ┃   ┃   ┣━━   job: build
@@ -16,7 +16,7 @@ paths=('.',)
 ┃   ┃   ┃   ┣━━     - Set PYTHONUTF8 for Windows
 ┃   ┃   ┃   ┣━━     - Run generic tests
 ┃   ┃   ┃   ┗━━     - Run specific test
-┃   ┃   ┗━━ 📄 unix.yml (726 tokens, 87 lines)
+┃   ┃   ┗━━ 📄 unix.yml (714 tokens, 86 lines)
 ┃   ┃       ┣━━ Linux & MacOS
 ┃   ┃       ┣━━   job: test
 ┃   ┃       ┣━━     - Set up Python ${{ matrix.python-version }}
@@ -37,7 +37,7 @@ paths=('.',)
 ┃   ┃       ┗━━     - Publish to PyPI
 ┃   ┗━━ 📄 dependabot.yml (107 tokens, 11 lines)
 ┃       ┗━━ Unsupported YAML Category
-┣━━ 📁 tree_plus_src (19659 tokens, 2422 lines)
+┣━━ 📁 tree_plus_src (20013 tokens, 2454 lines)
 ┃   ┣━━ 📁 scripts (3515 tokens, 450 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -56,7 +56,9 @@ paths=('.',)
 ┃   ┃   ┣━━ def disable_debug
 ┃   ┃   ┣━━ def debug_enabled
 ┃   ┃   ┗━━ def debug_print
-┃   ┣━━ 📄 deploy.py (1736 tokens, 208 lines)
+┃   ┣━━ 📄 deploy.py (2090 tokens, 240 lines)
+┃   ┃   ┣━━ TODO (Line 167): test this reset readme command so we can clean out 
+┃   ┃   ┃   the code blocks
 ┃   ┃   ┣━━ def extract
 ┃   ┃   ┣━━ def load
 ┃   ┃   ┣━━ def extract_version
