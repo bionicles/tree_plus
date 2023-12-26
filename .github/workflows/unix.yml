@@ -24,9 +24,7 @@ jobs:
     - name: Install tree_plus
       run: |
         python -m pip install --upgrade pip
-        # pip install -r requirements.txt # moved into setup.py
-        pip install pytest
-        pip install -e .[dev]
+        pip install -U -e .[dev]
     - name: Create .env file
       run: |
         echo "DEBUG_TREE_PLUS=1" > .env.test
@@ -53,13 +51,14 @@ jobs:
         run: python -m pip install build
       - name: Increment Version
         run: |
-          ls
           ls tree_plus_src
-          TREE_PLUS_INCREMENT_VERSION=YES python -m tree_plus_src/deploy
+          TREE_PLUS_INCREMENT_VERSION=YES python tree_plus_src/deploy.py
       - name: Build
         run: make build
       - name: Install
-        run: pip install -U dist/*.whl
+        run: |
+          pip install pytest pytest-dotenv
+          pip install -U dist/*.whl
       - name: Run generic tests
         run: |
           pytest tests/ -k "not test_tree_plus_dotdot" -vv
@@ -67,7 +66,7 @@ jobs:
         run: |
           cd tests/dot_dot/nested_dir && pytest -k test_tree_plus_dotdot -vv && cd ../../..
       - name: Update README
-        run: TREE_PLUS_UPDATE_README=YES python -m tree_plus_src/deploy
+        run: TREE_PLUS_UPDATE_README=YES python -m tree_plus_src/deploy.py
       - name: Commit Updates
         run: |
           git config --local user.email "action@github.com"
