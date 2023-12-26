@@ -71,6 +71,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
+          echo "Token Length: ${#GITHUB_TOKEN}"
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -am "cd: increment version.py; update readme [skip ci]"
