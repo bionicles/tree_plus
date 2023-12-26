@@ -669,8 +669,6 @@ CPP_DENY = {"private", "public"}
 
 
 def parse_cpp(contents) -> List[str]:
-    var = os.environ.get("DEBUG_TREE_PLUS")
-    print(f"DEBUG_TREE_PLUS={var}")
     debug_print("parse_cpp")
     contents = remove_c_comments(contents)
 

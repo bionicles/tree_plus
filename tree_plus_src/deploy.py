@@ -82,8 +82,9 @@ def run_command(command: str = None, debug: bool = False):
     if command.startswith("make"):
         command = command.replace("make", "make --no-print-directory")
     if not debug:
-        command = "DEBUG_TREE_PLUS=0 " + command
-    return subprocess.check_output(command, shell=True).decode()
+        env = os.environ.copy()
+        env.update({"DEBUG_TREE_PLUS": "0"})
+    return subprocess.check_output(command, shell=True, env=env).decode()
 
 
 def replace_readme_section(
