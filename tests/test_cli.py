@@ -33,16 +33,18 @@ def test_tree_plus_help():
     assert "Usage: tree_plus" in result.stdout
 
 
-def test_tree_plus_version():
+def test_tree_plus_display_version():
+    from tree_plus_src import __version__
+
     result = subprocess.run(["tree_plus", "-v"], capture_output=True, text=True)
     assert result.returncode == 0
-    assert "version" in result.stdout
+    assert __version__ in result.stdout
     result = subprocess.run(["tree_plus", "-V"], capture_output=True, text=True)
     assert result.returncode == 0
-    assert "version" in result.stdout
+    assert __version__ in result.stdout
     result = subprocess.run(["tree_plus", "--version"], capture_output=True, text=True)
     assert result.returncode == 0
-    assert "version" in result.stdout
+    assert __version__ in result.stdout
 
 
 # def test_tree_plus_glob():

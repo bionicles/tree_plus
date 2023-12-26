@@ -7,7 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  # CI
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -36,3 +37,43 @@ jobs:
     - name: Run specific test
       run: |
         cd tests/dot_dot/nested_dir && pytest -k test_tree_plus_dotdot -vv && cd ../../..
+
+  # CD 
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment: cicd
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install pypa/build
+        run: python -m pip install build
+      - name: Increment Version
+        run: TREE_PLUS_INCREMENT_VERSION=YES python tree_plus_src/deploy.py
+      - name: Build
+        run: make build
+      - name: Install
+        run: pip install -U dist/*.whl
+      - name: Run generic tests
+        run: |
+          pytest tests/ -k "not test_tree_plus_dotdot" -vv
+      - name: Run specific test
+        run: |
+          cd tests/dot_dot/nested_dir && pytest -k test_tree_plus_dotdot -vv && cd ../../..
+      - name: Update README
+        run: TREE_PLUS_UPDATE_README=YES python tree_plus_src/deploy.py
+      - name: Commit Updates
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -am "cd: increment version.py; update readme [skip ci]"
+          git push
+      - name: Publish to PyPI
+        if: steps.test_again.outputs.success == 'true'
+        uses: pypa/gh-action-pypi-publish@v1.4.2
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}

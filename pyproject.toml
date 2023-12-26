@@ -1,6 +1,6 @@
 [project]
 name = "tree_plus"
-version = "1.0.9"
+dynamic = ["version"]
 authors = [{ name = "Bion Howard", email = "bion@atomiclogic.com" }]
 description = "A `tree` util enhanced with tokens, lines, and components."
 readme = "README.md"
@@ -17,8 +17,10 @@ classifiers = [
 ]
 dependencies = ["tiktoken", "PyYAML", "click", "rich", "tomli"]
 
+
+
 [project.optional-dependencies]
-dev = ["pytest", "pytest-dotenv"]
+dev = ["pytest", "pytest-dotenv", "tomli-w"]
 
 [project.urls]
 Homepage = "https://github.com/bionicles/tree_plus"
@@ -37,3 +39,5 @@ tree_plus = "tree_plus_cli:main"
 py-modules = ["tree_plus_cli"]
 packages = ["tree_plus_src"]
 
+[tool.setuptools.dynamic]
+version = {attr = "tree_plus_src.version.__version__"}

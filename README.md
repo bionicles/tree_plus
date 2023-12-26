@@ -30,6 +30,7 @@
 
 ## Example Output:
 - [ ] Demonstrate Parsed Checkboxes
+<!-- t1-start -->
 ```sh
 (py310) [2023-12-24T20:38:59-0500]
 ~/hax/tree_plus (main) $
@@ -197,9 +198,11 @@ paths=('.',)
     ┣━━ def _handle_paths
     ┗━━ def _handle_path
 ```
+<!-- t1-end -->
 - [x] Demonstrate Parsed Checkboxes
 
-Here's how `tree_plus --help` looks (`-h` and `-H` both  also work) 
+Here's how `tree_plus --help` looks (`-h` and `-H` both also work) 
+<!-- t5-start -->
 ```sh
 ~/hax/tree_plus (main) $
 > tp -h
@@ -227,6 +230,7 @@ Options:
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
   -h, -H, --help         Show this message and exit.
 ```
+<!-- t5-end -->
 
 ## Start Quick!
 
@@ -313,6 +317,7 @@ make debug
 
 ## Moar Languages
 
+<!-- t2-start -->
 ```sh
 (py310) [2023-12-24T19:58:07-0500]
 ~/hax/tree_plus (main) $
@@ -795,9 +800,10 @@ DEBUG_TREE_PLUS=None
         ┣━━ const mockTickets: async =>
         ┗━━ const renderQRCode: async =>
 ```
-
+<!-- t2-end -->
 ## Got Globs?
 
+<!-- t3-start -->
 ```sh
 (py310) [2023-12-24T19:59:31-0500]
 ~/hax/tree_plus (main) $
@@ -954,6 +960,7 @@ paths=('tests/more_languages',)
         ┣━━ const mockTickets: async =>
         ┗━━ const renderQRCode: async =>
 ```
+<!-- t3-end -->
 
 ## Languages Todo:
 
@@ -962,6 +969,7 @@ Help me **add to** and **priorize** this list of languages to support!
 - [Open a `tree_plus` GitHub Issue](https://github.com/bionicles/tree_plus/issues/new), or
 - [Contact Bion on X](https://twitter.com/flesheatingemu)
 
+<!-- t4-start -->
 ```sh
 (py310) [2023-12-24T20:00:51-0500]
 ~/hax/tree_plus (main) $
@@ -984,6 +992,7 @@ paths=('tests/more_languages/group_todo',)
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 ```
+<!-- t4-end -->
 
 ## Oppose Unfair Business Practices
 

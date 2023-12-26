@@ -4,11 +4,12 @@ import collections
 import builtins
 import sqlite3
 import typing
+import json
 import yaml
+import csv
 import ast
 import os
 import re
-import json
 
 import tomli
 
@@ -184,6 +185,20 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def parse_csv(filename: str) -> list:
+    with open(filename, newline="") as csvfile:
+        reader = csv.reader(csvfile)
+        header = next(reader)
+
+        # Check if headers are wrapped in quotes
+        if not all(field.startswith('"') and field.endswith('"') for field in header):
+            raise ValueError("Headers are not wrapped in quotes")
+
+        # Remove quotes for returning the result
+        header = [field.strip('"') for field in header]
+        return header
 
 
 def parse_mathematica(contents: str) -> List[str]:
@@ -1064,7 +1079,6 @@ def is_openapi_yml(ymls: Tuple[dict]) -> bool:
 
 def is_k8s_yml(ymls: Tuple[dict]) -> bool:
     yml = ymls[0]
-    debug_print("is_k8s_yml yml:", yml)
     if "apiVersion" in yml and "kind" in yml and "metadata" in yml:
         return True
     return False
@@ -1159,7 +1173,6 @@ def parse_yml(contents: str) -> List[str]:
         debug_print("parse_yml yaml.safe_load Exception:", e)
         debug_print("parse_yml contents:", contents)
         raise
-    debug_print("parse_yml loaded yml:", ymls)
     if not ymls:
         return []
     try:

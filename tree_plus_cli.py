@@ -29,6 +29,7 @@ from tree_plus_src import (  # noqa E402
     IgnoreInput,
     Ignore,
     should_ignore,
+    __version__,
 )
 
 console = Console()
@@ -73,24 +74,16 @@ file_char = ":page_facing_up:" if operate_normally else "[file]"
 glob_char = ":cyclone:" if operate_normally else "[glob]"
 
 
-def handle_version():
-    parent_path = os.path.dirname(os.path.abspath(__file__))
-    debug_print(f"[handle_version] {parent_path=}")
-    pyproject_path = os.path.join(parent_path, "pyproject.toml")
-    debug_print(f"[handle_version] {pyproject_path=}")
-    with open(pyproject_path, "r") as f:
-        contents = f.readlines()
-    debug_print(f"[handle_version] {contents=}")
-    for line in contents:
-        if "version" in line:
-            rich_print(f"tree_plus {line}")
-            return
-
-
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h", "-H"])
 
 
-@click.command(context_settings=CONTEXT_SETTINGS)
+@click.command(
+    context_settings=CONTEXT_SETTINGS,
+    epilog=f"""
+    \b
+    (v{__version__}) --- https://github.com/bionicles/tree_plus
+""",
+)
 @click.option(
     "--ignore",
     "-i",
@@ -140,7 +133,7 @@ def main(
             > tree_plus tree_plus_src tests
 
         \b
-        Show files matching "*.*s" tests/more_languages
+        Show files matching "*.*s" within tests/more_languages
             > tree_plus -g "*.*s" tests/more_languages
 
         \b
@@ -150,7 +143,7 @@ def main(
     if debug:
         enable_debug()
     if version:
-        handle_version()
+        print(__version__)
         return
     debug_print(f"tree_plus main received {paths=} {ignore=} {glob=}")
     globs = make_globs(glob)

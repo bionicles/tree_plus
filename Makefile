@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 cli:
-	pip install -e .[dev]
+	pip install -U -e .[dev]
 
 # DEVELOP with `make debug`
 debug: 
@@ -11,9 +11,8 @@ debug:
 debug_command: test test_cli
 
 
-# first, test the dotdot stuff (no cli reinstall, for speed)
 test: test_tp_dotdot
-	pytest tests/ -k "not test_tree_plus_dotdot and not cli" -vv
+	pytest tests/ -k "not test_tree_plus_dotdot and not cli and not deploy" -vv
 
 test_tp_dotdot:
 	cd tests/dot_dot/nested_dir && pytest -k test_tree_plus_dotdot -vv
@@ -25,10 +24,13 @@ test_cli: cli
 test_dotenv:
 	pytest tests/ -k "dotenv"
 
-build: install-build clean-dist
+build: install-build-tool clean-dist
 	python -m build
 
-install-build:
+install-wheel:
+	pip install -U dist/*.whl
+
+install-build-tool:
 	pip install --upgrade build
 
 test-publish: install-twine
@@ -54,3 +56,6 @@ t3:
 
 t4:
 	tree_plus tests/more_languages/group_todo
+
+t5:
+	tree_plus -h
