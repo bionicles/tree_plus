@@ -4,9 +4,9 @@
 ```sh
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (43364 tokens, 4702 lines)
+📁 tree_plus (31865 tokens, 3865 lines)
 ┣━━ 📁 .github (107 tokens, 11 lines)
-┃   ┣━━ 📁 workflows (1050 tokens, 127 lines)
+┃   ┣━━ 📁 workflows (1049 tokens, 127 lines)
 ┃   ┃   ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
 ┃   ┃   ┃   ┣━━ Microsoft
 ┃   ┃   ┃   ┣━━   job: build
@@ -16,7 +16,7 @@ paths=('.',)
 ┃   ┃   ┃   ┣━━     - Set PYTHONUTF8 for Windows
 ┃   ┃   ┃   ┣━━     - Run generic tests
 ┃   ┃   ┃   ┗━━     - Run specific test
-┃   ┃   ┗━━ 📄 unix.yml (727 tokens, 87 lines)
+┃   ┃   ┗━━ 📄 unix.yml (726 tokens, 87 lines)
 ┃   ┃       ┣━━ Linux & MacOS
 ┃   ┃       ┣━━   job: test
 ┃   ┃       ┣━━     - Set up Python ${{ matrix.python-version }}
@@ -33,10 +33,11 @@ paths=('.',)
 ┃   ┃       ┣━━     - Run generic tests
 ┃   ┃       ┣━━     - Run specific test
 ┃   ┃       ┣━━     - Update README
-┃   ┃       ┗━━     - Commit Updates
+┃   ┃       ┣━━     - Commit Updates
+┃   ┃       ┗━━     - Publish to PyPI
 ┃   ┗━━ 📄 dependabot.yml (107 tokens, 11 lines)
 ┃       ┗━━ Unsupported YAML Category
-┣━━ 📁 tree_plus_src (19671 tokens, 2423 lines)
+┣━━ 📁 tree_plus_src (19659 tokens, 2422 lines)
 ┃   ┣━━ 📁 scripts (3515 tokens, 450 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -55,7 +56,7 @@ paths=('.',)
 ┃   ┃   ┣━━ def disable_debug
 ┃   ┃   ┣━━ def debug_enabled
 ┃   ┃   ┗━━ def debug_print
-┃   ┣━━ 📄 deploy.py (1727 tokens, 207 lines)
+┃   ┣━━ 📄 deploy.py (1736 tokens, 208 lines)
 ┃   ┃   ┣━━ def extract
 ┃   ┃   ┣━━ def load
 ┃   ┃   ┣━━ def extract_version
@@ -70,7 +71,7 @@ paths=('.',)
 ┃   ┃   ┣━━ def is_binary_string
 ┃   ┃   ┣━━ def is_binary
 ┃   ┃   ┗━━ def should_ignore
-┃   ┣━━ 📄 parse_file.py (15866 tokens, 1909 lines)
+┃   ┣━━ 📄 parse_file.py (15845 tokens, 1907 lines)
 ┃   ┃   ┣━━ def extract_groups
 ┃   ┃   ┣━━ def parse_file
 ┃   ┃   ┣━━ def parse_csv
@@ -183,7 +184,7 @@ paths=('.',)
 ┃   ┣━━     rich
 ┃   ┗━━     tomli
 ┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (12609 tokens, 1007 lines)
+┣━━ 📄 README.md (1123 tokens, 171 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -244,7 +245,7 @@ Options:
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
   -h, -H, --help         Show this message and exit.
 
-  (v1.0.9) --- https://github.com/bionicles/tree_plus
+  (v1.0.10) --- https://github.com/bionicles/tree_plus
 
 ```
 <!-- t5-end -->
@@ -255,7 +256,6 @@ Options:
 ```sh
 tree_plus -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-DEBUG_TREE_PLUS=0
 📁 more_languages (22990 tokens, 3306 lines)
 ┣━━ 📁 group1 (791 tokens, 158 lines)
 ┃   ┣━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
