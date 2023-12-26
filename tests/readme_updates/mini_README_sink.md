@@ -4,9 +4,9 @@
 ```sh
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (32207 tokens, 3896 lines)
+📁 tree_plus (32220 tokens, 3899 lines)
 ┣━━ 📁 .github (107 tokens, 11 lines)
-┃   ┣━━ 📁 workflows (1037 tokens, 126 lines)
+┃   ┣━━ 📁 workflows (1050 tokens, 128 lines)
 ┃   ┃   ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
 ┃   ┃   ┃   ┣━━ Microsoft
 ┃   ┃   ┃   ┣━━   job: build
@@ -16,7 +16,7 @@ paths=('.',)
 ┃   ┃   ┃   ┣━━     - Set PYTHONUTF8 for Windows
 ┃   ┃   ┃   ┣━━     - Run generic tests
 ┃   ┃   ┃   ┗━━     - Run specific test
-┃   ┃   ┗━━ 📄 unix.yml (714 tokens, 86 lines)
+┃   ┃   ┗━━ 📄 unix.yml (727 tokens, 88 lines)
 ┃   ┃       ┣━━ Linux & MacOS
 ┃   ┃       ┣━━   job: test
 ┃   ┃       ┣━━     - Set up Python ${{ matrix.python-version }}
@@ -33,6 +33,7 @@ paths=('.',)
 ┃   ┃       ┣━━     - Run generic tests
 ┃   ┃       ┣━━     - Run specific test
 ┃   ┃       ┣━━     - Update README
+┃   ┃       ┣━━     - Build Again
 ┃   ┃       ┣━━     - Commit Updates
 ┃   ┃       ┗━━     - Publish to PyPI
 ┃   ┗━━ 📄 dependabot.yml (107 tokens, 11 lines)
@@ -186,7 +187,7 @@ paths=('.',)
 ┃   ┣━━     rich
 ┃   ┗━━     tomli
 ┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (1123 tokens, 171 lines)
+┣━━ 📄 README.md (1123 tokens, 172 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
