@@ -216,6 +216,3 @@ def test_deploy_main_update_readme():
     assert "util enhanced with tokens, lines, and components" in readme_content
     assert "both also work" in readme_content
     # assert "within tests/more_languages" in readme_content
-
-
-# NOTE: this order means

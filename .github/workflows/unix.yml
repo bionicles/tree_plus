@@ -52,7 +52,7 @@ jobs:
       - name: Install pypa/build
         run: python -m pip install build
       - name: Increment Version
-        run: TREE_PLUS_INCREMENT_VERSION=YES python -m tree_plus_src/deploy.py
+        run: TREE_PLUS_INCREMENT_VERSION=YES python -m tree_plus_src/deploy
       - name: Build
         run: make build
       - name: Install
@@ -64,7 +64,7 @@ jobs:
         run: |
           cd tests/dot_dot/nested_dir && pytest -k test_tree_plus_dotdot -vv && cd ../../..
       - name: Update README
-        run: TREE_PLUS_UPDATE_README=YES python -m tree_plus_src/deploy.py
+        run: TREE_PLUS_UPDATE_README=YES python -m tree_plus_src/deploy
       - name: Commit Updates
         run: |
           git config --local user.email "action@github.com"
