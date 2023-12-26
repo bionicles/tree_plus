@@ -1,8 +1,9 @@
 # .gitignore
 
 # Python cache files
-tests/__pycache__
+tests/__pycache__/
 __pycache__/
+__pycache__
 *.pyc
 *.pyo
 *.pyd
@@ -36,3 +37,6 @@ detritus/
 
 # testing stuff
 .hypothesis
+
+tests/.pytest_cache
+.pytest_cache

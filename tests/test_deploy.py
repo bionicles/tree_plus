@@ -167,9 +167,13 @@ MAIN_VERSION_PY_SINK_PATH = os.path.join(
     "tests", "version_increments", "dry_run_version.py"
 )
 MAIN_README_SINK_PATH = os.path.join("tests", "readme_updates", "dry_run_README.md")
-# rename the file so it sticks around for manual inspection
+
+# rename files so they stick around to inspect
 DRY_RUN_VERSION_PY_SINK_RENAMED_PATH = os.path.join(
     "tests", "version_increments", "renamed_dry_run_version.py"
+)
+DRY_RUN_README_SINK_RENAMED_PATH = os.path.join(
+    "tests", "readme_updates", "renamed_dry_run_README.md"
 )
 
 
@@ -216,3 +220,5 @@ def test_deploy_main_update_readme():
     assert "util enhanced with tokens, lines, and components" in readme_content
     assert "both also work" in readme_content
     # assert "within tests/more_languages" in readme_content
+
+    os.rename(MAIN_README_SINK_PATH, DRY_RUN_README_SINK_RENAMED_PATH)
