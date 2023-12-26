@@ -4,7 +4,7 @@ import subprocess
 import re
 import os
 
-from .debug import debug_print
+from tree_plus_src.debug import debug_print
 
 
 def extract(path: str = None) -> str:
