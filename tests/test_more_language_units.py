@@ -786,7 +786,7 @@ def test_more_languages_group4(
                 "    - Run specific test",
                 "    - Update README",
                 "    - Commit Updates",
-                "    - Publish to PyPI",
+                # "    - Publish to PyPI",
             ],
         ),
         (

@@ -71,9 +71,9 @@ jobs:
           git config --local user.name "GitHub Action"
           git commit -am "cd: increment version.py; update readme [skip ci]"
           git push
-      - name: Publish to PyPI
-        if: steps.test_again.outputs.success == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.4.2
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+      # - name: Publish to PyPI
+      #   if: steps.test_again.outputs.success == 'true'
+      #   uses: pypa/gh-action-pypi-publish@v1.4.2
+      #   with:
+      #     user: __token__
+      #     password: ${{ secrets.PYPI_API_TOKEN }}
