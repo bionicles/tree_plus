@@ -44,6 +44,8 @@ jobs:
     environment: cicd
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{secrets.GH_PAT}}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -70,14 +72,9 @@ jobs:
       - name: Update README
         run: TREE_PLUS_UPDATE_README=YES python tree_plus_src/deploy.py
       - name: Commit Updates
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          echo "Token Length: ${#GITHUB_TOKEN}"
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
           git commit -am "cd: increment version.py; update readme [skip ci]"
-          git push https://bionicles:${GITHUB_TOKEN}@github.com/bionicles/tree_plus.git
+          git push https://github.com/bionicles/tree_plus.git
       # - name: Publish to PyPI
       #   if: steps.test_again.outputs.success == 'true'
       #   uses: pypa/gh-action-pypi-publish@v1.4.2
