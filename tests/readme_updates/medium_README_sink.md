@@ -4,37 +4,39 @@
 ```sh
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (43124 tokens, 4674 lines)
-┣━━ 📁 .github
-┃   ┗━━ 📁 workflows (927 tokens, 115 lines)
-┃       ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
-┃       ┃   ┣━━ Microsoft
-┃       ┃   ┣━━   job: build
-┃       ┃   ┣━━     - Set up Python ${{ matrix.python-version }}
-┃       ┃   ┣━━     - Install tree_plus
-┃       ┃   ┣━━     - Create .env file
-┃       ┃   ┣━━     - Set PYTHONUTF8 for Windows
-┃       ┃   ┣━━     - Run generic tests
-┃       ┃   ┗━━     - Run specific test
-┃       ┗━━ 📄 unix.yml (604 tokens, 75 lines)
-┃           ┣━━ Linux & MacOS
-┃           ┣━━   job: test
-┃           ┣━━     - Set up Python ${{ matrix.python-version }}
-┃           ┣━━     - Install tree_plus
-┃           ┣━━     - Create .env file
-┃           ┣━━     - Run generic tests
-┃           ┣━━     - Run specific test
-┃           ┣━━   job: deploy
-┃           ┣━━     - Set up Python
-┃           ┣━━     - Install pypa/build
-┃           ┣━━     - Increment Version
-┃           ┣━━     - Build
-┃           ┣━━     - Install
-┃           ┣━━     - Test
-┃           ┣━━     - Update README
-┃           ┣━━     - Commit Updates
-┃           ┗━━     - Publish to PyPI
-┣━━ 📁 tree_plus_src (19682 tokens, 2422 lines)
+📁 tree_plus (43305 tokens, 4692 lines)
+┣━━ 📁 .github (107 tokens, 11 lines)
+┃   ┣━━ 📁 workflows (1042 tokens, 125 lines)
+┃   ┃   ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
+┃   ┃   ┃   ┣━━ Microsoft
+┃   ┃   ┃   ┣━━   job: build
+┃   ┃   ┃   ┣━━     - Set up Python ${{ matrix.python-version }}
+┃   ┃   ┃   ┣━━     - Install tree_plus
+┃   ┃   ┃   ┣━━     - Create .env file
+┃   ┃   ┃   ┣━━     - Set PYTHONUTF8 for Windows
+┃   ┃   ┃   ┣━━     - Run generic tests
+┃   ┃   ┃   ┗━━     - Run specific test
+┃   ┃   ┗━━ 📄 unix.yml (719 tokens, 85 lines)
+┃   ┃       ┣━━ Linux & MacOS
+┃   ┃       ┣━━   job: test
+┃   ┃       ┣━━     - Set up Python ${{ matrix.python-version }}
+┃   ┃       ┣━━     - Install tree_plus
+┃   ┃       ┣━━     - Create .env file
+┃   ┃       ┣━━     - Run generic tests
+┃   ┃       ┣━━     - Run specific test
+┃   ┃       ┣━━   job: deploy
+┃   ┃       ┣━━     - Set up Python
+┃   ┃       ┣━━     - Install pypa/build
+┃   ┃       ┣━━     - Increment Version
+┃   ┃       ┣━━     - Build
+┃   ┃       ┣━━     - Install
+┃   ┃       ┣━━     - Run generic tests
+┃   ┃       ┣━━     - Run specific test
+┃   ┃       ┣━━     - Update README
+┃   ┃       ┗━━     - Commit Updates
+┃   ┗━━ 📄 dependabot.yml (107 tokens, 11 lines)
+┃       ┗━━ Unsupported YAML Category
+┣━━ 📁 tree_plus_src (19634 tokens, 2419 lines)
 ┃   ┣━━ 📁 scripts (3515 tokens, 450 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -53,11 +55,7 @@ paths=('.',)
 ┃   ┃   ┣━━ def disable_debug
 ┃   ┃   ┣━━ def debug_enabled
 ┃   ┃   ┗━━ def debug_print
-┃   ┣━━ 📄 deploy.py (1738 tokens, 206 lines)
-┃   ┃   ┣━━ NOTE (Line 188): if 'TREE_PLUS_DEPLOYMENT' is 'GO',
-┃   ┃   ┣━━ NOTE (Line 189): then modify pyproject.toml & README.md
-┃   ┃   ┣━━ NOTE (Line 190): and separate concerns to delay needing to commit 
-┃   ┃   ┃   updates
+┃   ┣━━ 📄 deploy.py (1690 tokens, 203 lines)
 ┃   ┃   ┣━━ def extract
 ┃   ┃   ┣━━ def load
 ┃   ┃   ┣━━ def extract_version
@@ -149,7 +147,7 @@ paths=('.',)
 ┃   ┗━━ 📄 version.py (18 tokens, 2 lines)
 ┣━━ 📄 .gitignore (124 tokens, 38 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (294 tokens, 58 lines)
+┣━━ 📄 Makefile (309 tokens, 61 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ debug
@@ -159,8 +157,9 @@ paths=('.',)
 ┃   ┣━━ test_tp_dotdot
 ┃   ┣━━ test_cli: cli
 ┃   ┣━━ test_dotenv
-┃   ┣━━ build: install-build clean-dist
-┃   ┣━━ install-build
+┃   ┣━━ build: install-build-tool clean-dist
+┃   ┣━━ install-wheel
+┃   ┣━━ install-build-tool
 ┃   ┣━━ test-publish: install-twine
 ┃   ┣━━ install-twine
 ┃   ┣━━ publish: install-twine
@@ -171,7 +170,7 @@ paths=('.',)
 ┃   ┣━━ t4
 ┃   ┗━━ t5
 ┣━━ 📄 nodemon.json (102 tokens, 18 lines)
-┣━━ 📄 pyproject.toml (343 tokens, 44 lines)
+┣━━ 📄 pyproject.toml (327 tokens, 41 lines)
 ┃   ┣━━ name: tree_plus
 ┃   ┣━━ version: N/A
 ┃   ┣━━ description: A `tree` util enhanced with tokens, lines, and components.
@@ -184,7 +183,7 @@ paths=('.',)
 ┃   ┣━━     rich
 ┃   ┗━━     tomli
 ┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (12601 tokens, 1007 lines)
+┣━━ 📄 README.md (12609 tokens, 1007 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
