@@ -1,6 +1,8 @@
 # tests/test_units.py
 import pytest
 
+from rich.text import Text
+
 from tree_plus_src import (
     traverse_directory,
     parse_file,
@@ -13,9 +15,8 @@ from tree_plus_src import (
 
 def test_directory_token_line_counting():
     dir_path = "tests/path_to_test/"
-    expected = TokenLineCount(
-        n_tokens=658, n_lines=136
-    )  # Manually calculated total counts.
+    # Manually calculated total counts.
+    expected = TokenLineCount(n_tokens=724, n_lines=149)
     result = count_directory_tokens_lines(dir_path)
     assert isinstance(result, TokenLineCount)
     assert result == expected
@@ -37,7 +38,7 @@ def test_units_file_as_directory():
     "file,expected",
     [
         ("tests/path_to_test/version.py", ['__version__ = "1.2.3"']),
-        ("tests/path_to_test/file.py", ["def hello_world()"]),
+        ("tests/path_to_test/file.py", [Text("def hello_world()")]),
         ("tests/path_to_test/file.js", ["function helloWorld"]),
         ("tests/path_to_test/file.md", ["# Hello, world!"]),
         ("tests/path_to_test/file.txt", []),
@@ -45,25 +46,34 @@ def test_units_file_as_directory():
             "tests/path_to_test/class_method_type.py",
             [
                 'T = TypeVar("T")',
-                "class MyClass",
-                "    def my_method(self)",
-                "    def my_typed_method(self, obj: dict) -> int",
-                """    def my_multiline_signature_method(
+                Text("def parse_py(contents: str) -> List[str]"),
+                Text("class MyClass"),
+                Text("    def my_method(self)"),
+                "    @staticmethod",
+                Text("    def my_typed_method(obj: dict) -> int"),
+                Text(
+                    """    def my_multiline_signature_method(
         self,
         alice: str = None,
         bob: int = None,
-    ) -> tuple""",
+    ) -> tuple"""
+                ),
                 "@lru_cache(maxsize=None)",
-                """def my_multiline_signature_function(
+                Text(
+                    """def my_multiline_signature_function(
     tree: tuple = (),
     plus: str = "+",
 ) -> tuple"""
-                "class LogLevelEnum(str, Enum)",
-                "class Algo(BaseModel)",
+                ),
+                Text("class LogLevelEnum(str, Enum)"),
+                Text("class Algo(BaseModel)"),
                 "@dataclass",
-                "class TestDataclass",
+                Text("class TestDataclass"),
                 'A = TypeVar("A", str, bytes)',
-                "def omega_yikes(file: str, expected: List[str]) -> bool",
+                Text("def omega_yikes(file: str, expected: List[str]) -> bool"),
+                Text("def ice[T](args: Iterable[T] = ())"),
+                Text("class list[T]"),
+                Text("    def __getitem__(self, index: int, /) -> T"),
             ],
         ),
         (
@@ -131,3 +141,9 @@ def test_units_token_counting(file, expected):
     result = count_tokens_lines(file)
     assert isinstance(result, TokenLineCount)
     assert result == expected
+
+
+def test_units_rich_prints_list_str():
+    from rich.console import Console
+
+    cons = Console()

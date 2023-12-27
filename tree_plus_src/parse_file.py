@@ -11,6 +11,7 @@ import ast
 import os
 import re
 
+from rich.text import Text
 import tomli
 
 from tree_plus_src.ignore import is_binary
@@ -1216,54 +1217,112 @@ def is_builtin_type(node, parent):
     return False
 
 
-def parse_py(content: str) -> List[str]:
-    try:
-        node = ast.parse(content)
-    except SyntaxError as se:
-        return [str(se)]
+# r"\n(( *)def .*\([^\)]*\) (-> .*)?):( +# .*)?\n|"
+# \n(( *)def .*\([^\)]*\) ?(-> .*)?):( +# .*)?\n
+# ^\s*def\s+\w+\s*\([^)]*(?:\n\s+.+)*\)\s*(?:->\s*[\w\[\], ]+)?\s*:
+# this following works in regex101 but way overmatched in python
+# r"^\s*def\s+\w+\s*\((?:[^()]|\([^)]*\))*\)\s*(?:->\s*[\w\[\], ]+)?\s*:|"
+# the following works in regex101 python but didn't match the () tuple literal in the signature
+# r"\n( *def\s+\w+\s*\((?:[^()]|\([^)]*\))*\)\s*(?:->\s*[\w\[\], ]+)?\s*):|"
 
-    # Extract classes and functions
-    classes = extract_nodes(node, ast.ClassDef)
-    funcs = extract_nodes(node, ast.FunctionDef)
 
-    all_items = []
-    method_names = set()  # To keep track of method names
+# r"( *def\s+\w+\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*->\s*[\w\[\], ]+\s*):|"
+# regex might help with indentation & multiline function signatures
+def parse_py(contents: str) -> List[str]:
+    # Combined regex pattern to match Python components
+    combined_pattern = re.compile(
+        # Functions and Methods, capturing indentation and multiline signatures
+        r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\[\], ]+)?)\s*:|"
+        # Classes
+        r"(class \w+(\[.*\])?(\([\w\s,]*\))?):|"
+        # Decorators
+        r"\n( *@\w+(\(.*\))?)\n|"
+        # TypeVar
+        r"\n(\w+ = TypeVar\([^)]+\))|"
+        # Version
+        r"\n((__version__ = \".*\"))",
+        re.MULTILINE,
+        # re.DOTALL,  # causes dramatic over-extension of matches
+    )
 
-    # Handling type annotations
-    for n in extract_nodes(node, ast.Assign):
-        if (
-            isinstance(n[1].value, ast.Call)
-            and (
-                is_typing_construct(n[1].value.func)
-                or is_builtin_type(n[1].value.func, n[0])
-            )
-            and not isinstance(n[0], ast.ClassDef)
-        ):
-            all_items.append((n[1].lineno, f"type {n[1].targets[0].id}"))
+    components = []
+    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+        groups = extract_groups(match)
+        debug_print(f"parse_py: {match_number=}:")
 
-    # Handling classes and methods
-    for cls in classes:
-        class_name = f"class {cls[1].name}"
-        all_items.append((cls[1].lineno, class_name))
+        # Function or Method is 1
+        if 1 in groups:
+            function_or_method = Text(groups[1])  # fix a bug with [hints]
+            components.append(function_or_method)
+        # Class is 2
+        elif 3 in groups:
+            class_group = Text(groups[3])  # [generics]
+            components.append(class_group)
+        # 6 is the whole decorator group
+        elif 6 in groups:
+            decorator = groups[6]
+            components.append(decorator)
+        # 8 wraps entire TypeVar matches
+        elif 8 in groups:
+            typevar = groups[8]
+            components.append(typevar)
+        # 9 is __version__
+        elif 9 in groups:
+            version = groups[9]
+            components.append(version)
 
-        # Extracting methods within the class
-        methods = extract_nodes(cls[1], ast.FunctionDef)
-        for m in methods:
-            method_name = f"    def {m[1].name}"  # Indentation for method under class
-            all_items.append((m[1].lineno, method_name))
-            method_names.add(m[1].name)  # Add method name to the set
+    return components
 
-    # Handling standalone functions
-    for func in funcs:
-        if func[1].name not in method_names:  # Check if the function is not a method
-            func_name = f"def {func[1].name}"
-            all_items.append((func[1].lineno, func_name))
 
-    # Sorting all items by their line number to preserve order
-    sorted_items = sorted(all_items, key=lambda x: x[0])
+# AST version
+# def parse_py(content: str) -> List[str]:
+#     try:
+#         node = ast.parse(content)
+#     except SyntaxError as se:
+#         return [str(se)]
 
-    # Return only the formatted names
-    return [item[1] for item in sorted_items]
+#     # Extract classes and functions
+#     classes = extract_nodes(node, ast.ClassDef)
+#     funcs = extract_nodes(node, ast.FunctionDef)
+
+#     all_items = []
+#     method_names = set()  # To keep track of method names
+
+#     # Handling type annotations
+#     for n in extract_nodes(node, ast.Assign):
+#         if (
+#             isinstance(n[1].value, ast.Call)
+#             and (
+#                 is_typing_construct(n[1].value.func)
+#                 or is_builtin_type(n[1].value.func, n[0])
+#             )
+#             and not isinstance(n[0], ast.ClassDef)
+#         ):
+#             all_items.append((n[1].lineno, f"type {n[1].targets[0].id}"))
+
+#     # Handling classes and methods
+#     for cls in classes:
+#         class_name = f"class {cls[1].name}"
+#         all_items.append((cls[1].lineno, class_name))
+
+#         # Extracting methods within the class
+#         methods = extract_nodes(cls[1], ast.FunctionDef)
+#         for m in methods:
+#             method_name = f"    def {m[1].name}"  # Indentation for method under class
+#             all_items.append((m[1].lineno, method_name))
+#             method_names.add(m[1].name)  # Add method name to the set
+
+#     # Handling standalone functions
+#     for func in funcs:
+#         if func[1].name not in method_names:  # Check if the function is not a method
+#             func_name = f"def {func[1].name}"
+#             all_items.append((func[1].lineno, func_name))
+
+#     # Sorting all items by their line number to preserve order
+#     sorted_items = sorted(all_items, key=lambda x: x[0])
+
+#     # Return only the formatted names
+#     return [item[1] for item in sorted_items]
 
 
 def parse_db(db_path: str) -> List[str]:

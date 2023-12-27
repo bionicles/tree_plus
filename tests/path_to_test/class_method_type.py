@@ -10,11 +10,16 @@ import pytest
 T = TypeVar("T")
 
 
+def parse_py(contents: str) -> List[str]:
+    return ["def parse_py(contents: str) -> List[str]:"]
+
+
 class MyClass:
     def my_method(self):
         pass
 
-    def my_typed_method(self, obj: dict) -> int:
+    @staticmethod
+    def my_typed_method(obj: dict) -> int:
         pass
 
     def my_multiline_signature_method(
@@ -73,3 +78,11 @@ A = TypeVar("A", str, bytes)
 def omega_yikes(file: str, expected: List[str]) -> bool:
     assert "does 'tree_plus' show multiline decorators or strings?"
     return False
+
+
+def ice[T](args: Iterable[T] = ()):
+    pass
+
+class list[T]:
+    def __getitem__(self, index: int, /) -> T:
+        ...

@@ -11,15 +11,24 @@ debug:
 debug_command: test test_cli
 
 
-test: test_tp_dotdot
+test: test_normally test_tp_dotdot test_cli test_deploy
+
+# first we'll do our unit tests (most likely to need fast debug)
+test_normally:
 	pytest tests/ -k "not test_tree_plus_dotdot and not cli and not deploy" -vv
 
+# then we have a test where we change directory
 test_tp_dotdot:
 	cd tests/dot_dot/nested_dir && pytest -k test_tree_plus_dotdot -vv
 
-# then, reinstall the cli and test it in there
+# then we reinstall the cli and test it
 test_cli: cli
-	pytest tests/ -k "cli" -vv
+	pytest tests/test_cli.py -k "cli" -vv
+
+# finally, we'll test the deployment script
+test_deploy:
+	pytest tests/test_deploy.py
+
 
 test_dotenv:
 	pytest tests/ -k "dotenv"

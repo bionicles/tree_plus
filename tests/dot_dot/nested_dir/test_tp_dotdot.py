@@ -12,11 +12,11 @@ BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 EXPECTATION_1 = """📁 dot_dot
 ┣━━ 📁 nested_dir
 ┃   ┗━━ 📄 test_tp_dotdot.py
-┃       ┣━━ def ignore_tokens_lines_test
-┃       ┣━━ def test_tree_plus_dotdot
-┃       ┗━━ def test_tree_plus_dotdot_traverse
+┃       ┣━━ def ignore_tokens_lines_test(text: str) -> str
+┃       ┣━━ def test_tree_plus_dotdot()
+┃       ┗━━ def test_tree_plus_dotdot_traverse()
 ┗━━ 📄 my_test_file.py
-    ┗━━ def dot_dot_dot
+    ┗━━ def dot_dot_dot()
 """
 
 

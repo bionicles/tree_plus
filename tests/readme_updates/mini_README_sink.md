@@ -4,9 +4,9 @@
 ```sh
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (32207 tokens, 3896 lines)
+📁 tree_plus (33682 tokens, 4060 lines)
 ┣━━ 📁 .github (107 tokens, 11 lines)
-┃   ┣━━ 📁 workflows (1037 tokens, 126 lines)
+┃   ┣━━ 📁 workflows (1050 tokens, 128 lines)
 ┃   ┃   ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
 ┃   ┃   ┃   ┣━━ Microsoft
 ┃   ┃   ┃   ┣━━   job: build
@@ -16,7 +16,7 @@ paths=('.',)
 ┃   ┃   ┃   ┣━━     - Set PYTHONUTF8 for Windows
 ┃   ┃   ┃   ┣━━     - Run generic tests
 ┃   ┃   ┃   ┗━━     - Run specific test
-┃   ┃   ┗━━ 📄 unix.yml (714 tokens, 86 lines)
+┃   ┃   ┗━━ 📄 unix.yml (727 tokens, 88 lines)
 ┃   ┃       ┣━━ Linux & MacOS
 ┃   ┃       ┣━━   job: test
 ┃   ┃       ┣━━     - Set up Python ${{ matrix.python-version }}
@@ -33,11 +33,12 @@ paths=('.',)
 ┃   ┃       ┣━━     - Run generic tests
 ┃   ┃       ┣━━     - Run specific test
 ┃   ┃       ┣━━     - Update README
+┃   ┃       ┣━━     - Build Again
 ┃   ┃       ┣━━     - Commit Updates
 ┃   ┃       ┗━━     - Publish to PyPI
 ┃   ┗━━ 📄 dependabot.yml (107 tokens, 11 lines)
 ┃       ┗━━ Unsupported YAML Category
-┣━━ 📁 tree_plus_src (20013 tokens, 2454 lines)
+┣━━ 📁 tree_plus_src (21347 tokens, 2596 lines)
 ┃   ┣━━ 📁 scripts (3515 tokens, 450 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -45,120 +46,144 @@ paths=('.',)
 ┃   ┃   ┗━━ 📄 Microsoft.PowerShell_profile.ps1 (3238 tokens, 419 lines)
 ┃   ┃       ┣━━ function Log($message)
 ┃   ┃       ┗━━ function Show-Error($err)
-┃   ┣━━ 📄 count_tokens_lines.py (613 tokens, 82 lines)
-┃   ┃   ┣━━ TODO (Line 12): show off how well we parse_todo!
+┃   ┣━━ 📄 count_tokens_lines.py (775 tokens, 119 lines)
+┃   ┃   ┣━━ TODO (Line 13): show off how well we parse_todo!
+┃   ┃   ┣━━ @dataclass
 ┃   ┃   ┣━━ class TokenLineCount
-┃   ┃   ┣━━ def add_tokens_lines
-┃   ┃   ┣━━ def count_tokens_lines
-┃   ┃   ┗━━ def count_directory_tokens_lines
+┃   ┃   ┣━━ def add_tokens_lines(
+┃   ┃   ┃       lhs_count: TokenLineCount, rhs_count: TokenLineCount
+┃   ┃   ┃   ) -> TokenLineCount
+┃   ┃   ┣━━ def count_tokens_lines(file_path: str) -> TokenLineCount
+┃   ┃   ┗━━ def count_directory_tokens_lines(directory_path: str) -> 
+┃   ┃       TokenLineCount
 ┃   ┣━━ 📄 debug.py (87 tokens, 20 lines)
-┃   ┃   ┣━━ def enable_debug
-┃   ┃   ┣━━ def disable_debug
-┃   ┃   ┣━━ def debug_enabled
-┃   ┃   ┗━━ def debug_print
+┃   ┃   ┣━━ def enable_debug()
+┃   ┃   ┣━━ def disable_debug()
+┃   ┃   ┣━━ def debug_enabled()
+┃   ┃   ┗━━ def debug_print(*args, **kwargs)
 ┃   ┣━━ 📄 deploy.py (2090 tokens, 240 lines)
 ┃   ┃   ┣━━ TODO (Line 167): test this reset readme command so we can clean out 
 ┃   ┃   ┃   the code blocks
-┃   ┃   ┣━━ def extract
-┃   ┃   ┣━━ def load
-┃   ┃   ┣━━ def extract_version
-┃   ┃   ┣━━ def increment_version
-┃   ┃   ┣━━ def run_command
-┃   ┃   ┣━━ def replace_readme_section
-┃   ┃   ┣━━ def update_readme
-┃   ┃   ┗━━ def main
-┃   ┣━━ 📄 ignore.py (931 tokens, 145 lines)
-┃   ┃   ┣━━ def make_ignore
-┃   ┃   ┣━━ def make_globs
-┃   ┃   ┣━━ def is_binary_string
-┃   ┃   ┣━━ def is_binary
-┃   ┃   ┗━━ def should_ignore
-┃   ┣━━ 📄 parse_file.py (15845 tokens, 1907 lines)
-┃   ┃   ┣━━ def extract_groups
-┃   ┃   ┣━━ def parse_file
-┃   ┃   ┣━━ def parse_csv
-┃   ┃   ┣━━ def parse_mathematica
-┃   ┃   ┣━━ def parse_r
-┃   ┃   ┣━━ def parse_zig
-┃   ┃   ┣━━ def parse_hs
-┃   ┃   ┣━━ def parse_lisp
-┃   ┃   ┣━━ def parse_capnp
-┃   ┃   ┣━━ def parse_grpc
-┃   ┃   ┣━━ def parse_openrpc_json
-┃   ┃   ┣━━ def parse_json_rpc
-┃   ┃   ┣━━ def parse_graphql
-┃   ┃   ┣━━ def format_dependency
-┃   ┃   ┣━━ def parse_cargo_toml
-┃   ┃   ┣━━ def parse_pyproject_toml
-┃   ┃   ┣━━ def parse_lean
-┃   ┃   ┣━━ def parse_cs
-┃   ┃   ┣━━ def parse_tex
-┃   ┃   ┣━━ def parse_rb
-┃   ┃   ┣━━ def remove_c_comments
-┃   ┃   ┣━━ def parse_cpp
-┃   ┃   ┣━━ def parse_c
-┃   ┃   ┣━━ def parse_go
-┃   ┃   ┣━━ def parse_swift
-┃   ┃   ┣━━ def parse_bash
-┃   ┃   ┣━━ def parse_d_dot_ts
-┃   ┃   ┣━━ def parse_angular_app_module
-┃   ┃   ┣━━ def parse_angular_routes
-┃   ┃   ┣━━ def parse_angular_spec
-┃   ┃   ┣━━ def parse_environment_ts
-┃   ┃   ┣━━ def parse_dot_env
-┃   ┃   ┣━━ def parse_requirements_txt
-┃   ┃   ┣━━ def parse_json_schema
-┃   ┃   ┣━━ def parse_package_json
-┃   ┃   ┣━━ def remove_ts_comments_and_private_blocks
-┃   ┃   ┣━━ def parse_ts
-┃   ┃   ┣━━ def parse_makefile
-┃   ┃   ┣━━ def parse_sql
-┃   ┃   ┣━━ def is_openapi_yml
-┃   ┃   ┣━━ def is_k8s_yml
-┃   ┃   ┣━━ def is_ansible_yml
-┃   ┃   ┣━━ def is_github_yml
-┃   ┃   ┣━━ def parse_github_yml
-┃   ┃   ┣━━ def parse_k8s
-┃   ┃   ┣━━ def parse_ansible
-┃   ┃   ┣━━ def parse_openapi_yml
-┃   ┃   ┣━━ def parse_yml
-┃   ┃   ┣━━ def extract_nodes
-┃   ┃   ┣━━ def is_typing_construct
-┃   ┃   ┣━━ def is_builtin_type
-┃   ┃   ┣━━ def parse_py
-┃   ┃   ┣━━ def parse_db
-┃   ┃   ┣━━ def parse_cobol
-┃   ┃   ┣━━ def parse_java
-┃   ┃   ┣━━ def parse_julia
-┃   ┃   ┣━━ def parse_kotlin
-┃   ┃   ┣━━ def parse_lua
-┃   ┃   ┣━━ def parse_objective_c
-┃   ┃   ┣━━ def parse_ocaml
-┃   ┃   ┣━━ def parse_apl
-┃   ┃   ┣━━ def parse_perl
-┃   ┃   ┣━━ def parse_php
-┃   ┃   ┣━━ def parse_powershell
-┃   ┃   ┣━━ def parse_matlab
-┃   ┃   ┣━━ def parse_scala
-┃   ┃   ┣━━ def parse_tf
-┃   ┃   ┣━━ def parse_md
-┃   ┃   ┣━━ def parse_txt
-┃   ┃   ┣━━ def parse_markers
-┃   ┃   ┗━━ def parse_rs
+┃   ┃   ┣━━ def extract(path: str = None) -> str
+┃   ┃   ┣━━ def load(content: str = None, path: str = None)
+┃   ┃   ┣━━ def extract_version(source_path: str = None) -> Tuple[int, int, int]
+┃   ┃   ┣━━ def increment_version(
+┃   ┃   ┃       source_path: str = None,
+┃   ┃   ┃       sink_path: str = None,
+┃   ┃   ┃   )
+┃   ┃   ┣━━ def run_command(command: str = None, debug: bool = False)
+┃   ┃   ┣━━ def replace_readme_section(
+┃   ┃   ┃       source_path: str = None,
+┃   ┃   ┃       sink_path: str = None,
+┃   ┃   ┃       marker: str = None,
+┃   ┃   ┃       command: str = None,
+┃   ┃   ┃   )
+┃   ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
+┃   ┃   ┗━━ def main()
+┃   ┣━━ 📄 ignore.py (1356 tokens, 191 lines)
+┃   ┃   ┣━━ @lru_cache
+┃   ┃   ┣━━ def make_ignore(ignore: IgnoreInput) -> Ignore
+┃   ┃   ┣━━ @lru_cache
+┃   ┃   ┣━━ def make_globs(globs: IgnoreInput) -> FrozenSet
+┃   ┃   ┣━━ @lru_cache()
+┃   ┃   ┣━━ def is_binary_string(data: bytes) -> bool
+┃   ┃   ┣━━ @lru_cache()
+┃   ┃   ┣━━ def is_binary(file_path: str) -> bool
+┃   ┃   ┣━━ @lru_cache(maxsize=None)
+┃   ┃   ┗━━ def should_ignore(path: str, ignore: Ignore, globs: Optional[Ignore]
+┃   ┃       = None) -> bool
+┃   ┣━━ 📄 parse_file.py (16592 tokens, 1966 lines)
+┃   ┃   ┣━━ def extract_groups(match: re.Match) -> dict
+┃   ┃   ┣━━ def parse_file(file_path: str) -> List[str]
+┃   ┃   ┣━━ def parse_csv(filename: str) -> list
+┃   ┃   ┣━━ def parse_mathematica(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_r(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_zig(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_hs(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_lisp(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_capnp(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_grpc(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_openrpc_json(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_json_rpc(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_graphql(contents: str) -> List[str]
+┃   ┃   ┣━━ def format_dependency(name, details)
+┃   ┃   ┣━━ def parse_cargo_toml(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_pyproject_toml(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_lean(lean_content: str) -> List[str]
+┃   ┃   ┣━━ def parse_cs(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_tex(tex_content: str) -> List[str]
+┃   ┃   ┣━━ def parse_rb(contents) -> List[str]
+┃   ┃   ┣━━ def remove_c_comments(multiline_string)
+┃   ┃   ┣━━ def parse_cpp(contents) -> List[str]
+┃   ┃   ┣━━ def parse_c(contents) -> List[str]
+┃   ┃   ┣━━ def parse_go(contents) -> List[str]
+┃   ┃   ┣━━ def parse_swift(contents) -> List[str]
+┃   ┃   ┣━━ def parse_bash(contents) -> List[str]
+┃   ┃   ┣━━ def parse_d_dot_ts(contents) -> List[str]
+┃   ┃   ┣━━ def parse_angular_app_module(contents) -> List[str]
+┃   ┃   ┣━━ def parse_angular_routes(content) -> List[str]
+┃   ┃   ┣━━ def parse_angular_spec(content) -> List[str]
+┃   ┃   ┣━━ def parse_environment_ts(contents) -> List[str]
+┃   ┃   ┣━━ def parse_dot_env(contents) -> List[str]
+┃   ┃   ┣━━ def parse_requirements_txt(contents) -> List[str]
+┃   ┃   ┣━━ def parse_json_schema(contents) -> List[str]
+┃   ┃   ┣━━ def parse_package_json(contents) -> List[str]
+┃   ┃   ┣━━ def remove_ts_comments_and_private_blocks(contents: str) -> str
+┃   ┃   ┣━━ def parse_ts(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_makefile(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_sql(contents: str) -> List[str]
+┃   ┃   ┣━━ def is_openapi_yml(ymls: Tuple[dict]) -> bool
+┃   ┃   ┣━━ def is_k8s_yml(ymls: Tuple[dict]) -> bool
+┃   ┃   ┣━━ def is_ansible_yml(ymls: Tuple[dict]) -> bool
+┃   ┃   ┣━━ def is_github_yml(ymls: Tuple[dict]) -> bool
+┃   ┃   ┣━━ def parse_github_yml(ymls: Tuple[dict]) -> List[str]
+┃   ┃   ┣━━ def parse_k8s(ymls: Tuple[dict]) -> List[str]
+┃   ┃   ┣━━ def parse_ansible(ymls: Tuple[dict]) -> List[str]
+┃   ┃   ┣━━ def parse_openapi_yml(ymls: Tuple[dict]) -> List[str]
+┃   ┃   ┣━━ def parse_yml(contents: str) -> List[str]
+┃   ┃   ┣━━ def extract_nodes(node, node_type, parent=None)
+┃   ┃   ┣━━ def is_typing_construct(node)
+┃   ┃   ┣━━ def is_builtin_type(node, parent)
+┃   ┃   ┣━━ def parse_py(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_db(db_path: str) -> List[str]
+┃   ┃   ┣━━ def parse_cobol(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_java(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_julia(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_kotlin(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_lua(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_objective_c(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_ocaml(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_apl(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_perl(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_php(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_powershell(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_matlab(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_scala(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_tf(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_md(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_txt(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_markers(content: str) -> List[str]
+┃   ┃   ┗━━ def parse_rs(contents: str) -> List[str]
 ┃   ┣━━ 📄 traverse_directory.py (429 tokens, 58 lines)
-┃   ┃   ┗━━ def traverse_directory
+┃   ┃   ┗━━ def traverse_directory(
+┃   ┃           directory_path: str, ignore: IgnoreInput = None, globs: 
+┃   ┃       IgnoreInput = None
+┃   ┃       ) -> List[str]
 ┃   ┗━━ 📄 version.py (18 tokens, 2 lines)
+┃       ┗━━ __version__ = "1.0.10"
 ┣━━ 📄 .gitignore (138 tokens, 42 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (309 tokens, 61 lines)
+┣━━ 📄 Makefile (368 tokens, 70 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
 ┃   ┣━━ debug_command: test test_cli
-┃   ┣━━ test: test_tp_dotdot
+┃   ┣━━ test: test_normally test_tp_dotdot test_cli test_deploy
+┃   ┣━━ test_normally
 ┃   ┣━━ test_tp_dotdot
 ┃   ┣━━ test_cli: cli
+┃   ┣━━ test_deploy
 ┃   ┣━━ test_dotenv
 ┃   ┣━━ build: install-build-tool clean-dist
 ┃   ┣━━ install-wheel
@@ -172,7 +197,7 @@ paths=('.',)
 ┃   ┣━━ t3
 ┃   ┣━━ t4
 ┃   ┗━━ t5
-┣━━ 📄 nodemon.json (102 tokens, 18 lines)
+┣━━ 📄 nodemon.json (124 tokens, 23 lines)
 ┣━━ 📄 pyproject.toml (327 tokens, 41 lines)
 ┃   ┣━━ name: tree_plus
 ┃   ┣━━ version: N/A
@@ -186,7 +211,7 @@ paths=('.',)
 ┃   ┣━━     rich
 ┃   ┗━━     tomli
 ┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (1123 tokens, 171 lines)
+┣━━ 📄 README.md (1123 tokens, 172 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -201,19 +226,33 @@ paths=('.',)
 ┃   ┣━━ ## Languages Todo:
 ┃   ┣━━ ## Oppose Unfair Business Practices
 ┃   ┗━━ ## License
-┗━━ 📄 tree_plus_cli.py (3402 tokens, 438 lines)
-    ┣━━ NOTE (Line 398): parent_count unused, is that ok?
-    ┣━━ def tree_to_string
-    ┣━━ def clean_string
-    ┣━━ def safe_print
-    ┣━━ def main
-    ┣━━ def subtree
-    ┣━━ def clean_tree
-    ┣━━ def tree_plus
-    ┣━━ def _parse_paths
-    ┣━━ def flatten_to_str
-    ┣━━ def _handle_paths
-    ┗━━ def _handle_path
+┗━━ 📄 tree_plus_cli.py (3449 tokens, 443 lines)
+    ┣━━ NOTE (Line 403): parent_count unused, is that ok?
+    ┣━━ def tree_to_string(tree: Tree) -> str
+    ┣━━ def clean_string(input_str)
+    ┣━━ def safe_print(tree)
+    ┣━━ def main(
+    ┃       glob: IgnoreInput,
+    ┃       paths: PathsInput,
+    ┃       ignore: IgnoreInput,
+    ┃       debug: bool,
+    ┃       version: bool,
+    ┃   )
+    ┣━━ def subtree(label: str) -> Tree
+    ┣━━ def clean_tree(input_tree: Tree, root_node: bool = False) -> 
+    ┃   Optional[Tree]
+    ┣━━ def tree_plus(
+    ┃       path_or_paths: Union[str, Tuple[str]],
+    ┃       ignore: IgnoreInput = None,
+    ┃       globs: IgnoreInput = None,
+    ┃   ) -> Tree
+    ┣━━ def _parse_paths(path_or_paths: Union[str, Tuple[str]]) -> Tuple[str]
+    ┣━━ def flatten_to_str(collection: Collection)
+    ┣━━ def _handle_paths(paths: Tuple[str], ignore: Ignore, globs: Ignore) -> 
+    ┃   Tree
+    ┗━━ def _handle_path(
+            path: str, ignore: Ignore, globs: Ignore, paths_to_trees: dict
+        ) -> Tuple[Tree, TokenLineCount]
 
 ```
 <!-- t1-end -->

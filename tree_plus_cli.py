@@ -52,7 +52,8 @@ def safe_print(tree):
     try:
         # Attempt to print the tree normally
         rich_print(tree)
-    except UnicodeEncodeError:
+    except UnicodeEncodeError as e:
+        debug_print(f"UnicodeEncodeError printing tree normally: ", e)
         try:
             # Attempt to print a cleaned version of the tree
             print(clean_string(tree_to_string(tree)))

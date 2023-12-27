@@ -14,5 +14,10 @@
     "DEBUG_TREE_PLUS": "1"
   },
   "ext": "*",
-  "ignore": ["**/*.pyc", "tree_plus.egg-info"]
+  "ignore": [
+    "**/*.pyc", 
+    "tree_plus.egg-info",
+    "tests/version_increments/*",
+    "tests/readme_updates/*"
+  ]
 }

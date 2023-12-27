@@ -83,17 +83,18 @@ DEFAULT_IGNORE = {
     "*:Zone.Identifier",
 }
 
-IgnoreInput = Optional[Union[str, Set[str], Tuple[str]]]
+IgnoreInput = Optional[Union[str, FrozenSet[str], Tuple[str]]]
 Ignore = FrozenSet[str]
 
 
-@lru_cache()
+@lru_cache
 def make_ignore(ignore: IgnoreInput) -> Ignore:
+    "CACHED = HASHABLE"
     if ignore is None:
         ignore = frozenset()
     elif isinstance(ignore, str):
         ignore = frozenset(ignore.split(","))
-    elif isinstance(ignore, (tuple, set, list)):
+    elif isinstance(ignore, tuple):
         ignore = frozenset(ignore)
     elif isinstance(ignore, frozenset):
         pass
@@ -104,8 +105,9 @@ def make_ignore(ignore: IgnoreInput) -> Ignore:
     return frozenset(ignore)
 
 
-@lru_cache()
+@lru_cache
 def make_globs(globs: IgnoreInput) -> FrozenSet:
+    "CACHED = HASHABLE"
     if globs is None:
         globs = frozenset()
     elif isinstance(globs, str):

@@ -14,8 +14,8 @@ from tree_plus_cli import main as tree_plus_main, tree_plus, tree_to_string
 
 test_directory = "tests/path_to_test"
 
-EXPECTATION_0 = """📄 file.py (11 tokens, 2 lines)
-┗━━ def hello_world
+EXPECTATION_0 = """📄 file.py (19 tokens, 3 lines)
+┗━━ def hello_world()
 """
 
 
@@ -62,7 +62,7 @@ def test_e2e_empty_folder():
     assert unify_tree_symbols(result_str) == EXPECTATION_EMPTY
 
 
-EXPECTATION_1 = """📁 path_to_test (277 tokens, 66 lines)
+EXPECTATION_1 = """📁 path_to_test (724 tokens, 149 lines)
 ┣━━ 📄 class_function.js (33 tokens, 9 lines)
 ┃   ┣━━ class MyClass
 ┃   ┣━━     myMethod
@@ -80,18 +80,42 @@ EXPECTATION_1 = """📁 path_to_test (277 tokens, 66 lines)
 ┃   ┣━━ const myAsyncArrowFunction: async =>
 ┃   ┣━━ const myAsyncArrow: async =>
 ┃   ┗━━ let myWeirdArrow: =>
-┣━━ 📄 class_method_type.py (27 tokens, 8 lines)
-┃   ┣━━ type MyType
+┣━━ 📄 class_method_type.py (447 tokens, 88 lines)
+┃   ┣━━ T = TypeVar(\"T\")
+┃   ┣━━ def parse_py(contents: str) -> List[str]
 ┃   ┣━━ class MyClass
-┃   ┗━━     def my_method
-┣━━ 📄 empty.py (0 tokens, 0 lines)
+┃   ┣━━     def my_method(self)
+┃   ┣━━     @staticmethod
+┃   ┣━━     def my_typed_method(obj: dict) -> int
+┃   ┣━━     def my_multiline_signature_method(
+┃   ┃           self,
+┃   ┃           alice: str = None,
+┃   ┃           bob: int = None,
+┃   ┃       ) -> tuple
+┃   ┣━━ @lru_cache(maxsize=None)
+┃   ┣━━ def my_multiline_signature_function(
+┃   ┃       tree: tuple = (),
+┃   ┃       plus: str = "+",
+┃   ┃   ) -> tuple
+┃   ┣━━ class LogLevelEnum(str, Enum)
+┃   ┣━━ class Algo(BaseModel)
+┃   ┣━━ @dataclass
+┃   ┣━━ class TestDataclass
+┃   ┣━━ A = TypeVar("A", str, bytes)
+┃   ┣━━ def omega_yikes(file: str, expected: List[str]) -> bool
+┃   ┣━━ def ice[T](args: Iterable[T] = ())
+┃   ┣━━ class list[T]
+┃   ┗━━     def __getitem__(self, index: int, /) -> T
+┣━━ 📄 empty.py
 ┣━━ 📄 file.js (14 tokens, 3 lines)
 ┃   ┗━━ function helloWorld
 ┣━━ 📄 file.md (12 tokens, 2 lines)
 ┃   ┗━━ # Hello, world!
-┣━━ 📄 file.py (11 tokens, 2 lines)
-┃   ┗━━ def hello_world
-┗━━ 📄 file.txt (11 tokens, 2 lines)
+┣━━ 📄 file.py (19 tokens, 3 lines)
+┃   ┗━━ def hello_world()
+┣━━ 📄 file.txt (11 tokens, 2 lines)
+┗━━ 📄 version.py (19 tokens, 2 lines)
+    ┗━━ __version__ = "1.2.3"
 """
 
 
@@ -132,7 +156,7 @@ def test_e2e_glob():
 
 # Test ignore parameter
 def test_e2e_ignore_parameter_filetype():
-    result = tree_plus("tests/more_languages/group1", ignore={"*.kt"})
+    result = tree_plus("tests/more_languages/group1", ignore=("*.kt",))
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
     print(result_str)
@@ -140,7 +164,7 @@ def test_e2e_ignore_parameter_filetype():
 
 
 def test_e2e_ignore_parameter_directory():
-    result = tree_plus("tests/more_languages", ignore={"group2"})
+    result = tree_plus("tests/more_languages", ignore=("group2",))
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
     print(result_str)
