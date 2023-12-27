@@ -1232,7 +1232,7 @@ def parse_py(contents: str) -> List[str]:
     # Combined regex pattern to match Python components
     combined_pattern = re.compile(
         # Functions and Methods, capturing indentation and multiline signatures
-        r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\[\], ]+)?)\s*:|"
+        r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\], ]+)?)\s*:|"
         # Classes
         r"(class \w+(\[.*\])?(\([\w\s,]*\))?):|"
         # Decorators

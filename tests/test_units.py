@@ -16,7 +16,7 @@ from tree_plus_src import (
 def test_directory_token_line_counting():
     dir_path = "tests/path_to_test/"
     # Manually calculated total counts.
-    expected = TokenLineCount(n_tokens=724, n_lines=149)
+    expected = TokenLineCount(n_tokens=750, n_lines=153)
     result = count_directory_tokens_lines(dir_path)
     assert isinstance(result, TokenLineCount)
     assert result == expected
@@ -74,6 +74,10 @@ def test_units_file_as_directory():
                 Text("def ice[T](args: Iterable[T] = ())"),
                 Text("class list[T]"),
                 Text("    def __getitem__(self, index: int, /) -> T"),
+                "    @classmethod",
+                Text(
+                    '    def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"'
+                ),
             ],
         ),
         (

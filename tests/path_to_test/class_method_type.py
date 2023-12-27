@@ -86,3 +86,7 @@ def ice[T](args: Iterable[T] = ()):
 class list[T]:
     def __getitem__(self, index: int, /) -> T:
         ...
+
+    @classmethod
+    def from_code(cls, toolbox, code: bytes, score=None) -> "Algo":
+        ...

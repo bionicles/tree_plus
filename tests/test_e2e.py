@@ -62,7 +62,7 @@ def test_e2e_empty_folder():
     assert unify_tree_symbols(result_str) == EXPECTATION_EMPTY
 
 
-EXPECTATION_1 = """📁 path_to_test (724 tokens, 149 lines)
+EXPECTATION_1 = """📁 path_to_test (750 tokens, 153 lines)
 ┣━━ 📄 class_function.js (33 tokens, 9 lines)
 ┃   ┣━━ class MyClass
 ┃   ┣━━     myMethod
@@ -80,7 +80,7 @@ EXPECTATION_1 = """📁 path_to_test (724 tokens, 149 lines)
 ┃   ┣━━ const myAsyncArrowFunction: async =>
 ┃   ┣━━ const myAsyncArrow: async =>
 ┃   ┗━━ let myWeirdArrow: =>
-┣━━ 📄 class_method_type.py (447 tokens, 88 lines)
+┣━━ 📄 class_method_type.py (473 tokens, 92 lines)
 ┃   ┣━━ T = TypeVar(\"T\")
 ┃   ┣━━ def parse_py(contents: str) -> List[str]
 ┃   ┣━━ class MyClass
@@ -105,7 +105,9 @@ EXPECTATION_1 = """📁 path_to_test (724 tokens, 149 lines)
 ┃   ┣━━ def omega_yikes(file: str, expected: List[str]) -> bool
 ┃   ┣━━ def ice[T](args: Iterable[T] = ())
 ┃   ┣━━ class list[T]
-┃   ┗━━     def __getitem__(self, index: int, /) -> T
+┃   ┣━━     def __getitem__(self, index: int, /) -> T
+┃   ┣━━     @classmethod
+┃   ┗━━     def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
 ┣━━ 📄 empty.py
 ┣━━ 📄 file.js (14 tokens, 3 lines)
 ┃   ┗━━ function helloWorld

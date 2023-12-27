@@ -26,6 +26,7 @@ DEFAULT_IGNORE = {
     ".idea",
     ".DS_Store",
     ".ipynb_checkpoints",
+    ".flake8",
     ".env*",
     "*.log",
     ".cache",

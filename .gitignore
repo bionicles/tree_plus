@@ -46,3 +46,5 @@ tests/version_increments/test_sink_version.py
 tests/version_increments/dry_run_version.py
 tests/readme_updates/*sink.md
 tests/readme_updates/dry_run_README.md
+tests/readme_updates/renamed_dry_run_README.md
+tests/version_increments/renamed_dry_run_version.py
