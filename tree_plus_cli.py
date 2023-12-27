@@ -330,10 +330,14 @@ def _handle_path(
         components = parse_file(file_path)
         file_count = count_tokens_lines(file_path)
         file_tree = Tree(
-            f"{file_char} {os.path.basename(file_path)} ({file_count.n_tokens} tokens, {file_count.n_lines} lines)",
+            f"{file_char} {os.path.basename(file_path)}",
             guide_style="bold cyan",
             highlight=True,
         )
+        if file_count.n_lines > 0 or file_count.n_tokens > 0:
+            file_tree.label += (
+                f" ({file_count.n_tokens} tokens, {file_count.n_lines} lines)"
+            )
         for component in components:
             file_tree.add(component)
         paths_to_trees[file_path] = (file_tree, file_count)

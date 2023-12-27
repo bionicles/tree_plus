@@ -1,5 +1,6 @@
 # tree_plus_src/ignore.py
-from typing import Optional, Union, Set, Tuple
+from typing import Optional, Union, Set, Tuple, FrozenSet
+from functools import lru_cache
 import os
 
 import fnmatch
@@ -61,48 +62,76 @@ DEFAULT_IGNORE = {
     "Anaconda3*.sh",
     "Miniconda3*.sh",
     "*.gz",
+    "*.rlib",
+    "*.rmeta",
+    "*.d",
+    "**/target/debug/*",
+    "**/target/debug/**",
+    ".rustc_info.json",
+    "**/tmp/",
+    "CACHEDIR.TAG",
+    "*.onnx",
+    "Cargo.lock",
+    "*.o",  # Object files
+    "*.a",  # Archive files
+    "*.lib",  # Library files
+    "*.exe",  # Executable files
+    "*.dll",  # Dynamic Link Library files
+    "*.bin",  # Binary files
+    "target",  # Rust build directory
+    "build",  # Common build directory
+    "*:Zone.Identifier",
 }
 
 IgnoreInput = Optional[Union[str, Set[str], Tuple[str]]]
-Ignore = Set[str]
+Ignore = FrozenSet[str]
 
 
+@lru_cache()
 def make_ignore(ignore: IgnoreInput) -> Ignore:
     if ignore is None:
-        ignore = set()
+        ignore = frozenset()
     elif isinstance(ignore, str):
-        ignore = set(ignore.split(","))
-    elif isinstance(ignore, tuple):
-        ignore = set(ignore)
-    elif isinstance(ignore, set):
+        ignore = frozenset(ignore.split(","))
+    elif isinstance(ignore, (tuple, set, list)):
+        ignore = frozenset(ignore)
+    elif isinstance(ignore, frozenset):
         pass
     else:
         print(f"{ignore=} {type(ignore)=}")
         raise TypeError("tree_plus ignore arg must be a string, set or None")
-    ignore |= DEFAULT_IGNORE
-    return ignore
+    ignore = ignore.union(DEFAULT_IGNORE)
+    return frozenset(ignore)
 
 
-def make_globs(globs: IgnoreInput) -> Ignore:
+@lru_cache()
+def make_globs(globs: IgnoreInput) -> FrozenSet:
     if globs is None:
-        globs = set()
+        globs = frozenset()
     elif isinstance(globs, str):
-        globs = set(globs.split(","))
+        globs = frozenset(globs.split(","))
     elif isinstance(globs, tuple):
-        globs = set(globs)
+        globs = frozenset(globs)
     elif isinstance(globs, set):
+        globs = frozenset(globs)
+    elif isinstance(globs, frozenset):
         pass
     else:
         print(f"{globs=} {type(globs)=}")
         raise TypeError("tree_plus globs arg must be a string, set or None")
-    return globs
+    return frozenset(globs)
 
 
-def is_binary_string(bytes):
-    textchars = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
-    return bool(bytes.translate(None, textchars))
+TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
+BINARY_CHECK_SIZE = 1024
 
 
+@lru_cache()
+def is_binary_string(data: bytes) -> bool:
+    return bool(data.translate(None, TEXTCHARS))
+
+
+@lru_cache()
 def is_binary(file_path: str) -> bool:
     """
     Check if a file is binary or not.
@@ -110,36 +139,51 @@ def is_binary(file_path: str) -> bool:
     try:
         # read the file in binary mode
         with open(file_path, "rb") as f:
-            return is_binary_string(f.read(1024))
+            return is_binary_string(f.read(BINARY_CHECK_SIZE))
     except Exception as e:
         print(f"Error opening file {file_path}: {e}")
         return False
 
 
+@lru_cache(maxsize=None)
 def should_ignore(path: str, ignore: Ignore, globs: Optional[Ignore] = None) -> bool:
-    """
-    Determine if a given path should be ignored based on ignore and glob patterns.
+    "Determine if a given path should be ignored based on ignore and glob patterns."
+    # Normalize the path to handle different OS path separators
+    normalized_path = os.path.normpath(path)
 
-    If globs is provided, a file must match one of the glob patterns to be included.
-    """
-    filename = os.path.basename(path)
-    dir_path = os.path.dirname(path)
-
-    # Check if file matches any ignore pattern
-    is_ignored = any(fnmatch.fnmatch(filename, pattern) for pattern in ignore) or any(
-        fnmatch.fnmatch(dir_path, pattern) for pattern in ignore
-    )
-    if is_ignored:
-        debug_print(f"[should_ignore] Ignored due to ignore pattern: {path=}")
-        return True
-
-    # If globs are provided, check if file matches any glob pattern
+    # Check each part of the path against the ignore patterns
+    for part in normalized_path.split(os.sep):
+        if any(fnmatch.fnmatch(part, pattern) for pattern in ignore):
+            debug_print(f"[should_ignore] Ignored due to ignore pattern: {path=}")
+            return True
+    # If globs are provided, check if any part of the path matches any glob pattern
     if globs:
-        matches_glob = any(
-            fnmatch.fnmatch(filename, pattern) for pattern in globs
-        ) or any(fnmatch.fnmatch(dir_path, pattern) for pattern in globs)
-        if not matches_glob:
+        if not any(
+            fnmatch.fnmatch(part, pattern)
+            for pattern in globs
+            for part in normalized_path.split(os.sep)
+        ):
             debug_print(f"[should_ignore] Ignored due to not matching globs: {path=}")
             return True
 
     return False
+
+    # filename = os.path.basename(path)
+    # dir_path = os.path.dirname(path)
+
+    # Check if file matches any ignore pattern
+    # is_ignored = any(fnmatch.fnmatch(filename, pattern) for pattern in ignore) or any(
+    #     fnmatch.fnmatch(dir_path, pattern) for pattern in ignore
+    # )
+    # if is_ignored:
+    #     debug_print(f"[should_ignore] Ignored due to ignore pattern: {path=}")
+    #     return True
+
+    # # If globs are provided, check if file matches any glob pattern
+    # if globs:
+    #     matches_glob = any(
+    #         fnmatch.fnmatch(filename, pattern) for pattern in globs
+    #     ) or any(fnmatch.fnmatch(dir_path, pattern) for pattern in globs)
+    #     if not matches_glob:
+    #         debug_print(f"[should_ignore] Ignored due to not matching globs: {path=}")
+    #         return True

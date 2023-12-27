@@ -14,7 +14,7 @@ from tree_plus_src import (
 def test_directory_token_line_counting():
     dir_path = "tests/path_to_test/"
     expected = TokenLineCount(
-        n_tokens=277, n_lines=66
+        n_tokens=658, n_lines=136
     )  # Manually calculated total counts.
     result = count_directory_tokens_lines(dir_path)
     assert isinstance(result, TokenLineCount)
@@ -27,7 +27,7 @@ def test_valid_directory():
     assert isinstance(result, list)
 
 
-def test_file_as_directory():
+def test_units_file_as_directory():
     result = traverse_directory("tests/path_to_test/file.txt")
     assert isinstance(result, list)
 
@@ -36,13 +36,35 @@ def test_file_as_directory():
 @pytest.mark.parametrize(
     "file,expected",
     [
-        ("tests/path_to_test/file.py", ["def hello_world"]),
+        ("tests/path_to_test/version.py", ['__version__ = "1.2.3"']),
+        ("tests/path_to_test/file.py", ["def hello_world()"]),
         ("tests/path_to_test/file.js", ["function helloWorld"]),
         ("tests/path_to_test/file.md", ["# Hello, world!"]),
         ("tests/path_to_test/file.txt", []),
         (
             "tests/path_to_test/class_method_type.py",
-            ["type MyType", "class MyClass", "    def my_method"],
+            [
+                'T = TypeVar("T")',
+                "class MyClass",
+                "    def my_method(self)",
+                "    def my_typed_method(self, obj: dict) -> int",
+                """    def my_multiline_signature_method(
+        self,
+        alice: str = None,
+        bob: int = None,
+    ) -> tuple""",
+                "@lru_cache(maxsize=None)",
+                """def my_multiline_signature_function(
+    tree: tuple = (),
+    plus: str = "+",
+) -> tuple"""
+                "class LogLevelEnum(str, Enum)",
+                "class Algo(BaseModel)",
+                "@dataclass",
+                "class TestDataclass",
+                'A = TypeVar("A", str, bytes)',
+                "def omega_yikes(file: str, expected: List[str]) -> bool",
+            ],
         ),
         (
             "tests/path_to_test/class_function.js",
@@ -67,7 +89,7 @@ def test_file_as_directory():
         ),
     ],
 )
-def test_file_parsing(file, expected):
+def test_units_file_parsing(file, expected):
     print(f"{file=}")
     result = parse_file(file)
     print(f"{expected=}")
@@ -75,7 +97,7 @@ def test_file_parsing(file, expected):
     assert result == expected
 
 
-def test_parse_todo():
+def test_units_parse_todo():
     content = open("tests/more_languages/group5/rust_todo_test.rs", "r").read()
     result = parse_markers(content)
     assert result == [
@@ -88,7 +110,7 @@ bug_todo_note = (
 )
 
 
-def test_parse_markers():
+def test_units_parse_markers():
     results = parse_markers(bug_todo_note)
     assert results == [
         "BUG (Line 1): This is a bug.",
@@ -101,11 +123,11 @@ def test_parse_markers():
 @pytest.mark.parametrize(
     "file,expected",
     [
-        ("tests/path_to_test/file.py", TokenLineCount(n_tokens=11, n_lines=2)),
+        ("tests/path_to_test/file.py", TokenLineCount(n_tokens=19, n_lines=3)),
         ("tests/path_to_test/empty.py", TokenLineCount(n_tokens=0, n_lines=0)),
     ],
 )
-def test_token_counting(file, expected):
+def test_units_token_counting(file, expected):
     result = count_tokens_lines(file)
     assert isinstance(result, TokenLineCount)
     assert result == expected

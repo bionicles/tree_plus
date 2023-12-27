@@ -1,6 +1,7 @@
 # tree_plus_src/count_tokens_lines.py
 from dataclasses import dataclass
 import tiktoken
+import os
 
 from tree_plus_src.traverse_directory import traverse_directory
 from tree_plus_src.debug import debug_print
@@ -45,8 +46,43 @@ def count_tokens_lines(file_path: str) -> TokenLineCount:
         ".odg",
         ".sqlite",
         ".bin",
+        ".mp3",
+        ".wav",
+        ".aac",
+        ".flac",
+        ".mp4",
+        ".avi",
+        ".mov",
+        ".wmv",
+        ".flv",
+        ".gif",
+        ".psd",
+        ".ai",
+        ".eps",
+        ".zip",
+        ".rar",
+        ".7z",
+        ".tar",
+        ".gz",
+        ".bz2",
+        ".iso",
+        ".img",
+        ".pyc",
+        ".class",
+        ".tml",
+        ".log",
+        ".chk",
+        ".swp",
+        ".bak",
+        ".xlsx",
+        ".rmeta",
+        ".rlib",
+        ".csv",
+        ".lock",
     }
-    if any(file_path.endswith(ext) for ext in ignored_extensions):
+    if os.path.isdir(file_path) or any(
+        file_path.endswith(ext) for ext in ignored_extensions
+    ):
         # if any(file_path.suffix == ext for ext in ignored_extensions):
         return TokenLineCount(n_tokens=0, n_lines=0)
 
