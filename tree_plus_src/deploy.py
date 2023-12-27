@@ -200,8 +200,8 @@ MAIN_README_SOURCE_PATH = "README.md"
 
 def main():
     print("deploy::main start")
-    if os.environ.get("RESET_TREE_PLUS_README") == "1":
-        reset_readme(source_path="README.md", sink_path="README.md")
+    # if os.environ.get("RESET_TREE_PLUS_README") == "1":
+    #     reset_readme(source_path="README.md", sink_path="README.md")
     # dry run: load new pyproject.toml into tests/version_increments
     main_version_py_sink_path = os.path.join(
         "tests", "version_increments", "dry_run_version.py"

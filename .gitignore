@@ -40,3 +40,9 @@ detritus/
 
 tests/.pytest_cache
 .pytest_cache
+
+# deployment stuff
+tests/version_increments/test_sink_version.py
+tests/version_increments/dry_run_version.py
+tests/readme_updates/*sink.md
+tests/readme_updates/dry_run_README.md
