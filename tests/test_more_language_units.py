@@ -334,7 +334,7 @@ void printVector(const std :: vector<T>& vec)""",
         (
             "tests/more_languages/group3/hallucination.tex",
             [
-                "Harnessing the Master Algorithm: Strategies for AI Large Language Models to Mitigate Hallucinations",
+                "Harnessing the Master Algorithm: Strategies for AI LLMs to Mitigate Hallucinations",
                 "Hallucinated Pedro Domingos et al.",
                 "Christmas Eve 2023",
                 "1 Introduction",
@@ -464,7 +464,7 @@ void printVector(const std :: vector<T>& vec)""",
             [
                 "openapi: 3.0.1",
                 "    title: TODO Plugin",
-                "    description: A plugin that allows the user to create and manage a TODO list using ChatGPT.",
+                "    description: A plugin to create and manage TODO lists using ChatGPT.",
                 "    version: v1",
                 "servers:",
                 "    - url: PLUGIN_HOSTNAME",

@@ -51,7 +51,12 @@ def clean_string(input_str):
 def safe_print(tree):
     try:
         # Attempt to print the tree normally
-        rich_print(tree)
+        console = Console(
+            # reduce the tab size to fit content
+            tab_size=2,
+            width=128 if os.environ.get("TREE_PLUS_UPDATE_README") == "YES" else None,
+        )
+        console.print(tree)
     except UnicodeEncodeError as e:
         debug_print(f"UnicodeEncodeError printing tree normally: ", e)
         try:
