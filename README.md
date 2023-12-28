@@ -34,7 +34,7 @@
 ```sh
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (32220 tokens, 3899 lines)
+📁 tree_plus (50999 tokens, 5283 lines)
 ┣━━ 📁 .github (107 tokens, 11 lines)
 ┃   ┣━━ 📁 workflows (1050 tokens, 128 lines)
 ┃   ┃   ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
@@ -68,7 +68,7 @@ paths=('.',)
 ┃   ┃       ┗━━     - Publish to PyPI
 ┃   ┗━━ 📄 dependabot.yml (107 tokens, 11 lines)
 ┃       ┗━━ Unsupported YAML Category
-┣━━ 📁 tree_plus_src (20013 tokens, 2454 lines)
+┣━━ 📁 tree_plus_src (21743 tokens, 2630 lines)
 ┃   ┣━━ 📁 scripts (3515 tokens, 450 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -76,120 +76,140 @@ paths=('.',)
 ┃   ┃   ┗━━ 📄 Microsoft.PowerShell_profile.ps1 (3238 tokens, 419 lines)
 ┃   ┃       ┣━━ function Log($message)
 ┃   ┃       ┗━━ function Show-Error($err)
-┃   ┣━━ 📄 count_tokens_lines.py (613 tokens, 82 lines)
-┃   ┃   ┣━━ TODO (Line 12): show off how well we parse_todo!
-┃   ┃   ┣━━ class TokenLineCount
-┃   ┃   ┣━━ def add_tokens_lines
-┃   ┃   ┣━━ def count_tokens_lines
-┃   ┃   ┗━━ def count_directory_tokens_lines
+┃   ┣━━ 📄 count_tokens_lines.py (775 tokens, 119 lines)
+┃   ┃   ┣━━ TODO (Line 13): show off how well we parse_todo!
+┃   ┃   ┣━━ @dataclass
+┃   ┃   ┃   class TokenLineCount
+┃   ┃   ┣━━ def add_tokens_lines(
+┃   ┃   ┃       lhs_count: TokenLineCount, rhs_count: TokenLineCount
+┃   ┃   ┃   ) -> TokenLineCount
+┃   ┃   ┣━━ def count_tokens_lines(file_path: str) -> TokenLineCount
+┃   ┃   ┗━━ def count_directory_tokens_lines(directory_path: str) -> TokenLineCount
 ┃   ┣━━ 📄 debug.py (87 tokens, 20 lines)
-┃   ┃   ┣━━ def enable_debug
-┃   ┃   ┣━━ def disable_debug
-┃   ┃   ┣━━ def debug_enabled
-┃   ┃   ┗━━ def debug_print
-┃   ┣━━ 📄 deploy.py (2090 tokens, 240 lines)
-┃   ┃   ┣━━ TODO (Line 167): test this reset readme command so we can clean out 
-┃   ┃   ┃   the code blocks
-┃   ┃   ┣━━ def extract
-┃   ┃   ┣━━ def load
-┃   ┃   ┣━━ def extract_version
-┃   ┃   ┣━━ def increment_version
-┃   ┃   ┣━━ def run_command
-┃   ┃   ┣━━ def replace_readme_section
-┃   ┃   ┣━━ def update_readme
-┃   ┃   ┗━━ def main
-┃   ┣━━ 📄 ignore.py (931 tokens, 145 lines)
-┃   ┃   ┣━━ def make_ignore
-┃   ┃   ┣━━ def make_globs
-┃   ┃   ┣━━ def is_binary_string
-┃   ┃   ┣━━ def is_binary
-┃   ┃   ┗━━ def should_ignore
-┃   ┣━━ 📄 parse_file.py (15845 tokens, 1907 lines)
-┃   ┃   ┣━━ def extract_groups
-┃   ┃   ┣━━ def parse_file
-┃   ┃   ┣━━ def parse_csv
-┃   ┃   ┣━━ def parse_mathematica
-┃   ┃   ┣━━ def parse_r
-┃   ┃   ┣━━ def parse_zig
-┃   ┃   ┣━━ def parse_hs
-┃   ┃   ┣━━ def parse_lisp
-┃   ┃   ┣━━ def parse_capnp
-┃   ┃   ┣━━ def parse_grpc
-┃   ┃   ┣━━ def parse_openrpc_json
-┃   ┃   ┣━━ def parse_json_rpc
-┃   ┃   ┣━━ def parse_graphql
-┃   ┃   ┣━━ def format_dependency
-┃   ┃   ┣━━ def parse_cargo_toml
-┃   ┃   ┣━━ def parse_pyproject_toml
-┃   ┃   ┣━━ def parse_lean
-┃   ┃   ┣━━ def parse_cs
-┃   ┃   ┣━━ def parse_tex
-┃   ┃   ┣━━ def parse_rb
-┃   ┃   ┣━━ def remove_c_comments
-┃   ┃   ┣━━ def parse_cpp
-┃   ┃   ┣━━ def parse_c
-┃   ┃   ┣━━ def parse_go
-┃   ┃   ┣━━ def parse_swift
-┃   ┃   ┣━━ def parse_bash
-┃   ┃   ┣━━ def parse_d_dot_ts
-┃   ┃   ┣━━ def parse_angular_app_module
-┃   ┃   ┣━━ def parse_angular_routes
-┃   ┃   ┣━━ def parse_angular_spec
-┃   ┃   ┣━━ def parse_environment_ts
-┃   ┃   ┣━━ def parse_dot_env
-┃   ┃   ┣━━ def parse_requirements_txt
-┃   ┃   ┣━━ def parse_json_schema
-┃   ┃   ┣━━ def parse_package_json
-┃   ┃   ┣━━ def remove_ts_comments_and_private_blocks
-┃   ┃   ┣━━ def parse_ts
-┃   ┃   ┣━━ def parse_makefile
-┃   ┃   ┣━━ def parse_sql
-┃   ┃   ┣━━ def is_openapi_yml
-┃   ┃   ┣━━ def is_k8s_yml
-┃   ┃   ┣━━ def is_ansible_yml
-┃   ┃   ┣━━ def is_github_yml
-┃   ┃   ┣━━ def parse_github_yml
-┃   ┃   ┣━━ def parse_k8s
-┃   ┃   ┣━━ def parse_ansible
-┃   ┃   ┣━━ def parse_openapi_yml
-┃   ┃   ┣━━ def parse_yml
-┃   ┃   ┣━━ def extract_nodes
-┃   ┃   ┣━━ def is_typing_construct
-┃   ┃   ┣━━ def is_builtin_type
-┃   ┃   ┣━━ def parse_py
-┃   ┃   ┣━━ def parse_db
-┃   ┃   ┣━━ def parse_cobol
-┃   ┃   ┣━━ def parse_java
-┃   ┃   ┣━━ def parse_julia
-┃   ┃   ┣━━ def parse_kotlin
-┃   ┃   ┣━━ def parse_lua
-┃   ┃   ┣━━ def parse_objective_c
-┃   ┃   ┣━━ def parse_ocaml
-┃   ┃   ┣━━ def parse_apl
-┃   ┃   ┣━━ def parse_perl
-┃   ┃   ┣━━ def parse_php
-┃   ┃   ┣━━ def parse_powershell
-┃   ┃   ┣━━ def parse_matlab
-┃   ┃   ┣━━ def parse_scala
-┃   ┃   ┣━━ def parse_tf
-┃   ┃   ┣━━ def parse_md
-┃   ┃   ┣━━ def parse_txt
-┃   ┃   ┣━━ def parse_markers
-┃   ┃   ┗━━ def parse_rs
+┃   ┃   ┣━━ def enable_debug()
+┃   ┃   ┣━━ def disable_debug()
+┃   ┃   ┣━━ def debug_enabled()
+┃   ┃   ┗━━ def debug_print(*args, **kwargs)
+┃   ┣━━ 📄 deploy.py (2093 tokens, 240 lines)
+┃   ┃   ┣━━ TODO (Line 167): test this reset readme command so we can clean out the code blocks
+┃   ┃   ┣━━ def extract(path: str = None) -> str
+┃   ┃   ┣━━ def load(content: str = None, path: str = None)
+┃   ┃   ┣━━ def extract_version(source_path: str = None) -> Tuple[int, int, int]
+┃   ┃   ┣━━ def increment_version(
+┃   ┃   ┃       source_path: str = None,
+┃   ┃   ┃       sink_path: str = None,
+┃   ┃   ┃   )
+┃   ┃   ┣━━ def run_command(command: str = None, debug: bool = False)
+┃   ┃   ┣━━ def replace_readme_section(
+┃   ┃   ┃       source_path: str = None,
+┃   ┃   ┃       sink_path: str = None,
+┃   ┃   ┃       marker: str = None,
+┃   ┃   ┃       command: str = None,
+┃   ┃   ┃   )
+┃   ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
+┃   ┃   ┗━━ def main()
+┃   ┣━━ 📄 ignore.py (1361 tokens, 192 lines)
+┃   ┃   ┣━━ @lru_cache
+┃   ┃   ┃   def make_ignore(ignore: IgnoreInput) -> Ignore
+┃   ┃   ┣━━ @lru_cache
+┃   ┃   ┃   def make_globs(globs: IgnoreInput) -> FrozenSet
+┃   ┃   ┣━━ @lru_cache()
+┃   ┃   ┃   def is_binary_string(data: bytes) -> bool
+┃   ┃   ┣━━ @lru_cache()
+┃   ┃   ┃   def is_binary(file_path: str) -> bool
+┃   ┃   ┗━━ @lru_cache(maxsize=None)
+┃   ┃       def should_ignore(path: str, ignore: Ignore, globs: Optional[Ignore] = None) -> bool
+┃   ┣━━ 📄 parse_file.py (16980 tokens, 1999 lines)
+┃   ┃   ┣━━ def extract_groups(match: re.Match) -> dict
+┃   ┃   ┣━━ def parse_file(file_path: str) -> List[str]
+┃   ┃   ┣━━ def parse_rs(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_csv(filename: str) -> list
+┃   ┃   ┣━━ def parse_mathematica(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_r(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_zig(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_hs(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_lisp(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_capnp(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_grpc(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_openrpc_json(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_json_rpc(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_graphql(contents: str) -> List[str]
+┃   ┃   ┣━━ def format_dependency(name, details)
+┃   ┃   ┣━━ def parse_cargo_toml(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_pyproject_toml(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_lean(lean_content: str) -> List[str]
+┃   ┃   ┣━━ def parse_cs(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_tex(tex_content: str) -> List[str]
+┃   ┃   ┣━━ def parse_rb(contents) -> List[str]
+┃   ┃   ┣━━ def remove_c_comments(multiline_string)
+┃   ┃   ┣━━ def parse_cpp(contents) -> List[str]
+┃   ┃   ┣━━ def parse_c(contents) -> List[str]
+┃   ┃   ┣━━ def parse_go(contents) -> List[str]
+┃   ┃   ┣━━ def parse_swift(contents) -> List[str]
+┃   ┃   ┣━━ def parse_bash(contents) -> List[str]
+┃   ┃   ┣━━ def parse_d_dot_ts(contents) -> List[str]
+┃   ┃   ┣━━ def parse_angular_app_module(contents) -> List[str]
+┃   ┃   ┣━━ def parse_angular_routes(content) -> List[str]
+┃   ┃   ┣━━ def parse_angular_spec(content) -> List[str]
+┃   ┃   ┣━━ def parse_environment_ts(contents) -> List[str]
+┃   ┃   ┣━━ def parse_dot_env(contents) -> List[str]
+┃   ┃   ┣━━ def parse_requirements_txt(contents) -> List[str]
+┃   ┃   ┣━━ def parse_json_schema(contents) -> List[str]
+┃   ┃   ┣━━ def parse_package_json(contents) -> List[str]
+┃   ┃   ┣━━ def remove_ts_comments_and_private_blocks(contents: str) -> str
+┃   ┃   ┣━━ def parse_ts(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_makefile(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_sql(contents: str) -> List[str]
+┃   ┃   ┣━━ def is_openapi_yml(ymls: Tuple[dict]) -> bool
+┃   ┃   ┣━━ def is_k8s_yml(ymls: Tuple[dict]) -> bool
+┃   ┃   ┣━━ def is_ansible_yml(ymls: Tuple[dict]) -> bool
+┃   ┃   ┣━━ def is_github_yml(ymls: Tuple[dict]) -> bool
+┃   ┃   ┣━━ def parse_github_yml(ymls: Tuple[dict]) -> List[str]
+┃   ┃   ┣━━ def parse_k8s(ymls: Tuple[dict]) -> List[str]
+┃   ┃   ┣━━ def parse_ansible(ymls: Tuple[dict]) -> List[str]
+┃   ┃   ┣━━ def parse_openapi_yml(ymls: Tuple[dict]) -> List[str]
+┃   ┃   ┣━━ def parse_yml(contents: str) -> List[str]
+┃   ┃   ┣━━ def extract_nodes(node, node_type, parent=None)
+┃   ┃   ┣━━ def is_typing_construct(node)
+┃   ┃   ┣━━ def is_builtin_type(node, parent)
+┃   ┃   ┣━━ def parse_py(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_db(db_path: str) -> List[str]
+┃   ┃   ┣━━ def parse_cobol(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_java(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_julia(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_kotlin(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_lua(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_objective_c(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_ocaml(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_apl(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_perl(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_php(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_powershell(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_matlab(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_scala(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_tf(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_md(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_txt(content: str) -> List[str]
+┃   ┃   ┗━━ def parse_markers(content: str) -> List[str]
 ┃   ┣━━ 📄 traverse_directory.py (429 tokens, 58 lines)
-┃   ┃   ┗━━ def traverse_directory
+┃   ┃   ┗━━ def traverse_directory(
+┃   ┃           directory_path: str, ignore: IgnoreInput = None, globs: IgnoreInput = None
+┃   ┃       ) -> List[str]
 ┃   ┗━━ 📄 version.py (18 tokens, 2 lines)
-┣━━ 📄 .gitignore (138 tokens, 42 lines)
+┃       ┗━━ __version__ = "1.0.12"
+┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (309 tokens, 61 lines)
+┣━━ 📄 Makefile (368 tokens, 70 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
 ┃   ┣━━ debug_command: test test_cli
-┃   ┣━━ test: test_tp_dotdot
+┃   ┣━━ test: test_normally test_tp_dotdot test_cli test_deploy
+┃   ┣━━ test_normally
 ┃   ┣━━ test_tp_dotdot
 ┃   ┣━━ test_cli: cli
+┃   ┣━━ test_deploy
 ┃   ┣━━ test_dotenv
 ┃   ┣━━ build: install-build-tool clean-dist
 ┃   ┣━━ install-wheel
@@ -203,7 +223,7 @@ paths=('.',)
 ┃   ┣━━ t3
 ┃   ┣━━ t4
 ┃   ┗━━ t5
-┣━━ 📄 nodemon.json (102 tokens, 18 lines)
+┣━━ 📄 nodemon.json (124 tokens, 23 lines)
 ┣━━ 📄 pyproject.toml (327 tokens, 41 lines)
 ┃   ┣━━ name: tree_plus
 ┃   ┣━━ version: N/A
@@ -217,7 +237,7 @@ paths=('.',)
 ┃   ┣━━     rich
 ┃   ┗━━     tomli
 ┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (1123 tokens, 172 lines)
+┣━━ 📄 README.md (17924 tokens, 1348 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -232,19 +252,31 @@ paths=('.',)
 ┃   ┣━━ ## Languages Todo:
 ┃   ┣━━ ## Oppose Unfair Business Practices
 ┃   ┗━━ ## License
-┗━━ 📄 tree_plus_cli.py (3402 tokens, 438 lines)
-    ┣━━ NOTE (Line 398): parent_count unused, is that ok?
-    ┣━━ def tree_to_string
-    ┣━━ def clean_string
-    ┣━━ def safe_print
-    ┣━━ def main
-    ┣━━ def subtree
-    ┣━━ def clean_tree
-    ┣━━ def tree_plus
-    ┣━━ def _parse_paths
-    ┣━━ def flatten_to_str
-    ┣━━ def _handle_paths
-    ┗━━ def _handle_path
+┗━━ 📄 tree_plus_cli.py (3497 tokens, 448 lines)
+    ┣━━ NOTE (Line 408): parent_count unused, is that ok?
+    ┣━━ def tree_to_string(tree: Tree) -> str
+    ┣━━ def clean_string(input_str)
+    ┣━━ def safe_print(tree)
+    ┣━━ def main(
+    ┃       glob: IgnoreInput,
+    ┃       paths: PathsInput,
+    ┃       ignore: IgnoreInput,
+    ┃       debug: bool,
+    ┃       version: bool,
+    ┃   )
+    ┣━━ def subtree(label: str) -> Tree
+    ┣━━ def clean_tree(input_tree: Tree, root_node: bool = False) -> Optional[Tree]
+    ┣━━ def tree_plus(
+    ┃       path_or_paths: Union[str, Tuple[str]],
+    ┃       ignore: IgnoreInput = None,
+    ┃       globs: IgnoreInput = None,
+    ┃   ) -> Tree
+    ┣━━ def _parse_paths(path_or_paths: Union[str, Tuple[str]]) -> Tuple[str]
+    ┣━━ def flatten_to_str(collection: Collection)
+    ┣━━ def _handle_paths(paths: Tuple[str], ignore: Ignore, globs: Ignore) -> Tree
+    ┗━━ def _handle_path(
+            path: str, ignore: Ignore, globs: Ignore, paths_to_trees: dict
+        ) -> Tuple[Tree, TokenLineCount]
 
 ```
 <!-- t1-end -->
@@ -278,7 +310,7 @@ Options:
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
   -H, -h, --help         Show this message and exit.
 
-  (v1.0.11) --- https://github.com/bionicles/tree_plus
+  (v1.0.12) --- https://github.com/bionicles/tree_plus
 
 ```
 <!-- t5-end -->
@@ -372,7 +404,7 @@ make debug
 ```sh
 tree_plus -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-📁 more_languages (22990 tokens, 3306 lines)
+📁 more_languages (23262 tokens, 3350 lines)
 ┣━━ 📁 group1 (791 tokens, 158 lines)
 ┃   ┣━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO
@@ -393,8 +425,7 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━     @Override
 ┃   ┃   ┣━━     public String communicate()
 ┃   ┃   ┣━━     void greet()
-┃   ┃   ┣━━     String personalizedGreeting(String greeting, Optional<Boolean> 
-┃   ┃   ┃   includeAge)
+┃   ┃   ┣━━     String personalizedGreeting(String greeting, Optional<Boolean> includeAge)
 ┃   ┃   ┣━━ @Singleton
 ┃   ┃   ┣━━ @RestController
 ┃   ┃   ┣━━ @SpringBootApplication
@@ -402,10 +433,8 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━     @Inject
 ┃   ┃   ┣━━     public Example(Person person)
 ┃   ┃   ┣━━     @RequestMapping("/greet")
-┃   ┃   ┣━━     String home(@RequestParam(value = "name", defaultValue = 
-┃   ┃   ┃   "World") String name,
-┃   ┃   ┃                   @RequestParam(value = "age", defaultValue = "30") 
-┃   ┃   ┃   int age)
+┃   ┃   ┣━━     String home(@RequestParam(value = "name", defaultValue = "World") String name,
+┃   ┃   ┃                   @RequestParam(value = "age", defaultValue = "30") int age)
 ┃   ┃   ┗━━     public static void main(String[] args)
 ┃   ┣━━ 📄 JuliaTest.jl (42 tokens, 12 lines)
 ┃   ┃   ┣━━ module JuliaTest
@@ -475,7 +504,7 @@ paths=('tests/more_languages',)
 ┃       ┣━━ object HelloWorld -> def greet(person: Person): Unit
 ┃       ┣━━ object HelloWorld -> def main(args: Array[String]): Unit
 ┃       ┗━━ def sumOfSquaresShort(x: Int, y: Int): Int
-┣━━ 📁 group3 (6642 tokens, 1005 lines)
+┣━━ 📁 group3 (6637 tokens, 1005 lines)
 ┃   ┣━━ 📄 bash_test.sh (154 tokens, 23 lines)
 ┃   ┃   ┣━━ echo_hello_world()
 ┃   ┃   ┣━━ function fun_echo_hello_world()
@@ -494,14 +523,10 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━ class Animal
 ┃   ┃   ┣━━ class Dog : public Animal
 ┃   ┃   ┣━━ class Cat : public Animal
-┃   ┃   ┣━━ nb :: bytes BuildRnnDescriptor(int input_size, int hidden_size, int 
-┃   ┃   ┃   num_layers,
-┃   ┃   ┃                                int batch_size, int max_seq_length, 
-┃   ┃   ┃   float dropout,
-┃   ┃   ┃                                bool bidirectional, bool 
-┃   ┃   ┃   cudnn_allow_tf32,
-┃   ┃   ┃                                int workspace_size, int 
-┃   ┃   ┃   reserve_space_size)
+┃   ┃   ┣━━ nb :: bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
+┃   ┃   ┃                                int batch_size, int max_seq_length, float dropout,
+┃   ┃   ┃                                bool bidirectional, bool cudnn_allow_tf32,
+┃   ┃   ┃              int workspace_size, int reserve_space_size)
 ┃   ┃   ┣━━ int main()
 ┃   ┃   ┣━━ enum ECarTypes
 ┃   ┃   ┣━━ ECarTypes GetPreferredCarType()
@@ -562,17 +587,16 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━ func createGreeting(m string) Greeting
 ┃   ┃   ┣━━ type SomethingLong struct
 ┃   ┃   ┣━━ func (s *SomethingLong) WithAReasonableName(
-┃   ┃   ┃           ctx context.Context,
-┃   ┃   ┃           param1 string,
-┃   ┃   ┃           param2 int,
-┃   ┃   ┃           param3 mapinterface{},
-┃   ┃   ┃           callback func(int) error,
+┃   ┃   ┃     ctx context.Context,
+┃   ┃   ┃     param1 string,
+┃   ┃   ┃     param2 int,
+┃   ┃   ┃     param3 mapinterface{},
+┃   ┃   ┃     callback func(int) error,
 ┃   ┃   ┃   ) (resultType, error)
 ┃   ┃   ┣━━ type resultType struct
 ┃   ┃   ┗━━ func main()
 ┃   ┣━━ 📄 hallucination.tex (1465 tokens, 127 lines)
-┃   ┃   ┣━━ Harnessing the Master Algorithm: Strategies for AI Large Language 
-┃   ┃   ┃   Models to Mitigate Hallucinations
+┃   ┃   ┣━━ Harnessing the Master Algorithm: Strategies for AI LLMs to Mitigate Hallucinations
 ┃   ┃   ┣━━ Hallucinated Pedro Domingos et al.
 ┃   ┃   ┣━━ Christmas Eve 2023
 ┃   ┃   ┣━━ 1 Introduction
@@ -664,8 +688,7 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━ section GroupDynamics
 ┃   ┃   ┣━━ lemma group_stability (G : Type*) [Group G] (H : Subgroup G)
 ┃   ┃   ┣━━ theorem subgroup_closure {G : Type*} [Group G] (S : Set G)
-┃   ┃   ┣━━ axiom group_homomorphism_preservation {G H : Type*} [Group G] [Group
-┃   ┃   ┃   H] (f : G → H)
+┃   ┃   ┣━━ axiom group_homomorphism_preservation {G H : Type*} [Group G] [Group H] (f : G → H)
 ┃   ┃   ┣━━ end GroupDynamics
 ┃   ┃   ┣━━ section ConstructiveApproach
 ┃   ┃   ┣━━ lemma finite_group_order (G : Type*) [Group G] [Fintype G]
@@ -691,7 +714,7 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━     int32 id = 1
 ┃   ┃   ┣━━     string name = 2
 ┃   ┃   ┗━━     string role = 3
-┃   ┣━━ 📄 test.sqlite (0 tokens, 0 lines)
+┃   ┣━━ 📄 test.sqlite
 ┃   ┃   ┣━━ students table:
 ┃   ┃   ┣━━    id integer primary key
 ┃   ┃   ┣━━    name text not null
@@ -715,11 +738,10 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━     minuend: 42
 ┃   ┃   ┣━━     subtrahend: 23
 ┃   ┃   ┗━━ id: 1
-┃   ┣━━ 📄 test_openapi.yaml (512 tokens, 93 lines)
+┃   ┣━━ 📄 test_openapi.yaml (507 tokens, 93 lines)
 ┃   ┃   ┣━━ openapi: 3.0.1
 ┃   ┃   ┣━━     title: TODO Plugin
-┃   ┃   ┣━━     description: A plugin that allows the user to create and manage 
-┃   ┃   ┃   a TODO list using ChatGPT.
+┃   ┃   ┣━━     description: A plugin to create and manage TODO lists using ChatGPT.
 ┃   ┃   ┣━━     version: v1
 ┃   ┃   ┣━━ servers:
 ┃   ┃   ┣━━     - url: PLUGIN_HOSTNAME
@@ -741,8 +763,7 @@ paths=('tests/more_languages',)
 ┃   ┗━━ 📄 test_pyproject.toml (311 tokens, 39 lines)
 ┃       ┣━━ name: tree_plus
 ┃       ┣━━ version: 1.0.8
-┃       ┣━━ description: A `tree` util enhanced with tokens, lines, and 
-┃       ┃   components.
+┃       ┣━━ description: A `tree` util enhanced with tokens, lines, and components.
 ┃       ┣━━ License :: OSI Approved :: Apache Software License
 ┃       ┣━━ License :: OSI Approved :: MIT License
 ┃       ┣━━ dependencies:
@@ -751,7 +772,7 @@ paths=('tests/more_languages',)
 ┃       ┣━━     click
 ┃       ┣━━     rich
 ┃       ┗━━     tomli
-┣━━ 📁 group4 (2248 tokens, 336 lines)
+┣━━ 📁 group4 (2525 tokens, 380 lines)
 ┃   ┣━━ 📄 haskell_test.hs (373 tokens, 41 lines)
 ┃   ┃   ┣━━ data Person
 ┃   ┃   ┣━━ greet :: Person -> String
@@ -779,14 +800,14 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━ greet.Person <- function
 ┃   ┃   ┣━━ ensure_between = function
 ┃   ┃   ┗━━ run_intermediate_annealing_process = function
-┃   ┣━━ 📄 rust_test.rs (611 tokens, 115 lines)
+┃   ┣━━ 📄 rust_test.rs (888 tokens, 159 lines)
 ┃   ┃   ┣━━ enum Days
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ impl Point
-┃   ┃   ┣━━ fn get_origin() -> Point
+┃   ┃   ┣━━     fn get_origin() -> Point
 ┃   ┃   ┣━━ struct Person
 ┃   ┃   ┣━━ impl Person
-┃   ┃   ┣━━ fn greet(&self)
+┃   ┃   ┣━━     fn greet(&self)
 ┃   ┃   ┣━━ fn add_two_longs(x1: i64, x2: i64) -> i64
 ┃   ┃   ┣━━ fn add_two_longs_longer(
 ┃   ┃   ┃       x1: i64,
@@ -795,40 +816,52 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━ fn multiply_by_two(num: f64) -> f64
 ┃   ┃   ┣━━ fn get_first_character(s: &str) -> Option<char>
 ┃   ┃   ┣━━ trait Drawable
-┃   ┃   ┣━━ fn draw(&self)
+┃   ┃   ┣━━     fn draw(&self)
 ┃   ┃   ┣━━ impl Drawable for Point
-┃   ┃   ┣━━ fn draw(&self)
+┃   ┃   ┣━━     fn draw(&self)
 ┃   ┃   ┣━━ fn main()
 ┃   ┃   ┣━━ pub struct VisibleStruct
 ┃   ┃   ┣━━ mod my_module
+┃   ┃   ┣━━     pub struct AlsoVisibleStruct<T>(T, T)
 ┃   ┃   ┣━━ macro_rules! say_hello
+┃   ┃   ┣━━ #[macro_export]
+┃   ┃   ┃   macro_rules! hello_tree_plus
 ┃   ┃   ┣━━ pub mod lib
-┃   ┃   ┣━━ pub mod interfaces
-┃   ┃   ┣━━ mod engine
-┃   ┃   ┗━━ pub fn flow<S1, S2, S3, S4, E, T, L>(
-┃   ┃           source: S1, 
-┃   ┃           extractor: E, 
-┃   ┃           inbox: S2, 
-┃   ┃           transformer: T, 
-┃   ┃           outbox: S3, 
-┃   ┃           loader: L, 
-┃   ┃           sink: &mut S4,
-┃   ┃       ) -> Result<(), Box<dyn Error>>
-┃   ┃       where
-┃   ┃           S1: Extractable,
-┃   ┃           S2: Extractable + Loadable,
-┃   ┃           S3: Extractable + Loadable,
-┃   ┃           S4: Loadable,
-┃   ┃           E: Extractor<S1, S2>,
-┃   ┃           T: Transformer<S2, S3>,
-┃   ┃           L: Loader<S3, S4>,
+┃   ┃   ┣━━     pub mod interfaces
+┃   ┃   ┣━━     mod engine
+┃   ┃   ┣━━ pub fn flow<S1, S2, S3, S4, E, T, L>(
+┃   ┃   ┃       source: S1, 
+┃   ┃   ┃       extractor: E, 
+┃   ┃   ┃       inbox: S2, 
+┃   ┃   ┃       transformer: T, 
+┃   ┃   ┃       outbox: S3, 
+┃   ┃   ┃       loader: L, 
+┃   ┃   ┃       sink: &mut S4,
+┃   ┃   ┃   ) -> Result<(), Box<dyn Error>>
+┃   ┃   ┃   where
+┃   ┃   ┃       S1: Extractable,
+┃   ┃   ┃       S2: Extractable + Loadable,
+┃   ┃   ┃       S3: Extractable + Loadable,
+┃   ┃   ┃       S4: Loadable,
+┃   ┃   ┃       E: Extractor<S1, S2>,
+┃   ┃   ┃       T: Transformer<S2, S3>,
+┃   ┃   ┃       L: Loader<S3, S4>,
+┃   ┃   ┣━━ trait Container
+┃   ┃   ┣━━     fn items(&self) -> impl Iterator<Item = Widget>
+┃   ┃   ┣━━ trait HttpService
+┃   ┃   ┣━━     async fn fetch(&self, url: Url) -> HtmlBody
+┃   ┃   ┣━━ struct Pair<T, U>
+┃   ┃   ┣━━ trait Transformer<T>
+┃   ┃   ┣━━     fn transform(&self, input: T) -> T
+┃   ┃   ┣━━ impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
+┃   ┃   ┣━━     fn transform(&self, input: T) -> T
+┃   ┃   ┗━━ fn main()
 ┃   ┣━━ 📄 test.zig (432 tokens, 61 lines)
 ┃   ┃   ┣━━ pub fn add(a: i32, b: i32) i32
 ┃   ┃   ┣━━ test "add function"
 ┃   ┃   ┣━━ const BunBuildOptions = struct
 ┃   ┃   ┣━━     pub fn updateRuntime(this: *BunBuildOptions) anyerror!void
-┃   ┃   ┣━━     pub fn step(this: BunBuildOptions, b: anytype) 
-┃   ┃   ┃   *std.build.OptionsStep
+┃   ┃   ┣━━     pub fn step(this: BunBuildOptions, b: anytype) *std.build.OptionsStep
 ┃   ┃   ┗━━ pub fn sgemv(
 ┃   ┃           order: Order,
 ┃   ┃           trans: Trans,
@@ -954,9 +987,9 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━ enum Color
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ trait Drawable
-┃   ┃   ┣━━ fn draw(&self)
+┃   ┃   ┣━━     fn draw(&self)
 ┃   ┃   ┣━━ impl Drawable for Point
-┃   ┃   ┣━━ fn draw(&self)
+┃   ┃   ┣━━     fn draw(&self)
 ┃   ┃   ┗━━ fn main()
 ┃   ┣━━ 📄 sql_test.sql (300 tokens, 52 lines)
 ┃   ┃   ┣━━ CREATE TABLE promoters
@@ -1100,7 +1133,7 @@ paths=('tests/more_languages',)
 ```sh
 tree_plus -g "*.*s" -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-📁 more_languages (9928 tokens, 1379 lines)
+📁 more_languages (10205 tokens, 1423 lines)
 ┣━━ 📁 group3 (538 tokens, 93 lines)
 ┃   ┗━━ 📄 csharp_test.cs (538 tokens, 93 lines)
 ┃       ┣━━ public interface IExcelTemplate
@@ -1139,7 +1172,7 @@ paths=('tests/more_languages',)
 ┃       ┣━━ Func<int, int, int> add: =>
 ┃       ┣━━ button.Click +=: =>
 ┃       ┗━━ public Func<int, int> GetMultiplier: =>
-┣━━ 📁 group4 (984 tokens, 156 lines)
+┣━━ 📁 group4 (1261 tokens, 200 lines)
 ┃   ┣━━ 📄 haskell_test.hs (373 tokens, 41 lines)
 ┃   ┃   ┣━━ data Person
 ┃   ┃   ┣━━ greet :: Person -> String
@@ -1155,14 +1188,14 @@ paths=('tests/more_languages',)
 ┃   ┃           ( [G.Directive Variable],
 ┃   ┃             G.SelectionSet fragments Variable
 ┃   ┃           )
-┃   ┗━━ 📄 rust_test.rs (611 tokens, 115 lines)
+┃   ┗━━ 📄 rust_test.rs (888 tokens, 159 lines)
 ┃       ┣━━ enum Days
 ┃       ┣━━ struct Point
 ┃       ┣━━ impl Point
-┃       ┣━━ fn get_origin() -> Point
+┃       ┣━━     fn get_origin() -> Point
 ┃       ┣━━ struct Person
 ┃       ┣━━ impl Person
-┃       ┣━━ fn greet(&self)
+┃       ┣━━     fn greet(&self)
 ┃       ┣━━ fn add_two_longs(x1: i64, x2: i64) -> i64
 ┃       ┣━━ fn add_two_longs_longer(
 ┃       ┃       x1: i64,
@@ -1171,33 +1204,46 @@ paths=('tests/more_languages',)
 ┃       ┣━━ fn multiply_by_two(num: f64) -> f64
 ┃       ┣━━ fn get_first_character(s: &str) -> Option<char>
 ┃       ┣━━ trait Drawable
-┃       ┣━━ fn draw(&self)
+┃       ┣━━     fn draw(&self)
 ┃       ┣━━ impl Drawable for Point
-┃       ┣━━ fn draw(&self)
+┃       ┣━━     fn draw(&self)
 ┃       ┣━━ fn main()
 ┃       ┣━━ pub struct VisibleStruct
 ┃       ┣━━ mod my_module
+┃       ┣━━     pub struct AlsoVisibleStruct<T>(T, T)
 ┃       ┣━━ macro_rules! say_hello
+┃       ┣━━ #[macro_export]
+┃       ┃   macro_rules! hello_tree_plus
 ┃       ┣━━ pub mod lib
-┃       ┣━━ pub mod interfaces
-┃       ┣━━ mod engine
-┃       ┗━━ pub fn flow<S1, S2, S3, S4, E, T, L>(
-┃               source: S1, 
-┃               extractor: E, 
-┃               inbox: S2, 
-┃               transformer: T, 
-┃               outbox: S3, 
-┃               loader: L, 
-┃               sink: &mut S4,
-┃           ) -> Result<(), Box<dyn Error>>
-┃           where
-┃               S1: Extractable,
-┃               S2: Extractable + Loadable,
-┃               S3: Extractable + Loadable,
-┃               S4: Loadable,
-┃               E: Extractor<S1, S2>,
-┃               T: Transformer<S2, S3>,
-┃               L: Loader<S3, S4>,
+┃       ┣━━     pub mod interfaces
+┃       ┣━━     mod engine
+┃       ┣━━ pub fn flow<S1, S2, S3, S4, E, T, L>(
+┃       ┃       source: S1, 
+┃       ┃       extractor: E, 
+┃       ┃       inbox: S2, 
+┃       ┃       transformer: T, 
+┃       ┃       outbox: S3, 
+┃       ┃       loader: L, 
+┃       ┃       sink: &mut S4,
+┃       ┃   ) -> Result<(), Box<dyn Error>>
+┃       ┃   where
+┃       ┃       S1: Extractable,
+┃       ┃       S2: Extractable + Loadable,
+┃       ┃       S3: Extractable + Loadable,
+┃       ┃       S4: Loadable,
+┃       ┃       E: Extractor<S1, S2>,
+┃       ┃       T: Transformer<S2, S3>,
+┃       ┃       L: Loader<S3, S4>,
+┃       ┣━━ trait Container
+┃       ┣━━     fn items(&self) -> impl Iterator<Item = Widget>
+┃       ┣━━ trait HttpService
+┃       ┣━━     async fn fetch(&self, url: Url) -> HtmlBody
+┃       ┣━━ struct Pair<T, U>
+┃       ┣━━ trait Transformer<T>
+┃       ┣━━     fn transform(&self, input: T) -> T
+┃       ┣━━ impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
+┃       ┣━━     fn transform(&self, input: T) -> T
+┃       ┗━━ fn main()
 ┗━━ 📁 group5 (8406 tokens, 1130 lines)
     ┣━━ 📄 app-routing.module.ts (242 tokens, 28 lines)
     ┃   ┣━━ const routes: Routes = [
@@ -1246,9 +1292,9 @@ paths=('tests/more_languages',)
     ┃   ┣━━ enum Color
     ┃   ┣━━ struct Point
     ┃   ┣━━ trait Drawable
-    ┃   ┣━━ fn draw(&self)
+    ┃   ┣━━     fn draw(&self)
     ┃   ┣━━ impl Drawable for Point
-    ┃   ┣━━ fn draw(&self)
+    ┃   ┣━━     fn draw(&self)
     ┃   ┗━━ fn main()
     ┣━━ 📄 standard-app-routing.module.ts (93 tokens, 17 lines)
     ┃   ┗━━ const routes: Routes = [
