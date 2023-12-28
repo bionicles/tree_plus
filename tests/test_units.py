@@ -16,7 +16,7 @@ from tree_plus_src import (
 def test_directory_token_line_counting():
     dir_path = "tests/path_to_test/"
     # Manually calculated total counts.
-    expected = TokenLineCount(n_tokens=750, n_lines=153)
+    expected = TokenLineCount(n_tokens=776, n_lines=157)
     result = count_directory_tokens_lines(dir_path)
     assert isinstance(result, TokenLineCount)
     assert result == expected
@@ -49,8 +49,10 @@ def test_units_file_as_directory():
                 Text("def parse_py(contents: str) -> List[str]"),
                 Text("class MyClass"),
                 Text("    def my_method(self)"),
-                "    @staticmethod",
-                Text("    def my_typed_method(obj: dict) -> int"),
+                Text(
+                    """    @staticmethod
+    def my_typed_method(obj: dict) -> int"""
+                ),
                 Text(
                     """    def my_multiline_signature_method(
         self,
@@ -58,25 +60,31 @@ def test_units_file_as_directory():
         bob: int = None,
     ) -> tuple"""
                 ),
-                "@lru_cache(maxsize=None)",
                 Text(
-                    """def my_multiline_signature_function(
+                    """@lru_cache(maxsize=None)
+def my_multiline_signature_function(
     tree: tuple = (),
     plus: str = "+",
 ) -> tuple"""
                 ),
                 Text("class LogLevelEnum(str, Enum)"),
                 Text("class Algo(BaseModel)"),
-                "@dataclass",
-                Text("class TestDataclass"),
+                Text(
+                    """@dataclass
+class TestDataclass"""
+                ),
                 'A = TypeVar("A", str, bytes)',
                 Text("def omega_yikes(file: str, expected: List[str]) -> bool"),
                 Text("def ice[T](args: Iterable[T] = ())"),
                 Text("class list[T]"),
                 Text("    def __getitem__(self, index: int, /) -> T"),
-                "    @classmethod",
                 Text(
-                    '    def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"'
+                    '''    @classmethod
+    def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"'''
+                ),
+                Text(
+                    """    @classmethod
+    def from_str(cls, toolbox, string: str, score=None) -> 'Algo'"""
                 ),
             ],
         ),

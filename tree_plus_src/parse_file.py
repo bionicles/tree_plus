@@ -188,6 +188,50 @@ def parse_file(file_path: str) -> List[str]:
     return total_components
 
 
+def parse_rs(contents: str) -> List[str]:
+    debug_print("parse_rs")
+
+    # Combined regex pattern to match all components
+    combined_pattern = re.compile(
+        # functions
+        # r"(pub\s+)?(fn\s+[a-z_][a-z_0-9]*\s*(<[^>]+>)?\s*\([^)]*\)\s*(->\s*[^{]*)?(where\s*[^{]*)?|"
+        r"\n( *(pub )?(async )?fn [\w_]*(\<.*\>)?(\([^)]*\))( -> ([^;{]*))?)|"
+        # structs and impls with generics
+        # r"struct\s+[A-Z]\w*|impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?|"
+        # r"^( *(pub)? ?struct\s+[A-Z]\w*|impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?)"
+        r"\n(( *(((pub )?struct)|impl))[^{;]*) ?[{;]|"
+        # trait, enum, or mod
+        # r"trait\s+[A-Z]\w*|enum\s+[A-Z]\w*|mod\s+[a-z_][a-z_0-9]*|"
+        r"\n(( *)?(pub )?(trait|enum|mod)\s+\w*(<[^{]*>)?)|"
+        # r"macro_rules!\s+[a-z_][a-z_0-9]*)",
+        r"\n((#\[macro_export\]\n)?macro_rules!\s+[a-z_][a-z_0-9]*)",
+        re.DOTALL,
+    )
+
+    components = []
+
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        groups = extract_groups(match)
+        debug_print(f"parse_rs match {n}:\n", groups)
+        component = None
+        # functions, group 1
+        if 1 in groups:
+            component = groups[1].rstrip()
+        # struct or impl
+        elif 8 in groups:
+            component = groups[8].rstrip()
+        # trait, enum, mod
+        elif 13 in groups:
+            component = groups[13]
+        # macro
+        elif 18 in groups:
+            component = groups[18]
+        if component:
+            components.append(Text(component))
+
+    return components
+
+
 def parse_csv(filename: str) -> list:
     with open(filename, newline="") as csvfile:
         reader = csv.reader(csvfile)
@@ -1246,22 +1290,32 @@ def parse_py(contents: str) -> List[str]:
     )
 
     components = []
+    decorator_carry = []
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         groups = extract_groups(match)
         debug_print(f"parse_py: {match_number=}:")
 
         # Function or Method is 1
         if 1 in groups:
-            function_or_method = Text(groups[1])  # fix a bug with [hints]
-            components.append(function_or_method)
+            fun_group = groups[1]
+            if decorator_carry:
+                fun_group = "\n".join(decorator_carry) + "\n" + fun_group
+                decorator_carry = []
+            # fix a bug with [hints]
+            fun_group = Text(fun_group)
+            components.append(fun_group)
         # Class is 2
         elif 3 in groups:
-            class_group = Text(groups[3])  # [generics]
+            class_group = groups[3]
+            if decorator_carry:
+                class_group = "\n".join(decorator_carry) + "\n" + class_group
+                decorator_carry = []
+            class_group = Text(class_group)  # [generics]
             components.append(class_group)
         # 6 is the whole decorator group
         elif 6 in groups:
             decorator = groups[6]
-            components.append(decorator)
+            decorator_carry.append(decorator)
         # 8 wraps entire TypeVar matches
         elif 8 in groups:
             typevar = groups[8]
@@ -1943,24 +1997,3 @@ def parse_markers(content: str) -> List[str]:
             mark = f"{marker.upper()} (Line {line_n}): {content.strip()}"
             markers.append(mark)
     return markers
-
-
-def parse_rs(contents: str) -> List[str]:
-    debug_print("parse_rs")
-
-    # Combined regex pattern to match all components
-    combined_pattern = re.compile(
-        r"(pub\s+)?(fn\s+[a-z_][a-z_0-9]*\s*(<[^>]+>)?\s*\([^)]*\)\s*(->\s*[^{]*)?(where\s*[^{]*)?|"
-        r"struct\s+[A-Z]\w*|impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?|"
-        r"trait\s+[A-Z]\w*|enum\s+[A-Z]\w*|mod\s+[a-z_][a-z_0-9]*|"
-        r"macro_rules!\s+[a-z_][a-z_0-9]*)",
-        re.DOTALL,
-    )
-
-    components = []
-
-    for match in combined_pattern.finditer(contents):
-        component = match.group().strip()
-        components.append(component)
-
-    return components

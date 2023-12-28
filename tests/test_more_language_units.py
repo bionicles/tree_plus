@@ -3,6 +3,7 @@ from typing import List
 import pytest
 import os
 
+from rich.text import Text
 from rich import print
 import sqlite3
 
@@ -586,10 +587,10 @@ def test_more_languages_group3(file: str, expected: List[str]):
                 "enum Days",
                 "struct Point",
                 "impl Point",
-                "fn get_origin() -> Point",
+                "    fn get_origin() -> Point",
                 "struct Person",
                 "impl Person",
-                "fn greet(&self)",
+                "    fn greet(&self)",
                 "fn add_two_longs(x1: i64, x2: i64) -> i64",
                 """fn add_two_longs_longer(
     x1: i64,
@@ -598,16 +599,19 @@ def test_more_languages_group3(file: str, expected: List[str]):
                 "fn multiply_by_two(num: f64) -> f64",
                 "fn get_first_character(s: &str) -> Option<char>",
                 "trait Drawable",
-                "fn draw(&self)",
+                "    fn draw(&self)",
                 "impl Drawable for Point",
-                "fn draw(&self)",
+                "    fn draw(&self)",
                 "fn main()",
                 "pub struct VisibleStruct",
                 "mod my_module",
+                "    pub struct AlsoVisibleStruct<T>(T, T)",
                 "macro_rules! say_hello",
+                """#[macro_export]
+macro_rules! hello_tree_plus""",
                 "pub mod lib",
-                "pub mod interfaces",
-                "mod engine",
+                "    pub mod interfaces",
+                "    mod engine",
                 """pub fn flow<S1, S2, S3, S4, E, T, L>(
     source: S1, 
     extractor: E, 
@@ -625,6 +629,16 @@ where
     E: Extractor<S1, S2>,
     T: Transformer<S2, S3>,
     L: Loader<S3, S4>,""",
+                "trait Container",
+                "    fn items(&self) -> impl Iterator<Item = Widget>",
+                "trait HttpService",
+                "    async fn fetch(&self, url: Url) -> HtmlBody",
+                "struct Pair<T, U>",
+                "trait Transformer<T>",
+                "    fn transform(&self, input: T) -> T",
+                "impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>",
+                "    fn transform(&self, input: T) -> T",
+                "fn main()",
             ],
         ),
         (
@@ -707,6 +721,8 @@ def test_more_languages_group4(
 ):
     print(f"{file=}")
     result = parse_file(file)
+    if file.endswith("rust_test.rs"):
+        expected = [Text(expectation) for expectation in expected]
     print(f"{result=}")
     print(f"{expected=}")
     assert result == expected

@@ -36,7 +36,7 @@ console = Console()
 
 
 def tree_to_string(tree: Tree) -> str:
-    console = Console(force_terminal=True, no_color=True)
+    console = Console(force_terminal=True, no_color=True, soft_wrap=True)
     with console.capture() as capture:
         console.print(tree)
     captured_str = capture.get()
@@ -69,7 +69,7 @@ PathsInput = Optional[PathOrPaths]
 Paths = Tuple[str]
 
 operate_normally = platform.system() != "Windows" or sys.stdout.encoding != "cp1252"
-root_char = ":cactus:" if operate_normally else "[multiple paths]"
+root_char = ":cactus:" if operate_normally else "[root]"
 folder_char = ":file_folder:" if operate_normally else "[folder]"
 file_char = ":page_facing_up:" if operate_normally else "[file]"
 glob_char = ":cyclone:" if operate_normally else "[glob]"

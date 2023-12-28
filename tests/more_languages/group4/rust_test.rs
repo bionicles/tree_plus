@@ -72,9 +72,18 @@ pub struct VisibleStruct {
 
 mod my_module {
     // Module contents...
+    pub struct AlsoVisibleStruct<T>(T, T);
 }
 
 macro_rules! say_hello {
+    () => {
+        println!("Hello, world!");
+    };
+}
+
+
+#[macro_export]
+macro_rules! hello_tree_plus {
     () => {
         println!("Hello, world!");
     };
@@ -112,4 +121,39 @@ where
     log_message(&logger, Level::Info, "Outbox {:#?}", outbox);
     loader(outbox, sink);
     log_message(&logger, Level::Info, "Sink {:#?}", sink);
+}
+
+trait Container {
+    fn items(&self) -> impl Iterator<Item = Widget>;
+}
+
+trait HttpService {
+    async fn fetch(&self, url: Url) -> HtmlBody;
+//  ^^^^^^^^ desugars to:
+//  fn fetch(&self, url: Url) -> impl Future<Output = HtmlBody>;
+}
+
+// Define a generic struct with two generic types
+struct Pair<T, U> {
+    first: T,
+    second: U,
+}
+
+// Define a generic trait with one generic type
+trait Transformer<T> {
+    fn transform(&self, input: T) -> T;
+}
+
+// Implement the Transformer trait for the Pair struct
+// This implementation will transform a Pair of the same types (T, T)
+impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T> {
+    fn transform(&self, input: T) -> T {
+        self.first + self.second + input
+    }
+}
+
+// Main function for demonstration
+fn main() {
+    let pair = Pair { first: 10, second: 20 };
+    println!("Result: {}", pair.transform(5));
 }

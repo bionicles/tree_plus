@@ -62,7 +62,7 @@ def test_e2e_empty_folder():
     assert unify_tree_symbols(result_str) == EXPECTATION_EMPTY
 
 
-EXPECTATION_1 = """📁 path_to_test (750 tokens, 153 lines)
+EXPECTATION_1 = """📁 path_to_test (776 tokens, 157 lines)
 ┣━━ 📄 class_function.js (33 tokens, 9 lines)
 ┃   ┣━━ class MyClass
 ┃   ┣━━     myMethod
@@ -80,34 +80,36 @@ EXPECTATION_1 = """📁 path_to_test (750 tokens, 153 lines)
 ┃   ┣━━ const myAsyncArrowFunction: async =>
 ┃   ┣━━ const myAsyncArrow: async =>
 ┃   ┗━━ let myWeirdArrow: =>
-┣━━ 📄 class_method_type.py (473 tokens, 92 lines)
-┃   ┣━━ T = TypeVar(\"T\")
+┣━━ 📄 class_method_type.py (499 tokens, 96 lines)
+┃   ┣━━ T = TypeVar("T")
 ┃   ┣━━ def parse_py(contents: str) -> List[str]
 ┃   ┣━━ class MyClass
 ┃   ┣━━     def my_method(self)
 ┃   ┣━━     @staticmethod
-┃   ┣━━     def my_typed_method(obj: dict) -> int
+┃   ┃       def my_typed_method(obj: dict) -> int
 ┃   ┣━━     def my_multiline_signature_method(
 ┃   ┃           self,
 ┃   ┃           alice: str = None,
 ┃   ┃           bob: int = None,
 ┃   ┃       ) -> tuple
 ┃   ┣━━ @lru_cache(maxsize=None)
-┃   ┣━━ def my_multiline_signature_function(
+┃   ┃   def my_multiline_signature_function(
 ┃   ┃       tree: tuple = (),
 ┃   ┃       plus: str = "+",
 ┃   ┃   ) -> tuple
 ┃   ┣━━ class LogLevelEnum(str, Enum)
 ┃   ┣━━ class Algo(BaseModel)
 ┃   ┣━━ @dataclass
-┃   ┣━━ class TestDataclass
+┃   ┃   class TestDataclass
 ┃   ┣━━ A = TypeVar("A", str, bytes)
 ┃   ┣━━ def omega_yikes(file: str, expected: List[str]) -> bool
 ┃   ┣━━ def ice[T](args: Iterable[T] = ())
 ┃   ┣━━ class list[T]
 ┃   ┣━━     def __getitem__(self, index: int, /) -> T
 ┃   ┣━━     @classmethod
-┃   ┗━━     def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
+┃   ┃       def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
+┃   ┗━━     @classmethod
+┃           def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
 ┣━━ 📄 empty.py
 ┣━━ 📄 file.js (14 tokens, 3 lines)
 ┃   ┗━━ function helloWorld
