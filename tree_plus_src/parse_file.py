@@ -141,6 +141,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_scala(contents)
     elif file_extension in LISP_EXTENSIONS:
         components = parse_lisp(contents)
+    elif file_extension in {".erl", ".hrl"}:
+        components = parse_erl(contents)
     elif file_extension == ".capnp":
         components = parse_capnp(contents)
     elif file_extension == ".proto":
@@ -193,8 +195,44 @@ def parse_tcl(contents: str) -> List[str]:
     )
     components = []
     for n, match in enumerate(combined_pattern.finditer(contents)):
-        debug_print(f"parse_rs match {n}:\n", match)
+        debug_print(f"parse_tcl match {n}:\n", match)
         components.append(match.group())
+
+    return components
+
+
+def parse_erl(contents: str) -> List[str]:
+    debug_print("parse_erl")
+
+    combined_pattern = re.compile(
+        # -spec 1
+        r"^(-spec[^\n]*?(?:\n\s+.*?)*?\.)\n|"
+        # -record(thingy). 2
+        r"^((-record\(\w*))(?=,)|"
+        # type 4
+        r"^(-(?:type|opaque) \w+\((?:\s|[^\)])*\))(?=\s::)|"
+        # -module(name). 5
+        r"^((-module\([^\)]*\).))",
+        re.MULTILINE,
+    )
+
+    components = []
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        groups = extract_groups(match)
+        debug_print(f"parse_erl match {n}:\n", groups)
+        component = None
+        if 1 in groups:  # spec
+            component = groups[1]
+        elif 2 in groups:  # record
+            component = groups[2] + ")."
+        elif 4 in groups:  # type
+            component = groups[4] + "."
+        elif 5 in groups:  # module
+            component = groups[5]
+
+        if component:
+            debug_print(f"parse_erl component {n}:\n{component}")
+            components.append(component)
 
     return components
 

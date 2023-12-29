@@ -953,6 +953,34 @@ where
 }""",
             ],
         ),
+        (
+            "tests/more_languages/group4/erl_test.erl",
+            [
+                "-module(erl_test).",
+                "-record(person).",
+                "-type ra_peer_status().",
+                "-type ra_membership().",
+                "-opaque my_opaq_type().",
+                "-type orddict(Key, Val).",
+                """-type edge(
+        Cases,
+        Pwn,
+    ).""",
+                "-spec guarded(X) -> X when X :: tuple().",
+                """-spec edge_case(
+        {integer(), any()} | [any()]
+    ) -> processed, integer(), any()} | [{item, any()}].""",
+                """-spec complex_function({integer(), any()} | [any()]) -> 
+    {processed, integer(), any()} | [{item, any()}].""",
+                "-spec list_manipulation([integer()]) -> [integer()].",
+                """-spec overload(T1, T2) -> T3
+        ; (T4, T5) -> T6.""",
+                """-spec multiguard({X, integer()}) -> X when X :: atom()
+        ; ([Y]) -> Y when Y :: number().""",
+                "-record(multiline).",
+                "-record(maybe_undefined).",
+            ],
+        ),
     ],
 )
 def test_more_languages_group4(
