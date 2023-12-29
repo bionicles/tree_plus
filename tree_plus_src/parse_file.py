@@ -28,6 +28,7 @@ def extract_groups(match: re.Match) -> dict:
         group = match.group(i)
         if group:
             numbered_groups[i] = group
+    debug_print("groups:")
     debug_print(numbered_groups)
     return numbered_groups
 
@@ -129,7 +130,7 @@ def parse_file(file_path: str) -> List[str]:
     elif file_extension == ".cs":
         components = parse_cs(contents)
     elif file_extension == ".kt":
-        components = parse_kotlin(contents)
+        components = parse_kt(contents)
     elif file_extension == ".java":
         components = parse_java(contents)
     elif file_extension == ".hs":
@@ -152,6 +153,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_tf(contents)
     elif file_extension == ".lua":
         components = parse_lua(contents)
+    elif file_extension == ".tcl":
+        components = parse_tcl(contents)
     elif file_extension == ".php":
         components = parse_php(contents)
     elif file_extension == ".m":
@@ -179,6 +182,21 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def parse_tcl(contents: str) -> List[str]:
+    debug_print("parse_tcl")
+
+    combined_pattern = re.compile(
+        r"^(proc \w+ \{[^\}]*\})",
+        re.MULTILINE,
+    )
+    components = []
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_rs match {n}:\n", match)
+        components.append(match.group())
+
+    return components
 
 
 def parse_rs(contents: str) -> List[str]:
@@ -556,30 +574,6 @@ def parse_lean(lean_content: str) -> List[str]:
     return components
 
 
-# Combined regex pattern to match all components
-# combined_pattern = re.compile(
-#     # Interfaces, Enums, Delegates, Structs, Classes
-#     r"\n( *(public )?(static )?(interface|enum|delegate|struct|class)\s+(\w+)( \w+)?( : \w+)?)|"
-#     # Methods in Interfaces and Classes, capturing indentation
-#     r"\n( *(public)?\s+(static\s+)?[\w<>\[\],]+\??\s+(\w+))\([^)]*\)|"
-#     # Namespaces
-#     r"\b(namespace\s+([\w\.]+))|"
-#     # Method Arrow functions
-#     r"\n( *(public\s+override\s+)?[\w<>\[\]]+\s+(\w+)\s*)\([^)]*\)\s*=>|"
-#     # Arrow functions
-#     # r"\n( *var\s+(\w+))\s*=\s*\([^)]*\)\s*=>|"
-#     # Func<...> Lambda Expressions
-#     # r"( *Func<[\w<>, ]+\s+\w+)\s*=\s*\([^)]*\)\s*=>|"
-#     # Combined var and Func Lambda Expressions
-#     r"\n( *(var|Func<[\w<>, ]+)\s+(\w+))\s*=\s*\([^)]*\)\s*=>|"
-#     # Methods returning Lambda Expressions
-#     r"\n( *(public\s+)?Func<[\w<>,\s]+\s+\w+)\([^)]*\)\s*\{|"
-#     # Event Handler Arrow Functions
-#     r"\n( *\w+(\.\w+)?\s*\+=)\s*\([^)]*\)\s*=>",
-#     re.DOTALL,
-# )
-
-
 def parse_cs(contents: str) -> List[str]:
     # Updated regex pattern to match all components including method signatures
     combined_cs_pattern = re.compile(
@@ -844,29 +838,39 @@ def parse_go(contents) -> List[str]:
     return components
 
 
-def parse_swift(contents) -> List[str]:
+def parse_swift(contents: str) -> List[str]:
     debug_print("parse_swift")
+
+    contents = remove_ts_comments(contents)
 
     # Combined regex pattern to match Go components
     combined_pattern = re.compile(
-        # class, enum, enum class, with or without protocol
-        r"\n((enum)?( ?class|struct)? \w+:? ?\w+)|"
-        # protocols are that which is inherited
-        r"\n((protocol) \w+)|"
-        # functions with or without multiline signatures
-        r"\n(func [\s\S]+?){\s",
-        re.DOTALL,
+        # # class, enum, enum class, with or without protocol
+        # r"\n((enum)?( ?class|struct)? \w+:? ?\w+)|"
+        # # protocols are that which is inherited
+        # r"\n((protocol) \w+)|"
+        r"^((?:class|struct|protocol|enum).*(?= {))|"
+        # functions or init methods, with or without multiline signatures
+        # r"\n( *func [\s\S]+?)(?=\s{\s)",
+        r"^( *(?:func|init)\s*\w*\s*\([^)]*\)\s*(?:->\s*\w+\s*)?(?=(?: \{|;|\n)))",
+        re.MULTILINE,
     )
 
     components = []
 
-    for match in combined_pattern.finditer(contents):
-        debug_print(f"{match=}")
-        debug_print(f"{match.groups()=}")
-        component = match.group().strip().replace(" {", "")
-        debug_print(f"{component=}")
-        debug_print(f"final {component=}")
-        components.append(component)
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_swift {n=} {match=}")
+        groups = extract_groups(match)
+        component = None
+        if 1 in groups:
+            component = groups[1]
+        else:
+            component = groups[0]
+        # elif
+        # component = match.group()
+        if component:
+            debug_print(f"parse_swift {component=}")
+            components.append(component)
 
     return components
 
@@ -1303,14 +1307,6 @@ def is_builtin_type(node, parent):
     return False
 
 
-# r"\n(( *)def .*\([^\)]*\) (-> .*)?):( +# .*)?\n|"
-# \n(( *)def .*\([^\)]*\) ?(-> .*)?):( +# .*)?\n
-# ^\s*def\s+\w+\s*\([^)]*(?:\n\s+.+)*\)\s*(?:->\s*[\w\[\], ]+)?\s*:
-# this following works in regex101 but way overmatched in python
-# r"^\s*def\s+\w+\s*\((?:[^()]|\([^)]*\))*\)\s*(?:->\s*[\w\[\], ]+)?\s*:|"
-# the following works in regex101 python but didn't match the () tuple literal in the signature
-# r"\n( *def\s+\w+\s*\((?:[^()]|\([^)]*\))*\)\s*(?:->\s*[\w\[\], ]+)?\s*):|"
-
 # Combined regex pattern to match Python components
 combined_py_pattern = re.compile(
     # Functions and Methods, capturing indentation and multiline signatures
@@ -1368,57 +1364,6 @@ def parse_py(contents: str) -> List[str]:
             components.append(version)
 
     return components
-
-
-# AST version
-# def parse_py(content: str) -> List[str]:
-#     try:
-#         node = ast.parse(content)
-#     except SyntaxError as se:
-#         return [str(se)]
-
-#     # Extract classes and functions
-#     classes = extract_nodes(node, ast.ClassDef)
-#     funcs = extract_nodes(node, ast.FunctionDef)
-
-#     all_items = []
-#     method_names = set()  # To keep track of method names
-
-#     # Handling type annotations
-#     for n in extract_nodes(node, ast.Assign):
-#         if (
-#             isinstance(n[1].value, ast.Call)
-#             and (
-#                 is_typing_construct(n[1].value.func)
-#                 or is_builtin_type(n[1].value.func, n[0])
-#             )
-#             and not isinstance(n[0], ast.ClassDef)
-#         ):
-#             all_items.append((n[1].lineno, f"type {n[1].targets[0].id}"))
-
-#     # Handling classes and methods
-#     for cls in classes:
-#         class_name = f"class {cls[1].name}"
-#         all_items.append((cls[1].lineno, class_name))
-
-#         # Extracting methods within the class
-#         methods = extract_nodes(cls[1], ast.FunctionDef)
-#         for m in methods:
-#             method_name = f"    def {m[1].name}"  # Indentation for method under class
-#             all_items.append((m[1].lineno, method_name))
-#             method_names.add(m[1].name)  # Add method name to the set
-
-#     # Handling standalone functions
-#     for func in funcs:
-#         if func[1].name not in method_names:  # Check if the function is not a method
-#             func_name = f"def {func[1].name}"
-#             all_items.append((func[1].lineno, func_name))
-
-#     # Sorting all items by their line number to preserve order
-#     sorted_items = sorted(all_items, key=lambda x: x[0])
-
-#     # Return only the formatted names
-#     return [item[1] for item in sorted_items]
 
 
 def parse_db(db_path: str) -> List[str]:
@@ -1551,48 +1496,34 @@ def parse_julia(content: str) -> List[str]:
     return components
 
 
-def parse_kotlin(content: str) -> List[str]:
+# edge case ends like \)( = \w+\(.*\))
+def parse_kt(contents: str) -> List[str]:
+    debug_print("parse_kt")
+    # Combined regex pattern to match Kotlin constructs as single groups
+    combined_pattern = re.compile(
+        # 1. classes, interfaces, objects (no fun) # blank line group discovered here! learn more!!!
+        r"(?m)(?:^ *(\w+ (?<!fun ))*(?:class|interface|object)[^.](?:[^{](?!(?:^\s*$)|^\w+))*)|"
+        # 2. fun
+        # r"(?m)( +[A-Z]+ {.*\n)?^.* ?fun (?:[^{}](?!(?:^\s*$)))*(?=(?:\s=\s)|(?: {)|(?:\s^}(?<!=)))",
+        # r"( +[A-Z]+ {.*\n)?(^.* ?fun )(([^{}](?!(^\s*$)|=))*())(?=(\s^}(?<!\) = \w))|(\s=\s)|( {))",
+        # r"( +[A-Z]+ {.*\n)?(^.* ?fun )(([^{}](?!(^\s*$)|($\s}))|( = ))*)(?=(\s^}(?<!\) = \w))|(\s=\s)|( {))",
+        # r"( +[A-Z]+ {.*\n)?(^.* ?fun )(([^{}](?!(^\s*$))|( = ))*)(?=(\)\n^}(?<!\) = \w))|(\s=\s)|( {))",
+        # r"(?m)( +[A-Z]+ {.*\n)?(^.* ?fun )(([^{}](?!(^\s*$))|( = ))*)(?=(\s^}(?<!\) = \w))|(\s=\s)|( {))",
+        r"(?:(?: +[A-Z]+ {.*\n)?(?:^.* ?fun (?:<.*> )?(?:(?:\w|\.)\??|<.*>)*)\([^)]*\)(?:\s?: [A-Z]\w*\??)?(?:\s->\s\w+\))?)(?=\s)",
+        re.MULTILINE,
+    )
+
     components = []
 
-    # Find class declarations
-    class_pattern = r"\bdata class\s+(\w+)\((.*?)\)"
-    class_matches = re.findall(class_pattern, content)
-
-    for class_match in class_matches:
-        class_name = class_match[0]
-        properties = class_match[1]
-        components.append(f"data class {class_name}({properties})")
-
-    # Find function definitions
-    function_pattern = r"\bfun\s+(\w+)\((.*?)\)"
-    function_matches = re.findall(function_pattern, content)
-
-    for function_match in function_matches:
-        function_name = function_match[0]
-        parameters = function_match[1]
-        components.append(f"fun {function_name}({parameters})")
+    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_kt: {match_number=} {match=}")
+        groups = extract_groups(match)
+        component = groups[0]
+        if component:
+            component = remove_ts_comments(component).rstrip().replace(", \n", ",\n")
+            components.append(component)
 
     return components
-
-
-# def parse_lisp(content: str) -> List[str]:
-#     components = []
-
-#     # Find struct declarations
-#     struct_pattern = r"\(defstruct\s+(\w+)"
-#     struct_matches = re.findall(struct_pattern, content)
-
-#     for struct_match in struct_matches:
-#         components.append(f"defstruct {struct_match}")
-
-#     # Find function declarations
-#     function_pattern = r"\(defun\s+(\w+)"
-#     function_matches = re.findall(function_pattern, content)
-
-#     for function_match in function_matches:
-#         components.append(f"defun {function_match}")
-
-#     return components
 
 
 def parse_lua(content: str) -> List[str]:

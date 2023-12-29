@@ -11,6 +11,17 @@ class Person {
     func greet() {
         print("Hello, \(name)")
     }
+
+    func yEdgeCase(
+        fname: String, 
+        lname: String, 
+        age: Int, // { get wrecked by this comment }
+        address: String, 
+        phoneNumber: String
+    ) {
+        print("\(fname) \(lname) is \(age) years old.")
+        print("Address: \(address), Phone: \(phoneNumber)")
+    }
 }
 
 func globalGreet() {
