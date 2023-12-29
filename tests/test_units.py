@@ -16,7 +16,7 @@ from tree_plus_src import (
 def test_directory_token_line_counting():
     dir_path = "tests/path_to_test/"
     # Manually calculated total counts.
-    expected = TokenLineCount(n_tokens=776, n_lines=157)
+    expected = TokenLineCount(n_tokens=560, n_lines=105)
     result = count_directory_tokens_lines(dir_path)
     assert isinstance(result, TokenLineCount)
     assert result == expected
@@ -39,7 +39,6 @@ def test_units_file_as_directory():
     [
         ("tests/path_to_test/version.py", ['__version__ = "1.2.3"']),
         ("tests/path_to_test/file.py", [Text("def hello_world()")]),
-        ("tests/path_to_test/file.js", ["function helloWorld"]),
         ("tests/path_to_test/file.md", ["# Hello, world!"]),
         ("tests/path_to_test/file.txt", []),
         (
@@ -86,27 +85,6 @@ class TestDataclass"""
                     """    @classmethod
     def from_str(cls, toolbox, string: str, score=None) -> 'Algo'"""
                 ),
-            ],
-        ),
-        (
-            "tests/path_to_test/class_function.js",
-            ["class MyClass", "    myMethod", "function myFunction"],
-        ),
-        (
-            "tests/path_to_test/class_function_type.ts",
-            [
-                "type MyType",
-                "interface MyInterface",
-                "class TsClass",
-                "    myMethod",
-                "class TicketsComponent implements AfterViewInit",
-                "    async myAsyncMethod",
-                "function tsFunction",
-                "const myArrowFunction: =>",
-                "const myArrow: =>",
-                "const myAsyncArrowFunction: async =>",
-                "const myAsyncArrow: async =>",
-                "let myWeirdArrow: =>",
             ],
         ),
     ],

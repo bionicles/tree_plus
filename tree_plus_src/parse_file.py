@@ -40,13 +40,11 @@ def parse_file(file_path: str) -> List[str]:
     file_name = os.path.basename(base_file_path)
     file_extension = file_extension.lower()
     debug_print(f"{file_path=} {file_name=} {file_extension=}")
-    # print(f"DEBUG(parse_file): {file_path=}, {file_extension=}\n{path_parts=}")
     components = []
 
     # handle sqlite databases before trying to open the file
     if file_extension == ".db" or file_extension == ".sqlite":
-        components = parse_db(file_path)
-        return components
+        return parse_db(file_path)
 
     # skip binary files
     if is_binary(file_path):
@@ -65,7 +63,6 @@ def parse_file(file_path: str) -> List[str]:
     if file_extension == ".py":
         components = parse_py(contents)
         if isinstance(components, SyntaxError):
-            # print(f"SyntaxError @ {file_path}: {components}")
             components = [f"SyntaxError: {components}"]
     elif file_extension == ".json":
         if "package.json" in file_path.lower():
@@ -80,18 +77,14 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_cargo_toml(contents)
     elif file_path.endswith("pyproject.toml"):
         components = parse_pyproject_toml(contents)
-    elif file_extension in [".js", ".jsx"]:
-        components = parse_ts(contents)
     elif file_path.endswith(".d.ts"):
         components = parse_d_dot_ts(contents)
-    elif file_extension in {".ts", ".tsx"}:
+    elif file_extension in {".js", ".jsx", ".ts", ".tsx"}:
         components = parse_ts(contents)
         if "app-routing.module" in file_path:
             components = parse_angular_routes(contents) + components
         elif "app.module" in file_path:
             components = parse_angular_app_module(contents) + components
-        # elif file_path.endswith("component.ts"): # just moving title into parse_ts
-        #     components = parse_angular_component_ts(contents) + components
         elif "environment" == file_name or "environment." in file_name:  # paranoid
             components = parse_environment_ts(contents)
         elif "spec.ts" in file_path:
@@ -1009,71 +1002,83 @@ def parse_package_json(contents) -> List[str]:
     return keepers
 
 
-def remove_ts_comments_and_private_blocks(contents: str) -> str:
-    # Remove multi-line comments (no change)
+def remove_ts_comments(contents: str) -> str:
+    # # Remove multi-line comments (no change)
     # contents = re.sub(r"/\*.*?\*/", "", contents, flags=re.DOTALL)
 
-    # Remove single line comments
-    contents = re.sub(r"//.*", "", contents)
+    # # Remove single line comments
+    # contents = re.sub(r"//.*", "", contents)
 
-    # Remove private closures (not effective)
-    # contents = re.sub(r"private\s+.*?\{.*?\}", "", contents, flags=re.DOTALL)
-
+    contents = re.sub(r"//.*($|\n)|/\*.*?\*/", "", contents, flags=re.MULTILINE)
     return contents
 
 
+combined_ts_pattern = re.compile(
+    # 1. (Arrow)? Function or Method
+    r"\n?^( *\(?(?:(export\s+)?(?:default\s+)?(?:(?:var|const|let)\s+\w+\s*=\s*(?:async\s+)?)?(?:function\s*\*?\s+)?[\w<>, ]+\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?\s*|(\w+)\s*:\s*\([^)]*\)\s*=>|(\w+)\s*:\s*function\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?)(?:=>)?)(?= )|"
+    # 2. Class or Interface
+    r"\n?((?:export )?(?:default )?(?:(?:class|interface)\s+(?:[\w<>, ]+)(?:\s+(?:extends|implements)\s+[\w<>, ]+)?)) |"
+    # 3. Type
+    r"\n?((type\s+(?:[\w<>, ]+))) |"
+    # 4."Gotcha: Object scopes containing functions or arrows"
+    # r"(((?:const|let) \w+))(?:\s*=\s*\{\s*(?=[\s\S]*?(?:\b\w+\s*:\s*function\b|\b\w+\s*:\s*\(.*\)\s*=>)))"
+    # r"^(?P<scope>(?:const|let) \w+)\s*=\s*\{\s*^(.*?( *\bfunction\b|.*?\b\w+\s*:\s*\([^)]*\)\s*=>))",
+    r"^(?P<object_scope>(?:var|const|let) [\w_]+)\s*=\s*\{",
+    re.MULTILINE,
+)
+
+
 def parse_ts(contents: str) -> List[str]:
-    contents = remove_ts_comments_and_private_blocks(contents)
-    # Combined regex pattern to match all components and title pattern
-    combined_pattern = re.compile(
-        # Types
-        r"\btype\s+(\w+)|"
-        # Interfaces
-        r"\binterface\s+(\w+)(?:\s+extends\s+\w+)?|"
-        # Classes
-        r"\bclass\s+(\w+)(?:\s+implements\s+\w+)?|"
-        # Functions
-        r"\b(async )?function\s+(\w+)\b|"
-        # Arrow functions (both async and regular)
-        # this version missed return types
-        # r"\n( *\b(const|let)\s+(\w+)\s*=\s*(async\s+)?)\(\s*([^)]*)\)\s*=>|"
-        r"\n( *\b(const|let)\s+(\w+)\s*=\s*(async\s+)?)\([^)]*\)\s*(?::\s*[\w<>\[\]]+\s*)?=>|"
-        # Class and async methods, capturing indentation
-        r"\n( *((async\s+)?\w+)\([^)]*\)\s*(?::\s*[\w<>\[\]|\s]+)?\s*\{)",
-        re.DOTALL,
-    )
+    contents = remove_ts_comments(contents)
+
     components = []
-    for match_number, match in enumerate(combined_pattern.finditer(contents)):
-        component = match.group()
-        debug_print(f"[parse_ts] {match_number=} {component=}")
+    object_scope = None
+    for match_number, match in enumerate(combined_ts_pattern.finditer(contents)):
+        debug_print(f"parse_ts: {match_number=} {match=}")
         groups = extract_groups(match)
-
-        # Skip control structures within class methods
-        if any(
-            kw in component
-            for kw in ["if (", "catch (", "for (", "switch (", "return ", "constructor"]
-        ):
-            debug_print("skipping a control structure!")
-            continue
-
-        # handle visual defects with methods
-        if component.endswith("{"):
-            n_spaces = len(groups[10]) - len(groups[10].lstrip())
-            indentation = " " * n_spaces
-            component = indentation + groups[11]
-
-        # custom arrow function format
-        if "=>" in component:
-            # skip indented arrow functions which are usually helpers inside methods
-            if component.startswith("\n "):
+        component = None
+        # [arrow] function/method is group 4
+        if 1 in groups:
+            component = groups[1]
+            component = (
+                component.replace(" \n", "\n").replace(" ,\n", ",\n").lstrip("(")
+            )
+            if object_scope:
+                # check for functions in this scope
+                if _fun_match := re.search(r"\s+\w+: function", component):
+                    components.append(object_scope)
+                # check for arrow functions in this scope
+                elif _arrow_match := re.search(
+                    r"\s+\w+:\s*\((?:[^\)]|\s)*\) =>", component
+                ):
+                    components.append(object_scope)
+                object_scope = None
+            double = component.lstrip()
+            # Check if the component is empty, ends with whitespace, or matches control structures without '=>'
+            if (
+                not double
+                or not double.splitlines()[-1].strip()
+                or (
+                    re.search(r"( *(if|switch|for|catch|return) ?\()", double)
+                    and "=>" not in double
+                )
+            ):
                 continue
-            const_or_let = match.group(7)
-            fun_name = match.group(8)
-            maybe_async = " async" if match.group(9) else ""
-            component = f"{const_or_let} {fun_name}:{maybe_async} =>"
+
+        # class/interface is group 5
+        elif 5 in groups:
+            component = groups[5]
+            object_scope = None
+        # type is 6
+        elif 6 in groups:
+            component = groups[6]
+            object_scope = None
+        else:
+            object_scope = groups[0]
+            debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
 
         if component:
-            debug_print(f"{match_number=} final {component=}")
+            debug_print(f"{match_number=} FINAL {component=}")
             components.append(component)
 
     return components
@@ -1269,29 +1274,29 @@ def is_builtin_type(node, parent):
 # the following works in regex101 python but didn't match the () tuple literal in the signature
 # r"\n( *def\s+\w+\s*\((?:[^()]|\([^)]*\))*\)\s*(?:->\s*[\w\[\], ]+)?\s*):|"
 
+# Combined regex pattern to match Python components
+combined_py_pattern = re.compile(
+    # Functions and Methods, capturing indentation and multiline signatures
+    r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\], ]+)?)\s*:|"
+    # Classes
+    r"(class \w+(\[.*\])?(\([\w\s,]*\))?):|"
+    # Decorators
+    r"\n( *@\w+(\(.*\))?)\n|"
+    # TypeVar
+    r"\n(\w+ = TypeVar\([^)]+\))|"
+    # Version
+    r"\n((__version__ = \".*\"))",
+    re.MULTILINE,
+    # re.DOTALL,  # causes dramatic over-extension of matches
+)
+
 
 # r"( *def\s+\w+\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*->\s*[\w\[\], ]+\s*):|"
 # regex might help with indentation & multiline function signatures
 def parse_py(contents: str) -> List[str]:
-    # Combined regex pattern to match Python components
-    combined_pattern = re.compile(
-        # Functions and Methods, capturing indentation and multiline signatures
-        r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\], ]+)?)\s*:|"
-        # Classes
-        r"(class \w+(\[.*\])?(\([\w\s,]*\))?):|"
-        # Decorators
-        r"\n( *@\w+(\(.*\))?)\n|"
-        # TypeVar
-        r"\n(\w+ = TypeVar\([^)]+\))|"
-        # Version
-        r"\n((__version__ = \".*\"))",
-        re.MULTILINE,
-        # re.DOTALL,  # causes dramatic over-extension of matches
-    )
-
     components = []
     decorator_carry = []
-    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+    for match_number, match in enumerate(combined_py_pattern.finditer(contents)):
         groups = extract_groups(match)
         debug_print(f"parse_py: {match_number=}:")
 
@@ -1986,8 +1991,10 @@ def parse_txt(content: str) -> List[str]:
     return parsed_checkboxes
 
 
+marker_pattern = re.compile(r'(BUG|TODO|NOTE)(?![\'"]): (.*)')
+
+
 def parse_markers(content: str) -> List[str]:
-    marker_pattern = re.compile(r'(BUG|TODO|NOTE)(?![\'"]): (.*)')
     markers = []
     lines = content.splitlines()
     for line_n, line in enumerate(lines, start=1):

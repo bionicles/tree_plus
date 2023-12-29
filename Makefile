@@ -11,11 +11,14 @@ debug:
 debug_command: test test_cli
 
 
-test: test_normally test_tp_dotdot test_cli test_deploy
+test: test_normally test_e2e test_tp_dotdot test_cli test_deploy
 
 # first we'll do our unit tests (most likely to need fast debug)
 test_normally:
-	pytest tests/ -k "not test_tree_plus_dotdot and not cli and not deploy" -vv
+	pytest tests/ -k "units or more_languages or dotenv" -vv
+
+test_e2e:
+	pytest tests/ -k "e2e"
 
 # then we have a test where we change directory
 test_tp_dotdot:

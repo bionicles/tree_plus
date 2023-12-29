@@ -62,24 +62,7 @@ def test_e2e_empty_folder():
     assert unify_tree_symbols(result_str) == EXPECTATION_EMPTY
 
 
-EXPECTATION_1 = """📁 path_to_test (776 tokens, 157 lines)
-┣━━ 📄 class_function.js (33 tokens, 9 lines)
-┃   ┣━━ class MyClass
-┃   ┣━━     myMethod
-┃   ┗━━ function myFunction
-┣━━ 📄 class_function_type.ts (169 tokens, 40 lines)
-┃   ┣━━ type MyType
-┃   ┣━━ interface MyInterface
-┃   ┣━━ class TsClass
-┃   ┣━━     myMethod
-┃   ┣━━ class TicketsComponent implements AfterViewInit
-┃   ┣━━     async myAsyncMethod
-┃   ┣━━ function tsFunction
-┃   ┣━━ const myArrowFunction: =>
-┃   ┣━━ const myArrow: =>
-┃   ┣━━ const myAsyncArrowFunction: async =>
-┃   ┣━━ const myAsyncArrow: async =>
-┃   ┗━━ let myWeirdArrow: =>
+EXPECTATION_1 = """📁 path_to_test (560 tokens, 105 lines)
 ┣━━ 📄 class_method_type.py (499 tokens, 96 lines)
 ┃   ┣━━ T = TypeVar("T")
 ┃   ┣━━ def parse_py(contents: str) -> List[str]
@@ -111,8 +94,6 @@ EXPECTATION_1 = """📁 path_to_test (776 tokens, 157 lines)
 ┃   ┗━━     @classmethod
 ┃           def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
 ┣━━ 📄 empty.py
-┣━━ 📄 file.js (14 tokens, 3 lines)
-┃   ┗━━ function helloWorld
 ┣━━ 📄 file.md (12 tokens, 2 lines)
 ┃   ┗━━ # Hello, world!
 ┣━━ 📄 file.py (19 tokens, 3 lines)
@@ -147,11 +128,11 @@ def test_e2e_glob():
     print(result_str)
     assert ".rs" in result_str
     assert ".ts" in result_str
+    assert ".js" in result_str
     assert ".hs" in result_str
     assert ".cs" in result_str
     assert ".exs" in result_str
     assert ".java" not in result_str
-    assert "group1" not in result_str
     assert "group2" not in result_str
     assert "group4" in result_str
     assert "group5" in result_str

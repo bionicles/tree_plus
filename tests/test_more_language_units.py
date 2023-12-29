@@ -50,6 +50,129 @@ def create_sqlite_test_db(
     "file,expected",
     [
         (
+            "tests/more_languages/group1/test.js",
+            [
+                "class MyClass",
+                "  myMethod()",
+                "  async asyncMethod(a, b)",
+                "  methodWithDefaultParameters(a = 5, b = 10)",
+                """  multilineMethod(
+    c,
+    d
+  )""",
+                """  multilineMethodWithDefaults(
+    t = "tree",
+    p = "plus"
+  )""",
+                "function myFunction(param1, param2)",
+                """function multilineFunction(
+  param1,
+  param2
+)""",
+                "const arrowFunction = () =>",
+                "const parametricArrow = (a, b) =>",
+                "function ()",
+                "function outerFunction(outerParam)",
+                "  function innerFunction(innerParam)",
+                "const myObject = {",
+                "  myMethod: function (stuff)",
+                "let myArrowObject = {",
+                """  myArrow: ({
+    a,
+    b,
+    c,
+  }) =>""",
+                "const myAsyncArrowFunction = async () =>",
+                "function functionWithRestParameters(...args)",
+                "const namedFunctionExpression = function myNamedFunction()",
+                """const multilineArrowFunction = (
+  a,
+  b
+) =>""",
+                "function functionReturningFunction()",
+                "  return function ()",
+                """function destructuringOnMultipleLines({
+  a,
+  b,
+})""",
+                "const arrowFunctionWithDestructuring = ({ a, b }) =>",
+                """const multilineDestructuringArrow = ({
+  a,
+  b,
+}) =>""",
+                "async function asyncFunctionWithErrorHandling()",
+                "class Car",
+                "  constructor(brand)",
+                "  present()",
+                "class Model extends Car",
+                "  constructor(brand, mod)",
+                "  show()",
+            ],
+        ),
+        (
+            "tests/more_languages/group1/test.ts",
+            [
+                "type MyType",
+                "interface MyInterface",
+                "class TsClass",
+                "  myMethod()",
+                "  myMethodWithArgs(param1: string, param2: number): void",
+                "  static myStaticMethod<T>(param: T): T",
+                """  multilineMethod(
+    c: number,
+    d: number
+  ): number""",
+                """  multilineMethodWithDefaults(
+    t: string = "tree",
+    p: string = "plus"
+  ): string""",
+                "export class AdvancedComponent implements MyInterface",
+                """  async myAsyncMethod(
+    a: string,
+    b: number,
+    c: string
+  ): Promise<void>""",
+                """  genericMethod<T, U>(
+    arg1: T,
+    arg2: U
+  ): [T, U]""",
+                "export class TicketsComponent implements MyInterface",
+                "  async myAsyncMethod({ a, b, c }: { a: String; b: Number; c: String })",
+                "function tsFunction()",
+                """function tsFunctionSigned(
+  param1: number,
+  param2: number
+): void""",
+                """const tsArrowFunctionSigned = ({
+  a,
+  b,
+}: {
+  a: number;
+  b: string;
+}) =>""",
+                "const arrowFunction = () =>",
+                "const arrow = (a: String, b: Number) =>",
+                "const asyncArrowFunction = async () =>",
+                "const asyncArrow = async (a: String, b: Number) =>",
+                "let weirdArrow = () =>",
+                "const asyncPromiseArrow = async (): Promise<void> =>",
+                "let myWeirdArrowSigned = (x: number): number =>",
+                "class Person",
+                "  constructor(private firstName: string, private lastName: string)",
+                "  getFullName(): string",
+                "  describe(): string",
+                "class Employee extends Person",
+                """  constructor(
+    firstName: string,
+    lastName: string,
+    private jobTitle: string
+  )""",
+                "  describe(): string",
+                "interface Shape",
+                "interface Square extends Shape",
+            ],
+        ),
+        (
             "tests/more_languages/group1/COBOL_TEST.CBL",
             [
                 "IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO",
@@ -833,7 +956,7 @@ def test_more_languages_group4(
                 "   created timestamp",
             ],
         ),
-        (
+        (  # TODO: UNCOMMENT AND VERIFY
             "tests/more_languages/group5/app.component.spec.ts",
             [
                 "describe 'AppComponent'",
@@ -846,10 +969,11 @@ def test_more_languages_group4(
         (
             "tests/more_languages/group5/app.component.ts",
             [
-                "class AppComponent",
-                "  checkSession",
-                "  async goToEvent",
-                "  valInvitedBy",
+                "export class AppComponent",
+                "  constructor(private loginService: LoginService)",
+                "  checkSession()",
+                "  async goToEvent(event_id: string)",
+                "  valInvitedBy(event: any, event_id: string)",
             ],
         ),
         (
@@ -859,41 +983,62 @@ def test_more_languages_group4(
                 "interface SpinConfig",
                 "interface RotationState",
                 "interface SpeakInput",
-                "const formatSpeakInput: =>",
-                "function hourToSpeech",
-                "class TicketsComponent implements AfterViewInit",
-                "  speak",
-                "  speakEvent",
-                "  formatEvent",
-                "  speakVenue",
-                "  formatDate",
-                "  formatDateForSpeech",
-                "  async spinQRCode",
-                "  ngAfterViewInit",
-                "  ngOnDestroy",
-                "  toggleColumn",
-                "  adjustColumns",
-                "  onResize",
-                "  async ngOnInit",
-                "  async loadTickets",
-                "  onDateRangeChange",
-                "  applyFilter",
-                "  formatDateForComparison",
-                "  onFilterChange",
-                "  onLatitudeChange",
-                "  onLongitudeChange",
-                "  onRadiusChange",
-                "  sortData",
-                "  onRowClick",
-                "function isDate",
-                "function isNonNullNumber",
-                "function hasLocation",
-                "const create_faker_ticket: async =>",
-                "function compare",
-                "function compare_dates",
-                "async function mockMoreTickets",
-                "const mockTickets: async =>",
-                "const renderQRCode: async =>",
+                "const formatSpeakInput = (input: SpeakInput): string =>",
+                "function hourToSpeech(hour: number, minute: number, period: string): string",
+                "export class TicketsComponent implements AfterViewInit",
+                "  speak(input: SpeakInput)",
+                "  speakEvent(ticket: EnrichedTicket): void",
+                "  formatEvent(ticket: EnrichedTicket): string",
+                "  speakVenue(ticket: EnrichedTicket): void",
+                "  formatDate(date: Date, oneLiner: boolean = false): string",
+                "  formatDateForSpeech(date: Date): string",
+                """  async spinQRCode(
+    event: PointerEvent,
+    config: SpinConfig = DEFAULT_SPIN_CONFIG
+  )""",
+                """  private animateRotation(
+    imgElement: HTMLElement,
+    targetRotation: number,
+    config: SpinConfig,
+    cleanup: () => void
+  )""",
+                "    const animate = (currentTime: number) =>",
+                "  private getNext90Degree(currentRotation: number): number",
+                "  private getCurrentRotation(matrix: string): number",
+                "  ngAfterViewInit()",
+                "      const mouseEnterListener = () =>",
+                "      const mouseLeaveListener = () =>",
+                "  ngOnDestroy()",
+                "  toggleColumn(event: MatOptionSelectionChange, column: string)",
+                "          (col) =>",
+                "  adjustColumns(event?: Event)",
+                "  onResize(event: Event)",
+                "  async ngOnInit()",
+                "  async loadTickets(): Promise<void>",
+                """  onDateRangeChange(
+    type: "start" | "end",
+    event: MatDatepickerInputEvent<Date>
+  )""",
+                "  applyFilter(column: string): void",
+                "  formatDateForComparison(date: Date): string",
+                "  constructor(private renderer: Renderer2)",
+                "  onFilterChange(event: Event, column: string)",
+                "  onLatitudeChange(event: Event)",
+                "  onLongitudeChange(event: Event)",
+                "  onRadiusChange(event: Event)",
+                "  sortData(sort: Sort): void",
+                "  onRowClick(event: Event, row: any)",
+                "function isDate(value: Date | undefined | null): value is Date",
+                "function isNonNullNumber(value: number | null): value is number",
+                """function hasLocation(
+  ticket: any
+): ticket is""",  # TODO: handle the 'ticket is { location: { latitude: number; longitude: number } }' EDGE CASE
+                "const create_faker_ticket = async () =>",
+                "function compare(a: number | string, b: number | string, isAsc: boolean)",
+                "function compare_dates(a: Date, b: Date, isAsc: boolean)",
+                "async function mockMoreTickets(): Promise<Ticket[]>",
+                "const mockTickets = async () =>",
+                "const renderQRCode = async (text: String): Promise<string> =>",
             ],
         ),
         (
@@ -910,7 +1055,7 @@ def test_more_languages_group4(
     { path: 'rewards', component: RewardsComponent },
     { path: 'profile', component: ProfileComponent },
 ];""",
-                "class AppRoutingModule",
+                "export class AppRoutingModule",
             ],
         ),
         (
@@ -926,7 +1071,7 @@ def test_more_languages_group4(
         InvitesComponent,
         RewardsComponent,
         ProfileComponent""",
-                "class AppModule",
+                "export class AppModule",
             ],
         ),
         (
