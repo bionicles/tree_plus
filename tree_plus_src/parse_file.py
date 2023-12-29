@@ -556,45 +556,82 @@ def parse_lean(lean_content: str) -> List[str]:
     return components
 
 
+# Combined regex pattern to match all components
+# combined_pattern = re.compile(
+#     # Interfaces, Enums, Delegates, Structs, Classes
+#     r"\n( *(public )?(static )?(interface|enum|delegate|struct|class)\s+(\w+)( \w+)?( : \w+)?)|"
+#     # Methods in Interfaces and Classes, capturing indentation
+#     r"\n( *(public)?\s+(static\s+)?[\w<>\[\],]+\??\s+(\w+))\([^)]*\)|"
+#     # Namespaces
+#     r"\b(namespace\s+([\w\.]+))|"
+#     # Method Arrow functions
+#     r"\n( *(public\s+override\s+)?[\w<>\[\]]+\s+(\w+)\s*)\([^)]*\)\s*=>|"
+#     # Arrow functions
+#     # r"\n( *var\s+(\w+))\s*=\s*\([^)]*\)\s*=>|"
+#     # Func<...> Lambda Expressions
+#     # r"( *Func<[\w<>, ]+\s+\w+)\s*=\s*\([^)]*\)\s*=>|"
+#     # Combined var and Func Lambda Expressions
+#     r"\n( *(var|Func<[\w<>, ]+)\s+(\w+))\s*=\s*\([^)]*\)\s*=>|"
+#     # Methods returning Lambda Expressions
+#     r"\n( *(public\s+)?Func<[\w<>,\s]+\s+\w+)\([^)]*\)\s*\{|"
+#     # Event Handler Arrow Functions
+#     r"\n( *\w+(\.\w+)?\s*\+=)\s*\([^)]*\)\s*=>",
+#     re.DOTALL,
+# )
+
+
 def parse_cs(contents: str) -> List[str]:
-    # Combined regex pattern to match all components
-    combined_pattern = re.compile(
+    # Updated regex pattern to match all components including method signatures
+    combined_cs_pattern = re.compile(
         # Interfaces, Enums, Delegates, Structs, Classes
         r"\n( *(public )?(static )?(interface|enum|delegate|struct|class)\s+(\w+)( \w+)?( : \w+)?)|"
-        # Methods in Interfaces and Classes, capturing indentation
-        r"\n( *(public)?\s+(static\s+)?[\w<>\[\],]+\??\s+(\w+))\([^)]*\)|"
+        # Decorators in brackets like [HttpGet ...]
+        r"\n\[.*\]|"
+        # Methods in Interfaces and Classes, capturing indentation and signatures
+        r"\n( *(public )?(static\s+)?[\w<>\[\],\s]+(?:\??)\s+(\w+)\s*\([^)]*\))(?! =>)|"
         # Namespaces
         r"\b(namespace\s+([\w\.]+))|"
-        # Method Arrow functions
-        r"\n( *(public\s+override\s+)?[\w<>\[\]]+\s+(\w+)\s*)\([^)]*\)\s*=>|"
-        # Arrow functions
-        # r"\n( *var\s+(\w+))\s*=\s*\([^)]*\)\s*=>|"
-        # Func<...> Lambda Expressions
-        # r"( *Func<[\w<>, ]+\s+\w+)\s*=\s*\([^)]*\)\s*=>|"
-        # Combined var and Func Lambda Expressions
-        r"\n( *(var|Func<[\w<>, ]+)\s+(\w+))\s*=\s*\([^)]*\)\s*=>|"
-        # Methods returning Lambda Expressions
+        # Method Arrow functions, capturing signatures
+        r"\n( *(?:public\s+)?(override\s+)?[\w<>\[\],\s]+\s+(\w+)\s*\([^)]*\)\s*=>)|"
+        # Arrow functions, capturing signatures
+        r"\n( *(var|Func<[\w<>,\s]+)\s+(\w+)\s*=\s*\([^)]*\)\s*=>)|"
+        # Methods returning Lambda Expressions, capturing signatures
         r"\n( *(public\s+)?Func<[\w<>,\s]+\s+\w+)\([^)]*\)\s*\{|"
-        # Event Handler Arrow Functions
-        r"\n( *\w+(\.\w+)?\s*\+=)\s*\([^)]*\)\s*=>",
+        # Event Handler Arrow Functions, capturing signatures
+        r"\n( *\w+(\.\w+)*\s*\+=\s*(async )?\([^)]*\)\s*=>)",
         re.DOTALL,
     )
 
     components = []
-    for match_number, match in enumerate(combined_pattern.finditer(contents)):
+
+    for match_number, match in enumerate(combined_cs_pattern.finditer(contents)):
+        debug_print(f"parse_cs: {match_number=} {match=}")
         groups = extract_groups(match)
+        # Interfaces, Enums, Delegates, Structs, Classes
         if 1 in groups:
             component = groups[1]
+        # Methods in Interfaces and Classes
         elif 8 in groups:
             component = groups[8].lstrip("\n")
-        elif 14 in groups:  # Method Lambda
-            component = groups[14] + ": =>"
-        elif 17 in groups:  # var / Func Lambda
-            component = groups[17] + ": =>"
-        elif 20 in groups:  # Method returning Lambda
-            component = groups[20] + ": =>"
+            if component.lstrip().startswith("private"):
+                debug_print("parse_cs: skipping a private method")
+                continue
+            if no_return_type_found := re.search(r"^ +\w+\(", component):
+                debug_print(f"parse_cs: {no_return_type_found=}")
+                continue
+        # Method Arrow functions Lambda 14
+        elif 14 in groups:
+            component = groups[14].lstrip("\n")
+        # Arrow functions 17
+        elif 17 in groups:
+            component = groups[17]
+        # Methods returning Lambda Expressions
+        elif 20 in groups:
+            component = groups[20]
+        # Event Handler Arrow Functions
         elif 22 in groups:
-            component = groups[22] + ": =>"
+            component = groups[22]
+        # Namespaces
         else:
             component = match.group().strip()
         debug_print(f"parse_cs: {match_number=} {component=}")

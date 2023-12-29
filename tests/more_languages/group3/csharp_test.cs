@@ -66,7 +66,9 @@ namespace TemplateToExcelServer.Template
         TemplateObject SetContent(string[,] Content);
         TemplateObject SetContentArray(string[] value);
         TemplateObject SetFormat(string[] Header);
-        TemplateObject SetNameOfReport(ReadOnlyMemory<byte> ReportName);
+        TemplateObject SetNameOfReport(
+            ReadOnlyMemory<byte> ReportName,
+            int[] EdgeCase);
         TemplateObject SetSheetName(ReadOnlyMemory<byte> SheetName);
     }
 }
@@ -90,4 +92,56 @@ button.Click += (sender, args) => MessageBox.Show("Button clicked!");
 public Func<int, int> GetMultiplier(int factor)
 {
     return x => x * factor;
+}
+
+public void Method(
+        int param1,
+        int param2,
+        int param3,
+        int param4,
+        int param5,
+        int param6,
+    )
+{
+
+}
+
+System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+    (se, cert, chain, sslerror) =>
+    {
+        return true;
+    };
+
+class ServerCertificateValidation {
+    public bool OnRemoteCertificateValidation(
+        object se,
+        X509Certificate cert,
+        X509Chain chain,
+        SslPolicyErrors sslerror
+    ) {
+        return true;
+    }
+}
+
+s_downloadButton.Clicked += async (o, e) =>
+{
+    // This line will yield control to the UI as the request
+    // from the web service is happening.
+    //
+    // The UI thread is now free to perform other work.
+    var stringData = await s_httpClient.GetStringAsync(URL);
+    DoSomethingWithData(stringData);
+};
+
+// Note
+// If you plan on doing HTML parsing in production code, 
+// don't use regular expressions. 
+// Use a parsing library instead. (lulz)
+[HttpGet, Route("DotNetCount")]
+static public async Task<int> GetDotNetCount(string URL)
+{
+    // Suspends GetDotNetCount() to allow the caller (the web server)
+    // to accept another request, rather than blocking on this one.
+    var html = await s_httpClient.GetStringAsync(URL);
+    return Regex.Matches(html, @"\.NET").Count;
 }
