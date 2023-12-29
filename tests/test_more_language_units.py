@@ -322,6 +322,16 @@ def test_more_languages_group1(
                 "typedef struct Person",
                 "int main()",
                 "int* getArrayStart(int arr[], int size)",
+                """long complexFunctionWithMultipleArguments(
+    int param1,
+    double param2,
+    char *param3,
+    struct Point point
+)""",
+                "keyPattern *ACLKeyPatternCreate(sds pattern, int flags)",
+                "sds sdsCatPatternString(sds base, keyPattern *pat)",
+                "static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)",
+                "static struct config",
             ],
         ),
         (

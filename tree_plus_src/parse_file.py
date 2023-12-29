@@ -790,7 +790,7 @@ def parse_c(contents) -> List[str]:
         # r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})|"
         r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*)|"
         # Structs
-        r"\nstruct\s+\w+\s*\{[^}]*\}|"
+        r"\n(static )?struct\s+\w+\s*\{[^}]*\}|"
         # Enums
         r"\nenum\s+\w+\s*\{[^}]*\}|"
         # Typedefs
