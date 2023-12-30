@@ -137,6 +137,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_cargo_toml(contents)
     elif file_path.endswith("pyproject.toml"):
         components = parse_pyproject_toml(contents)
+    elif file_extension == ".csv":
+        components = parse_csv(contents)
     elif file_extension == ".hs":
         components = parse_hs(contents)
     elif file_extension == ".fs":
@@ -192,13 +194,17 @@ def parse_fsharp(contents: str) -> List[str]:
     debug_print("parse_fsharp")
 
     combined_pattern = re.compile(
-        r"^(\s*(module|type|let)\s+[^\n]+)",
+        r"^(\s*(module|type)\s+[^\n]+)|"  # module or type in a single line
+        r"(\blet\b\s+(?:\w+\s+)*\w+\s*"  # start of a let binding
+        r"(?:\n\s+\(.+\)\s*)*"  # multiline parameters
+        r":?\s*[^\n=]*=)",  # return type and start of the body
         re.MULTILINE,
     )
     components = []
     for n, match in enumerate(combined_pattern.finditer(contents)):
-        debug_print(f"parse_fsharp match {n}:\n", match)
-        components.append(match.group().strip())
+        component = match.group().strip()
+        debug_print(f"parse_fsharp match {n}:\n", component)
+        components.append(component)
 
     return components
 
@@ -298,18 +304,17 @@ def parse_rs(contents: str) -> List[str]:
     return components
 
 
-def parse_csv(filename: str) -> list:
-    with open(filename, newline="") as csvfile:
-        reader = csv.reader(csvfile)
-        header = next(reader)
+def parse_csv(contents: str, max_leaves=11) -> List[str]:
+    debug_print("parse_csv")
 
-        # Check if headers are wrapped in quotes
-        if not all(field.startswith('"') and field.endswith('"') for field in header):
-            raise ValueError("Headers are not wrapped in quotes")
+    rows = contents.splitlines()
 
-        # Remove quotes for returning the result
-        header = [field.strip('"') for field in header]
-        return header
+    columns = rows[0].split(",")
+    n_cols = len(columns)
+    if n_cols <= max_leaves:
+        return columns
+
+    return [f"{len(columns)} columns"]
 
 
 def parse_mathematica(contents: str) -> List[str]:
@@ -1860,65 +1865,26 @@ def parse_matlab(content: str) -> List[str]:
 
 
 def parse_scala(contents: str) -> List[str]:
-    lines = contents.split("\n")
-    result = []
-    current_scope = None
-    scope_type = None
+    debug_print("parse_scala:")
+    # Combined regex pattern to match Scala components
+    combined_pattern = re.compile(
+        # Function signatures
+        r"^( *def[^{]*(?= =))|"
+        # Trait, case class, object names
+        r"^( *(?:trait|(case )?class|object)\s+\w+(?:\[([^\]])+\])?((?:\([^\)]*)\))?)",
+        re.MULTILINE,
+    )
 
-    brace_count = 0  # Count braces to keep track of scope
+    components = []
 
-    for line in lines:
-        line = line.strip()
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_scala: {n=} {match=}")
+        groups = extract_groups(match)
+        component = groups[0]  # Get the matched component
+        if component:
+            components.append(component)
 
-        function_match = re.match(r"def (\w+)\((.*)\): (\w+)", line)
-        trait_match = re.match(r"trait (\w+)", line)
-        trait_func_match = re.match(r"def (\w+): (\w+) =", line)
-        object_match = re.match(r"object (\w+)", line)
-        case_class_match = re.match(r"case class (\w+)\((.*)\)", line)
-        opening_brace_match = re.search(r"\{", line)
-        closing_brace_match = re.search(r"\}", line)
-
-        # Increase or decrease brace_count based on opening or closing braces
-        if opening_brace_match:
-            brace_count += 1
-        if closing_brace_match:
-            brace_count -= 1
-
-        if function_match:
-            function_name, params, return_type = function_match.groups()
-            if current_scope:
-                result.append(
-                    f"{scope_type} {current_scope} -> def {function_name}({params}): {return_type}"
-                )
-            else:
-                result.append(f"def {function_name}({params}): {return_type}")
-        elif trait_match:
-            trait_name = trait_match.group(1)
-            result.append(f"trait {trait_name}")
-            current_scope = trait_name
-            scope_type = "trait"
-        elif trait_func_match and current_scope:
-            func_name, return_type = trait_func_match.groups()
-            result.append(
-                f"{scope_type} {current_scope} -> def {func_name}: {return_type}"
-            )
-        elif object_match:
-            object_name = object_match.group(1)
-            result.append(f"object {object_name}")
-            current_scope = object_name
-            scope_type = "object"
-        elif case_class_match:
-            case_class_name, params = case_class_match.groups()
-            result.append(f"case class {case_class_name}({params})")
-            current_scope = None
-            scope_type = None
-
-        # If brace_count reaches 0, we are outside of current scope
-        if brace_count == 0:
-            current_scope = None
-            scope_type = None
-
-    return result
+    return components
 
 
 def parse_tf(contents: str) -> List[str]:

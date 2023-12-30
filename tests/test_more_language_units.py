@@ -361,11 +361,21 @@ def test_more_languages_group1(
             [
                 "def sumOfSquares(x: Int, y: Int): Int",
                 "trait Bark",
-                "trait Bark -> def bark: String",
+                "  def bark: String",
                 "case class Person(name: String)",
+                """class GenericClass[T](
+    val data: T,
+    val count: Int
+)""",
+                "  def getData: T",
                 "object HelloWorld",
-                "object HelloWorld -> def greet(person: Person): Unit",
-                "object HelloWorld -> def main(args: Array[String]): Unit",
+                "  def greet(person: Person): Unit",
+                "  def main(args: Array[String]): Unit",
+                """def complexFunction(
+    a: Int,
+    b: String,
+    c: Float
+): (Int, String) Option""",
                 "def sumOfSquaresShort(x: Int, y: Int): Int",
             ],
         ),
@@ -407,6 +417,10 @@ def test_more_languages_group1(
                 "class Person -> NoReturnNoArgs()",
                 "function Say-Hello([Person]$person)",
             ],
+        ),
+        (
+            "tests/more_languages/group2/test.csv",
+            ["Name", "Age", "Country", "City", "Email"],
         ),
     ],
 )
@@ -987,7 +1001,14 @@ where
                 "module TestFSharp",
                 "type Person = {",
                 "let add x y =",
-                "let multiply (x: int) (y: int): int =",
+                """let multiply 
+    (x: int) 
+    (y: int): int =""",
+                """let complexFunction
+    (a: int)
+    (b: string)
+    (c: float)
+    : (int * string) option =""",
                 "type Result<'T> =",
             ],
         ),
