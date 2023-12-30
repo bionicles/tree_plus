@@ -875,25 +875,27 @@ def parse_go(contents) -> List[str]:
     # Combined regex pattern to match Go components
     combined_pattern = re.compile(
         # struct or type declarations without the body
-        r"\n(type \w+ (struct|interface)\s*)\{.*?\}\s*|"
+        r"^( *type \w+ (struct|interface))(?=\s*\{)|"
         # function declarations, including multiline, without the body
         # r"\n(func[\s?\S?]*?){\n",
         # r"\s(func [\s\S]+?){\s",
-        r"(func [\s\S]+?){\s",
-        re.DOTALL,
+        r"^((func [\s\S]+?))(?=\s{\s)",
+        re.MULTILINE,
     )
 
     components = []
 
-    for match in combined_pattern.finditer(contents):
-        debug_print(f"{match=}")
-        debug_print(f"{match.groups()=}")
-        component = match.group().strip().replace(" {", "")
-        debug_print(f"{component=}")
-        if component.startswith("type"):
-            component = match.group(1).strip()
-        debug_print(f"final {component=}")
-        components.append(component)
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_go: {n=} {match=}")
+        component = None
+        groups = extract_groups(match)
+        if 1 in groups:
+            component = groups[1]
+        elif 3 in groups:
+            component = groups[3]
+        if component:
+            debug_print(f"parse_go final {component=}")
+            components.append(component)
 
     return components
 

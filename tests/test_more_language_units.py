@@ -422,6 +422,24 @@ def test_more_languages_group1(
             "tests/more_languages/group2/test.csv",
             ["Name", "Age", "Country", "City", "Email"],
         ),
+        (
+            "tests/more_languages/group2/go_test.go",
+            [
+                "type Greeting struct",
+                "func (g Greeting) sayHello()",
+                "func createGreeting(m string) Greeting",
+                "type SomethingLong struct",
+                """func (s *SomethingLong) WithAReasonableName(
+	ctx context.Context,
+	param1 string,
+	param2 int,
+	param3 map[string]interface{},
+	callback func(int) error,
+) (resultType, error)""",
+                "type resultType struct",
+                "func main()",
+            ],
+        ),
     ],
 )
 def test_more_languages_group2(
@@ -472,24 +490,6 @@ void printVector(const std :: vector<T>& vec)""",
     int group_size,
     int bits,
     StreamOrDevice s)""",
-            ],
-        ),
-        (
-            "tests/more_languages/group3/go_test.go",
-            [
-                "type Greeting struct",
-                "func (g Greeting) sayHello()",
-                "func createGreeting(m string) Greeting",
-                "type SomethingLong struct",
-                """func (s *SomethingLong) WithAReasonableName(
-	ctx context.Context,
-	param1 string,
-	param2 int,
-	param3 map[string]interface{},
-	callback func(int) error,
-) (resultType, error)""",
-                "type resultType struct",
-                "func main()",
             ],
         ),
         (
