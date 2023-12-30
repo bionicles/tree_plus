@@ -245,9 +245,38 @@ def create_sqlite_test_db(
         (
             "tests/more_languages/group1/JuliaTest.jl",
             [
-                "module JuliaTest",
-                "module JuliaTest -> struct Person",
-                "module JuliaTest -> greet(p::Person)",
+                "module JuliaTest_EdgeCase",
+                """struct Location
+    name :: String 
+    lat :: Float32
+    lon :: Float32
+end""",
+                """mutable struct mPerson
+    name :: String
+    age :: Int
+end""",
+                """Base.@kwdef mutable struct Param
+    Δt :: Float64 = 0.1
+    n :: Int64
+    m :: Int64
+end""",
+                "    sic(x,y)",
+                "welcome(l :: Location)",
+                "∑(α, Ω)",
+                """function noob()
+end""",
+                """function ye_olde(hello :: String, world :: Location)
+end""",
+                """function multiline_greet(
+        p :: mPerson, 
+        greeting :: String
+    )
+end""",
+                """function julia_is_awesome(prob :: DiffEqBase.AbstractDAEProblem{uType, duType, tType,
+        isinplace};
+    kwargs...) where {uType, duType, tType, isinplace}
+end""",
+                "end",
             ],
         ),
         (

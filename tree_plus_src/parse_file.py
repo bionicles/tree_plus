@@ -134,7 +134,7 @@ def parse_file(file_path: str) -> List[str]:
     elif file_extension == ".cs":
         components = parse_cs(contents)
     elif file_extension == ".jl":
-        components = parse_julia(contents)
+        components = parse_jl(contents)
     elif file_extension == ".scala":
         components = parse_scala(contents)
     elif file_extension == ".java":
@@ -350,7 +350,7 @@ def parse_c(contents: str) -> List[str]:
 py_rb_comment_pattern = re.compile(r"\s*#.*\n")
 
 
-def remove_py_rb_comments(input_string: str) -> str:
+def remove_py_comments(input_string: str) -> str:
     "Replace # comments with a newline character"
     return re.sub(py_rb_comment_pattern, "\n", input_string)
 
@@ -377,7 +377,7 @@ combined_py_pattern = re.compile(
 def parse_py(contents: str) -> List[str]:
     debug_print("parse_py")
     # remove comments in multiline signatures
-    contents = remove_py_rb_comments(contents)
+    contents = remove_py_comments(contents)
     components = []
     decorator_carry = []
     for match_number, match in enumerate(combined_py_pattern.finditer(contents)):
@@ -420,7 +420,7 @@ def parse_py(contents: str) -> List[str]:
 
 def parse_rb(contents: str) -> List[str]:
     debug_print("parse_rb")
-    contents = remove_py_rb_comments(contents)
+    contents = remove_py_comments(contents)
 
     combined_pattern = re.compile(
         # Match method definitions (instance and class methods) with parameters
@@ -1590,32 +1590,67 @@ def parse_java(contents: str) -> List[str]:
     return components
 
 
-def parse_julia(content: str) -> List[str]:
+# def parse_julia(content: str) -> List[str]:
+#     components = []
+
+#     # Find module declarations
+#     module_pattern = r"\bmodule\s+(\w+)"
+#     module_matches = re.findall(module_pattern, content)
+
+#     # For each module, add it and its components to the output list
+#     for module_match in module_matches:
+#         module_name = module_match
+#         components.append(f"module {module_name}")
+
+#         # Find struct declarations within the module
+#         struct_pattern = r"\bstruct\s+(\w+)"
+#         struct_matches = re.findall(struct_pattern, content)
+#         for struct_match in struct_matches:
+#             components.append(f"module {module_name} -> struct {struct_match}")
+
+#         # Find function definitions within the module
+#         # Note the addition of `=` in the pattern
+#         function_pattern = r"(\w+)\s*\((.*?)\)\s*="
+#         function_matches = re.findall(function_pattern, content)
+#         for function_match in function_matches:
+#             function_name = function_match[0]
+#             parameters = function_match[1]
+#             components.append(f"module {module_name} -> {function_name}({parameters})")
+
+#     return components
+
+# ^( *(Base\.@kwdef )?(mutable )?struct \w+([\s:\w\d#α-ωΑ-Ω])*(?=\s^\s*end))
+# r"^( *(?:mutable )?struct \w+[\s: \w\d#]*(?=\s^\s*end))",
+# r"^( *(Base\.@kwdef )?(mutable )?struct \w+([α-ωΑ-Ω]|[\s:\w\d#])*(?=\s^\s*end))",
+
+
+def parse_jl(contents: str) -> List[str]:
+    debug_print("parse_jl")
+    contents = remove_py_comments(contents).replace("::", " :: ")
+    combined_pattern = re.compile(
+        # traditional functions
+        r"^ *(?P<signature>function \w+\([\s\S]*?\)(?: where ({.*}|.*))?)(?P<details>[\s\S]*?(?P<ending>\s^ *end))(?=\s)|"
+        # assignment form of functions
+        r"^ *\S+\((?:[\s\S]*?\)(?= =))|"
+        # structs
+        r"^( *(?:Base\.@kwdef )?(?:mutable )?struct \w+(?:[\s\S])*?(\s^\s*end))|"
+        r"^(module \w+)|"
+        r"^( *end)",
+        re.MULTILINE,
+    )
+
     components = []
 
-    # Find module declarations
-    module_pattern = r"\bmodule\s+(\w+)"
-    module_matches = re.findall(module_pattern, content)
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_jl: {n=} {match=}")
+        groups = extract_and_debug_print_groups(match)
+        if 4 in groups:
+            component = groups[1] + groups[4]
+        else:
+            component = groups[0]
 
-    # For each module, add it and its components to the output list
-    for module_match in module_matches:
-        module_name = module_match
-        components.append(f"module {module_name}")
-
-        # Find struct declarations within the module
-        struct_pattern = r"\bstruct\s+(\w+)"
-        struct_matches = re.findall(struct_pattern, content)
-        for struct_match in struct_matches:
-            components.append(f"module {module_name} -> struct {struct_match}")
-
-        # Find function definitions within the module
-        # Note the addition of `=` in the pattern
-        function_pattern = r"(\w+)\s*\((.*?)\)\s*="
-        function_matches = re.findall(function_pattern, content)
-        for function_match in function_matches:
-            function_name = function_match[0]
-            parameters = function_match[1]
-            components.append(f"module {module_name} -> {function_name}({parameters})")
+        if component:
+            components.append(component)
 
     return components
 
