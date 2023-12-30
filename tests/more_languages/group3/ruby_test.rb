@@ -25,4 +25,13 @@ class Human
 end
 
 class Doctor < Human
+  def brachial_plexus(
+      roots,
+      trunks,
+      divisions: true,
+      cords: [],
+      branches: Time.now
+    )
+    # Method implementation...
+  end
 end

@@ -754,20 +754,23 @@ def parse_rb(contents) -> List[str]:
     debug_print("parse_rb")
 
     combined_pattern = re.compile(
-        # Match class and module definitions
-        r"\n(\bclass\s+\w+(?:\s*<\s*\w+)?|\bmodule\s+\w+)|"
         # Match method definitions (instance and class methods) with parameters
-        r"\n(\s*def\s+(self\.)?\w+[\w=]*(?:\s*\([^)]*\))?)",
-        re.DOTALL,
+        r"^( *def\s+(self\.)?\w+[\w=]*(?:\s*\([^)]*\))?)|"
+        # Match class and module definitions
+        r"^( *class\s+\w+(?:\s*<\s*\w+)?|\bmodule\s+\w+)",
+        re.MULTILINE,
     )
 
     components = []
 
-    for match in combined_pattern.finditer(contents):
-        component = match.group().strip()
-        if match.lastindex == 2:  # It's a method definition
-            component = match.group(2).rstrip().lstrip("\n")
-        components.append(component)
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_rb: {n=} {match=}")
+        component = None
+        groups = extract_groups(match)
+        component = groups[0]
+        if component:
+            debug_print(f"parse_rb {component=}")
+            components.append(groups[0])
 
     return components
 

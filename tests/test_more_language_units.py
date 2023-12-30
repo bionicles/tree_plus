@@ -549,6 +549,13 @@ void printVector(const std :: vector<T>& vec)""",
                 "  def self.bar",
                 "  def self.bar=(value)",
                 "class Doctor < Human",
+                """  def brachial_plexus(
+      roots,
+      trunks,
+      divisions: true,
+      cords: [],
+      branches: Time.now
+    )""",
             ],
         ),
         (
