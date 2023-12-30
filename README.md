@@ -34,7 +34,7 @@
 ```sh
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (53007 tokens, 5414 lines)
+📁 tree_plus (57964 tokens, 5753 lines)
 ┣━━ 📁 .github (107 tokens, 11 lines)
 ┃   ┣━━ 📁 workflows (1050 tokens, 128 lines)
 ┃   ┃   ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
@@ -68,7 +68,7 @@ paths=('.',)
 ┃   ┃       ┗━━     - Publish to PyPI
 ┃   ┗━━ 📄 dependabot.yml (107 tokens, 11 lines)
 ┃       ┗━━ Unsupported YAML Category
-┣━━ 📁 tree_plus_src (22209 tokens, 2712 lines)
+┣━━ 📁 tree_plus_src (22324 tokens, 2706 lines)
 ┃   ┣━━ 📁 scripts (3515 tokens, 450 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -109,7 +109,7 @@ paths=('.',)
 ┃   ┃   ┃   )
 ┃   ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
 ┃   ┃   ┗━━ def main()
-┃   ┣━━ 📄 ignore.py (1471 tokens, 227 lines)
+┃   ┣━━ 📄 ignore.py (1483 tokens, 227 lines)
 ┃   ┃   ┣━━ @lru_cache
 ┃   ┃   ┃   def make_ignore(ignore: IgnoreInput) -> Ignore
 ┃   ┃   ┣━━ @lru_cache
@@ -120,11 +120,14 @@ paths=('.',)
 ┃   ┃   ┃   def is_binary(file_path: str) -> bool
 ┃   ┃   ┗━━ @lru_cache(maxsize=None)
 ┃   ┃       def should_ignore(path: str, ignore: Ignore, globs: Optional[Ignore] = None) -> bool
-┃   ┣━━ 📄 parse_file.py (17160 tokens, 2006 lines)
+┃   ┣━━ 📄 parse_file.py (17263 tokens, 2000 lines)
 ┃   ┃   ┣━━ def extract_groups(match: re.Match) -> dict
 ┃   ┃   ┣━━ def parse_file(file_path: str) -> List[str]
+┃   ┃   ┣━━ def parse_fsharp(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_tcl(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_erl(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_rs(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_csv(filename: str) -> list
+┃   ┃   ┣━━ def parse_csv(contents: str, max_leaves=11) -> List[str]
 ┃   ┃   ┣━━ def parse_mathematica(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_r(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_zig(contents: str) -> List[str]
@@ -146,7 +149,7 @@ paths=('.',)
 ┃   ┃   ┣━━ def parse_cpp(contents) -> List[str]
 ┃   ┃   ┣━━ def parse_c(contents) -> List[str]
 ┃   ┃   ┣━━ def parse_go(contents) -> List[str]
-┃   ┃   ┣━━ def parse_swift(contents) -> List[str]
+┃   ┃   ┣━━ def parse_swift(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_bash(contents) -> List[str]
 ┃   ┃   ┣━━ def parse_d_dot_ts(contents) -> List[str]
 ┃   ┃   ┣━━ def parse_angular_app_module(contents) -> List[str]
@@ -178,7 +181,7 @@ paths=('.',)
 ┃   ┃   ┣━━ def parse_cobol(content: str) -> List[str]
 ┃   ┃   ┣━━ def parse_java(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_julia(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_kotlin(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_kt(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_lua(content: str) -> List[str]
 ┃   ┃   ┣━━ def parse_objective_c(content: str) -> List[str]
 ┃   ┃   ┣━━ def parse_ocaml(content: str) -> List[str]
@@ -197,7 +200,7 @@ paths=('.',)
 ┃   ┃           directory_path: str, ignore: IgnoreInput = None, globs: IgnoreInput = None
 ┃   ┃       ) -> List[str]
 ┃   ┗━━ 📄 version.py (18 tokens, 2 lines)
-┃       ┗━━ __version__ = "1.0.13"
+┃       ┗━━ __version__ = "1.0.14"
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
 ┣━━ 📄 Makefile (383 tokens, 73 lines)
@@ -239,7 +242,7 @@ paths=('.',)
 ┃   ┣━━     rich
 ┃   ┗━━     tomli
 ┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (19451 tokens, 1394 lines)
+┣━━ 📄 README.md (24293 tokens, 1739 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -312,7 +315,7 @@ Options:
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
   -H, -h, --help         Show this message and exit.
 
-  (v1.0.13) --- https://github.com/bionicles/tree_plus
+  (v1.0.14) --- https://github.com/bionicles/tree_plus
 
 ```
 <!-- t5-end -->
@@ -407,8 +410,8 @@ make debug
 tree_plus -i group_todo tests/more_languages
 paths=('tests/more_languages',)
 count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/more_languages/group3/test.sqlite: 'utf-8' codec can't decode byte 0xe9 in position 99: invalid continuation byte
-📁 more_languages (24730 tokens, 3646 lines)
-┣━━ 📁 group1 (2259 tokens, 454 lines)
+📁 more_languages (27625 tokens, 4096 lines)
+┣━━ 📁 group1 (3228 tokens, 622 lines)
 ┃   ┣━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO
 ┃   ┃   ┣━━ DATA DIVISION -> 01 GREETING
@@ -443,9 +446,70 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━ module JuliaTest
 ┃   ┃   ┣━━ module JuliaTest -> struct Person
 ┃   ┃   ┗━━ module JuliaTest -> greet(p::Person)
-┃   ┣━━ 📄 KotlinTest.kt (29 tokens, 4 lines)
+┃   ┣━━ 📄 KotlinTest.kt (998 tokens, 172 lines)
 ┃   ┃   ┣━━ data class Person(val name: String)
-┃   ┃   ┗━━ fun greet(person: Person)
+┃   ┃   ┣━━ fun greet(person: Person)
+┃   ┃   ┣━━ fun <T> processItems(items: List<T>, processor: (T) -> Unit)
+┃   ┃   ┣━━ interface Source<out T>
+┃   ┃   ┣━━     fun nextT(): T
+┃   ┃   ┣━━ fun MutableList<Int>.swap(index1: Int, index2: Int)
+┃   ┃   ┣━━ fun Any?.toString(): String
+┃   ┃   ┣━━ tailrec fun findFixPoint(x: Double = 1.0): Double
+┃   ┃   ┣━━ class GenericRepository<T>
+┃   ┃   ┣━━     fun getItem(id: Int): T?
+┃   ┃   ┣━━ sealed interface Error
+┃   ┃   ┣━━ sealed class IOError(): Error
+┃   ┃   ┣━━ object Runner
+┃   ┃   ┣━━     inline fun <reified S: SomeClass<T>, T> run() : T
+┃   ┃   ┣━━ infix fun Int.shl(x: Int): Int
+┃   ┃   ┣━━ class MyStringCollection
+┃   ┃   ┣━━     infix fun add(s: String)
+┃   ┃   ┣━━     fun build()
+┃   ┃   ┣━━ open class Base(p: Int)
+┃   ┃   ┣━━ class Derived(p: Int) : Base(p)
+┃   ┃   ┣━━ open class Shape
+┃   ┃   ┣━━     open fun draw()
+┃   ┃   ┣━━     fun fill()
+┃   ┃   ┣━━     open fun edge(case: Int)
+┃   ┃   ┣━━ interface Thingy
+┃   ┃   ┣━━     fun edge()
+┃   ┃   ┣━━ class Circle() : Shape(), Thingy
+┃   ┃   ┣━━     override fun draw()
+┃   ┃   ┣━━     final override fun edge(case: Int)
+┃   ┃   ┣━━ interface Base
+┃   ┃   ┣━━     fun print()
+┃   ┃   ┣━━ class BaseImpl(val x: Int) : Base
+┃   ┃   ┣━━     override fun print()
+┃   ┃   ┣━━ internal class Derived(b: Base) : Base by b
+┃   ┃   ┣━━ class Person constructor(firstName: String)
+┃   ┃   ┣━━ class People(
+┃   ┃   ┃       firstNames: Array<String>,
+┃   ┃   ┃       ages: Array<Int>(42),
+┃   ┃   ┃   )
+┃   ┃   ┣━━     fun edgeCases(): Boolean
+┃   ┃   ┣━━ class Alien public @Inject constructor(
+┃   ┃   ┃       val firstName: String,
+┃   ┃   ┃       val lastName: String,
+┃   ┃   ┃       var age: Int,
+┃   ┃   ┃       val pets: MutableList<Pet> = mutableListOf(),
+┃   ┃   ┃   )
+┃   ┃   ┣━━     fun objectOriented(): String
+┃   ┃   ┣━━  enum class IntArithmetics : BinaryOperator<Int>, IntBinaryOperator
+┃   ┃   ┣━━     PLUS {
+┃   ┃   ┃           override fun apply(t: Int, u: Int): Int
+┃   ┃   ┣━━     TIMES {
+┃   ┃   ┃           override fun apply(t: Int, u: Int): Int
+┃   ┃   ┣━━     override fun applyAsInt(t: Int, u: Int)
+┃   ┃   ┣━━ fun reformat(
+┃   ┃   ┃       str: String,
+┃   ┃   ┃       normalizeCase: Boolean = true,
+┃   ┃   ┃       upperCaseFirstLetter: Boolean = true,
+┃   ┃   ┃       divideByCamelHumps: Boolean = false,
+┃   ┃   ┃       wordSeparator: Char = ' ',
+┃   ┃   ┃   )
+┃   ┃   ┣━━ operator fun Point.unaryMinus()
+┃   ┃   ┣━━ abstract class Polygon
+┃   ┃   ┗━━     abstract fun draw()
 ┃   ┣━━ 📄 LuaTest.lua (84 tokens, 16 lines)
 ┃   ┃   ┣━━ function HelloWorld.new
 ┃   ┃   ┣━━ function HelloWorld.greet
@@ -576,12 +640,12 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃       ┣━━   describe(): string
 ┃       ┣━━ interface Shape
 ┃       ┗━━ interface Square extends Shape
-┣━━ 📁 group2 (754 tokens, 164 lines)
+┣━━ 📁 group2 (1714 tokens, 305 lines)
 ┃   ┣━━ 📄 apl_test.apl (44 tokens, 5 lines)
 ┃   ┃   ┣━━ :Namespace HelloWorld
 ┃   ┃   ┣━━ :Namespace HelloWorld -> hello ← 'Hello, World!'
 ┃   ┃   ┗━━ :Namespace HelloWorld -> plus ← {⍺+⍵}
-┃   ┣━━ 📄 c_test.c (256 tokens, 69 lines)
+┃   ┣━━ 📄 c_test.c (886 tokens, 141 lines)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ struct Point getOrigin()
 ┃   ┃   ┣━━ float mul_two_floats(float x1, float x2)
@@ -592,7 +656,31 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━ void greet(Person p)
 ┃   ┃   ┣━━ typedef struct Person
 ┃   ┃   ┣━━ int main()
-┃   ┃   ┗━━ int* getArrayStart(int arr[], int size)
+┃   ┃   ┣━━ int* getArrayStart(int arr[], int size)
+┃   ┃   ┣━━ long complexFunctionWithMultipleArguments(
+┃   ┃   ┃       int param1,
+┃   ┃   ┃       double param2,
+┃   ┃   ┃       char *param3,
+┃   ┃   ┃       struct Point point
+┃   ┃   ┃   )
+┃   ┃   ┣━━ keyPattern *ACLKeyPatternCreate(sds pattern, int flags)
+┃   ┃   ┣━━ sds sdsCatPatternString(sds base, keyPattern *pat)
+┃   ┃   ┣━━ static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)
+┃   ┃   ┗━━ static struct config
+┃   ┣━━ 📄 go_test.go (169 tokens, 46 lines)
+┃   ┃   ┣━━ type Greeting struct
+┃   ┃   ┣━━ func (g Greeting) sayHello()
+┃   ┃   ┣━━ func createGreeting(m string) Greeting
+┃   ┃   ┣━━ type SomethingLong struct
+┃   ┃   ┣━━ func (s *SomethingLong) WithAReasonableName(
+┃   ┃   ┃     ctx context.Context,
+┃   ┃   ┃     param1 string,
+┃   ┃   ┃     param2 int,
+┃   ┃   ┃     param3 mapinterface{},
+┃   ┃   ┃     callback func(int) error,
+┃   ┃   ┃   ) (resultType, error)
+┃   ┃   ┣━━ type resultType struct
+┃   ┃   ┗━━ func main()
 ┃   ┣━━ 📄 PerlTest.pl (75 tokens, 20 lines)
 ┃   ┃   ┣━━ package PerlTest
 ┃   ┃   ┣━━ package PerlTest -> sub new
@@ -613,16 +701,32 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━ class Person -> NoReturn($times)
 ┃   ┃   ┣━━ class Person -> NoReturnNoArgs()
 ┃   ┃   ┗━━ function Say-Hello([Person]$person)
-┃   ┗━━ 📄 ScalaTest.scala (136 tokens, 24 lines)
-┃       ┣━━ def sumOfSquares(x: Int, y: Int): Int
-┃       ┣━━ trait Bark
-┃       ┣━━ trait Bark -> def bark: String
-┃       ┣━━ case class Person(name: String)
-┃       ┣━━ object HelloWorld
-┃       ┣━━ object HelloWorld -> def greet(person: Person): Unit
-┃       ┣━━ object HelloWorld -> def main(args: Array[String]): Unit
-┃       ┗━━ def sumOfSquaresShort(x: Int, y: Int): Int
-┣━━ 📁 group3 (6637 tokens, 1005 lines)
+┃   ┣━━ 📄 ScalaTest.scala (217 tokens, 41 lines)
+┃   ┃   ┣━━ def sumOfSquares(x: Int, y: Int): Int
+┃   ┃   ┣━━ trait Bark
+┃   ┃   ┣━━   def bark: String
+┃   ┃   ┣━━ case class Person(name: String)
+┃   ┃   ┣━━ class GenericClass[T](
+┃   ┃   ┃       val data: T,
+┃   ┃   ┃       val count: Int
+┃   ┃   ┃   )
+┃   ┃   ┣━━   def getData: T
+┃   ┃   ┣━━ object HelloWorld
+┃   ┃   ┣━━   def greet(person: Person): Unit
+┃   ┃   ┣━━   def main(args: Array[String]): Unit
+┃   ┃   ┣━━ def complexFunction(
+┃   ┃   ┃       a: Int,
+┃   ┃   ┃       b: String,
+┃   ┃   ┃       c: Float
+┃   ┃   ┃   ): (Int, String) Option
+┃   ┃   ┗━━ def sumOfSquaresShort(x: Int, y: Int): Int
+┃   ┗━━ 📄 test.csv (80 tokens, 6 lines)
+┃       ┣━━ Name
+┃       ┣━━ Age
+┃       ┣━━ Country
+┃       ┣━━ City
+┃       ┗━━ Email
+┣━━ 📁 group3 (6898 tokens, 1033 lines)
 ┃   ┣━━ 📄 bash_test.sh (154 tokens, 23 lines)
 ┃   ┃   ┣━━ echo_hello_world()
 ┃   ┃   ┣━━ function fun_echo_hello_world()
@@ -662,57 +766,65 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃           int group_size,
 ┃   ┃           int bits,
 ┃   ┃           StreamOrDevice s)
-┃   ┣━━ 📄 csharp_test.cs (538 tokens, 93 lines)
+┃   ┣━━ 📄 csharp_test.cs (850 tokens, 147 lines)
 ┃   ┃   ┣━━ public interface IExcelTemplate
-┃   ┃   ┣━━     void LoadTemplate
-┃   ┃   ┣━━     void LoadData
-┃   ┃   ┣━━     void ModifyCell
-┃   ┃   ┣━━     void SaveToFile
+┃   ┃   ┣━━     void LoadTemplate(string templateFilePath)
+┃   ┃   ┣━━     void LoadData(Dictionary<string, string> data)
+┃   ┃   ┣━━     void ModifyCell(string cellName, string value)
+┃   ┃   ┣━━     void SaveToFile(string filePath)
 ┃   ┃   ┣━━ public interface IGreet
-┃   ┃   ┣━━     void Greet
+┃   ┃   ┣━━     void Greet()
 ┃   ┃   ┣━━ public enum WeekDays
-┃   ┃   ┣━━ public delegate void DisplayMessage
+┃   ┃   ┣━━ public delegate void DisplayMessage(string message)
 ┃   ┃   ┣━━ public struct Address
 ┃   ┃   ┣━━ public static class HelperFunctions
-┃   ┃   ┣━━     public static void PrintMessage
-┃   ┃   ┣━━     public static int AddNumbers
+┃   ┃   ┣━━     public static void PrintMessage(string message)
+┃   ┃   ┣━━     public static int AddNumbers(int a, int b)
 ┃   ┃   ┣━━ namespace HelloWorldApp
 ┃   ┃   ┣━━     class Person : IGreet
-┃   ┃   ┣━━         public Person
-┃   ┃   ┣━━         public void Greet
+┃   ┃   ┣━━         public Person(string name, int age)
+┃   ┃   ┣━━         public void Greet()
 ┃   ┃   ┣━━     class HelloWorld
-┃   ┃   ┣━━         static void Main
+┃   ┃   ┣━━         static void Main(string[] args)
 ┃   ┃   ┣━━ namespace TemplateToExcelServer.Template
 ┃   ┃   ┣━━     public interface ITemplateObject
-┃   ┃   ┣━━         string[,] GetContent
-┃   ┃   ┣━━         string[] GetContentArray
-┃   ┃   ┣━━         string[] GetFormat
-┃   ┃   ┣━━         int? GetFormatLength
-┃   ┃   ┣━━         TemplateObject SetContent
-┃   ┃   ┣━━         TemplateObject SetContentArray
-┃   ┃   ┣━━         TemplateObject SetFormat
-┃   ┃   ┣━━         TemplateObject SetNameOfReport
-┃   ┃   ┣━━         TemplateObject SetSheetName
-┃   ┃   ┣━━ public class BankAccount
-┃   ┃   ┣━━     public override string ToString: =>
-┃   ┃   ┣━━ var IncrementBy: =>
-┃   ┃   ┣━━ Func<int, int, int> add: =>
-┃   ┃   ┣━━ button.Click +=: =>
-┃   ┃   ┗━━ public Func<int, int> GetMultiplier: =>
-┃   ┣━━ 📄 go_test.go (169 tokens, 46 lines)
-┃   ┃   ┣━━ type Greeting struct
-┃   ┃   ┣━━ func (g Greeting) sayHello()
-┃   ┃   ┣━━ func createGreeting(m string) Greeting
-┃   ┃   ┣━━ type SomethingLong struct
-┃   ┃   ┣━━ func (s *SomethingLong) WithAReasonableName(
-┃   ┃   ┃     ctx context.Context,
-┃   ┃   ┃     param1 string,
-┃   ┃   ┃     param2 int,
-┃   ┃   ┃     param3 mapinterface{},
-┃   ┃   ┃     callback func(int) error,
-┃   ┃   ┃   ) (resultType, error)
-┃   ┃   ┣━━ type resultType struct
-┃   ┃   ┗━━ func main()
+┃   ┃   ┣━━         string[,] GetContent()
+┃   ┃   ┣━━         string[] GetContentArray()
+┃   ┃   ┣━━         string[] GetFormat()
+┃   ┃   ┣━━         int? GetFormatLength()
+┃   ┃   ┣━━         TemplateObject SetContent(string[,] Content)
+┃   ┃   ┣━━         TemplateObject SetContentArray(string[] value)
+┃   ┃   ┣━━         TemplateObject SetFormat(string[] Header)
+┃   ┃   ┣━━         TemplateObject SetNameOfReport(
+┃   ┃   ┃               ReadOnlyMemory<byte> ReportName,
+┃   ┃   ┃               int[] EdgeCase)
+┃   ┃   ┣━━         TemplateObject SetSheetName(ReadOnlyMemory<byte> SheetName)
+┃   ┃   ┣━━ public class BankAccount(string accountID, string owner)
+┃   ┃   ┣━━     public override string ToString() =>
+┃   ┃   ┣━━ var IncrementBy = (int source, int increment = 1) =>
+┃   ┃   ┣━━ Func<int, int, int> add = (x, y) =>
+┃   ┃   ┣━━ button.Click += (sender, args) =>
+┃   ┃   ┣━━ public Func<int, int> GetMultiplier(int factor)
+┃   ┃   ┣━━ public void Method(
+┃   ┃   ┃           int param1,
+┃   ┃   ┃           int param2,
+┃   ┃   ┃           int param3,
+┃   ┃   ┃           int param4,
+┃   ┃   ┃           int param5,
+┃   ┃   ┃           int param6,
+┃   ┃   ┃       )
+┃   ┃   ┣━━ System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+┃   ┃   ┃       (se, cert, chain, sslerror) =>
+┃   ┃   ┣━━ class ServerCertificateValidation
+┃   ┃   ┣━━     public bool OnRemoteCertificateValidation(
+┃   ┃   ┃           object se,
+┃   ┃   ┃           X509Certificate cert,
+┃   ┃   ┃           X509Chain chain,
+┃   ┃   ┃           SslPolicyErrors sslerror
+┃   ┃   ┃       )
+┃   ┃   ┣━━ s_downloadButton.Clicked += async (o, e) =>
+┃   ┃   ┣━━ [HttpGet, Route("DotNetCount")]
+┃   ┃   ┗━━ static public async Task<int> GetDotNetCount(string URL)
 ┃   ┣━━ 📄 hallucination.tex (1465 tokens, 127 lines)
 ┃   ┃   ┣━━ Harnessing the Master Algorithm: Strategies for AI LLMs to Mitigate Hallucinations
 ┃   ┃   ┣━━ Hallucinated Pedro Domingos et al.
@@ -739,7 +851,7 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━ 7 Conclusion
 ┃   ┃   ┣━━   7.1 Summarizing Key Findings
 ┃   ┃   ┗━━   7.2 The Next Steps in AI Development
-┃   ┣━━ 📄 ruby_test.rb (110 tokens, 28 lines)
+┃   ┣━━ 📄 ruby_test.rb (152 tokens, 37 lines)
 ┃   ┃   ┣━━ module Greeter
 ┃   ┃   ┣━━   def self.say_hello
 ┃   ┃   ┣━━ class HelloWorld
@@ -747,14 +859,33 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━ class Human
 ┃   ┃   ┣━━   def self.bar
 ┃   ┃   ┣━━   def self.bar=(value)
-┃   ┃   ┗━━ class Doctor < Human
-┃   ┣━━ 📄 swift_test.swift (449 tokens, 99 lines)
+┃   ┃   ┣━━ class Doctor < Human
+┃   ┃   ┗━━   def brachial_plexus(
+┃   ┃             roots,
+┃   ┃             trunks,
+┃   ┃             divisions: true,
+┃   ┃             cords: [],
+┃   ┃             branches: Time.now
+┃   ┃           )
+┃   ┣━━ 📄 swift_test.swift (525 tokens, 110 lines)
 ┃   ┃   ┣━━ class Person
+┃   ┃   ┣━━     init(name: String)
+┃   ┃   ┣━━     func greet()
+┃   ┃   ┣━━     func yEdgeCase(
+┃   ┃   ┃           fname: String, 
+┃   ┃   ┃           lname: String, 
+┃   ┃   ┃           age: Int, 
+┃   ┃   ┃           address: String, 
+┃   ┃   ┃           phoneNumber: String
+┃   ┃   ┃       )
 ┃   ┃   ┣━━ func globalGreet()
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ protocol Animal
+┃   ┃   ┣━━     func speak()
 ┃   ┃   ┣━━ struct Dog: Animal
 ┃   ┃   ┣━━ class Cat: Animal
+┃   ┃   ┣━━     init(name: String)
+┃   ┃   ┣━━     func speak()
 ┃   ┃   ┣━━ enum CarType
 ┃   ┃   ┣━━ func getPreferredCarType() -> CarType
 ┃   ┃   ┣━━ enum CarType: UInt8
@@ -890,7 +1021,31 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃       ┣━━     click
 ┃       ┣━━     rich
 ┃       ┗━━     tomli
-┣━━ 📁 group4 (2525 tokens, 380 lines)
+┣━━ 📁 group4 (3230 tokens, 493 lines)
+┃   ┣━━ 📄 erl_test.erl (512 tokens, 69 lines)
+┃   ┃   ┣━━ -module(erl_test).
+┃   ┃   ┣━━ -record(person).
+┃   ┃   ┣━━ -type ra_peer_status().
+┃   ┃   ┣━━ -type ra_membership().
+┃   ┃   ┣━━ -opaque my_opaq_type().
+┃   ┃   ┣━━ -type orddict(Key, Val).
+┃   ┃   ┣━━ -type edge(
+┃   ┃   ┃           Cases,
+┃   ┃   ┃           Pwn,
+┃   ┃   ┃       ).
+┃   ┃   ┣━━ -spec guarded(X) -> X when X :: tuple().
+┃   ┃   ┣━━ -spec edge_case(
+┃   ┃   ┃           {integer(), any()} | 
+┃   ┃   ┃       ) -> processed, integer(), any()} | [{item, any()}].
+┃   ┃   ┣━━ -spec complex_function({integer(), any()} | ) -> 
+┃   ┃   ┃       {processed, integer(), any()} | [{item, any()}].
+┃   ┃   ┣━━ -spec list_manipulation() -> .
+┃   ┃   ┣━━ -spec overload(T1, T2) -> T3
+┃   ┃   ┃           ; (T4, T5) -> T6.
+┃   ┃   ┣━━ -spec multiguard({X, integer()}) -> X when X :: atom()
+┃   ┃   ┃           ; ([Y]) -> Y when Y :: number().
+┃   ┃   ┣━━ -record(multiline).
+┃   ┃   ┗━━ -record(maybe_undefined).
 ┃   ┣━━ 📄 haskell_test.hs (373 tokens, 41 lines)
 ┃   ┃   ┣━━ data Person
 ┃   ┃   ┣━━ greet :: Person -> String
@@ -994,6 +1149,26 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃           y: []f32,
 ┃   ┃           y_add: usize,
 ┃   ┃       ) void
+┃   ┣━━ 📄 test_fsharp.fs (127 tokens, 27 lines)
+┃   ┃   ┣━━ module TestFSharp
+┃   ┃   ┣━━ type Person = {
+┃   ┃   ┣━━ let add x y =
+┃   ┃   ┣━━ let multiply 
+┃   ┃   ┃       (x: int) 
+┃   ┃   ┃       (y: int): int =
+┃   ┃   ┣━━ let complexFunction
+┃   ┃   ┃       (a: int)
+┃   ┃   ┃       (b: string)
+┃   ┃   ┃       (c: float)
+┃   ┃   ┃       : (int * string) option =
+┃   ┃   ┗━━ type Result<'T> =
+┃   ┣━━ 📄 test_tcl_tk.tcl (66 tokens, 17 lines)
+┃   ┃   ┣━━ proc sayHello {}
+┃   ┃   ┣━━ proc arrg { input }
+┃   ┃   ┗━━ proc multiLine {
+┃   ┃           x,
+┃   ┃           y
+┃   ┃       }
 ┃   ┗━━ 📄 tf_test.tf (288 tokens, 39 lines)
 ┃       ┣━━ provider "aws"
 ┃       ┣━━ resource "aws_instance" "example"
@@ -1273,7 +1448,7 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ```sh
 tree_plus -g "*.*s" -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-📁 more_languages (11673 tokens, 1719 lines)
+📁 more_languages (12112 tokens, 1800 lines)
 ┣━━ 📁 group1 (1468 tokens, 296 lines)
 ┃   ┣━━ 📄 test.js (755 tokens, 154 lines)
 ┃   ┃   ┣━━ class MyClass
@@ -1390,45 +1565,67 @@ paths=('tests/more_languages',)
 ┃       ┣━━   describe(): string
 ┃       ┣━━ interface Shape
 ┃       ┗━━ interface Square extends Shape
-┣━━ 📁 group3 (538 tokens, 93 lines)
-┃   ┗━━ 📄 csharp_test.cs (538 tokens, 93 lines)
+┣━━ 📁 group3 (850 tokens, 147 lines)
+┃   ┗━━ 📄 csharp_test.cs (850 tokens, 147 lines)
 ┃       ┣━━ public interface IExcelTemplate
-┃       ┣━━     void LoadTemplate
-┃       ┣━━     void LoadData
-┃       ┣━━     void ModifyCell
-┃       ┣━━     void SaveToFile
+┃       ┣━━     void LoadTemplate(string templateFilePath)
+┃       ┣━━     void LoadData(Dictionary<string, string> data)
+┃       ┣━━     void ModifyCell(string cellName, string value)
+┃       ┣━━     void SaveToFile(string filePath)
 ┃       ┣━━ public interface IGreet
-┃       ┣━━     void Greet
+┃       ┣━━     void Greet()
 ┃       ┣━━ public enum WeekDays
-┃       ┣━━ public delegate void DisplayMessage
+┃       ┣━━ public delegate void DisplayMessage(string message)
 ┃       ┣━━ public struct Address
 ┃       ┣━━ public static class HelperFunctions
-┃       ┣━━     public static void PrintMessage
-┃       ┣━━     public static int AddNumbers
+┃       ┣━━     public static void PrintMessage(string message)
+┃       ┣━━     public static int AddNumbers(int a, int b)
 ┃       ┣━━ namespace HelloWorldApp
 ┃       ┣━━     class Person : IGreet
-┃       ┣━━         public Person
-┃       ┣━━         public void Greet
+┃       ┣━━         public Person(string name, int age)
+┃       ┣━━         public void Greet()
 ┃       ┣━━     class HelloWorld
-┃       ┣━━         static void Main
+┃       ┣━━         static void Main(string[] args)
 ┃       ┣━━ namespace TemplateToExcelServer.Template
 ┃       ┣━━     public interface ITemplateObject
-┃       ┣━━         string[,] GetContent
-┃       ┣━━         string[] GetContentArray
-┃       ┣━━         string[] GetFormat
-┃       ┣━━         int? GetFormatLength
-┃       ┣━━         TemplateObject SetContent
-┃       ┣━━         TemplateObject SetContentArray
-┃       ┣━━         TemplateObject SetFormat
-┃       ┣━━         TemplateObject SetNameOfReport
-┃       ┣━━         TemplateObject SetSheetName
-┃       ┣━━ public class BankAccount
-┃       ┣━━     public override string ToString: =>
-┃       ┣━━ var IncrementBy: =>
-┃       ┣━━ Func<int, int, int> add: =>
-┃       ┣━━ button.Click +=: =>
-┃       ┗━━ public Func<int, int> GetMultiplier: =>
-┣━━ 📁 group4 (1261 tokens, 200 lines)
+┃       ┣━━         string[,] GetContent()
+┃       ┣━━         string[] GetContentArray()
+┃       ┣━━         string[] GetFormat()
+┃       ┣━━         int? GetFormatLength()
+┃       ┣━━         TemplateObject SetContent(string[,] Content)
+┃       ┣━━         TemplateObject SetContentArray(string[] value)
+┃       ┣━━         TemplateObject SetFormat(string[] Header)
+┃       ┣━━         TemplateObject SetNameOfReport(
+┃       ┃               ReadOnlyMemory<byte> ReportName,
+┃       ┃               int[] EdgeCase)
+┃       ┣━━         TemplateObject SetSheetName(ReadOnlyMemory<byte> SheetName)
+┃       ┣━━ public class BankAccount(string accountID, string owner)
+┃       ┣━━     public override string ToString() =>
+┃       ┣━━ var IncrementBy = (int source, int increment = 1) =>
+┃       ┣━━ Func<int, int, int> add = (x, y) =>
+┃       ┣━━ button.Click += (sender, args) =>
+┃       ┣━━ public Func<int, int> GetMultiplier(int factor)
+┃       ┣━━ public void Method(
+┃       ┃           int param1,
+┃       ┃           int param2,
+┃       ┃           int param3,
+┃       ┃           int param4,
+┃       ┃           int param5,
+┃       ┃           int param6,
+┃       ┃       )
+┃       ┣━━ System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+┃       ┃       (se, cert, chain, sslerror) =>
+┃       ┣━━ class ServerCertificateValidation
+┃       ┣━━     public bool OnRemoteCertificateValidation(
+┃       ┃           object se,
+┃       ┃           X509Certificate cert,
+┃       ┃           X509Chain chain,
+┃       ┃           SslPolicyErrors sslerror
+┃       ┃       )
+┃       ┣━━ s_downloadButton.Clicked += async (o, e) =>
+┃       ┣━━ [HttpGet, Route("DotNetCount")]
+┃       ┗━━ static public async Task<int> GetDotNetCount(string URL)
+┣━━ 📁 group4 (1388 tokens, 227 lines)
 ┃   ┣━━ 📄 haskell_test.hs (373 tokens, 41 lines)
 ┃   ┃   ┣━━ data Person
 ┃   ┃   ┣━━ greet :: Person -> String
@@ -1444,62 +1641,75 @@ paths=('tests/more_languages',)
 ┃   ┃           ( [G.Directive Variable],
 ┃   ┃             G.SelectionSet fragments Variable
 ┃   ┃           )
-┃   ┗━━ 📄 rust_test.rs (888 tokens, 159 lines)
-┃       ┣━━ enum Days
-┃       ┣━━ struct Point
-┃       ┣━━ impl Point
-┃       ┣━━     fn get_origin() -> Point
-┃       ┣━━ struct Person
-┃       ┣━━ impl Person
-┃       ┣━━     fn greet(&self)
-┃       ┣━━ fn add_two_longs(x1: i64, x2: i64) -> i64
-┃       ┣━━ fn add_two_longs_longer(
-┃       ┃       x1: i64,
-┃       ┃       x2: i64,
-┃       ┃   ) -> i64
-┃       ┣━━ fn multiply_by_two(num: f64) -> f64
-┃       ┣━━ fn get_first_character(s: &str) -> Option<char>
-┃       ┣━━ trait Drawable
-┃       ┣━━     fn draw(&self)
-┃       ┣━━ impl Drawable for Point
-┃       ┣━━     fn draw(&self)
-┃       ┣━━ fn main()
-┃       ┣━━ pub struct VisibleStruct
-┃       ┣━━ mod my_module
-┃       ┣━━     pub struct AlsoVisibleStruct<T>(T, T)
-┃       ┣━━ macro_rules! say_hello
-┃       ┣━━ #[macro_export]
-┃       ┃   macro_rules! hello_tree_plus
-┃       ┣━━ pub mod lib
-┃       ┣━━     pub mod interfaces
-┃       ┣━━     mod engine
-┃       ┣━━ pub fn flow<S1, S2, S3, S4, E, T, L>(
-┃       ┃       source: S1, 
-┃       ┃       extractor: E, 
-┃       ┃       inbox: S2, 
-┃       ┃       transformer: T, 
-┃       ┃       outbox: S3, 
-┃       ┃       loader: L, 
-┃       ┃       sink: &mut S4,
-┃       ┃   ) -> Result<(), Box<dyn Error>>
-┃       ┃   where
-┃       ┃       S1: Extractable,
-┃       ┃       S2: Extractable + Loadable,
-┃       ┃       S3: Extractable + Loadable,
-┃       ┃       S4: Loadable,
-┃       ┃       E: Extractor<S1, S2>,
-┃       ┃       T: Transformer<S2, S3>,
-┃       ┃       L: Loader<S3, S4>,
-┃       ┣━━ trait Container
-┃       ┣━━     fn items(&self) -> impl Iterator<Item = Widget>
-┃       ┣━━ trait HttpService
-┃       ┣━━     async fn fetch(&self, url: Url) -> HtmlBody
-┃       ┣━━ struct Pair<T, U>
-┃       ┣━━ trait Transformer<T>
-┃       ┣━━     fn transform(&self, input: T) -> T
-┃       ┣━━ impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
-┃       ┣━━     fn transform(&self, input: T) -> T
-┃       ┗━━ fn main()
+┃   ┣━━ 📄 rust_test.rs (888 tokens, 159 lines)
+┃   ┃   ┣━━ enum Days
+┃   ┃   ┣━━ struct Point
+┃   ┃   ┣━━ impl Point
+┃   ┃   ┣━━     fn get_origin() -> Point
+┃   ┃   ┣━━ struct Person
+┃   ┃   ┣━━ impl Person
+┃   ┃   ┣━━     fn greet(&self)
+┃   ┃   ┣━━ fn add_two_longs(x1: i64, x2: i64) -> i64
+┃   ┃   ┣━━ fn add_two_longs_longer(
+┃   ┃   ┃       x1: i64,
+┃   ┃   ┃       x2: i64,
+┃   ┃   ┃   ) -> i64
+┃   ┃   ┣━━ fn multiply_by_two(num: f64) -> f64
+┃   ┃   ┣━━ fn get_first_character(s: &str) -> Option<char>
+┃   ┃   ┣━━ trait Drawable
+┃   ┃   ┣━━     fn draw(&self)
+┃   ┃   ┣━━ impl Drawable for Point
+┃   ┃   ┣━━     fn draw(&self)
+┃   ┃   ┣━━ fn main()
+┃   ┃   ┣━━ pub struct VisibleStruct
+┃   ┃   ┣━━ mod my_module
+┃   ┃   ┣━━     pub struct AlsoVisibleStruct<T>(T, T)
+┃   ┃   ┣━━ macro_rules! say_hello
+┃   ┃   ┣━━ #[macro_export]
+┃   ┃   ┃   macro_rules! hello_tree_plus
+┃   ┃   ┣━━ pub mod lib
+┃   ┃   ┣━━     pub mod interfaces
+┃   ┃   ┣━━     mod engine
+┃   ┃   ┣━━ pub fn flow<S1, S2, S3, S4, E, T, L>(
+┃   ┃   ┃       source: S1, 
+┃   ┃   ┃       extractor: E, 
+┃   ┃   ┃       inbox: S2, 
+┃   ┃   ┃       transformer: T, 
+┃   ┃   ┃       outbox: S3, 
+┃   ┃   ┃       loader: L, 
+┃   ┃   ┃       sink: &mut S4,
+┃   ┃   ┃   ) -> Result<(), Box<dyn Error>>
+┃   ┃   ┃   where
+┃   ┃   ┃       S1: Extractable,
+┃   ┃   ┃       S2: Extractable + Loadable,
+┃   ┃   ┃       S3: Extractable + Loadable,
+┃   ┃   ┃       S4: Loadable,
+┃   ┃   ┃       E: Extractor<S1, S2>,
+┃   ┃   ┃       T: Transformer<S2, S3>,
+┃   ┃   ┃       L: Loader<S3, S4>,
+┃   ┃   ┣━━ trait Container
+┃   ┃   ┣━━     fn items(&self) -> impl Iterator<Item = Widget>
+┃   ┃   ┣━━ trait HttpService
+┃   ┃   ┣━━     async fn fetch(&self, url: Url) -> HtmlBody
+┃   ┃   ┣━━ struct Pair<T, U>
+┃   ┃   ┣━━ trait Transformer<T>
+┃   ┃   ┣━━     fn transform(&self, input: T) -> T
+┃   ┃   ┣━━ impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
+┃   ┃   ┣━━     fn transform(&self, input: T) -> T
+┃   ┃   ┗━━ fn main()
+┃   ┗━━ 📄 test_fsharp.fs (127 tokens, 27 lines)
+┃       ┣━━ module TestFSharp
+┃       ┣━━ type Person = {
+┃       ┣━━ let add x y =
+┃       ┣━━ let multiply 
+┃       ┃       (x: int) 
+┃       ┃       (y: int): int =
+┃       ┣━━ let complexFunction
+┃       ┃       (a: int)
+┃       ┃       (b: string)
+┃       ┃       (c: float)
+┃       ┃       : (int * string) option =
+┃       ┗━━ type Result<'T> =
 ┗━━ 📁 group5 (8406 tokens, 1130 lines)
     ┣━━ 📄 app-routing.module.ts (242 tokens, 28 lines)
     ┃   ┣━━ const routes: Routes = [
@@ -1642,84 +1852,14 @@ Help me **add to** and **priorize** this list of languages to support!
 ```sh
 tree_plus tests/more_languages/group_todo
 paths=('tests/more_languages/group_todo',)
-📁 group_todo (4935 tokens, 748 lines)
+📁 group_todo (888 tokens, 176 lines)
 ┣━━ 📄 crystal_test.cr (56 tokens, 15 lines)
 ┣━━ 📄 dart_test.dart (106 tokens, 24 lines)
 ┣━━ 📄 elixir_test.exs (49 tokens, 10 lines)
-┣━━ 📄 erl_test.erl (60 tokens, 9 lines)
 ┣━━ 📄 fortran_test.f90 (114 tokens, 21 lines)
-┣━━ 📄 fsharp_test.fs (44 tokens, 6 lines)
-┣━━ 📄 harder_KotlinTest.kt (2572 tokens, 410 lines)
-┃   ┣━━ data class Person(val name: String, val age: Int)
-┃   ┣━━ data class User(val name: String, val age: Int)
-┃   ┣━━ data class Point(val x: Int, val y: Int)
-┃   ┣━━ fun foo()
-┃   ┣━━ fun greet(person: Person)
-┃   ┣━━ fun add(a: Int, b: Int)
-┃   ┣━━ fun multiply(a: Int, b: Int)
-┃   ┣━━ fun getItem(id: Int)
-┃   ┣━━ fun transform(input: T)
-┃   ┣━━ fun transform(input: Int)
-┃   ┣━━ fun subtract(a: Int, b: Int)
-┃   ┣━━ fun nextT()
-┃   ┣━━ fun demo(strs: Source<String>)
-┃   ┣━━ fun compareTo(other: T)
-┃   ┣━━ fun demo(x: Comparable<Number>)
-┃   ┣━━ fun fill(dest: Array<in String>, value: String)
-┃   ┣━━ fun save(x: T1)
-┃   ┣━━ fun load(x: T1 & Any)
-┃   ┣━━ fun signal()
-┃   ┣━━ fun signal()
-┃   ┣━━ fun signal()
-┃   ┣━━ fun animate()
-┃   ┣━━ fun stopAnimating()
-┃   ┣━━ fun animateTwice()
-┃   ┣━━ fun executeLambda(f: (String)
-┃   ┣━━ fun sayHello(maybe: String?, neverNull: Int)
-┃   ┣━━ fun yell()
-┃   ┣━━ fun whisper()
-┃   ┣━━ fun utter()
-┃   ┣━━ fun apply(t: Int, u: Int)
-┃   ┣━━ fun apply(t: Int, u: Int)
-┃   ┣━━ fun applyAsInt(t: Int, u: Int)
-┃   ┣━━ fun log(e: Error)
-┃   ┣━━ fun foo(i: Int = 10)
-┃   ┣━━ fun foo(i: Int)
-┃   ┣━━ fun printHello(name: String?)
-┃   ┣━━ fun toString()
-┃   ┣━━ fun invoke()
-┃   ┣━━ fun saveUserToDb(user: User)
-┃   ┣━━ fun validate(user: User, value: String, fieldName: String)
-┃   ┣━━ fun accept(i: Int)
-┃   ┣━━ fun double(x: Int)
-┃   ┣━━ fun implicitDouble(x: Int)
-┃   ┣━━ fun disable()
-┃   ┣━━ fun animate()
-┃   ┣━━ fun animate()
-┃   ┣━━ fun funFromA()
-┃   ┣━━ fun getObject()
-┃   ┣━━ fun getObjectA()
-┃   ┣━━ fun funFromA()
-┃   ┣━━ fun getObjectB()
-┃   ┣━━ fun funFromA()
-┃   ┣━━ fun getObject()
-┃   ┣━━ fun printX()
-┃   ┣━━ fun add(s: String)
-┃   ┣━━ fun build()
-┃   ┣━━ fun findFixPoint(x: Double = 1.0)
-┃   ┣━━ fun get(index: Int)
-┃   ┗━━ fun get(index: Int)
-┣━━ 📄 harder_KT_expectation.py (1338 tokens, 139 lines)
-┃   ┣━━ class MyTalkativeButton
-┃   ┣━━ class IOError()
-┃   ┣━━ class IOError()
-┃   ┣━━ class CustomError()
-┃   ┣━━ class GigaButton
-┃   ┗━━ class OrdersList
 ┣━━ 📄 nodemon.json (120 tokens, 21 lines)
 ┣━━ 📄 sas_test.sas (104 tokens, 22 lines)
 ┣━━ 📄 test_setup_py.test (118 tokens, 24 lines)
-┣━━ 📄 test_tcl_tk.tcl (33 tokens, 8 lines)
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
