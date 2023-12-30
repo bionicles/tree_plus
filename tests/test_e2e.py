@@ -62,8 +62,8 @@ def test_e2e_empty_folder():
     assert unify_tree_symbols(result_str) == EXPECTATION_EMPTY
 
 
-EXPECTATION_1 = """📁 path_to_test (560 tokens, 105 lines)
-┣━━ 📄 class_method_type.py (499 tokens, 96 lines)
+EXPECTATION_1 = """📁 path_to_test (564 tokens, 105 lines)
+┣━━ 📄 class_method_type.py (503 tokens, 96 lines)
 ┃   ┣━━ T = TypeVar("T")
 ┃   ┣━━ def parse_py(contents: str) -> List[str]
 ┃   ┣━━ class MyClass

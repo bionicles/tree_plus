@@ -1,18 +1,10 @@
 # tree_plus_src/parse_file.py
+from functools import lru_cache
 from typing import List, Tuple
-import collections
-import builtins
-import sqlite3
-import typing
 import json
-import yaml
-import csv
-import ast
 import os
 import re
-
 from rich.text import Text
-import tomli
 
 from tree_plus_src.ignore import is_binary
 from tree_plus_src.debug import debug_print
@@ -21,7 +13,7 @@ from tree_plus_src.debug import debug_print
 LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
 
 
-def extract_groups(match: re.Match) -> dict:
+def extract_and_debug_print_groups(match: re.Match) -> dict:
     "filter and debug print non-None match groups"
     numbered_groups = {}
     for i in range(len(match.groups())):
@@ -33,10 +25,30 @@ def extract_groups(match: re.Match) -> dict:
     return numbered_groups
 
 
+@lru_cache(maxsize=None)
+def read_file(file_path: str, raise_exceptions: bool = False) -> str:
+    """
+    Read the content of a file and return it as a string.
+    Optionally raise exceptions if encountered.
+
+    :param file_path: Path to the file to be read.
+    :param raise_exceptions: Flag to control exception handling.
+    :return: Content of the file as a string.
+    """
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            contents = file.read()
+        return contents
+    except Exception as e:
+        if raise_exceptions:
+            raise
+        else:
+            print(f"read_file Exception @ {file_path}: {e}")
+            return ""
+
+
 def parse_file(file_path: str) -> List[str]:
-    """
-    Parse a file and return a List[str] of its major components.
-    """
+    "Parse a file and return a List[str] of its major components."
     base_file_path, file_extension = os.path.splitext(file_path)
     file_name = os.path.basename(base_file_path)
     file_extension = file_extension.lower()
@@ -51,20 +63,28 @@ def parse_file(file_path: str) -> List[str]:
     if is_binary(file_path):
         return components
 
-    try:
-        with open(file_path, "r", encoding="utf-8") as file:
-            contents = file.read()
-    except UnicodeDecodeError as ude:
-        print(f"tree_plus.parse_file UnicodeDecodeError @ {file_path}: {ude}")
-        return components
-    except Exception as e:
-        print(f"tree_plus.parse_file Exception @ {file_path}: {e}")
-        return components
+    contents = read_file(file_path)
 
-    if file_extension == ".py":
+    if file_extension in {".js", ".jsx", ".ts", ".tsx"}:
+        if file_path.endswith(".d.ts"):
+            components = parse_d_dot_ts(contents)
+        else:
+            components = parse_ts(contents)
+            # angular here
+            if "spec.ts" in file_path:
+                components = parse_angular_spec(contents) + components
+            if "app-routing.module" in file_path:
+                components = parse_angular_routes(contents) + components
+            elif "app.module" in file_path:
+                components = parse_angular_app_module(contents) + components
+            elif "environment" == file_name or "environment." in file_name:  # paranoid
+                components = parse_environment_ts(contents)
+    elif file_extension == ".py":
         components = parse_py(contents)
         if isinstance(components, SyntaxError):
             components = [f"SyntaxError: {components}"]
+    elif file_extension == ".md":
+        components = parse_md(contents)
     elif file_extension == ".json":
         if "package.json" in file_path.lower():
             components = parse_package_json(contents)
@@ -74,30 +94,14 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_json_rpc(contents)
         elif 'openrpc": "' in contents:
             components = parse_openrpc_json(contents)
-    elif file_path.endswith(".d.ts"):
-        components = parse_d_dot_ts(contents)
-    elif file_extension in {".js", ".jsx", ".ts", ".tsx"}:
-        components = parse_ts(contents)
-        if "app-routing.module" in file_path:
-            components = parse_angular_routes(contents) + components
-        elif "app.module" in file_path:
-            components = parse_angular_app_module(contents) + components
-        elif "environment" == file_name or "environment." in file_name:  # paranoid
-            components = parse_environment_ts(contents)
-        elif "spec.ts" in file_path:
-            components = parse_angular_spec(contents) + components
-    elif file_extension == ".md":
-        components = parse_md(contents)
     elif file_extension in (".yml", ".yaml"):
         components = parse_yml(contents)
     elif file_extension == ".c":
         components = parse_c(contents)
-    elif file_extension in {".cpp", ".cc"}:
+    elif file_extension in {".cpp", ".cc", ".h"}:
         components = parse_cpp(contents)
-    elif file_extension == ".h":
-        # harrumph!
-        # components = parse_c(contents)
-        components = parse_cpp(contents)
+    elif file_extension == ".php":
+        components = parse_php(contents)
     elif file_extension == ".rs":
         components = parse_rs(contents)
     elif file_extension == ".kt":
@@ -108,16 +112,18 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_go(contents)
     elif file_extension == ".sh":
         components = parse_bash(contents)
+    elif file_extension == ".ps1":
+        components = parse_powershell(contents)
     elif file_extension == ".zig":
         components = parse_zig(contents)
     elif file_extension == ".rb":
         components = parse_rb(contents)
-    elif file_extension == ".env":
-        components = parse_dot_env(contents)
-    elif file_extension == ".sql":
-        components = parse_sql(contents)
     elif file_name == "Makefile":
         components = parse_makefile(contents)
+    elif file_extension == ".sql":
+        components = parse_sql(contents)
+    elif file_extension == ".env":
+        components = parse_dot_env(contents)
     elif file_extension == ".txt":
         if "requirements" in file_name:
             components = parse_requirements_txt(contents)
@@ -139,6 +145,8 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_pyproject_toml(contents)
     elif file_extension == ".csv":
         components = parse_csv(contents)
+    elif file_extension == ".pl":
+        components = parse_perl(contents)
     elif file_extension == ".hs":
         components = parse_hs(contents)
     elif file_extension == ".fs":
@@ -161,8 +169,6 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_lua(contents)
     elif file_extension == ".tcl":
         components = parse_tcl(contents)
-    elif file_extension == ".php":
-        components = parse_php(contents)
     elif file_extension == ".m":
         if "@interface" in contents or "@implementation" in contents:
             components = parse_objective_c(contents)
@@ -176,28 +182,280 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_matlab(contents)
     elif file_extension == ".ml":
         components = parse_ocaml(contents)
-    elif file_extension == ".cbl":
-        components = parse_cobol(contents)
+    elif file_extension.lower() == ".cbl":
+        components = parse_cbl(contents)
     elif file_extension == ".apl":
         components = parse_apl(contents)
-    elif file_extension == ".pl":
-        components = parse_perl(contents)
-    elif file_extension == ".ps1":
-        components = parse_powershell(contents)
 
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
 
 
+c_comment_pattern = re.compile(r"(\s)*//.*(\s*,\s*|\s*\))?$|\s*/\*.*?\*/", re.MULTILINE)
+
+
+def remove_c_comments(contents: str) -> str:
+    return re.sub(c_comment_pattern, "", contents)
+
+
+combined_ts_pattern = re.compile(
+    # 1. (Arrow)? Function or Method
+    r"\n?^( *\(?(?:(export\s+)?(?:default\s+)?(?:(?:var|const|let)\s+\w+\s*=\s*(?:async\s+)?)?(?:function\s*\*?\s+)?[\w<>, ]+\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?\s*|(\w+)\s*:\s*\([^)]*\)\s*=>|(\w+)\s*:\s*function\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?)(?:=>)?)(?= )|"
+    # 2. Class or Interface
+    r"\n?((?:export )?(?:default )?(?:(?:class|interface)\s+(?:[\w<>, ]+)(?:\s+(?:extends|implements)\s+[\w<>, ]+)?)) |"
+    # 3. Type
+    r"\n?((type\s+(?:[\w<>, ]+))) |"
+    # 4."Gotcha: Object scopes containing functions or arrows"
+    # r"(((?:const|let) \w+))(?:\s*=\s*\{\s*(?=[\s\S]*?(?:\b\w+\s*:\s*function\b|\b\w+\s*:\s*\(.*\)\s*=>)))"
+    # r"^(?P<scope>(?:const|let) \w+)\s*=\s*\{\s*^(.*?( *\bfunction\b|.*?\b\w+\s*:\s*\([^)]*\)\s*=>))",
+    r"^(?P<object_scope>(?:var|const|let) [\w_]+)\s*=\s*\{",
+    re.MULTILINE,
+)
+
+
+def parse_ts(contents: str) -> List[str]:
+    debug_print("parse_ts")
+    contents = remove_c_comments(contents)
+
+    components = []
+    object_scope = None
+    for match_number, match in enumerate(combined_ts_pattern.finditer(contents)):
+        debug_print(f"parse_ts: {match_number=} {match=}")
+        groups = extract_and_debug_print_groups(match)
+        component = None
+        # [arrow] function/method is group 4
+        if 1 in groups:
+            component = groups[1]
+            component = (
+                component.replace(" \n", "\n").replace(" ,\n", ",\n").lstrip("(")
+            )
+            if object_scope:
+                # check for functions in this scope
+                if _fun_match := re.search(r"\s+\w+: function", component):
+                    components.append(object_scope)
+                # check for arrow functions in this scope
+                elif _arrow_match := re.search(
+                    r"\s+\w+:\s*\((?:[^\)]|\s)*\) =>", component
+                ):
+                    components.append(object_scope)
+                object_scope = None
+            double = component.lstrip()
+            # Check if the component is empty, ends with whitespace, or matches control structures without '=>'
+            if (
+                not double
+                or not double.splitlines()[-1].strip()
+                or (
+                    re.search(r"( *(if|switch|for|catch|return) ?\()", double)
+                    and "=>" not in double
+                )
+            ):
+                continue
+
+        # class/interface is group 5
+        elif 5 in groups:
+            component = groups[5]
+            object_scope = None
+        # type is 6
+        elif 6 in groups:
+            component = groups[6]
+            object_scope = None
+        else:
+            object_scope = groups[0]
+            debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
+
+        if component:
+            debug_print(f"{match_number=} FINAL {component=}")
+            components.append(component)
+
+    return components
+
+
+CPP_DENY = {"private", "public"}
+
+
+def parse_cpp(contents: str) -> List[str]:
+    debug_print("parse_cpp")
+    contents = remove_c_comments(contents)
+
+    # Combined regex pattern to match all components
+    combined_pattern = re.compile(
+        # class or struct
+        r"\n((class|struct)? \w+( : \w+( \w+)?)?)|"
+        # enums (maybe class)
+        r"\n((enum) (class )?\w+( : \w+)?)|"
+        # (maybe template) functions
+        # r"\n((template<.*?>)?\n(\w+::)?(\w+) \w+\([\s\S]*?\))",
+        # r"((template<.*?>)?\n(\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
+        # templates
+        # r"\n(template.*)\n|"
+        r"\n(template ?<.*?>[^\{^;^=]*)|"
+        # functions
+        # r"\n(((\w+::)?(\w+))\s+\w+\([\s\S]*?\))",
+        # r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\)\s*)\s*{",
+        r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\))\s*(?=\{)",
+        re.DOTALL,
+    )
+
+    components = []
+
+    for match in combined_pattern.finditer(contents):
+        debug_print(f"{match=}")
+        component = match.group().strip()
+        # fix a minor visual defect
+        component = component.replace("::", " :: ")
+        if component in CPP_DENY:
+            continue
+        components.append(component)
+
+    return components
+
+
+def parse_c(contents: str) -> List[str]:
+    debug_print("parse_c")
+    contents = remove_c_comments(contents)
+
+    # Combined regex pattern to match functions (including pointer return types), structs, enums, and typedefs
+    combined_pattern = re.compile(
+        # Functions (including pointer return types)
+        # r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})|"
+        r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*)|"
+        # Structs
+        r"\n(static )?struct\s+\w+\s*\{[^}]*\}|"
+        # Enums
+        r"\nenum\s+\w+\s*\{[^}]*\}|"
+        # Typedefs
+        r"\ntypedef\s+struct\s*\{[^}]*\}\s*\w+;",
+        re.DOTALL,
+    )
+
+    components = []
+
+    for match in combined_pattern.finditer(contents):
+        component = match.group().strip()
+        if component.startswith("typedef"):
+            # Extract only the typedef struct name
+            typedef_name = component.split("}")[1].split(";")[0].strip()
+            component = f"typedef struct {typedef_name}"
+        else:
+            # Extract only the first line for each component
+            component = component.split("{")[0].strip()
+
+        components.append(component)
+
+    return components
+
+
+# Define the regular expression pattern for comments
+py_rb_comment_pattern = re.compile(r"\s*#.*\n")
+
+
+def remove_py_rb_comments(input_string: str) -> str:
+    "Replace # comments with a newline character"
+    return re.sub(py_rb_comment_pattern, "\n", input_string)
+
+
+# Combined regex pattern to match Python components
+combined_py_pattern = re.compile(
+    # Functions and Methods, capturing indentation and multiline signatures
+    r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\], ]+)?)\s*:|"
+    # Classes
+    r"(class \w+(\[.*\])?(\([\w\s,]*\))?):|"
+    # Decorators
+    r"\n( *@\w+(\(.*\))?)\n|"
+    # TypeVar
+    r"\n(\w+ = TypeVar\([^)]+\))|"
+    # Version
+    r"\n((__version__ = \".*\"))",
+    re.MULTILINE,
+    # re.DOTALL,  # causes dramatic over-extension of matches
+)
+
+
+# r"( *def\s+\w+\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*->\s*[\w\[\], ]+\s*):|"
+# regex might help with indentation & multiline function signatures
+def parse_py(contents: str) -> List[str]:
+    debug_print("parse_py")
+    # remove comments in multiline signatures
+    contents = remove_py_rb_comments(contents)
+    components = []
+    decorator_carry = []
+    for match_number, match in enumerate(combined_py_pattern.finditer(contents)):
+        groups = extract_and_debug_print_groups(match)
+        debug_print(f"parse_py: {match_number=} {match=}")
+
+        # Function or Method is 1
+        if 1 in groups:
+            fun_group = groups[1]
+            if decorator_carry:
+                fun_group = "\n".join(decorator_carry) + "\n" + fun_group
+                decorator_carry = []
+
+            # fix a bug with [hints]
+            fun_group = Text(fun_group)
+            components.append(fun_group)
+        # Class is 2
+        elif 3 in groups:
+            class_group = groups[3]
+            if decorator_carry:
+                class_group = "\n".join(decorator_carry) + "\n" + class_group
+                decorator_carry = []
+            class_group = Text(class_group)  # [generics]
+            components.append(class_group)
+        # 6 is the whole decorator group
+        elif 6 in groups:
+            decorator = groups[6]
+            decorator_carry.append(decorator)
+        # 8 wraps entire TypeVar matches
+        elif 8 in groups:
+            typevar = groups[8]
+            components.append(typevar)
+        # 9 is __version__
+        elif 9 in groups:
+            version = groups[9]
+            components.append(version)
+
+    return components
+
+
+def parse_rb(contents: str) -> List[str]:
+    debug_print("parse_rb")
+    contents = remove_py_rb_comments(contents)
+
+    combined_pattern = re.compile(
+        # Match method definitions (instance and class methods) with parameters
+        r"^( *def\s+(self\.)?\w+[\w=]*(?:\s*\([^)]*\))?)|"
+        # Match class and module definitions
+        r"^( *class\s+\w+(?:\s*<\s*\w+)?|\bmodule\s+\w+)",
+        re.MULTILINE,
+    )
+
+    components = []
+
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_rb: {n=} {match=}")
+        component = None
+        groups = extract_and_debug_print_groups(match)
+        component = groups[0]
+        if component:
+            debug_print(f"parse_rb {component=}")
+            components.append(component)
+
+    return components
+
+
 def parse_fsharp(contents: str) -> List[str]:
     debug_print("parse_fsharp")
 
     combined_pattern = re.compile(
-        r"^(\s*(module|type)\s+[^\n]+)|"  # module or type in a single line
-        r"(\blet\b\s+(?:\w+\s+)*\w+\s*"  # start of a let binding
-        r"(?:\n\s+\(.+\)\s*)*"  # multiline parameters
-        r":?\s*[^\n=]*=)",  # return type and start of the body
+        # module or type in a single line
+        r"^(\s*(module|type)\s+[^\n]+)|"
+        # start of a let binding
+        r"(\blet\b\s+(?:\w+\s+)*\w+\s*"
+        # multiline parameters
+        r"(?:\n\s+\(.+\)\s*)*"
+        # return type and start of the body
+        r":?\s*[^\n=]*=)",
         re.MULTILINE,
     )
     components = []
@@ -241,7 +499,7 @@ def parse_erl(contents: str) -> List[str]:
 
     components = []
     for n, match in enumerate(combined_pattern.finditer(contents)):
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         debug_print(f"parse_erl match {n}:\n", groups)
         component = None
         if 1 in groups:  # spec
@@ -262,6 +520,7 @@ def parse_erl(contents: str) -> List[str]:
 
 def parse_rs(contents: str) -> List[str]:
     debug_print("parse_rs")
+    contents = remove_c_comments(contents)
 
     # Combined regex pattern to match all components
     combined_pattern = re.compile(
@@ -283,7 +542,7 @@ def parse_rs(contents: str) -> List[str]:
     components = []
 
     for n, match in enumerate(combined_pattern.finditer(contents)):
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         debug_print(f"parse_rs match {n}:\n", groups)
         component = None
         # functions, group 1
@@ -326,7 +585,7 @@ def parse_mathematica(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_mathematica match_number: {match_number}")
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         component = groups[1]
         components.append(component)
 
@@ -345,7 +604,7 @@ def parse_r(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_r match_number: {match_number}")
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         component = match.group().strip().rstrip("(")
         components.append(component)
 
@@ -353,6 +612,8 @@ def parse_r(contents: str) -> List[str]:
 
 
 def parse_zig(contents: str) -> List[str]:
+    debug_print("parse_zig")
+    contents = remove_c_comments(contents)
     combined_pattern = re.compile(
         r"\n( *(pub )?fn \w+\([^)]*\) [^{]*) |"
         r"const\s+\w+\s*=\s*struct|"
@@ -364,7 +625,7 @@ def parse_zig(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_zig match_number: {match_number}")
-        groups = extract_groups(match)  # this debug prints the matches
+        groups = extract_and_debug_print_groups(match)  # this debug prints the matches
         if 1 in groups:
             component = groups[1]
         else:
@@ -388,7 +649,7 @@ def parse_hs(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_hs match_number: {match_number}")
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         if groups:
             component = groups[0].strip()
             debug_print(component)
@@ -430,7 +691,7 @@ def parse_lisp(content: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(content)):
         debug_print(f"parse_lisp match_number: {match_number}")
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         if groups:
             components.append(groups[0].replace("(", ""))
 
@@ -552,6 +813,9 @@ def format_dependency(name, details):
 
 
 def parse_cargo_toml(contents: str) -> List[str]:
+    debug_print("parse_cargo_toml")
+    import tomli
+
     data = tomli.loads(contents)
     components = []
 
@@ -572,6 +836,9 @@ def parse_cargo_toml(contents: str) -> List[str]:
 
 
 def parse_pyproject_toml(contents: str) -> List[str]:
+    debug_print("parse_pyproject_toml")
+    import tomli
+
     data = tomli.loads(contents)
     debug_print("parse_pyproject_toml data:", data)
     components = []
@@ -660,7 +927,7 @@ def parse_cs(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_cs_pattern.finditer(contents)):
         debug_print(f"parse_cs: {match_number=} {match=}")
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         # Interfaces, Enums, Delegates, Structs, Classes
         if 1 in groups:
             component = groups[1]
@@ -750,129 +1017,7 @@ def parse_tex(tex_content: str) -> List[str]:
     return components
 
 
-def parse_rb(contents) -> List[str]:
-    debug_print("parse_rb")
-
-    combined_pattern = re.compile(
-        # Match method definitions (instance and class methods) with parameters
-        r"^( *def\s+(self\.)?\w+[\w=]*(?:\s*\([^)]*\))?)|"
-        # Match class and module definitions
-        r"^( *class\s+\w+(?:\s*<\s*\w+)?|\bmodule\s+\w+)",
-        re.MULTILINE,
-    )
-
-    components = []
-
-    for n, match in enumerate(combined_pattern.finditer(contents)):
-        debug_print(f"parse_rb: {n=} {match=}")
-        component = None
-        groups = extract_groups(match)
-        component = groups[0]
-        if component:
-            debug_print(f"parse_rb {component=}")
-            components.append(groups[0])
-
-    return components
-
-
-def remove_c_comments(multiline_string):
-    # Pattern for block comments (/* */)
-    block_comment_pattern = r"/\*.*?\*/"
-    # Pattern for line comments (// ...) including preceding whitespace
-    line_comment_pattern = r"\s*//.*?$"
-
-    # Removing block comments
-    no_block_comments = re.sub(
-        block_comment_pattern, "", multiline_string, flags=re.DOTALL
-    )
-
-    # Removing line comments and preceding whitespace
-    cleaned_string = re.sub(
-        line_comment_pattern, "", no_block_comments, flags=re.MULTILINE
-    )
-
-    cleaned_string = re.sub(" ,", ",", cleaned_string)
-    cleaned_string = cleaned_string.replace(" )", ")")
-
-    return cleaned_string
-
-
-CPP_DENY = {"private", "public"}
-
-
-def parse_cpp(contents) -> List[str]:
-    debug_print("parse_cpp")
-    contents = remove_c_comments(contents)
-
-    # Combined regex pattern to match all components
-    combined_pattern = re.compile(
-        # class or struct
-        r"\n((class|struct)? \w+( : \w+( \w+)?)?)|"
-        # enums (maybe class)
-        r"\n((enum) (class )?\w+( : \w+)?)|"
-        # (maybe template) functions
-        # r"\n((template<.*?>)?\n(\w+::)?(\w+) \w+\([\s\S]*?\))",
-        # r"((template<.*?>)?\n(\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
-        # templates
-        # r"\n(template.*)\n|"
-        r"\n(template ?<.*?>[^\{^;^=]*)|"
-        # functions
-        # r"\n(((\w+::)?(\w+))\s+\w+\([\s\S]*?\))",
-        # r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\)\s*)\s*{",
-        r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\))\s*(?=\{)",
-        re.DOTALL,
-    )
-
-    components = []
-
-    for match in combined_pattern.finditer(contents):
-        debug_print(f"{match=}")
-        component = match.group().strip()
-        # fix a minor visual defect
-        component = component.replace("::", " :: ")
-        if component in CPP_DENY:
-            continue
-        components.append(component)
-
-    return components
-
-
-def parse_c(contents) -> List[str]:
-    debug_print("parse_c")
-    contents = remove_c_comments(contents)
-
-    # Combined regex pattern to match functions (including pointer return types), structs, enums, and typedefs
-    combined_pattern = re.compile(
-        # Functions (including pointer return types)
-        # r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})|"
-        r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*)|"
-        # Structs
-        r"\n(static )?struct\s+\w+\s*\{[^}]*\}|"
-        # Enums
-        r"\nenum\s+\w+\s*\{[^}]*\}|"
-        # Typedefs
-        r"\ntypedef\s+struct\s*\{[^}]*\}\s*\w+;",
-        re.DOTALL,
-    )
-
-    components = []
-
-    for match in combined_pattern.finditer(contents):
-        component = match.group().strip()
-        if component.startswith("typedef"):
-            # Extract only the typedef struct name
-            typedef_name = component.split("}")[1].split(";")[0].strip()
-            component = f"typedef struct {typedef_name}"
-        else:
-            # Extract only the first line for each component
-            component = component.split("{")[0].strip()
-
-        components.append(component)
-
-    return components
-
-
-def parse_go(contents) -> List[str]:
+def parse_go(contents: str) -> List[str]:
     debug_print("parse_go")
 
     # Combined regex pattern to match Go components
@@ -891,7 +1036,7 @@ def parse_go(contents) -> List[str]:
     for n, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_go: {n=} {match=}")
         component = None
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         if 1 in groups:
             component = groups[1]
         elif 3 in groups:
@@ -906,7 +1051,7 @@ def parse_go(contents) -> List[str]:
 def parse_swift(contents: str) -> List[str]:
     debug_print("parse_swift")
 
-    contents = remove_ts_comments(contents)
+    contents = remove_c_comments(contents)
 
     # Combined regex pattern to match Go components
     combined_pattern = re.compile(
@@ -925,7 +1070,7 @@ def parse_swift(contents: str) -> List[str]:
 
     for n, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_swift {n=} {match=}")
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         component = None
         if 1 in groups:
             component = groups[1]
@@ -940,7 +1085,7 @@ def parse_swift(contents: str) -> List[str]:
     return components
 
 
-def parse_bash(contents) -> List[str]:
+def parse_bash(contents: str) -> List[str]:
     debug_print("parse_bash")
 
     # Combined regex pattern to match Go components
@@ -974,7 +1119,7 @@ def parse_bash(contents) -> List[str]:
 
 
 # (declare|export) (default)?(\w+ \w+(<.*>)?(\(.*\))?(: \w+)?)
-def parse_d_dot_ts(contents) -> List[str]:
+def parse_d_dot_ts(contents: str) -> List[str]:
     debug_print(contents)
     pattern = r"(declare|export) (default)?(\w+ \w+(<.*>)?(\(.*\))?(: \w+)?)"
     keepers = []
@@ -984,7 +1129,7 @@ def parse_d_dot_ts(contents) -> List[str]:
     return keepers
 
 
-def parse_angular_app_module(contents) -> List[str]:
+def parse_angular_app_module(contents: str) -> List[str]:
     debug_print("parse_angular_app_module")
     pattern = r"(@NgModule\({\n\s*declarations: \[((\n\s*)[a-zA-Z]*,?)*)\n"
     if matches := re.search(pattern, contents, re.DOTALL):
@@ -993,7 +1138,7 @@ def parse_angular_app_module(contents) -> List[str]:
     return []
 
 
-def parse_angular_routes(content) -> List[str]:
+def parse_angular_routes(content: str) -> List[str]:
     routes_pattern = r"(const routes: Routes = \[\n(?:.|\n)*?\];)"
     routes_match = re.findall(routes_pattern, content)
     if routes_match:
@@ -1002,7 +1147,7 @@ def parse_angular_routes(content) -> List[str]:
     return []
 
 
-def parse_angular_spec(content) -> List[str]:
+def parse_angular_spec(content: str) -> List[str]:
     describe_pattern = re.compile(r"(\t*| *)describe\('(.*)'")
     it_pattern = re.compile(r"(\t*| *)it\(('|\")(.*)('|\")")
     components = []
@@ -1025,7 +1170,7 @@ def parse_angular_spec(content) -> List[str]:
     return components
 
 
-def parse_environment_ts(contents) -> List[str]:
+def parse_environment_ts(contents: str) -> List[str]:
     debug_print("parse_environment_ts")
     pattern = re.compile(r"(?P<key>\w+):")
     lines = contents.splitlines()
@@ -1054,7 +1199,7 @@ def parse_environment_ts(contents) -> List[str]:
     return keepers
 
 
-def parse_dot_env(contents) -> List[str]:
+def parse_dot_env(contents: str) -> List[str]:
     debug_print("parse_dot_env")
     keepers = []
     key_pattern = re.compile(r"([A-Z|_]*)=")
@@ -1067,12 +1212,12 @@ def parse_dot_env(contents) -> List[str]:
     return keepers
 
 
-def parse_requirements_txt(contents) -> List[str]:
+def parse_requirements_txt(contents: str) -> List[str]:
     debug_print(f"parse_requirements_txt")
     return [line for line in contents.splitlines() if not line.startswith("#")]
 
 
-def parse_json_schema(contents) -> List[str]:
+def parse_json_schema(contents: str) -> List[str]:
     debug_print("parse_json_schema")
     parsed = json.loads(contents)
     keepers = []
@@ -1083,7 +1228,7 @@ def parse_json_schema(contents) -> List[str]:
     return keepers
 
 
-def parse_package_json(contents) -> List[str]:
+def parse_package_json(contents: str) -> List[str]:
     debug_print("parse_package_json")
     keepers = []
     package_json_dict = json.loads(contents)
@@ -1106,88 +1251,6 @@ def parse_package_json(contents) -> List[str]:
         keepers.append(f"scripts:")
         keepers.extend(package_json_scripts)
     return keepers
-
-
-def remove_ts_comments(contents: str) -> str:
-    # # Remove multi-line comments (no change)
-    # contents = re.sub(r"/\*.*?\*/", "", contents, flags=re.DOTALL)
-
-    # # Remove single line comments
-    # contents = re.sub(r"//.*", "", contents)
-
-    contents = re.sub(r"//.*($|\n)|/\*.*?\*/", "", contents, flags=re.MULTILINE)
-    return contents
-
-
-combined_ts_pattern = re.compile(
-    # 1. (Arrow)? Function or Method
-    r"\n?^( *\(?(?:(export\s+)?(?:default\s+)?(?:(?:var|const|let)\s+\w+\s*=\s*(?:async\s+)?)?(?:function\s*\*?\s+)?[\w<>, ]+\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?\s*|(\w+)\s*:\s*\([^)]*\)\s*=>|(\w+)\s*:\s*function\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?)(?:=>)?)(?= )|"
-    # 2. Class or Interface
-    r"\n?((?:export )?(?:default )?(?:(?:class|interface)\s+(?:[\w<>, ]+)(?:\s+(?:extends|implements)\s+[\w<>, ]+)?)) |"
-    # 3. Type
-    r"\n?((type\s+(?:[\w<>, ]+))) |"
-    # 4."Gotcha: Object scopes containing functions or arrows"
-    # r"(((?:const|let) \w+))(?:\s*=\s*\{\s*(?=[\s\S]*?(?:\b\w+\s*:\s*function\b|\b\w+\s*:\s*\(.*\)\s*=>)))"
-    # r"^(?P<scope>(?:const|let) \w+)\s*=\s*\{\s*^(.*?( *\bfunction\b|.*?\b\w+\s*:\s*\([^)]*\)\s*=>))",
-    r"^(?P<object_scope>(?:var|const|let) [\w_]+)\s*=\s*\{",
-    re.MULTILINE,
-)
-
-
-def parse_ts(contents: str) -> List[str]:
-    contents = remove_ts_comments(contents)
-
-    components = []
-    object_scope = None
-    for match_number, match in enumerate(combined_ts_pattern.finditer(contents)):
-        debug_print(f"parse_ts: {match_number=} {match=}")
-        groups = extract_groups(match)
-        component = None
-        # [arrow] function/method is group 4
-        if 1 in groups:
-            component = groups[1]
-            component = (
-                component.replace(" \n", "\n").replace(" ,\n", ",\n").lstrip("(")
-            )
-            if object_scope:
-                # check for functions in this scope
-                if _fun_match := re.search(r"\s+\w+: function", component):
-                    components.append(object_scope)
-                # check for arrow functions in this scope
-                elif _arrow_match := re.search(
-                    r"\s+\w+:\s*\((?:[^\)]|\s)*\) =>", component
-                ):
-                    components.append(object_scope)
-                object_scope = None
-            double = component.lstrip()
-            # Check if the component is empty, ends with whitespace, or matches control structures without '=>'
-            if (
-                not double
-                or not double.splitlines()[-1].strip()
-                or (
-                    re.search(r"( *(if|switch|for|catch|return) ?\()", double)
-                    and "=>" not in double
-                )
-            ):
-                continue
-
-        # class/interface is group 5
-        elif 5 in groups:
-            component = groups[5]
-            object_scope = None
-        # type is 6
-        elif 6 in groups:
-            component = groups[6]
-            object_scope = None
-        else:
-            object_scope = groups[0]
-            debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
-
-        if component:
-            debug_print(f"{match_number=} FINAL {component=}")
-            components.append(component)
-
-    return components
 
 
 def parse_makefile(contents: str) -> List[str]:
@@ -1321,6 +1384,8 @@ def parse_openapi_yml(ymls: Tuple[dict]) -> List[str]:
 
 
 def parse_yml(contents: str) -> List[str]:
+    import yaml
+
     try:
         ymls = tuple(yaml.safe_load_all(contents))
     except Exception as e:
@@ -1343,96 +1408,10 @@ def parse_yml(contents: str) -> List[str]:
     return ["Unsupported YAML Category"]
 
 
-def extract_nodes(node, node_type, parent=None):
-    result = []
-    if isinstance(node, node_type):
-        result.append((parent, node))
-    for child in ast.iter_child_nodes(node):
-        result.extend(extract_nodes(child, node_type, node))
-    return result
-
-
-def is_typing_construct(node):
-    if isinstance(node, ast.Name):
-        return node.id in typing.__all__
-    elif (
-        isinstance(node, ast.Attribute)
-        and isinstance(node.value, ast.Name)
-        and node.value.id == "typing"
-    ):
-        return node.attr in typing.__all__
-    elif isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
-        return node.func.id in typing.__all__
-    return False
-
-
-def is_builtin_type(node, parent):
-    if isinstance(node, ast.Name) and isinstance(parent, ast.AnnAssign):
-        return node.id in dir(builtins) + dir(collections)
-    return False
-
-
-# Combined regex pattern to match Python components
-combined_py_pattern = re.compile(
-    # Functions and Methods, capturing indentation and multiline signatures
-    r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\], ]+)?)\s*:|"
-    # Classes
-    r"(class \w+(\[.*\])?(\([\w\s,]*\))?):|"
-    # Decorators
-    r"\n( *@\w+(\(.*\))?)\n|"
-    # TypeVar
-    r"\n(\w+ = TypeVar\([^)]+\))|"
-    # Version
-    r"\n((__version__ = \".*\"))",
-    re.MULTILINE,
-    # re.DOTALL,  # causes dramatic over-extension of matches
-)
-
-
-# r"( *def\s+\w+\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*->\s*[\w\[\], ]+\s*):|"
-# regex might help with indentation & multiline function signatures
-def parse_py(contents: str) -> List[str]:
-    components = []
-    decorator_carry = []
-    for match_number, match in enumerate(combined_py_pattern.finditer(contents)):
-        groups = extract_groups(match)
-        debug_print(f"parse_py: {match_number=}:")
-
-        # Function or Method is 1
-        if 1 in groups:
-            fun_group = groups[1]
-            if decorator_carry:
-                fun_group = "\n".join(decorator_carry) + "\n" + fun_group
-                decorator_carry = []
-            # fix a bug with [hints]
-            fun_group = Text(fun_group)
-            components.append(fun_group)
-        # Class is 2
-        elif 3 in groups:
-            class_group = groups[3]
-            if decorator_carry:
-                class_group = "\n".join(decorator_carry) + "\n" + class_group
-                decorator_carry = []
-            class_group = Text(class_group)  # [generics]
-            components.append(class_group)
-        # 6 is the whole decorator group
-        elif 6 in groups:
-            decorator = groups[6]
-            decorator_carry.append(decorator)
-        # 8 wraps entire TypeVar matches
-        elif 8 in groups:
-            typevar = groups[8]
-            components.append(typevar)
-        # 9 is __version__
-        elif 9 in groups:
-            version = groups[9]
-            components.append(version)
-
-    return components
-
-
 def parse_db(db_path: str) -> List[str]:
     # Connect to the SQLite database
+    import sqlite3
+
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -1468,27 +1447,107 @@ def parse_db(db_path: str) -> List[str]:
     return components
 
 
-def parse_cobol(content: str) -> List[str]:
-    division_patterns = [
-        (
-            r"IDENTIFICATION DIVISION.*\n.*PROGRAM-ID. (\w+)",
-            "IDENTIFICATION DIVISION -> PROGRAM-ID. ",
-        ),
-        (r"DATA DIVISION.*\n.*01 (\w+)", "DATA DIVISION -> 01 "),
-        (r"PROCEDURE DIVISION", "PROCEDURE DIVISION"),
-    ]
+# r"^\s*(IDENTIFICATION DIVISION\.|"
+# r"PROGRAM-ID\.|"
+# r"AUTHOR\.|"
+# r"DATE\.|"
+# r"ENVIRONMENT DIVISION\.|"
+# r"INPUT-OUTPUT SECTION\.|"
+# r"FILE-CONTROL\.|"
+# r"SELECT\s+[\w-]+\.|"
+# r"DATA DIVISION\.|"
+# r"FILE SECTION\.|"
+# r"FD\s+\w+\.|"
+# r"\d{2}\s+\w+-\w+\.|"
+# r"\d{2}\s+\w+|"
+# r"WORKING-STORAGE SECTION\.|"
+# r"PROCEDURE DIVISION\.|"
+# r"\d{4}-\w+-\w+\.|"
+# r"END PROGRAM\s+\w+-\w+\.)",
+
+dash_separated = r"(?:\w+(?:-\w+)*)"
+eight_spaces = "        "
+six_spaces = "      "
+four_spaces = "    "
+two_spaces = "  "
+
+
+def parse_cbl(content: str) -> List[str]:
+    debug_print("parse_cbl")
+
+    # Regex pattern to match significant lines or sections with indentation
+    combined_pattern = re.compile(
+        r"^(\w+ (DIVISION|division)\.?)|"
+        rf"^(PROGRAM-ID. {dash_separated}\.?)|"
+        r"^(AUTHOR. .*\.?)|"
+        r"^(DATE(?:-(?:COMPILED|WRITTEN))?\.? .*\.?)|"
+        r"^( *(?:\w+(?:-\w+)*) SECTION\.?)|"
+        r"^ *(FILE-CONTROL\.?)|"
+        r"^(?: *)(SELECT (?:\w+(?:-\w+)*)\.?)|"
+        r"^ *(FD (?:\w+(?:-\w+)*)\.?)|"
+        r"^ *(\d+( |-)(?:\w+(?:-\w+)*))|"
+        r"^ *(END PROGRAM (?:\w+(?:-\w+)*)\.?)",
+        re.MULTILINE,
+    )
+
     components = []
-    for pattern, division_string in division_patterns:
-        matches = re.findall(pattern, content, re.DOTALL)
-        for match in matches:
-            if division_string == "PROCEDURE DIVISION":
-                components.append(division_string)
-            else:
-                components.append(division_string + match)
+    identifying = True
+    for match_number, match in enumerate(combined_pattern.finditer(content)):
+        debug_print(f"parse_cbl: match_number={match_number} match={match}")
+        groups = extract_and_debug_print_groups(match)
+        # Remove leading newlines
+        component = groups[0].lstrip("\n")
+        lowercase = component.lower().strip()
+        first_chunk = lowercase.split()[0]
+        # INDENTATION HERE
+        # division: no spaces
+        if lowercase.endswith("division."):
+            if not lowercase.startswith("identification"):
+                identifying = False
+            pass
+        elif lowercase.startswith("end program"):
+            pass
+        # identifiers and section: two spaces
+        elif (
+            identifying
+            and (
+                lowercase.startswith("program-id")
+                or lowercase.startswith("author")
+                or lowercase.startswith("date")
+            )
+            or lowercase.endswith("section.")
+        ):
+            component = two_spaces + component
+        elif len(first_chunk) == 2 and re.match(r"\d{2}", first_chunk):
+            first_chunk_int = int(first_chunk)
+            if first_chunk_int > 5:
+                continue
+            elif first_chunk_int == 5:
+                component = eight_spaces + groups[10]
+            elif first_chunk_int == 1:
+                component = six_spaces + component
+        # control, fd, or procedure, four spaces
+        elif (
+            lowercase.startswith("file-control")
+            or lowercase.startswith("fd")
+            or all(character.isdigit() for character in lowercase.split("-")[0])
+        ):
+            component = four_spaces + component
+        else:  # six spaces
+            if 8 in groups:
+                component = groups[8]
+            component = six_spaces + component
+
+        if not component.endswith("."):
+            component += "."
+        components.append(component)
+
     return components
 
 
 def parse_java(contents: str) -> List[str]:
+    debug_print("parse_jave")
+    contents = remove_c_comments(contents)
     # Combined regex pattern to match Java components
     combined_pattern = re.compile(
         # Classes
@@ -1509,8 +1568,8 @@ def parse_java(contents: str) -> List[str]:
 
     components = []
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
-        debug_print(f"parse_java: {match_number}")
-        groups = extract_groups(match)
+        debug_print(f"parse_java: {match_number=} {match=}")
+        groups = extract_and_debug_print_groups(match)
         if 1 in groups:  # Class
             component = groups[1].rstrip()
         elif 7 in groups:  # Method
@@ -1582,10 +1641,10 @@ def parse_kt(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_kt: {match_number=} {match=}")
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         component = groups[0]
         if component:
-            component = remove_ts_comments(component).rstrip().replace(", \n", ",\n")
+            component = remove_c_comments(component).rstrip().replace(", \n", ",\n")
             components.append(component)
 
     return components
@@ -1738,7 +1797,7 @@ def parse_php(content: str) -> List[str]:
     # Extract classes and their methods
     for match in re.finditer(class_regex, content, re.MULTILINE):
         start_pos = match.start()
-        full_class, class_name, class_body = match.groups()
+        _, class_name, class_body = match.groups()
         components.append((start_pos, f"class {class_name}"))
 
         # Find methods within the class body
@@ -1884,7 +1943,7 @@ def parse_scala(contents: str) -> List[str]:
 
     for n, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_scala: {n=} {match=}")
-        groups = extract_groups(match)
+        groups = extract_and_debug_print_groups(match)
         component = groups[0]  # Get the matched component
         if component:
             components.append(component)

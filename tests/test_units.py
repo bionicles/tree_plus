@@ -9,17 +9,7 @@ from tree_plus_src import (
     parse_markers,
     TokenLineCount,
     count_tokens_lines,
-    count_directory_tokens_lines,
 )
-
-
-def test_directory_token_line_counting():
-    dir_path = "tests/path_to_test/"
-    # Manually calculated total counts.
-    expected = TokenLineCount(n_tokens=560, n_lines=105)
-    result = count_directory_tokens_lines(dir_path)
-    assert isinstance(result, TokenLineCount)
-    assert result == expected
 
 
 # test traversal
@@ -131,9 +121,3 @@ def test_units_token_counting(file, expected):
     result = count_tokens_lines(file)
     assert isinstance(result, TokenLineCount)
     assert result == expected
-
-
-def test_units_rich_prints_list_str():
-    from rich.console import Console
-
-    cons = Console()

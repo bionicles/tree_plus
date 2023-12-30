@@ -32,9 +32,15 @@ test_cli: cli
 test_deploy:
 	pytest tests/test_deploy.py
 
-
 test_dotenv:
 	pytest tests/ -k "dotenv"
+
+# vulture helps identify dead code
+vulture: install_vulture
+	vulture tree_plus_cli.py tree_plus_src tests/*.py tests/dot_dot/nested_dir/test_tp_dotdot.py
+
+install_vulture:
+	pip install vulture
 
 build: install-build-tool clean-dist
 	python -m build

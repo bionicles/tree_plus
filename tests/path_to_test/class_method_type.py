@@ -32,7 +32,7 @@ class MyClass:
 
 @lru_cache(maxsize=None)
 def my_multiline_signature_function(
-    tree: tuple = (),
+    tree: tuple = (), # edge case
     plus: str = "+",
 ) -> tuple:
     pass

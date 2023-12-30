@@ -27,7 +27,7 @@ end
 class Doctor < Human
   def brachial_plexus(
       roots,
-      trunks,
+      trunks, # edge case comment
       divisions: true,
       cords: [],
       branches: Time.now

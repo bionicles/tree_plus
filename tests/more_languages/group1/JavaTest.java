@@ -74,7 +74,7 @@ public class Example {
     }
 
     @RequestMapping("/greet")
-    String home(@RequestParam(value = "name", defaultValue = "World") String name,
+    String home(@RequestParam(value = "name", defaultValue = "World") String name, // comment
                 @RequestParam(value = "age", defaultValue = "30") int age) {
         Person person = new Person(name, age);
         person.breathe();

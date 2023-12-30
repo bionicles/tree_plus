@@ -173,11 +173,43 @@ def create_sqlite_test_db(
             ],
         ),
         (
-            "tests/more_languages/group1/COBOL_TEST.CBL",
+            "tests/more_languages/group1/CUSTOMER-INVOICE.CBL",
             [
-                "IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO",
-                "DATA DIVISION -> 01 GREETING",
-                "PROCEDURE DIVISION",
+                "IDENTIFICATION DIVISION.",
+                "  PROGRAM-ID. CUSTOMER-INVOICE.",
+                "  AUTHOR. JANE DOE.",
+                "  DATE. 2023-12-30.",
+                "  DATE-COMPILED. 06/30/10.",
+                "  DATE-WRITTEN. 12/34/56.",
+                "ENVIRONMENT DIVISION.",
+                "  INPUT-OUTPUT SECTION.",
+                "    FILE-CONTROL.",
+                "      SELECT CUSTOMER-FILE.",
+                "      SELECT INVOICE-FILE.",
+                "      SELECT REPORT-FILE.",
+                "DATA DIVISION.",
+                "  FILE SECTION.",
+                "    FD CUSTOMER-FILE.",
+                "      01 CUSTOMER-RECORD.",
+                "        05 CUSTOMER-ID.",
+                "        05 CUSTOMER-NAME.",
+                "        05 CUSTOMER-BALANCE.",
+                "    FD INVOICE-FILE.",
+                "      01 INVOICE-RECORD.",
+                "        05 INVOICE-ID.",
+                "        05 CUSTOMER-ID.",
+                "        05 INVOICE-AMOUNT.",
+                "    FD REPORT-FILE.",
+                "      01 REPORT-RECORD.",
+                "  WORKING-STORAGE SECTION.",
+                "      01 WS-CUSTOMER-FOUND.",
+                "      01 WS-END-OF-FILE.",
+                "      01 WS-TOTAL-BALANCE.",
+                "PROCEDURE DIVISION.",
+                "    0000-MAIN-ROUTINE.",
+                "    1000-PROCESS-RECORDS.",
+                "    1100-UPDATE-CUSTOMER-BALANCE.",
+                "END PROGRAM CUSTOMER-INVOICE.",
             ],
         ),
         (
@@ -501,7 +533,7 @@ void printVector(const std :: vector<T>& vec)""",
                 """    func yEdgeCase(
         fname: String, 
         lname: String, 
-        age: Int, 
+        age: Int,
         address: String, 
         phoneNumber: String
     )""",
@@ -863,7 +895,7 @@ macro_rules! hello_tree_plus""",
                 "    pub mod interfaces",
                 "    mod engine",
                 """pub fn flow<S1, S2, S3, S4, E, T, L>(
-    source: S1, 
+    source: S1,
     extractor: E, 
     inbox: S2, 
     transformer: T, 
@@ -1032,6 +1064,7 @@ def test_more_languages_group4(
     print(f"{result=}")
     print(f"{expected=}")
     assert result == expected
+    # assert 0
 
 
 @pytest.mark.parametrize(

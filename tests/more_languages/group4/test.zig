@@ -46,7 +46,7 @@ const BunBuildOptions = struct {
 pub fn sgemv(
     order: Order,
     trans: Trans,
-    m: usize,
+    m: usize, // edge case
     n: usize,
     alpha: f32,
     a: []const f32,

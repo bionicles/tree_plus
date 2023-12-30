@@ -96,7 +96,7 @@ pub mod lib {
 
 // Define a flow function
 pub fn flow<S1, S2, S3, S4, E, T, L>(
-    source: S1, 
+    source: S1, // edge
     extractor: E, 
     inbox: S2, 
     transformer: T, 
