@@ -34,7 +34,7 @@
 ```sh
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (50999 tokens, 5283 lines)
+📁 tree_plus (53007 tokens, 5414 lines)
 ┣━━ 📁 .github (107 tokens, 11 lines)
 ┃   ┣━━ 📁 workflows (1050 tokens, 128 lines)
 ┃   ┃   ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
@@ -68,7 +68,7 @@ paths=('.',)
 ┃   ┃       ┗━━     - Publish to PyPI
 ┃   ┗━━ 📄 dependabot.yml (107 tokens, 11 lines)
 ┃       ┗━━ Unsupported YAML Category
-┣━━ 📁 tree_plus_src (21743 tokens, 2630 lines)
+┣━━ 📁 tree_plus_src (22209 tokens, 2712 lines)
 ┃   ┣━━ 📁 scripts (3515 tokens, 450 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -76,20 +76,21 @@ paths=('.',)
 ┃   ┃   ┗━━ 📄 Microsoft.PowerShell_profile.ps1 (3238 tokens, 419 lines)
 ┃   ┃       ┣━━ function Log($message)
 ┃   ┃       ┗━━ function Show-Error($err)
-┃   ┣━━ 📄 count_tokens_lines.py (775 tokens, 119 lines)
-┃   ┃   ┣━━ TODO (Line 13): show off how well we parse_todo!
-┃   ┃   ┣━━ @dataclass
+┃   ┣━━ 📄 count_tokens_lines.py (951 tokens, 159 lines)
+┃   ┃   ┣━━ TODO (Line 14): show off how well we parse_todo!
+┃   ┃   ┣━━ @dataclass(frozen=True)
 ┃   ┃   ┃   class TokenLineCount
-┃   ┃   ┣━━ def add_tokens_lines(
+┃   ┃   ┣━━ @lru_cache
+┃   ┃   ┃   def add_tokens_lines(
 ┃   ┃   ┃       lhs_count: TokenLineCount, rhs_count: TokenLineCount
 ┃   ┃   ┃   ) -> TokenLineCount
 ┃   ┃   ┣━━ def count_tokens_lines(file_path: str) -> TokenLineCount
 ┃   ┃   ┗━━ def count_directory_tokens_lines(directory_path: str) -> TokenLineCount
 ┃   ┣━━ 📄 debug.py (87 tokens, 20 lines)
-┃   ┃   ┣━━ def enable_debug()
 ┃   ┃   ┣━━ def disable_debug()
 ┃   ┃   ┣━━ def debug_enabled()
-┃   ┃   ┗━━ def debug_print(*args, **kwargs)
+┃   ┃   ┣━━ def debug_print(*args, **kwargs)
+┃   ┃   ┗━━ def enable_debug()
 ┃   ┣━━ 📄 deploy.py (2093 tokens, 240 lines)
 ┃   ┃   ┣━━ TODO (Line 167): test this reset readme command so we can clean out the code blocks
 ┃   ┃   ┣━━ def extract(path: str = None) -> str
@@ -108,7 +109,7 @@ paths=('.',)
 ┃   ┃   ┃   )
 ┃   ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
 ┃   ┃   ┗━━ def main()
-┃   ┣━━ 📄 ignore.py (1361 tokens, 192 lines)
+┃   ┣━━ 📄 ignore.py (1471 tokens, 227 lines)
 ┃   ┃   ┣━━ @lru_cache
 ┃   ┃   ┃   def make_ignore(ignore: IgnoreInput) -> Ignore
 ┃   ┃   ┣━━ @lru_cache
@@ -119,7 +120,7 @@ paths=('.',)
 ┃   ┃   ┃   def is_binary(file_path: str) -> bool
 ┃   ┃   ┗━━ @lru_cache(maxsize=None)
 ┃   ┃       def should_ignore(path: str, ignore: Ignore, globs: Optional[Ignore] = None) -> bool
-┃   ┣━━ 📄 parse_file.py (16980 tokens, 1999 lines)
+┃   ┣━━ 📄 parse_file.py (17160 tokens, 2006 lines)
 ┃   ┃   ┣━━ def extract_groups(match: re.Match) -> dict
 ┃   ┃   ┣━━ def parse_file(file_path: str) -> List[str]
 ┃   ┃   ┣━━ def parse_rs(contents: str) -> List[str]
@@ -156,7 +157,7 @@ paths=('.',)
 ┃   ┃   ┣━━ def parse_requirements_txt(contents) -> List[str]
 ┃   ┃   ┣━━ def parse_json_schema(contents) -> List[str]
 ┃   ┃   ┣━━ def parse_package_json(contents) -> List[str]
-┃   ┃   ┣━━ def remove_ts_comments_and_private_blocks(contents: str) -> str
+┃   ┃   ┣━━ def remove_ts_comments(contents: str) -> str
 ┃   ┃   ┣━━ def parse_ts(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_makefile(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_sql(contents: str) -> List[str]
@@ -196,17 +197,18 @@ paths=('.',)
 ┃   ┃           directory_path: str, ignore: IgnoreInput = None, globs: IgnoreInput = None
 ┃   ┃       ) -> List[str]
 ┃   ┗━━ 📄 version.py (18 tokens, 2 lines)
-┃       ┗━━ __version__ = "1.0.12"
+┃       ┗━━ __version__ = "1.0.13"
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (368 tokens, 70 lines)
+┣━━ 📄 Makefile (383 tokens, 73 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
 ┃   ┣━━ debug_command: test test_cli
-┃   ┣━━ test: test_normally test_tp_dotdot test_cli test_deploy
+┃   ┣━━ test: test_normally test_e2e test_tp_dotdot test_cli test_deploy
 ┃   ┣━━ test_normally
+┃   ┣━━ test_e2e
 ┃   ┣━━ test_tp_dotdot
 ┃   ┣━━ test_cli: cli
 ┃   ┣━━ test_deploy
@@ -237,7 +239,7 @@ paths=('.',)
 ┃   ┣━━     rich
 ┃   ┗━━     tomli
 ┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (17924 tokens, 1348 lines)
+┣━━ 📄 README.md (19451 tokens, 1394 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -310,7 +312,7 @@ Options:
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
   -H, -h, --help         Show this message and exit.
 
-  (v1.0.12) --- https://github.com/bionicles/tree_plus
+  (v1.0.13) --- https://github.com/bionicles/tree_plus
 
 ```
 <!-- t5-end -->
@@ -404,8 +406,9 @@ make debug
 ```sh
 tree_plus -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-📁 more_languages (23262 tokens, 3350 lines)
-┣━━ 📁 group1 (791 tokens, 158 lines)
+count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/more_languages/group3/test.sqlite: 'utf-8' codec can't decode byte 0xe9 in position 99: invalid continuation byte
+📁 more_languages (24730 tokens, 3646 lines)
+┣━━ 📁 group1 (2259 tokens, 454 lines)
 ┃   ┣━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO
 ┃   ┃   ┣━━ DATA DIVISION -> 01 GREETING
@@ -453,11 +456,126 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━ @implementation HelloWorld
 ┃   ┃   ┣━━ @implementation HelloWorld -> (void) sayHello
 ┃   ┃   ┗━━ void sayHelloWorld()
-┃   ┗━━ 📄 OcamlTest.ml (53 tokens, 12 lines)
-┃       ┣━━ type color
-┃       ┣━━ class hello
-┃       ┣━━ class hello -> method say_hello
-┃       ┗━━ let main ()
+┃   ┣━━ 📄 OcamlTest.ml (53 tokens, 12 lines)
+┃   ┃   ┣━━ type color
+┃   ┃   ┣━━ class hello
+┃   ┃   ┣━━ class hello -> method say_hello
+┃   ┃   ┗━━ let main ()
+┃   ┣━━ 📄 test.js (755 tokens, 154 lines)
+┃   ┃   ┣━━ class MyClass
+┃   ┃   ┣━━   myMethod()
+┃   ┃   ┣━━   async asyncMethod(a, b)
+┃   ┃   ┣━━   methodWithDefaultParameters(a = 5, b = 10)
+┃   ┃   ┣━━   multilineMethod(
+┃   ┃   ┃       c,
+┃   ┃   ┃       d
+┃   ┃   ┃     )
+┃   ┃   ┣━━   multilineMethodWithDefaults(
+┃   ┃   ┃       t = "tree",
+┃   ┃   ┃       p = "plus"
+┃   ┃   ┃     )
+┃   ┃   ┣━━ function myFunction(param1, param2)
+┃   ┃   ┣━━ function multilineFunction(
+┃   ┃   ┃     param1,
+┃   ┃   ┃     param2
+┃   ┃   ┃   )
+┃   ┃   ┣━━ const arrowFunction = () =>
+┃   ┃   ┣━━ const parametricArrow = (a, b) =>
+┃   ┃   ┣━━ function ()
+┃   ┃   ┣━━ function outerFunction(outerParam)
+┃   ┃   ┣━━   function innerFunction(innerParam)
+┃   ┃   ┣━━ const myObject = {
+┃   ┃   ┣━━   myMethod: function (stuff)
+┃   ┃   ┣━━ let myArrowObject = {
+┃   ┃   ┣━━   myArrow: ({
+┃   ┃   ┃       a,
+┃   ┃   ┃       b,
+┃   ┃   ┃       c,
+┃   ┃   ┃     }) =>
+┃   ┃   ┣━━ const myAsyncArrowFunction = async () =>
+┃   ┃   ┣━━ function functionWithRestParameters(...args)
+┃   ┃   ┣━━ const namedFunctionExpression = function myNamedFunction()
+┃   ┃   ┣━━ const multilineArrowFunction = (
+┃   ┃   ┃     a,
+┃   ┃   ┃     b
+┃   ┃   ┃   ) =>
+┃   ┃   ┣━━ function functionReturningFunction()
+┃   ┃   ┣━━   return function ()
+┃   ┃   ┣━━ function destructuringOnMultipleLines({
+┃   ┃   ┃     a,
+┃   ┃   ┃     b,
+┃   ┃   ┃   })
+┃   ┃   ┣━━ const arrowFunctionWithDestructuring = ({ a, b }) =>
+┃   ┃   ┣━━ const multilineDestructuringArrow = ({
+┃   ┃   ┃     a,
+┃   ┃   ┃     b,
+┃   ┃   ┃   }) =>
+┃   ┃   ┣━━ async function asyncFunctionWithErrorHandling()
+┃   ┃   ┣━━ class Car
+┃   ┃   ┣━━   constructor(brand)
+┃   ┃   ┣━━   present()
+┃   ┃   ┣━━ class Model extends Car
+┃   ┃   ┣━━   constructor(brand, mod)
+┃   ┃   ┗━━   show()
+┃   ┗━━ 📄 test.ts (713 tokens, 142 lines)
+┃       ┣━━ type MyType
+┃       ┣━━ interface MyInterface
+┃       ┣━━ class TsClass
+┃       ┣━━   myMethod()
+┃       ┣━━   myMethodWithArgs(param1: string, param2: number): void
+┃       ┣━━   static myStaticMethod<T>(param: T): T
+┃       ┣━━   multilineMethod(
+┃       ┃       c: number,
+┃       ┃       d: number
+┃       ┃     ): number
+┃       ┣━━   multilineMethodWithDefaults(
+┃       ┃       t: string = "tree",
+┃       ┃       p: string = "plus"
+┃       ┃     ): string
+┃       ┣━━ export class AdvancedComponent implements MyInterface
+┃       ┣━━   async myAsyncMethod(
+┃       ┃       a: string,
+┃       ┃       b: number,
+┃       ┃       c: string
+┃       ┃     ): Promise<void>
+┃       ┣━━   genericMethod<T, U>(
+┃       ┃       arg1: T,
+┃       ┃       arg2: U
+┃       ┃     ): [T, U]
+┃       ┣━━ export class TicketsComponent implements MyInterface
+┃       ┣━━   async myAsyncMethod({ a, b, c }: { a: String; b: Number; c: String })
+┃       ┣━━ function tsFunction()
+┃       ┣━━ function tsFunctionSigned(
+┃       ┃     param1: number,
+┃       ┃     param2: number
+┃       ┃   ): void
+┃       ┣━━ const tsArrowFunctionSigned = ({
+┃       ┃     a,
+┃       ┃     b,
+┃       ┃   }: {
+┃       ┃     a: number;
+┃       ┃     b: string;
+┃       ┃   }) =>
+┃       ┣━━ const arrowFunction = () =>
+┃       ┣━━ const arrow = (a: String, b: Number) =>
+┃       ┣━━ const asyncArrowFunction = async () =>
+┃       ┣━━ const asyncArrow = async (a: String, b: Number) =>
+┃       ┣━━ let weirdArrow = () =>
+┃       ┣━━ const asyncPromiseArrow = async (): Promise<void> =>
+┃       ┣━━ let myWeirdArrowSigned = (x: number): number =>
+┃       ┣━━ class Person
+┃       ┣━━   constructor(private firstName: string, private lastName: string)
+┃       ┣━━   getFullName(): string
+┃       ┣━━   describe(): string
+┃       ┣━━ class Employee extends Person
+┃       ┣━━   constructor(
+┃       ┃       firstName: string,
+┃       ┃       lastName: string,
+┃       ┃       private jobTitle: string
+┃       ┃     )
+┃       ┣━━   describe(): string
+┃       ┣━━ interface Shape
+┃       ┗━━ interface Square extends Shape
 ┣━━ 📁 group2 (754 tokens, 164 lines)
 ┃   ┣━━ 📄 apl_test.apl (44 tokens, 5 lines)
 ┃   ┃   ┣━━ :Namespace HelloWorld
@@ -901,7 +1019,7 @@ paths=('tests/more_languages',)
 ┃   ┃   ┃       { path: 'rewards', component: RewardsComponent },
 ┃   ┃   ┃       { path: 'profile', component: ProfileComponent },
 ┃   ┃   ┃   ];
-┃   ┃   ┗━━ class AppRoutingModule
+┃   ┃   ┗━━ export class AppRoutingModule
 ┃   ┣━━ 📄 app.component.spec.ts (307 tokens, 48 lines)
 ┃   ┃   ┣━━ describe 'AppComponent'
 ┃   ┃   ┣━━     it should create the app
@@ -909,10 +1027,11 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━     it should welcome 'Jimbo'
 ┃   ┃   ┗━━     it should request login if not logged in
 ┃   ┣━━ 📄 app.component.ts (243 tokens, 45 lines)
-┃   ┃   ┣━━ class AppComponent
-┃   ┃   ┣━━   checkSession
-┃   ┃   ┣━━   async goToEvent
-┃   ┃   ┗━━   valInvitedBy
+┃   ┃   ┣━━ export class AppComponent
+┃   ┃   ┣━━   constructor(private loginService: LoginService)
+┃   ┃   ┣━━   checkSession()
+┃   ┃   ┣━━   async goToEvent(event_id: string)
+┃   ┃   ┗━━   valInvitedBy(event: any, event_id: string)
 ┃   ┣━━ 📄 app.module.ts (269 tokens, 43 lines)
 ┃   ┃   ┣━━ @NgModule({
 ┃   ┃   ┃       declarations: [
@@ -924,7 +1043,7 @@ paths=('tests/more_languages',)
 ┃   ┃   ┃           InvitesComponent,
 ┃   ┃   ┃           RewardsComponent,
 ┃   ┃   ┃           ProfileComponent
-┃   ┃   ┗━━ class AppModule
+┃   ┃   ┗━━ export class AppModule
 ┃   ┣━━ 📄 checkbox_test.md (263 tokens, 22 lines)
 ┃   ┃   ┣━━ # My Checkbox Test
 ┃   ┃   ┣━━ ## My No Parens Test
@@ -1067,41 +1186,62 @@ paths=('tests/more_languages',)
 ┃       ┣━━ interface SpinConfig
 ┃       ┣━━ interface RotationState
 ┃       ┣━━ interface SpeakInput
-┃       ┣━━ const formatSpeakInput: =>
-┃       ┣━━ function hourToSpeech
-┃       ┣━━ class TicketsComponent implements AfterViewInit
-┃       ┣━━   speak
-┃       ┣━━   speakEvent
-┃       ┣━━   formatEvent
-┃       ┣━━   speakVenue
-┃       ┣━━   formatDate
-┃       ┣━━   formatDateForSpeech
-┃       ┣━━   async spinQRCode
-┃       ┣━━   ngAfterViewInit
-┃       ┣━━   ngOnDestroy
-┃       ┣━━   toggleColumn
-┃       ┣━━   adjustColumns
-┃       ┣━━   onResize
-┃       ┣━━   async ngOnInit
-┃       ┣━━   async loadTickets
-┃       ┣━━   onDateRangeChange
-┃       ┣━━   applyFilter
-┃       ┣━━   formatDateForComparison
-┃       ┣━━   onFilterChange
-┃       ┣━━   onLatitudeChange
-┃       ┣━━   onLongitudeChange
-┃       ┣━━   onRadiusChange
-┃       ┣━━   sortData
-┃       ┣━━   onRowClick
-┃       ┣━━ function isDate
-┃       ┣━━ function isNonNullNumber
-┃       ┣━━ function hasLocation
-┃       ┣━━ const create_faker_ticket: async =>
-┃       ┣━━ function compare
-┃       ┣━━ function compare_dates
-┃       ┣━━ async function mockMoreTickets
-┃       ┣━━ const mockTickets: async =>
-┃       ┗━━ const renderQRCode: async =>
+┃       ┣━━ const formatSpeakInput = (input: SpeakInput): string =>
+┃       ┣━━ function hourToSpeech(hour: number, minute: number, period: string): string
+┃       ┣━━ export class TicketsComponent implements AfterViewInit
+┃       ┣━━   speak(input: SpeakInput)
+┃       ┣━━   speakEvent(ticket: EnrichedTicket): void
+┃       ┣━━   formatEvent(ticket: EnrichedTicket): string
+┃       ┣━━   speakVenue(ticket: EnrichedTicket): void
+┃       ┣━━   formatDate(date: Date, oneLiner: boolean = false): string
+┃       ┣━━   formatDateForSpeech(date: Date): string
+┃       ┣━━   async spinQRCode(
+┃       ┃       event: PointerEvent,
+┃       ┃       config: SpinConfig = DEFAULT_SPIN_CONFIG
+┃       ┃     )
+┃       ┣━━   private animateRotation(
+┃       ┃       imgElement: HTMLElement,
+┃       ┃       targetRotation: number,
+┃       ┃       config: SpinConfig,
+┃       ┃       cleanup: () => void
+┃       ┃     )
+┃       ┣━━     const animate = (currentTime: number) =>
+┃       ┣━━   private getNext90Degree(currentRotation: number): number
+┃       ┣━━   private getCurrentRotation(matrix: string): number
+┃       ┣━━   ngAfterViewInit()
+┃       ┣━━       const mouseEnterListener = () =>
+┃       ┣━━       const mouseLeaveListener = () =>
+┃       ┣━━   ngOnDestroy()
+┃       ┣━━   toggleColumn(event: MatOptionSelectionChange, column: string)
+┃       ┣━━           (col) =>
+┃       ┣━━   adjustColumns(event?: Event)
+┃       ┣━━   onResize(event: Event)
+┃       ┣━━   async ngOnInit()
+┃       ┣━━   async loadTickets(): Promise<void>
+┃       ┣━━   onDateRangeChange(
+┃       ┃       type: "start" | "end",
+┃       ┃       event: MatDatepickerInputEvent<Date>
+┃       ┃     )
+┃       ┣━━   applyFilter(column: string): void
+┃       ┣━━   formatDateForComparison(date: Date): string
+┃       ┣━━   constructor(private renderer: Renderer2)
+┃       ┣━━   onFilterChange(event: Event, column: string)
+┃       ┣━━   onLatitudeChange(event: Event)
+┃       ┣━━   onLongitudeChange(event: Event)
+┃       ┣━━   onRadiusChange(event: Event)
+┃       ┣━━   sortData(sort: Sort): void
+┃       ┣━━   onRowClick(event: Event, row: any)
+┃       ┣━━ function isDate(value: Date | undefined | null): value is Date
+┃       ┣━━ function isNonNullNumber(value: number | null): value is number
+┃       ┣━━ function hasLocation(
+┃       ┃     ticket: any
+┃       ┃   ): ticket is
+┃       ┣━━ const create_faker_ticket = async () =>
+┃       ┣━━ function compare(a: number | string, b: number | string, isAsc: boolean)
+┃       ┣━━ function compare_dates(a: Date, b: Date, isAsc: boolean)
+┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
+┃       ┣━━ const mockTickets = async () =>
+┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
 ┗━━ 📁 group_lisp (1163 tokens, 139 lines)
     ┣━━ 📄 clojure_test.clj (726 tokens, 86 lines)
     ┃   ┣━━ defprotocol P
@@ -1133,7 +1273,123 @@ paths=('tests/more_languages',)
 ```sh
 tree_plus -g "*.*s" -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-📁 more_languages (10205 tokens, 1423 lines)
+📁 more_languages (11673 tokens, 1719 lines)
+┣━━ 📁 group1 (1468 tokens, 296 lines)
+┃   ┣━━ 📄 test.js (755 tokens, 154 lines)
+┃   ┃   ┣━━ class MyClass
+┃   ┃   ┣━━   myMethod()
+┃   ┃   ┣━━   async asyncMethod(a, b)
+┃   ┃   ┣━━   methodWithDefaultParameters(a = 5, b = 10)
+┃   ┃   ┣━━   multilineMethod(
+┃   ┃   ┃       c,
+┃   ┃   ┃       d
+┃   ┃   ┃     )
+┃   ┃   ┣━━   multilineMethodWithDefaults(
+┃   ┃   ┃       t = "tree",
+┃   ┃   ┃       p = "plus"
+┃   ┃   ┃     )
+┃   ┃   ┣━━ function myFunction(param1, param2)
+┃   ┃   ┣━━ function multilineFunction(
+┃   ┃   ┃     param1,
+┃   ┃   ┃     param2
+┃   ┃   ┃   )
+┃   ┃   ┣━━ const arrowFunction = () =>
+┃   ┃   ┣━━ const parametricArrow = (a, b) =>
+┃   ┃   ┣━━ function ()
+┃   ┃   ┣━━ function outerFunction(outerParam)
+┃   ┃   ┣━━   function innerFunction(innerParam)
+┃   ┃   ┣━━ const myObject = {
+┃   ┃   ┣━━   myMethod: function (stuff)
+┃   ┃   ┣━━ let myArrowObject = {
+┃   ┃   ┣━━   myArrow: ({
+┃   ┃   ┃       a,
+┃   ┃   ┃       b,
+┃   ┃   ┃       c,
+┃   ┃   ┃     }) =>
+┃   ┃   ┣━━ const myAsyncArrowFunction = async () =>
+┃   ┃   ┣━━ function functionWithRestParameters(...args)
+┃   ┃   ┣━━ const namedFunctionExpression = function myNamedFunction()
+┃   ┃   ┣━━ const multilineArrowFunction = (
+┃   ┃   ┃     a,
+┃   ┃   ┃     b
+┃   ┃   ┃   ) =>
+┃   ┃   ┣━━ function functionReturningFunction()
+┃   ┃   ┣━━   return function ()
+┃   ┃   ┣━━ function destructuringOnMultipleLines({
+┃   ┃   ┃     a,
+┃   ┃   ┃     b,
+┃   ┃   ┃   })
+┃   ┃   ┣━━ const arrowFunctionWithDestructuring = ({ a, b }) =>
+┃   ┃   ┣━━ const multilineDestructuringArrow = ({
+┃   ┃   ┃     a,
+┃   ┃   ┃     b,
+┃   ┃   ┃   }) =>
+┃   ┃   ┣━━ async function asyncFunctionWithErrorHandling()
+┃   ┃   ┣━━ class Car
+┃   ┃   ┣━━   constructor(brand)
+┃   ┃   ┣━━   present()
+┃   ┃   ┣━━ class Model extends Car
+┃   ┃   ┣━━   constructor(brand, mod)
+┃   ┃   ┗━━   show()
+┃   ┗━━ 📄 test.ts (713 tokens, 142 lines)
+┃       ┣━━ type MyType
+┃       ┣━━ interface MyInterface
+┃       ┣━━ class TsClass
+┃       ┣━━   myMethod()
+┃       ┣━━   myMethodWithArgs(param1: string, param2: number): void
+┃       ┣━━   static myStaticMethod<T>(param: T): T
+┃       ┣━━   multilineMethod(
+┃       ┃       c: number,
+┃       ┃       d: number
+┃       ┃     ): number
+┃       ┣━━   multilineMethodWithDefaults(
+┃       ┃       t: string = "tree",
+┃       ┃       p: string = "plus"
+┃       ┃     ): string
+┃       ┣━━ export class AdvancedComponent implements MyInterface
+┃       ┣━━   async myAsyncMethod(
+┃       ┃       a: string,
+┃       ┃       b: number,
+┃       ┃       c: string
+┃       ┃     ): Promise<void>
+┃       ┣━━   genericMethod<T, U>(
+┃       ┃       arg1: T,
+┃       ┃       arg2: U
+┃       ┃     ): [T, U]
+┃       ┣━━ export class TicketsComponent implements MyInterface
+┃       ┣━━   async myAsyncMethod({ a, b, c }: { a: String; b: Number; c: String })
+┃       ┣━━ function tsFunction()
+┃       ┣━━ function tsFunctionSigned(
+┃       ┃     param1: number,
+┃       ┃     param2: number
+┃       ┃   ): void
+┃       ┣━━ const tsArrowFunctionSigned = ({
+┃       ┃     a,
+┃       ┃     b,
+┃       ┃   }: {
+┃       ┃     a: number;
+┃       ┃     b: string;
+┃       ┃   }) =>
+┃       ┣━━ const arrowFunction = () =>
+┃       ┣━━ const arrow = (a: String, b: Number) =>
+┃       ┣━━ const asyncArrowFunction = async () =>
+┃       ┣━━ const asyncArrow = async (a: String, b: Number) =>
+┃       ┣━━ let weirdArrow = () =>
+┃       ┣━━ const asyncPromiseArrow = async (): Promise<void> =>
+┃       ┣━━ let myWeirdArrowSigned = (x: number): number =>
+┃       ┣━━ class Person
+┃       ┣━━   constructor(private firstName: string, private lastName: string)
+┃       ┣━━   getFullName(): string
+┃       ┣━━   describe(): string
+┃       ┣━━ class Employee extends Person
+┃       ┣━━   constructor(
+┃       ┃       firstName: string,
+┃       ┃       lastName: string,
+┃       ┃       private jobTitle: string
+┃       ┃     )
+┃       ┣━━   describe(): string
+┃       ┣━━ interface Shape
+┃       ┗━━ interface Square extends Shape
 ┣━━ 📁 group3 (538 tokens, 93 lines)
 ┃   ┗━━ 📄 csharp_test.cs (538 tokens, 93 lines)
 ┃       ┣━━ public interface IExcelTemplate
@@ -1257,7 +1513,7 @@ paths=('tests/more_languages',)
     ┃   ┃       { path: 'rewards', component: RewardsComponent },
     ┃   ┃       { path: 'profile', component: ProfileComponent },
     ┃   ┃   ];
-    ┃   ┗━━ class AppRoutingModule
+    ┃   ┗━━ export class AppRoutingModule
     ┣━━ 📄 app.component.spec.ts (307 tokens, 48 lines)
     ┃   ┣━━ describe 'AppComponent'
     ┃   ┣━━     it should create the app
@@ -1265,10 +1521,11 @@ paths=('tests/more_languages',)
     ┃   ┣━━     it should welcome 'Jimbo'
     ┃   ┗━━     it should request login if not logged in
     ┣━━ 📄 app.component.ts (243 tokens, 45 lines)
-    ┃   ┣━━ class AppComponent
-    ┃   ┣━━   checkSession
-    ┃   ┣━━   async goToEvent
-    ┃   ┗━━   valInvitedBy
+    ┃   ┣━━ export class AppComponent
+    ┃   ┣━━   constructor(private loginService: LoginService)
+    ┃   ┣━━   checkSession()
+    ┃   ┣━━   async goToEvent(event_id: string)
+    ┃   ┗━━   valInvitedBy(event: any, event_id: string)
     ┣━━ 📄 app.module.ts (269 tokens, 43 lines)
     ┃   ┣━━ @NgModule({
     ┃   ┃       declarations: [
@@ -1280,7 +1537,7 @@ paths=('tests/more_languages',)
     ┃   ┃           InvitesComponent,
     ┃   ┃           RewardsComponent,
     ┃   ┃           ProfileComponent
-    ┃   ┗━━ class AppModule
+    ┃   ┗━━ export class AppModule
     ┣━━ 📄 environment.test.ts (193 tokens, 19 lines)
     ┃   ┣━━ environment:
     ┃   ┣━━    production
@@ -1314,41 +1571,62 @@ paths=('tests/more_languages',)
         ┣━━ interface SpinConfig
         ┣━━ interface RotationState
         ┣━━ interface SpeakInput
-        ┣━━ const formatSpeakInput: =>
-        ┣━━ function hourToSpeech
-        ┣━━ class TicketsComponent implements AfterViewInit
-        ┣━━   speak
-        ┣━━   speakEvent
-        ┣━━   formatEvent
-        ┣━━   speakVenue
-        ┣━━   formatDate
-        ┣━━   formatDateForSpeech
-        ┣━━   async spinQRCode
-        ┣━━   ngAfterViewInit
-        ┣━━   ngOnDestroy
-        ┣━━   toggleColumn
-        ┣━━   adjustColumns
-        ┣━━   onResize
-        ┣━━   async ngOnInit
-        ┣━━   async loadTickets
-        ┣━━   onDateRangeChange
-        ┣━━   applyFilter
-        ┣━━   formatDateForComparison
-        ┣━━   onFilterChange
-        ┣━━   onLatitudeChange
-        ┣━━   onLongitudeChange
-        ┣━━   onRadiusChange
-        ┣━━   sortData
-        ┣━━   onRowClick
-        ┣━━ function isDate
-        ┣━━ function isNonNullNumber
-        ┣━━ function hasLocation
-        ┣━━ const create_faker_ticket: async =>
-        ┣━━ function compare
-        ┣━━ function compare_dates
-        ┣━━ async function mockMoreTickets
-        ┣━━ const mockTickets: async =>
-        ┗━━ const renderQRCode: async =>
+        ┣━━ const formatSpeakInput = (input: SpeakInput): string =>
+        ┣━━ function hourToSpeech(hour: number, minute: number, period: string): string
+        ┣━━ export class TicketsComponent implements AfterViewInit
+        ┣━━   speak(input: SpeakInput)
+        ┣━━   speakEvent(ticket: EnrichedTicket): void
+        ┣━━   formatEvent(ticket: EnrichedTicket): string
+        ┣━━   speakVenue(ticket: EnrichedTicket): void
+        ┣━━   formatDate(date: Date, oneLiner: boolean = false): string
+        ┣━━   formatDateForSpeech(date: Date): string
+        ┣━━   async spinQRCode(
+        ┃       event: PointerEvent,
+        ┃       config: SpinConfig = DEFAULT_SPIN_CONFIG
+        ┃     )
+        ┣━━   private animateRotation(
+        ┃       imgElement: HTMLElement,
+        ┃       targetRotation: number,
+        ┃       config: SpinConfig,
+        ┃       cleanup: () => void
+        ┃     )
+        ┣━━     const animate = (currentTime: number) =>
+        ┣━━   private getNext90Degree(currentRotation: number): number
+        ┣━━   private getCurrentRotation(matrix: string): number
+        ┣━━   ngAfterViewInit()
+        ┣━━       const mouseEnterListener = () =>
+        ┣━━       const mouseLeaveListener = () =>
+        ┣━━   ngOnDestroy()
+        ┣━━   toggleColumn(event: MatOptionSelectionChange, column: string)
+        ┣━━           (col) =>
+        ┣━━   adjustColumns(event?: Event)
+        ┣━━   onResize(event: Event)
+        ┣━━   async ngOnInit()
+        ┣━━   async loadTickets(): Promise<void>
+        ┣━━   onDateRangeChange(
+        ┃       type: "start" | "end",
+        ┃       event: MatDatepickerInputEvent<Date>
+        ┃     )
+        ┣━━   applyFilter(column: string): void
+        ┣━━   formatDateForComparison(date: Date): string
+        ┣━━   constructor(private renderer: Renderer2)
+        ┣━━   onFilterChange(event: Event, column: string)
+        ┣━━   onLatitudeChange(event: Event)
+        ┣━━   onLongitudeChange(event: Event)
+        ┣━━   onRadiusChange(event: Event)
+        ┣━━   sortData(sort: Sort): void
+        ┣━━   onRowClick(event: Event, row: any)
+        ┣━━ function isDate(value: Date | undefined | null): value is Date
+        ┣━━ function isNonNullNumber(value: number | null): value is number
+        ┣━━ function hasLocation(
+        ┃     ticket: any
+        ┃   ): ticket is
+        ┣━━ const create_faker_ticket = async () =>
+        ┣━━ function compare(a: number | string, b: number | string, isAsc: boolean)
+        ┣━━ function compare_dates(a: Date, b: Date, isAsc: boolean)
+        ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
+        ┣━━ const mockTickets = async () =>
+        ┗━━ const renderQRCode = async (text: String): Promise<string> =>
 
 ```
 <!-- t3-end -->
@@ -1364,13 +1642,80 @@ Help me **add to** and **priorize** this list of languages to support!
 ```sh
 tree_plus tests/more_languages/group_todo
 paths=('tests/more_languages/group_todo',)
-📁 group_todo (1025 tokens, 199 lines)
+📁 group_todo (4935 tokens, 748 lines)
 ┣━━ 📄 crystal_test.cr (56 tokens, 15 lines)
 ┣━━ 📄 dart_test.dart (106 tokens, 24 lines)
 ┣━━ 📄 elixir_test.exs (49 tokens, 10 lines)
 ┣━━ 📄 erl_test.erl (60 tokens, 9 lines)
 ┣━━ 📄 fortran_test.f90 (114 tokens, 21 lines)
 ┣━━ 📄 fsharp_test.fs (44 tokens, 6 lines)
+┣━━ 📄 harder_KotlinTest.kt (2572 tokens, 410 lines)
+┃   ┣━━ data class Person(val name: String, val age: Int)
+┃   ┣━━ data class User(val name: String, val age: Int)
+┃   ┣━━ data class Point(val x: Int, val y: Int)
+┃   ┣━━ fun foo()
+┃   ┣━━ fun greet(person: Person)
+┃   ┣━━ fun add(a: Int, b: Int)
+┃   ┣━━ fun multiply(a: Int, b: Int)
+┃   ┣━━ fun getItem(id: Int)
+┃   ┣━━ fun transform(input: T)
+┃   ┣━━ fun transform(input: Int)
+┃   ┣━━ fun subtract(a: Int, b: Int)
+┃   ┣━━ fun nextT()
+┃   ┣━━ fun demo(strs: Source<String>)
+┃   ┣━━ fun compareTo(other: T)
+┃   ┣━━ fun demo(x: Comparable<Number>)
+┃   ┣━━ fun fill(dest: Array<in String>, value: String)
+┃   ┣━━ fun save(x: T1)
+┃   ┣━━ fun load(x: T1 & Any)
+┃   ┣━━ fun signal()
+┃   ┣━━ fun signal()
+┃   ┣━━ fun signal()
+┃   ┣━━ fun animate()
+┃   ┣━━ fun stopAnimating()
+┃   ┣━━ fun animateTwice()
+┃   ┣━━ fun executeLambda(f: (String)
+┃   ┣━━ fun sayHello(maybe: String?, neverNull: Int)
+┃   ┣━━ fun yell()
+┃   ┣━━ fun whisper()
+┃   ┣━━ fun utter()
+┃   ┣━━ fun apply(t: Int, u: Int)
+┃   ┣━━ fun apply(t: Int, u: Int)
+┃   ┣━━ fun applyAsInt(t: Int, u: Int)
+┃   ┣━━ fun log(e: Error)
+┃   ┣━━ fun foo(i: Int = 10)
+┃   ┣━━ fun foo(i: Int)
+┃   ┣━━ fun printHello(name: String?)
+┃   ┣━━ fun toString()
+┃   ┣━━ fun invoke()
+┃   ┣━━ fun saveUserToDb(user: User)
+┃   ┣━━ fun validate(user: User, value: String, fieldName: String)
+┃   ┣━━ fun accept(i: Int)
+┃   ┣━━ fun double(x: Int)
+┃   ┣━━ fun implicitDouble(x: Int)
+┃   ┣━━ fun disable()
+┃   ┣━━ fun animate()
+┃   ┣━━ fun animate()
+┃   ┣━━ fun funFromA()
+┃   ┣━━ fun getObject()
+┃   ┣━━ fun getObjectA()
+┃   ┣━━ fun funFromA()
+┃   ┣━━ fun getObjectB()
+┃   ┣━━ fun funFromA()
+┃   ┣━━ fun getObject()
+┃   ┣━━ fun printX()
+┃   ┣━━ fun add(s: String)
+┃   ┣━━ fun build()
+┃   ┣━━ fun findFixPoint(x: Double = 1.0)
+┃   ┣━━ fun get(index: Int)
+┃   ┗━━ fun get(index: Int)
+┣━━ 📄 harder_KT_expectation.py (1338 tokens, 139 lines)
+┃   ┣━━ class MyTalkativeButton
+┃   ┣━━ class IOError()
+┃   ┣━━ class IOError()
+┃   ┣━━ class CustomError()
+┃   ┣━━ class GigaButton
+┃   ┗━━ class OrdersList
 ┣━━ 📄 nodemon.json (120 tokens, 21 lines)
 ┣━━ 📄 sas_test.sas (104 tokens, 22 lines)
 ┣━━ 📄 test_setup_py.test (118 tokens, 24 lines)
