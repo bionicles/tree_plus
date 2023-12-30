@@ -74,10 +74,6 @@ def parse_file(file_path: str) -> List[str]:
             components = parse_json_rpc(contents)
         elif 'openrpc": "' in contents:
             components = parse_openrpc_json(contents)
-    elif file_path.endswith("Cargo.toml"):
-        components = parse_cargo_toml(contents)
-    elif file_path.endswith("pyproject.toml"):
-        components = parse_pyproject_toml(contents)
     elif file_path.endswith(".d.ts"):
         components = parse_d_dot_ts(contents)
     elif file_extension in {".js", ".jsx", ".ts", ".tsx"}:
@@ -104,14 +100,16 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_cpp(contents)
     elif file_extension == ".rs":
         components = parse_rs(contents)
-    elif file_extension == ".zig":
-        components = parse_zig(contents)
+    elif file_extension == ".kt":
+        components = parse_kt(contents)
     elif file_extension == ".swift":
         components = parse_swift(contents)
     elif file_extension == ".go":
         components = parse_go(contents)
     elif file_extension == ".sh":
         components = parse_bash(contents)
+    elif file_extension == ".zig":
+        components = parse_zig(contents)
     elif file_extension == ".rb":
         components = parse_rb(contents)
     elif file_extension == ".env":
@@ -129,16 +127,20 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_graphql(contents)
     elif file_extension == ".cs":
         components = parse_cs(contents)
-    elif file_extension == ".kt":
-        components = parse_kt(contents)
-    elif file_extension == ".java":
-        components = parse_java(contents)
-    elif file_extension == ".hs":
-        components = parse_hs(contents)
     elif file_extension == ".jl":
         components = parse_julia(contents)
     elif file_extension == ".scala":
         components = parse_scala(contents)
+    elif file_extension == ".java":
+        components = parse_java(contents)
+    elif file_path.endswith("Cargo.toml"):
+        components = parse_cargo_toml(contents)
+    elif file_path.endswith("pyproject.toml"):
+        components = parse_pyproject_toml(contents)
+    elif file_extension == ".hs":
+        components = parse_hs(contents)
+    elif file_extension == ".fs":
+        components = parse_fsharp(contents)
     elif file_extension in LISP_EXTENSIONS:
         components = parse_lisp(contents)
     elif file_extension in {".erl", ".hrl"}:
@@ -184,6 +186,21 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def parse_fsharp(contents: str) -> List[str]:
+    debug_print("parse_fsharp")
+
+    combined_pattern = re.compile(
+        r"^(\s*(module|type|let)\s+[^\n]+)",
+        re.MULTILINE,
+    )
+    components = []
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_fsharp match {n}:\n", match)
+        components.append(match.group().strip())
+
+    return components
 
 
 def parse_tcl(contents: str) -> List[str]:

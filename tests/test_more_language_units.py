@@ -981,6 +981,16 @@ where
                 "-record(maybe_undefined).",
             ],
         ),
+        (
+            "tests/more_languages/group4/test_fsharp.fs",
+            [
+                "module TestFSharp",
+                "type Person = {",
+                "let add x y =",
+                "let multiply (x: int) (y: int): int =",
+                "type Result<'T> =",
+            ],
+        ),
     ],
 )
 def test_more_languages_group4(
