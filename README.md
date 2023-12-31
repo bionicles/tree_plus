@@ -34,7 +34,7 @@
 ```sh
 tree_plus -i tests
 paths=('.',)
-📁 tree_plus (57964 tokens, 5753 lines)
+📁 tree_plus (66379 tokens, 6523 lines)
 ┣━━ 📁 .github (107 tokens, 11 lines)
 ┃   ┣━━ 📁 workflows (1050 tokens, 128 lines)
 ┃   ┃   ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
@@ -68,7 +68,7 @@ paths=('.',)
 ┃   ┃       ┗━━     - Publish to PyPI
 ┃   ┗━━ 📄 dependabot.yml (107 tokens, 11 lines)
 ┃       ┗━━ Unsupported YAML Category
-┣━━ 📁 tree_plus_src (22324 tokens, 2706 lines)
+┣━━ 📁 tree_plus_src (28123 tokens, 3326 lines)
 ┃   ┣━━ 📁 scripts (3515 tokens, 450 lines)
 ┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
 ┃   ┃   ┃   ┣━━ add_alias()
@@ -76,7 +76,7 @@ paths=('.',)
 ┃   ┃   ┗━━ 📄 Microsoft.PowerShell_profile.ps1 (3238 tokens, 419 lines)
 ┃   ┃       ┣━━ function Log($message)
 ┃   ┃       ┗━━ function Show-Error($err)
-┃   ┣━━ 📄 count_tokens_lines.py (951 tokens, 159 lines)
+┃   ┣━━ 📄 count_tokens_lines.py (731 tokens, 132 lines)
 ┃   ┃   ┣━━ TODO (Line 14): show off how well we parse_todo!
 ┃   ┃   ┣━━ @dataclass(frozen=True)
 ┃   ┃   ┃   class TokenLineCount
@@ -84,11 +84,10 @@ paths=('.',)
 ┃   ┃   ┃   def add_tokens_lines(
 ┃   ┃   ┃       lhs_count: TokenLineCount, rhs_count: TokenLineCount
 ┃   ┃   ┃   ) -> TokenLineCount
-┃   ┃   ┣━━ def count_tokens_lines(file_path: str) -> TokenLineCount
-┃   ┃   ┗━━ def count_directory_tokens_lines(directory_path: str) -> TokenLineCount
-┃   ┣━━ 📄 debug.py (87 tokens, 20 lines)
-┃   ┃   ┣━━ def disable_debug()
-┃   ┃   ┣━━ def debug_enabled()
+┃   ┃   ┗━━ def count_tokens_lines(file_path: str) -> TokenLineCount
+┃   ┣━━ 📄 debug.py (114 tokens, 24 lines)
+┃   ┃   ┣━━ @lru_cache
+┃   ┃   ┃   def debug_enabled()
 ┃   ┃   ┣━━ def debug_print(*args, **kwargs)
 ┃   ┃   ┗━━ def enable_debug()
 ┃   ┣━━ 📄 deploy.py (2093 tokens, 240 lines)
@@ -120,9 +119,25 @@ paths=('.',)
 ┃   ┃   ┃   def is_binary(file_path: str) -> bool
 ┃   ┃   ┗━━ @lru_cache(maxsize=None)
 ┃   ┃       def should_ignore(path: str, ignore: Ignore, globs: Optional[Ignore] = None) -> bool
-┃   ┣━━ 📄 parse_file.py (17263 tokens, 2000 lines)
-┃   ┃   ┣━━ def extract_groups(match: re.Match) -> dict
+┃   ┣━━ 📄 isabelle_symbols.py (4084 tokens, 462 lines)
+┃   ┃   ┣━━ @lru_cache
+┃   ┃   ┃   def _replace_symbol(match: re.Match) -> str
+┃   ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
+┃   ┣━━ 📄 parse_file.py (19171 tokens, 2181 lines)
+┃   ┃   ┣━━ def extract_and_debug_print_groups(match: re.Match) -> dict
+┃   ┃   ┣━━ @lru_cache(maxsize=None)
+┃   ┃   ┃   def read_file(file_path: str, raise_exceptions: bool = False) -> str
 ┃   ┃   ┣━━ def parse_file(file_path: str) -> List[str]
+┃   ┃   ┣━━ def clean_isabelle_text(content: Text) -> Text
+┃   ┃   ┣━━ def parse_isabelle(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_fortran(contents: str) -> List[str]
+┃   ┃   ┣━━ def remove_c_comments(contents: str) -> str
+┃   ┃   ┣━━ def parse_ts(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_cpp(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_c(contents: str) -> List[str]
+┃   ┃   ┣━━ def remove_py_comments(input_string: str) -> str
+┃   ┃   ┣━━ def parse_py(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_rb(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_fsharp(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_tcl(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_erl(contents: str) -> List[str]
@@ -144,24 +159,18 @@ paths=('.',)
 ┃   ┃   ┣━━ def parse_lean(lean_content: str) -> List[str]
 ┃   ┃   ┣━━ def parse_cs(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_tex(tex_content: str) -> List[str]
-┃   ┃   ┣━━ def parse_rb(contents) -> List[str]
-┃   ┃   ┣━━ def remove_c_comments(multiline_string)
-┃   ┃   ┣━━ def parse_cpp(contents) -> List[str]
-┃   ┃   ┣━━ def parse_c(contents) -> List[str]
-┃   ┃   ┣━━ def parse_go(contents) -> List[str]
+┃   ┃   ┣━━ def parse_go(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_swift(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_bash(contents) -> List[str]
-┃   ┃   ┣━━ def parse_d_dot_ts(contents) -> List[str]
-┃   ┃   ┣━━ def parse_angular_app_module(contents) -> List[str]
-┃   ┃   ┣━━ def parse_angular_routes(content) -> List[str]
-┃   ┃   ┣━━ def parse_angular_spec(content) -> List[str]
-┃   ┃   ┣━━ def parse_environment_ts(contents) -> List[str]
-┃   ┃   ┣━━ def parse_dot_env(contents) -> List[str]
-┃   ┃   ┣━━ def parse_requirements_txt(contents) -> List[str]
-┃   ┃   ┣━━ def parse_json_schema(contents) -> List[str]
-┃   ┃   ┣━━ def parse_package_json(contents) -> List[str]
-┃   ┃   ┣━━ def remove_ts_comments(contents: str) -> str
-┃   ┃   ┣━━ def parse_ts(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_bash(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_d_dot_ts(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_angular_app_module(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_angular_routes(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_angular_spec(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_environment_ts(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_dot_env(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_requirements_txt(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_json_schema(contents: str) -> List[str]
+┃   ┃   ┣━━ def parse_package_json(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_makefile(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_sql(contents: str) -> List[str]
 ┃   ┃   ┣━━ def is_openapi_yml(ymls: Tuple[dict]) -> bool
@@ -173,14 +182,10 @@ paths=('.',)
 ┃   ┃   ┣━━ def parse_ansible(ymls: Tuple[dict]) -> List[str]
 ┃   ┃   ┣━━ def parse_openapi_yml(ymls: Tuple[dict]) -> List[str]
 ┃   ┃   ┣━━ def parse_yml(contents: str) -> List[str]
-┃   ┃   ┣━━ def extract_nodes(node, node_type, parent=None)
-┃   ┃   ┣━━ def is_typing_construct(node)
-┃   ┃   ┣━━ def is_builtin_type(node, parent)
-┃   ┃   ┣━━ def parse_py(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_db(db_path: str) -> List[str]
-┃   ┃   ┣━━ def parse_cobol(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_cbl(content: str) -> List[str]
 ┃   ┃   ┣━━ def parse_java(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_julia(content: str) -> List[str]
+┃   ┃   ┣━━ def parse_jl(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_kt(contents: str) -> List[str]
 ┃   ┃   ┣━━ def parse_lua(content: str) -> List[str]
 ┃   ┃   ┣━━ def parse_objective_c(content: str) -> List[str]
@@ -200,10 +205,10 @@ paths=('.',)
 ┃   ┃           directory_path: str, ignore: IgnoreInput = None, globs: IgnoreInput = None
 ┃   ┃       ) -> List[str]
 ┃   ┗━━ 📄 version.py (18 tokens, 2 lines)
-┃       ┗━━ __version__ = "1.0.14"
+┃       ┗━━ __version__ = "1.0.15"
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (383 tokens, 73 lines)
+┣━━ 📄 Makefile (433 tokens, 79 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ debug
@@ -216,6 +221,8 @@ paths=('.',)
 ┃   ┣━━ test_cli: cli
 ┃   ┣━━ test_deploy
 ┃   ┣━━ test_dotenv
+┃   ┣━━ vulture: install_vulture
+┃   ┣━━ install_vulture
 ┃   ┣━━ build: install-build-tool clean-dist
 ┃   ┣━━ install-wheel
 ┃   ┣━━ install-build-tool
@@ -228,7 +235,7 @@ paths=('.',)
 ┃   ┣━━ t3
 ┃   ┣━━ t4
 ┃   ┗━━ t5
-┣━━ 📄 nodemon.json (124 tokens, 23 lines)
+┣━━ 📄 nodemon.json (129 tokens, 24 lines)
 ┣━━ 📄 pyproject.toml (327 tokens, 41 lines)
 ┃   ┣━━ name: tree_plus
 ┃   ┣━━ version: N/A
@@ -241,8 +248,8 @@ paths=('.',)
 ┃   ┣━━     click
 ┃   ┣━━     rich
 ┃   ┗━━     tomli
-┣━━ 📄 pytest.ini (11 tokens, 3 lines)
-┣━━ 📄 README.md (24293 tokens, 1739 lines)
+┣━━ 📄 pytest.ini (24 tokens, 6 lines)
+┣━━ 📄 README.md (26841 tokens, 1879 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -313,9 +320,9 @@ Options:
   -g, -G, --glob TEXT    Patterns to find, in quotes: -g "*.rs"
   -v, -V, --version      Print the version and exit.
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
-  -H, -h, --help         Show this message and exit.
+  -h, -H, --help         Show this message and exit.
 
-  (v1.0.14) --- https://github.com/bionicles/tree_plus
+  (v1.0.15) --- https://github.com/bionicles/tree_plus
 
 ```
 <!-- t5-end -->
@@ -409,14 +416,46 @@ make debug
 ```sh
 tree_plus -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/more_languages/group3/test.sqlite: 'utf-8' codec can't decode byte 0xe9 in position 99: invalid continuation byte
-📁 more_languages (27625 tokens, 4096 lines)
-┣━━ 📁 group1 (3228 tokens, 622 lines)
-┃   ┣━━ 📄 COBOL_TEST.CBL (57 tokens, 11 lines)
-┃   ┃   ┣━━ IDENTIFICATION DIVISION -> PROGRAM-ID. HELLO
-┃   ┃   ┣━━ DATA DIVISION -> 01 GREETING
-┃   ┃   ┗━━ PROCEDURE DIVISION
-┃   ┣━━ 📄 JavaTest.java (467 tokens, 87 lines)
+read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages/group3/test.sqlite: 'utf-8' codec can't decode byte 0xe9 in position 99: invalid continuation byte
+📁 more_languages (30950 tokens, 4375 lines)
+┣━━ 📁 group1 (4159 tokens, 722 lines)
+┃   ┣━━ 📄 CUSTOMER-INVOICE.CBL (545 tokens, 60 lines)
+┃   ┃   ┣━━ IDENTIFICATION DIVISION.
+┃   ┃   ┣━━   PROGRAM-ID. CUSTOMER-INVOICE.
+┃   ┃   ┣━━   AUTHOR. JANE DOE.
+┃   ┃   ┣━━   DATE. 2023-12-30.
+┃   ┃   ┣━━   DATE-COMPILED. 06/30/10.
+┃   ┃   ┣━━   DATE-WRITTEN. 12/34/56.
+┃   ┃   ┣━━ ENVIRONMENT DIVISION.
+┃   ┃   ┣━━   INPUT-OUTPUT SECTION.
+┃   ┃   ┣━━     FILE-CONTROL.
+┃   ┃   ┣━━       SELECT CUSTOMER-FILE.
+┃   ┃   ┣━━       SELECT INVOICE-FILE.
+┃   ┃   ┣━━       SELECT REPORT-FILE.
+┃   ┃   ┣━━ DATA DIVISION.
+┃   ┃   ┣━━   FILE SECTION.
+┃   ┃   ┣━━     FD CUSTOMER-FILE.
+┃   ┃   ┣━━       01 CUSTOMER-RECORD.
+┃   ┃   ┣━━         05 CUSTOMER-ID.
+┃   ┃   ┣━━         05 CUSTOMER-NAME.
+┃   ┃   ┣━━         05 CUSTOMER-BALANCE.
+┃   ┃   ┣━━     FD INVOICE-FILE.
+┃   ┃   ┣━━       01 INVOICE-RECORD.
+┃   ┃   ┣━━         05 INVOICE-ID.
+┃   ┃   ┣━━         05 CUSTOMER-ID.
+┃   ┃   ┣━━         05 INVOICE-AMOUNT.
+┃   ┃   ┣━━     FD REPORT-FILE.
+┃   ┃   ┣━━       01 REPORT-RECORD.
+┃   ┃   ┣━━   WORKING-STORAGE SECTION.
+┃   ┃   ┣━━       01 WS-CUSTOMER-FOUND.
+┃   ┃   ┣━━       01 WS-END-OF-FILE.
+┃   ┃   ┣━━       01 WS-TOTAL-BALANCE.
+┃   ┃   ┣━━ PROCEDURE DIVISION.
+┃   ┃   ┣━━     0000-MAIN-ROUTINE.
+┃   ┃   ┣━━     1000-PROCESS-RECORDS.
+┃   ┃   ┣━━     1100-UPDATE-CUSTOMER-BALANCE.
+┃   ┃   ┗━━ END PROGRAM CUSTOMER-INVOICE.
+┃   ┣━━ 📄 JavaTest.java (470 tokens, 87 lines)
 ┃   ┃   ┣━━ abstract class LivingBeing
 ┃   ┃   ┣━━     abstract void breathe()
 ┃   ┃   ┣━━ interface Communicator
@@ -442,10 +481,39 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━     String home(@RequestParam(value = "name", defaultValue = "World") String name,
 ┃   ┃   ┃                   @RequestParam(value = "age", defaultValue = "30") int age)
 ┃   ┃   ┗━━     public static void main(String[] args)
-┃   ┣━━ 📄 JuliaTest.jl (42 tokens, 12 lines)
-┃   ┃   ┣━━ module JuliaTest
-┃   ┃   ┣━━ module JuliaTest -> struct Person
-┃   ┃   ┗━━ module JuliaTest -> greet(p::Person)
+┃   ┣━━ 📄 JuliaTest.jl (482 tokens, 63 lines)
+┃   ┃   ┣━━ module JuliaTest_EdgeCase
+┃   ┃   ┣━━ struct Location
+┃   ┃   ┃       name :: String 
+┃   ┃   ┃       lat :: Float32
+┃   ┃   ┃       lon :: Float32
+┃   ┃   ┃   end
+┃   ┃   ┣━━ mutable struct mPerson
+┃   ┃   ┃       name :: String
+┃   ┃   ┃       age :: Int
+┃   ┃   ┃   end
+┃   ┃   ┣━━ Base.@kwdef mutable struct Param
+┃   ┃   ┃       Δt :: Float64 = 0.1
+┃   ┃   ┃       n :: Int64
+┃   ┃   ┃       m :: Int64
+┃   ┃   ┃   end
+┃   ┃   ┣━━     sic(x,y)
+┃   ┃   ┣━━ welcome(l :: Location)
+┃   ┃   ┣━━ ∑(α, Ω)
+┃   ┃   ┣━━ function noob()
+┃   ┃   ┃   end
+┃   ┃   ┣━━ function ye_olde(hello :: String, world :: Location)
+┃   ┃   ┃   end
+┃   ┃   ┣━━ function multiline_greet(
+┃   ┃   ┃           p :: mPerson, 
+┃   ┃   ┃           greeting :: String
+┃   ┃   ┃       )
+┃   ┃   ┃   end
+┃   ┃   ┣━━ function julia_is_awesome(prob :: DiffEqBase.AbstractDAEProblem{uType, duType, tType,
+┃   ┃   ┃           isinplace};
+┃   ┃   ┃       kwargs...) where {uType, duType, tType, isinplace}
+┃   ┃   ┃   end
+┃   ┃   ┗━━ end
 ┃   ┣━━ 📄 KotlinTest.kt (998 tokens, 172 lines)
 ┃   ┃   ┣━━ data class Person(val name: String)
 ┃   ┃   ┣━━ fun greet(person: Person)
@@ -726,7 +794,7 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃       ┣━━ Country
 ┃       ┣━━ City
 ┃       ┗━━ Email
-┣━━ 📁 group3 (6898 tokens, 1033 lines)
+┣━━ 📁 group3 (6903 tokens, 1033 lines)
 ┃   ┣━━ 📄 bash_test.sh (154 tokens, 23 lines)
 ┃   ┃   ┣━━ echo_hello_world()
 ┃   ┃   ┣━━ function fun_echo_hello_world()
@@ -851,7 +919,7 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━ 7 Conclusion
 ┃   ┃   ┣━━   7.1 Summarizing Key Findings
 ┃   ┃   ┗━━   7.2 The Next Steps in AI Development
-┃   ┣━━ 📄 ruby_test.rb (152 tokens, 37 lines)
+┃   ┣━━ 📄 ruby_test.rb (157 tokens, 37 lines)
 ┃   ┃   ┣━━ module Greeter
 ┃   ┃   ┣━━   def self.say_hello
 ┃   ┃   ┣━━ class HelloWorld
@@ -874,7 +942,7 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━     func yEdgeCase(
 ┃   ┃   ┃           fname: String, 
 ┃   ┃   ┃           lname: String, 
-┃   ┃   ┃           age: Int, 
+┃   ┃   ┃           age: Int,
 ┃   ┃   ┃           address: String, 
 ┃   ┃   ┃           phoneNumber: String
 ┃   ┃   ┃       )
@@ -1021,7 +1089,7 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃       ┣━━     click
 ┃       ┣━━     rich
 ┃       ┗━━     tomli
-┣━━ 📁 group4 (3230 tokens, 493 lines)
+┣━━ 📁 group4 (3236 tokens, 493 lines)
 ┃   ┣━━ 📄 erl_test.erl (512 tokens, 69 lines)
 ┃   ┃   ┣━━ -module(erl_test).
 ┃   ┃   ┣━━ -record(person).
@@ -1073,7 +1141,7 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━ greet.Person <- function
 ┃   ┃   ┣━━ ensure_between = function
 ┃   ┃   ┗━━ run_intermediate_annealing_process = function
-┃   ┣━━ 📄 rust_test.rs (888 tokens, 159 lines)
+┃   ┣━━ 📄 rust_test.rs (890 tokens, 159 lines)
 ┃   ┃   ┣━━ enum Days
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ impl Point
@@ -1103,7 +1171,7 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━     pub mod interfaces
 ┃   ┃   ┣━━     mod engine
 ┃   ┃   ┣━━ pub fn flow<S1, S2, S3, S4, E, T, L>(
-┃   ┃   ┃       source: S1, 
+┃   ┃   ┃       source: S1,
 ┃   ┃   ┃       extractor: E, 
 ┃   ┃   ┃       inbox: S2, 
 ┃   ┃   ┃       transformer: T, 
@@ -1129,7 +1197,7 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃   ┃   ┣━━ impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
 ┃   ┃   ┣━━     fn transform(&self, input: T) -> T
 ┃   ┃   ┗━━ fn main()
-┃   ┣━━ 📄 test.zig (432 tokens, 61 lines)
+┃   ┣━━ 📄 test.zig (436 tokens, 61 lines)
 ┃   ┃   ┣━━ pub fn add(a: i32, b: i32) i32
 ┃   ┃   ┣━━ test "add function"
 ┃   ┃   ┣━━ const BunBuildOptions = struct
@@ -1417,6 +1485,88 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
 ┃       ┣━━ const mockTickets = async () =>
 ┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
+┣━━ 📁 group6 (2383 tokens, 179 lines)
+┃   ┣━━ 📄 fractal.thy (2183 tokens, 148 lines)
+┃   ┃   ┣━━ Title:      fractal.thy
+┃   ┃   ┣━━ Author:     Isabelle/HOL Contributors!
+┃   ┃   ┣━━ Author:     edge cases r us
+┃   ┃   ┣━━ theory Simplified_Ring
+┃   ┃   ┣━━ section ‹Basic Algebraic Structures›
+┃   ┃   ┣━━ class everything = nothing + itself
+┃   ┃   ┣━━ subsection ‹Monoids›
+┃   ┃   ┣━━ definition ring_hom :: "[('a, 'm) ring_scheme, ('b, 'n) ring_scheme] => ('a => 'b) set"
+┃   ┃   ┣━━ fun example_fun :: "nat ⇒ nat"
+┃   ┃   ┣━━ locale monoid =
+┃   ┃   ┃     fixes G (structure)
+┃   ┃   ┃     assumes m_closed: "⟦x ∈ carrier G; y ∈ carrier G⟧ ⟹  x ⊗ y ∈ carrier G"
+┃   ┃   ┃       and m_assoc: "⟦x ∈ carrier G; y ∈ carrier G; z ∈ carrier G⟧ ⟹  (x ⊗ y) ⊗ z = x ⊗ (y ⊗ z)"
+┃   ┃   ┃       and one_closed: "𝟭 ∈ carrier G"
+┃   ┃   ┃       and l_one: "x ∈ carrier G ⟹  𝟭 ⊗ x = x"
+┃   ┃   ┃       and r_one: "x ∈ carrier G ⟹  x ⊗ 𝟭 = x"
+┃   ┃   ┣━━ subsection ‹Groups›
+┃   ┃   ┣━━ locale group = monoid +
+┃   ┃   ┃     assumes Units_closed: "x ∈ Units G ⟹  x ∈ carrier G"
+┃   ┃   ┃       and l_inv_ex: "x ∈ carrier G ⟹  ∃ y ∈ carrier G. y ⊗ x = 𝟭"
+┃   ┃   ┃       and r_inv_ex: "x ∈ carrier G ⟹  ∃ y ∈ carrier G. x ⊗ y = 𝟭"
+┃   ┃   ┣━━ subsection ‹Rings›
+┃   ┃   ┣━━ locale ring = abelian_group R + monoid R +
+┃   ┃   ┃     assumes l_distr: "⟦x ∈ carrier R; y ∈ carrier R; z ∈ carrier R⟧ ⟹  (x ⊕ y) ⊗ z = x ⊗ z ⊕ y ⊗ z"
+┃   ┃   ┃       and r_distr: "⟦x ∈ carrier R; y ∈ carrier R; z ∈ carrier R⟧ ⟹  z ⊗ (x ⊕ y) = z ⊗ x ⊕ z ⊗ y"
+┃   ┃   ┣━━ locale commutative_ring = ring +
+┃   ┃   ┃     assumes m_commutative: "⟦x ∈ carrier R; y ∈ carrier R⟧ ⟹  x ⊗ y = y ⊗ x"
+┃   ┃   ┣━━ locale domain = commutative_ring +
+┃   ┃   ┃     assumes no_zero_divisors: "⟦a ⊗ b = 𝟬; a ∈ carrier R; b ∈ carrier R⟧ ⟹  a = 𝟬 ∨ b = 𝟬"
+┃   ┃   ┣━━ locale field = domain +
+┃   ┃   ┃     assumes inv_ex: "x ∈ carrier R - {𝟬} ⟹  inv x ∈ carrier R"
+┃   ┃   ┣━━ subsection ‹Morphisms›
+┃   ┃   ┣━━ lemma example_lemma: "example_fun n = n"
+┃   ┃   ┣━━ qualified lemma gcd_0:
+┃   ┃   ┃     "gcd a 0 = normalize a"
+┃   ┃   ┣━━ lemma abelian_monoidI:
+┃   ┃   ┃     fixes R (structure)
+┃   ┃   ┃         and f :: "'edge::{} ⇒ 'case::{}"
+┃   ┃   ┃     assumes "⋀x y. ⟦ x ∈ carrier R; y ∈ carrier R ⟧ ⟹  x ⊕ y ∈ carrier R"
+┃   ┃   ┃         and "𝟬 ∈ carrier R"
+┃   ┃   ┃         and "⋀x y z. ⟦ x ∈ carrier R; y ∈ carrier R; z ∈ carrier R ⟧ ⟹  (x ⊕ y) ⊕ z = x ⊕ (y ⊕ z)"
+┃   ┃   ┃     shows "abelian_monoid R"
+┃   ┃   ┣━━ lemma euclidean_size_gcd_le1 :
+┃   ┃   ┃     assumes "a ≠ 0"
+┃   ┃   ┃     shows "euclidean_size (gcd a b) ≤ euclidean_size a"
+┃   ┃   ┣━━ theorem Residue_theorem:
+┃   ┃   ┃     fixes S pts::"complex set" and f::"complex ⇒ complex"
+┃   ┃   ┃       and g::"real ⇒ complex"
+┃   ┃   ┃     assumes "open S" "connected S" "finite pts" and
+┃   ┃   ┃             holo:"f holomorphic_on S-pts" and
+┃   ┃   ┃             "valid_path g" and
+┃   ┃   ┃             loop:"pathfinish g = pathstart g" and
+┃   ┃   ┃             "path_image g ⊆ S-pts" and
+┃   ┃   ┃             homo:"∀z. (z ∉ S) ⟶  winding_number g z  = 0"
+┃   ┃   ┃     shows "contour_integral g f = 2 * pi * 𝗂 *(∑p ∈ pts. winding_number g p * residue f p)"
+┃   ┃   ┣━━ corollary fps_coeff_residues_bigo':
+┃   ┃   ┃     fixes f :: "complex ⇒ complex" and r :: real
+┃   ┃   ┃     assumes exp: "f has_fps_expansion F"
+┃   ┃   ┃     assumes "open A" "connected A" "cball 0 r ⊆ A" "r > 0" 
+┃   ┃   ┃     assumes "f holomorphic_on A - S" "S ⊆ ball 0 r" "finite S" "0 ∉ S"
+┃   ┃   ┃     assumes "eventually (λn. g n = -(∑z ∈ S. residue (λz. f z / z ^ Suc n) z)) sequentially"
+┃   ┃   ┃                (is "eventually (λn. _ = -?g' n) _")
+┃   ┃   ┃     shows   "(λn. fps_nth F n - g n) ∈ O(λn. 1 / r ^ n)" (is "(λn. ?c n - _) ∈ O(_)")
+┃   ┃   ┗━━ end
+┃   ┗━━ 📄 test.f (200 tokens, 31 lines)
+┃       ┣━━ MODULE basic_mod
+┃       ┣━━     TYPE :: person
+┃       ┃           CHARACTER(LEN=50) :: name
+┃       ┃           INTEGER :: age
+┃       ┃       END TYPE person
+┃       ┣━━     SUBROUTINE short_hello(happy, path)
+┃       ┃       END SUBROUTINE short_hello
+┃       ┣━━     SUBROUTINE long_hello(
+┃       ┃           p,
+┃       ┃           message
+┃       ┃       )
+┃       ┃       END SUBROUTINE long_hello
+┃       ┣━━ END MODULE basic_mod
+┃       ┗━━ PROGRAM HelloFortran
+┃           END PROGRAM HelloFortran
 ┗━━ 📁 group_lisp (1163 tokens, 139 lines)
     ┣━━ 📄 clojure_test.clj (726 tokens, 86 lines)
     ┃   ┣━━ defprotocol P
@@ -1448,7 +1598,7 @@ count_tokens_lines Error reading /home/runner/work/tree_plus/tree_plus/tests/mor
 ```sh
 tree_plus -g "*.*s" -i group_todo tests/more_languages
 paths=('tests/more_languages',)
-📁 more_languages (12112 tokens, 1800 lines)
+📁 more_languages (12114 tokens, 1800 lines)
 ┣━━ 📁 group1 (1468 tokens, 296 lines)
 ┃   ┣━━ 📄 test.js (755 tokens, 154 lines)
 ┃   ┃   ┣━━ class MyClass
@@ -1625,7 +1775,7 @@ paths=('tests/more_languages',)
 ┃       ┣━━ s_downloadButton.Clicked += async (o, e) =>
 ┃       ┣━━ [HttpGet, Route("DotNetCount")]
 ┃       ┗━━ static public async Task<int> GetDotNetCount(string URL)
-┣━━ 📁 group4 (1388 tokens, 227 lines)
+┣━━ 📁 group4 (1390 tokens, 227 lines)
 ┃   ┣━━ 📄 haskell_test.hs (373 tokens, 41 lines)
 ┃   ┃   ┣━━ data Person
 ┃   ┃   ┣━━ greet :: Person -> String
@@ -1641,7 +1791,7 @@ paths=('tests/more_languages',)
 ┃   ┃           ( [G.Directive Variable],
 ┃   ┃             G.SelectionSet fragments Variable
 ┃   ┃           )
-┃   ┣━━ 📄 rust_test.rs (888 tokens, 159 lines)
+┃   ┣━━ 📄 rust_test.rs (890 tokens, 159 lines)
 ┃   ┃   ┣━━ enum Days
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ impl Point
@@ -1671,7 +1821,7 @@ paths=('tests/more_languages',)
 ┃   ┃   ┣━━     pub mod interfaces
 ┃   ┃   ┣━━     mod engine
 ┃   ┃   ┣━━ pub fn flow<S1, S2, S3, S4, E, T, L>(
-┃   ┃   ┃       source: S1, 
+┃   ┃   ┃       source: S1,
 ┃   ┃   ┃       extractor: E, 
 ┃   ┃   ┃       inbox: S2, 
 ┃   ┃   ┃       transformer: T, 
@@ -1852,11 +2002,10 @@ Help me **add to** and **priorize** this list of languages to support!
 ```sh
 tree_plus tests/more_languages/group_todo
 paths=('tests/more_languages/group_todo',)
-📁 group_todo (888 tokens, 176 lines)
+📁 group_todo (774 tokens, 155 lines)
 ┣━━ 📄 crystal_test.cr (56 tokens, 15 lines)
 ┣━━ 📄 dart_test.dart (106 tokens, 24 lines)
 ┣━━ 📄 elixir_test.exs (49 tokens, 10 lines)
-┣━━ 📄 fortran_test.f90 (114 tokens, 21 lines)
 ┣━━ 📄 nodemon.json (120 tokens, 21 lines)
 ┣━━ 📄 sas_test.sas (104 tokens, 22 lines)
 ┣━━ 📄 test_setup_py.test (118 tokens, 24 lines)
