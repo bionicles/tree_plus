@@ -19,7 +19,9 @@ def extract_and_debug_print_groups(match: re.Match) -> dict:
         group = match.group(i)
         if group:
             numbered_groups[i] = group
-    numbered_groups |= {k: v for k, v in match.groupdict().items() if v}
+    for k, v in match.groupdict().items():
+        if v:
+            numbered_groups[k] = v
     debug_print("groups:")
     debug_print(numbered_groups)
     return numbered_groups
