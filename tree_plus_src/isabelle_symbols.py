@@ -1,7 +1,6 @@
 from functools import lru_cache
 import re
 
-
 from tree_plus_src import debug_print
 
 _isabelle_symbols = {

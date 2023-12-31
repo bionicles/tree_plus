@@ -221,7 +221,7 @@ FIXES = r"^(?P<fixes> *fixes \w+ .*(\s^ *and.*)*)"
 
 
 def parse_isabelle(contents: str) -> List[str]:
-    from tree_plus_src.lookups.isabelle_symbols import replace_isabelle_symbols
+    from tree_plus_src.isabelle_symbols import replace_isabelle_symbols
 
     debug_print("parse_isabelle")
 

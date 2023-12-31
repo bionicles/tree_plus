@@ -17,5 +17,4 @@ from .count_tokens_lines import (
     add_tokens_lines,
 )
 from .deploy import extract, run_command, replace_readme_section, update_readme
-from .lookups import replace_isabelle_symbols
-from . import lookups
+from .isabelle_symbols import replace_isabelle_symbols

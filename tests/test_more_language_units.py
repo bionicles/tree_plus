@@ -7,7 +7,7 @@ from rich.text import Text
 from rich import print
 import sqlite3
 
-from tree_plus_src import parse_file
+from tree_plus_src import parse_file, replace_isabelle_symbols
 
 
 SQLITE_PATH = "tests/more_languages/group3/test.sqlite"
@@ -1469,9 +1469,6 @@ def test_more_languages_group_lisp(
     print(f"{result=}")
     print(f"{expected=}")
     assert result == expected
-
-
-from tree_plus_src.lookups.isabelle_symbols import replace_isabelle_symbols
 
 
 ISABELLE_EXPECTATION = [
