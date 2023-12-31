@@ -9,6 +9,7 @@ import sqlite3
 
 from tree_plus_src import parse_file
 
+
 SQLITE_PATH = "tests/more_languages/group3/test.sqlite"
 
 # Define the SQL commands for table creation
@@ -1468,6 +1469,138 @@ def test_more_languages_group_lisp(
     print(f"{result=}")
     print(f"{expected=}")
     assert result == expected
+
+
+from tree_plus_src.lookups.isabelle_symbols import replace_isabelle_symbols
+
+
+ISABELLE_EXPECTATION = [
+    replace_isabelle_symbols(x)
+    for x in [
+        "Title:      fractal.thy",
+        "Author:     Isabelle/HOL Contributors!",
+        "Author:     edge cases r us",
+        "theory Simplified_Ring",
+        r"section \<open>Basic Algebraic Structures\<close>",
+        "class everything = nothing + itself",
+        r"subsection \<open>Monoids\<close>",
+        "definition ring_hom :: \"[('a, 'm) ring_scheme, ('b, 'n) ring_scheme] => ('a => 'b) set\"",
+        'fun example_fun :: "nat ⇒ nat"',
+        """locale monoid =
+  fixes G (structure)
+  assumes m_closed: \"\<lbrakk>x \<in> carrier G; y \<in> carrier G\<rbrakk> \<Longrightarrow> x \<otimes> y \<in> carrier G\"
+    and m_assoc: \"\<lbrakk>x \<in> carrier G; y \<in> carrier G; z \<in> carrier G\<rbrakk> \<Longrightarrow> (x \<otimes> y) \<otimes> z = x \<otimes> (y \<otimes> z)\"
+    and one_closed: \"\<one> \<in> carrier G\"
+    and l_one: \"x \<in> carrier G \<Longrightarrow> \<one> \<otimes> x = x\"
+    and r_one: \"x \<in> carrier G \<Longrightarrow> x \<otimes> \<one> = x\"""",
+        r"subsection \<open>Groups\<close>",
+        """locale group = monoid +
+  assumes Units_closed: \"x \<in> Units G \<Longrightarrow> x \<in> carrier G\"
+    and l_inv_ex: \"x \<in> carrier G \<Longrightarrow> \<exists> y \<in> carrier G. y \<otimes> x = \<one>\"
+    and r_inv_ex: \"x \<in> carrier G \<Longrightarrow> \<exists> y \<in> carrier G. x \<otimes> y = \<one>\"""",
+        r"subsection \<open>Rings\<close>",
+        """locale ring = abelian_group R + monoid R +
+  assumes l_distr: \"\<lbrakk>x \<in> carrier R; y \<in> carrier R; z \<in> carrier R\<rbrakk> \<Longrightarrow> (x \<oplus> y) \<otimes> z = x \<otimes> z \<oplus> y \<otimes> z\"
+    and r_distr: \"\<lbrakk>x \<in> carrier R; y \<in> carrier R; z \<in> carrier R\<rbrakk> \<Longrightarrow> z \<otimes> (x \<oplus> y) = z \<otimes> x \<oplus> z \<otimes> y\"""",
+        """locale commutative_ring = ring +
+  assumes m_commutative: \"\<lbrakk>x \<in> carrier R; y \<in> carrier R\<rbrakk> \<Longrightarrow> x \<otimes> y = y \<otimes> x\"""",
+        """locale domain = commutative_ring +
+  assumes no_zero_divisors: \"\<lbrakk>a \<otimes> b = \<zero>; a \<in> carrier R; b \<in> carrier R\<rbrakk> \<Longrightarrow> a = \<zero> \<or> b = \<zero>\"""",
+        """locale field = domain +
+  assumes inv_ex: \"x \<in> carrier R - {\<zero>} \<Longrightarrow> inv x \<in> carrier R\"""",
+        r"subsection \<open>Morphisms\<close>",
+        'lemma example_lemma: "example_fun n = n"',
+        """qualified lemma gcd_0:
+  \"gcd a 0 = normalize a\"""",
+        """lemma abelian_monoidI:
+  fixes R (structure)
+      and f :: "'edge::{} \<Rightarrow> 'case::{}"
+  assumes \"\<And>x y. \<lbrakk> x \<in> carrier R; y \<in> carrier R \<rbrakk> \<Longrightarrow> x \<oplus> y \<in> carrier R\"
+      and \"\<zero> \<in> carrier R\"
+      and \"\<And>x y z. \<lbrakk> x \<in> carrier R; y \<in> carrier R; z \<in> carrier R \<rbrakk> \<Longrightarrow> (x \<oplus> y) \<oplus> z = x \<oplus> (y \<oplus> z)\"
+  shows \"abelian_monoid R\"""",
+        """lemma euclidean_size_gcd_le1 [simp]:
+  assumes \"a \<noteq> 0\"
+  shows \"euclidean_size (gcd a b) \<le> euclidean_size a\"""",
+        """theorem Residue_theorem:
+  fixes S pts::\"complex set\" and f::\"complex \<Rightarrow> complex\"
+    and g::\"real \<Rightarrow> complex\"
+  assumes \"open S\" \"connected S\" \"finite pts\" and
+          holo:\"f holomorphic_on S-pts\" and
+          \"valid_path g\" and
+          loop:\"pathfinish g = pathstart g\" and
+          \"path_image g \<subseteq> S-pts\" and
+          homo:\"\<forall>z. (z \<notin> S) \<longrightarrow> winding_number g z  = 0\"
+  shows \"contour_integral g f = 2 * pi * \<i> *(\<Sum>p \<in> pts. winding_number g p * residue f p)\"""",
+        """corollary fps_coeff_residues_bigo':
+  fixes f :: \"complex \<Rightarrow> complex\" and r :: real
+  assumes exp: \"f has_fps_expansion F\"
+  assumes \"open A\" \"connected A\" \"cball 0 r \<subseteq> A\" \"r > 0\" 
+  assumes \"f holomorphic_on A - S\" \"S \<subseteq> ball 0 r\" \"finite S\" \"0 \<notin> S\"
+  assumes \"eventually (\<lambda>n. g n = -(\<Sum>z \<in> S. residue (\<lambda>z. f z / z ^ Suc n) z)) sequentially\"
+             (is \"eventually (\<lambda>n. _ = -?g' n) _\")
+  shows   \"(\<lambda>n. fps_nth F n - g n) \<in> O(\<lambda>n. 1 / r ^ n)\" (is \"(\<lambda>n. ?c n - _) \<in> O(_)\")""",
+        "end",
+    ]
+]
+
+import warnings
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+
+@pytest.mark.parametrize(
+    "file,expected",
+    [
+        (
+            "tests/more_languages/group6/test.f",
+            [
+                "MODULE basic_mod",
+                """    TYPE :: person
+        CHARACTER(LEN=50) :: name
+        INTEGER :: age
+    END TYPE person""",
+                """    SUBROUTINE short_hello(happy, path)
+    END SUBROUTINE short_hello""",
+                """    SUBROUTINE long_hello(
+        p,
+        message
+    )
+    END SUBROUTINE long_hello""",
+                "END MODULE basic_mod",
+                """PROGRAM HelloFortran
+END PROGRAM HelloFortran""",
+            ],
+        ),
+        (
+            "tests/more_languages/group6/fractal.thy",
+            ISABELLE_EXPECTATION,
+        ),
+    ],
+)
+def test_more_languages_group_6(
+    file: str,
+    expected: List[str],
+):
+    print(f"{file=}")
+
+    result = parse_file(file)
+    print(f"{result=}")
+    print(f"{expected=}")
+    assert result == expected
+    # if file.endswith(".thy"):
+    #     assert 0
+
+
+def test_more_languages_isabelle_symbol_replacement():
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
+    test_content_1 = r"\<fakesymbol> f \<noteq> 0 \<longleftrightarrow> (\<exists>n. f $ n \<noteq> 0 \<and> (\<forall>m < n. f $ m = 0))"
+    expected = r"\<fakesymbol> f ≠ 0 ⟷ (∃n. f $ n ≠ 0 ∧ (∀m < n. f $ m = 0))"
+    processed = replace_isabelle_symbols(test_content_1)
+    print(processed)
+    print(expected)
+    assert processed == expected
+    # assert 0
 
 
 # TODO:

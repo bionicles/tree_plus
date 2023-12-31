@@ -7,7 +7,8 @@
     "requirements.txt",
     "tree_plus_src",
     "tests",
-    "test.sqlite"
+    "test.sqlite",
+    "pytest.ini"
   ],
   "exec": "make debug_command || exit 1",
   "env": {

@@ -9,7 +9,6 @@ from rich.text import Text
 from tree_plus_src.ignore import is_binary
 from tree_plus_src.debug import debug_print
 
-
 LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
 
 
@@ -20,6 +19,7 @@ def extract_and_debug_print_groups(match: re.Match) -> dict:
         group = match.group(i)
         if group:
             numbered_groups[i] = group
+    numbered_groups |= {k: v for k, v in match.groupdict().items() if v}
     debug_print("groups:")
     debug_print(numbered_groups)
     return numbered_groups
@@ -163,8 +163,22 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_tex(contents)
     elif file_extension == ".lean":
         components = parse_lean(contents)
+    elif file_extension in {
+        ".f",
+        ".for",
+        ".f77",
+        ".f90",
+        ".f95",
+        ".f03",
+        ".f08",
+        ".F",
+        ".F90",
+    }:
+        components = parse_fortran(contents)
     elif file_extension == ".tf":
         components = parse_tf(contents)
+    elif file_extension == ".thy":
+        components = parse_isabelle(contents)
     elif file_extension == ".lua":
         components = parse_lua(contents)
     elif file_extension == ".tcl":
@@ -190,6 +204,109 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+def clean_isabelle_text(content: Text) -> Text:
+    string = content
+    debug_print("string", string)
+    return string.replace('"', "'").replace("'", '"')
+
+
+ASSUMES = r"^(?P<assumption> *assumes \w+: \"[^\"]*\"(?:\s *and \w+: \"[^\"]*\")*)"
+FIXES = r"^(?P<fixes> *fixes \w+ .*(\s^ *and.*)*)"
+# ^(?P<lemma_or_locale> *(?:lemma|locale).*
+# r"^(?P<lemma_or_locale> *(qualified )?(?:lemma|locale).*)(\s^ *\".*)?(\s^ *(?:fixes|assumes|shows).*(\s^ *and.*)*)*",
+
+
+def parse_isabelle(contents: str) -> List[str]:
+    from tree_plus_src.lookups.isabelle_symbols import replace_isabelle_symbols
+
+    debug_print("parse_isabelle")
+
+    pattern = re.compile(
+        # title
+        r"^\(\* *(?P<title>Title: *[^\n]+)|"
+        r"^ *(?P<author>Author: *[^\n]+)|"
+        r"^ *(?P<theory>theory *[^\n]+)|"
+        r"^ *(?P<section>(sub)?section *[^\n]+)|"
+        r"^ *(?P<class>class *[^\n]+)|"
+        r"^ *(?P<definition>(qualified )?definition \w+ :: \"[^\"]*\")|"
+        r"^ *(?P<function>(qualified )?fun(ction)? \w+ :: \"[^\"]*\")|"
+        r"^(?P<claim>(?P<lemma_or_locale> *(qualified )?(?:theorem|lemma|locale|corollary).*)(\s^ *\".*)?(\s^ *(?:fixes|assumes|shows|obtains).*((\s^ *(?:and|\(is).*(\s^.*(and|\"))*)*)*)*.*)(?=\s^)|"
+        r"^(?P<fin>end)",
+        re.MULTILINE,
+    )
+
+    components = []
+    for n, match in enumerate(pattern.finditer(contents)):
+        debug_print(f"parse_isabelle {n=} {match=}")
+        groups = extract_and_debug_print_groups(match)
+        component = None
+        if "title" in groups:
+            component = groups["title"]
+        elif "author" in groups:
+            component = groups["author"]
+        elif "theory" in groups:
+            component = groups["theory"]
+        elif "section" in groups:
+            component = replace_isabelle_symbols(groups["section"])
+            component = clean_isabelle_text(component)
+        elif "class" in groups:
+            component = groups["class"]
+        elif "definition" in groups:
+            component = replace_isabelle_symbols(groups["definition"])
+        elif "function" in groups:
+            component = replace_isabelle_symbols(groups["function"])
+        elif "claim" in groups:
+            component = replace_isabelle_symbols(groups["claim"])
+        elif "fin" in groups:
+            component = groups["fin"]
+
+        if component:
+            debug_print(f"match {n} component:\n{component}")
+            components.append(component)
+
+    return components
+
+
+def parse_fortran(contents: str) -> List[str]:
+    debug_print("parse_fortran")
+
+    # remove comments
+    contents = re.sub(r" ?! ?[^\"]*?(?=\n)", "", contents)
+
+    # Regex pattern to match Fortran components including multiline subroutine signatures
+    combined_pattern = re.compile(
+        # Match traditional subroutines (single line and multiline)
+        r"^(?P<signature> *SUBROUTINE\s+\w+\([^\)]*\))(?P<details>[\s\S]*?(?P<ending>\s*END\s+SUBROUTINE\s+\w+))(?=\s|$)|"
+        # Match types to the end
+        r"^(?P<typedef> *TYPE[\s\S]*?(?:END TYPE \w+))|"
+        # Match PROGRAM and label start and end
+        r"^((?P<programstart>PROGRAM\s+\w+)[\s\S]*?(?P<programend>END PROGRAM \w+))\s?|"
+        # Match MODULE without its contents (so we don't consume the subroutines)
+        r"^(?P<module>MODULE \w+)|" r"^(?P<endmodule>END MODULE \w+)",
+        re.MULTILINE,
+    )
+
+    components = []
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_fortran {n=} {match=}")
+        component = None
+        groups = extract_and_debug_print_groups(match)
+        if "signature" in groups and "ending" in groups:
+            component = groups["signature"] + groups["ending"]
+        elif "programstart" in groups and "programend" in groups:
+            component = groups["programstart"] + "\n" + groups["programend"]
+        elif "typedef" in groups:
+            component = groups["typedef"]
+        elif "module" in groups:
+            component = groups["module"]
+        elif "endmodule" in groups:
+            component = groups["endmodule"]
+        if component:
+            debug_print(f"parse_fortran {n=} {component=}")
+            components.append(component)
+    return components
 
 
 c_comment_pattern = re.compile(r"(\s)*//.*(\s*,\s*|\s*\))?$|\s*/\*.*?\*/", re.MULTILINE)
@@ -299,8 +416,8 @@ def parse_cpp(contents: str) -> List[str]:
 
     components = []
 
-    for match in combined_pattern.finditer(contents):
-        debug_print(f"{match=}")
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_cpp {n=} {match=}")
         component = match.group().strip()
         # fix a minor visual defect
         component = component.replace("::", " :: ")
@@ -331,7 +448,9 @@ def parse_c(contents: str) -> List[str]:
 
     components = []
 
-    for match in combined_pattern.finditer(contents):
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        debug_print(f"parse_cpp {n=} {match=}")
+        _ = extract_and_debug_print_groups(match)
         component = match.group().strip()
         if component.startswith("typedef"):
             # Extract only the typedef struct name
@@ -1588,40 +1707,6 @@ def parse_java(contents: str) -> List[str]:
             components.append(component)
 
     return components
-
-
-# def parse_julia(content: str) -> List[str]:
-#     components = []
-
-#     # Find module declarations
-#     module_pattern = r"\bmodule\s+(\w+)"
-#     module_matches = re.findall(module_pattern, content)
-
-#     # For each module, add it and its components to the output list
-#     for module_match in module_matches:
-#         module_name = module_match
-#         components.append(f"module {module_name}")
-
-#         # Find struct declarations within the module
-#         struct_pattern = r"\bstruct\s+(\w+)"
-#         struct_matches = re.findall(struct_pattern, content)
-#         for struct_match in struct_matches:
-#             components.append(f"module {module_name} -> struct {struct_match}")
-
-#         # Find function definitions within the module
-#         # Note the addition of `=` in the pattern
-#         function_pattern = r"(\w+)\s*\((.*?)\)\s*="
-#         function_matches = re.findall(function_pattern, content)
-#         for function_match in function_matches:
-#             function_name = function_match[0]
-#             parameters = function_match[1]
-#             components.append(f"module {module_name} -> {function_name}({parameters})")
-
-#     return components
-
-# ^( *(Base\.@kwdef )?(mutable )?struct \w+([\s:\w\d#α-ωΑ-Ω])*(?=\s^\s*end))
-# r"^( *(?:mutable )?struct \w+[\s: \w\d#]*(?=\s^\s*end))",
-# r"^( *(Base\.@kwdef )?(mutable )?struct \w+([α-ωΑ-Ω]|[\s:\w\d#])*(?=\s^\s*end))",
 
 
 def parse_jl(contents: str) -> List[str]:
