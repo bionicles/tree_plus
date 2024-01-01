@@ -3,7 +3,6 @@ from typing import List
 import pytest
 import os
 
-from rich.text import Text
 from rich import print
 import sqlite3
 
@@ -470,14 +469,47 @@ def test_more_languages_group1(
         (
             "tests/more_languages/group2/PowershellTest.ps1",
             [
-                "function Test-Ordering([string]$foo)",
+                "function Say-Nothing()",
                 "class Person",
-                "class Person -> Person([string]$name)",
-                "class Person -> [string]Greet()",
-                "class Person -> [string]GreetMany([int]$times)",
-                "class Person -> NoReturn([int]$times)",
-                "class Person -> NoReturnNoArgs()",
+                "    Person([string]$name)",
+                "    [string]Greet()",
+                "    [string]GreetMany([int]$times)",
+                "    [string]GreetWithDetails([string]$greeting, [int]$times)",
+                """    [string]GreetMultiline(
+        [string]$greeting,
+        [int]$times
+    )""",
+                "    NoReturn([int]$times)",
+                "    NoReturnNoArgs()",
                 "function Say-Hello([Person]$person)",
+                "function Multi-Hello([Person]$personA, [Person]$personB)",
+                "function Switch-Item",
+                "  param ([switch]$on)",
+                "function Get-SmallFiles",
+                """  param (
+      [PSDefaultValue(Help = '100')]
+      $Size = 100
+  )""",
+                "function Get-User",
+                '  [CmdletBinding(DefaultParameterSetName="ID")]',
+                '  [OutputType("System.Int32", ParameterSetName="ID")]',
+                '  [OutputType([String], ParameterSetName="Name")]',
+                """  Param (
+    [parameter(Mandatory=$true, ParameterSetName="ID")]
+    [Int[]]
+    $UserID,
+
+    [parameter(Mandatory=$true, ParameterSetName="Name")]
+    [String[]]
+    $UserName
+  )""",
+                "filter Get-ErrorLog ([switch]$Message)",
+                """function global:MultilineSignature(
+  [string]$param1,
+  [int]$param2,
+  [Parameter(Mandatory=$true)]
+  [string]$param3
+)""",
             ],
         ),
         (
@@ -510,6 +542,8 @@ def test_more_languages_group2(
 ):
     print(f"{file=}")
     result = parse_file(file)
+    # if file.endswith(".ps1"):
+    # expected = [expectation) for expectation in expected]
     print(f"{expected=}")
     print(f"{result=}")
     assert result == expected
@@ -1090,7 +1124,8 @@ def test_more_languages_group4(
     print(f"{file=}")
     result = parse_file(file)
     if file.endswith("rust_test.rs"):
-        expected = [Text(expectation) for expectation in expected]
+        result = [r.code for r in result]
+        # expected = [expectation for expectation in expected]
     print(f"{result=}")
     print(f"{expected=}")
     assert result == expected

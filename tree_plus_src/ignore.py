@@ -1,8 +1,9 @@
 # tree_plus_src/ignore.py
-from typing import Optional, Union, Set, Tuple, FrozenSet
+from typing import Optional, Tuple, FrozenSet
 from functools import lru_cache
 import os
 
+from rich import print as rich_print
 import fnmatch
 
 from tree_plus_src.debug import debug_print
@@ -119,57 +120,46 @@ DEFAULT_IGNORE = {
     "venv",
 }
 
-IgnoreInput = Optional[Union[str, FrozenSet[str], Tuple[str]]]
-Ignore = FrozenSet[str]
-
 
 @lru_cache
-def make_ignore(ignore: IgnoreInput) -> Ignore:
-    "CACHED = HASHABLE"
-    if ignore is None:
+def make_ignore(maybe_ignore_tuple: Optional[Tuple[str]] = None) -> FrozenSet[str]:
+    "make_ignore: Give me tuple[str] or give me None"
+    debug_print(f"make_ignore: input {maybe_ignore_tuple=}")
+    if maybe_ignore_tuple is not None:
+        if not isinstance(maybe_ignore_tuple, tuple):
+            raise TypeError(f"{maybe_ignore_tuple=} must be None or tuple[str]")
+    if maybe_ignore_tuple is None:
         ignore = frozenset()
-    elif isinstance(ignore, str):
-        ignore = frozenset(ignore.split(","))
-    elif isinstance(ignore, tuple):
-        ignore = frozenset(ignore)
-    elif isinstance(ignore, frozenset):
-        pass
-    else:
-        print(f"{ignore=} {type(ignore)=}")
-        raise TypeError("tree_plus ignore arg must be a string, set or None")
+    elif isinstance(maybe_ignore_tuple, tuple):
+        ignore = frozenset(maybe_ignore_tuple)
     ignore = ignore.union(DEFAULT_IGNORE)
-    return frozenset(ignore)
+    ignore = frozenset(ignore)
+    rich_print(f"{ignore=}")
+    return ignore
 
 
 @lru_cache
-def make_globs(globs: IgnoreInput) -> FrozenSet:
-    "CACHED = HASHABLE"
-    if globs is None:
-        globs = frozenset()
-    elif isinstance(globs, str):
-        globs = frozenset(globs.split(","))
-    elif isinstance(globs, tuple):
-        globs = frozenset(globs)
-    elif isinstance(globs, set):
-        globs = frozenset(globs)
-    elif isinstance(globs, frozenset):
-        pass
-    else:
-        print(f"{globs=} {type(globs)=}")
-        raise TypeError("tree_plus globs arg must be a string, set or None")
-    return frozenset(globs)
+def make_globs(
+    maybe_globs_tuple: Optional[Tuple[str]] = None,
+) -> Optional[FrozenSet[str]]:
+    "make_globs: Give me tuple[str] as in ('*.rs',) or give me None"
+    debug_print(f"make_globs: input {maybe_globs_tuple=}")
+    assert maybe_globs_tuple is None or isinstance(maybe_globs_tuple, tuple)
+    globs = None if maybe_globs_tuple is None else frozenset(maybe_globs_tuple)
+    rich_print(f"{globs=}")
+    return globs
 
 
 TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
 BINARY_CHECK_SIZE = 1024
 
 
-@lru_cache()
+@lru_cache
 def is_binary_string(data: bytes) -> bool:
     return bool(data.translate(None, TEXTCHARS))
 
 
-@lru_cache()
+@lru_cache
 def is_binary(file_path: str) -> bool:
     """
     Check if a file is binary or not.
@@ -184,16 +174,23 @@ def is_binary(file_path: str) -> bool:
 
 
 @lru_cache(maxsize=None)
-def should_ignore(path: str, ignore: Ignore, globs: Optional[Ignore] = None) -> bool:
+def should_ignore(
+    path: str,
+    ignore: Optional[FrozenSet[str]] = DEFAULT_IGNORE,
+    globs: Optional[FrozenSet[str]] = None,
+) -> bool:
     "Determine if a given path should be ignored based on ignore and glob patterns."
+    assert ignore is None or isinstance(ignore, frozenset)
+    assert globs is None or isinstance(globs, frozenset)
     # Normalize the path to handle different OS path separators
     normalized_path = os.path.normpath(path)
 
     # Check each part of the path against the ignore patterns
-    for part in normalized_path.split(os.sep):
-        if any(fnmatch.fnmatch(part, pattern) for pattern in ignore):
-            debug_print(f"[should_ignore] Ignored due to ignore pattern: {path=}")
-            return True
+    if ignore:
+        for part in normalized_path.split(os.sep):
+            if any(fnmatch.fnmatch(part, pattern) for pattern in ignore):
+                debug_print(f"[should_ignore] Ignored due to ignore pattern: {path=}")
+                return True
     # If globs are provided, check if any part of the path matches any glob pattern
     if globs:
         if not any(
@@ -201,7 +198,7 @@ def should_ignore(path: str, ignore: Ignore, globs: Optional[Ignore] = None) -> 
             for pattern in globs
             for part in normalized_path.split(os.sep)
         ):
-            debug_print(f"[should_ignore] Ignored due to not matching globs: {path=}")
+            debug_print(f"should_ignore: Ignored due to not matching globs: {path=}")
             return True
 
     return False

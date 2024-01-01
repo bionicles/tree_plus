@@ -63,7 +63,7 @@ def test_cli_on_root():
     path_to_tests = os.path.dirname(os.path.abspath(__file__))
     root_path = os.path.join(path_to_tests, "..")
     result = subprocess.run(
-        ["tree_plus", root_path],
+        ["tree_plus", "-i", "README.md", root_path],
         capture_output=True,
         text=True,
     )
@@ -88,7 +88,7 @@ def test_cli_on_root():
     assert " tree_plus_src" in result.stdout
     assert " unix.yml" in result.stdout
     assert " microsoft.yml" in result.stdout
-    assert "# Tree Plus" in result.stdout
+    assert "# Hello, world!" in result.stdout
     assert "tokens" in result.stdout
     assert "lines" in result.stdout
     assert "def" in result.stdout

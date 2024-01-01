@@ -1,10 +1,12 @@
 # tree_plus_src/parse_file.py
 from functools import lru_cache
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import json
 import os
 import re
-from rich.text import Text
+
+from rich.syntax import Syntax
+
 
 from tree_plus_src.ignore import is_binary
 from tree_plus_src.debug import debug_print
@@ -28,7 +30,11 @@ def extract_and_debug_print_groups(match: re.Match) -> dict:
 
 
 @lru_cache(maxsize=None)
-def read_file(file_path: str, raise_exceptions: bool = False) -> str:
+def read_file(
+    file_path: str,
+    raise_exceptions: bool = False,
+    n_lines: Optional[int] = None,
+) -> str:
     """
     Read the content of a file and return it as a string.
     Optionally raise exceptions if encountered.
@@ -39,7 +45,10 @@ def read_file(file_path: str, raise_exceptions: bool = False) -> str:
     """
     try:
         with open(file_path, "r", encoding="utf-8") as file:
-            contents = file.read()
+            if n_lines is None:
+                contents = file.read()
+            else:
+                contents = "\n".join([next(file) for _ in range(n_lines)])
         return contents
     except Exception as e:
         if raise_exceptions:
@@ -65,7 +74,10 @@ def parse_file(file_path: str) -> List[str]:
     if is_binary(file_path):
         return components
 
-    contents = read_file(file_path)
+    n_lines = None
+    if file_extension == ".csv":
+        n_lines = 3
+    contents = read_file(file_path, n_lines=n_lines)
 
     if file_extension in {".js", ".jsx", ".ts", ".tsx"}:
         if file_path.endswith(".d.ts"):
@@ -115,7 +127,7 @@ def parse_file(file_path: str) -> List[str]:
     elif file_extension == ".sh":
         components = parse_bash(contents)
     elif file_extension == ".ps1":
-        components = parse_powershell(contents)
+        components = parse_ps1(contents)
     elif file_extension == ".zig":
         components = parse_zig(contents)
     elif file_extension == ".rb":
@@ -208,16 +220,10 @@ def parse_file(file_path: str) -> List[str]:
     return total_components
 
 
-def clean_isabelle_text(content: Text) -> Text:
+def clean_isabelle_text(content: str) -> str:
     string = content
     debug_print("string", string)
     return string.replace('"', "'").replace("'", '"')
-
-
-ASSUMES = r"^(?P<assumption> *assumes \w+: \"[^\"]*\"(?:\s *and \w+: \"[^\"]*\")*)"
-FIXES = r"^(?P<fixes> *fixes \w+ .*(\s^ *and.*)*)"
-# ^(?P<lemma_or_locale> *(?:lemma|locale).*
-# r"^(?P<lemma_or_locale> *(qualified )?(?:lemma|locale).*)(\s^ *\".*)?(\s^ *(?:fixes|assumes|shows).*(\s^ *and.*)*)*",
 
 
 def parse_isabelle(contents: str) -> List[str]:
@@ -495,8 +501,12 @@ combined_py_pattern = re.compile(
 
 # r"( *def\s+\w+\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*->\s*[\w\[\], ]+\s*):|"
 # regex might help with indentation & multiline function signatures
+# from pygments.lexers.python import PythonLexer
+
+
 def parse_py(contents: str) -> List[str]:
     debug_print("parse_py")
+
     # remove comments in multiline signatures
     contents = remove_py_comments(contents)
     components = []
@@ -504,37 +514,35 @@ def parse_py(contents: str) -> List[str]:
     for match_number, match in enumerate(combined_py_pattern.finditer(contents)):
         groups = extract_and_debug_print_groups(match)
         debug_print(f"parse_py: {match_number=} {match=}")
-
+        component = None
         # Function or Method is 1
         if 1 in groups:
-            fun_group = groups[1]
+            component = groups[1]
             if decorator_carry:
-                fun_group = "\n".join(decorator_carry) + "\n" + fun_group
+                component = "\n".join(decorator_carry) + "\n" + component
                 decorator_carry = []
 
-            # fix a bug with [hints]
-            fun_group = Text(fun_group)
-            components.append(fun_group)
         # Class is 2
         elif 3 in groups:
-            class_group = groups[3]
+            component = groups[3]
             if decorator_carry:
-                class_group = "\n".join(decorator_carry) + "\n" + class_group
+                component = "\n".join(decorator_carry) + "\n" + component
                 decorator_carry = []
-            class_group = Text(class_group)  # [generics]
-            components.append(class_group)
         # 6 is the whole decorator group
         elif 6 in groups:
             decorator = groups[6]
             decorator_carry.append(decorator)
         # 8 wraps entire TypeVar matches
         elif 8 in groups:
-            typevar = groups[8]
-            components.append(typevar)
+            component = groups[8]
         # 9 is __version__
         elif 9 in groups:
-            version = groups[9]
-            components.append(version)
+            component = groups[9]
+
+        if component:
+            assert isinstance(component, str)
+            component = Syntax(component, "python")
+            components.append(component)
 
     return components
 
@@ -641,6 +649,8 @@ def parse_erl(contents: str) -> List[str]:
 
 def parse_rs(contents: str) -> List[str]:
     debug_print("parse_rs")
+    from pygments.lexers.rust import RustLexer
+
     contents = remove_c_comments(contents)
 
     # Combined regex pattern to match all components
@@ -679,7 +689,9 @@ def parse_rs(contents: str) -> List[str]:
         elif 18 in groups:
             component = groups[18]
         if component:
-            components.append(Text(component))
+            # component = Text(component)
+            component = Syntax(component, lexer=RustLexer())
+            components.append(component)
 
     return components
 
@@ -1945,80 +1957,42 @@ def parse_php(content: str) -> List[str]:
     return [component for _, component in components]
 
 
-def parse_powershell(contents: str) -> List[str]:
-    # Split the contents into lines
-    lines = contents.split("\n")
-
-    # Create an empty result list
-    result = []
-
-    # Initialize the current class name to None
-    current_class_name = None
-
-    # Iterate over the lines in the contents
-    for line in lines:
-        # Check if the line matches a function
-        function_match = re.match(r"function\s+([\w-]+)\s*\((.*?)\)\s*\{", line)
-        if function_match:
-            result.append(
-                "function {}({})".format(
-                    function_match.group(1), function_match.group(2)
-                )
-            )
-            continue
-
-        # Check if the line matches a class
-        class_match = re.match(r"class\s+([\w]+)\s*\{", line)
-        if class_match:
-            current_class_name = class_match.group(1)
-            result.append("class {}".format(current_class_name))
-            continue
-
-        # Check if the line matches a constructor
-        constructor_match = re.match(rf"{current_class_name}\s*\((.*?)\)\s*\{{", line)
-        if constructor_match and current_class_name:
-            arguments = constructor_match.group(1)
-            result.append(
-                "class {} -> {}({})".format(
-                    current_class_name, current_class_name, arguments
-                )
-            )
-
-        # Check if the line matches a method
-        method_match = re.match(r"\s*(?:\[(\w+)\])?\s*([\w-]+)\s*\((.*?)\)\s*\{", line)
-        if method_match and current_class_name:
-            method_name = method_match.group(2)
-            arguments = method_match.group(3)
-
-            if method_match.group(1):  # if return type is present
-                return_type = method_match.group(1)
-                result.append(
-                    "class {} -> [{}]{}({})".format(
-                        current_class_name, return_type, method_name, arguments
-                    )
-                )
-            else:  # if return type is not present
-                result.append(
-                    "class {} -> {}({})".format(
-                        current_class_name, method_name, arguments
-                    )
-                )
-
-        # Check if the line matches a function with a class type argument
-        function_with_class_type_arg_match = re.match(
-            r"function\s+([\w-]+)\s*\(\[([\w]+)\]\s*([\w-]+)\)\s*\{", line
-        )
-        if function_with_class_type_arg_match:
-            result.append(
-                "function {}([{}] {})".format(
-                    function_with_class_type_arg_match.group(1),
-                    function_with_class_type_arg_match.group(2),
-                    function_with_class_type_arg_match.group(3),
-                )
-            )
-            continue
-
-    return result
+def parse_ps1(contents: str) -> List[str]:
+    debug_print("parse_ps1")
+    contents = remove_py_comments(contents)
+    pattern = re.compile(
+        # function
+        r"^(?P<function>(?P<function_scope>\w+:)?(?:function|filter)[\s\S]*?(?=\s{))|"
+        # method
+        r"^(?P<method> *(?:\[.*\])?\w+\([\s\S]*?\)(?=\s{))|"
+        # (P|p)aram
+        r"^(?P<param_block> *(?:P|p)aram \((?:\s*(?:\[|\$|(?:\)(?=\n))).*)*)|"
+        # class
+        r"^(?P<class>(?P<class_scope>\w+:)?class[\s\S]*?(?= {))|"
+        # [Annotation] not followed by $
+        r"^(?P<annotation> *\[.*\](?!\$))",
+        re.MULTILINE,
+    )
+    components = []
+    for n, match in enumerate(pattern.finditer(contents)):
+        debug_print(f"parse_ps1 {n=} {match=}")
+        groups = extract_and_debug_print_groups(match)
+        component = None
+        if "function" in groups:
+            component = groups["function"]
+        elif "method" in groups:
+            component = groups["method"]
+        elif "class" in groups:
+            component = groups["class"]
+        elif "param_block" in groups:
+            component = groups["param_block"]
+        elif "annotation" in groups:
+            component = groups["annotation"]
+        debug_print(f"parse_ps1 {n=} {component=}")
+        if component:
+            # component = Text(component)
+            components.append(component)
+    return components
 
 
 def parse_matlab(content: str) -> List[str]:

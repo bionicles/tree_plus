@@ -18,7 +18,7 @@ test_normally:
 	pytest tests/ -k "units or more_languages or dotenv" -vv
 
 test_e2e:
-	pytest tests/ -k "e2e"
+	pytest tests/ -k "e2e" -vv
 
 # then we have a test where we change directory
 test_tp_dotdot:

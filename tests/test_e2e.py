@@ -1,16 +1,65 @@
 # tests/test_e2e.py
+from typing import Optional
 import subprocess
 import platform
 import rich
 import sys
 import os
+import re
 
 import pytest  # noqa: F401
 
-from rich import print
 from io import StringIO
 
-from tree_plus_cli import main as tree_plus_main, tree_plus, tree_to_string
+from tree_plus_cli import (
+    main as tree_plus_main,
+    tree_plus,
+    tree_to_string,
+    safe_print,
+    make_ignore,
+)
+from tree_plus_src import (
+    debug_disabled,
+    debug_print,
+    TokenLineCount,
+    extract_and_debug_print_groups,
+)
+
+
+def extract_tokens_lines(line: str) -> Optional[TokenLineCount]:
+    debug_print(f"extract_tokens_lines: {line=}")
+    if match := re.search(
+        r"\((?P<n_tokens>\d+) tokens, (?P<n_lines>\d+) lines\)", line
+    ):
+        debug_print(f"extract_tokens_lines: {match=}")
+        groups = extract_and_debug_print_groups(match)
+        if "n_tokens" in groups and "n_lines" in groups:
+            return TokenLineCount(
+                n_tokens=int(groups["n_tokens"]), n_lines=int(groups["n_lines"])
+            )
+    return None
+
+
+def test_e2e_root_rs():
+    # disable_debug()
+    result = tree_plus(".", globs_tuple=("*.rs",))
+    result_string = tree_to_string(result)
+    result_lines = result_string.splitlines()
+    first_lines = result_lines[:4]
+    rust_lines = [
+        line
+        for line in result_lines[4:]
+        if ".rs (" in line or ("tokens" in line and "(0 " not in line)
+    ]
+    relevant_lines = first_lines + rust_lines
+    safe_print(relevant_lines)
+    with debug_disabled():
+        for line in relevant_lines:
+            if ".rs (" in line:
+                counts = extract_tokens_lines(line)
+                print(counts)
+    assert 0
+
 
 test_directory = "tests/path_to_test"
 
@@ -38,7 +87,7 @@ def test_e2e_single_file():
     result = tree_plus(f"{test_directory}/file.py")
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
-    print(result_str)
+    safe_print(result_str)
     assert unify_tree_symbols(result_str) == EXPECTATION_0
 
 
@@ -107,8 +156,10 @@ EXPECTATION_1 = """📁 path_to_test (564 tokens, 105 lines)
 def test_e2e_single_directory():
     result = tree_plus(test_directory)
     assert isinstance(result, rich.tree.Tree)
+    print("test_e2e_single_directory tree\n")
+    safe_print(result)
     result_str = tree_to_string(result)
-    print(result_str)
+    print("test_e2e_single_directory result\n", result_str)
     assert unify_tree_symbols(result_str) == unify_tree_symbols(EXPECTATION_1)
 
 
@@ -116,13 +167,15 @@ def test_e2e_multiple_directories():
     test_directory2 = "tests/path_to_test"
     result = tree_plus(f"{test_directory},{test_directory2}")
     assert isinstance(result, rich.tree.Tree)
+    print("test_e2e_multiple_directories tree")
+    safe_print(result)
     result_str = tree_to_string(result)
-    print(result_str)
+    print("test_e2e_multiple_directories result\n", result_str)
     assert unify_tree_symbols(result_str) == unify_tree_symbols(EXPECTATION_1)
 
 
 def test_e2e_glob():
-    result = tree_plus("tests/more_languages", globs=("*.*s",))
+    result = tree_plus("tests/more_languages", globs_tuple=("*.*s",))
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
     print(result_str)
@@ -141,15 +194,15 @@ def test_e2e_glob():
 
 # Test ignore parameter
 def test_e2e_ignore_parameter_filetype():
-    result = tree_plus("tests/more_languages/group1", ignore=("*.kt",))
+    result = tree_plus("tests/more_languages/group1", ignore_tuple=("*.kt",))
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
-    print(result_str)
+    safe_print(result_str)
     assert ".kt" not in result_str
 
 
 def test_e2e_ignore_parameter_directory():
-    result = tree_plus("tests/more_languages", ignore=("group2",))
+    result = tree_plus("tests/more_languages", ignore_tuple=("group2",))
     assert isinstance(result, rich.tree.Tree)
     result_str = tree_to_string(result)
     print(result_str)
