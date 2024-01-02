@@ -1123,9 +1123,6 @@ def test_more_languages_group4(
 ):
     print(f"{file=}")
     result = parse_file(file)
-    if file.endswith("rust_test.rs"):
-        result = [r.code for r in result]
-        # expected = [expectation for expectation in expected]
     print(f"{result=}")
     print(f"{expected=}")
     assert result == expected

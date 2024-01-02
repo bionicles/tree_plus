@@ -1,11 +1,9 @@
 # tree_plus_src/count_tokens_lines.py
 from dataclasses import dataclass
-from functools import lru_cache
 import tiktoken
 import os
 
 from tree_plus_src.debug import debug_print
-from tree_plus_src.traverse_directory import traverse_directory
 from tree_plus_src.parse_file import read_file
 
 encoder = tiktoken.encoding_for_model("gpt-4")
@@ -16,17 +14,6 @@ encoder = tiktoken.encoding_for_model("gpt-4")
 class TokenLineCount:
     n_tokens: int = 0
     n_lines: int = 0
-
-
-@lru_cache
-def add_tokens_lines(
-    lhs_count: TokenLineCount, rhs_count: TokenLineCount
-) -> TokenLineCount:
-    total_tokens = lhs_count.n_tokens + rhs_count.n_tokens
-    total_lines = lhs_count.n_lines + rhs_count.n_lines
-    new_count = TokenLineCount(total_tokens, total_lines)
-    debug_print(f"{lhs_count} + {rhs_count} = {new_count}")
-    return new_count
 
 
 # Ignore binary files like images, executables, and databases
@@ -120,8 +107,10 @@ def count_tokens_lines(file_path: str) -> TokenLineCount:
     """
     Count the number of lines and OpenAI tokens in a file.
     """
+    debug_print(f"count_tokens_lines {file_path=}")
     file_extension = os.path.splitext(file_path)
     if os.path.isdir(file_path) or file_extension in extensions_not_to_count:
+        debug_print(f"count_tokens_lines not counting {file_path=}")
         return TokenLineCount(n_tokens=0, n_lines=0)
 
     contents = read_file(file_path)
@@ -129,4 +118,16 @@ def count_tokens_lines(file_path: str) -> TokenLineCount:
         return TokenLineCount(n_tokens=0, n_lines=0)
     n_tokens = len(encoder.encode(contents, disallowed_special=()))
     n_lines = len(contents.splitlines())
-    return TokenLineCount(n_tokens=n_tokens, n_lines=n_lines)
+    count = TokenLineCount(n_tokens=n_tokens, n_lines=n_lines)
+    debug_print(f"count_tokens_lines {count=}")
+    return count
+
+
+def add_tokens_lines(
+    lhs_count: TokenLineCount, rhs_count: TokenLineCount
+) -> TokenLineCount:
+    total_tokens = lhs_count.n_tokens + rhs_count.n_tokens
+    total_lines = lhs_count.n_lines + rhs_count.n_lines
+    new_count = TokenLineCount(total_tokens, total_lines)
+    debug_print(f"{lhs_count} + {rhs_count} = {new_count}")
+    return new_count

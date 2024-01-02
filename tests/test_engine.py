@@ -1,8 +1,18 @@
-import pathlib
-
+from pathlib import Path
 import pytest
 
-from tree_plus_src import engine
+from rich.syntax import Syntax
+from rich.tree import Tree
+from rich import print as rich_print
+
+from tree_plus_src import (
+    engine,
+    debug_disabled,
+    debug_print,
+    parse_ignore,
+    AmortizedGlobs,
+    amortize_globs,
+)
 
 
 def is_(types, thing) -> bool:
@@ -20,6 +30,14 @@ def test_engine_categorize_root():
     assert category is engine.Category.ROOT, "root 2"
 
 
+def test_engine_is_glob():
+    assert engine.is_glob("*.rs")
+    assert engine.is_glob("?.rs")
+    assert engine.is_glob("[a-zA-Z].rs")
+    assert not engine.is_glob("tests")
+    assert not engine.is_glob("tests/test_engine.py")
+
+
 def test_engine_categorize_glob():
     category = engine.categorize("*.rs")
     assert category is engine.Category.GLOB, "glob 1"
@@ -32,7 +50,7 @@ def test_engine_categorize_glob():
 def test_engine_categorize_folder():
     category = engine.categorize("tests")
     assert category is engine.Category.FOLDER, "folder 1"
-    category = engine.categorize(pathlib.Path("tests"))
+    category = engine.categorize(Path("tests"))
     assert category is engine.Category.FOLDER, "folder 2"
     category = engine.categorize(".")
     assert category is engine.Category.FOLDER, "folder 3"
@@ -47,3 +65,258 @@ def test_engine_categorize_file():
     assert category is engine.Category.FILE, "file 2"
     category = engine.categorize("tests/../tree_plus_cli.py")
     assert category is engine.Category.FILE, "file 3"
+
+
+def test_engine__new():
+    x = engine.TreePlus()
+    assert is_(engine.TreePlus, x)
+    assert x.is_component()
+    assert x.name == ""
+    assert x.n_folders == 0
+    assert x.n_files == 0
+    assert x.n_tokens == 0
+    assert x.n_lines == 0
+
+
+def test_engine__from_file():
+    file_path = Path("tests/test_engine.py")
+    x = engine._from_file(
+        # noformat
+        file_path=file_path,
+    )
+    print(x)
+    assert is_(engine.TreePlus, x)
+    assert x.is_file()
+    y = engine.into_rich_tree(root=x)
+    assert is_(Tree, y)
+    engine.safe_print(y)
+    tree_string = engine.tree_to_string(y)
+    assert "test_engine__from_file" in tree_string
+
+
+def test_engine__from_code():
+    x = engine._from_code(
+        # noformat
+        lexer="definitely not a lexer",
+        code="lambda x: x + 1",
+    )
+    rich_print(x)
+    assert is_(str, x)
+    y = engine._from_code(lexer="python", code="lambda x: x + 2")
+    rich_print(y)
+    print(y.lexer)
+    assert is_(Syntax, y)
+
+
+def test_engine__from_folder():
+    print("\nnormal print: test_engine__from_folder")
+    folder_path = Path("tests/dot_dot")
+    tree_plus_default_ignore = engine._from_folder(
+        # noformat
+        folder_path=folder_path,
+    )
+    debug_print(tree_plus_default_ignore)
+    assert is_(engine.TreePlus, tree_plus_default_ignore)
+    assert tree_plus_default_ignore.is_folder()
+    rich_tree_default_ignore = engine.into_rich_tree(root=tree_plus_default_ignore)
+    assert is_(Tree, rich_tree_default_ignore)
+    engine.safe_print(rich_tree_default_ignore)
+    default_ignore_tree_string = engine.tree_to_string(rich_tree_default_ignore)
+    assert "test_tp_dotdot.py" in default_ignore_tree_string
+    assert "__pycache__" not in default_ignore_tree_string
+
+
+def test_engine__from_folder_with_ignore_None():
+    print("\nnormal print: test_engine__from_folder")
+    # again, ignoring nothing this time
+    folder_path = Path("tests/dot_dot")
+    tree_plus_no_ignore = engine._from_folder(
+        folder_path=folder_path,
+        maybe_ignore=None,
+    )
+    assert is_(engine.TreePlus, tree_plus_no_ignore)
+    assert tree_plus_no_ignore.is_folder()
+    rich_tree_no_ignore = engine.into_rich_tree(root=tree_plus_no_ignore)
+    assert is_(Tree, rich_tree_no_ignore)
+    engine.safe_print(rich_tree_no_ignore)
+    no_ignore_tree_string = tree_plus_no_ignore.into_str()
+    assert "test_tp_dotdot.py" in no_ignore_tree_string
+    # does contain ignored things
+    assert "__pycache__" in no_ignore_tree_string
+
+
+def test_engine_amortize_globs():
+    paths = (Path("tree_plus_src"), Path("tests"))
+    globs = ("*.rs", "*.scm")
+    amortized = amortize_globs(paths=paths, globs=globs)
+    rich_print(amortized)
+    assert isinstance(amortized, AmortizedGlobs)
+    assert amortized.globs == globs
+    assert amortized.matches == frozenset(
+        {
+            Path("tests/more_languages/group4"),
+            Path("tests/more_languages/group5"),
+            Path("tests/more_languages"),
+            Path("tests/more_languages/group_lisp"),
+            Path("."),
+            Path("tests"),
+            Path("tests/more_languages/group_lisp/test_scheme.scm"),
+            Path("tests/more_languages/group5/rust_todo_test.rs"),
+            Path("tests/more_languages/group4/rust_test.rs"),
+        }
+    )
+    assert Path("tests") in amortized.matches
+    assert Path("tests/path_to_test") not in amortized.matches
+    assert Path("tests/more_languages") in amortized.matches
+    # doesn't contain directories with 0 matches
+    assert Path("tests/more_languages/group1") not in amortized.matches
+    assert Path("tests/more_languages/group2") not in amortized.matches
+    assert Path("tests/more_languages/group3") not in amortized.matches
+    # does contain directories with matches:
+    assert Path("tests/more_languages/group4") in amortized.matches
+    assert Path("tests/more_languages/group5") in amortized.matches
+    assert Path("tests/more_languages/group_lisp") in amortized.matches
+
+
+def test_engine__from_folder_with_glob_no_ignore():
+    print("\nnormal print: test_engine__from_folder_with_glob_no_ignore")
+    # again, ignoring nothing this time
+    tests_path = Path("tests/more_languages")
+    rust_glob = "*.rs"
+    paths = (tests_path,)
+    globs = (rust_glob,)
+    amortized_globs = amortize_globs(paths=paths, globs=globs)
+    rich_print(amortized_globs)
+    tree_plus_no_ignore = engine._from_folder(
+        folder_path=tests_path,
+        maybe_globs=amortized_globs,
+    )
+    assert is_(engine.TreePlus, tree_plus_no_ignore)
+    assert tree_plus_no_ignore.is_folder()
+    rich_tree_no_ignore = tree_plus_no_ignore.into_rich_tree()
+    assert is_(Tree, rich_tree_no_ignore)
+    engine.safe_print(rich_tree_no_ignore)
+    rust_glob_tree_string = tree_plus_no_ignore.into_str()
+    assert "rust_todo_test.rs" in rust_glob_tree_string
+    assert "rust_todo_test.rs" in rust_glob_tree_string
+    # does not contain ignored things
+    assert "__pycache__" not in rust_glob_tree_string
+    # does not contain other languages besides rust
+    assert ".py" not in rust_glob_tree_string
+    assert ".rs" in rust_glob_tree_string
+    assert "more_languages" in rust_glob_tree_string
+    assert "group4" in rust_glob_tree_string
+    assert "group5" in rust_glob_tree_string
+
+
+def test_engine__from_seed_for_file():
+    file_path = Path("tests/test_engine.py")
+    file_tree_plus = engine._from_seed(seed_path=file_path)
+    rich_print(file_tree_plus)
+    rich_file_tree = file_tree_plus.into_rich_tree()
+    assert is_(Tree, rich_file_tree)
+    engine.safe_print(rich_file_tree)
+    rich_file_tree_str = file_tree_plus.into_str()
+    assert is_(str, rich_file_tree_str)
+    assert "test_engine__from_seed_for_file" in rich_file_tree_str
+
+
+def test_engine__from_seed_for_folder():
+    folder_path = Path("tests/path_to_test")
+    folder_tree_plus = engine._from_seed(seed_path=folder_path)
+    rich_print(folder_tree_plus)
+    rich_folder_tree = folder_tree_plus.into_rich_tree()
+    assert is_(Tree, rich_folder_tree)
+    engine.safe_print(rich_folder_tree)
+    rich_folder_tree_str = folder_tree_plus.into_str()
+    assert is_(str, rich_folder_tree_str)
+    assert "def my_multiline_signature_method" in rich_folder_tree_str
+    assert ".txt" in rich_folder_tree_str
+
+
+def test_engine__from_seed_for_folder_with_glob():
+    folder_path = Path("tests/path_to_test")
+    amortized_globs = amortize_globs(
+        paths=(folder_path,),
+        globs=("*.py",),
+    )
+    # ignore_txt = parse_ignore(maybe_ignore_tuple=("*.txt",))
+    folder_tree_plus = engine._from_seed(
+        seed_path=folder_path,
+        # maybe_ignore=ignore_txt,
+        maybe_globs=amortized_globs,
+    )
+    rich_print(folder_tree_plus)
+    rich_folder_tree = folder_tree_plus.into_rich_tree()
+    assert is_(Tree, rich_folder_tree)
+    engine.safe_print(rich_folder_tree)
+    rich_folder_tree_str = folder_tree_plus.into_str()
+    assert is_(str, rich_folder_tree_str)
+    assert "def my_multiline_signature_method" in rich_folder_tree_str
+    assert ".txt" not in rich_folder_tree_str
+
+
+def test_engine__from_seed_for_folder_with_ignore():
+    folder_path = Path("tests/path_to_test")
+    ignore_txt = parse_ignore(maybe_ignore_tuple=("*.txt",))
+    folder_tree_plus = engine._from_seed(
+        seed_path=folder_path,
+        maybe_ignore=ignore_txt,
+    )
+    rich_print(folder_tree_plus)
+    rich_folder_tree = folder_tree_plus.into_rich_tree()
+    assert is_(Tree, rich_folder_tree)
+    engine.safe_print(rich_folder_tree)
+    rich_folder_tree_str = folder_tree_plus.into_str()
+    assert is_(str, rich_folder_tree_str)
+    assert "def my_multiline_signature_method" in rich_folder_tree_str
+    assert ".txt" not in rich_folder_tree_str
+
+
+def test_engine__map_seeds():
+    folder_seed = "tests/path_to_test"
+    file_seed = "tests/test_engine.py"
+    glob_seed = "*.py"
+    seeds = (folder_seed, file_seed, glob_seed)
+    forest = engine._map_seeds(
+        seeds=seeds,
+    )
+    rich_print(forest)
+    tree1 = forest[0].into_rich_tree()
+    tree2 = forest[1].into_rich_tree()
+    rich_print(tree1)
+    rich_print(tree2)
+    str1 = forest[0].into_str()
+    str2 = forest[1].into_str()
+    assert "def my_multiline_signature_method" in str1
+    assert ".txt" not in str1
+    assert "def test_engine__map_seeds" in str2
+
+
+def test_engine__reduce_forest():
+    folder_seed = "tests/path_to_test"
+    file_seed = "tests/test_engine.py"
+    glob_seed = "*.py"
+    seeds = (folder_seed, file_seed, glob_seed)
+    forest = engine._map_seeds(
+        seeds=seeds,
+    )
+    root = engine._reduce_forest(
+        forest=forest,
+    )
+    root_rich_tree = root.into_rich_tree()
+    rich_print(root_rich_tree)
+    root_str = root.into_str()
+    assert "Root (1 folder," in root_str
+    assert "tokens," in root_str
+    assert "test_engine.py" in root_str
+
+
+def test_engine_from_seeds():
+    folder_seed = "tests/path_to_test"
+    file_seed = "tests/test_engine.py"
+    glob_seed = "*.py"
+    seeds = (folder_seed, file_seed, glob_seed)
+    root = engine.from_seeds(seeds)
+    rich_print(root.into_rich_tree())
+    root_str = root.into_str()

@@ -8,14 +8,20 @@ debug:
 	nodemon -L -V
 
 .PHONY: debug_command
-debug_command: test test_cli
+debug_command: test
+# debug_command: test_engine
 
+# use -s to colorize / immediately print test debug output
 
-test: test_normally test_e2e test_tp_dotdot test_cli test_deploy
+test: test_e2e test_engine test_normally test_tp_dotdot test_cli test_deploy
+
+test_engine:
+	pytest tests/test_engine.py
 
 # first we'll do our unit tests (most likely to need fast debug)
 test_normally:
 	pytest tests/ -k "units or more_languages or dotenv" -vv
+
 
 test_e2e:
 	pytest tests/ -k "e2e" -vv

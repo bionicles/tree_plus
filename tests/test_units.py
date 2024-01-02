@@ -1,40 +1,58 @@
 # tests/test_units.py
 import pytest
 
+# from tree_plus.detritus import traverse_directory
 
-from tree_plus_cli import remove_trailing_space
-from tree_plus_src import (
-    traverse_directory,
-    parse_file,
-    parse_markers,
-    TokenLineCount,
-    count_tokens_lines,
-    make_ignore,
-    make_globs,
-    debug_print,
-)
 
+# from tree_plus_cli import remove_trailing_space
+# from tree_plus_src import (
+#     parse_file,
+#     parse_markers,
+#     TokenLineCount,
+#     count_tokens_lines,
+#     make_ignore,
+#     make_globs,
+#     debug_print,
+# )
+
+import tree_plus_src as tree_plus
 
 # TODO: test debug_disabled
 
 
-def test_units_make_ignore():
-    ignored = make_ignore()
-    debug_print(f"{ignored=}")
-    assert len(ignored) > 0
-    ignored2 = make_ignore(("stuff.exe",))
-    debug_print(f"{ignored2=}")
-    assert "stuff.exe" in ignored2
-    # assert 0
+def test_engine_parse_ignore_default():
+    ignored = tree_plus.parse_ignore()
+    tree_plus.debug_print(f"{ignored=}")
+    assert ignored == tree_plus.DEFAULT_IGNORE
 
 
-def test_units_make_globs():
-    globs = make_globs()
-    debug_print(f"{globs=}")
+def test_engine_parse_ignore_none():
+    ignored_with_override = tree_plus.parse_ignore(
+        maybe_ignore_tuple=None, override=True
+    )
+    tree_plus.debug_print(f"{ignored_with_override=}")
+    assert ignored_with_override == None
+
+
+def test_engine_parse_ignore_one():
+    x = tree_plus.parse_ignore(maybe_ignore_tuple=("externals",))
+    assert isinstance(x, tuple)
+    assert "externals" in x
+
+
+def test_engine_parse_ignore_one_override():
+    input1 = ("externals",)
+    x = tree_plus.parse_ignore(maybe_ignore_tuple=input1, override=True)
+    assert x == input1
+
+
+def test_units_parse_globs():
+    globs = tree_plus.parse_globs()
+    tree_plus.debug_print(f"{globs=}")
     assert globs is None
-    globs2 = make_globs(("*.rs",))
-    debug_print(f"{globs2=}")
-    assert globs2 == frozenset(("*.rs",))
+    globs2 = tree_plus.parse_globs(("*.rs",))
+    tree_plus.debug_print(f"{globs2=}")
+    assert globs2 == ("*.rs",)
     # assert 0
 
 
@@ -43,18 +61,7 @@ def test_units_remove_trailing_space():
 bobbins"""
     y = """bob
 bobbins"""
-    assert remove_trailing_space(x) == y
-
-
-# test traversal
-def test_units_valid_directory():
-    result = traverse_directory("tests/path_to_test")
-    assert isinstance(result, list)
-
-
-def test_units_file_as_directory():
-    result = traverse_directory("tests/path_to_test/file.txt")
-    assert isinstance(result, list)
+    assert tree_plus.engine.remove_trailing_space(x) == y
 
 
 # test parsing
@@ -103,9 +110,7 @@ class TestDataclass""",
 )
 def test_units_file_parsing(file, expected):
     print(f"{file=}")
-    result = parse_file(file)
-    if file.endswith(".py"):
-        result = [r.code for r in result]
+    result = tree_plus.parse_file(file)
     print(f"{expected=}")
     print(f"{result=}")
     assert result == expected
@@ -113,7 +118,7 @@ def test_units_file_parsing(file, expected):
 
 def test_units_parse_todo():
     content = open("tests/more_languages/group5/rust_todo_test.rs", "r").read()
-    result = parse_markers(content)
+    result = tree_plus.parse_markers(content)
     assert result == [
         "TODO (Line 23): This todo tests parse_todo",
     ]
@@ -125,7 +130,7 @@ bug_todo_note = (
 
 
 def test_units_parse_markers():
-    results = parse_markers(bug_todo_note)
+    results = tree_plus.parse_markers(bug_todo_note)
     assert results == [
         "BUG (Line 1): This is a bug.",
         "TODO (Line 2): Fix this soon.",
@@ -137,11 +142,17 @@ def test_units_parse_markers():
 @pytest.mark.parametrize(
     "file,expected",
     [
-        ("tests/path_to_test/file.py", TokenLineCount(n_tokens=19, n_lines=3)),
-        ("tests/path_to_test/empty.py", TokenLineCount(n_tokens=0, n_lines=0)),
+        (
+            "tests/path_to_test/file.py",
+            tree_plus.TokenLineCount(n_tokens=19, n_lines=3),
+        ),
+        (
+            "tests/path_to_test/empty.py",
+            tree_plus.TokenLineCount(n_tokens=0, n_lines=0),
+        ),
     ],
 )
 def test_units_token_counting(file, expected):
-    result = count_tokens_lines(file)
-    assert isinstance(result, TokenLineCount)
+    result = tree_plus.count_tokens_lines(file)
+    assert isinstance(result, tree_plus.TokenLineCount)
     assert result == expected

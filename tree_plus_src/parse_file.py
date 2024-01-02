@@ -5,28 +5,14 @@ import json
 import os
 import re
 
-from rich.syntax import Syntax
+# moved into engine.py ... here we can just extract components
+# from rich.syntax import Syntax
 
-
-from tree_plus_src.ignore import is_binary
 from tree_plus_src.debug import debug_print
 
 LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
-
-
-def extract_and_debug_print_groups(match: re.Match) -> dict:
-    "filter and debug print non-None match groups"
-    numbered_groups = {}
-    for i in range(len(match.groups())):
-        group = match.group(i)
-        if group:
-            numbered_groups[i] = group
-    for k, v in match.groupdict().items():
-        if v:
-            numbered_groups[k] = v
-    debug_print("groups:")
-    debug_print(numbered_groups)
-    return numbered_groups
+TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
+BINARY_CHECK_SIZE = 1024
 
 
 @lru_cache(maxsize=None)
@@ -54,7 +40,7 @@ def read_file(
         if raise_exceptions:
             raise
         else:
-            print(f"read_file Exception @ {file_path}: {e}")
+            debug_print(f"read_file Exception @ {file_path}: {e}")
             return ""
 
 
@@ -136,7 +122,7 @@ def parse_file(file_path: str) -> List[str]:
         components = parse_makefile(contents)
     elif file_extension == ".sql":
         components = parse_sql(contents)
-    elif file_extension == ".env":
+    elif file_extension == ".env" or file_name.startswith(".env"):
         components = parse_dot_env(contents)
     elif file_extension == ".txt":
         if "requirements" in file_name:
@@ -218,6 +204,40 @@ def parse_file(file_path: str) -> List[str]:
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
     return total_components
+
+
+@lru_cache
+def is_binary_string(data: bytes) -> bool:
+    return bool(data.translate(None, TEXTCHARS))
+
+
+@lru_cache
+def is_binary(file_path: str) -> bool:
+    """
+    Check if a file is binary or not.
+    """
+    try:
+        # read the file in binary mode
+        with open(file_path, "rb") as f:
+            return is_binary_string(f.read(BINARY_CHECK_SIZE))
+    except Exception as e:
+        print(f"Error opening file {file_path}: {e}")
+        return False
+
+
+def extract_and_debug_print_groups(match: re.Match) -> dict:
+    "filter and debug print non-None match groups"
+    numbered_groups = {}
+    for i in range(len(match.groups())):
+        group = match.group(i)
+        if group:
+            numbered_groups[i] = group
+    for k, v in match.groupdict().items():
+        if v:
+            numbered_groups[k] = v
+    debug_print("groups:")
+    debug_print(numbered_groups)
+    return numbered_groups
 
 
 def clean_isabelle_text(content: str) -> str:
@@ -541,7 +561,7 @@ def parse_py(contents: str) -> List[str]:
 
         if component:
             assert isinstance(component, str)
-            component = Syntax(component, "python")
+            # component = Syntax(component, "python")
             components.append(component)
 
     return components
@@ -690,7 +710,7 @@ def parse_rs(contents: str) -> List[str]:
             component = groups[18]
         if component:
             # component = Text(component)
-            component = Syntax(component, lexer=RustLexer())
+            # component = Syntax(component, lexer=RustLexer())
             components.append(component)
 
     return components

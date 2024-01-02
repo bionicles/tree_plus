@@ -11,54 +11,22 @@ import pytest  # noqa: F401
 
 from io import StringIO
 
-from tree_plus_cli import (
-    main as tree_plus_main,
-    tree_plus,
-    tree_to_string,
-    safe_print,
-    make_ignore,
-)
-from tree_plus_src import (
-    debug_disabled,
-    debug_print,
-    TokenLineCount,
-    extract_and_debug_print_groups,
-)
+from tree_plus_cli import main as tree_plus_main
+import tree_plus_src as tree_plus
 
 
-def extract_tokens_lines(line: str) -> Optional[TokenLineCount]:
-    debug_print(f"extract_tokens_lines: {line=}")
+def extract_tokens_lines(line: str) -> Optional[tree_plus.TokenLineCount]:
+    tree_plus.debug_print(f"extract_tokens_lines: {line=}")
     if match := re.search(
         r"\((?P<n_tokens>\d+) tokens, (?P<n_lines>\d+) lines\)", line
     ):
-        debug_print(f"extract_tokens_lines: {match=}")
-        groups = extract_and_debug_print_groups(match)
+        tree_plus.debug_print(f"extract_tokens_lines: {match=}")
+        groups = tree_plus.extract_and_debug_print_groups(match)
         if "n_tokens" in groups and "n_lines" in groups:
-            return TokenLineCount(
+            return tree_plus.TokenLineCount(
                 n_tokens=int(groups["n_tokens"]), n_lines=int(groups["n_lines"])
             )
     return None
-
-
-def test_e2e_root_rs():
-    # disable_debug()
-    result = tree_plus(".", globs_tuple=("*.rs",))
-    result_string = tree_to_string(result)
-    result_lines = result_string.splitlines()
-    first_lines = result_lines[:4]
-    rust_lines = [
-        line
-        for line in result_lines[4:]
-        if ".rs (" in line or ("tokens" in line and "(0 " not in line)
-    ]
-    relevant_lines = first_lines + rust_lines
-    safe_print(relevant_lines)
-    with debug_disabled():
-        for line in relevant_lines:
-            if ".rs (" in line:
-                counts = extract_tokens_lines(line)
-                print(counts)
-    assert 0
 
 
 test_directory = "tests/path_to_test"
@@ -84,10 +52,10 @@ def unify_tree_symbols(tree_string):
 
 
 def test_e2e_single_file():
-    result = tree_plus(f"{test_directory}/file.py")
-    assert isinstance(result, rich.tree.Tree)
-    result_str = tree_to_string(result)
-    safe_print(result_str)
+    result = tree_plus.from_seed(f"{test_directory}/file.py")
+    assert isinstance(result, tree_plus.TreePlus)
+    result.render()
+    result_str = result.into_str()
     assert unify_tree_symbols(result_str) == EXPECTATION_0
 
 
@@ -104,9 +72,9 @@ def test_e2e_empty_folder():
         os.makedirs(EMPTY)
     if not os.path.exists(EMPTY_MEANS_EMPTY):
         os.makedirs(EMPTY_MEANS_EMPTY)
-    result = tree_plus(EMPTY)
-    assert isinstance(result, rich.tree.Tree)
-    result_str = tree_to_string(result)
+    result = tree_plus.from_seeds((EMPTY,))
+    assert isinstance(result, tree_plus.TreePlus)
+    result_str = result.into_str()
     print(result_str)
     assert unify_tree_symbols(result_str) == EXPECTATION_EMPTY
 
@@ -154,30 +122,31 @@ EXPECTATION_1 = """📁 path_to_test (564 tokens, 105 lines)
 
 
 def test_e2e_single_directory():
-    result = tree_plus(test_directory)
-    assert isinstance(result, rich.tree.Tree)
+    result = tree_plus.from_seeds((test_directory,))
+    assert isinstance(result, tree_plus.TreePlus)
     print("test_e2e_single_directory tree\n")
-    safe_print(result)
-    result_str = tree_to_string(result)
+    tree_plus.safe_print(result)
+    result_str = tree_plus.tree_to_string(result)
     print("test_e2e_single_directory result\n", result_str)
     assert unify_tree_symbols(result_str) == unify_tree_symbols(EXPECTATION_1)
 
 
 def test_e2e_multiple_directories():
     test_directory2 = "tests/path_to_test"
-    result = tree_plus(f"{test_directory},{test_directory2}")
-    assert isinstance(result, rich.tree.Tree)
+    with tree_plus.debug_disabled():
+        result = tree_plus.from_seeds((test_directory, test_directory2))
+    assert isinstance(result, tree_plus.TreePlus)
     print("test_e2e_multiple_directories tree")
-    safe_print(result)
-    result_str = tree_to_string(result)
+    result.render()
+    result_str = result.into_str()
     print("test_e2e_multiple_directories result\n", result_str)
     assert unify_tree_symbols(result_str) == unify_tree_symbols(EXPECTATION_1)
 
 
 def test_e2e_glob():
-    result = tree_plus("tests/more_languages", globs_tuple=("*.*s",))
-    assert isinstance(result, rich.tree.Tree)
-    result_str = tree_to_string(result)
+    result = tree_plus.from_seeds("tests/more_languages", maybe_globs=("*.*s",))
+    assert isinstance(result, tree_plus.TreePlus)
+    result_str = result.into_str()
     print(result_str)
     assert ".rs" in result_str
     assert ".ts" in result_str
@@ -194,19 +163,80 @@ def test_e2e_glob():
 
 # Test ignore parameter
 def test_e2e_ignore_parameter_filetype():
-    result = tree_plus("tests/more_languages/group1", ignore_tuple=("*.kt",))
-    assert isinstance(result, rich.tree.Tree)
-    result_str = tree_to_string(result)
-    safe_print(result_str)
+    result = tree_plus.from_seed(
+        "tests/more_languages/group1",
+        maybe_ignore=("*.kt",),
+    )
+    assert isinstance(result, tree_plus.TreePlus)
+    result.render()
+    result_str = result.into_str()
     assert ".kt" not in result_str
 
 
 def test_e2e_ignore_parameter_directory():
-    result = tree_plus("tests/more_languages", ignore_tuple=("group2",))
-    assert isinstance(result, rich.tree.Tree)
-    result_str = tree_to_string(result)
+    result = tree_plus.from_seed(
+        "tests/more_languages",
+        maybe_ignore=("group2",),
+    )
+    assert isinstance(result, tree_plus.TreePlus)
+    result_str = result.into_str()
     print(result_str)
     assert "group2" not in result_str
+
+
+# BUG: this test identifies the issue with deeply nested glob matches
+# [
+#     '📁 tree_plus (999 tokens, 186 lines)',
+#     '┗━━ 📁 tests (0 tokens, 0 lines)',
+#     '    ┗━━ 📁 more_languages',
+#     '        ┣━━ 📁 group4 (890 tokens, 159 lines)',
+#     '        ┃   ┗━━ 📄 rust_test.rs (890 tokens, 159 lines)',
+#     '        ┗━━ 📁 group5 (109 tokens, 27 lines)',
+#     '            ┗━━ 📄 rust_todo_test.rs (109 tokens, 27 lines)'
+# ]
+# TokenLineCount(n_tokens=890, n_lines=159)
+# TokenLineCount(n_tokens=109, n_lines=27)
+def test_e2e_root_rs_glob():
+    # disable_debug()
+    with tree_plus.debug_disabled():
+        result = tree_plus.from_seed(".", maybe_globs=("*.rs",))
+    result.render()
+    result_str = result.into_str()
+    result_lines = result_str.splitlines()
+    first_lines = result_lines[:4]
+    rust_lines = [
+        line
+        for line in result_lines[4:]
+        if ".rs (" in line or ("tokens" in line and "(0 " not in line)
+    ]
+    relevant_lines = first_lines + rust_lines
+    tree_plus.safe_print(relevant_lines)
+    total = tree_plus.TokenLineCount()
+    tests_line = ""
+    more_languages_line = ""
+    with tree_plus.debug_disabled():
+        for line in relevant_lines:
+            if ".rs (" in line:
+                line_count = extract_tokens_lines(line)
+                print(line_count)
+                total = tree_plus.add_tokens_lines(total, line_count)
+            elif "tests" in line:
+                tests_line = line
+            elif "more_languages" in line:
+                more_languages_line = line
+    print(total)
+    expectation = f"({total.n_tokens} tokens, {total.n_lines} lines)"
+    print(f"{tests_line=}")
+    print(f"{more_languages_line=}")
+    # visual defect
+    assert not all(
+        (
+            "🌵 Root (1 folder, 2 files)" in result_str,
+            "└── 📁  (1 folder, 2 files)" in result_str,
+        )
+    )
+    assert expectation in more_languages_line
+    assert expectation in tests_line
 
 
 def test_e2e_main_glob():

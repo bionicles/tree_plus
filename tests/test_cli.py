@@ -8,20 +8,15 @@ from rich import print
 
 # the exact import path might need to be adjusted based on your setup
 from tree_plus_cli import main
-from tree_plus_src import (
-    count_tokens_lines,
-    TokenLineCount,
-    traverse_directory,
-    parse_file,
-)
+import tree_plus_src as tree_plus
 
 
 def test_imports():
     assert callable(main)
-    assert callable(count_tokens_lines)
-    assert callable(TokenLineCount)
-    assert callable(traverse_directory)
-    assert callable(parse_file)
+    assert callable(tree_plus.count_tokens_lines)
+    assert callable(tree_plus.TokenLineCount)
+
+    assert callable(tree_plus.parse_file)
 
 
 def test_tree_plus_help():
@@ -45,18 +40,6 @@ def test_tree_plus_display_version():
     result = subprocess.run(["tree_plus", "--version"], capture_output=True, text=True)
     assert result.returncode == 0
     assert __version__ in result.stdout
-
-
-# def test_tree_plus_glob():
-#     result = subprocess.run(
-#         ["tree_plus", "-g !*.rs", "tests/more_language_units/group5"],
-#         capture_output=True,
-#     )
-#     assert result.returncode == 0
-#     assert result.stderr == ""
-#     assert "group5" in result.stdout
-#     assert ".rs" not in result.stdout
-#     assert "trait" not in result.stdout
 
 
 def test_cli_on_root():
