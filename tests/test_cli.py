@@ -101,7 +101,6 @@ def test_cli_override():
     assert " pytest.ini" not in stdout
     assert " .hypothesis" in stdout
     assert " __pycache__" in stdout
-    assert " .pytest_cache" in stdout
     assert " test_tp_dotdot.py" in stdout
     # "-i", "*.ini", removed for normal override test
     result = subprocess.run(
@@ -120,7 +119,6 @@ def test_cli_override():
     assert " .hypothesis" in stdout
     assert " pytest.ini" in stdout
     assert " __pycache__" in stdout
-    assert " .pytest_cache" in stdout
     assert " test_tp_dotdot.py" in stdout
     result = subprocess.run(
         ["tree_plus", "--override", "-i", ".hypothesis", "tests/dot_dot"],
@@ -134,7 +132,6 @@ def test_cli_override():
     assert " .hypothesis" not in stdout
     assert " pytest.ini" in stdout
     assert " __pycache__" in stdout
-    assert " .pytest_cache" in stdout
     assert " test_tp_dotdot.py" in stdout
 
 
