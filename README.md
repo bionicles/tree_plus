@@ -33,194 +33,58 @@
 <!-- t1-start -->
 ```sh
 tree_plus -i tests
-paths=('.',)
-📁 tree_plus (66379 tokens, 6523 lines)
-┣━━ 📁 .github (107 tokens, 11 lines)
-┃   ┣━━ 📁 workflows (1050 tokens, 128 lines)
-┃   ┃   ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
-┃   ┃   ┃   ┣━━ Microsoft
-┃   ┃   ┃   ┣━━   job: build
-┃   ┃   ┃   ┣━━     - Set up Python ${{ matrix.python-version }}
-┃   ┃   ┃   ┣━━     - Install tree_plus
-┃   ┃   ┃   ┣━━     - Create .env file
-┃   ┃   ┃   ┣━━     - Set PYTHONUTF8 for Windows
-┃   ┃   ┃   ┣━━     - Run generic tests
-┃   ┃   ┃   ┗━━     - Run specific test
-┃   ┃   ┗━━ 📄 unix.yml (727 tokens, 88 lines)
-┃   ┃       ┣━━ Linux & MacOS
-┃   ┃       ┣━━   job: test
-┃   ┃       ┣━━     - Set up Python ${{ matrix.python-version }}
-┃   ┃       ┣━━     - Install tree_plus
-┃   ┃       ┣━━     - Create .env file
-┃   ┃       ┣━━     - Run generic tests
-┃   ┃       ┣━━     - Run specific test
-┃   ┃       ┣━━   job: deploy
-┃   ┃       ┣━━     - Set up Python
-┃   ┃       ┣━━     - Install pypa/build
-┃   ┃       ┣━━     - Increment Version
-┃   ┃       ┣━━     - Build
-┃   ┃       ┣━━     - Install
-┃   ┃       ┣━━     - Run generic tests
-┃   ┃       ┣━━     - Run specific test
-┃   ┃       ┣━━     - Update README
-┃   ┃       ┣━━     - Build Again
-┃   ┃       ┣━━     - Commit Updates
-┃   ┃       ┗━━     - Publish to PyPI
-┃   ┗━━ 📄 dependabot.yml (107 tokens, 11 lines)
-┃       ┗━━ Unsupported YAML Category
-┣━━ 📁 tree_plus_src (28123 tokens, 3326 lines)
-┃   ┣━━ 📁 scripts (3515 tokens, 450 lines)
-┃   ┃   ┣━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
-┃   ┃   ┃   ┣━━ add_alias()
-┃   ┃   ┃   ┗━━ create_conda_env()
-┃   ┃   ┗━━ 📄 Microsoft.PowerShell_profile.ps1 (3238 tokens, 419 lines)
-┃   ┃       ┣━━ function Log($message)
-┃   ┃       ┗━━ function Show-Error($err)
-┃   ┣━━ 📄 count_tokens_lines.py (731 tokens, 132 lines)
-┃   ┃   ┣━━ TODO (Line 14): show off how well we parse_todo!
-┃   ┃   ┣━━ @dataclass(frozen=True)
-┃   ┃   ┃   class TokenLineCount
-┃   ┃   ┣━━ @lru_cache
-┃   ┃   ┃   def add_tokens_lines(
-┃   ┃   ┃       lhs_count: TokenLineCount, rhs_count: TokenLineCount
-┃   ┃   ┃   ) -> TokenLineCount
-┃   ┃   ┗━━ def count_tokens_lines(file_path: str) -> TokenLineCount
-┃   ┣━━ 📄 debug.py (114 tokens, 24 lines)
-┃   ┃   ┣━━ @lru_cache
-┃   ┃   ┃   def debug_enabled()
-┃   ┃   ┣━━ def debug_print(*args, **kwargs)
-┃   ┃   ┗━━ def enable_debug()
-┃   ┣━━ 📄 deploy.py (2093 tokens, 240 lines)
-┃   ┃   ┣━━ TODO (Line 167): test this reset readme command so we can clean out the code blocks
-┃   ┃   ┣━━ def extract(path: str = None) -> str
-┃   ┃   ┣━━ def load(content: str = None, path: str = None)
-┃   ┃   ┣━━ def extract_version(source_path: str = None) -> Tuple[int, int, int]
-┃   ┃   ┣━━ def increment_version(
-┃   ┃   ┃       source_path: str = None,
-┃   ┃   ┃       sink_path: str = None,
-┃   ┃   ┃   )
-┃   ┃   ┣━━ def run_command(command: str = None, debug: bool = False)
-┃   ┃   ┣━━ def replace_readme_section(
-┃   ┃   ┃       source_path: str = None,
-┃   ┃   ┃       sink_path: str = None,
-┃   ┃   ┃       marker: str = None,
-┃   ┃   ┃       command: str = None,
-┃   ┃   ┃   )
-┃   ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
-┃   ┃   ┗━━ def main()
-┃   ┣━━ 📄 ignore.py (1483 tokens, 227 lines)
-┃   ┃   ┣━━ @lru_cache
-┃   ┃   ┃   def make_ignore(ignore: IgnoreInput) -> Ignore
-┃   ┃   ┣━━ @lru_cache
-┃   ┃   ┃   def make_globs(globs: IgnoreInput) -> FrozenSet
-┃   ┃   ┣━━ @lru_cache()
-┃   ┃   ┃   def is_binary_string(data: bytes) -> bool
-┃   ┃   ┣━━ @lru_cache()
-┃   ┃   ┃   def is_binary(file_path: str) -> bool
-┃   ┃   ┗━━ @lru_cache(maxsize=None)
-┃   ┃       def should_ignore(path: str, ignore: Ignore, globs: Optional[Ignore] = None) -> bool
-┃   ┣━━ 📄 isabelle_symbols.py (4084 tokens, 462 lines)
-┃   ┃   ┣━━ @lru_cache
-┃   ┃   ┃   def _replace_symbol(match: re.Match) -> str
-┃   ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-┃   ┣━━ 📄 parse_file.py (19171 tokens, 2181 lines)
-┃   ┃   ┣━━ def extract_and_debug_print_groups(match: re.Match) -> dict
-┃   ┃   ┣━━ @lru_cache(maxsize=None)
-┃   ┃   ┃   def read_file(file_path: str, raise_exceptions: bool = False) -> str
-┃   ┃   ┣━━ def parse_file(file_path: str) -> List[str]
-┃   ┃   ┣━━ def clean_isabelle_text(content: Text) -> Text
-┃   ┃   ┣━━ def parse_isabelle(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_fortran(contents: str) -> List[str]
-┃   ┃   ┣━━ def remove_c_comments(contents: str) -> str
-┃   ┃   ┣━━ def parse_ts(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_cpp(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_c(contents: str) -> List[str]
-┃   ┃   ┣━━ def remove_py_comments(input_string: str) -> str
-┃   ┃   ┣━━ def parse_py(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_rb(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_fsharp(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_tcl(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_erl(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_rs(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_csv(contents: str, max_leaves=11) -> List[str]
-┃   ┃   ┣━━ def parse_mathematica(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_r(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_zig(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_hs(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_lisp(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_capnp(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_grpc(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_openrpc_json(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_json_rpc(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_graphql(contents: str) -> List[str]
-┃   ┃   ┣━━ def format_dependency(name, details)
-┃   ┃   ┣━━ def parse_cargo_toml(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_pyproject_toml(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_lean(lean_content: str) -> List[str]
-┃   ┃   ┣━━ def parse_cs(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_tex(tex_content: str) -> List[str]
-┃   ┃   ┣━━ def parse_go(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_swift(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_bash(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_d_dot_ts(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_angular_app_module(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_angular_routes(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_angular_spec(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_environment_ts(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_dot_env(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_requirements_txt(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_json_schema(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_package_json(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_makefile(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_sql(contents: str) -> List[str]
-┃   ┃   ┣━━ def is_openapi_yml(ymls: Tuple[dict]) -> bool
-┃   ┃   ┣━━ def is_k8s_yml(ymls: Tuple[dict]) -> bool
-┃   ┃   ┣━━ def is_ansible_yml(ymls: Tuple[dict]) -> bool
-┃   ┃   ┣━━ def is_github_yml(ymls: Tuple[dict]) -> bool
-┃   ┃   ┣━━ def parse_github_yml(ymls: Tuple[dict]) -> List[str]
-┃   ┃   ┣━━ def parse_k8s(ymls: Tuple[dict]) -> List[str]
-┃   ┃   ┣━━ def parse_ansible(ymls: Tuple[dict]) -> List[str]
-┃   ┃   ┣━━ def parse_openapi_yml(ymls: Tuple[dict]) -> List[str]
-┃   ┃   ┣━━ def parse_yml(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_db(db_path: str) -> List[str]
-┃   ┃   ┣━━ def parse_cbl(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_java(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_jl(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_kt(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_lua(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_objective_c(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_ocaml(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_apl(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_perl(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_php(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_powershell(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_matlab(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_scala(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_tf(contents: str) -> List[str]
-┃   ┃   ┣━━ def parse_md(content: str) -> List[str]
-┃   ┃   ┣━━ def parse_txt(content: str) -> List[str]
-┃   ┃   ┗━━ def parse_markers(content: str) -> List[str]
-┃   ┣━━ 📄 traverse_directory.py (429 tokens, 58 lines)
-┃   ┃   ┗━━ def traverse_directory(
-┃   ┃           directory_path: str, ignore: IgnoreInput = None, globs: IgnoreInput = None
-┃   ┃       ) -> List[str]
-┃   ┗━━ 📄 version.py (18 tokens, 2 lines)
-┃       ┗━━ __version__ = "1.0.15"
+📁 tree_plus (3 folders, 21 files) 
+┣━━ 📄 .env.test (5 tokens, 1 line)
+┃   ┗━━ DEBUG_TREE_PLUS
+┣━━ 📁 .github (2 folders, 3 files) 
+┃   ┣━━ 📄 dependabot.yml (107 tokens, 11 lines)
+┃   ┃   ┗━━ Unsupported YAML Category
+┃   ┗━━ 📁 workflows (1 folder, 2 files) 
+┃       ┣━━ 📄 microsoft.yml (323 tokens, 40 lines)
+┃       ┃   ┣━━ Microsoft
+┃       ┃   ┣━━   job: build
+┃       ┃   ┣━━     - Set up Python ${{ matrix.python-version }}
+┃       ┃   ┣━━     - Install tree_plus
+┃       ┃   ┣━━     - Create .env file
+┃       ┃   ┣━━     - Set PYTHONUTF8 for Windows
+┃       ┃   ┣━━     - Run generic tests
+┃       ┃   ┗━━     - Run specific test
+┃       ┗━━ 📄 unix.yml (672 tokens, 86 lines)
+┃           ┣━━ Linux & MacOS
+┃           ┣━━   job: test
+┃           ┣━━     - Set up Python ${{ matrix.python-version }}
+┃           ┣━━     - Install tree_plus
+┃           ┣━━     - Create .env file
+┃           ┣━━     - Run generic tests
+┃           ┣━━     - Run specific test
+┃           ┣━━   job: deploy
+┃           ┣━━     - Set up Python
+┃           ┣━━     - Install dependencies
+┃           ┣━━     - Increment Version
+┃           ┣━━     - Build
+┃           ┣━━     - Install
+┃           ┣━━     - Test
+┃           ┣━━     - Update README
+┃           ┣━━     - Build Again
+┃           ┣━━     - Commit Updates
+┃           ┗━━     - Publish to PyPI
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (433 tokens, 79 lines)
+┣━━ 📄 Makefile (501 tokens, 86 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
-┃   ┣━━ debug_command: test test_cli
-┃   ┣━━ test: test_normally test_e2e test_tp_dotdot test_cli test_deploy
+┃   ┣━━ debug_command: test_units test_engine test_more_languages test_tp_dotdot test_e2e test_cli test_deploy
+┃   ┣━━ test_units
+┃   ┣━━ test_more_languages
+┃   ┣━━ test: test_normally test_tp_dotdot test_e2e test_cli test_deploy
+┃   ┣━━ test_engine
 ┃   ┣━━ test_normally
-┃   ┣━━ test_e2e
 ┃   ┣━━ test_tp_dotdot
+┃   ┣━━ test_e2e
 ┃   ┣━━ test_cli: cli
 ┃   ┣━━ test_deploy
-┃   ┣━━ test_dotenv
 ┃   ┣━━ vulture: install_vulture
 ┃   ┣━━ install_vulture
 ┃   ┣━━ build: install-build-tool clean-dist
@@ -236,7 +100,7 @@ paths=('.',)
 ┃   ┣━━ t4
 ┃   ┗━━ t5
 ┣━━ 📄 nodemon.json (129 tokens, 24 lines)
-┣━━ 📄 pyproject.toml (327 tokens, 41 lines)
+┣━━ 📄 pyproject.toml (339 tokens, 41 lines)
 ┃   ┣━━ name: tree_plus
 ┃   ┣━━ version: N/A
 ┃   ┣━━ description: A `tree` util enhanced with tokens, lines, and components.
@@ -247,9 +111,10 @@ paths=('.',)
 ┃   ┣━━     PyYAML
 ┃   ┣━━     click
 ┃   ┣━━     rich
-┃   ┗━━     tomli
-┣━━ 📄 pytest.ini (24 tokens, 6 lines)
-┣━━ 📄 README.md (26841 tokens, 1879 lines)
+┃   ┣━━     tomli
+┃   ┗━━     natsort>=7.1
+┣━━ 📄 pytest.ini (21 tokens, 5 lines)
+┣━━ 📄 README.md (29833 tokens, 2028 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -264,31 +129,277 @@ paths=('.',)
 ┃   ┣━━ ## Languages Todo:
 ┃   ┣━━ ## Oppose Unfair Business Practices
 ┃   ┗━━ ## License
-┗━━ 📄 tree_plus_cli.py (3497 tokens, 448 lines)
-    ┣━━ NOTE (Line 408): parent_count unused, is that ok?
-    ┣━━ def tree_to_string(tree: Tree) -> str
-    ┣━━ def clean_string(input_str)
-    ┣━━ def safe_print(tree)
-    ┣━━ def main(
-    ┃       glob: IgnoreInput,
-    ┃       paths: PathsInput,
-    ┃       ignore: IgnoreInput,
-    ┃       debug: bool,
-    ┃       version: bool,
-    ┃   )
-    ┣━━ def subtree(label: str) -> Tree
-    ┣━━ def clean_tree(input_tree: Tree, root_node: bool = False) -> Optional[Tree]
-    ┣━━ def tree_plus(
-    ┃       path_or_paths: Union[str, Tuple[str]],
-    ┃       ignore: IgnoreInput = None,
-    ┃       globs: IgnoreInput = None,
-    ┃   ) -> Tree
-    ┣━━ def _parse_paths(path_or_paths: Union[str, Tuple[str]]) -> Tuple[str]
-    ┣━━ def flatten_to_str(collection: Collection)
-    ┣━━ def _handle_paths(paths: Tuple[str], ignore: Ignore, globs: Ignore) -> Tree
-    ┗━━ def _handle_path(
-            path: str, ignore: Ignore, globs: Ignore, paths_to_trees: dict
-        ) -> Tuple[Tree, TokenLineCount]
+┣━━ 📄 tree_plus_cli.py (969 tokens, 161 lines)
+┃   ┗━━ def main(
+┃           glob: Optional[Tuple[str]],
+┃           paths: Optional[Union[str, Tuple[str]]],
+┃           ignore: Tuple[str],
+┃           override: bool,
+┃           debug: bool,
+┃           version: bool,
+┃           syntax: bool,
+┃           concise: bool,
+┃       )
+┗━━ 📁 tree_plus_src (2 folders, 9 files) 
+    ┣━━ 📄 count_tokens_lines.py (753 tokens, 133 lines)
+    ┃   ┣━━ TODO (Line 12): show off how well we parse_todo!
+    ┃   ┣━━ @dataclass(frozen=True)
+    ┃   ┃   class TokenLineCount
+    ┃   ┣━━ def count_tokens_lines(file_path: str) -> TokenLineCount
+    ┃   ┗━━ def add_tokens_lines(
+    ┃           lhs_count: TokenLineCount, rhs_count: TokenLineCount
+    ┃       ) -> TokenLineCount
+    ┣━━ 📄 debug.py (167 tokens, 39 lines)
+    ┃   ┣━━ def disable_debug()
+    ┃   ┣━━ @lru_cache
+    ┃   ┃   def debug_enabled()
+    ┃   ┣━━ def debug_print(*args, **kwargs)
+    ┃   ┣━━ def enable_debug()
+    ┃   ┗━━ @contextmanager
+    ┃       def debug_disabled()
+    ┣━━ 📄 deploy.py (1771 tokens, 210 lines)
+    ┃   ┣━━ def extract(path: str = None) -> str
+    ┃   ┣━━ def load(content: str = None, path: str = None)
+    ┃   ┣━━ def extract_version(source_path: str = None) -> Tuple[int, int, int]
+    ┃   ┣━━ def increment_version(
+    ┃   ┃       source_path: str = None,
+    ┃   ┃       sink_path: str = None,
+    ┃   ┃   )
+    ┃   ┣━━ def run_command(command: str = None, debug: bool = False)
+    ┃   ┣━━ def replace_readme_section(
+    ┃   ┃       source_path: str = None,
+    ┃   ┃       sink_path: str = None,
+    ┃   ┃       marker: str = None,
+    ┃   ┃       command: str = None,
+    ┃   ┃   )
+    ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
+    ┃   ┗━━ def main()
+    ┣━━ 📄 engine.py (5841 tokens, 702 lines)
+    ┃   ┣━━ TODO (Line 40): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
+    ┃   ┣━━ TODO (Line 385): research & decide about globs as paths instead of as filters
+    ┃   ┣━━ NOTE (Line 419): here we add directly input file_paths to the amortized glob matches
+    ┃   ┣━━ TODO (Line 492): decide if we apply glob patterns to glob paths (currently NO)
+    ┃   ┣━━ TODO (Line 530): decide between glob and rglob in _from_glob
+    ┃   ┣━━ TODO (Line 537): decide if we need to re-amortize the globs in the glob seed
+    ┃   ┣━━ TODO (Line 539): clarify ignore in glob seed context, skipping for now
+    ┃   ┣━━ class Category(Enum)
+    ┃   ┣━━ @dataclass
+    ┃   ┃   class TreePlus
+    ┃   ┣━━     def is_root(self) -> bool
+    ┃   ┣━━     def is_folder(self) -> bool
+    ┃   ┣━━     def is_file(self) -> bool
+    ┃   ┣━━     def is_glob(self) -> bool
+    ┃   ┣━━     def is_component(self) -> bool
+    ┃   ┣━━     def into_rich_tree(self) -> Tree
+    ┃   ┣━━     def into_str(self) -> str
+    ┃   ┣━━     def render(self)
+    ┃   ┣━━     def stats(self) -> str
+    ┃   ┣━━ @lru_cache
+    ┃   ┃   def remove_trailing_space(x: str) -> str
+    ┃   ┣━━ def tree_to_string(tree: Tree) -> str
+    ┃   ┣━━ def clean_string(input_str: str) -> str
+    ┃   ┣━━ def safe_print(
+    ┃   ┃       tree: Tree,
+    ┃   ┃       style: Optional[str] = None,
+    ┃   ┃       highlight: bool = True,
+    ┃   ┃       markup: bool = False,
+    ┃   ┃   )
+    ┃   ┣━━ def _make_rich_tree(label: str) -> Tree
+    ┃   ┣━━ def into_rich_tree(*, root: TreePlus = None) -> Tree
+    ┃   ┣━━ @lru_cache
+    ┃   ┃   def categorize(
+    ┃   ┃       x: Union[Path, Tuple[str], str],
+    ┃   ┃       check_strs_globs: bool = True,
+    ┃   ┃       check_strs_paths: bool = True,
+    ┃   ┃       raise_if_component: bool = True,
+    ┃   ┃   ) -> Category
+    ┃   ┣━━ def from_seed(
+    ┃   ┃       maybe_seed_str=None,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[Tuple[str]] = None,
+    ┃   ┃       syntax_highlighting: bool = False,
+    ┃   ┃       override_ignore: bool = False,
+    ┃   ┃       concise: bool = False,
+    ┃   ┃   ) -> TreePlus
+    ┃   ┣━━ def from_seeds(
+    ┃   ┃       maybe_seed_strs: Optional[Tuple[str]] = None,
+    ┃   ┃       *,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[Tuple[str]] = None,
+    ┃   ┃       syntax_highlighting: bool = False,
+    ┃   ┃       override_ignore: bool = False,
+    ┃   ┃       concise: bool = False,
+    ┃   ┃   ) -> TreePlus
+    ┃   ┣━━ def _reduce_forest(*, forest: Tuple[TreePlus] = None) -> TreePlus
+    ┃   ┣━━ def _map_seeds(
+    ┃   ┃       *,
+    ┃   ┃       seeds: Tuple[str] = None,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[Tuple[str]] = None,
+    ┃   ┃       syntax_highlighting: bool = False,
+    ┃   ┃       concise: bool = False,
+    ┃   ┃   ) -> Tuple[TreePlus]
+    ┃   ┣━━ def _from_seed(
+    ┃   ┃       *,
+    ┃   ┃       seed_path: Optional[Path] = None,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[AmortizedGlobs] = None,
+    ┃   ┃       syntax_highlighting: bool = False,
+    ┃   ┃       concise: bool = False,
+    ┃   ┃   ) -> TreePlus
+    ┃   ┣━━ def _add_subtree(
+    ┃   ┃       *,
+    ┃   ┃       root: TreePlus = None,
+    ┃   ┃       subtree: TreePlus = None,
+    ┃   ┃   )
+    ┃   ┣━━ def _from_glob(
+    ┃   ┃       *,
+    ┃   ┃       pattern: str,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[AmortizedGlobs] = None,
+    ┃   ┃       syntax_highlighting: bool = False,
+    ┃   ┃       concise: bool = False,
+    ┃   ┃   ) -> TreePlus
+    ┃   ┣━━ def _from_folder(
+    ┃   ┃       *,
+    ┃   ┃       folder_path: Path,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[AmortizedGlobs] = None,
+    ┃   ┃       syntax_highlighting: bool = False,
+    ┃   ┃       concise: bool = False,
+    ┃   ┃   ) -> TreePlus
+    ┃   ┣━━ def _from_file(
+    ┃   ┃       *,
+    ┃   ┃       file_path: Path,
+    ┃   ┃       syntax_highlighting: bool = False,
+    ┃   ┃       concise: bool = False,
+    ┃   ┃   ) -> TreePlus
+    ┃   ┣━━ def _get_lexer(file_path: Path) -> str
+    ┃   ┗━━ def _syntax_highlight(
+    ┃           *,
+    ┃           file_path: Path = None,
+    ┃           components: List[str] = None,
+    ┃       ) -> Union[Syntax, str]
+    ┣━━ 📄 ignore.py (2155 tokens, 312 lines)
+    ┃   ┣━━ def _is_all_str(x: Any) -> bool
+    ┃   ┣━━ def can_parse(x) -> bool
+    ┃   ┣━━ @lru_cache
+    ┃   ┃   def parse_ignore(
+    ┃   ┃       maybe_ignore_tuple: Optional[Tuple[str]] = None, override: bool = False
+    ┃   ┃   ) -> Optional[Tuple[str]]
+    ┃   ┣━━ @lru_cache
+    ┃   ┃   def is_glob(x: str) -> bool
+    ┃   ┣━━ @lru_cache
+    ┃   ┃   def parse_globs(
+    ┃   ┃       maybe_globs_tuple: Optional[Tuple[str]] = None,
+    ┃   ┃   ) -> Tuple[str]
+    ┃   ┣━━ @dataclass(frozen=True)
+    ┃   ┃   class AmortizedGlobs
+    ┃   ┣━━ def amortize_globs(paths: Tuple[Path], globs: Tuple[str]) -> Optional[AmortizedGlobs]
+    ┃   ┗━━ @lru_cache(maxsize=None)
+    ┃       def should_ignore(
+    ┃           path: Path,
+    ┃           ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃           globs: Optional[AmortizedGlobs] = None,
+    ┃       ) -> bool
+    ┣━━ 📄 isabelle_symbols.py (4084 tokens, 462 lines)
+    ┃   ┣━━ @lru_cache
+    ┃   ┃   def _replace_symbol(match: re.Match) -> str
+    ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
+    ┣━━ 📄 parse_file.py (20565 tokens, 2282 lines)
+    ┃   ┣━━ BUG (Line 563): catastrophic backtracking in some c files
+    ┃   ┣━━ @lru_cache(maxsize=None)
+    ┃   ┃   def read_file(
+    ┃   ┃       file_path: str,
+    ┃   ┃       raise_exceptions: bool = False,
+    ┃   ┃       n_lines: Optional[int] = None,
+    ┃   ┃   ) -> str
+    ┃   ┣━━ def parse_file(file_path: Union[str, Path]) -> List[str]
+    ┃   ┣━━ def extract_and_debug_print_groups(match: re.Match, named_only: bool = False) -> dict
+    ┃   ┣━━ def parse_c(contents: str) -> List[str]
+    ┃   ┣━━ @lru_cache
+    ┃   ┃   def is_binary_string(data: bytes) -> bool
+    ┃   ┣━━ @lru_cache
+    ┃   ┃   def is_binary(file_path: str) -> bool
+    ┃   ┣━━ def clean_isabelle_text(content: str) -> str
+    ┃   ┣━━ def parse_isabelle(contents: str) -> List[str]
+    ┃   ┣━━ def parse_fortran(contents: str) -> List[str]
+    ┃   ┣━━ def remove_c_comments(contents: str) -> str
+    ┃   ┣━━ def parse_ts(contents: str) -> List[str]
+    ┃   ┣━━ def remove_py_comments(input_string: str) -> str
+    ┃   ┣━━ def parse_py(contents: str) -> List[str]
+    ┃   ┣━━ def parse_rb(contents: str) -> List[str]
+    ┃   ┣━━ def parse_fsharp(contents: str) -> List[str]
+    ┃   ┣━━ def parse_tcl(contents: str) -> List[str]
+    ┃   ┣━━ def parse_erl(contents: str) -> List[str]
+    ┃   ┣━━ def parse_rs(contents: str) -> List[str]
+    ┃   ┣━━ def parse_csv(contents: str, max_leaves=11) -> List[str]
+    ┃   ┣━━ def parse_mathematica(contents: str) -> List[str]
+    ┃   ┣━━ def parse_r(contents: str) -> List[str]
+    ┃   ┣━━ def parse_zig(contents: str) -> List[str]
+    ┃   ┣━━ def parse_hs(contents: str) -> List[str]
+    ┃   ┣━━ def parse_lisp(content: str) -> List[str]
+    ┃   ┣━━ def parse_capnp(contents: str) -> List[str]
+    ┃   ┣━━ def parse_grpc(contents: str) -> List[str]
+    ┃   ┣━━ def parse_openrpc_json(contents: str) -> List[str]
+    ┃   ┣━━ def parse_json_rpc(contents: str) -> List[str]
+    ┃   ┣━━ def parse_graphql(contents: str) -> List[str]
+    ┃   ┣━━ def format_dependency(name, details)
+    ┃   ┣━━ def parse_cargo_toml(contents: str) -> List[str]
+    ┃   ┣━━ def parse_pyproject_toml(contents: str) -> List[str]
+    ┃   ┣━━ def parse_lean(lean_content: str) -> List[str]
+    ┃   ┣━━ def parse_cs(contents: str) -> List[str]
+    ┃   ┣━━ def parse_tex(tex_content: str) -> List[str]
+    ┃   ┣━━ def parse_go(contents: str) -> List[str]
+    ┃   ┣━━ def parse_swift(contents: str) -> List[str]
+    ┃   ┣━━ def parse_bash(contents: str) -> List[str]
+    ┃   ┣━━ def parse_d_dot_ts(contents: str) -> List[str]
+    ┃   ┣━━ def parse_angular_app_module(contents: str) -> List[str]
+    ┃   ┣━━ def parse_angular_routes(content: str) -> List[str]
+    ┃   ┣━━ def parse_angular_spec(content: str) -> List[str]
+    ┃   ┣━━ def parse_environment_ts(contents: str) -> List[str]
+    ┃   ┣━━ def parse_dot_env(contents: str) -> List[str]
+    ┃   ┣━━ def parse_requirements_txt(contents: str) -> List[str]
+    ┃   ┣━━ def parse_json_schema(contents: str) -> List[str]
+    ┃   ┣━━ def parse_package_json(contents: str) -> List[str]
+    ┃   ┣━━ def parse_makefile(contents: str) -> List[str]
+    ┃   ┣━━ def parse_sql(contents: str) -> List[str]
+    ┃   ┣━━ def is_openapi_yml(ymls: Tuple[dict]) -> bool
+    ┃   ┣━━ def is_k8s_yml(ymls: Tuple[dict]) -> bool
+    ┃   ┣━━ def is_ansible_yml(ymls: Tuple[dict]) -> bool
+    ┃   ┣━━ def is_github_yml(ymls: Tuple[dict]) -> bool
+    ┃   ┣━━ def parse_github_yml(ymls: Tuple[dict]) -> List[str]
+    ┃   ┣━━ def parse_k8s(ymls: Tuple[dict]) -> List[str]
+    ┃   ┣━━ def parse_ansible(ymls: Tuple[dict]) -> List[str]
+    ┃   ┣━━ def parse_openapi_yml(ymls: Tuple[dict]) -> List[str]
+    ┃   ┣━━ def parse_yml(contents: str) -> List[str]
+    ┃   ┣━━ def parse_db(db_path: str) -> List[str]
+    ┃   ┣━━ def parse_cbl(content: str) -> List[str]
+    ┃   ┣━━ def parse_java(contents: str) -> List[str]
+    ┃   ┣━━ def parse_jl(contents: str) -> List[str]
+    ┃   ┣━━ def parse_kt(contents: str) -> List[str]
+    ┃   ┣━━ def parse_lua(content: str) -> List[str]
+    ┃   ┣━━ def parse_objective_c(content: str) -> List[str]
+    ┃   ┣━━ def parse_ocaml(content: str) -> List[str]
+    ┃   ┣━━ def parse_apl(content: str) -> List[str]
+    ┃   ┣━━ def parse_perl(content: str) -> List[str]
+    ┃   ┣━━ def parse_php(content: str) -> List[str]
+    ┃   ┣━━ def parse_ps1(contents: str) -> List[str]
+    ┃   ┣━━ def parse_matlab(content: str) -> List[str]
+    ┃   ┣━━ def parse_scala(contents: str) -> List[str]
+    ┃   ┣━━ def parse_tf(contents: str) -> List[str]
+    ┃   ┣━━ def parse_md(content: str) -> List[str]
+    ┃   ┣━━ def parse_txt(content: str) -> List[str]
+    ┃   ┗━━ def parse_markers(content: str) -> List[str]
+    ┣━━ 📁 scripts (1 folder, 1 file) 
+    ┃   ┗━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
+    ┃       ┣━━ add_alias()
+    ┃       ┗━━ create_conda_env()
+    ┗━━ 📄 version.py (18 tokens, 2 lines)
+        ┗━━ __version__ = "1.0.16"
+
+tree_plus v(1.0.16) ignore=('tests',) globs=() syntax=False paths=()
+3 folder(s), 21 file(s), 6,787 line(s), 70,863 token(s) in 0.20 second(s).
 
 ```
 <!-- t1-end -->
@@ -302,7 +413,7 @@ Usage: tree_plus [OPTIONS] [PATHS]...
 
   A `tree` util enhanced with tokens, lines, and components.
 
-  Wrap glob patterns in quotes: -i "*.py" / -g "*.rs"
+  Wrap patterns in quotes: -i "*.py" / -g "*.rs"
 
   Examples:
 
@@ -313,16 +424,29 @@ Usage: tree_plus [OPTIONS] [PATHS]...
               > tree_plus -g "*.*s" tests/more_languages
 
           Ignore Java files
-              > tree_plus tests -i "*.java"
+              > tree_plus -i "*.java" tests
+
+          Override DEFAULT_IGNORE: Only ignore .ini files.
+              > tree_plus -o -i "*.ini" tests/dot_dot
+
+          Syntax Highlight python files in src and tests
+              > tree_plus -s tree_plus_src/*.py tests/*.py
+
+          Concise Mode (No Parsing)
+              > tree_plus -c
 
 Options:
   -i, -I, --ignore TEXT  Patterns to ignore, in quotes: -i "*.java"
+  -o, -O, --override     Override DEFAULT_IGNORE (includes ignored content):
+                         -o -i "*.java"
   -g, -G, --glob TEXT    Patterns to find, in quotes: -g "*.rs"
   -v, -V, --version      Print the version and exit.
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
-  -h, -H, --help         Show this message and exit.
+  -s, -S, --syntax       Enables Syntax Highlighting (WIP).
+  -c, -C, --concise      Enables Syntax Highlighting (WIP).
+  -H, -h, --help         Show this message and exit.
 
-  (v1.0.15) --- https://github.com/bionicles/tree_plus
+  (v1.0.16) --- https://github.com/bionicles/tree_plus
 
 ```
 <!-- t5-end -->
@@ -415,10 +539,8 @@ make debug
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages
-paths=('tests/more_languages',)
-read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages/group3/test.sqlite: 'utf-8' codec can't decode byte 0xe9 in position 99: invalid continuation byte
-📁 more_languages (30950 tokens, 4375 lines)
-┣━━ 📁 group1 (4159 tokens, 722 lines)
+📁 more_languages (8 folders, 69 files) 
+┣━━ 📁 group1 (1 folder, 9 files) 
 ┃   ┣━━ 📄 CUSTOMER-INVOICE.CBL (545 tokens, 60 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION.
 ┃   ┃   ┣━━   PROGRAM-ID. CUSTOMER-INVOICE.
@@ -484,32 +606,32 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┣━━ 📄 JuliaTest.jl (482 tokens, 63 lines)
 ┃   ┃   ┣━━ module JuliaTest_EdgeCase
 ┃   ┃   ┣━━ struct Location
-┃   ┃   ┃       name :: String 
-┃   ┃   ┃       lat :: Float32
-┃   ┃   ┃       lon :: Float32
+┃   ┃   ┃       name::String 
+┃   ┃   ┃       lat::Float32
+┃   ┃   ┃       lon::Float32
 ┃   ┃   ┃   end
 ┃   ┃   ┣━━ mutable struct mPerson
-┃   ┃   ┃       name :: String
-┃   ┃   ┃       age :: Int
+┃   ┃   ┃       name::String
+┃   ┃   ┃       age::Int
 ┃   ┃   ┃   end
 ┃   ┃   ┣━━ Base.@kwdef mutable struct Param
-┃   ┃   ┃       Δt :: Float64 = 0.1
-┃   ┃   ┃       n :: Int64
-┃   ┃   ┃       m :: Int64
+┃   ┃   ┃       Δt::Float64 = 0.1
+┃   ┃   ┃       n::Int64
+┃   ┃   ┃       m::Int64
 ┃   ┃   ┃   end
 ┃   ┃   ┣━━     sic(x,y)
-┃   ┃   ┣━━ welcome(l :: Location)
+┃   ┃   ┣━━ welcome(l::Location)
 ┃   ┃   ┣━━ ∑(α, Ω)
 ┃   ┃   ┣━━ function noob()
 ┃   ┃   ┃   end
-┃   ┃   ┣━━ function ye_olde(hello :: String, world :: Location)
+┃   ┃   ┣━━ function ye_olde(hello::String, world::Location)
 ┃   ┃   ┃   end
 ┃   ┃   ┣━━ function multiline_greet(
-┃   ┃   ┃           p :: mPerson, 
-┃   ┃   ┃           greeting :: String
+┃   ┃   ┃           p::mPerson, 
+┃   ┃   ┃           greeting::String
 ┃   ┃   ┃       )
 ┃   ┃   ┃   end
-┃   ┃   ┣━━ function julia_is_awesome(prob :: DiffEqBase.AbstractDAEProblem{uType, duType, tType,
+┃   ┃   ┣━━ function julia_is_awesome(prob::DiffEqBase.AbstractDAEProblem{uType, duType, tType,
 ┃   ┃   ┃           isinplace};
 ┃   ┃   ┃       kwargs...) where {uType, duType, tType, isinplace}
 ┃   ┃   ┃   end
@@ -708,12 +830,12 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃       ┣━━   describe(): string
 ┃       ┣━━ interface Shape
 ┃       ┗━━ interface Square extends Shape
-┣━━ 📁 group2 (1714 tokens, 305 lines)
+┣━━ 📁 group2 (1 folder, 8 files) 
 ┃   ┣━━ 📄 apl_test.apl (44 tokens, 5 lines)
 ┃   ┃   ┣━━ :Namespace HelloWorld
 ┃   ┃   ┣━━ :Namespace HelloWorld -> hello ← 'Hello, World!'
 ┃   ┃   ┗━━ :Namespace HelloWorld -> plus ← {⍺+⍵}
-┃   ┣━━ 📄 c_test.c (886 tokens, 141 lines)
+┃   ┣━━ 📄 c_test.c (886 tokens, 142 lines)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ struct Point getOrigin()
 ┃   ┃   ┣━━ float mul_two_floats(float x1, float x2)
@@ -734,6 +856,7 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┣━━ keyPattern *ACLKeyPatternCreate(sds pattern, int flags)
 ┃   ┃   ┣━━ sds sdsCatPatternString(sds base, keyPattern *pat)
 ┃   ┃   ┣━━ static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)
+┃   ┃   ┣━━     while((ln = listNext(&li)))
 ┃   ┃   ┗━━ static struct config
 ┃   ┣━━ 📄 go_test.go (169 tokens, 46 lines)
 ┃   ┃   ┣━━ type Greeting struct
@@ -744,7 +867,7 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┃     ctx context.Context,
 ┃   ┃   ┃     param1 string,
 ┃   ┃   ┃     param2 int,
-┃   ┃   ┃     param3 mapinterface{},
+┃   ┃   ┃     param3 map[string]interface{},
 ┃   ┃   ┃     callback func(int) error,
 ┃   ┃   ┃   ) (resultType, error)
 ┃   ┃   ┣━━ type resultType struct
@@ -760,15 +883,48 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┣━━ function greet
 ┃   ┃   ┣━━ class Person
 ┃   ┃   ┗━━ class Person -> function __construct
-┃   ┣━━ 📄 PowershellTest.ps1 (169 tokens, 27 lines)
-┃   ┃   ┣━━ function Test-Ordering($foo)
+┃   ┣━━ 📄 PowershellTest.ps1 (523 tokens, 89 lines)
+┃   ┃   ┣━━ function Say-Nothing()
 ┃   ┃   ┣━━ class Person
-┃   ┃   ┣━━ class Person -> Person($name)
-┃   ┃   ┣━━ class Person -> Greet()
-┃   ┃   ┣━━ class Person -> GreetMany($times)
-┃   ┃   ┣━━ class Person -> NoReturn($times)
-┃   ┃   ┣━━ class Person -> NoReturnNoArgs()
-┃   ┃   ┗━━ function Say-Hello([Person]$person)
+┃   ┃   ┣━━     Person([string]$name)
+┃   ┃   ┣━━     [string]Greet()
+┃   ┃   ┣━━     [string]GreetMany([int]$times)
+┃   ┃   ┣━━     [string]GreetWithDetails([string]$greeting, [int]$times)
+┃   ┃   ┣━━     [string]GreetMultiline(
+┃   ┃   ┃           [string]$greeting,
+┃   ┃   ┃           [int]$times
+┃   ┃   ┃       )
+┃   ┃   ┣━━     NoReturn([int]$times)
+┃   ┃   ┣━━     NoReturnNoArgs()
+┃   ┃   ┣━━ function Say-Hello([Person]$person)
+┃   ┃   ┣━━ function Multi-Hello([Person]$personA, [Person]$personB)
+┃   ┃   ┣━━ function Switch-Item
+┃   ┃   ┣━━   param ([switch]$on)
+┃   ┃   ┣━━ function Get-SmallFiles
+┃   ┃   ┣━━   param (
+┃   ┃   ┃         [PSDefaultValue(Help = '100')]
+┃   ┃   ┃         $Size = 100
+┃   ┃   ┃     )
+┃   ┃   ┣━━ function Get-User
+┃   ┃   ┣━━   [CmdletBinding(DefaultParameterSetName="ID")]
+┃   ┃   ┣━━   [OutputType("System.Int32", ParameterSetName="ID")]
+┃   ┃   ┣━━   [OutputType([String], ParameterSetName="Name")]
+┃   ┃   ┣━━   Param (
+┃   ┃   ┃       [parameter(Mandatory=$true, ParameterSetName="ID")]
+┃   ┃   ┃       [Int[]]
+┃   ┃   ┃       $UserID,
+┃   ┃   ┃   
+┃   ┃   ┃       [parameter(Mandatory=$true, ParameterSetName="Name")]
+┃   ┃   ┃       [String[]]
+┃   ┃   ┃       $UserName
+┃   ┃   ┃     )
+┃   ┃   ┣━━ filter Get-ErrorLog ([switch]$Message)
+┃   ┃   ┗━━ function global:MultilineSignature(
+┃   ┃         [string]$param1,
+┃   ┃         [int]$param2,
+┃   ┃         [Parameter(Mandatory=$true)]
+┃   ┃         [string]$param3
+┃   ┃       )
 ┃   ┣━━ 📄 ScalaTest.scala (217 tokens, 41 lines)
 ┃   ┃   ┣━━ def sumOfSquares(x: Int, y: Int): Int
 ┃   ┃   ┣━━ trait Bark
@@ -794,7 +950,7 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃       ┣━━ Country
 ┃       ┣━━ City
 ┃       ┗━━ Email
-┣━━ 📁 group3 (6903 tokens, 1033 lines)
+┣━━ 📁 group3 (1 folder, 16 files) 
 ┃   ┣━━ 📄 bash_test.sh (154 tokens, 23 lines)
 ┃   ┃   ┣━━ echo_hello_world()
 ┃   ┃   ┣━━ function fun_echo_hello_world()
@@ -804,16 +960,30 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┗━━ create_conda_env()
 ┃   ┣━━ 📄 cpp_test.cpp (1737 tokens, 259 lines)
 ┃   ┃   ┣━━ class Person
+┃   ┃   ┣━━ public:
+┃   ┃   ┣━━     Person(std::string n) : name(n)
+┃   ┃   ┣━━     void greet()
 ┃   ┃   ┣━━ void globalGreet()
 ┃   ┃   ┣━━ int main()
-┃   ┃   ┣━━ void printMessage(const std :: string &message)
+┃   ┃   ┣━━ void printMessage(const std::string &message)
 ┃   ┃   ┣━━ template<typename T>
-┃   ┃   ┃   void printVector(const std :: vector<T>& vec)
+┃   ┃   ┣━━ void printVector(const std::vector<T>& vec)
 ┃   ┃   ┣━━ struct Point
+┃   ┃   ┣━━     Point(int x, int y) : x(x), y(y)
 ┃   ┃   ┣━━ class Animal
+┃   ┃   ┣━━ public:
+┃   ┃   ┣━━     Animal(const std::string &name) : name(name)
+┃   ┃   ┣━━     virtual void speak() const
+┃   ┃   ┣━━     virtual ~Animal()
 ┃   ┃   ┣━━ class Dog : public Animal
+┃   ┃   ┣━━ public:
+┃   ┃   ┣━━     Dog(const std::string &name) : Animal(name)
+┃   ┃   ┣━━     void speak() const override
 ┃   ┃   ┣━━ class Cat : public Animal
-┃   ┃   ┣━━ nb :: bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
+┃   ┃   ┣━━ public:
+┃   ┃   ┣━━     Cat(const std::string &name) : Animal(name)
+┃   ┃   ┣━━     void speak() const override
+┃   ┃   ┣━━ nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
 ┃   ┃   ┃                                int batch_size, int max_seq_length, float dropout,
 ┃   ┃   ┃                                bool bidirectional, bool cudnn_allow_tf32,
 ┃   ┃   ┃              int workspace_size, int reserve_space_size)
@@ -828,8 +998,23 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┣━━ template <typename T> T sqrt(T)
 ┃   ┃   ┣━━ template<typename T> struct VLEN
 ┃   ┃   ┣━━ template<typename T> class arr
+┃   ┃   ┣━━   private:
+┃   ┃   ┣━━     static T *ralloc(size_t num)
+┃   ┃   ┣━━     static void dealloc(T *ptr)
+┃   ┃   ┣━━     static T *ralloc(size_t num)
+┃   ┃   ┣━━     static void dealloc(T *ptr)
+┃   ┃   ┣━━   public:
+┃   ┃   ┣━━     arr() : p(0), sz(0)
+┃   ┃   ┣━━     arr(size_t n) : p(ralloc(n)), sz(n)
+┃   ┃   ┣━━     arr(arr &&other)
+┃   ┃   ┃         : p(other.p), sz(other.sz)
+┃   ┃   ┣━━     ~arr()
+┃   ┃   ┣━━     void resize(size_t n)
+┃   ┃   ┣━━     T &operator[](size_t idx)
+┃   ┃   ┣━━     T *data()
+┃   ┃   ┣━━     size_t size() const
 ┃   ┃   ┣━━ class Buffer
-┃   ┃   ┗━━ std :: tuple<array, array, array> quantize(
+┃   ┃   ┗━━ std::tuple<array, array, array> quantize(
 ┃   ┃           const array& w,
 ┃   ┃           int group_size,
 ┃   ┃           int bits,
@@ -966,6 +1151,18 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃           address: String, 
 ┃   ┃           phoneNumber: String
 ┃   ┃       )
+┃   ┣━━ 📄 test.lean (384 tokens, 43 lines)
+┃   ┃   ┣━━ # Advanced Topics in Group Theory
+┃   ┃   ┣━━ section GroupDynamics
+┃   ┃   ┣━━ lemma group_stability (G : Type*) [Group G] (H : Subgroup G)
+┃   ┃   ┣━━ theorem subgroup_closure {G : Type*} [Group G] (S : Set G)
+┃   ┃   ┣━━ axiom group_homomorphism_preservation {G H : Type*} [Group G] [Group H] (f : G → H)
+┃   ┃   ┣━━ end GroupDynamics
+┃   ┃   ┣━━ section ConstructiveApproach
+┃   ┃   ┣━━ lemma finite_group_order (G : Type*) [Group G] [Fintype G]
+┃   ┃   ┣━━ lemma complex_lemma {X Y : Type*} [SomeClass X] [AnotherClass Y]
+┃   ┃   ┃     (f : X → Y) (g : Y → X)
+┃   ┃   ┗━━ end ConstructiveApproach
 ┃   ┣━━ 📄 test.capnp (143 tokens, 31 lines)
 ┃   ┃   ┣━━ struct Employee
 ┃   ┃   ┣━━   id @0 :Int32
@@ -1000,18 +1197,6 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┣━━     id: ID
 ┃   ┃   ┣━━     name: String
 ┃   ┃   ┗━━     books: [Book]
-┃   ┣━━ 📄 test.lean (384 tokens, 43 lines)
-┃   ┃   ┣━━ # Advanced Topics in Group Theory
-┃   ┃   ┣━━ section GroupDynamics
-┃   ┃   ┣━━ lemma group_stability (G : Type*) [Group G] (H : Subgroup G)
-┃   ┃   ┣━━ theorem subgroup_closure {G : Type*} [Group G] (S : Set G)
-┃   ┃   ┣━━ axiom group_homomorphism_preservation {G H : Type*} [Group G] [Group H] (f : G → H)
-┃   ┃   ┣━━ end GroupDynamics
-┃   ┃   ┣━━ section ConstructiveApproach
-┃   ┃   ┣━━ lemma finite_group_order (G : Type*) [Group G] [Fintype G]
-┃   ┃   ┣━━ lemma complex_lemma {X Y : Type*} [SomeClass X] [AnotherClass Y]
-┃   ┃   ┃     (f : X → Y) (g : Y → X)
-┃   ┃   ┗━━ end ConstructiveApproach
 ┃   ┣━━ 📄 test.proto (150 tokens, 34 lines)
 ┃   ┃   ┣━━ syntax = "proto3"
 ┃   ┃   ┣━━ service EmployeeService
@@ -1031,7 +1216,7 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┣━━     int32 id = 1
 ┃   ┃   ┣━━     string name = 2
 ┃   ┃   ┗━━     string role = 3
-┃   ┣━━ 📄 test.sqlite
+┃   ┣━━ 📄 test.sqlite (0 tokens, 0 lines)
 ┃   ┃   ┣━━ students table:
 ┃   ┃   ┣━━    id integer primary key
 ┃   ┃   ┣━━    name text not null
@@ -1089,7 +1274,7 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃       ┣━━     click
 ┃       ┣━━     rich
 ┃       ┗━━     tomli
-┣━━ 📁 group4 (3236 tokens, 493 lines)
+┣━━ 📁 group4 (1 folder, 10 files) 
 ┃   ┣━━ 📄 erl_test.erl (512 tokens, 69 lines)
 ┃   ┃   ┣━━ -module(erl_test).
 ┃   ┃   ┣━━ -record(person).
@@ -1103,11 +1288,11 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┃       ).
 ┃   ┃   ┣━━ -spec guarded(X) -> X when X :: tuple().
 ┃   ┃   ┣━━ -spec edge_case(
-┃   ┃   ┃           {integer(), any()} | 
+┃   ┃   ┃           {integer(), any()} | [any()]
 ┃   ┃   ┃       ) -> processed, integer(), any()} | [{item, any()}].
-┃   ┃   ┣━━ -spec complex_function({integer(), any()} | ) -> 
+┃   ┃   ┣━━ -spec complex_function({integer(), any()} | [any()]) -> 
 ┃   ┃   ┃       {processed, integer(), any()} | [{item, any()}].
-┃   ┃   ┣━━ -spec list_manipulation() -> .
+┃   ┃   ┣━━ -spec list_manipulation([integer()]) -> [integer()].
 ┃   ┃   ┣━━ -spec overload(T1, T2) -> T3
 ┃   ┃   ┃           ; (T4, T5) -> T6.
 ┃   ┃   ┣━━ -spec multiguard({X, integer()}) -> X when X :: atom()
@@ -1130,9 +1315,9 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃             G.SelectionSet fragments Variable
 ┃   ┃           )
 ┃   ┣━━ 📄 mathematica_test.nb (132 tokens, 21 lines)
-┃   ┃   ┣━━ person
+┃   ┃   ┣━━ person[name_]
 ┃   ┃   ┣━━ sayHello[]
-┃   ┃   ┗━━ sumList
+┃   ┃   ┗━━ sumList[list_List]
 ┃   ┣━━ 📄 matlab_test.m (45 tokens, 12 lines)
 ┃   ┃   ┣━━ classdef HelloWorld -> function greet
 ┃   ┃   ┗━━ function loneFun
@@ -1186,7 +1371,7 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┃       S4: Loadable,
 ┃   ┃   ┃       E: Extractor<S1, S2>,
 ┃   ┃   ┃       T: Transformer<S2, S3>,
-┃   ┃   ┃       L: Loader<S3, S4>,
+┃   ┃   ┃       L: Loader<S3, S4>
 ┃   ┃   ┣━━ trait Container
 ┃   ┃   ┣━━     fn items(&self) -> impl Iterator<Item = Widget>
 ┃   ┃   ┣━━ trait HttpService
@@ -1245,7 +1430,7 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃       ┣━━ output "instance_public_ip"
 ┃       ┣━━ locals
 ┃       ┗━━ module "vpc"
-┣━━ 📁 group5 (11392 tokens, 1504 lines)
+┣━━ 📁 group5 (1 folder, 18 files) 
 ┃   ┣━━ 📄 ansible_test.yml (60 tokens, 15 lines)
 ┃   ┃   ┣━━ Install package
 ┃   ┃   ┣━━ Start service
@@ -1300,10 +1485,10 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┣━━     - [ ] Two Spaces Task 1.2
 ┃   ┃   ┣━━         - [ ] Subtask 1.2.1
 ┃   ┃   ┣━━ - [ ] Task 2
-┃   ┃   ┣━━ -  Task 3
+┃   ┃   ┣━━ - [x] Task 3
 ┃   ┃   ┣━━     - [ ] Subtask 3.1
-┃   ┃   ┣━━ -  Task 6
-┃   ┃   ┣━━     -  Subtask 6.1
+┃   ┃   ┣━━ - [x] Task 6
+┃   ┃   ┣━━     - [x] Subtask 6.1
 ┃   ┃   ┗━━         - [ ] Handle edge cases
 ┃   ┣━━ 📄 checkbox_test.txt (276 tokens, 33 lines)
 ┃   ┃   ┣━━ - [ ] fix phone number format +1
@@ -1338,11 +1523,11 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┣━━ psycopg2-binary
 ┃   ┃   ┣━━ pytest
 ┃   ┃   ┣━━ coverage
-┃   ┃   ┣━━ flask
+┃   ┃   ┣━━ flask[async]
 ┃   ┃   ┣━━ flask_cors
 ┃   ┃   ┣━━ stripe
-┃   ┃   ┣━━ pyjwt
-┃   ┃   ┣━━ cognitojwt
+┃   ┃   ┣━━ pyjwt[crypto]
+┃   ┃   ┣━━ cognitojwt[async]
 ┃   ┃   ┗━━ flask-lambda
 ┃   ┣━━ 📄 rust_todo_test.rs (109 tokens, 27 lines)
 ┃   ┃   ┣━━ TODO (Line 23): This todo tests parse_todo
@@ -1485,7 +1670,111 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
 ┃       ┣━━ const mockTickets = async () =>
 ┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
-┣━━ 📁 group6 (2383 tokens, 179 lines)
+┣━━ 📁 group6 (1 folder, 4 files) 
+┃   ┣━━ 📄 catastrophic.c (4144 tokens, 581 lines)
+┃   ┃   ┣━━ struct Point
+┃   ┃   ┣━━ struct Point getOrigin()
+┃   ┃   ┣━━ float mul_two_floats(float x1, float x2)
+┃   ┃   ┣━━ enum days
+┃   ┃   ┣━━ long add_two_longs(long x1, long x2)
+┃   ┃   ┣━━ double multiplyByTwo(double num)
+┃   ┃   ┣━━ char getFirstCharacter(char *str)
+┃   ┃   ┣━━ void greet(Person p)
+┃   ┃   ┣━━ typedef struct Person
+┃   ┃   ┣━━ typedef struct PersonA
+┃   ┃   ┣━━ int main()
+┃   ┃   ┣━━ int* getArrayStart(int arr[], int size)
+┃   ┃   ┣━━ long complexFunctionWithMultipleArguments(
+┃   ┃   ┃       int param1,
+┃   ┃   ┃       double param2,
+┃   ┃   ┃       char *param3,
+┃   ┃   ┃       struct Point point
+┃   ┃   ┃   )
+┃   ┃   ┣━━ keyPattern *ACLKeyPatternCreate(sds pattern, int flags)
+┃   ┃   ┣━━ sds sdsCatPatternString(sds base, keyPattern *pat)
+┃   ┃   ┣━━ static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)
+┃   ┃   ┣━━     while((ln = listNext(&li)))
+┃   ┃   ┣━━ static struct config
+┃   ┃   ┣━━ class Person
+┃   ┃   ┣━━ public:
+┃   ┃   ┣━━     Person(std::string n) : name(n)
+┃   ┃   ┣━━     void greet()
+┃   ┃   ┣━━ void globalGreet()
+┃   ┃   ┣━━ int main()
+┃   ┃   ┣━━ void printMessage(const std::string &message)
+┃   ┃   ┣━━ template<typename T>
+┃   ┃   ┣━━ void printVector(const std::vector<T>& vec)
+┃   ┃   ┣━━ struct Point
+┃   ┃   ┣━━     Point(int x, int y) : x(x), y(y)
+┃   ┃   ┣━━ class Animal
+┃   ┃   ┣━━   public:
+┃   ┃   ┣━━     Animal(const std::string &name) : name(name)
+┃   ┃   ┣━━     virtual void speak() const
+┃   ┃   ┣━━     virtual ~Animal()
+┃   ┃   ┣━━ class Dog : public Animal
+┃   ┃   ┣━━   public:
+┃   ┃   ┣━━     Dog(const std::string &name) : Animal(name)
+┃   ┃   ┣━━     void speak() const override
+┃   ┃   ┣━━ class Cat : public Animal
+┃   ┃   ┣━━   public:
+┃   ┃   ┣━━     Cat(const std::string &name) : Animal(name)
+┃   ┃   ┣━━     void speak() const override
+┃   ┃   ┣━━ class CatDog: public Animal, public Cat, public Dog
+┃   ┃   ┣━━   public:
+┃   ┃   ┣━━       CatDog(const std::string &name) : Animal(name)
+┃   ┃   ┣━━       int meow_bark()
+┃   ┃   ┣━━ nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
+┃   ┃   ┃                                int batch_size, int max_seq_length, float dropout,
+┃   ┃   ┃                                bool bidirectional, bool cudnn_allow_tf32,
+┃   ┃   ┃              int workspace_size, int reserve_space_size)
+┃   ┃   ┣━━ int main()
+┃   ┃   ┣━━ enum ECarTypes
+┃   ┃   ┣━━ ECarTypes GetPreferredCarType()
+┃   ┃   ┣━━ enum ECarTypes : uint8_t
+┃   ┃   ┣━━ enum class ECarTypes : uint8_t
+┃   ┃   ┣━━ void myFunction(string fname, int age)
+┃   ┃   ┣━━ template <typename T> T cos(T)
+┃   ┃   ┣━━ template <typename T> T sin(T)
+┃   ┃   ┣━━ template <typename T> T sqrt(T)
+┃   ┃   ┣━━ template<typename T> struct VLEN
+┃   ┃   ┣━━ template<typename T> class arr
+┃   ┃   ┣━━   private:
+┃   ┃   ┣━━     static T *ralloc(size_t num)
+┃   ┃   ┣━━     static void dealloc(T *ptr)
+┃   ┃   ┣━━     static T *ralloc(size_t num)
+┃   ┃   ┣━━     static void dealloc(T *ptr)
+┃   ┃   ┣━━   public:
+┃   ┃   ┣━━     arr() : p(0), sz(0)
+┃   ┃   ┣━━     arr(size_t n) : p(ralloc(n)), sz(n)
+┃   ┃   ┣━━     arr(arr &&other)
+┃   ┃   ┃         : p(other.p), sz(other.sz)
+┃   ┃   ┣━━     ~arr()
+┃   ┃   ┣━━     void resize(size_t n)
+┃   ┃   ┣━━     T &operator[](size_t idx)
+┃   ┃   ┣━━     T *data()
+┃   ┃   ┣━━     size_t size() const
+┃   ┃   ┣━━ class Buffer
+┃   ┃   ┣━━ std::tuple<array, array, array> quantize(
+┃   ┃   ┃       const array& w,
+┃   ┃   ┃       int group_size,
+┃   ┃   ┃       int bits,
+┃   ┃   ┃       StreamOrDevice s)
+┃   ┃   ┣━━ #define PY_SSIZE_T_CLEAN
+┃   ┃   ┣━━ #define PLATFORM_IS_X86
+┃   ┃   ┣━━ #define PLATFORM_WINDOWS
+┃   ┃   ┣━━ #define GETCPUID(a, b, c, d, a_inp, c_inp)
+┃   ┃   ┣━━ static int GetXCR0EAX()
+┃   ┃   ┣━━ #define GETCPUID(a, b, c, d, a_inp, c_inp)
+┃   ┃   ┣━━ static int GetXCR0EAX()
+┃   ┃   ┣━━   asm("XGETBV" : "=a"(eax), "=d"(edx) : "c"(0))
+┃   ┃   ┣━━ static void ReportMissingCpuFeature(const char* name)
+┃   ┃   ┣━━ static PyObject *CheckCpuFeatures(PyObject *self, PyObject *args)
+┃   ┃   ┣━━ static PyObject *CheckCpuFeatures(PyObject *self, PyObject *args)
+┃   ┃   ┣━━ static PyMethodDef cpu_feature_guard_methods[]
+┃   ┃   ┣━━ static struct PyModuleDef cpu_feature_guard_module
+┃   ┃   ┣━━ #define EXPORT_SYMBOL __declspec(dllexport)
+┃   ┃   ┣━━ #define EXPORT_SYMBOL __attribute__ ((visibility("default")))
+┃   ┃   ┗━━ EXPORT_SYMBOL PyMODINIT_FUNC PyInit_cpu_feature_guard(void)
 ┃   ┣━━ 📄 fractal.thy (2183 tokens, 148 lines)
 ┃   ┃   ┣━━ Title:      fractal.thy
 ┃   ┃   ┣━━ Author:     Isabelle/HOL Contributors!
@@ -1529,7 +1818,7 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┃         and "𝟬 ∈ carrier R"
 ┃   ┃   ┃         and "⋀x y z. ⟦ x ∈ carrier R; y ∈ carrier R; z ∈ carrier R ⟧ ⟹  (x ⊕ y) ⊕ z = x ⊕ (y ⊕ z)"
 ┃   ┃   ┃     shows "abelian_monoid R"
-┃   ┃   ┣━━ lemma euclidean_size_gcd_le1 :
+┃   ┃   ┣━━ lemma euclidean_size_gcd_le1 [simp]:
 ┃   ┃   ┃     assumes "a ≠ 0"
 ┃   ┃   ┃     shows "euclidean_size (gcd a b) ≤ euclidean_size a"
 ┃   ┃   ┣━━ theorem Residue_theorem:
@@ -1551,6 +1840,8 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃   ┃   ┃                (is "eventually (λn. _ = -?g' n) _")
 ┃   ┃   ┃     shows   "(λn. fps_nth F n - g n) ∈ O(λn. 1 / r ^ n)" (is "(λn. ?c n - _) ∈ O(_)")
 ┃   ┃   ┗━━ end
+┃   ┣━━ 📄 ramda_prop.js (294 tokens, 33 lines)
+┃   ┃   ┗━━ var prop = _curry2(function prop(p, obj)
 ┃   ┗━━ 📄 test.f (200 tokens, 31 lines)
 ┃       ┣━━ MODULE basic_mod
 ┃       ┣━━     TYPE :: person
@@ -1567,7 +1858,7 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 ┃       ┣━━ END MODULE basic_mod
 ┃       ┗━━ PROGRAM HelloFortran
 ┃           END PROGRAM HelloFortran
-┗━━ 📁 group_lisp (1163 tokens, 139 lines)
+┗━━ 📁 group_lisp (1 folder, 4 files) 
     ┣━━ 📄 clojure_test.clj (726 tokens, 86 lines)
     ┃   ┣━━ defprotocol P
     ┃   ┣━━ defrecord Person
@@ -1590,6 +1881,9 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
+tree_plus v(1.0.16) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 69 file(s), 5,052 line(s), 35,742 token(s) in 0.40 second(s).
+
 ```
 <!-- t2-end -->
 ## Got Globs?
@@ -1597,9 +1891,8 @@ read_file Exception @ /home/runner/work/tree_plus/tree_plus/tests/more_languages
 <!-- t3-start -->
 ```sh
 tree_plus -g "*.*s" -i group_todo tests/more_languages
-paths=('tests/more_languages',)
-📁 more_languages (12114 tokens, 1800 lines)
-┣━━ 📁 group1 (1468 tokens, 296 lines)
+📁 more_languages (6 folders, 15 files) 
+┣━━ 📁 group1 (1 folder, 2 files) 
 ┃   ┣━━ 📄 test.js (755 tokens, 154 lines)
 ┃   ┃   ┣━━ class MyClass
 ┃   ┃   ┣━━   myMethod()
@@ -1715,7 +2008,7 @@ paths=('tests/more_languages',)
 ┃       ┣━━   describe(): string
 ┃       ┣━━ interface Shape
 ┃       ┗━━ interface Square extends Shape
-┣━━ 📁 group3 (850 tokens, 147 lines)
+┣━━ 📁 group3 (1 folder, 1 file) 
 ┃   ┗━━ 📄 csharp_test.cs (850 tokens, 147 lines)
 ┃       ┣━━ public interface IExcelTemplate
 ┃       ┣━━     void LoadTemplate(string templateFilePath)
@@ -1775,7 +2068,7 @@ paths=('tests/more_languages',)
 ┃       ┣━━ s_downloadButton.Clicked += async (o, e) =>
 ┃       ┣━━ [HttpGet, Route("DotNetCount")]
 ┃       ┗━━ static public async Task<int> GetDotNetCount(string URL)
-┣━━ 📁 group4 (1390 tokens, 227 lines)
+┣━━ 📁 group4 (1 folder, 3 files) 
 ┃   ┣━━ 📄 haskell_test.hs (373 tokens, 41 lines)
 ┃   ┃   ┣━━ data Person
 ┃   ┃   ┣━━ greet :: Person -> String
@@ -1836,7 +2129,7 @@ paths=('tests/more_languages',)
 ┃   ┃   ┃       S4: Loadable,
 ┃   ┃   ┃       E: Extractor<S1, S2>,
 ┃   ┃   ┃       T: Transformer<S2, S3>,
-┃   ┃   ┃       L: Loader<S3, S4>,
+┃   ┃   ┃       L: Loader<S3, S4>
 ┃   ┃   ┣━━ trait Container
 ┃   ┃   ┣━━     fn items(&self) -> impl Iterator<Item = Widget>
 ┃   ┃   ┣━━ trait HttpService
@@ -1860,133 +2153,139 @@ paths=('tests/more_languages',)
 ┃       ┃       (c: float)
 ┃       ┃       : (int * string) option =
 ┃       ┗━━ type Result<'T> =
-┗━━ 📁 group5 (8406 tokens, 1130 lines)
-    ┣━━ 📄 app-routing.module.ts (242 tokens, 28 lines)
-    ┃   ┣━━ const routes: Routes = [
-    ┃   ┃       { path: '', redirectTo: 'login', pathMatch: 'full' },
-    ┃   ┃       { path: '*', redirectTo: 'login' },
-    ┃   ┃       { path: 'home', component: HomeComponent },
-    ┃   ┃       { path: 'login', component: LoginComponent },
-    ┃   ┃       { path: 'register', component: RegisterComponent },
-    ┃   ┃       { path: 'events', component: EventsComponent },
-    ┃   ┃       { path: 'invites', component: InvitesComponent },
-    ┃   ┃       { path: 'rewards', component: RewardsComponent },
-    ┃   ┃       { path: 'profile', component: ProfileComponent },
-    ┃   ┃   ];
-    ┃   ┗━━ export class AppRoutingModule
-    ┣━━ 📄 app.component.spec.ts (307 tokens, 48 lines)
-    ┃   ┣━━ describe 'AppComponent'
-    ┃   ┣━━     it should create the app
-    ┃   ┣━━     it should welcome the user
-    ┃   ┣━━     it should welcome 'Jimbo'
-    ┃   ┗━━     it should request login if not logged in
-    ┣━━ 📄 app.component.ts (243 tokens, 45 lines)
-    ┃   ┣━━ export class AppComponent
-    ┃   ┣━━   constructor(private loginService: LoginService)
-    ┃   ┣━━   checkSession()
-    ┃   ┣━━   async goToEvent(event_id: string)
-    ┃   ┗━━   valInvitedBy(event: any, event_id: string)
-    ┣━━ 📄 app.module.ts (269 tokens, 43 lines)
-    ┃   ┣━━ @NgModule({
-    ┃   ┃       declarations: [
-    ┃   ┃           AppComponent,
-    ┃   ┃           HomeComponent,
-    ┃   ┃           LoginComponent,
-    ┃   ┃           RegisterComponent,
-    ┃   ┃           EventsComponent,
-    ┃   ┃           InvitesComponent,
-    ┃   ┃           RewardsComponent,
-    ┃   ┃           ProfileComponent
-    ┃   ┗━━ export class AppModule
-    ┣━━ 📄 environment.test.ts (193 tokens, 19 lines)
-    ┃   ┣━━ environment:
-    ┃   ┣━━    production
-    ┃   ┣━━    cognitoUserPoolId
-    ┃   ┣━━    cognitoAppClientId
-    ┃   ┗━━    apiurl
-    ┣━━ 📄 rust_todo_test.rs (109 tokens, 27 lines)
-    ┃   ┣━━ TODO (Line 23): This todo tests parse_todo
-    ┃   ┣━━ enum Color
-    ┃   ┣━━ struct Point
-    ┃   ┣━━ trait Drawable
-    ┃   ┣━━     fn draw(&self)
-    ┃   ┣━━ impl Drawable for Point
-    ┃   ┣━━     fn draw(&self)
-    ┃   ┗━━ fn main()
-    ┣━━ 📄 standard-app-routing.module.ts (93 tokens, 17 lines)
-    ┃   ┗━━ const routes: Routes = [
-    ┃         { path: '', component: HomeComponent },
-    ┃         {
-    ┃           path: 'heroes',
-    ┃           component: HeroesListComponent,
-    ┃           children: [
-    ┃             { path: ':id', component: HeroDetailComponent },
-    ┃             { path: 'new', component: HeroFormComponent },
-    ┃           ],
-    ┃         },
-    ┃         { path: '**', component: PageNotFoundComponent },
-    ┃       ];
-    ┗━━ 📄 tickets.component.ts (6950 tokens, 903 lines)
-        ┣━━ interface EnrichedTicket extends Ticket
-        ┣━━ interface SpinConfig
-        ┣━━ interface RotationState
-        ┣━━ interface SpeakInput
-        ┣━━ const formatSpeakInput = (input: SpeakInput): string =>
-        ┣━━ function hourToSpeech(hour: number, minute: number, period: string): string
-        ┣━━ export class TicketsComponent implements AfterViewInit
-        ┣━━   speak(input: SpeakInput)
-        ┣━━   speakEvent(ticket: EnrichedTicket): void
-        ┣━━   formatEvent(ticket: EnrichedTicket): string
-        ┣━━   speakVenue(ticket: EnrichedTicket): void
-        ┣━━   formatDate(date: Date, oneLiner: boolean = false): string
-        ┣━━   formatDateForSpeech(date: Date): string
-        ┣━━   async spinQRCode(
-        ┃       event: PointerEvent,
-        ┃       config: SpinConfig = DEFAULT_SPIN_CONFIG
-        ┃     )
-        ┣━━   private animateRotation(
-        ┃       imgElement: HTMLElement,
-        ┃       targetRotation: number,
-        ┃       config: SpinConfig,
-        ┃       cleanup: () => void
-        ┃     )
-        ┣━━     const animate = (currentTime: number) =>
-        ┣━━   private getNext90Degree(currentRotation: number): number
-        ┣━━   private getCurrentRotation(matrix: string): number
-        ┣━━   ngAfterViewInit()
-        ┣━━       const mouseEnterListener = () =>
-        ┣━━       const mouseLeaveListener = () =>
-        ┣━━   ngOnDestroy()
-        ┣━━   toggleColumn(event: MatOptionSelectionChange, column: string)
-        ┣━━           (col) =>
-        ┣━━   adjustColumns(event?: Event)
-        ┣━━   onResize(event: Event)
-        ┣━━   async ngOnInit()
-        ┣━━   async loadTickets(): Promise<void>
-        ┣━━   onDateRangeChange(
-        ┃       type: "start" | "end",
-        ┃       event: MatDatepickerInputEvent<Date>
-        ┃     )
-        ┣━━   applyFilter(column: string): void
-        ┣━━   formatDateForComparison(date: Date): string
-        ┣━━   constructor(private renderer: Renderer2)
-        ┣━━   onFilterChange(event: Event, column: string)
-        ┣━━   onLatitudeChange(event: Event)
-        ┣━━   onLongitudeChange(event: Event)
-        ┣━━   onRadiusChange(event: Event)
-        ┣━━   sortData(sort: Sort): void
-        ┣━━   onRowClick(event: Event, row: any)
-        ┣━━ function isDate(value: Date | undefined | null): value is Date
-        ┣━━ function isNonNullNumber(value: number | null): value is number
-        ┣━━ function hasLocation(
-        ┃     ticket: any
-        ┃   ): ticket is
-        ┣━━ const create_faker_ticket = async () =>
-        ┣━━ function compare(a: number | string, b: number | string, isAsc: boolean)
-        ┣━━ function compare_dates(a: Date, b: Date, isAsc: boolean)
-        ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
-        ┣━━ const mockTickets = async () =>
-        ┗━━ const renderQRCode = async (text: String): Promise<string> =>
+┣━━ 📁 group5 (1 folder, 8 files) 
+┃   ┣━━ 📄 app-routing.module.ts (242 tokens, 28 lines)
+┃   ┃   ┣━━ const routes: Routes = [
+┃   ┃   ┃       { path: '', redirectTo: 'login', pathMatch: 'full' },
+┃   ┃   ┃       { path: '*', redirectTo: 'login' },
+┃   ┃   ┃       { path: 'home', component: HomeComponent },
+┃   ┃   ┃       { path: 'login', component: LoginComponent },
+┃   ┃   ┃       { path: 'register', component: RegisterComponent },
+┃   ┃   ┃       { path: 'events', component: EventsComponent },
+┃   ┃   ┃       { path: 'invites', component: InvitesComponent },
+┃   ┃   ┃       { path: 'rewards', component: RewardsComponent },
+┃   ┃   ┃       { path: 'profile', component: ProfileComponent },
+┃   ┃   ┃   ];
+┃   ┃   ┗━━ export class AppRoutingModule
+┃   ┣━━ 📄 app.component.spec.ts (307 tokens, 48 lines)
+┃   ┃   ┣━━ describe 'AppComponent'
+┃   ┃   ┣━━     it should create the app
+┃   ┃   ┣━━     it should welcome the user
+┃   ┃   ┣━━     it should welcome 'Jimbo'
+┃   ┃   ┗━━     it should request login if not logged in
+┃   ┣━━ 📄 app.component.ts (243 tokens, 45 lines)
+┃   ┃   ┣━━ export class AppComponent
+┃   ┃   ┣━━   constructor(private loginService: LoginService)
+┃   ┃   ┣━━   checkSession()
+┃   ┃   ┣━━   async goToEvent(event_id: string)
+┃   ┃   ┗━━   valInvitedBy(event: any, event_id: string)
+┃   ┣━━ 📄 app.module.ts (269 tokens, 43 lines)
+┃   ┃   ┣━━ @NgModule({
+┃   ┃   ┃       declarations: [
+┃   ┃   ┃           AppComponent,
+┃   ┃   ┃           HomeComponent,
+┃   ┃   ┃           LoginComponent,
+┃   ┃   ┃           RegisterComponent,
+┃   ┃   ┃           EventsComponent,
+┃   ┃   ┃           InvitesComponent,
+┃   ┃   ┃           RewardsComponent,
+┃   ┃   ┃           ProfileComponent
+┃   ┃   ┗━━ export class AppModule
+┃   ┣━━ 📄 environment.test.ts (193 tokens, 19 lines)
+┃   ┃   ┣━━ environment:
+┃   ┃   ┣━━    production
+┃   ┃   ┣━━    cognitoUserPoolId
+┃   ┃   ┣━━    cognitoAppClientId
+┃   ┃   ┗━━    apiurl
+┃   ┣━━ 📄 rust_todo_test.rs (109 tokens, 27 lines)
+┃   ┃   ┣━━ TODO (Line 23): This todo tests parse_todo
+┃   ┃   ┣━━ enum Color
+┃   ┃   ┣━━ struct Point
+┃   ┃   ┣━━ trait Drawable
+┃   ┃   ┣━━     fn draw(&self)
+┃   ┃   ┣━━ impl Drawable for Point
+┃   ┃   ┣━━     fn draw(&self)
+┃   ┃   ┗━━ fn main()
+┃   ┣━━ 📄 standard-app-routing.module.ts (93 tokens, 17 lines)
+┃   ┃   ┗━━ const routes: Routes = [
+┃   ┃         { path: '', component: HomeComponent },
+┃   ┃         {
+┃   ┃           path: 'heroes',
+┃   ┃           component: HeroesListComponent,
+┃   ┃           children: [
+┃   ┃             { path: ':id', component: HeroDetailComponent },
+┃   ┃             { path: 'new', component: HeroFormComponent },
+┃   ┃           ],
+┃   ┃         },
+┃   ┃         { path: '**', component: PageNotFoundComponent },
+┃   ┃       ];
+┃   ┗━━ 📄 tickets.component.ts (6950 tokens, 903 lines)
+┃       ┣━━ interface EnrichedTicket extends Ticket
+┃       ┣━━ interface SpinConfig
+┃       ┣━━ interface RotationState
+┃       ┣━━ interface SpeakInput
+┃       ┣━━ const formatSpeakInput = (input: SpeakInput): string =>
+┃       ┣━━ function hourToSpeech(hour: number, minute: number, period: string): string
+┃       ┣━━ export class TicketsComponent implements AfterViewInit
+┃       ┣━━   speak(input: SpeakInput)
+┃       ┣━━   speakEvent(ticket: EnrichedTicket): void
+┃       ┣━━   formatEvent(ticket: EnrichedTicket): string
+┃       ┣━━   speakVenue(ticket: EnrichedTicket): void
+┃       ┣━━   formatDate(date: Date, oneLiner: boolean = false): string
+┃       ┣━━   formatDateForSpeech(date: Date): string
+┃       ┣━━   async spinQRCode(
+┃       ┃       event: PointerEvent,
+┃       ┃       config: SpinConfig = DEFAULT_SPIN_CONFIG
+┃       ┃     )
+┃       ┣━━   private animateRotation(
+┃       ┃       imgElement: HTMLElement,
+┃       ┃       targetRotation: number,
+┃       ┃       config: SpinConfig,
+┃       ┃       cleanup: () => void
+┃       ┃     )
+┃       ┣━━     const animate = (currentTime: number) =>
+┃       ┣━━   private getNext90Degree(currentRotation: number): number
+┃       ┣━━   private getCurrentRotation(matrix: string): number
+┃       ┣━━   ngAfterViewInit()
+┃       ┣━━       const mouseEnterListener = () =>
+┃       ┣━━       const mouseLeaveListener = () =>
+┃       ┣━━   ngOnDestroy()
+┃       ┣━━   toggleColumn(event: MatOptionSelectionChange, column: string)
+┃       ┣━━           (col) =>
+┃       ┣━━   adjustColumns(event?: Event)
+┃       ┣━━   onResize(event: Event)
+┃       ┣━━   async ngOnInit()
+┃       ┣━━   async loadTickets(): Promise<void>
+┃       ┣━━   onDateRangeChange(
+┃       ┃       type: "start" | "end",
+┃       ┃       event: MatDatepickerInputEvent<Date>
+┃       ┃     )
+┃       ┣━━   applyFilter(column: string): void
+┃       ┣━━   formatDateForComparison(date: Date): string
+┃       ┣━━   constructor(private renderer: Renderer2)
+┃       ┣━━   onFilterChange(event: Event, column: string)
+┃       ┣━━   onLatitudeChange(event: Event)
+┃       ┣━━   onLongitudeChange(event: Event)
+┃       ┣━━   onRadiusChange(event: Event)
+┃       ┣━━   sortData(sort: Sort): void
+┃       ┣━━   onRowClick(event: Event, row: any)
+┃       ┣━━ function isDate(value: Date | undefined | null): value is Date
+┃       ┣━━ function isNonNullNumber(value: number | null): value is number
+┃       ┣━━ function hasLocation(
+┃       ┃     ticket: any
+┃       ┃   ): ticket is
+┃       ┣━━ const create_faker_ticket = async () =>
+┃       ┣━━ function compare(a: number | string, b: number | string, isAsc: boolean)
+┃       ┣━━ function compare_dates(a: Date, b: Date, isAsc: boolean)
+┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
+┃       ┣━━ const mockTickets = async () =>
+┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
+┗━━ 📁 group6 (1 folder, 1 file) 
+    ┗━━ 📄 ramda_prop.js (294 tokens, 33 lines)
+        ┗━━ var prop = _curry2(function prop(p, obj)
+
+tree_plus v(1.0.16) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+6 folder(s), 15 file(s), 1,833 line(s), 12,408 token(s) in 0.13 second(s).
 
 ```
 <!-- t3-end -->
@@ -2001,8 +2300,7 @@ Help me **add to** and **priorize** this list of languages to support!
 <!-- t4-start -->
 ```sh
 tree_plus tests/more_languages/group_todo
-paths=('tests/more_languages/group_todo',)
-📁 group_todo (774 tokens, 155 lines)
+📁 group_todo (1 folder, 8 files) 
 ┣━━ 📄 crystal_test.cr (56 tokens, 15 lines)
 ┣━━ 📄 dart_test.dart (106 tokens, 24 lines)
 ┣━━ 📄 elixir_test.exs (49 tokens, 10 lines)
@@ -2011,6 +2309,9 @@ paths=('tests/more_languages/group_todo',)
 ┣━━ 📄 test_setup_py.test (118 tokens, 24 lines)
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
+
+tree_plus v(1.0.16) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
 <!-- t4-end -->
