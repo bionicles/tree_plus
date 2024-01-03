@@ -6,7 +6,6 @@ import json
 import os
 import re
 
-from func_timeout import func_set_timeout, func_timeout
 from tree_plus_src.debug import debug_print
 
 

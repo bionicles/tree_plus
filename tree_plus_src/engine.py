@@ -15,7 +15,7 @@ import os
 import re
 
 # time limit on file parsing makes sense
-from func_timeout import func_timeout
+# from func_timeout import func_timeout
 from rich.console import Console
 from rich.syntax import Syntax
 from rich.tree import Tree
