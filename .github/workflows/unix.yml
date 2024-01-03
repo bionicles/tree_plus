@@ -58,9 +58,6 @@ jobs:
       - name: Increment Version
         run: |
           TREE_PLUS_DEPLOYMENT=GO TREE_PLUS_INCREMENT_VERSION=YES python tree_plus_src/deploy.py
-      - name: Update README
-        run: |
-          TREE_PLUS_DEPLOYMENT=GO TREE_PLUS_UPDATE_README=YES python tree_plus_src/deploy.py
       - name: Build
         run: make build
       - name: Install
@@ -69,6 +66,11 @@ jobs:
       - name: Test
         run: |
           make test
+      - name: Update README
+        run: |
+          TREE_PLUS_DEPLOYMENT=GO TREE_PLUS_UPDATE_README=YES python tree_plus_src/deploy.py
+      - name: Build Again
+        run: make build
       - name: Commit Updates
         run: |
           git config --global user.email "bion@atomiclogic.com"

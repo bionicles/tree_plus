@@ -34,33 +34,33 @@ C_EXPECTATION = [
     "static struct config",
     "class Person",
     "public:",
-    "    Person(std :: string n) : name(n)",
+    "    Person(std::string n) : name(n)",
     "    void greet()",
     "void globalGreet()",
     "int main()",
-    "void printMessage(const std :: string &message)",
+    "void printMessage(const std::string &message)",
     "template<typename T>",
-    "void printVector(const std :: vector<T>& vec)",
+    "void printVector(const std::vector<T>& vec)",
     "struct Point",
     "    Point(int x, int y) : x(x), y(y)",
     "class Animal",
     "  public:",
-    "    Animal(const std :: string &name) : name(name)",
+    "    Animal(const std::string &name) : name(name)",
     "    virtual void speak() const",
     "    virtual ~Animal()",
     "class Dog : public Animal",
     "  public:",
-    "    Dog(const std :: string &name) : Animal(name)",
+    "    Dog(const std::string &name) : Animal(name)",
     "    void speak() const override",
     "class Cat : public Animal",
     "  public:",
-    "    Cat(const std :: string &name) : Animal(name)",
+    "    Cat(const std::string &name) : Animal(name)",
     "    void speak() const override",
     "class CatDog: public Animal, public Cat, public Dog",
     "  public:",
-    "      CatDog(const std :: string &name) : Animal(name)",
+    "      CatDog(const std::string &name) : Animal(name)",
     "      int meow_bark()",
-    """nb :: bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
+    """nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
                              int batch_size, int max_seq_length, float dropout,
                              bool bidirectional, bool cudnn_allow_tf32,
 			     int workspace_size, int reserve_space_size)""",
@@ -91,7 +91,7 @@ C_EXPECTATION = [
     "    T *data()",
     "    size_t size() const",
     "class Buffer",
-    """std :: tuple<array, array, array> quantize(
+    """std::tuple<array, array, array> quantize(
     const array& w,
     int group_size,
     int bits,
@@ -353,32 +353,32 @@ def create_sqlite_test_db(
             [
                 "module JuliaTest_EdgeCase",
                 """struct Location
-    name :: String 
-    lat :: Float32
-    lon :: Float32
+    name::String 
+    lat::Float32
+    lon::Float32
 end""",
                 """mutable struct mPerson
-    name :: String
-    age :: Int
+    name::String
+    age::Int
 end""",
                 """Base.@kwdef mutable struct Param
-    Δt :: Float64 = 0.1
-    n :: Int64
-    m :: Int64
+    Δt::Float64 = 0.1
+    n::Int64
+    m::Int64
 end""",
                 "    sic(x,y)",
-                "welcome(l :: Location)",
+                "welcome(l::Location)",
                 "∑(α, Ω)",
                 """function noob()
 end""",
-                """function ye_olde(hello :: String, world :: Location)
+                """function ye_olde(hello::String, world::Location)
 end""",
                 """function multiline_greet(
-        p :: mPerson, 
-        greeting :: String
+        p::mPerson, 
+        greeting::String
     )
 end""",
-                """function julia_is_awesome(prob :: DiffEqBase.AbstractDAEProblem{uType, duType, tType,
+                """function julia_is_awesome(prob::DiffEqBase.AbstractDAEProblem{uType, duType, tType,
         isinplace};
     kwargs...) where {uType, duType, tType, isinplace}
 end""",
@@ -1249,10 +1249,11 @@ def test_more_languages_group4(
                 "    - Set up Python",
                 "    - Install dependencies",
                 "    - Increment Version",
-                "    - Update README",
                 "    - Build",
                 "    - Install",
                 "    - Test",
+                "    - Update README",
+                "    - Build Again",
                 "    - Commit Updates",
                 "    - Publish to PyPI",
             ],

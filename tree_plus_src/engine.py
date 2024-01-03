@@ -18,6 +18,7 @@ import re
 # from func_timeout import func_timeout
 from rich.console import Console
 from rich.syntax import Syntax
+from rich.theme import Theme
 from rich.tree import Tree
 from natsort import os_sorted
 
@@ -108,9 +109,6 @@ class TreePlus:
         return stats
 
 
-console = Console()
-
-
 @lru_cache
 def remove_trailing_space(x: str) -> str:
     # debug_print("remove_trailing_space")
@@ -127,6 +125,7 @@ def tree_to_string(tree: Tree) -> str:
         # soft_wrap=True,
         # markup=False,
         # highlight=False,
+        theme=Theme({"repr.ipv6": "default"}),
     )
     with console.capture() as capture:
         console.print(tree, markup=False)
@@ -155,6 +154,7 @@ def safe_print(
             markup=markup,
             highlight=highlight,
             style=style,
+            theme=Theme({"repr.ipv6": "default"}),
         )
         console.print(tree)
     except UnicodeEncodeError as e:

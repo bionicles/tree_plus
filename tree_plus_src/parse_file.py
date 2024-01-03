@@ -8,10 +8,22 @@ import re
 
 from tree_plus_src.debug import debug_print
 
-
-LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
-TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
 BINARY_CHECK_SIZE = 1024
+TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
+LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
+JS_EXTENSIONS = {".js", ".jsx", ".ts", ".tsx"}
+C_EXTENSIONS = {".c", ".cpp", ".cc", ".h"}
+FORTRAN_EXTENSIONS = {
+    ".f",
+    ".for",
+    ".f77",
+    ".f90",
+    ".f95",
+    ".f03",
+    ".f08",
+    ".F",
+    ".F90",
+}
 
 
 @lru_cache(maxsize=None)
@@ -66,7 +78,7 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
         n_lines = 3
     contents = read_file(file_path, n_lines=n_lines)
 
-    if file_extension in {".js", ".jsx", ".ts", ".tsx"}:
+    if file_extension in JS_EXTENSIONS:
         if file_path.endswith(".d.ts"):
             components = parse_d_dot_ts(contents)
         else:
@@ -100,7 +112,7 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
     # elif file_extension == ".c":
     #     components = parse_c(contents)
     # components = func_timeout(1, parse_c, (contents,))
-    elif file_extension in {".c", ".cpp", ".cc", ".h"}:
+    elif file_extension in C_EXTENSIONS:
         components = parse_c(contents)
     elif file_extension == ".php":
         components = parse_php(contents)
@@ -165,17 +177,7 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
         components = parse_tex(contents)
     elif file_extension == ".lean":
         components = parse_lean(contents)
-    elif file_extension in {
-        ".f",
-        ".for",
-        ".f77",
-        ".f90",
-        ".f95",
-        ".f03",
-        ".f08",
-        ".F",
-        ".F90",
-    }:
+    elif file_extension in FORTRAN_EXTENSIONS:
         components = parse_fortran(contents)
     elif file_extension == ".tf":
         components = parse_tf(contents)
@@ -317,7 +319,7 @@ def parse_c(contents: str) -> List[str]:
             component = groups["other_static"]
         if component:
             debug_print(f"{component=}")
-            component = component.replace("::", " :: ")
+            component = component
             components.append(component)
 
     return components
@@ -370,7 +372,7 @@ def parse_isabelle(contents: str) -> List[str]:
     components = []
     for n, match in enumerate(pattern.finditer(contents)):
         debug_print(f"parse_isabelle {n=} {match=}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_and_debug_print_groups(match, named_only=True)
         component = None
         if "title" in groups:
             component = groups["title"]
@@ -550,7 +552,7 @@ def parse_ts(contents: str) -> List[str]:
 #         groups = extract_and_debug_print_groups(match)
 #         component = match.group().strip()
 #         # fix a minor visual defect
-#         component = component.replace("::", " :: ")
+#         component = component
 #         if component in CPP_DENY:
 #             continue
 #         components.append(component)
@@ -1850,7 +1852,7 @@ def parse_java(contents: str) -> List[str]:
 
 def parse_jl(contents: str) -> List[str]:
     debug_print("parse_jl")
-    contents = remove_py_comments(contents).replace("::", " :: ")
+    contents = remove_py_comments(contents)
     combined_pattern = re.compile(
         # traditional functions
         r"^ *(?P<signature>function \w+\([\s\S]*?\)(?: where ({.*}|.*))?)(?P<details>[\s\S]*?(?P<ending>\s^ *end))(?=\s)|"
