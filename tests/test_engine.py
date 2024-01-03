@@ -7,7 +7,6 @@ from rich import print as rich_print
 
 from tree_plus_src import (
     engine,
-    debug_disabled,
     debug_print,
     parse_ignore,
     AmortizedGlobs,
@@ -17,10 +16,6 @@ from tree_plus_src import (
 
 def is_(types, thing) -> bool:
     return isinstance(thing, types)
-
-
-def nis_(types, thing) -> bool:
-    return not is_(types, thing)
 
 
 def test_engine_categorize_root():
@@ -94,18 +89,23 @@ def test_engine__from_file():
     assert "test_engine__from_file" in tree_string
 
 
-def test_engine__from_code():
-    x = engine._from_code(
+def test_engine__from_components():
+    components = ["lambda x: x + 1", "lambda x: x + 2"]
+    xs = engine._from_components(
         # noformat
-        lexer="definitely not a lexer",
-        code="lambda x: x + 1",
+        file_path=Path("nonexistent.exe"),
+        components=components,
     )
-    rich_print(x)
-    assert is_(str, x)
-    y = engine._from_code(lexer="python", code="lambda x: x + 2")
-    rich_print(y)
-    print(y.lexer)
-    assert is_(Syntax, y)
+    rich_print(xs)
+    assert is_(list, xs)
+    for xi in xs:
+        assert is_(str, xi)
+    ys = engine._from_components(file_path=Path("fake.py"), components=components)
+    rich_print(ys)
+    assert is_(list, ys)
+    for yi in ys:
+        print(yi.lexer)
+        assert is_(Syntax, yi)
 
 
 def test_engine__from_folder():
@@ -316,7 +316,25 @@ def test_engine_from_seeds():
     folder_seed = "tests/path_to_test"
     file_seed = "tests/test_engine.py"
     glob_seed = "*.py"
-    seeds = (folder_seed, file_seed, glob_seed)
-    root = engine.from_seeds(seeds)
+    seeds = ("tree_plus_src", folder_seed, file_seed, glob_seed)
+    root = engine.from_seeds(seeds, maybe_ignore=("debug.py",))
     rich_print(root.into_rich_tree())
     root_str = root.into_str()
+    assert "__pycache__" not in root_str
+    assert "def my_multiline_signature_function" in root_str
+    assert "def debug_print" not in root_str
+    assert "count_tokens_lines.py" in root_str
+
+
+def test_engine_from_seeds_override():
+    folder_seed = "tests/path_to_test"
+    file_seed = "tests/test_engine.py"
+    # glob_seed = "*.py" # this screwed up the ignore override btw
+    seeds = ("tree_plus_src", folder_seed, file_seed)
+    root = engine.from_seeds(seeds, maybe_ignore=("debug.py",), override_ignore=True)
+    rich_print(root.into_rich_tree())
+    root_str = root.into_str()
+    assert "__pycache__" in root_str
+    assert "def my_multiline_signature_function" in root_str
+    assert "def debug_print" not in root_str
+    assert "count_tokens_lines.py" in root_str

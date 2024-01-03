@@ -30,6 +30,7 @@ from tree_plus_src import (
     is_parsed_ignore,
     AmortizedGlobs,
     amortize_globs,
+    parse_ignore,
 )
 
 # emojis here
@@ -37,7 +38,6 @@ operate_normally = platform.system() != "Windows" or sys.stdout.encoding != "cp1
 ROOT_CHAR = ":cactus:" if operate_normally else "[root]"
 FOLDER_CHAR = ":file_folder:" if operate_normally else "[folder]"
 FILE_CHAR = ":page_facing_up:" if operate_normally else "[file]"
-GLOB_CHAR = ":cyclone:" if operate_normally else "[glob]"
 
 
 class Category(Enum):
@@ -77,18 +77,24 @@ class TreePlus:
 
     def into_rich_tree(self) -> Tree:
         "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
-        self_as_rich_tree = into_rich_tree(root=self)
-        return self_as_rich_tree
+        return into_rich_tree(root=self)
 
     def into_str(self) -> str:
         "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
-        self_as_rich_tree = into_rich_tree(root=self)
-        self_as_str = tree_to_string(self_as_rich_tree)
-        return self_as_str
+        return tree_to_string(into_rich_tree(root=self))
 
     def render(self):
         "PUBLIC: Safely print a TreePlus"
-        safe_print(self.into_rich_tree())
+        safe_print(into_rich_tree(root=self))
+
+    def stats(self) -> str:
+        "PUBLIC: statistics only"
+        stats = ""
+        stats += f"{self.n_folders} subfolder{'' if self.n_folders == 1 else 's'}"
+        stats += f", {self.n_files} file{'' if self.n_files == 1 else 's'}"
+        stats += f", {self.n_lines} line{'' if self.n_lines == 1 else 's'}"
+        stats += f", {self.n_tokens} token{'' if self.n_tokens == 1 else 's'}"
+        return stats
 
 
 console = Console()
@@ -148,35 +154,38 @@ def safe_print(tree: Tree):
             print(e)
 
 
+STYLE = "bold"
+
+
+def _make_rich_tree(label: str) -> Tree:
+    return Tree(label, guide_style=STYLE, highlight=True)
+
+
 def into_rich_tree(*, root: TreePlus = None) -> Tree:
     "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
     if not isinstance(root, TreePlus):
         raise TypeError(f"tree_plus.into_rich_tree got non-TreePlus {root=}")
     rich_tree = None
     if root.category is Category.FILE:
-        label = f"{FILE_CHAR} {root.name}"
-        rich_tree = Tree(label)
+        label = f"{FILE_CHAR} {root.name} ({root.n_tokens} token{'' if root.n_tokens == 1 else 's'}, {root.n_lines} line{'' if root.n_lines == 1 else 's'})"
+        rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_tree.add(subtree)
-        counts = f" ({root.n_tokens} token{'' if root.n_tokens == 1 else 's'}, {root.n_lines} line{'' if root.n_lines == 1 else 's'})"
-        rich_tree.label += counts
     elif root.category is Category.FOLDER:
-        label = f"{FOLDER_CHAR} {root.name}"
-        rich_tree = Tree(label)
+        label = f"{FOLDER_CHAR} {root.name} ({root.n_folders} subfolder{'' if root.n_folders == 1 else 's'}, {root.n_files} file{'' if root.n_files == 1 else 's'})"
+        rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             # RECURSION HERE
             rich_subtree = into_rich_tree(root=subtree)
             rich_tree.add(rich_subtree)
-        counts = f" ({root.n_folders} folder{'' if root.n_folders == 1 else 's'}, {root.n_files} file{'' if root.n_files == 1 else 's'})"
+        counts = f" "
         rich_tree.label += counts
     elif root.category is Category.ROOT:
-        label = f"{ROOT_CHAR} {root.name}"
-        rich_tree = Tree(label)
+        label = f"{ROOT_CHAR} {root.name} ({root.n_folders} folder{'' if root.n_folders == 1 else 's'}, {root.n_files} file{'' if root.n_files == 1 else 's'})"
+        rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_subtree = into_rich_tree(root=subtree)
             rich_tree.add(rich_subtree)
-        counts = f" ({root.n_folders} folder{'' if root.n_folders == 1 else 's'}, {root.n_files} file{'' if root.n_files == 1 else 's'})"
-        rich_tree.label += counts
     if not rich_tree:
         raise TypeError(f"engine.into_rich_tree: unsupported {root=}")
     return rich_tree
@@ -232,11 +241,14 @@ def categorize(
 
 def from_seed(
     maybe_seed_str=None,
-    maybe_ignore: Optional[Tuple[str]] = None,
+    maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
     maybe_globs: Optional[Tuple[str]] = None,
-    syntax_highlighting: bool = True,
+    syntax_highlighting: bool = False,
 ) -> TreePlus:
     "PUBLIC: Construct a TreePlus from maybe_seed_strs = tuple[str] or None"
+    debug_print(
+        f"from_seed {maybe_seed_str=} {maybe_ignore=} {maybe_globs=} {syntax_highlighting=}"
+    )
     return from_seeds(
         maybe_seed_strs=(maybe_seed_str,),
         maybe_ignore=maybe_ignore,
@@ -248,21 +260,28 @@ def from_seed(
 def from_seeds(
     maybe_seed_strs: Optional[Tuple[str]] = None,
     *,
-    maybe_ignore: Optional[Tuple[str]] = None,
+    maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
     maybe_globs: Optional[Tuple[str]] = None,
-    syntax_highlighting: bool = True,
+    syntax_highlighting: bool = False,
+    override_ignore: bool = False,
 ) -> TreePlus:
     "PUBLIC: Construct a TreePlus from maybe_seed_strs = tuple[str] or None"
+    debug_print(
+        f"from_seeds {maybe_seed_strs=} {maybe_ignore=} {maybe_globs=} {syntax_highlighting=}"
+    )
     try:
         # default to current working directory
-        if maybe_seed_strs is None:
+        if not maybe_seed_strs:
             debug_print(f"tree_plus.from_root defaulting to current working directory")
-            maybe_seed_strs = (".",)
+            maybe_seed_strs = (str(Path.cwd()),)
         if not all(isinstance(s, str) for s in maybe_seed_strs):
             raise TypeError(
                 f"tree_plus.from_root tuple must contain str, got {maybe_seed_strs}"
             )
-        seeds = maybe_seed_strs
+        # dedupe
+        seeds = tuple(set(maybe_seed_strs))
+        if maybe_ignore != DEFAULT_IGNORE:
+            maybe_ignore = parse_ignore(maybe_ignore, override=override_ignore)
         # mapper
         subtrees = _map_seeds(
             seeds=seeds,
@@ -271,7 +290,13 @@ def from_seeds(
             syntax_highlighting=syntax_highlighting,
         )
         # reducer
-        root = _reduce_forest(forest=subtrees)
+        n_subtrees = len(subtrees)
+        if n_subtrees == 0:
+            root = TreePlus(category=Category.ROOT, name="No match")
+        elif n_subtrees == 1:
+            root = subtrees[0]
+        else:
+            root = _reduce_forest(forest=subtrees)
         return root
     except Exception as e:
         debug_print(f"tree_plus.from_root Exception {e=}")
@@ -294,7 +319,7 @@ def _map_seeds(
     seeds: Tuple[str] = None,
     maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
     maybe_globs: Optional[Tuple[str]] = None,
-    syntax_highlighting: bool = True,
+    syntax_highlighting: bool = False,
 ) -> Tuple[TreePlus]:
     "PRIVATE (MAPPER): grow a forest from a tuple of seed strings"
     debug_print(f"_map_seeds {seeds=}, {maybe_ignore=}, {maybe_globs=}")
@@ -343,6 +368,8 @@ def _map_seeds(
     globs = tuple(set(chain(maybe_globs, glob_paths)))
     debug_print("_map_seeds GLOBS AFTER MERGE", globs)
     if globs:
+        if not folder_paths:
+            folder_paths = (Path.cwd(),)
         globs = amortize_globs(paths=folder_paths, globs=globs)
         if globs and file_paths:
             print(
@@ -371,8 +398,8 @@ def _map_seeds(
             maybe_globs=globs,
             syntax_highlighting=syntax_highlighting,
         )
-        debug_print(f"_map_seeds TreePlus from seed {n=}", seed_tree_plus)
         assert isinstance(seed_tree_plus, TreePlus)
+        debug_print(f"_map_seeds got TreePlus from seed {n=}")
         assert seed_tree_plus.is_file() or seed_tree_plus.is_folder()
         forest.append(seed_tree_plus)
     debug_print(f"_map_seeds  DONE!")
@@ -384,7 +411,7 @@ def _from_seed(
     seed_path: Optional[Path] = None,
     maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
     maybe_globs: Optional[AmortizedGlobs] = None,
-    syntax_highlighting: bool = True,
+    syntax_highlighting: bool = False,
 ) -> TreePlus:
     "PRIVATE: dispatcher to either file or folder"
     if seed_path is None:
@@ -420,7 +447,7 @@ def _add_subtree(
     subtree: TreePlus = None,
 ):
     "PRIVATE: add a subtree TreePlus to a root TreePlus"
-    debug_print(f"_add_subtree {root=} {subtree=}")
+    # debug_print(f"_add_subtree {root=} {subtree=}")
     root.subtrees.append(subtree)
     if subtree.is_file():
         root.n_files += 1
@@ -436,7 +463,7 @@ def _from_folder(
     folder_path: Path,
     maybe_ignore: Optional[Tuple[str]] = tuple(DEFAULT_IGNORE),
     maybe_globs: Optional[AmortizedGlobs] = None,
-    syntax_highlighting: bool = True,
+    syntax_highlighting: bool = False,
 ) -> TreePlus:
     "PRIVATE: walk a folder and construct a tree"
     debug_print(f"engine._from_folder {folder_path=} {maybe_ignore=} {maybe_globs=}")
@@ -450,10 +477,10 @@ def _from_folder(
     subtree_paths = os_sorted(filter(lambda x: x != ".", folder_path.iterdir()))
     folder_tree_plus = TreePlus(
         category=Category.FOLDER,
-        name=folder_path.name,
+        name=folder_path.resolve().name,  # FIXES THE Path(".").name == "" bug
     )
     for subtree_n, subtree_path in enumerate(subtree_paths):
-        debug_print(f"engine._from_folder {subtree_n=} {subtree_path=}")
+        # debug_print(f"engine._from_folder {subtree_n=} {subtree_path=}")
         if should_ignore(subtree_path, ignore=maybe_ignore, globs=maybe_globs):
             continue
         if subtree_path.is_dir():
@@ -461,6 +488,7 @@ def _from_folder(
                 folder_path=subtree_path,
                 maybe_ignore=maybe_ignore,
                 maybe_globs=maybe_globs,
+                syntax_highlighting=syntax_highlighting,
             )
         elif subtree_path.is_file():
             subtree_plus = _from_file(
@@ -477,7 +505,7 @@ def _from_folder(
 def _from_file(
     *,
     file_path: Path,
-    syntax_highlighting: bool = True,
+    syntax_highlighting: bool = False,
 ) -> TreePlus:
     "PRIVATE: parse a file_path into a TreePlus"
     debug_print(f"engine._from_file {file_path=}")
@@ -494,18 +522,14 @@ def _from_file(
         components = []
     if syntax_highlighting:
         try:
-            extension = file_path.suffix
-            components = [
-                _from_code(
-                    lexer=extension,
-                    code=component,
-                )
-                for component in components
-            ]
+            components = _from_components(
+                file_path=file_path,
+                components=components,
+            )
         except Exception as e:
             debug_print(f"engine._from_file syntax highlighting exception {e=}")
     debug_print(f"engine._from_file got counts:", counts)
-    debug_print(f"engine._from_file got components:", components)
+    # debug_print(f"engine._from_file got components:", components)
     file_tree_plus = TreePlus(
         subtrees=components,
         category=Category.FILE,
@@ -518,28 +542,41 @@ def _from_file(
     return file_tree_plus
 
 
-def _from_code(
+BACKUP_LEXERS = {
+    "kt": "kotlin",
+}
+
+DENY_SUFFIXES = {".json"}
+
+
+def _get_lexer(file_path: Path) -> str:
+    if "makefile" in file_path.name:
+        return "make"
+    if file_path.suffix in DENY_SUFFIXES:
+        return ""
+    if file_path.suffix in BACKUP_LEXERS:
+        return BACKUP_LEXERS[file_path.suffix]
+    return file_path.suffix.lstrip(".")
+
+
+def _from_components(
     *,
-    lexer: str = None,
-    code: Union[Syntax, str] = None,
+    file_path: Path = None,
+    components: List[str] = None,
 ) -> Union[Syntax, str]:
     "PRIVATE: either Syntax highlighting, or fallback to str"
-    assert isinstance(lexer, str), f"tree_plus._from_code not str {code=}"
-    if isinstance(code, Syntax):
-        debug_print(f"engine._from_code skip {code=}")
-        return code
-    assert isinstance(code, str), f"tree_plus._from_code not str {code=}"
-    assert len(code) > 0, f"tree_plus._from_code len 0 {code=}"
-    try:
-        lexer = lexer.lstrip(".")
-        syntax = Syntax(code=code, lexer=lexer)
-        if syntax.lexer is None:
-            debug_print(f"engine.from_code no {lexer=}")
-            return code
-        debug_print(
-            f"engine._from_code found Pygment {syntax.lexer.__class__.__name__}"
-        )
-        return syntax
-    except Exception as e:
-        debug_print(f"engine._from_code Syntax exception:\n{e=}\nfallback to str...")
-        return code
+    lexer = _get_lexer(file_path)
+    if not lexer:
+        return components
+    highlighted = []
+    for component in components:
+        try:
+            syntax = Syntax(component, lexer)
+            if syntax.lexer is None:
+                debug_print(f"_from_components failed with {lexer=}")
+                return components
+            highlighted.append(syntax)
+        except Exception as e:
+            debug_print(f"_from_components failed with {lexer=}\n{e=}")
+            return components
+    return highlighted

@@ -9,26 +9,20 @@ debug:
 
 .PHONY: debug_command
 debug_command: test
-# debug_command: test_engine
 
-# use -s to colorize / immediately print test debug output
-
-test: test_e2e test_engine test_normally test_tp_dotdot test_cli test_deploy
-
-test_engine:
-	pytest tests/test_engine.py
+test: test_normally test_tp_dotdot test_e2e test_cli test_deploy
 
 # first we'll do our unit tests (most likely to need fast debug)
 test_normally:
-	pytest tests/ -k "units or more_languages or dotenv" -vv
-
-
-test_e2e:
-	pytest tests/ -k "e2e" -vv
+	pytest tests/ -k "engine or units or more_languages or dotenv" -vv
 
 # then we have a test where we change directory
 test_tp_dotdot:
 	cd tests/dot_dot/nested_dir && pytest -k test_tree_plus_dotdot -vv
+
+# then we do e2e tests 
+test_e2e:
+	pytest tests/ -k "e2e" -vv
 
 # then we reinstall the cli and test it
 test_cli: cli
@@ -37,9 +31,6 @@ test_cli: cli
 # finally, we'll test the deployment script
 test_deploy:
 	pytest tests/test_deploy.py
-
-test_dotenv:
-	pytest tests/ -k "dotenv"
 
 # vulture helps identify dead code
 vulture: install_vulture

@@ -1,20 +1,15 @@
 # tree_plus_cli.py
 from typing import Optional, Union, Tuple
-import os
+from time import perf_counter
 
-from rich.traceback import install
 import click
-
-
-if os.getenv("GITHUB_ACTIONS") != "true":
-    # tracebacks
-    install(show_locals=True)
 
 from tree_plus_src import (  # noqa E402
     enable_debug,
     debug_print,
     __version__,
     engine as tree_plus,
+    DEFAULT_IGNORE,
 )
 
 
@@ -58,6 +53,14 @@ CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h", "-H"])
     default=False,
     help="Enables $DEBUG_TREE_PLUS.",
 )
+@click.option(
+    "--lex",
+    "-l",
+    "-L",
+    is_flag=True,
+    default=False,
+    help="Enables Pygments Lexing (WIP).",
+)
 @click.argument("paths", nargs=-1, type=click.UNPROCESSED)  # Accepts multiple arguments
 def main(
     glob: Optional[Tuple[str]],
@@ -65,6 +68,7 @@ def main(
     ignore: Tuple[str],
     debug: bool,
     version: bool,
+    lex: bool,
 ):
     """A `tree` util enhanced with tokens, lines, and components.
 
@@ -99,10 +103,14 @@ def main(
     assert glob is None or isinstance(
         glob, tuple
     ), f"{glob=} must be None or Tuple[str]"
+    if not ignore:
+        ignore = DEFAULT_IGNORE
+    start_time = perf_counter()
     root = tree_plus.from_seeds(
-        paths, maybe_ignore=ignore, maybe_globs=glob, syntax_highlighting=True
+        paths, maybe_ignore=ignore, maybe_globs=glob, syntax_highlighting=lex
     )
     root.render()
+    print(f"\n{root.stats()} in {perf_counter() - start_time:.02f} seconds.")
 
 
 if __name__ == "__main__":

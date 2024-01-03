@@ -1,6 +1,12 @@
 # tree_plus_src/__init__.py
 from .version import __version__
-from .debug import debug_print, enable_debug, disable_debug, debug_disabled
+from .debug import (
+    debug_print,
+    enable_debug,
+    disable_debug,
+    debug_disabled,
+    debug_enabled,
+)
 from .ignore import (  # noqa F401
     DEFAULT_IGNORE,
     parse_ignore,
@@ -9,7 +15,6 @@ from .ignore import (  # noqa F401
     is_glob,
     can_parse,
     is_parsed_ignore,
-    is_parsed_globs,
     AmortizedGlobs,
     amortize_globs,
 )

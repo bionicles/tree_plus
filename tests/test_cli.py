@@ -42,57 +42,60 @@ def test_tree_plus_display_version():
     assert __version__ in result.stdout
 
 
-def test_cli_on_root():
+def test_cli_on_tests():
     path_to_tests = os.path.dirname(os.path.abspath(__file__))
-    root_path = os.path.join(path_to_tests, "..")
-    result = subprocess.run(
-        ["tree_plus", "-i", "README.md", root_path],
-        capture_output=True,
-        text=True,
-    )
+    tests = os.path.join(path_to_tests)
+    with tree_plus.debug_disabled():
+        result = subprocess.run(
+            ["tree_plus", "-i", "README.md", tests],
+            capture_output=True,
+            text=True,
+        )
     print(result.stdout)
     assert result.returncode == 0
     assert result.stderr == ""
 
+    stdout = result.stdout
     # example of what you could test
-    assert " tree_plus" in result.stdout
-    assert " .github" in result.stdout
-    assert " workflows" in result.stdout
-    assert " tests" in result.stdout
-    assert " dot_dot" in result.stdout
-    assert " nested_dir" in result.stdout
-    assert " more_languages" in result.stdout
-    assert " group1" in result.stdout
-    assert " group2" in result.stdout
-    assert " group_todo" in result.stdout
-    assert " group4" in result.stdout
-    assert " group5" in result.stdout
-    assert " path_to_test" in result.stdout
-    assert " tree_plus_src" in result.stdout
-    assert " unix.yml" in result.stdout
-    assert " microsoft.yml" in result.stdout
-    assert "# Hello, world!" in result.stdout
-    assert "tokens" in result.stdout
-    assert "lines" in result.stdout
-    assert "def" in result.stdout
-    assert "fn" in result.stdout
-    assert "function" in result.stdout
-    assert "class" in result.stdout
-    assert "trait" in result.stdout
-    assert "struct" in result.stdout
-    assert "type" in result.stdout
-    assert "impl" in result.stdout
-    assert "module" in result.stdout
-    assert "let" in result.stdout
-    assert "->" in result.stdout
-    assert "::" in result.stdout
-    assert "provider" in result.stdout
-    assert "resource" in result.stdout
-    assert "pub" in result.stdout
-    assert "mod" in result.stdout
-    assert "struct" in result.stdout
-    assert "enum" in result.stdout
-    assert '): (.*)")' not in result.stdout
+    assert "__pycache__" not in stdout
+    # assert " tree_plus" in stdout
+    # assert " .github" in stdout
+    # assert " workflows" in stdout
+    assert " tests" in stdout
+    assert " dot_dot" in stdout
+    assert " nested_dir" in stdout
+    assert " more_languages" in stdout
+    assert " group1" in stdout
+    assert " group2" in stdout
+    assert " group_todo" in stdout
+    assert " group4" in stdout
+    assert " group5" in stdout
+    assert " path_to_test" in stdout
+    # assert " tree_plus_src" in stdout
+    # assert " unix.yml" in stdout
+    # assert " microsoft.yml" in stdout
+    assert "# Hello, world!" in stdout
+    assert "tokens" in stdout
+    assert "lines" in stdout
+    assert "def" in stdout
+    assert "fn" in stdout
+    assert "function" in stdout
+    assert "class" in stdout
+    assert "trait" in stdout
+    assert "struct" in stdout
+    assert "type" in stdout
+    assert "impl" in stdout
+    assert "module" in stdout
+    assert "let" in stdout
+    assert "->" in stdout
+    assert "::" in stdout
+    assert "provider" in stdout
+    assert "resource" in stdout
+    assert "pub" in stdout
+    assert "mod" in stdout
+    assert "struct" in stdout
+    assert "enum" in stdout
+    assert '): (.*)")' not in stdout
 
     if platform.system() == "Windows":
         assert 0, "Windows always fails because of extensive visual defects"

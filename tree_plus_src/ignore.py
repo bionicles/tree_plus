@@ -154,7 +154,7 @@ def parse_ignore(
     maybe_ignore_tuple: Optional[Tuple[str]] = None, override: bool = False
 ) -> Optional[Tuple[str]]:
     "make_ignore: Give me tuple[str] or give me None"
-    debug_print(f"make_ignore: input {maybe_ignore_tuple=}")
+    debug_print(f"parse_ignore: input {maybe_ignore_tuple=}")
     if maybe_ignore_tuple is None:
         if override:
             return None
@@ -170,7 +170,7 @@ def parse_ignore(
     if not override:
         ignore_set = ignore_set.union(DEFAULT_IGNORE)
     ignore_tuple = tuple(ignore_set)
-    rich_print(f"parsed {ignore_tuple=}")
+    # rich_print(f"parsed {ignore_tuple=}")
     return ignore_tuple
 
 
@@ -203,14 +203,6 @@ def parse_globs(
     globs_tuple = tuple(globs_set)
     rich_print(f"parsed {globs_tuple=}")
     return globs_tuple
-
-
-def is_parsed_globs(x) -> bool:
-    if x is None:
-        return True
-    if isinstance(x, tuple) and all(is_glob(i) for i in x):
-        return True
-    return False
 
 
 @dataclass(frozen=True)
@@ -264,15 +256,13 @@ def should_ignore(
     globs: Optional[AmortizedGlobs] = None,
 ) -> bool:
     "Determine if a given path should be ignored based on ignore FROZENSET"
-    # assert is_parsed_ignore(ignore), "should_ignore: unparsed {ignore=}"
-    # assert is_parsed_globs(globs), "should_ignore: unparsed {globs=}"
-    debug_print(f"should_ignore {path=} {ignore=} {globs=}")
-    if not ignore and not globs:  # no check needed
+    if not ignore and not globs:
+        debug_print(f"should_ignore NO CHECK NEEDED {path=}")
         return False
 
     # check the amortized globs first
     if globs and path not in globs.matches:
-        debug_print(f"should_ignore: GLOB SKIP {path=} not in {globs.matches=}")
+        debug_print(f"should_ignore: GLOB SKIP {path=}")
         return True
 
     if ignore:
@@ -285,6 +275,7 @@ def should_ignore(
                 debug_print(f"should_ignore: IGNORE SKIP {path=}")
                 return True
 
+    debug_print(f"should_ignore DO NOT IGNORE {path=}")
     return False
 
 

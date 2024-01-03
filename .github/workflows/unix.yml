@@ -51,28 +51,24 @@ jobs:
         with:
           python-version: '3.10'
           cache: 'pip' # caching pip dependencies
-      - name: Install pypa/build
-        run: python -m pip install build
+      - name: Install dependencies
+        run: |
+          pip install build
+          pip install pytest pytest-dotenv
       - name: Increment Version
         run: |
           TREE_PLUS_DEPLOYMENT=GO TREE_PLUS_INCREMENT_VERSION=YES python tree_plus_src/deploy.py
+      - name: Update README
+        run: |
+          TREE_PLUS_DEPLOYMENT=GO TREE_PLUS_UPDATE_README=YES python tree_plus_src/deploy.py
       - name: Build
         run: make build
       - name: Install
         run: |
-          pip install pytest pytest-dotenv
-          pip install -U dist/*.whl
-      - name: Run generic tests
+            pip install -U dist/*.whl
+      - name: Test
         run: |
-          pytest tests/ -k "not test_tree_plus_dotdot" -vv
-      - name: Run specific test
-        run: |
-          cd tests/dot_dot/nested_dir && pytest -k test_tree_plus_dotdot -vv && cd ../../..
-      - name: Update README
-        run: |
-          TREE_PLUS_DEPLOYMENT=GO TREE_PLUS_UPDATE_README=YES python tree_plus_src/deploy.py
-      - name: Build Again
-        run: make build
+          make test
       - name: Commit Updates
         run: |
           git config --global user.email "bion@atomiclogic.com"

@@ -1,12 +1,11 @@
 # tree_plus_src/parse_file.py
 from functools import lru_cache
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Union
+from pathlib import Path
 import json
 import os
 import re
 
-# moved into engine.py ... here we can just extract components
-# from rich.syntax import Syntax
 
 from tree_plus_src.debug import debug_print
 
@@ -44,8 +43,10 @@ def read_file(
             return ""
 
 
-def parse_file(file_path: str) -> List[str]:
+def parse_file(file_path: Union[str, Path]) -> List[str]:
     "Parse a file and return a List[str] of its major components."
+    if isinstance(file_path, Path):
+        file_path = str(file_path)
     base_file_path, file_extension = os.path.splitext(file_path)
     file_name = os.path.basename(base_file_path)
     file_extension = file_extension.lower()
@@ -669,7 +670,6 @@ def parse_erl(contents: str) -> List[str]:
 
 def parse_rs(contents: str) -> List[str]:
     debug_print("parse_rs")
-    from pygments.lexers.rust import RustLexer
 
     contents = remove_c_comments(contents)
 
