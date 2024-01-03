@@ -15,6 +15,10 @@ def parse_py(contents: str) -> List[str]:
 
 
 class MyClass:
+    @staticmethod
+    def physical_element_aval(dtype) -> core.ShapedArray:
+        return core.ShapedArray((), dtype.float_dtype)
+
     def my_method(self):
         pass
 

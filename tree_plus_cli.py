@@ -31,6 +31,14 @@ CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h", "-H"])
     help='Patterns to ignore, in quotes: -i "*.java"',
 )
 @click.option(
+    "--override",
+    "-o",
+    "-O",
+    is_flag=True,
+    default=False,
+    help='Override DEFAULT_IGNORE (includes ignored content): -o -i "*.java"',
+)
+@click.option(
     "--glob",
     "-g",
     "-G",
@@ -54,25 +62,35 @@ CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h", "-H"])
     help="Enables $DEBUG_TREE_PLUS.",
 )
 @click.option(
-    "--lex",
-    "-l",
-    "-L",
+    "--syntax",
+    "-s",
+    "-S",
     is_flag=True,
     default=False,
-    help="Enables Pygments Lexing (WIP).",
+    help="Enables Syntax Highlighting (WIP).",
+)
+@click.option(
+    "--concise",
+    "-c",
+    "-C",
+    is_flag=True,
+    default=False,
+    help="Enables Syntax Highlighting (WIP).",
 )
 @click.argument("paths", nargs=-1, type=click.UNPROCESSED)  # Accepts multiple arguments
 def main(
     glob: Optional[Tuple[str]],
     paths: Optional[Union[str, Tuple[str]]],
     ignore: Tuple[str],
+    override: bool,
     debug: bool,
     version: bool,
-    lex: bool,
+    syntax: bool,
+    concise: bool,
 ):
     """A `tree` util enhanced with tokens, lines, and components.
 
-    Wrap glob patterns in quotes: -i "*.py" / -g "*.rs"
+    Wrap patterns in quotes: -i "*.py" / -g "*.rs"
 
     Examples:
 
@@ -86,7 +104,19 @@ def main(
 
         \b
         Ignore Java files
-            > tree_plus tests -i "*.java"
+            > tree_plus -i "*.java" tests
+
+        \b
+        Override DEFAULT_IGNORE: Only ignore .ini files.
+            > tree_plus -o -i "*.ini" tests/dot_dot
+
+        \b
+        Syntax Highlight python files in src and tests
+            > tree_plus -s tree_plus_src/*.py tests/*.py
+
+        \b
+        Concise Mode (No Parsing)
+            > tree_plus -c
     """
     if debug:
         enable_debug()
@@ -103,14 +133,28 @@ def main(
     assert glob is None or isinstance(
         glob, tuple
     ), f"{glob=} must be None or Tuple[str]"
-    if not ignore:
+    og_ignore = ignore
+    if not ignore and not override:
         ignore = DEFAULT_IGNORE
     start_time = perf_counter()
     root = tree_plus.from_seeds(
-        paths, maybe_ignore=ignore, maybe_globs=glob, syntax_highlighting=lex
+        paths,
+        maybe_ignore=ignore,
+        maybe_globs=glob,
+        syntax_highlighting=syntax,
+        override_ignore=override,
+        concise=concise,
     )
     root.render()
-    print(f"\n{root.stats()} in {perf_counter() - start_time:.02f} seconds.")
+    line1 = f"\n[link=https://github.com/bionicles/tree_plus/blob/main/README.md]tree_plus[/link] v({__version__}) ignore={og_ignore} globs={glob}"
+    line1 += f" {concise=} {paths=}" if concise else f" {syntax=} {paths=}"
+    line2 = f"\n{root.stats()} in {perf_counter() - start_time:.02f} second(s)."
+    tree_plus.safe_print(
+        line1 + line2,
+        style="bold white on black",
+        # highlight=False,
+        markup=True,
+    )
 
 
 if __name__ == "__main__":

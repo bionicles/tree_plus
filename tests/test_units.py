@@ -78,6 +78,8 @@ bobbins"""
                 'T = TypeVar("T")',
                 "def parse_py(contents: str) -> List[str]",
                 "class MyClass",
+                """    @staticmethod
+    def physical_element_aval(dtype) -> core.ShapedArray""",
                 "    def my_method(self)",
                 """    @staticmethod
     def my_typed_method(obj: dict) -> int""",

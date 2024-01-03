@@ -6,8 +6,9 @@ import json
 import os
 import re
 
-
+from func_timeout import func_set_timeout, func_timeout
 from tree_plus_src.debug import debug_print
+
 
 LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
 TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
@@ -97,10 +98,11 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
             components = parse_openrpc_json(contents)
     elif file_extension in (".yml", ".yaml"):
         components = parse_yml(contents)
-    elif file_extension == ".c":
+    # elif file_extension == ".c":
+    #     components = parse_c(contents)
+    # components = func_timeout(1, parse_c, (contents,))
+    elif file_extension in {".c", ".cpp", ".cc", ".h"}:
         components = parse_c(contents)
-    elif file_extension in {".cpp", ".cc", ".h"}:
-        components = parse_cpp(contents)
     elif file_extension == ".php":
         components = parse_php(contents)
     elif file_extension == ".rs":
@@ -207,6 +209,121 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
     return total_components
 
 
+def extract_and_debug_print_groups(match: re.Match, named_only: bool = False) -> dict:
+    "filter and debug print non-None match groups"
+    numbered_groups = {}
+    if not named_only:
+        for i in range(len(match.groups())):
+            group = match.group(i)
+            if group:
+                numbered_groups[i] = group
+    for k, v in match.groupdict().items():
+        if v:
+            numbered_groups[k] = v
+    debug_print("groups:")
+    debug_print(numbered_groups)
+    return numbered_groups
+
+
+# r"\n((template<.*?>)?\n(\w+::)?(\w+) \w+\([\s\S]*?\))",
+# r"((template<.*?>)?\n(\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
+# r"\n(template.*)\n|"
+# r"\n(((\w+::)?(\w+))\s+\w+\([\s\S]*?\))",
+# r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\)\s*)\s*{",
+# r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\))\s*(?=\{)",
+
+# ^(?P<typedef_struct>typedef\s+struct\s+(?P<name1>\w+)?\s*\{[^}]*\}\s*(?P<name2>\w+)(?=;\s))
+
+# wow:
+# r"^(?P<method> +(?P<virtual>virtual )?(?P<method_return_type>\w+ )?~?(?P<method_name>\w+)(?P<args>\(.*?\)[^,](?P<const_override>( const)?( override)?)?)(?P<postfix>(\s^ *)?(?P<colon>\s?:\s).*?)?)(?=(\s{)|(?=.*=.*;\n)|(?=\s^))|"
+
+
+# refactor with newer regex learning to cover more and avoid catastrophic backtracking
+def parse_c(contents: str) -> List[str]:
+    debug_print("parse_cpp")
+    contents = remove_c_comments(contents)
+
+    # Combined regex pattern to match all components
+    combined_pattern = re.compile(
+        # Functions first (most common)
+        r"^(?P<function> *(?P<modifier>[\w:]+ )?(?P<function_return_type>[\w:*&]+(?P<generics>\s?<[^>]*>\s?)? )(?P<function_name>[\w*&[\]]+)\([^\)]*\)(?=\s{))|"
+        # templates
+        r"^(?P<template>template ?<.*?>[^\{^;^=\n]*(?=\s))|"
+        # hashtag macros
+        r"^(?P<macro>#(?:define)(?P<invocation>\s\w+( ?\w* ?\(.*\))?)?)|"
+        # Methods
+        r"(?<!\\\n)^(?P<method> +(?P<virtual>virtual |static )?(?P<method_return_type>\w+ )?~?(?P<method_name>[*\w]+)(?P<args>\(.*\)(?P<const_override>( const)?( override)?)?)(?P<postfix>(\s^ *)?(?P<colon>\s?:\s).*?)?)(?=(\s{)|(?=.*=.*;\n)|(?=\s^))|"
+        # typedef struct
+        r"^(?P<typedef_struct>typedef struct\s?(?P<type_struct_name1>\w+)?(?P<body>\s\{[\s\S]*?(?P<closing>\} (?P<type_struct_name2>\w+))))|"
+        # structs
+        r"^(?P<struct>(?:static )?struct(?P<struct_name> \w+)?(?=\s\{))|"
+        # typedef struct weirdness with two names
+        # class
+        r"^(?P<class>class \w+(?P<inheritance>\s?:(?P<mod>\s\w+\s\w+,?)*)?)|"
+        # enums (maybe class)
+        r"^(?P<enum>(?:enum) (?:class )?\w+(?: : \w+)?)|"
+        # public or private sections
+        r"^(?P<public_or_private> *(public|private):)|"
+        # static definitions seem important
+        r"^(?P<other_static>static (struct )?(?P<static_kind>\w+) \w+(\[\])?(?= =))",
+        # functions
+        re.MULTILINE,
+    )
+
+    components = []
+    public_or_private = None
+    for n, match in enumerate(combined_pattern.finditer(contents)):
+        component = None  # just in case!
+        debug_print(f"parse_cpp {n=} {match=}")
+        groups = extract_and_debug_print_groups(match, named_only=True)
+        if "function" in groups:
+            component = groups["function"]
+            public_or_private = None
+        elif "method" in groups:
+            if public_or_private is not None:
+                components.append(public_or_private)
+                public_or_private = None
+            component = groups["method"].rstrip(";")
+        elif "struct" in groups:
+            component = groups["struct"]
+        elif "typedef_struct" in groups:
+            name = (
+                groups["type_struct_name1"]
+                if "type_struct_name1" in groups
+                else groups["type_struct_name2"]
+                if "type_struct_name2" in groups
+                else ""
+            )
+            if name:
+                component = f"typedef struct {name}"
+            else:
+                component = None
+        elif "public_or_private" in groups:
+            # carrying this but not adding it eagerly to avoid scope confusion
+            public_or_private = groups["public_or_private"]
+            continue
+        elif "class" in groups:
+            component = groups["class"]
+            public_or_private = None  # right?
+        elif "enum" in groups:
+            component = groups["enum"]
+            public_or_private = None  # right?
+        elif "template" in groups:
+            component = groups["template"].rstrip("\n")
+            public_or_private = None  # right?
+        elif "macro" in groups:
+            component = groups["macro"]
+            public_or_private = None  # right?
+        elif "other_static" in groups:
+            component = groups["other_static"]
+        if component:
+            debug_print(f"{component=}")
+            component = component.replace("::", " :: ")
+            components.append(component)
+
+    return components
+
+
 @lru_cache
 def is_binary_string(data: bytes) -> bool:
     return bool(data.translate(None, TEXTCHARS))
@@ -224,21 +341,6 @@ def is_binary(file_path: str) -> bool:
     except Exception as e:
         print(f"Error opening file {file_path}: {e}")
         return False
-
-
-def extract_and_debug_print_groups(match: re.Match) -> dict:
-    "filter and debug print non-None match groups"
-    numbered_groups = {}
-    for i in range(len(match.groups())):
-        group = match.group(i)
-        if group:
-            numbered_groups[i] = group
-    for k, v in match.groupdict().items():
-        if v:
-            numbered_groups[k] = v
-    debug_print("groups:")
-    debug_print(numbered_groups)
-    return numbered_groups
 
 
 def clean_isabelle_text(content: str) -> str:
@@ -347,7 +449,7 @@ def remove_c_comments(contents: str) -> str:
 
 combined_ts_pattern = re.compile(
     # 1. (Arrow)? Function or Method
-    r"\n?^( *\(?(?:(export\s+)?(?:default\s+)?(?:(?:var|const|let)\s+\w+\s*=\s*(?:async\s+)?)?(?:function\s*\*?\s+)?[\w<>, ]+\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?\s*|(\w+)\s*:\s*\([^)]*\)\s*=>|(\w+)\s*:\s*function\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?)(?:=>)?)(?= )|"
+    r"\n?^( *\(?(?:(export\s+)?(?:default\s+)?(?:(?:var|const|let)\s+\w+\s*=\s*(?:_curry\d\()?(?:async\s+)?)?(?:function\s*\*?\s+)?[\w<>, ]+\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?\s*|(\w+)\s*:\s*\([^)]*\)\s*=>|(\w+)\s*:\s*function\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?)(?:=>)?)(?= )|"
     # 2. Class or Interface
     r"\n?((?:export )?(?:default )?(?:(?:class|interface)\s+(?:[\w<>, ]+)(?:\s+(?:extends|implements)\s+[\w<>, ]+)?)) |"
     # 3. Type
@@ -392,7 +494,7 @@ def parse_ts(contents: str) -> List[str]:
                 not double
                 or not double.splitlines()[-1].strip()
                 or (
-                    re.search(r"( *(if|switch|for|catch|return) ?\()", double)
+                    re.search(r"( *(if|switch|for|catch|return) ?(?:\(|_))", double)
                     and "=>" not in double
                 )
             ):
@@ -417,81 +519,85 @@ def parse_ts(contents: str) -> List[str]:
     return components
 
 
-CPP_DENY = {"private", "public"}
+# CPP_DENY = {"private", "public"}
+# missed a lot
+# def parse_cpp(contents: str) -> List[str]:
+#     debug_print("parse_cpp")
+#     contents = remove_c_comments(contents)
+
+#     # Combined regex pattern to match all components
+#     combined_pattern = re.compile(
+#         # class or struct
+#         r"\n((class|struct)? \w+( : \w+( \w+)?)?)|"
+#         # enums (maybe class)
+#         r"\n((enum) (class )?\w+( : \w+)?)|"
+#         # (maybe template) functions
+#         # r"\n((template<.*?>)?\n(\w+::)?(\w+) \w+\([\s\S]*?\))",
+#         # r"((template<.*?>)?\n(\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
+#         # templates
+#         # r"\n(template.*)\n|"
+#         r"\n(template ?<.*?>[^\{^;^=]*)|"
+#         # functions
+#         # r"\n(((\w+::)?(\w+))\s+\w+\([\s\S]*?\))",
+#         # r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\)\s*)\s*{",
+#         r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\))\s*(?=\{)",
+#         re.DOTALL,
+#     )
+
+#     components = []
+
+#     for n, match in enumerate(combined_pattern.finditer(contents)):
+#         debug_print(f"parse_cpp {n=} {match=}")
+#         groups = extract_and_debug_print_groups(match)
+#         component = match.group().strip()
+#         # fix a minor visual defect
+#         component = component.replace("::", " :: ")
+#         if component in CPP_DENY:
+#             continue
+#         components.append(component)
+
+#     return components
 
 
-def parse_cpp(contents: str) -> List[str]:
-    debug_print("parse_cpp")
-    contents = remove_c_comments(contents)
+# BUG: catastrophic backtracking in some c files
+# @func_set_timeout(1)
+# def parse_c(contents: str) -> List[str]:
+#     debug_print("parse_c")
+#     contents = remove_c_comments(contents)
+#     debug_print("comments removed")
 
-    # Combined regex pattern to match all components
-    combined_pattern = re.compile(
-        # class or struct
-        r"\n((class|struct)? \w+( : \w+( \w+)?)?)|"
-        # enums (maybe class)
-        r"\n((enum) (class )?\w+( : \w+)?)|"
-        # (maybe template) functions
-        # r"\n((template<.*?>)?\n(\w+::)?(\w+) \w+\([\s\S]*?\))",
-        # r"((template<.*?>)?\n(\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
-        # templates
-        # r"\n(template.*)\n|"
-        r"\n(template ?<.*?>[^\{^;^=]*)|"
-        # functions
-        # r"\n(((\w+::)?(\w+))\s+\w+\([\s\S]*?\))",
-        # r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\)\s*)\s*{",
-        r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\))\s*(?=\{)",
-        re.DOTALL,
-    )
+#     # Combined regex pattern to match functions (including pointer return types), structs, enums, and typedefs
+#     combined_pattern = re.compile(
+#         # Functions (including pointer return types)
+#         # r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})|"
+#         r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*)|"
+#         # Structs
+#         r"\n(static )?struct\s+\w+\s*\{[^}]*\}|"
+#         # Enums
+#         r"\nenum\s+\w+\s*\{[^}]*\}|"
+#         # Typedefs
+#         r"\ntypedef\s+struct\s*\{[^}]*\}\s*\w+;",
+#         re.DOTALL,
+#     )
+#     debug_print("compiled pattern")
 
-    components = []
+#     components = []
 
-    for n, match in enumerate(combined_pattern.finditer(contents)):
-        debug_print(f"parse_cpp {n=} {match=}")
-        component = match.group().strip()
-        # fix a minor visual defect
-        component = component.replace("::", " :: ")
-        if component in CPP_DENY:
-            continue
-        components.append(component)
+#     for n, match in enumerate(combined_pattern.finditer(contents)):
+#         debug_print(f"parse_c {n=} {match=}")
+#         _ = extract_and_debug_print_groups(match)
+#         component = match.group().strip()
+#         if component.startswith("typedef"):
+#             # Extract only the typedef struct name
+#             typedef_name = component.split("}")[1].split(";")[0].strip()
+#             component = f"typedef struct {typedef_name}"
+#         else:
+#             # Extract only the first line for each component
+#             component = component.split("{")[0].strip()
 
-    return components
+#         components.append(component)
 
-
-def parse_c(contents: str) -> List[str]:
-    debug_print("parse_c")
-    contents = remove_c_comments(contents)
-
-    # Combined regex pattern to match functions (including pointer return types), structs, enums, and typedefs
-    combined_pattern = re.compile(
-        # Functions (including pointer return types)
-        # r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*\{[^}]*\})|"
-        r"\n((?:[\w*]+\s*)+\*?\s*\w+\s*\([^)]*\)\s*)|"
-        # Structs
-        r"\n(static )?struct\s+\w+\s*\{[^}]*\}|"
-        # Enums
-        r"\nenum\s+\w+\s*\{[^}]*\}|"
-        # Typedefs
-        r"\ntypedef\s+struct\s*\{[^}]*\}\s*\w+;",
-        re.DOTALL,
-    )
-
-    components = []
-
-    for n, match in enumerate(combined_pattern.finditer(contents)):
-        debug_print(f"parse_cpp {n=} {match=}")
-        _ = extract_and_debug_print_groups(match)
-        component = match.group().strip()
-        if component.startswith("typedef"):
-            # Extract only the typedef struct name
-            typedef_name = component.split("}")[1].split(";")[0].strip()
-            component = f"typedef struct {typedef_name}"
-        else:
-            # Extract only the first line for each component
-            component = component.split("{")[0].strip()
-
-        components.append(component)
-
-    return components
+#     return components
 
 
 # Define the regular expression pattern for comments
@@ -506,7 +612,7 @@ def remove_py_comments(input_string: str) -> str:
 # Combined regex pattern to match Python components
 combined_py_pattern = re.compile(
     # Functions and Methods, capturing indentation and multiline signatures
-    r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\], ]+)?)\s*:|"
+    r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\],. ]+)?)\s*:|"
     # Classes
     r"(class \w+(\[.*\])?(\([\w\s,]*\))?):|"
     # Decorators
@@ -687,7 +793,7 @@ def parse_rs(contents: str) -> List[str]:
         r"\n(( *)?(pub )?(trait|enum|mod)\s+\w*(<[^{]*>)?)|"
         # r"macro_rules!\s+[a-z_][a-z_0-9]*)",
         r"\n((#\[macro_export\]\n)?macro_rules!\s+[a-z_][a-z_0-9]*)",
-        re.DOTALL,
+        re.MULTILINE,
     )
 
     components = []
@@ -698,7 +804,7 @@ def parse_rs(contents: str) -> List[str]:
         component = None
         # functions, group 1
         if 1 in groups:
-            component = groups[1].rstrip()
+            component = groups[1].rstrip().rstrip(",")
         # struct or impl
         elif 8 in groups:
             component = groups[8].rstrip()

@@ -8,6 +8,112 @@ import sqlite3
 
 from tree_plus_src import parse_file, replace_isabelle_symbols
 
+C_EXPECTATION = [
+    "struct Point",
+    "struct Point getOrigin()",
+    "float mul_two_floats(float x1, float x2)",
+    "enum days",
+    "long add_two_longs(long x1, long x2)",
+    "double multiplyByTwo(double num)",
+    "char getFirstCharacter(char *str)",
+    "void greet(Person p)",
+    "typedef struct Person",
+    "typedef struct PersonA",
+    "int main()",
+    "int* getArrayStart(int arr[], int size)",
+    """long complexFunctionWithMultipleArguments(
+    int param1,
+    double param2,
+    char *param3,
+    struct Point point
+)""",
+    "keyPattern *ACLKeyPatternCreate(sds pattern, int flags)",
+    "sds sdsCatPatternString(sds base, keyPattern *pat)",
+    "static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)",
+    "    while((ln = listNext(&li)))",
+    "static struct config",
+    "class Person",
+    "public:",
+    "    Person(std :: string n) : name(n)",
+    "    void greet()",
+    "void globalGreet()",
+    "int main()",
+    "void printMessage(const std :: string &message)",
+    "template<typename T>",
+    "void printVector(const std :: vector<T>& vec)",
+    "struct Point",
+    "    Point(int x, int y) : x(x), y(y)",
+    "class Animal",
+    "  public:",
+    "    Animal(const std :: string &name) : name(name)",
+    "    virtual void speak() const",
+    "    virtual ~Animal()",
+    "class Dog : public Animal",
+    "  public:",
+    "    Dog(const std :: string &name) : Animal(name)",
+    "    void speak() const override",
+    "class Cat : public Animal",
+    "  public:",
+    "    Cat(const std :: string &name) : Animal(name)",
+    "    void speak() const override",
+    "class CatDog: public Animal, public Cat, public Dog",
+    "  public:",
+    "      CatDog(const std :: string &name) : Animal(name)",
+    "      int meow_bark()",
+    """nb :: bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
+                             int batch_size, int max_seq_length, float dropout,
+                             bool bidirectional, bool cudnn_allow_tf32,
+			     int workspace_size, int reserve_space_size)""",
+    "int main()",
+    "enum ECarTypes",
+    "ECarTypes GetPreferredCarType()",
+    "enum ECarTypes : uint8_t",
+    "enum class ECarTypes : uint8_t",
+    "void myFunction(string fname, int age)",
+    "template <typename T> T cos(T)",
+    "template <typename T> T sin(T)",
+    "template <typename T> T sqrt(T)",
+    "template<typename T> struct VLEN",
+    "template<typename T> class arr",
+    "  private:",
+    "    static T *ralloc(size_t num)",
+    "    static void dealloc(T *ptr)",
+    "    static T *ralloc(size_t num)",
+    "    static void dealloc(T *ptr)",
+    "  public:",
+    "    arr() : p(0), sz(0)",
+    "    arr(size_t n) : p(ralloc(n)), sz(n)",
+    """    arr(arr &&other)
+      : p(other.p), sz(other.sz)""",
+    "    ~arr()",
+    "    void resize(size_t n)",
+    "    T &operator[](size_t idx)",
+    "    T *data()",
+    "    size_t size() const",
+    "class Buffer",
+    """std :: tuple<array, array, array> quantize(
+    const array& w,
+    int group_size,
+    int bits,
+    StreamOrDevice s)""",
+    "#define PY_SSIZE_T_CLEAN",
+    "#define PLATFORM_IS_X86",
+    "#define PLATFORM_WINDOWS",
+    "#define GETCPUID(a, b, c, d, a_inp, c_inp)",
+    "static int GetXCR0EAX()",
+    "#define GETCPUID(a, b, c, d, a_inp, c_inp)",
+    "static int GetXCR0EAX()",
+    '  asm("XGETBV" : "=a"(eax), "=d"(edx) : "c"(0))',
+    "static void ReportMissingCpuFeature(const char* name)",
+    "static PyObject *CheckCpuFeatures(PyObject *self, PyObject *args)",
+    "static PyObject *CheckCpuFeatures(PyObject *self, PyObject *args)",
+    "static PyMethodDef cpu_feature_guard_methods[]",
+    "static struct PyModuleDef cpu_feature_guard_module",
+    "#define EXPORT_SYMBOL __declspec(dllexport)",
+    '#define EXPORT_SYMBOL __attribute__ ((visibility("default")))',
+    "EXPORT_SYMBOL PyMODINIT_FUNC PyInit_cpu_feature_guard(void)",
+]
+
 
 SQLITE_PATH = "tests/more_languages/group3/test.sqlite"
 
@@ -440,32 +546,10 @@ def test_more_languages_group1(
                 "def sumOfSquaresShort(x: Int, y: Int): Int",
             ],
         ),
-        (
-            "tests/more_languages/group2/c_test.c",
-            [
-                "struct Point",
-                "struct Point getOrigin()",
-                "float mul_two_floats(float x1, float x2)",
-                "enum days",
-                "long add_two_longs(long x1, long x2)",
-                "double multiplyByTwo(double num)",
-                "char getFirstCharacter(char *str)",
-                "void greet(Person p)",
-                "typedef struct Person",
-                "int main()",
-                "int* getArrayStart(int arr[], int size)",
-                """long complexFunctionWithMultipleArguments(
-    int param1,
-    double param2,
-    char *param3,
-    struct Point point
-)""",
-                "keyPattern *ACLKeyPatternCreate(sds pattern, int flags)",
-                "sds sdsCatPatternString(sds base, keyPattern *pat)",
-                "static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)",
-                "static struct config",
-            ],
-        ),
+        # ( # subsumed
+        #     "tests/more_languages/group2/c_test.c",
+        #     C_EXPECTATION,
+        # ),
         (
             "tests/more_languages/group2/PowershellTest.ps1",
             [
@@ -552,42 +636,10 @@ def test_more_languages_group2(
 @pytest.mark.parametrize(
     "file,expected",
     [
-        (
-            "tests/more_languages/group3/cpp_test.cpp",
-            [
-                "class Person",
-                "void globalGreet()",
-                "int main()",
-                "void printMessage(const std :: string &message)",
-                """template<typename T>
-void printVector(const std :: vector<T>& vec)""",
-                "struct Point",
-                "class Animal",
-                "class Dog : public Animal",
-                "class Cat : public Animal",
-                """nb :: bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
-                             int batch_size, int max_seq_length, float dropout,
-                             bool bidirectional, bool cudnn_allow_tf32,
-			     int workspace_size, int reserve_space_size)""",
-                "int main()",
-                "enum ECarTypes",
-                "ECarTypes GetPreferredCarType()",
-                "enum ECarTypes : uint8_t",
-                "enum class ECarTypes : uint8_t",
-                "void myFunction(string fname, int age)",
-                "template <typename T> T cos(T)",
-                "template <typename T> T sin(T)",
-                "template <typename T> T sqrt(T)",
-                "template<typename T> struct VLEN",
-                "template<typename T> class arr",
-                "class Buffer",
-                """std :: tuple<array, array, array> quantize(
-    const array& w,
-    int group_size,
-    int bits,
-    StreamOrDevice s)""",
-            ],
-        ),
+        # ( # subsumed
+        #     "tests/more_languages/group3/cpp_test.cpp",
+        #     CPP_EXPECTATION,
+        # ),
         (
             "tests/more_languages/group3/swift_test.swift",
             [
@@ -974,7 +1026,7 @@ where
     S4: Loadable,
     E: Extractor<S1, S2>,
     T: Transformer<S2, S3>,
-    L: Loader<S3, S4>,""",
+    L: Loader<S3, S4>""",
                 "trait Container",
                 "    fn items(&self) -> impl Iterator<Item = Widget>",
                 "trait HttpService",
@@ -1575,33 +1627,44 @@ import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+FORTRAN_EXPECTATION = [
+    "MODULE basic_mod",
+    """    TYPE :: person
+        CHARACTER(LEN=50) :: name
+        INTEGER :: age
+    END TYPE person""",
+    """    SUBROUTINE short_hello(happy, path)
+    END SUBROUTINE short_hello""",
+    """    SUBROUTINE long_hello(
+        p,
+        message
+    )
+    END SUBROUTINE long_hello""",
+    "END MODULE basic_mod",
+    """PROGRAM HelloFortran
+END PROGRAM HelloFortran""",
+]
+
 
 @pytest.mark.parametrize(
     "file,expected",
     [
         (
             "tests/more_languages/group6/test.f",
-            [
-                "MODULE basic_mod",
-                """    TYPE :: person
-        CHARACTER(LEN=50) :: name
-        INTEGER :: age
-    END TYPE person""",
-                """    SUBROUTINE short_hello(happy, path)
-    END SUBROUTINE short_hello""",
-                """    SUBROUTINE long_hello(
-        p,
-        message
-    )
-    END SUBROUTINE long_hello""",
-                "END MODULE basic_mod",
-                """PROGRAM HelloFortran
-END PROGRAM HelloFortran""",
-            ],
+            FORTRAN_EXPECTATION,
         ),
         (
             "tests/more_languages/group6/fractal.thy",
             ISABELLE_EXPECTATION,
+        ),
+        (
+            "tests/more_languages/group6/catastrophic.c",
+            C_EXPECTATION,
+        ),
+        # TODO: parse_jsdoc!
+        (
+            "tests/more_languages/group6/ramda_prop.js",
+            ["var prop = _curry2(function prop(p, obj)"],
         ),
     ],
 )

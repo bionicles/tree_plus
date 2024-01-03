@@ -8,9 +8,19 @@ debug:
 	nodemon -L -V
 
 .PHONY: debug_command
-debug_command: test
+# debug_command: test
+debug_command: test_units test_engine test_more_languages test_tp_dotdot test_e2e test_cli test_deploy
+
+test_units:
+	pytest tests/test_units.py -vv
+
+test_more_languages:
+	pytest tests/test_more_language_units.py -vv
 
 test: test_normally test_tp_dotdot test_e2e test_cli test_deploy
+
+test_engine:
+	pytest tests/test_engine.py -vv
 
 # first we'll do our unit tests (most likely to need fast debug)
 test_normally:
@@ -22,7 +32,7 @@ test_tp_dotdot:
 
 # then we do e2e tests 
 test_e2e:
-	pytest tests/ -k "e2e" -vv
+	pytest tests/test_e2e.py -k "e2e" -vv
 
 # then we reinstall the cli and test it
 test_cli: cli

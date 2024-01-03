@@ -122,7 +122,7 @@ def test_deploy_update_readme():
     assert "<!-- t5-start -->\n```sh" in final
     assert "```\n<!-- t5-end -->" in final
     assert "this 5th text should be removed" not in final
-    assert "Wrap glob patterns" in final
+    assert "Wrap patterns in quotes:" in final
     # assert "within tests/more_languages" in final # not working b/c need to build new version
     assert "5th remaining text" in final
 

@@ -86,12 +86,25 @@ def test_engine__from_file():
     assert is_(Tree, y)
     engine.safe_print(y)
     tree_string = engine.tree_to_string(y)
-    assert "test_engine__from_file" in tree_string
+    assert "def test_engine__from_file" in tree_string
 
 
-def test_engine__from_components():
+def test_engine__from_glob():
+    test_pattern = "tests/*.py"
+    x = engine._from_glob(
+        pattern=test_pattern,
+    )
+    print(x)
+    assert is_(engine.TreePlus, x)
+    x.render()
+    assert x.is_glob()
+    tree_string = x.into_str()
+    assert f"tests/*.py ({len(x.subtrees)}" in tree_string
+
+
+def test_engine__syntax_highlight():
     components = ["lambda x: x + 1", "lambda x: x + 2"]
-    xs = engine._from_components(
+    xs = engine._syntax_highlight(
         # noformat
         file_path=Path("nonexistent.exe"),
         components=components,
@@ -100,7 +113,7 @@ def test_engine__from_components():
     assert is_(list, xs)
     for xi in xs:
         assert is_(str, xi)
-    ys = engine._from_components(file_path=Path("fake.py"), components=components)
+    ys = engine._syntax_highlight(file_path=Path("fake.py"), components=components)
     rich_print(ys)
     assert is_(list, ys)
     for yi in ys:
@@ -315,15 +328,20 @@ def test_engine__reduce_forest():
 def test_engine_from_seeds():
     folder_seed = "tests/path_to_test"
     file_seed = "tests/test_engine.py"
-    glob_seed = "*.py"
+    glob_seed = "Mak*"
     seeds = ("tree_plus_src", folder_seed, file_seed, glob_seed)
     root = engine.from_seeds(seeds, maybe_ignore=("debug.py",))
     rich_print(root.into_rich_tree())
     root_str = root.into_str()
-    assert "__pycache__" not in root_str
-    assert "def my_multiline_signature_function" in root_str
-    assert "def debug_print" not in root_str
-    assert "count_tokens_lines.py" in root_str
+    assert "path_to_test" in root_str
+    assert "test_engine.py" in root_str
+    assert "count_tokens_lines.py" in root_str  # tree_plus_src
+    assert "__pycache__" not in root_str  # default ignore
+    assert "def my_multiline_signature_function" in root_str  # tests/path_to_test
+    assert "def debug_print" not in root_str  # explicit ignore
+    assert "Mak* (" in root_str  # glob seed
+    assert "Makefile" in root_str  # tests glob match
+    # assert 0
 
 
 def test_engine_from_seeds_override():
@@ -338,3 +356,24 @@ def test_engine_from_seeds_override():
     assert "def my_multiline_signature_function" in root_str
     assert "def debug_print" not in root_str
     assert "count_tokens_lines.py" in root_str
+
+
+def test_engine_class_treeplus_stats():
+    tp1 = engine.TreePlus()
+    tp1_stats = tp1.stats()
+    # assert tp1_stats == f"0 folders, 0 files, 0 lines, 0 tokens"
+    assert tp1_stats == f"0 folder(s), 0 file(s), 0 line(s), 0 token(s)"
+    tp1.n_folders = 1
+    tp1.n_files = 1
+    tp1.n_lines = 1
+    tp1.n_tokens = 1
+    tp1_stats = tp1.stats()
+    # assert tp1_stats == f"1 folder, 1 file, 1 line, 1 token"
+    assert tp1_stats == f"1 folder(s), 1 file(s), 1 line(s), 1 token(s)"
+    tp1.n_folders = 2
+    tp1.n_files = 2
+    tp1.n_lines = 2
+    tp1.n_tokens = 2
+    tp1_stats = tp1.stats()
+    # assert tp1_stats == f"2 folders, 2 files, 2 lines, 2 tokens"
+    assert tp1_stats == f"2 folder(s), 2 file(s), 2 line(s), 2 token(s)"

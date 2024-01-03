@@ -4,7 +4,7 @@ import platform
 import pytest  # noqa: F401
 import os
 
-from rich import print
+from rich import print as rich_print
 
 # the exact import path might need to be adjusted based on your setup
 from tree_plus_cli import main
@@ -42,6 +42,102 @@ def test_tree_plus_display_version():
     assert __version__ in result.stdout
 
 
+def test_cli_syntax_highlighting_flag():
+    result = subprocess.run(
+        ["tree_plus", "-d", "-s", "tests/path_to_test", "tests/*.py"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    stdout = result.stdout
+    rich_print(stdout)
+    assert "syntax_highlighting=True" in stdout
+    assert "component(s) from file_path=" in stdout
+    assert " tests" in stdout
+    assert " test_cli.py" in stdout
+    assert " Root" in stdout
+    assert " parse_file.py" not in stdout
+    assert " nested_dir" not in stdout
+    result = subprocess.run(
+        ["tree_plus", "-d", "-S", "tests/path_to_test", "tests/*.py"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    stdout = result.stdout
+    assert "syntax_highlighting=True" in stdout
+    assert "component(s) from file_path=" in stdout
+    assert " tests" in stdout
+    assert " test_cli.py" in stdout
+    assert " Root" in stdout
+    assert " parse_file.py" not in stdout
+    assert " nested_dir" not in stdout
+    result = subprocess.run(
+        ["tree_plus", "-d", "--syntax", "tests/path_to_test", "tests/*.py"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    stdout = result.stdout
+    assert "syntax_highlighting=True" in stdout
+    assert "component(s) from file_path=" in stdout
+    assert " tests" in stdout
+    assert " test_cli.py" in stdout
+    assert " Root" in stdout
+    assert " parse_file.py" not in stdout
+    assert " nested_dir" not in stdout
+
+
+def test_cli_override():
+    result = subprocess.run(
+        ["tree_plus", "-o", "-i", "*.ini", "tests/dot_dot"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    stdout = result.stdout
+    assert " dot_dot" in stdout
+    assert " nested_dir" in stdout
+    assert " pytest.ini" not in stdout
+    assert " .hypothesis" in stdout
+    assert " __pycache__" in stdout
+    assert " .pytest_cache" in stdout
+    assert " test_tp_dotdot.py" in stdout
+    # "-i", "*.ini", removed for normal override test
+    result = subprocess.run(
+        [
+            "tree_plus",
+            "-O",
+            "tests/dot_dot",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    stdout = result.stdout
+    assert " dot_dot" in stdout
+    assert " nested_dir" in stdout
+    assert " .hypothesis" in stdout
+    assert " pytest.ini" in stdout
+    assert " __pycache__" in stdout
+    assert " .pytest_cache" in stdout
+    assert " test_tp_dotdot.py" in stdout
+    result = subprocess.run(
+        ["tree_plus", "--override", "-i", ".hypothesis", "tests/dot_dot"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    stdout = result.stdout
+    assert " dot_dot" in stdout
+    assert " nested_dir" in stdout
+    assert " .hypothesis" not in stdout
+    assert " pytest.ini" in stdout
+    assert " __pycache__" in stdout
+    assert " .pytest_cache" in stdout
+    assert " test_tp_dotdot.py" in stdout
+
+
 def test_cli_on_tests():
     path_to_tests = os.path.dirname(os.path.abspath(__file__))
     tests = os.path.join(path_to_tests)
@@ -58,6 +154,8 @@ def test_cli_on_tests():
     stdout = result.stdout
     # example of what you could test
     assert "__pycache__" not in stdout
+    assert ".hypothesis" not in stdout
+    assert ".pytest_cache" not in stdout
     # assert " tree_plus" in stdout
     # assert " .github" in stdout
     # assert " workflows" in stdout

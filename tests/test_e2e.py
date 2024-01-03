@@ -59,8 +59,8 @@ def test_e2e_single_file():
     assert unify_tree_symbols(result_str) == EXPECTATION_0
 
 
-EXPECTATION_EMPTY = """📁 empty_folder (1 subfolder, 0 files)
-┗━━ 📁 is_empty (0 subfolders, 0 files)
+EXPECTATION_EMPTY = """📁 empty_folder (2 folders, 0 files)
+┗━━ 📁 is_empty (1 folder, 0 files)
 """
 
 EMPTY = "tests/empty_folder"
@@ -79,11 +79,13 @@ def test_e2e_empty_folder():
     assert unify_tree_symbols(result_str) == EXPECTATION_EMPTY
 
 
-EXPECTATION_1 = """📁 path_to_test (0 subfolders, 6 files)
-┣━━ 📄 class_method_type.py (503 tokens, 96 lines)
+EXPECTATION_1 = """📁 path_to_test (1 folder, 6 files)
+┣━━ 📄 class_method_type.py (533 tokens, 100 lines)
 ┃   ┣━━ T = TypeVar("T")
 ┃   ┣━━ def parse_py(contents: str) -> List[str]
 ┃   ┣━━ class MyClass
+┃   ┣━━     @staticmethod
+┃   ┃       def physical_element_aval(dtype) -> core.ShapedArray
 ┃   ┣━━     def my_method(self)
 ┃   ┣━━     @staticmethod
 ┃   ┃       def my_typed_method(obj: dict) -> int
