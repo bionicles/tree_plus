@@ -65,8 +65,8 @@ class TreePlus:
     name: str = ""
     n_folders: int = 0
     n_files: int = 0
-    n_lines: int = 0
-    n_tokens: int = 0
+    n_lines: Optional[int] = 0
+    n_tokens: Optional[int] = 0
     subtrees: List[Union["TreePlus", str]] = field(default_factory=list)
 
     def is_root(self) -> bool:
@@ -184,7 +184,9 @@ def into_rich_tree(*, root: TreePlus = None) -> Tree:
         raise TypeError(f"tree_plus.into_rich_tree got non-TreePlus {root=}")
     rich_tree = None
     if root.category is Category.FILE:
-        label = f"{FILE_CHAR} {root.name} ({root.n_tokens} token{'' if root.n_tokens == 1 else 's'}, {root.n_lines} line{'' if root.n_lines == 1 else 's'})"
+        label = f"{FILE_CHAR} {root.name}"
+        if root.n_tokens is not None and root.n_lines is not None:
+            label += f" ({root.n_tokens} token{'' if root.n_tokens == 1 else 's'}, {root.n_lines} line{'' if root.n_lines == 1 else 's'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_tree.add(subtree)
@@ -512,8 +514,9 @@ def _add_subtree(
     elif subtree.is_folder():
         root.n_folders += 1
         root.n_files += subtree.n_files
-    root.n_tokens += subtree.n_tokens
-    root.n_lines += subtree.n_lines
+    if subtree.n_tokens is not None and subtree.n_lines is not None:
+        root.n_tokens += subtree.n_tokens
+        root.n_lines += subtree.n_lines
 
 
 def _from_glob(
@@ -653,8 +656,8 @@ def _from_file(
         name=file_path.name,
         n_folders=0,
         n_files=0,
-        n_tokens=counts.n_tokens,
-        n_lines=counts.n_lines,
+        n_tokens=None if counts is None else counts.n_tokens,
+        n_lines=None if counts is None else counts.n_lines,
     )
     return file_tree_plus
 

@@ -59,7 +59,7 @@ DEFAULT_IGNORE_FROZENSET = frozenset(
         # "*.gdoc",
         # "*.gif",
         # "*.gsheet",
-        "*.gz",
+        # "*.gz",
         # "*.ico",
         "*.img",
         "*.ipa",
@@ -106,25 +106,42 @@ DEFAULT_IGNORE_FROZENSET = frozenset(
         # "*.xlsx",
         "*.zip",
         "*.zst",
-        "**/target/debug/*",
+        # "**/target/debug/*",
         "**/target/debug/**",
         "**/tmp/",
         "*~",
-        "Anaconda3*.sh",
+        # "Anaconda3*.sh",
         "babel-webpack",
         "build",
         "CACHEDIR.TAG",
         "Cargo.lock",
         "detritus",  # bion's name for unused code folder
-        # "archive", # another common name for
+        # "archive",  # another common name for unused code
         "dist",
         "env",
-        "Miniconda3*.sh",
+        # "Miniconda3*.sh",
         "node_modules",
         "target",
         "venv",
     }
 )
+
+# TODO: incorporate gitignore
+# def load_gitignore_patterns(gitignore_path: str) -> set:
+#     """Read and parse patterns from a .gitignore file."""
+#     patterns = set()
+#     with open(gitignore_path, "r") as file:
+#         for line in file:
+#             stripped_line = line.strip()
+#             # Skip comments and empty lines
+#             if stripped_line and not stripped_line.startswith("#"):
+#                 patterns.add(stripped_line)
+#     return patterns
+
+# def update_ignore_frozenset(gitignore_patterns: set) -> frozenset:
+#     """Update DEFAULT_IGNORE_FROZENSET with .gitignore patterns."""
+#     combined_patterns = DEFAULT_IGNORE_FROZENSET.union(gitignore_patterns)
+#     return frozenset(combined_patterns)
 
 DEFAULT_IGNORE = tuple(DEFAULT_IGNORE_FROZENSET)
 

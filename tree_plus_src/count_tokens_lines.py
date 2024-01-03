@@ -1,8 +1,10 @@
 # tree_plus_src/count_tokens_lines.py
 from dataclasses import dataclass
-import tiktoken
+from typing import Optional, Union
+from pathlib import Path
 import os
 
+import tiktoken
 from tree_plus_src.debug import debug_print
 from tree_plus_src.parse_file import read_file
 
@@ -103,15 +105,19 @@ extensions_not_to_count = {
 }
 
 
-def count_tokens_lines(file_path: str) -> TokenLineCount:
+def count_tokens_lines(file_path: Union[str, Path]) -> Optional[TokenLineCount]:
     """
     Count the number of lines and OpenAI tokens in a file.
     """
+    if isinstance(file_path, Path):
+        file_path = str(file_path)
     debug_print(f"count_tokens_lines {file_path=}")
-    file_extension = os.path.splitext(file_path)
+    _prefix, file_extension = os.path.splitext(file_path)
+    debug_print(f"count_tokens_lines {file_extension=}")
     if os.path.isdir(file_path) or file_extension in extensions_not_to_count:
         debug_print(f"count_tokens_lines not counting {file_path=}")
-        return TokenLineCount(n_tokens=0, n_lines=0)
+        return None
+    debug_print(f"count_tokens_lines counting {file_path=}")
 
     contents = read_file(file_path)
     if not contents.strip():
