@@ -75,7 +75,7 @@ tree_plus -i tests
 ┃   ┣━━ cli
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
-┃   ┣━━ debug_command: test_units test_engine test_more_languages test_tp_dotdot test_e2e test_cli test_deploy
+┃   ┣━━ debug_command: test_more_languages test_units test_engine test_tp_dotdot test_e2e test_cli test_deploy
 ┃   ┣━━ test_units
 ┃   ┣━━ test_more_languages
 ┃   ┣━━ test: test_normally test_tp_dotdot test_e2e test_cli test_deploy
@@ -114,7 +114,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (34501 tokens, 2329 lines)
+┣━━ 📄 README.md (34509 tokens, 2330 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -174,7 +174,7 @@ tree_plus -i tests
     ┃   ┃   )
     ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
     ┃   ┗━━ def main()
-    ┣━━ 📄 engine.py (5892 tokens, 705 lines)
+    ┣━━ 📄 engine.py (5968 tokens, 712 lines)
     ┃   ┣━━ TODO (Line 40): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
     ┃   ┣━━ TODO (Line 387): research & decide about globs as paths instead of as filters
     ┃   ┣━━ NOTE (Line 421): here we add directly input file_paths to the amortized glob matches
@@ -307,8 +307,8 @@ tree_plus -i tests
     ┃   ┣━━ @lru_cache
     ┃   ┃   def _replace_symbol(match: re.Match) -> str
     ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-    ┣━━ 📄 parse_file.py (20565 tokens, 2282 lines)
-    ┃   ┣━━ BUG (Line 563): catastrophic backtracking in some c files
+    ┣━━ 📄 parse_file.py (21587 tokens, 2319 lines)
+    ┃   ┣━━ BUG (Line 600): catastrophic backtracking in some c files
     ┃   ┣━━ @lru_cache(maxsize=None)
     ┃   ┃   def read_file(
     ┃   ┃       file_path: str,
@@ -397,10 +397,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.17"
+        ┗━━ __version__ = "1.0.18"
 
-tree_plus v(1.0.17) ignore=('tests',) globs=() syntax=False paths=()
-3 folder(s), 21 file(s), 7,114 line(s), 75,814 token(s) in 0.21 second(s).
+tree_plus v(1.0.18) ignore=('tests',) globs=() syntax=False paths=()
+3 folder(s), 21 file(s), 7,159 line(s), 76,920 token(s) in 0.20 second(s).
 
 ```
 <!-- t1-end -->
@@ -445,9 +445,9 @@ Options:
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
   -s, -S, --syntax       Enables Syntax Highlighting (WIP).
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
-  -h, -H, --help         Show this message and exit.
+  -H, -h, --help         Show this message and exit.
 
-  (v1.0.17) --- https://github.com/bionicles/tree_plus
+  (v1.0.18) --- https://github.com/bionicles/tree_plus
 
 ```
 <!-- t5-end -->
@@ -540,7 +540,7 @@ make debug
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages
-📁 more_languages (8 folders, 69 files) 
+📁 more_languages (8 folders, 70 files) 
 ┣━━ 📁 group1 (1 folder, 9 files) 
 ┃   ┣━━ 📄 CUSTOMER-INVOICE.CBL (545 tokens, 60 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION.
@@ -772,7 +772,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ class Model extends Car
 ┃   ┃   ┣━━   constructor(brand, mod)
 ┃   ┃   ┗━━   show()
-┃   ┗━━ 📄 test.ts (713 tokens, 142 lines)
+┃   ┗━━ 📄 test.ts (871 tokens, 166 lines)
 ┃       ┣━━ type MyType
 ┃       ┣━━ interface MyInterface
 ┃       ┣━━ class TsClass
@@ -804,6 +804,15 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┃     param1: number,
 ┃       ┃     param2: number
 ┃       ┃   ): void
+┃       ┣━━ export default async function tsFunctionComplicated<A, B, C>({
+┃       ┃     a = 1 | 2,
+┃       ┃     b = "bob",
+┃       ┃     c = async () => "charlie",
+┃       ┃   }: {
+┃       ┃     a: number;
+┃       ┃     b: string;
+┃       ┃     c: () => Promise<string>;
+┃       ┃   }): Promise<string>
 ┃       ┣━━ const tsArrowFunctionSigned = ({
 ┃       ┃     a,
 ┃       ┃     b,
@@ -811,6 +820,15 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┃     a: number;
 ┃       ┃     b: string;
 ┃       ┃   }) =>
+┃       ┣━━ export const tsComplicatedArrow = async ({
+┃       ┃     a = 1 | 2,
+┃       ┃     b = "bob",
+┃       ┃     c = async () => "charlie",
+┃       ┃   }: {
+┃       ┃     a: number;
+┃       ┃     b: string;
+┃       ┃     c: () => Promise<string>;
+┃       ┃   }): Promise<string> =>
 ┃       ┣━━ const arrowFunction = () =>
 ┃       ┣━━ const arrow = (a: String, b: Number) =>
 ┃       ┣━━ const asyncArrowFunction = async () =>
@@ -1642,7 +1660,6 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┣━━       const mouseLeaveListener = () =>
 ┃       ┣━━   ngOnDestroy()
 ┃       ┣━━   toggleColumn(event: MatOptionSelectionChange, column: string)
-┃       ┣━━           (col) =>
 ┃       ┣━━   adjustColumns(event?: Event)
 ┃       ┣━━   onResize(event: Event)
 ┃       ┣━━   async ngOnInit()
@@ -1671,7 +1688,7 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
 ┃       ┣━━ const mockTickets = async () =>
 ┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
-┣━━ 📁 group6 (1 folder, 4 files) 
+┣━━ 📁 group6 (1 folder, 5 files) 
 ┃   ┣━━ 📄 catastrophic.c (4144 tokens, 581 lines)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ struct Point getOrigin()
@@ -1841,6 +1858,8 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┃                (is "eventually (λn. _ = -?g' n) _")
 ┃   ┃   ┃     shows   "(λn. fps_nth F n - g n) ∈ O(λn. 1 / r ^ n)" (is "(λn. ?c n - _) ∈ O(_)")
 ┃   ┃   ┗━━ end
+┃   ┣━━ 📄 ramda__cloneRegExp.js (105 tokens, 9 lines)
+┃   ┃   ┗━━ export default function _cloneRegExp(pattern)
 ┃   ┣━━ 📄 ramda_prop.js (294 tokens, 33 lines)
 ┃   ┃   ┗━━ var prop = _curry2(function prop(p, obj)
 ┃   ┗━━ 📄 test.f (200 tokens, 31 lines)
@@ -1882,8 +1901,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.17) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 69 file(s), 5,046 line(s), 35,662 token(s) in 0.39 second(s).
+tree_plus v(1.0.18) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 70 file(s), 5,079 line(s), 35,925 token(s) in 0.39 second(s).
 
 ```
 <!-- t2-end -->
@@ -1892,7 +1911,7 @@ tree_plus v(1.0.17) ignore=('group_todo',) globs=() syntax=False paths=('tests/m
 <!-- t3-start -->
 ```sh
 tree_plus -g "*.*s" -i group_todo tests/more_languages
-📁 more_languages (6 folders, 15 files) 
+📁 more_languages (6 folders, 16 files) 
 ┣━━ 📁 group1 (1 folder, 2 files) 
 ┃   ┣━━ 📄 test.js (755 tokens, 154 lines)
 ┃   ┃   ┣━━ class MyClass
@@ -1950,7 +1969,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 ┃   ┃   ┣━━ class Model extends Car
 ┃   ┃   ┣━━   constructor(brand, mod)
 ┃   ┃   ┗━━   show()
-┃   ┗━━ 📄 test.ts (713 tokens, 142 lines)
+┃   ┗━━ 📄 test.ts (871 tokens, 166 lines)
 ┃       ┣━━ type MyType
 ┃       ┣━━ interface MyInterface
 ┃       ┣━━ class TsClass
@@ -1982,6 +2001,15 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 ┃       ┃     param1: number,
 ┃       ┃     param2: number
 ┃       ┃   ): void
+┃       ┣━━ export default async function tsFunctionComplicated<A, B, C>({
+┃       ┃     a = 1 | 2,
+┃       ┃     b = "bob",
+┃       ┃     c = async () => "charlie",
+┃       ┃   }: {
+┃       ┃     a: number;
+┃       ┃     b: string;
+┃       ┃     c: () => Promise<string>;
+┃       ┃   }): Promise<string>
 ┃       ┣━━ const tsArrowFunctionSigned = ({
 ┃       ┃     a,
 ┃       ┃     b,
@@ -1989,6 +2017,15 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 ┃       ┃     a: number;
 ┃       ┃     b: string;
 ┃       ┃   }) =>
+┃       ┣━━ export const tsComplicatedArrow = async ({
+┃       ┃     a = 1 | 2,
+┃       ┃     b = "bob",
+┃       ┃     c = async () => "charlie",
+┃       ┃   }: {
+┃       ┃     a: number;
+┃       ┃     b: string;
+┃       ┃     c: () => Promise<string>;
+┃       ┃   }): Promise<string> =>
 ┃       ┣━━ const arrowFunction = () =>
 ┃       ┣━━ const arrow = (a: String, b: Number) =>
 ┃       ┣━━ const asyncArrowFunction = async () =>
@@ -2252,7 +2289,6 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 ┃       ┣━━       const mouseLeaveListener = () =>
 ┃       ┣━━   ngOnDestroy()
 ┃       ┣━━   toggleColumn(event: MatOptionSelectionChange, column: string)
-┃       ┣━━           (col) =>
 ┃       ┣━━   adjustColumns(event?: Event)
 ┃       ┣━━   onResize(event: Event)
 ┃       ┣━━   async ngOnInit()
@@ -2281,12 +2317,14 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 ┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
 ┃       ┣━━ const mockTickets = async () =>
 ┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
-┗━━ 📁 group6 (1 folder, 1 file) 
+┗━━ 📁 group6 (1 folder, 2 files) 
+    ┣━━ 📄 ramda__cloneRegExp.js (105 tokens, 9 lines)
+    ┃   ┗━━ export default function _cloneRegExp(pattern)
     ┗━━ 📄 ramda_prop.js (294 tokens, 33 lines)
         ┗━━ var prop = _curry2(function prop(p, obj)
 
-tree_plus v(1.0.17) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-6 folder(s), 15 file(s), 1,833 line(s), 12,408 token(s) in 0.12 second(s).
+tree_plus v(1.0.18) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+6 folder(s), 16 file(s), 1,866 line(s), 12,671 token(s) in 0.13 second(s).
 
 ```
 <!-- t3-end -->
@@ -2311,7 +2349,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.17) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.18) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
