@@ -9,7 +9,13 @@ debug:
 
 .PHONY: debug_command
 # debug_command: test
-debug_command: test_more_languages test_units test_engine test_tp_dotdot test_e2e test_cli test_deploy
+debug_command: test_parallel test_tp_dotdot test_cli
+
+test_sequential:
+	pytest tests/test_units.py tests/test_e2e.py tests/test_more_language_units.py tests/test_engine.py tests/test_deploy.py -vv
+
+test_parallel:
+	py.test -n 12 tests/test_units.py tests/test_e2e.py tests/test_more_language_units.py tests/test_engine.py tests/test_deploy.py -vv
 
 test_units:
 	pytest tests/test_units.py -vv

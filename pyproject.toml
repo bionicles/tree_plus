@@ -18,7 +18,7 @@ classifiers = [
 dependencies = ["tiktoken", "PyYAML", "click", "rich", "tomli", "natsort>=7.1"]
 
 [project.optional-dependencies]
-dev = ["pytest", "pytest-dotenv"]
+dev = ["pytest", "pytest-dotenv", "pytest-xdist"]
 
 [project.urls]
 documentation = "https://www.github.com/bionicles/tree_plus/README.md" 

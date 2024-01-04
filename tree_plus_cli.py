@@ -20,7 +20,7 @@ CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h", "-H"])
     context_settings=CONTEXT_SETTINGS,
     epilog=f"""
     \b
-    (v{__version__}) --- https://github.com/bionicles/tree_plus
+    v({__version__}) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 """,
 )
 @click.option(
