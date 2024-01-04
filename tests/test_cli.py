@@ -52,6 +52,9 @@ def test_cli_syntax_highlighting_flag():
     stdout = result.stdout
     rich_print(stdout)
     assert "syntax_highlighting=True" in stdout
+    assert "_from_file SYNTAX HIGHLIGHTING " in stdout
+    assert "_get_lexer chose lexer=" in stdout
+    assert "_syntax_highlight succeeded " in stdout
     assert "component(s) from file_path=" in stdout
     assert " tests" in stdout
     assert " test_cli.py" in stdout
@@ -67,6 +70,10 @@ def test_cli_syntax_highlighting_flag():
     stdout = result.stdout
     assert "syntax_highlighting=True" in stdout
     assert "component(s) from file_path=" in stdout
+    assert "_from_file SYNTAX HIGHLIGHTING " in stdout
+    assert "_get_lexer chose lexer=" in stdout
+    assert "_syntax_highlight succeeded " in stdout
+    assert "component(s) from file_path=" in stdout
     assert " tests" in stdout
     assert " test_cli.py" in stdout
     assert " Root" in stdout
@@ -80,6 +87,10 @@ def test_cli_syntax_highlighting_flag():
     assert result.returncode == 0
     stdout = result.stdout
     assert "syntax_highlighting=True" in stdout
+    assert "component(s) from file_path=" in stdout
+    assert "_from_file SYNTAX HIGHLIGHTING " in stdout
+    assert "_get_lexer chose lexer=" in stdout
+    assert "_syntax_highlight succeeded " in stdout
     assert "component(s) from file_path=" in stdout
     assert " tests" in stdout
     assert " test_cli.py" in stdout

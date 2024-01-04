@@ -709,4 +709,5 @@ def _syntax_highlight(
         except Exception as e:
             debug_print(f"_syntax_highlight failed with {lexer=}\n{e=}")
             return components
+    debug_print(f"_syntax_highlight succeeded with {lexer=}")
     return highlighted
