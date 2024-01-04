@@ -54,7 +54,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install build
-          pip install pytest pytest-dotenv
+          pip install pytest pytest-dotenv 
+          pip install pytest-xdist
       - name: Increment Version
         run: |
           TREE_PLUS_DEPLOYMENT=GO TREE_PLUS_INCREMENT_VERSION=YES python tree_plus_src/deploy.py
@@ -65,7 +66,7 @@ jobs:
             pip install -U dist/*.whl
       - name: Test
         run: |
-          py.test -n 2 tests/ -k "not test_tree_plus_dotdot" -vv
+          py.test tests/ -k "not test_tree_plus_dotdot" -vv
           pytest tests/dot_dot/nested_dir/test_tp_dotdot.py -vv
       - name: Update README
         run: |
