@@ -603,6 +603,7 @@ def _from_folder(
         elif subtree_path.is_file():
             subtree_plus = _from_file(
                 file_path=subtree_path,
+                syntax_highlighting=syntax_highlighting,
                 concise=concise,
             )
         else:
@@ -641,6 +642,7 @@ def _from_file(
         debug_print(f"engine._from_file components Exception {e=}")
         components = []
     if syntax_highlighting:
+        debug_print(f"_from_file SYNTAX HIGHLIGHTING {file_path=}")
         try:
             components = _syntax_highlight(
                 file_path=file_path,
@@ -648,6 +650,8 @@ def _from_file(
             )
         except Exception as e:
             debug_print(f"engine._from_file syntax highlighting exception {e=}")
+    else:
+        debug_print(f"_from_file NOT SYNTAX HIGHLIGHTING {file_path=}")
     debug_print(f"engine._from_file got counts:", counts)
     # debug_print(f"engine._from_file got components:", components)
     file_tree_plus = TreePlus(
@@ -671,12 +675,15 @@ DENY_SUFFIXES = {".json"}
 
 def _get_lexer(file_path: Path) -> str:
     if "makefile" in file_path.name:
-        return "make"
-    if file_path.suffix in DENY_SUFFIXES:
-        return ""
-    if file_path.suffix in BACKUP_LEXERS:
-        return BACKUP_LEXERS[file_path.suffix]
-    return file_path.suffix.lstrip(".")
+        lexer = "make"
+    elif file_path.suffix in DENY_SUFFIXES:
+        lexer = ""
+    elif file_path.suffix in BACKUP_LEXERS:
+        lexer = BACKUP_LEXERS[file_path.suffix]
+    else:
+        lexer = file_path.suffix.lstrip(".")
+    debug_print(f"_get_lexer chose {lexer=} for {file_path=}")
+    return lexer
 
 
 def _syntax_highlight(

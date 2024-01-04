@@ -80,6 +80,18 @@ function tsFunctionSigned(
   console.log("Standalone function with parameters");
 }
 
+export default async function tsFunctionComplicated<A, B, C>({
+  a = 1 | 2 /* edge cases */,
+  b = "bob",
+  c = async () => "charlie",
+}: {
+  a: number; // r us
+  b: string;
+  c: () => Promise<string>;
+}): Promise<string> {
+  return("Standalone function with parameters");
+}
+
 // Arrow function with destructuring and multiline signature
 const tsArrowFunctionSigned = ({
   a /* edge cases */,
@@ -90,6 +102,18 @@ const tsArrowFunctionSigned = ({
 }) => {
   console.log("Arrow Function with destructuring");
 };
+
+export const tsComplicatedArrow = async ({
+  a = 1 | 2 /* edge cases */,
+  b = "bob",
+  c = async () => "charlie",
+}: {
+  a: number; // r us
+  b: string;
+  c: () => Promise<string>;
+}): Promise<string> => {
+  return "Standalone function with parameters";
+}
 
 const arrowFunction = () => {};
 

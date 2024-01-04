@@ -249,6 +249,15 @@ def create_sqlite_test_db(
   param1: number,
   param2: number
 ): void""",
+                """export default async function tsFunctionComplicated<A, B, C>({
+  a = 1 | 2,
+  b = "bob",
+  c = async () => "charlie",
+}: {
+  a: number;
+  b: string;
+  c: () => Promise<string>;
+}): Promise<string>""",
                 """const tsArrowFunctionSigned = ({
   a,
   b,
@@ -256,6 +265,15 @@ def create_sqlite_test_db(
   a: number;
   b: string;
 }) =>""",
+                """export const tsComplicatedArrow = async ({
+  a = 1 | 2,
+  b = "bob",
+  c = async () => "charlie",
+}: {
+  a: number;
+  b: string;
+  c: () => Promise<string>;
+}): Promise<string> =>""",
                 "const arrowFunction = () =>",
                 "const arrow = (a: String, b: Number) =>",
                 "const asyncArrowFunction = async () =>",
@@ -1339,7 +1357,6 @@ def test_more_languages_group4(
                 "      const mouseLeaveListener = () =>",
                 "  ngOnDestroy()",
                 "  toggleColumn(event: MatOptionSelectionChange, column: string)",
-                "          (col) =>",
                 "  adjustColumns(event?: Event)",
                 "  onResize(event: Event)",
                 "  async ngOnInit()",
@@ -1666,6 +1683,10 @@ END PROGRAM HelloFortran""",
         (
             "tests/more_languages/group6/ramda_prop.js",
             ["var prop = _curry2(function prop(p, obj)"],
+        ),
+        (
+            "tests/more_languages/group6/ramda__cloneRegExp.js",
+            ["export default function _cloneRegExp(pattern)"],
         ),
     ],
 )

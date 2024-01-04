@@ -448,17 +448,67 @@ def remove_c_comments(contents: str) -> str:
     return re.sub(c_comment_pattern, "", contents)
 
 
+# # 1. (Arrow)? Function or Method (is overcomplicated)
+# r"\n?^( *\(?(?:(export\s+)?(?:default\s+)?(?:(?:var|const|let)\s+\w+\s*=\s*(?:_curry\d\()?(?:async\s+)?)?(?:function\s*\*?\s+)?[\w<>, ]+\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?\s*|(\w+)\s*:\s*\([^)]*\)\s*=>|(\w+)\s*:\s*function\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?)(?:=>)?)(?= )|"
+# # 2. Class or Interface
+# r"\n?((?:export )?(?:default )?(?:(?:class|interface)\s+(?:[\w<>, ]+)(?:\s+(?:extends|implements)\s+[\w<>, ]+)?)) |"
+# # 3. Type
+# r"\n?((type\s+(?:[\w<>, ]+))) |"
+# # 4."Gotcha: Object scopes containing functions or arrows"
+# # r"(((?:const|let) \w+))(?:\s*=\s*\{\s*(?=[\s\S]*?(?:\b\w+\s*:\s*function\b|\b\w+\s*:\s*\(.*\)\s*=>)))"
+# # r"^(?P<scope>(?:const|let) \w+)\s*=\s*\{\s*^(.*?( *\bfunction\b|.*?\b\w+\s*:\s*\([^)]*\)\s*=>))",
+# r"^(?P<object_scope>(?:var|const|let) [\w_]+)\s*=\s*\{",
+# inside the loop
+# # [arrow] function/method is group 4
+# if 1 in groups:
+#     component = groups[1]
+#     component = (
+#         component.replace(" \n", "\n").replace(" ,\n", ",\n").lstrip("(")
+#     )
+#     if object_scope:
+#         # check for functions in this scope
+#         if _fun_match := re.search(r"\s+\w+: function", component):
+#             components.append(object_scope)
+#         # check for arrow functions in this scope
+#         elif _arrow_match := re.search(
+#             r"\s+\w+:\s*\((?:[^\)]|\s)*\) =>", component
+#         ):
+#             components.append(object_scope)
+#         object_scope = None
+#     double = component.lstrip()
+#     # Check if the component is empty, ends with whitespace, matches control structures without '=>', or has a ternary
+#     if (
+#         not double
+#         or not double.splitlines()[-1].strip()
+#         or (
+#             re.search(r"( *(if|switch|for|catch|return) ?(?:\(|_))", double)
+#             and "=>" not in double
+#         )
+#         or re.search(r"\?.+?:", double)
+#     ):
+#         continue
+# # class/interface is group 5
+# elif 5 in groups:
+#     component = groups[5]
+#     object_scope = None
+# # type is 6
+# elif 6 in groups:
+#     component = groups[6]
+#     object_scope = None
+# elif 0 in groups:
+#     object_scope = groups[0]
+#     debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
+# Modularized:
+# [\w:(),/=>\s{}\'\"]*?
+# ARGS:
+# (?P<args>\((?P<inner_args>(?P<positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<destructuring>{[\s\S]*?}(?P<destructuring_type_hint>:\s{[\s\S]*?})?))\))
 combined_ts_pattern = re.compile(
-    # 1. (Arrow)? Function or Method
-    r"\n?^( *\(?(?:(export\s+)?(?:default\s+)?(?:(?:var|const|let)\s+\w+\s*=\s*(?:_curry\d\()?(?:async\s+)?)?(?:function\s*\*?\s+)?[\w<>, ]+\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?\s*|(\w+)\s*:\s*\([^)]*\)\s*=>|(\w+)\s*:\s*function\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?)(?:=>)?)(?= )|"
-    # 2. Class or Interface
-    r"\n?((?:export )?(?:default )?(?:(?:class|interface)\s+(?:[\w<>, ]+)(?:\s+(?:extends|implements)\s+[\w<>, ]+)?)) |"
-    # 3. Type
-    r"\n?((type\s+(?:[\w<>, ]+))) |"
-    # 4."Gotcha: Object scopes containing functions or arrows"
-    # r"(((?:const|let) \w+))(?:\s*=\s*\{\s*(?=[\s\S]*?(?:\b\w+\s*:\s*function\b|\b\w+\s*:\s*\(.*\)\s*=>)))"
-    # r"^(?P<scope>(?:const|let) \w+)\s*=\s*\{\s*^(.*?( *\bfunction\b|.*?\b\w+\s*:\s*\([^)]*\)\s*=>))",
-    r"^(?P<object_scope>(?:var|const|let) [\w_]+)\s*=\s*\{",
+    r"^(?P<function> *?(?P<function_export>export (?P<function_default>default )?)?(?P<preamble>(?P<preceding_paren>\(?)|(?P<assignment>(?P<type>const|var|let) \w+ = )|(?P<returns>return )|(?P<key>\w+: )?)(?P<function_async> *?async)? *?(?P<wrapper>\w+\()?function \w*(?P<function_generics><.*?>)?(?P<function_args>\([\s\S]*?\))(?P<function_return_type>:\s.*?)?(?= {))|"
+    r"^(?P<arrow> *(?P<arrow_export>export (?P<arrow_default>default )?)?(?P<mutability>(const|let|var) )?\w+(?P<colon_or_equals>:|(?: =))(?: async)?[^\(](?P<arrow_args>\((?P<arrow_inner_args>(?P<arrow_positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<arrow_destructuring>{[\s\S]*?}(?P<arrow_destructuring_type_hint>:\s{[\s\S]*?})?))\))(?P<arrow_return_hint>: [\w<>]+)? =>)|"
+    r"^(?P<method> +(?P<private>private )?(?P<static>static )?(?P<async>async )?(?P<method_name>\w+)(?P<method_generics>\<.*?\>)?(?P<method_args>\((?P<method_inner_args>(?P<method_positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<method_destructuring>{[\s\S]*?}(?P<method_destructuring_type_hint>:\s{[\s\S]*?})?))\))(?P<method_return_hint>:\s[^\{;]*?)?)?(?P<fin>(?: {(?P<space_or_close>\s|})))|"
+    r"^(?P<class_or_interface>(?P<export>export (?:default )?)?(?P<data_type>class|interface)\s+?(?P<structure_name>[\w<>, ]+?)(?P<inheritance>\s+?(?:extends|implements)\s+?[\w<>, ]+)?)(?=\s)|"
+    r"^(?P<type_definition>type\s+?(?P<type_name>\w+)(?P<generics>[\w<>, ]+?)?)(?=\s=\s)|"
+    r"^(?P<object_scope>(?P<object_scope_type>var|const|let) [\w_]+\s+?=\s+?\{)",
     re.MULTILINE,
 )
 
@@ -471,46 +521,33 @@ def parse_ts(contents: str) -> List[str]:
     object_scope = None
     for match_number, match in enumerate(combined_ts_pattern.finditer(contents)):
         debug_print(f"parse_ts: {match_number=} {match=}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_and_debug_print_groups(match, named_only=True)
         component = None
-        # [arrow] function/method is group 4
-        if 1 in groups:
-            component = groups[1]
-            component = (
-                component.replace(" \n", "\n").replace(" ,\n", ",\n").lstrip("(")
-            )
+        if "arrow" in groups:
+            component = groups["arrow"]
             if object_scope:
-                # check for functions in this scope
-                if _fun_match := re.search(r"\s+\w+: function", component):
-                    components.append(object_scope)
-                # check for arrow functions in this scope
-                elif _arrow_match := re.search(
-                    r"\s+\w+:\s*\((?:[^\)]|\s)*\) =>", component
-                ):
-                    components.append(object_scope)
+                components.append(object_scope)
                 object_scope = None
-            double = component.lstrip()
-            # Check if the component is empty, ends with whitespace, or matches control structures without '=>'
-            if (
-                not double
-                or not double.splitlines()[-1].strip()
-                or (
-                    re.search(r"( *(if|switch|for|catch|return) ?(?:\(|_))", double)
-                    and "=>" not in double
-                )
-            ):
-                continue
-
-        # class/interface is group 5
-        elif 5 in groups:
-            component = groups[5]
+                debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
+        elif "function" in groups:
+            component = groups["function"].lstrip("(")
+            if object_scope:
+                components.append(object_scope)
+                object_scope = None
+                debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
+        elif "method" in groups:
+            component = groups["method"]
+        elif "class_or_interface" in groups:
+            component = groups["class_or_interface"]
             object_scope = None
-        # type is 6
-        elif 6 in groups:
-            component = groups[6]
+            debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
+        elif "type_definition" in groups:
+            component = groups["type_definition"]
             object_scope = None
-        else:
-            object_scope = groups[0]
+            debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
+        # we carry a scope to append exactly once if it contains one or more functions
+        elif "object_scope" in groups:
+            object_scope = groups["object_scope"]
             debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
 
         if component:
