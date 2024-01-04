@@ -267,6 +267,7 @@ def categorize(
 
 def from_seed(
     maybe_seed_str=None,
+    *,
     maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
     maybe_globs: Optional[Tuple[str]] = None,
     syntax_highlighting: bool = False,
