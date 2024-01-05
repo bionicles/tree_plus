@@ -297,42 +297,108 @@ def create_sqlite_test_db(
             ],
         ),
         (
+            "tests/more_languages/group1/addamt.cobol",
+            [
+                "IDENTIFICATION DIVISION.",
+                """PROGRAM-ID.
+           ADDAMT.""",
+                "DATA DIVISION.",
+                "WORKING-STORAGE SECTION.",
+                "01  KEYED-INPUT.",
+                "    05  CUST-NO-IN.",
+                "    05  AMT1-IN.",
+                "    05  AMT2-IN.",
+                "    05  AMT3-IN.",
+                "01  DISPLAYED-OUTPUT.",
+                "    05  CUST-NO-OUT.",
+                "    05  TOTAL-OUT.",
+                "01  MORE-DATA.",
+                "PROCEDURE DIVISION.",
+                "100-MAIN.",
+            ],
+        ),
+        (
+            "tests/more_languages/group1/lesson.cbl",
+            [
+                "IDENTIFICATION DIVISION.",
+                "PROGRAM-ID.    CBL0002.",
+                "AUTHOR.        Otto B. Fun.",
+                "ENVIRONMENT DIVISION.",
+                "INPUT-OUTPUT SECTION.",
+                "FILE-CONTROL.",
+                "    SELECT PRINT-LINE.",
+                "    SELECT ACCT-REC.",
+                "DATA DIVISION.",
+                "FILE SECTION.",
+                "FD  PRINT-LINE.",
+                "01  PRINT-REC.",
+                "    05  ACCT-NO-O.",
+                "    05  ACCT-LIMIT-O.",
+                "    05  ACCT-BALANCE-O.",
+                "    05  LAST-NAME-O.",
+                "    05  FIRST-NAME-O.",
+                "    05  COMMENTS-O.",
+                "FD  ACCT-REC.",
+                "01  ACCT-FIELDS.",
+                "    05  ACCT-NO.",
+                "    05  ACCT-LIMIT.",
+                "    05  ACCT-BALANCE.",
+                "    05  LAST-NAME.",
+                "    05  FIRST-NAME.",
+                "    05  CLIENT-ADDR.",
+                "        10  STREET-ADDR.",
+                "        10  CITY-COUNTY.",
+                "        10  USA-STATE.",
+                "    05  RESERVED.",
+                "    05  COMMENTS.",
+                "WORKING-STORAGE SECTION.",
+                "01 FLAGS.",
+                "  05 LASTREC.",
+                "PROCEDURE DIVISION.",
+                "OPEN-FILES.",
+                "READ-NEXT-RECORD.",
+                "CLOSE-STOP.",
+                "READ-RECORD.",
+                "WRITE-RECORD.",
+            ],
+        ),
+        (
             "tests/more_languages/group1/CUSTOMER-INVOICE.CBL",
             [
                 "IDENTIFICATION DIVISION.",
-                "  PROGRAM-ID. CUSTOMER-INVOICE.",
-                "  AUTHOR. JANE DOE.",
-                "  DATE. 2023-12-30.",
+                "PROGRAM-ID. CUSTOMER-INVOICE.",
+                "AUTHOR. JANE DOE.",
+                "DATE. 2023-12-30.",
                 "  DATE-COMPILED. 06/30/10.",
-                "  DATE-WRITTEN. 12/34/56.",
+                "    DATE-WRITTEN. 12/34/56.",
                 "ENVIRONMENT DIVISION.",
-                "  INPUT-OUTPUT SECTION.",
-                "    FILE-CONTROL.",
-                "      SELECT CUSTOMER-FILE.",
-                "      SELECT INVOICE-FILE.",
-                "      SELECT REPORT-FILE.",
+                "INPUT-OUTPUT SECTION.",
+                "FILE-CONTROL.",
+                "    SELECT CUSTOMER-FILE.",
+                "    SELECT INVOICE-FILE.",
+                "    SELECT REPORT-FILE.",
                 "DATA DIVISION.",
-                "  FILE SECTION.",
-                "    FD CUSTOMER-FILE.",
-                "      01 CUSTOMER-RECORD.",
-                "        05 CUSTOMER-ID.",
-                "        05 CUSTOMER-NAME.",
-                "        05 CUSTOMER-BALANCE.",
-                "    FD INVOICE-FILE.",
-                "      01 INVOICE-RECORD.",
-                "        05 INVOICE-ID.",
-                "        05 CUSTOMER-ID.",
-                "        05 INVOICE-AMOUNT.",
-                "    FD REPORT-FILE.",
-                "      01 REPORT-RECORD.",
-                "  WORKING-STORAGE SECTION.",
-                "      01 WS-CUSTOMER-FOUND.",
-                "      01 WS-END-OF-FILE.",
-                "      01 WS-TOTAL-BALANCE.",
+                "FILE SECTION.",
+                "FD CUSTOMER-FILE.",
+                "01 CUSTOMER-RECORD.",
+                "   05 CUSTOMER-ID.",
+                "   05 CUSTOMER-NAME.",
+                "   05 CUSTOMER-BALANCE.",
+                "FD INVOICE-FILE.",
+                "01 INVOICE-RECORD.",
+                "   05 INVOICE-ID.",
+                "   05 CUSTOMER-ID.",
+                "   05 INVOICE-AMOUNT.",
+                "FD REPORT-FILE.",
+                "01 REPORT-RECORD.",
+                "WORKING-STORAGE SECTION.",
+                "01 WS-CUSTOMER-FOUND.",
+                "01 WS-END-OF-FILE.",
+                "01 WS-TOTAL-BALANCE.",
                 "PROCEDURE DIVISION.",
-                "    0000-MAIN-ROUTINE.",
-                "    1000-PROCESS-RECORDS.",
-                "    1100-UPDATE-CUSTOMER-BALANCE.",
+                "0000-MAIN-ROUTINE.",
+                "1000-PROCESS-RECORDS.",
+                "1100-UPDATE-CUSTOMER-BALANCE.",
                 "END PROGRAM CUSTOMER-INVOICE.",
             ],
         ),
@@ -506,8 +572,8 @@ def test_more_languages_group1(
 ):
     print(f"{file=}")
     result = parse_file(file)
-    print(f"{result=}")
-    print(f"{expected=}")
+    print("result", result)
+    print("expected", expected)
     assert result == expected
 
 
@@ -1679,10 +1745,47 @@ END PROGRAM HelloFortran""",
             "tests/more_languages/group6/catastrophic.c",
             C_EXPECTATION,
         ),
+        (
+            "tests/more_languages/group6/torch.rst",
+            [
+                "# libtorch (C++-only)",
+                "- Building libtorch using Python",
+            ],
+        ),
         # TODO: parse_jsdoc!
         (
             "tests/more_languages/group6/ramda_prop.js",
-            ["var prop = _curry2(function prop(p, obj)"],
+            [
+                """/**
+ * Returns a function that when supplied an object returns the indicated
+ * property of that object, if it exists.
+ * @category Object
+ * @typedefn Idx = String | Int | Symbol
+ * @sig Idx -> {s: a} -> a | Undefined
+ * @param {String|Number} p The property name or array index
+ * @param {Object} obj The object to query
+ * @return {*} The value at `obj.p`.
+ */
+var prop = _curry2(function prop(p, obj)""",
+                """/**
+ * Solves equations of the form a * x = b
+ * @param {{
+ *  z: number
+ * }} x
+ */
+function foo(x)""",
+                """/**
+ * Deconstructs an array field from the input documents to output a document for each element.
+ * Each output document is the input document with the value of the array field replaced by the element.
+ * @category Object
+ * @sig String -> {k: [v]} -> [{k: v}]
+ * @param {String} key The key to determine which property of the object should be unwound.
+ * @param {Object} object The object containing the list to unwind at the property named by the key.
+ * @return {List} A list of new objects, each having the given key associated to an item from the unwound list.
+ */
+var unwind = _curry2(function(key, object)""",
+                "  return _map(function(item)",
+            ],
         ),
         (
             "tests/more_languages/group6/ramda__cloneRegExp.js",
@@ -1697,8 +1800,8 @@ def test_more_languages_group_6(
     print(f"{file=}")
 
     result = parse_file(file)
-    print(f"{result=}")
-    print(f"{expected=}")
+    print("result", result)
+    print("expected", expected)
     assert result == expected
     # if file.endswith(".thy"):
     #     assert 0

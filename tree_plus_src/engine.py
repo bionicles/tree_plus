@@ -669,20 +669,24 @@ def _from_file(
 
 BACKUP_LEXERS = {
     "kt": "kotlin",
+    "cbl": "cobol",
+    "rst": "markdown",
 }
 
-DENY_SUFFIXES = {".json"}
+DENY_SUFFIXES = {"json"}
 
 
 def _get_lexer(file_path: Path) -> str:
+    extension_no_period = file_path.suffix.lstrip(".")
+    debug_print(f"_get_lexer for extension_no_period={extension_no_period}")
     if "makefile" in file_path.name:
         lexer = "make"
-    elif file_path.suffix in DENY_SUFFIXES:
+    elif extension_no_period in DENY_SUFFIXES:
         lexer = ""
-    elif file_path.suffix in BACKUP_LEXERS:
-        lexer = BACKUP_LEXERS[file_path.suffix]
+    elif extension_no_period in BACKUP_LEXERS:
+        lexer = BACKUP_LEXERS[extension_no_period]
     else:
-        lexer = file_path.suffix.lstrip(".")
+        lexer = extension_no_period
     debug_print(f"_get_lexer chose {lexer=} for {file_path=}")
     return lexer
 

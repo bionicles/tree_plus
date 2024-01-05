@@ -13,6 +13,7 @@ TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7
 LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
 JS_EXTENSIONS = {".js", ".jsx", ".ts", ".tsx"}
 C_EXTENSIONS = {".c", ".cpp", ".cc", ".h"}
+COBOL_EXTENSIONS = {".cbl", ".cobol"}
 FORTRAN_EXTENSIONS = {
     ".f",
     ".for",
@@ -98,6 +99,8 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
             components = [f"SyntaxError: {components}"]
     elif file_extension == ".md":
         components = parse_md(contents)
+    elif file_extension == ".rst":
+        components = parse_rst(contents)
     elif file_extension == ".json":
         if "package.json" in file_path.lower():
             components = parse_package_json(contents)
@@ -200,7 +203,7 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
         components = parse_matlab(contents)
     elif file_extension == ".ml":
         components = parse_ocaml(contents)
-    elif file_extension.lower() == ".cbl":
+    elif file_extension.lower() in COBOL_EXTENSIONS:
         components = parse_cbl(contents)
     elif file_extension == ".apl":
         components = parse_apl(contents)
@@ -224,6 +227,29 @@ def extract_and_debug_print_groups(match: re.Match, named_only: bool = False) ->
     debug_print("groups:")
     debug_print(numbered_groups)
     return numbered_groups
+
+
+def parse_rst(contents: str) -> List[str]:
+    debug_print("parse_rst")
+    pattern = re.compile(
+        r"^(?P<rst_header>(?P<content>.*)$\s(?P<line>(?P<subheading>-+)|(?P<heading>=+))(?=$))",
+        re.MULTILINE,
+    )
+
+    components = []
+    for n, match in enumerate(pattern.finditer(contents)):
+        debug_print(f"parse_rst {n=} {match=}")
+        groups = extract_and_debug_print_groups(match, named_only=True)
+        component = None
+        if "rst_header" in groups:
+            prefix = "# " if "heading" in groups else "- "
+            component = prefix + groups["content"]
+
+        if component:
+            debug_print(f"parse_rst component:", component)
+            components.append(component)
+
+    return components
 
 
 # r"\n((template<.*?>)?\n(\w+::)?(\w+) \w+\([\s\S]*?\))",
@@ -448,66 +474,14 @@ def remove_c_comments(contents: str) -> str:
     return re.sub(c_comment_pattern, "", contents)
 
 
-# # 1. (Arrow)? Function or Method (is overcomplicated)
-# r"\n?^( *\(?(?:(export\s+)?(?:default\s+)?(?:(?:var|const|let)\s+\w+\s*=\s*(?:_curry\d\()?(?:async\s+)?)?(?:function\s*\*?\s+)?[\w<>, ]+\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?\s*|(\w+)\s*:\s*\([^)]*\)\s*=>|(\w+)\s*:\s*function\s*\((?:[^()]|\([^()]*\))*\)\s*(?::\s*[\w<>\[\], ]+)?)(?:=>)?)(?= )|"
-# # 2. Class or Interface
-# r"\n?((?:export )?(?:default )?(?:(?:class|interface)\s+(?:[\w<>, ]+)(?:\s+(?:extends|implements)\s+[\w<>, ]+)?)) |"
-# # 3. Type
-# r"\n?((type\s+(?:[\w<>, ]+))) |"
-# # 4."Gotcha: Object scopes containing functions or arrows"
-# # r"(((?:const|let) \w+))(?:\s*=\s*\{\s*(?=[\s\S]*?(?:\b\w+\s*:\s*function\b|\b\w+\s*:\s*\(.*\)\s*=>)))"
-# # r"^(?P<scope>(?:const|let) \w+)\s*=\s*\{\s*^(.*?( *\bfunction\b|.*?\b\w+\s*:\s*\([^)]*\)\s*=>))",
-# r"^(?P<object_scope>(?:var|const|let) [\w_]+)\s*=\s*\{",
-# inside the loop
-# # [arrow] function/method is group 4
-# if 1 in groups:
-#     component = groups[1]
-#     component = (
-#         component.replace(" \n", "\n").replace(" ,\n", ",\n").lstrip("(")
-#     )
-#     if object_scope:
-#         # check for functions in this scope
-#         if _fun_match := re.search(r"\s+\w+: function", component):
-#             components.append(object_scope)
-#         # check for arrow functions in this scope
-#         elif _arrow_match := re.search(
-#             r"\s+\w+:\s*\((?:[^\)]|\s)*\) =>", component
-#         ):
-#             components.append(object_scope)
-#         object_scope = None
-#     double = component.lstrip()
-#     # Check if the component is empty, ends with whitespace, matches control structures without '=>', or has a ternary
-#     if (
-#         not double
-#         or not double.splitlines()[-1].strip()
-#         or (
-#             re.search(r"( *(if|switch|for|catch|return) ?(?:\(|_))", double)
-#             and "=>" not in double
-#         )
-#         or re.search(r"\?.+?:", double)
-#     ):
-#         continue
-# # class/interface is group 5
-# elif 5 in groups:
-#     component = groups[5]
-#     object_scope = None
-# # type is 6
-# elif 6 in groups:
-#     component = groups[6]
-#     object_scope = None
-# elif 0 in groups:
-#     object_scope = groups[0]
-#     debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
-# Modularized:
-# [\w:(),/=>\s{}\'\"]*?
-# ARGS:
-# (?P<args>\((?P<inner_args>(?P<positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<destructuring>{[\s\S]*?}(?P<destructuring_type_hint>:\s{[\s\S]*?})?))\))
 combined_ts_pattern = re.compile(
-    r"^(?P<function> *?(?P<function_export>export (?P<function_default>default )?)?(?P<preamble>(?P<preceding_paren>\(?)|(?P<assignment>(?P<type>const|var|let) \w+ = )|(?P<returns>return )|(?P<key>\w+: )?)(?P<function_async> *?async)? *?(?P<wrapper>\w+\()?function \w*(?P<function_generics><.*?>)?(?P<function_args>\([\s\S]*?\))(?P<function_return_type>:\s.*?)?(?= {))|"
+    r"^(?P<function> *?(?P<function_export>export (?P<function_default>default )?)?(?P<preamble>(?P<preceding_paren>\(?)|(?P<assignment>(?P<type>const|var|let) \w+ = )|(?P<returns>return )|(?P<key>\w+: )?)(?P<function_async> *?async)? *?(?P<wrapper>\w+\()?function ?\w*(?P<function_generics><.*?>)?(?P<function_args>\([\s\S]*?\))(?P<function_return_type>:\s.*?)?(?= {))|"
     r"^(?P<arrow> *(?P<arrow_export>export (?P<arrow_default>default )?)?(?P<mutability>(const|let|var) )?\w+(?P<colon_or_equals>:|(?: =))(?: async)?[^\(](?P<arrow_args>\((?P<arrow_inner_args>(?P<arrow_positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<arrow_destructuring>{[\s\S]*?}(?P<arrow_destructuring_type_hint>:\s{[\s\S]*?})?))\))(?P<arrow_return_hint>: [\w<>]+)? =>)|"
     r"^(?P<method> +(?P<private>private )?(?P<static>static )?(?P<async>async )?(?P<method_name>\w+)(?P<method_generics>\<.*?\>)?(?P<method_args>\((?P<method_inner_args>(?P<method_positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<method_destructuring>{[\s\S]*?}(?P<method_destructuring_type_hint>:\s{[\s\S]*?})?))\))(?P<method_return_hint>:\s[^\{;]*?)?)?(?P<fin>(?: {(?P<space_or_close>\s|})))|"
     r"^(?P<class_or_interface>(?P<export>export (?:default )?)?(?P<data_type>class|interface)\s+?(?P<structure_name>[\w<>, ]+?)(?P<inheritance>\s+?(?:extends|implements)\s+?[\w<>, ]+)?)(?=\s)|"
     r"^(?P<type_definition>type\s+?(?P<type_name>\w+)(?P<generics>[\w<>, ]+?)?)(?=\s=\s)|"
+    r"^(?P<jsdoc> +\* +@(?P<tag>category|typedefn|sig|param|returns?)(?P<multiline> {{?[\s\S]*?}?})?.*(?=$))|"
+    r"^(?P<jsdoc_untagged> \* \w+.*)$|"
     r"^(?P<object_scope>(?P<object_scope_type>var|const|let) [\w_]+\s+?=\s+?\{)",
     re.MULTILINE,
 )
@@ -519,6 +493,8 @@ def parse_ts(contents: str) -> List[str]:
 
     components = []
     object_scope = None
+    jsdocs = []
+    seen_jsdoc = False
     for match_number, match in enumerate(combined_ts_pattern.finditer(contents)):
         debug_print(f"parse_ts: {match_number=} {match=}")
         groups = extract_and_debug_print_groups(match, named_only=True)
@@ -546,12 +522,31 @@ def parse_ts(contents: str) -> List[str]:
             object_scope = None
             debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
         # we carry a scope to append exactly once if it contains one or more functions
+        elif "jsdoc" in groups:
+            seen_jsdoc = True
+            jsdoc = groups["jsdoc"]
+            jsdocs.append(jsdoc)
+            jsdoc = None
+            continue
+        # the not condition facilitates only getting preceding content
+        elif not seen_jsdoc and "jsdoc_untagged" in groups:
+            jsdoc = groups["jsdoc_untagged"]
+            jsdocs.append(jsdoc)
+            jsdoc = None
+            continue
         elif "object_scope" in groups:
             object_scope = groups["object_scope"]
             debug_print(f"parse_ts: SET OBJECT_SCOPE = '{object_scope}'")
 
         if component:
-            debug_print(f"{match_number=} FINAL {component=}")
+            if jsdocs:
+                jsdocs = ["/**"] + jsdocs + [" */\n"]
+                jsdoc_stack = "\n".join(jsdocs)
+                component = jsdoc_stack + component
+                jsdoc_stack = ""
+                jsdocs = []
+                seen_jsdoc = False
+            debug_print(f"{match_number=} FINAL component:", component)
             components.append(component)
 
     return components
@@ -1744,29 +1739,16 @@ def parse_db(db_path: str) -> List[str]:
     return components
 
 
-# r"^\s*(IDENTIFICATION DIVISION\.|"
-# r"PROGRAM-ID\.|"
-# r"AUTHOR\.|"
-# r"DATE\.|"
-# r"ENVIRONMENT DIVISION\.|"
-# r"INPUT-OUTPUT SECTION\.|"
-# r"FILE-CONTROL\.|"
-# r"SELECT\s+[\w-]+\.|"
-# r"DATA DIVISION\.|"
-# r"FILE SECTION\.|"
-# r"FD\s+\w+\.|"
-# r"\d{2}\s+\w+-\w+\.|"
-# r"\d{2}\s+\w+|"
-# r"WORKING-STORAGE SECTION\.|"
-# r"PROCEDURE DIVISION\.|"
-# r"\d{4}-\w+-\w+\.|"
-# r"END PROGRAM\s+\w+-\w+\.)",
-
-dash_separated = r"(?:\w+(?:-\w+)*)"
-eight_spaces = "        "
-six_spaces = "      "
-four_spaces = "    "
-two_spaces = "  "
+def dedent_components(components: List[str]) -> List[str]:
+    dedent_amount = min(
+        len(component) - len(component.lstrip(" ")) for component in components
+    )
+    if dedent_amount == 0:
+        return components
+    pattern = r"^(?P<indentation_to_remove> {," + str(dedent_amount) + r"})"
+    debug_print("dedent_components PATTERN:", pattern)
+    dedented_components = [re.sub(pattern, "", component) for component in components]
+    return dedented_components
 
 
 def parse_cbl(content: str) -> List[str]:
@@ -1774,76 +1756,87 @@ def parse_cbl(content: str) -> List[str]:
 
     # Regex pattern to match significant lines or sections with indentation
     combined_pattern = re.compile(
-        r"^(\w+ (DIVISION|division)\.?)|"
-        rf"^(PROGRAM-ID. {dash_separated}\.?)|"
-        r"^(AUTHOR. .*\.?)|"
-        r"^(DATE(?:-(?:COMPILED|WRITTEN))?\.? .*\.?)|"
-        r"^( *(?:\w+(?:-\w+)*) SECTION\.?)|"
-        r"^ *(FILE-CONTROL\.?)|"
-        r"^(?: *)(SELECT (?:\w+(?:-\w+)*)\.?)|"
-        r"^ *(FD (?:\w+(?:-\w+)*)\.?)|"
-        r"^ *(\d+( |-)(?:\w+(?:-\w+)*))|"
-        r"^ *(END PROGRAM (?:\w+(?:-\w+)*)\.?)",
-        re.MULTILINE,
+        r"^(?P<division> *\w+ division\.?)|"
+        r"^(?P<program_id> *(program-id.)\s*[\w-]+(?P<program_id_tail>.|(?=\s))?)|"
+        r"^(?P<author> *author. .*\.?(?=\s))|"
+        r"^(?P<section> *[\w-]+ section.(?=\s))|"
+        r"^(?P<file_control> *file-control.?(?=\s))|"
+        r"^(?P<selection> *select [\w-]+(?=\s))|"
+        r"^(?P<file_descriptor> *fd +[\w-]*)|"
+        r"^(?P<numbered> *\d{2} *[\w-]*\.?)|"
+        r"^(?P<date_line> *date.*\.?$)|"
+        r"^(?P<nonnumbered_procedure> *[\w-]+\.)|"
+        r"^(?P<end_program> *end program [\w-]+\.?)",
+        re.MULTILINE | re.IGNORECASE,
     )
 
     components = []
-    identifying = True
+    collecting_procedures = False
+    candidate_procedures = []
+    end_program = None
     for match_number, match in enumerate(combined_pattern.finditer(content)):
         debug_print(f"parse_cbl: match_number={match_number} match={match}")
-        groups = extract_and_debug_print_groups(match)
-        # Remove leading newlines
-        component = groups[0].lstrip("\n")
-        lowercase = component.lower().strip()
-        first_chunk = lowercase.split()[0]
-        # INDENTATION HERE
-        # division: no spaces
-        if lowercase.endswith("division."):
-            if not lowercase.startswith("identification"):
-                identifying = False
-            pass
-        elif lowercase.startswith("end program"):
-            pass
-        # identifiers and section: two spaces
-        elif (
-            identifying
-            and (
-                lowercase.startswith("program-id")
-                or lowercase.startswith("author")
-                or lowercase.startswith("date")
-            )
-            or lowercase.endswith("section.")
-        ):
-            component = two_spaces + component
-        elif len(first_chunk) == 2 and re.match(r"\d{2}", first_chunk):
-            first_chunk_int = int(first_chunk)
-            if first_chunk_int > 5:
+        groups = extract_and_debug_print_groups(match, named_only=True)
+        component = None
+        if "numbered" in groups:
+            component = groups["numbered"]
+        elif collecting_procedures and "nonnumbered_procedure" in groups:
+            component = groups["nonnumbered_procedure"]
+        elif "selection" in groups:
+            component = groups["selection"]
+        elif "section" in groups:
+            component = groups["section"]
+        elif "division" in groups:
+            component = groups["division"]
+            if "procedure" in component.lower():
+                collecting_procedures = True
+        elif "file_descriptor" in groups:
+            component = groups["file_descriptor"]
+        elif "file_control" in groups:
+            component = groups["file_control"]
+        elif "author" in groups:
+            component = groups["author"]
+        elif "date_line" in groups:
+            component = groups["date_line"]
+        elif "program_id" in groups:
+            component = groups["program_id"]
+        elif "end_program" in groups:
+            end_program = groups["end_program"]
+
+        if component:
+            if not component.rstrip(" ").endswith("."):
+                component = component.rstrip(" ") + "."
+            # save procedures for later
+            if collecting_procedures:
+                if "nonnumbered_procedure" in groups or "numbered" in groups:
+                    candidate_procedures.append(component)
+                    continue
+            components.append(component)
+
+    # only the most dedented procedures
+    procedures = []
+    if candidate_procedures:
+        dedented_candidate_procedures = dedent_components(candidate_procedures)
+        debug_print("dedented_candidate_procedures", dedented_candidate_procedures)
+        for i, dedented_candidate_procedure in enumerate(dedented_candidate_procedures):
+            # skip indented candidates
+            if dedented_candidate_procedure.startswith(" "):
                 continue
-            elif first_chunk_int == 5:
-                component = eight_spaces + groups[10]
-            elif first_chunk_int == 1:
-                component = six_spaces + component
-        # control, fd, or procedure, four spaces
-        elif (
-            lowercase.startswith("file-control")
-            or lowercase.startswith("fd")
-            or all(character.isdigit() for character in lowercase.split("-")[0])
-        ):
-            component = four_spaces + component
-        else:  # six spaces
-            if 8 in groups:
-                component = groups[8]
-            component = six_spaces + component
-
-        if not component.endswith("."):
-            component += "."
-        components.append(component)
-
+            procedure = candidate_procedures[i]
+            procedures.append(procedure)
+    if procedures:
+        components.extend(procedures)
+    if end_program:
+        components.append(end_program)
+    # now we dedent again as a complete group
+    if components:
+        dedented_components = dedent_components(components)
+        return dedented_components
     return components
 
 
 def parse_java(contents: str) -> List[str]:
-    debug_print("parse_jave")
+    debug_print("parse_java")
     contents = remove_c_comments(contents)
     # Combined regex pattern to match Java components
     combined_pattern = re.compile(
