@@ -660,7 +660,7 @@ def _from_file(
         category=Category.FILE,
         name=file_path.name,
         n_folders=0,
-        n_files=0,
+        n_files=1,
         n_tokens=None if counts is None else counts.n_tokens,
         n_lines=None if counts is None else counts.n_lines,
     )
