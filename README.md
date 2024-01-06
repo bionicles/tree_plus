@@ -558,8 +558,13 @@ Here's how to import the library
 import tree_plus_src as tp
 ```
 
-Check out the **tree_plus_programs** folder for a usage example as a library.
+Check out the **tree_plus_programs** folder for a library usage example.
 (More to come!) 
+
+To run the library usage example (make sure you've installed `tree_plus`!)
+```sh
+make library_demo
+```
 
 ## Moar Languages
 

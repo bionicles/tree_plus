@@ -3,6 +3,9 @@ SHELL := /bin/bash
 cli:
 	pip install -U -e .[dev]
 
+library_demo:
+	python tree_plus_programs/hello_tree_plus.py
+
 # DEVELOP with `make debug`
 debug: 
 	nodemon -L -V
@@ -10,6 +13,7 @@ debug:
 .PHONY: debug_command
 # debug_command: test
 debug_command: test_parallel test_tp_dotdot test_e2e test_deploy test_cli
+
 
 test_sequential:
 	pytest tests/test_more_language_units.py tests/test_units.py tests/test_engine.py -vv
