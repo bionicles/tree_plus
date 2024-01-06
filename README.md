@@ -545,8 +545,8 @@ Here's how to import the library
 import tree_plus_src as tp
 ```
 
-### Examples
-
+Check out the **tree_plus_programs** folder for a usage example as a library.
+(More to come!) 
 
 ## Moar Languages
 
