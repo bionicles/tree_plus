@@ -2119,11 +2119,13 @@ def parse_ps1(contents: str) -> List[str]:
     contents = remove_py_comments(contents)
     pattern = re.compile(
         # function
-        r"^(?P<function>(?P<function_scope>\w+:)?(?:function|filter)[\s\S]*?(?=\s{))|"
+        r"^(?P<function>[ \t]*(?P<function_scope>\w+:)?(?:function|filter)[\s\S]*?(?=\s{))|"
+        # r"^(?P<param_block> *(?:P|p)aram \((?:\s*(?:\[|\$|(?:\)(?=\n))).*)*)|"
+        r"^(?P<param_oneliner>[ \t]+(?:P|p)aram ?\(.*?\).*?$)|"
+        r"^(?P<param_block>\s*(?:P|p)aram ?\((?P<args>[\s\S]+?(?=^\s+\))))|"
         # method
         r"^(?P<method> *(?:\[.*\])?\w+\([\s\S]*?\)(?=\s{))|"
         # (P|p)aram
-        r"^(?P<param_block> *(?:P|p)aram \((?:\s*(?:\[|\$|(?:\)(?=\n))).*)*)|"
         # class
         r"^(?P<class>(?P<class_scope>\w+:)?class[\s\S]*?(?= {))|"
         # [Annotation] not followed by $
@@ -2133,7 +2135,7 @@ def parse_ps1(contents: str) -> List[str]:
     components = []
     for n, match in enumerate(pattern.finditer(contents)):
         debug_print(f"parse_ps1 {n=} {match=}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_and_debug_print_groups(match, named_only=True)
         component = None
         if "function" in groups:
             component = groups["function"]
@@ -2141,8 +2143,23 @@ def parse_ps1(contents: str) -> List[str]:
             component = groups["method"]
         elif "class" in groups:
             component = groups["class"]
+        elif "param_oneliner" in groups:
+            component = groups["param_oneliner"]
         elif "param_block" in groups:
             component = groups["param_block"]
+            component_lines = component.splitlines()
+            keepers = []
+            for m, line in enumerate(component_lines):
+                debug_print(f"line {m}", line)
+                lstripped = line.lstrip().lstrip("\t")
+                if lstripped.startswith(")"):
+                    break
+                if not lstripped:
+                    continue
+                keepers.append(line)
+            keepers[-1] = keepers[-1].rstrip("\n").rstrip("\t").rstrip()
+            component = "\n".join(keepers)
+            component = component.rstrip("\n").rstrip("\t") + ")"
         elif "annotation" in groups:
             component = groups["annotation"]
         debug_print(f"parse_ps1 {n=} {component=}")

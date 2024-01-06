@@ -240,7 +240,7 @@ def categorize(
                     y = Category.FOLDER
     elif isinstance(x, Path):
         if x.is_file():
-            y = Category.FOLDER
+            y = Category.FILE  # Fixed
         elif x.is_dir():
             y = Category.FOLDER
     elif isinstance(x, tuple):

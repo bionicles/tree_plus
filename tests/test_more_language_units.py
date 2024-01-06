@@ -656,8 +656,7 @@ def test_more_languages_group1(
                 "function Get-SmallFiles",
                 """  param (
       [PSDefaultValue(Help = '100')]
-      $Size = 100
-  )""",
+      $Size = 100)""",
                 "function Get-User",
                 '  [CmdletBinding(DefaultParameterSetName="ID")]',
                 '  [OutputType("System.Int32", ParameterSetName="ID")]',
@@ -666,11 +665,9 @@ def test_more_languages_group1(
     [parameter(Mandatory=$true, ParameterSetName="ID")]
     [Int[]]
     $UserID,
-
     [parameter(Mandatory=$true, ParameterSetName="Name")]
     [String[]]
-    $UserName
-  )""",
+    $UserName)""",
                 "filter Get-ErrorLog ([switch]$Message)",
                 """function global:MultilineSignature(
   [string]$param1,
@@ -678,6 +675,59 @@ def test_more_languages_group1(
   [Parameter(Mandatory=$true)]
   [string]$param3
 )""",
+            ],
+        ),
+        (
+            "tests/more_languages/group6/Microsoft.PowerShell_profile.ps1",
+            [
+                "function Log($message)",
+                "function Remove-ChocolateyFromPath",
+                "function Show-Profiles",
+                "function Show-Path",
+                "function Show-Error($err)",
+                "function Get-ScoopPackagePath",
+                """	param(
+		[Parameter(Mandatory = $true)]
+		[string]$PackageName)""",
+                "function Check-Command",
+                """	param(
+		[Parameter(Mandatory = $true)]
+		[string]$Name)""",
+                "function Add-ToPath",
+                """	param(
+		[Parameter(Mandatory = $true)]
+		[string]$PathToAdd)""",
+                "function Install-Scoop",
+                "function Scoop-Install",
+                """	param(
+		[Parameter(Mandatory = $true)]
+		[string]$Name,
+		[string]$PathToAdd)""",
+                "function Start-CondaEnv",
+                "function Install-PipPackage",
+                """	param(
+        [Parameter(Mandatory = $true)]
+		[string]$PackageName)""",
+                "function Install-VSBuildTools",
+                "function Install-Crate",
+                """	param(
+        [Parameter(Mandatory = $true)]
+		[string]$CrateName)""",
+                "function Get-ScoopVersion",
+                "function Get-Version",
+                """    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ExecutablePath,
+        [string]$ExecutableName)""",
+                "function Show-Requirements",
+                "	function Measure-Status",
+                """		param(
+			[Parameter(Mandatory = $true)]
+			[string]$Name)""",
+                "function Find-Profile",
+                "function Edit-Profile",
+                "function Set-Profile",
+                "function Show-Profile",
             ],
         ),
         (
@@ -710,10 +760,8 @@ def test_more_languages_group2(
 ):
     print(f"{file=}")
     result = parse_file(file)
-    # if file.endswith(".ps1"):
-    # expected = [expectation) for expectation in expected]
-    print(f"{expected=}")
-    print(f"{result=}")
+    print("result", result)
+    print("expected", expected)
     assert result == expected
 
 
@@ -1055,8 +1103,8 @@ def test_more_languages_group3(file: str, expected: List[str]):
         create_sqlite_test_db()
     os.environ.get("DEBUG_TREE_PLUS") == "1"
     result = parse_file(file)
-    print(f"{result=}")
-    print(f"{expected=}")
+    print("result", result)
+    print("expected", expected)
     assert result == expected
 
 
