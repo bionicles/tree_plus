@@ -117,7 +117,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (37191 tokens, 2516 lines)
+┣━━ 📄 README.md (37200 tokens, 2517 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -188,7 +188,7 @@ tree_plus -i tests
     ┃   ┃   )
     ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
     ┃   ┗━━ def main()
-    ┣━━ 📄 engine.py (6022 tokens, 718 lines)
+    ┣━━ 📄 engine.py (6024 tokens, 718 lines)
     ┃   ┣━━ TODO (Line 40): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
     ┃   ┣━━ TODO (Line 388): research & decide about globs as paths instead of as filters
     ┃   ┣━━ NOTE (Line 422): here we add directly input file_paths to the amortized glob matches
@@ -322,7 +322,7 @@ tree_plus -i tests
     ┃   ┣━━ @lru_cache
     ┃   ┃   def _replace_symbol(match: re.Match) -> str
     ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-    ┣━━ 📄 parse_file.py (21229 tokens, 2312 lines)
+    ┣━━ 📄 parse_file.py (21447 tokens, 2329 lines)
     ┃   ┣━━ BUG (Line 595): catastrophic backtracking in some c files
     ┃   ┣━━ @lru_cache(maxsize=None)
     ┃   ┃   def read_file(
@@ -414,10 +414,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.24"
+        ┗━━ __version__ = "1.0.25"
 
-tree_plus v(1.0.24) ignore=('tests',) globs=() syntax=False paths=()
-4 folder(s), 22 file(s), 7,436 line(s), 79,942 token(s) in 0.22 second(s).
+tree_plus v(1.0.25) ignore=('tests',) globs=() syntax=False paths=()
+4 folder(s), 22 file(s), 7,454 line(s), 80,171 token(s) in 0.22 second(s).
 
 ```
 <!-- t1-end -->
@@ -462,9 +462,9 @@ Options:
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
   -s, -S, --syntax       Enables Syntax Highlighting (WIP).
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
-  -H, -h, --help         Show this message and exit.
+  -h, -H, --help         Show this message and exit.
 
-  v(1.0.24) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.25) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -572,7 +572,7 @@ make library_demo
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages
-📁 more_languages (8 folders, 73 files) 
+📁 more_languages (8 folders, 74 files) 
 ┣━━ 📁 group1 (1 folder, 11 files) 
 ┃   ┣━━ 📄 addamt.cobol (408 tokens, 41 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION.
@@ -1012,8 +1012,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ function Get-SmallFiles
 ┃   ┃   ┣━━   param (
 ┃   ┃   ┃         [PSDefaultValue(Help = '100')]
-┃   ┃   ┃         $Size = 100
-┃   ┃   ┃     )
+┃   ┃   ┃         $Size = 100)
 ┃   ┃   ┣━━ function Get-User
 ┃   ┃   ┣━━   [CmdletBinding(DefaultParameterSetName="ID")]
 ┃   ┃   ┣━━   [OutputType("System.Int32", ParameterSetName="ID")]
@@ -1022,11 +1021,9 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┃       [parameter(Mandatory=$true, ParameterSetName="ID")]
 ┃   ┃   ┃       [Int[]]
 ┃   ┃   ┃       $UserID,
-┃   ┃   ┃   
 ┃   ┃   ┃       [parameter(Mandatory=$true, ParameterSetName="Name")]
 ┃   ┃   ┃       [String[]]
-┃   ┃   ┃       $UserName
-┃   ┃   ┃     )
+┃   ┃   ┃       $UserName)
 ┃   ┃   ┣━━ filter Get-ErrorLog ([switch]$Message)
 ┃   ┃   ┗━━ function global:MultilineSignature(
 ┃   ┃         [string]$param1,
@@ -1778,7 +1775,7 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
 ┃       ┣━━ const mockTickets = async () =>
 ┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
-┣━━ 📁 group6 (1 folder, 6 files) 
+┣━━ 📁 group6 (1 folder, 7 files) 
 ┃   ┣━━ 📄 catastrophic.c (4144 tokens, 581 lines)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ struct Point getOrigin()
@@ -1948,6 +1945,55 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┃                (is "eventually (λn. _ = -?g' n) _")
 ┃   ┃   ┃     shows   "(λn. fps_nth F n - g n) ∈ O(λn. 1 / r ^ n)" (is "(λn. ?c n - _) ∈ O(_)")
 ┃   ┃   ┗━━ end
+┃   ┣━━ 📄 Microsoft.PowerShell_profile.ps1 (3854 tokens, 498 lines)
+┃   ┃   ┣━━ function Log($message)
+┃   ┃   ┣━━ function Remove-ChocolateyFromPath
+┃   ┃   ┣━━ function Show-Profiles
+┃   ┃   ┣━━ function Show-Path
+┃   ┃   ┣━━ function Show-Error($err)
+┃   ┃   ┣━━ function Get-ScoopPackagePath
+┃   ┃   ┣━━   param(
+┃   ┃   ┃       [Parameter(Mandatory = $true)]
+┃   ┃   ┃       [string]$PackageName)
+┃   ┃   ┣━━ function Check-Command
+┃   ┃   ┣━━   param(
+┃   ┃   ┃       [Parameter(Mandatory = $true)]
+┃   ┃   ┃       [string]$Name)
+┃   ┃   ┣━━ function Add-ToPath
+┃   ┃   ┣━━   param(
+┃   ┃   ┃       [Parameter(Mandatory = $true)]
+┃   ┃   ┃       [string]$PathToAdd)
+┃   ┃   ┣━━ function Install-Scoop
+┃   ┃   ┣━━ function Scoop-Install
+┃   ┃   ┣━━   param(
+┃   ┃   ┃       [Parameter(Mandatory = $true)]
+┃   ┃   ┃       [string]$Name,
+┃   ┃   ┃       [string]$PathToAdd)
+┃   ┃   ┣━━ function Start-CondaEnv
+┃   ┃   ┣━━ function Install-PipPackage
+┃   ┃   ┣━━   param(
+┃   ┃   ┃           [Parameter(Mandatory = $true)]
+┃   ┃   ┃       [string]$PackageName)
+┃   ┃   ┣━━ function Install-VSBuildTools
+┃   ┃   ┣━━ function Install-Crate
+┃   ┃   ┣━━   param(
+┃   ┃   ┃           [Parameter(Mandatory = $true)]
+┃   ┃   ┃       [string]$CrateName)
+┃   ┃   ┣━━ function Get-ScoopVersion
+┃   ┃   ┣━━ function Get-Version
+┃   ┃   ┣━━     param(
+┃   ┃   ┃           [Parameter(Mandatory = $true)]
+┃   ┃   ┃           [string]$ExecutablePath,
+┃   ┃   ┃           [string]$ExecutableName)
+┃   ┃   ┣━━ function Show-Requirements
+┃   ┃   ┣━━   function Measure-Status
+┃   ┃   ┣━━     param(
+┃   ┃   ┃         [Parameter(Mandatory = $true)]
+┃   ┃   ┃         [string]$Name)
+┃   ┃   ┣━━ function Find-Profile
+┃   ┃   ┣━━ function Edit-Profile
+┃   ┃   ┣━━ function Set-Profile
+┃   ┃   ┗━━ function Show-Profile
 ┃   ┣━━ 📄 ramda__cloneRegExp.js (105 tokens, 9 lines)
 ┃   ┃   ┗━━ export default function _cloneRegExp(pattern)
 ┃   ┣━━ 📄 ramda_prop.js (747 tokens, 86 lines)
@@ -2022,8 +2068,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.24) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 73 file(s), 5,261 line(s), 37,523 token(s) in 0.45 second(s).
+tree_plus v(1.0.25) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 74 file(s), 5,759 line(s), 41,377 token(s) in 0.47 second(s).
 
 ```
 <!-- t2-end -->
@@ -2472,7 +2518,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.24) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.25) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 6 folder(s), 16 file(s), 1,919 line(s), 13,124 token(s) in 0.14 second(s).
 
 ```
@@ -2498,7 +2544,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.24) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.25) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
