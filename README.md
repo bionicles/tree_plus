@@ -70,12 +70,12 @@ tree_plus -i tests
 ┃           ┗━━     - Publish to PyPI
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (561 tokens, 92 lines)
+┣━━ 📄 Makefile (547 tokens, 92 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
-┃   ┣━━ debug_command: test_parallel test_tp_dotdot test_cli
+┃   ┣━━ debug_command: test_parallel test_tp_dotdot test_e2e test_deploy test_cli
 ┃   ┣━━ test_sequential
 ┃   ┣━━ test_parallel
 ┃   ┣━━ test_units
@@ -116,7 +116,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (35012 tokens, 2370 lines)
+┣━━ 📄 README.md (35020 tokens, 2371 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -176,7 +176,7 @@ tree_plus -i tests
     ┃   ┃   )
     ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
     ┃   ┗━━ def main()
-    ┣━━ 📄 engine.py (5983 tokens, 714 lines)
+    ┣━━ 📄 engine.py (6022 tokens, 718 lines)
     ┃   ┣━━ TODO (Line 40): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
     ┃   ┣━━ TODO (Line 388): research & decide about globs as paths instead of as filters
     ┃   ┣━━ NOTE (Line 422): here we add directly input file_paths to the amortized glob matches
@@ -310,8 +310,8 @@ tree_plus -i tests
     ┃   ┣━━ @lru_cache
     ┃   ┃   def _replace_symbol(match: re.Match) -> str
     ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-    ┣━━ 📄 parse_file.py (21587 tokens, 2319 lines)
-    ┃   ┣━━ BUG (Line 600): catastrophic backtracking in some c files
+    ┣━━ 📄 parse_file.py (21229 tokens, 2312 lines)
+    ┃   ┣━━ BUG (Line 595): catastrophic backtracking in some c files
     ┃   ┣━━ @lru_cache(maxsize=None)
     ┃   ┃   def read_file(
     ┃   ┃       file_path: str,
@@ -320,6 +320,7 @@ tree_plus -i tests
     ┃   ┃   ) -> str
     ┃   ┣━━ def parse_file(file_path: Union[str, Path]) -> List[str]
     ┃   ┣━━ def extract_and_debug_print_groups(match: re.Match, named_only: bool = False) -> dict
+    ┃   ┣━━ def parse_rst(contents: str) -> List[str]
     ┃   ┣━━ def parse_c(contents: str) -> List[str]
     ┃   ┣━━ @lru_cache
     ┃   ┃   def is_binary_string(data: bytes) -> bool
@@ -378,6 +379,7 @@ tree_plus -i tests
     ┃   ┣━━ def parse_openapi_yml(ymls: Tuple[dict]) -> List[str]
     ┃   ┣━━ def parse_yml(contents: str) -> List[str]
     ┃   ┣━━ def parse_db(db_path: str) -> List[str]
+    ┃   ┣━━ def dedent_components(components: List[str]) -> List[str]
     ┃   ┣━━ def parse_cbl(content: str) -> List[str]
     ┃   ┣━━ def parse_java(contents: str) -> List[str]
     ┃   ┣━━ def parse_jl(contents: str) -> List[str]
@@ -400,10 +402,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.21"
+        ┗━━ __version__ = "1.0.22"
 
-tree_plus v(1.0.21) ignore=('tests',) globs=() syntax=False paths=()
-3 folder(s), 21 file(s), 7,209 line(s), 77,550 token(s) in 0.21 second(s).
+tree_plus v(1.0.22) ignore=('tests',) globs=() syntax=False paths=()
+3 folder(s), 21 file(s), 7,207 line(s), 77,225 token(s) in 0.21 second(s).
 
 ```
 <!-- t1-end -->
@@ -450,7 +452,7 @@ Options:
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
   -h, -H, --help         Show this message and exit.
 
-  v(1.0.21) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.22) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -553,43 +555,60 @@ Check out the **tree_plus_programs** folder for a usage example as a library.
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages
-📁 more_languages (8 folders, 70 files) 
-┣━━ 📁 group1 (1 folder, 9 files) 
-┃   ┣━━ 📄 CUSTOMER-INVOICE.CBL (545 tokens, 60 lines)
+📁 more_languages (8 folders, 73 files) 
+┣━━ 📁 group1 (1 folder, 11 files) 
+┃   ┣━━ 📄 addamt.cobol (408 tokens, 41 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION.
-┃   ┃   ┣━━   PROGRAM-ID. CUSTOMER-INVOICE.
-┃   ┃   ┣━━   AUTHOR. JANE DOE.
-┃   ┃   ┣━━   DATE. 2023-12-30.
-┃   ┃   ┣━━   DATE-COMPILED. 06/30/10.
-┃   ┃   ┣━━   DATE-WRITTEN. 12/34/56.
-┃   ┃   ┣━━ ENVIRONMENT DIVISION.
-┃   ┃   ┣━━   INPUT-OUTPUT SECTION.
-┃   ┃   ┣━━     FILE-CONTROL.
-┃   ┃   ┣━━       SELECT CUSTOMER-FILE.
-┃   ┃   ┣━━       SELECT INVOICE-FILE.
-┃   ┃   ┣━━       SELECT REPORT-FILE.
+┃   ┃   ┣━━ PROGRAM-ID.
+┃   ┃   ┃              ADDAMT.
 ┃   ┃   ┣━━ DATA DIVISION.
-┃   ┃   ┣━━   FILE SECTION.
-┃   ┃   ┣━━     FD CUSTOMER-FILE.
-┃   ┃   ┣━━       01 CUSTOMER-RECORD.
-┃   ┃   ┣━━         05 CUSTOMER-ID.
-┃   ┃   ┣━━         05 CUSTOMER-NAME.
-┃   ┃   ┣━━         05 CUSTOMER-BALANCE.
-┃   ┃   ┣━━     FD INVOICE-FILE.
-┃   ┃   ┣━━       01 INVOICE-RECORD.
-┃   ┃   ┣━━         05 INVOICE-ID.
-┃   ┃   ┣━━         05 CUSTOMER-ID.
-┃   ┃   ┣━━         05 INVOICE-AMOUNT.
-┃   ┃   ┣━━     FD REPORT-FILE.
-┃   ┃   ┣━━       01 REPORT-RECORD.
-┃   ┃   ┣━━   WORKING-STORAGE SECTION.
-┃   ┃   ┣━━       01 WS-CUSTOMER-FOUND.
-┃   ┃   ┣━━       01 WS-END-OF-FILE.
-┃   ┃   ┣━━       01 WS-TOTAL-BALANCE.
+┃   ┃   ┣━━ WORKING-STORAGE SECTION.
+┃   ┃   ┣━━ 01  KEYED-INPUT.
+┃   ┃   ┣━━     05  CUST-NO-IN.
+┃   ┃   ┣━━     05  AMT1-IN.
+┃   ┃   ┣━━     05  AMT2-IN.
+┃   ┃   ┣━━     05  AMT3-IN.
+┃   ┃   ┣━━ 01  DISPLAYED-OUTPUT.
+┃   ┃   ┣━━     05  CUST-NO-OUT.
+┃   ┃   ┣━━     05  TOTAL-OUT.
+┃   ┃   ┣━━ 01  MORE-DATA.
 ┃   ┃   ┣━━ PROCEDURE DIVISION.
-┃   ┃   ┣━━     0000-MAIN-ROUTINE.
-┃   ┃   ┣━━     1000-PROCESS-RECORDS.
-┃   ┃   ┣━━     1100-UPDATE-CUSTOMER-BALANCE.
+┃   ┃   ┗━━ 100-MAIN.
+┃   ┣━━ 📄 CUSTOMER-INVOICE.CBL (547 tokens, 60 lines)
+┃   ┃   ┣━━ IDENTIFICATION DIVISION.
+┃   ┃   ┣━━ PROGRAM-ID. CUSTOMER-INVOICE.
+┃   ┃   ┣━━ AUTHOR. JANE DOE.
+┃   ┃   ┣━━ DATE. 2023-12-30.
+┃   ┃   ┣━━   DATE-COMPILED. 06/30/10.
+┃   ┃   ┣━━     DATE-WRITTEN. 12/34/56.
+┃   ┃   ┣━━ ENVIRONMENT DIVISION.
+┃   ┃   ┣━━ INPUT-OUTPUT SECTION.
+┃   ┃   ┣━━ FILE-CONTROL.
+┃   ┃   ┣━━     SELECT CUSTOMER-FILE.
+┃   ┃   ┣━━     SELECT INVOICE-FILE.
+┃   ┃   ┣━━     SELECT REPORT-FILE.
+┃   ┃   ┣━━ DATA DIVISION.
+┃   ┃   ┣━━ FILE SECTION.
+┃   ┃   ┣━━ FD CUSTOMER-FILE.
+┃   ┃   ┣━━ 01 CUSTOMER-RECORD.
+┃   ┃   ┣━━    05 CUSTOMER-ID.
+┃   ┃   ┣━━    05 CUSTOMER-NAME.
+┃   ┃   ┣━━    05 CUSTOMER-BALANCE.
+┃   ┃   ┣━━ FD INVOICE-FILE.
+┃   ┃   ┣━━ 01 INVOICE-RECORD.
+┃   ┃   ┣━━    05 INVOICE-ID.
+┃   ┃   ┣━━    05 CUSTOMER-ID.
+┃   ┃   ┣━━    05 INVOICE-AMOUNT.
+┃   ┃   ┣━━ FD REPORT-FILE.
+┃   ┃   ┣━━ 01 REPORT-RECORD.
+┃   ┃   ┣━━ WORKING-STORAGE SECTION.
+┃   ┃   ┣━━ 01 WS-CUSTOMER-FOUND.
+┃   ┃   ┣━━ 01 WS-END-OF-FILE.
+┃   ┃   ┣━━ 01 WS-TOTAL-BALANCE.
+┃   ┃   ┣━━ PROCEDURE DIVISION.
+┃   ┃   ┣━━ 0000-MAIN-ROUTINE.
+┃   ┃   ┣━━ 1000-PROCESS-RECORDS.
+┃   ┃   ┣━━ 1100-UPDATE-CUSTOMER-BALANCE.
 ┃   ┃   ┗━━ END PROGRAM CUSTOMER-INVOICE.
 ┃   ┣━━ 📄 JavaTest.java (470 tokens, 87 lines)
 ┃   ┃   ┣━━ abstract class LivingBeing
@@ -714,6 +733,47 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ operator fun Point.unaryMinus()
 ┃   ┃   ┣━━ abstract class Polygon
 ┃   ┃   ┗━━     abstract fun draw()
+┃   ┣━━ 📄 lesson.cbl (682 tokens, 79 lines)
+┃   ┃   ┣━━ IDENTIFICATION DIVISION.
+┃   ┃   ┣━━ PROGRAM-ID.    CBL0002.
+┃   ┃   ┣━━ AUTHOR.        Otto B. Fun.
+┃   ┃   ┣━━ ENVIRONMENT DIVISION.
+┃   ┃   ┣━━ INPUT-OUTPUT SECTION.
+┃   ┃   ┣━━ FILE-CONTROL.
+┃   ┃   ┣━━     SELECT PRINT-LINE.
+┃   ┃   ┣━━     SELECT ACCT-REC.
+┃   ┃   ┣━━ DATA DIVISION.
+┃   ┃   ┣━━ FILE SECTION.
+┃   ┃   ┣━━ FD  PRINT-LINE.
+┃   ┃   ┣━━ 01  PRINT-REC.
+┃   ┃   ┣━━     05  ACCT-NO-O.
+┃   ┃   ┣━━     05  ACCT-LIMIT-O.
+┃   ┃   ┣━━     05  ACCT-BALANCE-O.
+┃   ┃   ┣━━     05  LAST-NAME-O.
+┃   ┃   ┣━━     05  FIRST-NAME-O.
+┃   ┃   ┣━━     05  COMMENTS-O.
+┃   ┃   ┣━━ FD  ACCT-REC.
+┃   ┃   ┣━━ 01  ACCT-FIELDS.
+┃   ┃   ┣━━     05  ACCT-NO.
+┃   ┃   ┣━━     05  ACCT-LIMIT.
+┃   ┃   ┣━━     05  ACCT-BALANCE.
+┃   ┃   ┣━━     05  LAST-NAME.
+┃   ┃   ┣━━     05  FIRST-NAME.
+┃   ┃   ┣━━     05  CLIENT-ADDR.
+┃   ┃   ┣━━         10  STREET-ADDR.
+┃   ┃   ┣━━         10  CITY-COUNTY.
+┃   ┃   ┣━━         10  USA-STATE.
+┃   ┃   ┣━━     05  RESERVED.
+┃   ┃   ┣━━     05  COMMENTS.
+┃   ┃   ┣━━ WORKING-STORAGE SECTION.
+┃   ┃   ┣━━ 01 FLAGS.
+┃   ┃   ┣━━   05 LASTREC.
+┃   ┃   ┣━━ PROCEDURE DIVISION.
+┃   ┃   ┣━━ OPEN-FILES.
+┃   ┃   ┣━━ READ-NEXT-RECORD.
+┃   ┃   ┣━━ CLOSE-STOP.
+┃   ┃   ┣━━ READ-RECORD.
+┃   ┃   ┗━━ WRITE-RECORD.
 ┃   ┣━━ 📄 LuaTest.lua (84 tokens, 16 lines)
 ┃   ┃   ┣━━ function HelloWorld.new
 ┃   ┃   ┣━━ function HelloWorld.greet
@@ -1701,7 +1761,7 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
 ┃       ┣━━ const mockTickets = async () =>
 ┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
-┣━━ 📁 group6 (1 folder, 5 files) 
+┣━━ 📁 group6 (1 folder, 6 files) 
 ┃   ┣━━ 📄 catastrophic.c (4144 tokens, 581 lines)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ struct Point getOrigin()
@@ -1873,24 +1933,55 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┗━━ end
 ┃   ┣━━ 📄 ramda__cloneRegExp.js (105 tokens, 9 lines)
 ┃   ┃   ┗━━ export default function _cloneRegExp(pattern)
-┃   ┣━━ 📄 ramda_prop.js (294 tokens, 33 lines)
-┃   ┃   ┗━━ var prop = _curry2(function prop(p, obj)
-┃   ┗━━ 📄 test.f (200 tokens, 31 lines)
-┃       ┣━━ MODULE basic_mod
-┃       ┣━━     TYPE :: person
-┃       ┃           CHARACTER(LEN=50) :: name
-┃       ┃           INTEGER :: age
-┃       ┃       END TYPE person
-┃       ┣━━     SUBROUTINE short_hello(happy, path)
-┃       ┃       END SUBROUTINE short_hello
-┃       ┣━━     SUBROUTINE long_hello(
-┃       ┃           p,
-┃       ┃           message
-┃       ┃       )
-┃       ┃       END SUBROUTINE long_hello
-┃       ┣━━ END MODULE basic_mod
-┃       ┗━━ PROGRAM HelloFortran
-┃           END PROGRAM HelloFortran
+┃   ┣━━ 📄 ramda_prop.js (747 tokens, 86 lines)
+┃   ┃   ┣━━ /**
+┃   ┃   ┃    * Returns a function that when supplied an object returns the indicated
+┃   ┃   ┃    * property of that object, if it exists.
+┃   ┃   ┃    * @category Object
+┃   ┃   ┃    * @typedefn Idx = String | Int | Symbol
+┃   ┃   ┃    * @sig Idx -> {s: a} -> a | Undefined
+┃   ┃   ┃    * @param {String|Number} p The property name or array index
+┃   ┃   ┃    * @param {Object} obj The object to query
+┃   ┃   ┃    * @return {*} The value at `obj.p`.
+┃   ┃   ┃    */
+┃   ┃   ┃   var prop = _curry2(function prop(p, obj)
+┃   ┃   ┣━━ /**
+┃   ┃   ┃    * Solves equations of the form a * x = b
+┃   ┃   ┃    * @param {{
+┃   ┃   ┃    *  z: number
+┃   ┃   ┃    * }} x
+┃   ┃   ┃    */
+┃   ┃   ┃   function foo(x)
+┃   ┃   ┣━━ /**
+┃   ┃   ┃    * Deconstructs an array field from the input documents to output a document for each element.
+┃   ┃   ┃    * Each output document is the input document with the value of the array field replaced by the element.
+┃   ┃   ┃    * @category Object
+┃   ┃   ┃    * @sig String -> {k: [v]} -> [{k: v}]
+┃   ┃   ┃    * @param {String} key The key to determine which property of the object should be unwound.
+┃   ┃   ┃    * @param {Object} object The object containing the list to unwind at the property named by the key.
+┃   ┃   ┃    * @return {List} A list of new objects, each having the given key associated to an item from the unwound list.
+┃   ┃   ┃    */
+┃   ┃   ┃   var unwind = _curry2(function(key, object)
+┃   ┃   ┗━━   return _map(function(item)
+┃   ┣━━ 📄 test.f (200 tokens, 31 lines)
+┃   ┃   ┣━━ MODULE basic_mod
+┃   ┃   ┣━━     TYPE :: person
+┃   ┃   ┃           CHARACTER(LEN=50) :: name
+┃   ┃   ┃           INTEGER :: age
+┃   ┃   ┃       END TYPE person
+┃   ┃   ┣━━     SUBROUTINE short_hello(happy, path)
+┃   ┃   ┃       END SUBROUTINE short_hello
+┃   ┃   ┣━━     SUBROUTINE long_hello(
+┃   ┃   ┃           p,
+┃   ┃   ┃           message
+┃   ┃   ┃       )
+┃   ┃   ┃       END SUBROUTINE long_hello
+┃   ┃   ┣━━ END MODULE basic_mod
+┃   ┃   ┗━━ PROGRAM HelloFortran
+┃   ┃       END PROGRAM HelloFortran
+┃   ┗━━ 📄 torch.rst (53 tokens, 9 lines)
+┃       ┣━━ # libtorch (C++-only)
+┃       ┗━━ - Building libtorch using Python
 ┗━━ 📁 group_lisp (1 folder, 4 files) 
     ┣━━ 📄 clojure_test.clj (726 tokens, 86 lines)
     ┃   ┣━━ defprotocol P
@@ -1914,8 +2005,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.21) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 70 file(s), 5,079 line(s), 35,925 token(s) in 0.42 second(s).
+tree_plus v(1.0.22) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 73 file(s), 5,261 line(s), 37,523 token(s) in 0.44 second(s).
 
 ```
 <!-- t2-end -->
@@ -2333,11 +2424,39 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 ┗━━ 📁 group6 (1 folder, 2 files) 
     ┣━━ 📄 ramda__cloneRegExp.js (105 tokens, 9 lines)
     ┃   ┗━━ export default function _cloneRegExp(pattern)
-    ┗━━ 📄 ramda_prop.js (294 tokens, 33 lines)
-        ┗━━ var prop = _curry2(function prop(p, obj)
+    ┗━━ 📄 ramda_prop.js (747 tokens, 86 lines)
+        ┣━━ /**
+        ┃    * Returns a function that when supplied an object returns the indicated
+        ┃    * property of that object, if it exists.
+        ┃    * @category Object
+        ┃    * @typedefn Idx = String | Int | Symbol
+        ┃    * @sig Idx -> {s: a} -> a | Undefined
+        ┃    * @param {String|Number} p The property name or array index
+        ┃    * @param {Object} obj The object to query
+        ┃    * @return {*} The value at `obj.p`.
+        ┃    */
+        ┃   var prop = _curry2(function prop(p, obj)
+        ┣━━ /**
+        ┃    * Solves equations of the form a * x = b
+        ┃    * @param {{
+        ┃    *  z: number
+        ┃    * }} x
+        ┃    */
+        ┃   function foo(x)
+        ┣━━ /**
+        ┃    * Deconstructs an array field from the input documents to output a document for each element.
+        ┃    * Each output document is the input document with the value of the array field replaced by the element.
+        ┃    * @category Object
+        ┃    * @sig String -> {k: [v]} -> [{k: v}]
+        ┃    * @param {String} key The key to determine which property of the object should be unwound.
+        ┃    * @param {Object} object The object containing the list to unwind at the property named by the key.
+        ┃    * @return {List} A list of new objects, each having the given key associated to an item from the unwound list.
+        ┃    */
+        ┃   var unwind = _curry2(function(key, object)
+        ┗━━   return _map(function(item)
 
-tree_plus v(1.0.21) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-6 folder(s), 16 file(s), 1,866 line(s), 12,671 token(s) in 0.14 second(s).
+tree_plus v(1.0.22) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+6 folder(s), 16 file(s), 1,919 line(s), 13,124 token(s) in 0.14 second(s).
 
 ```
 <!-- t3-end -->
@@ -2362,7 +2481,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.21) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.22) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
