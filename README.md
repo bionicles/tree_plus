@@ -538,6 +538,16 @@ Watch for changes to auto re-test `tree_plus`:
 make debug
 ```
 
+## Library Usage:
+
+Here's how to import the library
+```py
+import tree_plus_src as tp
+```
+
+### Examples
+
+
 ## Moar Languages
 
 <!-- t2-start -->

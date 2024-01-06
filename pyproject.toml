@@ -21,8 +21,8 @@ dependencies = ["tiktoken", "PyYAML", "click", "rich", "tomli", "natsort>=7.1"]
 dev = ["pytest", "pytest-dotenv", "pytest-xdist"]
 
 [project.urls]
-documentation = "https://www.github.com/bionicles/tree_plus/README.md" 
-Homepage = "https://github.com/bionicles/tree_plus/README.md"
+documentation = "https://github.com/bionicles/tree_plus/blob/main/README.md" 
+Homepage = "https://github.com/bionicles/tree_plus/blob/main/README.md"
 repository = "https://www.github.com/bionicles/tree_plus"
 Issues = "https://github.com/bionicles/tree_plus/issues"
 
