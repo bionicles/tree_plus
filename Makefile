@@ -48,6 +48,10 @@ test_e2e:
 test_cli: cli
 	pytest tests/test_cli.py -k "cli" -vv
 
+# make sure the library usage examples and examples work
+test_programs:
+	pytest tests/test_programs.py -vv
+
 # finally, we'll test the deployment script
 test_deploy:
 	pytest tests/test_deploy.py
