@@ -25,7 +25,7 @@ from .count_tokens_lines import (
     count_tokens_lines,
     add_tokens_lines,
 )
-from .deploy import extract, run_command, replace_readme_section, update_readme
+from .deploy import extract, load, run_command, replace_readme_section, update_readme
 from .isabelle_symbols import replace_isabelle_symbols
 from .engine import (
     TreePlus,
