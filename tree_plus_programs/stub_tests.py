@@ -4,9 +4,13 @@ from typing import Optional, Tuple, List
 
 from rich.console import Console
 from rich.theme import Theme
+from rich.traceback import install
+
 import click
 
 import tree_plus_src as tp
+
+install(show_locals=True)
 
 console = Console(
     style="#FFB000 on black",
@@ -52,8 +56,8 @@ def stub_tests(
     if output_path:
         output_path = Path(output_path)
     else:
-        new_stem = "test_" + input_path.stem
-        output_path = Path(input_path).with_stem(new_stem)
+        new_name = f"test_{input_path.stem}.py"
+        output_path = Path(input_path).with_name(new_name)
         console.print(f"gonna put this test at {output_path=}")
 
     if output_path.exists() and not rewrite_ok:
@@ -110,17 +114,17 @@ def stub_tests(
             console.print("dunno how to test that, moving right along...")
             continue
 
-        console.print("tests: List[str] =")
-        console.print_json(data=tests)
+    console.print("tests: List[str] =")
+    console.print_json(data=tests)
 
-        target_module = Path(input_path).stem
-        import_path = make_import_path(input_path)
+    target_module = Path(input_path).stem
+    import_path = make_import_path(input_path)
 
-        test_imports = [
-            "# TODO: fix this path",
-            f"# from {import_path} import {target_module}",
-            "# TODO: fill in these stubs:",
-        ]
+    test_imports = [
+        "# TODO: fix this path",
+        f"# from {import_path} import {target_module}",
+        "# TODO: fill in these stubs:",
+    ]
 
     tests = test_imports + tests
 
@@ -142,7 +146,7 @@ def stub_tests(
     "-o",
     help="path to the output file (default will be 'test_{input}')",
     default=None,
-    type=Optional[str],
+    type=str,
 )
 @click.option(
     "--rewrite-ok",
@@ -150,7 +154,6 @@ def stub_tests(
     help="should we overwrite the test file if it exists? y/n (default n)",
     is_flag=True,
     default=False,
-    type=bool,
 )
 def main(
     input_path: str,

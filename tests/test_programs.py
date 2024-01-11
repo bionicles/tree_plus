@@ -59,6 +59,9 @@ def test_programs_stub_tests():
         capture_output=True,
         text=True,
     )
+    rich.print("stderr:")
+    rich.print(result.stderr)
+    rich.print("stdout:")
     rich.print(result.stdout)
     # whoops, it didn't work!
     assert result.returncode != 0
@@ -69,6 +72,9 @@ def test_programs_stub_tests():
         capture_output=True,
         text=True,
     )
+    rich.print("stderr:")
+    rich.print(result.stderr)
+    rich.print("stdout:")
     rich.print(result.stdout)
     # it worked!
     assert result.returncode == 0
