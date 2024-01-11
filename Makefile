@@ -6,34 +6,34 @@ cli:
 library_demo:
 	python tree_plus_programs/hello_tree_plus.py
 
+# benchmark, dual core, library coverage, with line numbers for missing tests
+coverage:
+	time py.test -n 2 --cov=tree_plus_src --cov-report=term-missing tests
+
 # DEVELOP with `make debug`
 debug: 
 	nodemon -L -V
 
 .PHONY: debug_command
-# debug_command: test
-debug_command: test_parallel test_tp_dotdot test_e2e test_deploy test_cli
+debug_command: test_parallel test_tp_dotdot test_e2e test_cli test_programs test_deploy
 
-
+# TESTS
+# sequential unit tests (for CI)
 test_sequential:
 	pytest tests/test_more_language_units.py tests/test_units.py tests/test_engine.py -vv
 
+# parallel unit tests (for dev rig)
 test_parallel:
 	py.test -n 8 tests/test_more_language_units.py tests/test_units.py tests/test_engine.py -vv
 
-test_units:
-	pytest tests/test_units.py -vv
-
+# just to crank on language features, easy to debug on this
 test_more_languages:
 	pytest tests/test_more_language_units.py -vv
 
-test: test_normally test_tp_dotdot test_e2e test_cli test_deploy
-
-test_engine:
-	pytest tests/test_engine.py -vv
+test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
 
 # first we'll do our unit tests (most likely to need fast debug)
-test_normally:
+test_units:
 	pytest tests/ -k "engine or units or more_languages or dotenv" -vv
 
 # then we have a test where we change directory
@@ -56,9 +56,9 @@ test_programs:
 test_deploy:
 	pytest tests/test_deploy.py
 
-# vulture helps identify dead code
+# VULTURE helps identify dead code
 vulture: install_vulture
-	vulture tree_plus_cli.py tree_plus_src tests/*.py tests/dot_dot/nested_dir/test_tp_dotdot.py
+	vulture tree_plus_cli.py tree_plus_src tests/*.py tests/dot_dot/nested_dir/test_tp_dotdot.py tree_plus_programs/*.py
 
 install_vulture:
 	pip install vulture
