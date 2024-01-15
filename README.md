@@ -33,7 +33,7 @@
 <!-- t1-start -->
 ```sh
 tree_plus -i tests
-📁 tree_plus (4 folders, 24 files) 
+📁 tree_plus (5 folders, 25 files) 
 ┣━━ 📄 .env.test (5 tokens, 1 line)
 ┃   ┗━━ DEBUG_TREE_PLUS
 ┣━━ 📁 .github (2 folders, 3 files) 
@@ -69,19 +69,21 @@ tree_plus -i tests
 ┃           ┣━━     - Commit Updates
 ┃           ┗━━     - Publish to PyPI
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
+┣━━ 📁 coverage (1 folder, 1 file) 
+┃   ┗━━ 📄 lcov.info (48223 tokens, 2148 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
-┣━━ 📄 Makefile (643 tokens, 100 lines)
+┣━━ 📄 Makefile (672 tokens, 102 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ library_demo
 ┃   ┣━━ coverage
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
-┃   ┣━━ debug_command: test_parallel test_tp_dotdot test_e2e test_cli test_programs test_deploy
-┃   ┣━━ test_sequential
+┃   ┣━━ debug_command: test_parallel
 ┃   ┣━━ test_parallel
+┃   ┣━━ test_sequential
 ┃   ┣━━ test_more_languages
-┃   ┣━━ test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
+┃   ┣━━ test: test_parallel
 ┃   ┣━━ test_units
 ┃   ┣━━ test_tp_dotdot
 ┃   ┣━━ test_e2e
@@ -117,7 +119,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (37899 tokens, 2563 lines)
+┣━━ 📄 README.md (38326 tokens, 2590 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -135,9 +137,9 @@ tree_plus -i tests
 ┃   ┗━━ ## License
 ┣━━ 📄 tree_plus_cli.py (973 tokens, 161 lines)
 ┃   ┗━━ def main(
-┃           glob: Optional[Tuple[str]],
-┃           paths: Optional[Union[str, Tuple[str]]],
-┃           ignore: Tuple[str],
+┃           glob: Optional[Tuple],
+┃           paths: Optional[Union[str, Tuple]],
+┃           ignore: Tuple,
 ┃           override: bool,
 ┃           debug: bool,
 ┃           version: bool,
@@ -162,12 +164,12 @@ tree_plus -i tests
 ┃   ┃   ┣━━ def make_import_path(path: Path) -> str
 ┃   ┃   ┣━━ def stub_tests(
 ┃   ┃   ┃       input_path: str,
-┃   ┃   ┃       output_path: Optional[str],
+┃   ┃   ┃       output_path: Optional,
 ┃   ┃   ┃       rewrite_ok: bool,
-┃   ┃   ┃   ) -> Tuple[List[str], str, bool]
+┃   ┃   ┃   ) -> Tuple[List, str, bool]
 ┃   ┃   ┣━━ def main(
 ┃   ┃   ┃       input_path: str,
-┃   ┃   ┃       output_path: Optional[str],
+┃   ┃   ┃       output_path: Optional,
 ┃   ┃   ┃       rewrite_ok: bool,
 ┃   ┃   ┃   )
 ┃   ┃   ┣━━ class Vehicle
@@ -186,7 +188,7 @@ tree_plus -i tests
     ┃   ┣━━ TODO (Line 14): show off how well we parse_todo!
     ┃   ┣━━ @dataclass(frozen=True)
     ┃   ┃   class TokenLineCount
-    ┃   ┣━━ def count_tokens_lines(file_path: Union[str, Path]) -> Optional[TokenLineCount]
+    ┃   ┣━━ def count_tokens_lines(file_path: Union) -> Optional[TokenLineCount]
     ┃   ┗━━ def add_tokens_lines(
     ┃           lhs_count: TokenLineCount, rhs_count: TokenLineCount
     ┃       ) -> TokenLineCount
@@ -201,7 +203,7 @@ tree_plus -i tests
     ┣━━ 📄 deploy.py (1771 tokens, 210 lines)
     ┃   ┣━━ def extract(path: str = None) -> str
     ┃   ┣━━ def load(content: str = None, path: str = None)
-    ┃   ┣━━ def extract_version(source_path: str = None) -> Tuple[int, int, int]
+    ┃   ┣━━ def extract_version(source_path: str = None) -> Tuple
     ┃   ┣━━ def increment_version(
     ┃   ┃       source_path: str = None,
     ┃   ┃       sink_path: str = None,
@@ -215,7 +217,7 @@ tree_plus -i tests
     ┃   ┃   )
     ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
     ┃   ┗━━ def main()
-    ┣━━ 📄 engine.py (6024 tokens, 718 lines)
+    ┣━━ 📄 engine.py (6025 tokens, 718 lines)
     ┃   ┣━━ TODO (Line 40): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
     ┃   ┣━━ TODO (Line 388): research & decide about globs as paths instead of as filters
     ┃   ┣━━ NOTE (Line 422): here we add directly input file_paths to the amortized glob matches
@@ -241,7 +243,7 @@ tree_plus -i tests
     ┃   ┣━━ def clean_string(input_str: str) -> str
     ┃   ┣━━ def safe_print(
     ┃   ┃       tree: Tree,
-    ┃   ┃       style: Optional[str] = None,
+    ┃   ┃       style: Optional = None,
     ┃   ┃       highlight: bool = True,
     ┃   ┃       markup: bool = False,
     ┃   ┃   )
@@ -249,7 +251,7 @@ tree_plus -i tests
     ┃   ┣━━ def into_rich_tree(*, root: TreePlus = None) -> Tree
     ┃   ┣━━ @lru_cache
     ┃   ┃   def categorize(
-    ┃   ┃       x: Union[Path, Tuple[str], str],
+    ┃   ┃       x: Union[Path, Tuple, str],
     ┃   ┃       check_strs_globs: bool = True,
     ┃   ┃       check_strs_paths: bool = True,
     ┃   ┃       raise_if_component: bool = True,
@@ -257,17 +259,17 @@ tree_plus -i tests
     ┃   ┣━━ def from_seed(
     ┃   ┃       maybe_seed_str=None,
     ┃   ┃       *,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
-    ┃   ┃       maybe_globs: Optional[Tuple[str]] = None,
+    ┃   ┃       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[Tuple] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       override_ignore: bool = False,
     ┃   ┃       concise: bool = False,
     ┃   ┃   ) -> TreePlus
     ┃   ┣━━ def from_seeds(
-    ┃   ┃       maybe_seed_strs: Optional[Tuple[str]] = None,
+    ┃   ┃       maybe_seed_strs: Optional[Tuple] = None,
     ┃   ┃       *,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
-    ┃   ┃       maybe_globs: Optional[Tuple[str]] = None,
+    ┃   ┃       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[Tuple] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       override_ignore: bool = False,
     ┃   ┃       concise: bool = False,
@@ -275,16 +277,16 @@ tree_plus -i tests
     ┃   ┣━━ def _reduce_forest(*, forest: Tuple[TreePlus] = None) -> TreePlus
     ┃   ┣━━ def _map_seeds(
     ┃   ┃       *,
-    ┃   ┃       seeds: Tuple[str] = None,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
-    ┃   ┃       maybe_globs: Optional[Tuple[str]] = None,
+    ┃   ┃       seeds: Tuple = None,
+    ┃   ┃       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[Tuple] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       concise: bool = False,
     ┃   ┃   ) -> Tuple[TreePlus]
     ┃   ┣━━ def _from_seed(
     ┃   ┃       *,
     ┃   ┃       seed_path: Optional[Path] = None,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
     ┃   ┃       maybe_globs: Optional[AmortizedGlobs] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       concise: bool = False,
@@ -297,7 +299,7 @@ tree_plus -i tests
     ┃   ┣━━ def _from_glob(
     ┃   ┃       *,
     ┃   ┃       pattern: str,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
     ┃   ┃       maybe_globs: Optional[AmortizedGlobs] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       concise: bool = False,
@@ -305,7 +307,7 @@ tree_plus -i tests
     ┃   ┣━━ def _from_folder(
     ┃   ┃       *,
     ┃   ┃       folder_path: Path,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
     ┃   ┃       maybe_globs: Optional[AmortizedGlobs] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       concise: bool = False,
@@ -320,7 +322,7 @@ tree_plus -i tests
     ┃   ┗━━ def _syntax_highlight(
     ┃           *,
     ┃           file_path: Path = None,
-    ┃           components: List[str] = None,
+    ┃           components: List = None,
     ┃       ) -> Union[Syntax, str]
     ┣━━ 📄 ignore.py (2335 tokens, 329 lines)
     ┃   ┣━━ TODO (Line 129): incorporate gitignore
@@ -328,123 +330,127 @@ tree_plus -i tests
     ┃   ┣━━ def can_parse(x) -> bool
     ┃   ┣━━ @lru_cache
     ┃   ┃   def parse_ignore(
-    ┃   ┃       maybe_ignore_tuple: Optional[Tuple[str]] = None, override: bool = False
-    ┃   ┃   ) -> Optional[Tuple[str]]
+    ┃   ┃       maybe_ignore_tuple: Optional[Tuple] = None, override: bool = False
+    ┃   ┃   ) -> Optional[Tuple]
     ┃   ┣━━ @lru_cache
     ┃   ┃   def is_glob(x: str) -> bool
     ┃   ┣━━ @lru_cache
     ┃   ┃   def parse_globs(
-    ┃   ┃       maybe_globs_tuple: Optional[Tuple[str]] = None,
-    ┃   ┃   ) -> Tuple[str]
+    ┃   ┃       maybe_globs_tuple: Optional[Tuple] = None,
+    ┃   ┃   ) -> Tuple
     ┃   ┣━━ @dataclass(frozen=True)
     ┃   ┃   class AmortizedGlobs
-    ┃   ┣━━ def amortize_globs(paths: Tuple[Path], globs: Tuple[str]) -> Optional[AmortizedGlobs]
+    ┃   ┣━━ def amortize_globs(paths: Tuple[Path], globs: Tuple) -> Optional[AmortizedGlobs]
     ┃   ┗━━ @lru_cache(maxsize=None)
     ┃       def should_ignore(
     ┃           path: Path,
-    ┃           ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃           ignore: Optional[Tuple] = DEFAULT_IGNORE,
     ┃           globs: Optional[AmortizedGlobs] = None,
     ┃       ) -> bool
     ┣━━ 📄 isabelle_symbols.py (4084 tokens, 462 lines)
     ┃   ┣━━ @lru_cache
     ┃   ┃   def _replace_symbol(match: re.Match) -> str
     ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-    ┣━━ 📄 parse_file.py (21447 tokens, 2329 lines)
-    ┃   ┣━━ BUG (Line 595): catastrophic backtracking in some c files
+    ┣━━ 📄 parse_file.py (22106 tokens, 2403 lines)
+    ┃   ┣━━ BUG (Line 669): catastrophic backtracking in some c files
     ┃   ┣━━ @lru_cache(maxsize=None)
     ┃   ┃   def read_file(
     ┃   ┃       file_path: str,
     ┃   ┃       raise_exceptions: bool = False,
-    ┃   ┃       n_lines: Optional[int] = None,
+    ┃   ┃       n_lines: Optional = None,
     ┃   ┃   ) -> str
-    ┃   ┣━━ def parse_file(file_path: Union[str, Path]) -> List[str]
+    ┃   ┣━━ def parse_file(file_path: Union) -> List
     ┃   ┣━━ def extract_and_debug_print_groups(match: re.Match, named_only: bool = False) -> dict
-    ┃   ┣━━ def parse_rst(contents: str) -> List[str]
-    ┃   ┣━━ def parse_c(contents: str) -> List[str]
+    ┃   ┣━━ def assemble_tensorflow_flag(
+    ┃   ┃       flag_type: str, flag: str, description: Optional[List] = None
+    ┃   ┃   ) -> str
+    ┃   ┣━━ def parse_tensorflow_flags(contents: str) -> List
+    ┃   ┣━━ def parse_rst(contents: str) -> List
+    ┃   ┣━━ def parse_c(contents: str) -> List
     ┃   ┣━━ @lru_cache
     ┃   ┃   def is_binary_string(data: bytes) -> bool
     ┃   ┣━━ @lru_cache
     ┃   ┃   def is_binary(file_path: str) -> bool
     ┃   ┣━━ def clean_isabelle_text(content: str) -> str
-    ┃   ┣━━ def parse_isabelle(contents: str) -> List[str]
-    ┃   ┣━━ def parse_fortran(contents: str) -> List[str]
+    ┃   ┣━━ def parse_isabelle(contents: str) -> List
+    ┃   ┣━━ def parse_fortran(contents: str) -> List
     ┃   ┣━━ def remove_c_comments(contents: str) -> str
-    ┃   ┣━━ def parse_ts(contents: str) -> List[str]
+    ┃   ┣━━ def parse_ts(contents: str) -> List
     ┃   ┣━━ def remove_py_comments(input_string: str) -> str
-    ┃   ┣━━ def parse_py(contents: str) -> List[str]
-    ┃   ┣━━ def parse_rb(contents: str) -> List[str]
-    ┃   ┣━━ def parse_fsharp(contents: str) -> List[str]
-    ┃   ┣━━ def parse_tcl(contents: str) -> List[str]
-    ┃   ┣━━ def parse_erl(contents: str) -> List[str]
-    ┃   ┣━━ def parse_rs(contents: str) -> List[str]
-    ┃   ┣━━ def parse_csv(contents: str, max_leaves=11) -> List[str]
-    ┃   ┣━━ def parse_mathematica(contents: str) -> List[str]
-    ┃   ┣━━ def parse_r(contents: str) -> List[str]
-    ┃   ┣━━ def parse_zig(contents: str) -> List[str]
-    ┃   ┣━━ def parse_hs(contents: str) -> List[str]
-    ┃   ┣━━ def parse_lisp(content: str) -> List[str]
-    ┃   ┣━━ def parse_capnp(contents: str) -> List[str]
-    ┃   ┣━━ def parse_grpc(contents: str) -> List[str]
-    ┃   ┣━━ def parse_openrpc_json(contents: str) -> List[str]
-    ┃   ┣━━ def parse_json_rpc(contents: str) -> List[str]
-    ┃   ┣━━ def parse_graphql(contents: str) -> List[str]
+    ┃   ┣━━ def parse_py(contents: str) -> List
+    ┃   ┣━━ def parse_rb(contents: str) -> List
+    ┃   ┣━━ def parse_fsharp(contents: str) -> List
+    ┃   ┣━━ def parse_tcl(contents: str) -> List
+    ┃   ┣━━ def parse_erl(contents: str) -> List
+    ┃   ┣━━ def parse_rs(contents: str) -> List
+    ┃   ┣━━ def parse_csv(contents: str, max_leaves=11) -> List
+    ┃   ┣━━ def parse_mathematica(contents: str) -> List
+    ┃   ┣━━ def parse_r(contents: str) -> List
+    ┃   ┣━━ def parse_zig(contents: str) -> List
+    ┃   ┣━━ def parse_hs(contents: str) -> List
+    ┃   ┣━━ def parse_lisp(content: str) -> List
+    ┃   ┣━━ def parse_capnp(contents: str) -> List
+    ┃   ┣━━ def parse_grpc(contents: str) -> List
+    ┃   ┣━━ def parse_openrpc_json(contents: str) -> List
+    ┃   ┣━━ def parse_json_rpc(contents: str) -> List
+    ┃   ┣━━ def parse_graphql(contents: str) -> List
     ┃   ┣━━ def format_dependency(name, details)
-    ┃   ┣━━ def parse_cargo_toml(contents: str) -> List[str]
-    ┃   ┣━━ def parse_pyproject_toml(contents: str) -> List[str]
-    ┃   ┣━━ def parse_lean(lean_content: str) -> List[str]
-    ┃   ┣━━ def parse_cs(contents: str) -> List[str]
-    ┃   ┣━━ def parse_tex(tex_content: str) -> List[str]
-    ┃   ┣━━ def parse_go(contents: str) -> List[str]
-    ┃   ┣━━ def parse_swift(contents: str) -> List[str]
-    ┃   ┣━━ def parse_bash(contents: str) -> List[str]
-    ┃   ┣━━ def parse_d_dot_ts(contents: str) -> List[str]
-    ┃   ┣━━ def parse_angular_app_module(contents: str) -> List[str]
-    ┃   ┣━━ def parse_angular_routes(content: str) -> List[str]
-    ┃   ┣━━ def parse_angular_spec(content: str) -> List[str]
-    ┃   ┣━━ def parse_environment_ts(contents: str) -> List[str]
-    ┃   ┣━━ def parse_dot_env(contents: str) -> List[str]
-    ┃   ┣━━ def parse_requirements_txt(contents: str) -> List[str]
-    ┃   ┣━━ def parse_json_schema(contents: str) -> List[str]
-    ┃   ┣━━ def parse_package_json(contents: str) -> List[str]
-    ┃   ┣━━ def parse_makefile(contents: str) -> List[str]
-    ┃   ┣━━ def parse_sql(contents: str) -> List[str]
-    ┃   ┣━━ def is_openapi_yml(ymls: Tuple[dict]) -> bool
-    ┃   ┣━━ def is_k8s_yml(ymls: Tuple[dict]) -> bool
-    ┃   ┣━━ def is_ansible_yml(ymls: Tuple[dict]) -> bool
-    ┃   ┣━━ def is_github_yml(ymls: Tuple[dict]) -> bool
-    ┃   ┣━━ def parse_github_yml(ymls: Tuple[dict]) -> List[str]
-    ┃   ┣━━ def parse_k8s(ymls: Tuple[dict]) -> List[str]
-    ┃   ┣━━ def parse_ansible(ymls: Tuple[dict]) -> List[str]
-    ┃   ┣━━ def parse_openapi_yml(ymls: Tuple[dict]) -> List[str]
-    ┃   ┣━━ def parse_yml(contents: str) -> List[str]
-    ┃   ┣━━ def parse_db(db_path: str) -> List[str]
-    ┃   ┣━━ def dedent_components(components: List[str]) -> List[str]
-    ┃   ┣━━ def parse_cbl(content: str) -> List[str]
-    ┃   ┣━━ def parse_java(contents: str) -> List[str]
-    ┃   ┣━━ def parse_jl(contents: str) -> List[str]
-    ┃   ┣━━ def parse_kt(contents: str) -> List[str]
-    ┃   ┣━━ def parse_lua(content: str) -> List[str]
-    ┃   ┣━━ def parse_objective_c(content: str) -> List[str]
-    ┃   ┣━━ def parse_ocaml(content: str) -> List[str]
-    ┃   ┣━━ def parse_apl(content: str) -> List[str]
-    ┃   ┣━━ def parse_perl(content: str) -> List[str]
-    ┃   ┣━━ def parse_php(content: str) -> List[str]
-    ┃   ┣━━ def parse_ps1(contents: str) -> List[str]
-    ┃   ┣━━ def parse_matlab(content: str) -> List[str]
-    ┃   ┣━━ def parse_scala(contents: str) -> List[str]
-    ┃   ┣━━ def parse_tf(contents: str) -> List[str]
-    ┃   ┣━━ def parse_md(content: str) -> List[str]
-    ┃   ┣━━ def parse_txt(content: str) -> List[str]
-    ┃   ┗━━ def parse_markers(content: str) -> List[str]
+    ┃   ┣━━ def parse_cargo_toml(contents: str) -> List
+    ┃   ┣━━ def parse_pyproject_toml(contents: str) -> List
+    ┃   ┣━━ def parse_lean(lean_content: str) -> List
+    ┃   ┣━━ def parse_cs(contents: str) -> List
+    ┃   ┣━━ def parse_tex(tex_content: str) -> List
+    ┃   ┣━━ def parse_go(contents: str) -> List
+    ┃   ┣━━ def parse_swift(contents: str) -> List
+    ┃   ┣━━ def parse_bash(contents: str) -> List
+    ┃   ┣━━ def parse_d_dot_ts(contents: str) -> List
+    ┃   ┣━━ def parse_angular_app_module(contents: str) -> List
+    ┃   ┣━━ def parse_angular_routes(content: str) -> List
+    ┃   ┣━━ def parse_angular_spec(content: str) -> List
+    ┃   ┣━━ def parse_environment_ts(contents: str) -> List
+    ┃   ┣━━ def parse_dot_env(contents: str) -> List
+    ┃   ┣━━ def parse_requirements_txt(contents: str) -> List
+    ┃   ┣━━ def parse_json_schema(contents: str) -> List
+    ┃   ┣━━ def parse_package_json(contents: str) -> List
+    ┃   ┣━━ def parse_makefile(contents: str) -> List
+    ┃   ┣━━ def parse_sql(contents: str) -> List
+    ┃   ┣━━ def is_openapi_yml(ymls: Tuple) -> bool
+    ┃   ┣━━ def is_k8s_yml(ymls: Tuple) -> bool
+    ┃   ┣━━ def is_ansible_yml(ymls: Tuple) -> bool
+    ┃   ┣━━ def is_github_yml(ymls: Tuple) -> bool
+    ┃   ┣━━ def parse_github_yml(ymls: Tuple) -> List
+    ┃   ┣━━ def parse_k8s(ymls: Tuple) -> List
+    ┃   ┣━━ def parse_ansible(ymls: Tuple) -> List
+    ┃   ┣━━ def parse_openapi_yml(ymls: Tuple) -> List
+    ┃   ┣━━ def parse_yml(contents: str) -> List
+    ┃   ┣━━ def parse_db(db_path: str) -> List
+    ┃   ┣━━ def dedent_components(components: List) -> List
+    ┃   ┣━━ def parse_cbl(content: str) -> List
+    ┃   ┣━━ def parse_java(contents: str) -> List
+    ┃   ┣━━ def parse_jl(contents: str) -> List
+    ┃   ┣━━ def parse_kt(contents: str) -> List
+    ┃   ┣━━ def parse_lua(content: str) -> List
+    ┃   ┣━━ def parse_objective_c(content: str) -> List
+    ┃   ┣━━ def parse_ocaml(content: str) -> List
+    ┃   ┣━━ def parse_apl(content: str) -> List
+    ┃   ┣━━ def parse_perl(content: str) -> List
+    ┃   ┣━━ def parse_php(content: str) -> List
+    ┃   ┣━━ def parse_ps1(contents: str) -> List
+    ┃   ┣━━ def parse_matlab(content: str) -> List
+    ┃   ┣━━ def parse_scala(contents: str) -> List
+    ┃   ┣━━ def parse_tf(contents: str) -> List
+    ┃   ┣━━ def parse_md(content: str) -> List
+    ┃   ┣━━ def parse_txt(content: str) -> List
+    ┃   ┗━━ def parse_markers(content: str) -> List
     ┣━━ 📁 scripts (1 folder, 1 file) 
     ┃   ┗━━ 📄 alias_tree_plus.sh (277 tokens, 31 lines)
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.28"
+        ┗━━ __version__ = "1.0.29"
 
-tree_plus v(1.0.28) ignore=('tests',) globs=() syntax=False paths=()
-4 folder(s), 24 file(s), 7,704 line(s), 82,196 token(s) in 0.22 second(s).
+tree_plus v(1.0.29) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 25 file(s), 9,955 line(s), 131,535 token(s) in 0.25 second(s).
 
 ```
 <!-- t1-end -->
@@ -489,9 +495,9 @@ Options:
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
   -s, -S, --syntax       Enables Syntax Highlighting (WIP).
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
-  -h, -H, --help         Show this message and exit.
+  -H, -h, --help         Show this message and exit.
 
-  v(1.0.28) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.29) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -599,7 +605,7 @@ make library_demo
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages
-📁 more_languages (8 folders, 74 files) 
+📁 more_languages (8 folders, 75 files) 
 ┣━━ 📁 group1 (1 folder, 11 files) 
 ┃   ┣━━ 📄 addamt.cobol (408 tokens, 41 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION.
@@ -1003,7 +1009,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┃     ctx context.Context,
 ┃   ┃   ┃     param1 string,
 ┃   ┃   ┃     param2 int,
-┃   ┃   ┃     param3 map[string]interface{},
+┃   ┃   ┃     param3 mapinterface{},
 ┃   ┃   ┃     callback func(int) error,
 ┃   ┃   ┃   ) (resultType, error)
 ┃   ┃   ┣━━ type resultType struct
@@ -1022,20 +1028,20 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┣━━ 📄 PowershellTest.ps1 (523 tokens, 89 lines)
 ┃   ┃   ┣━━ function Say-Nothing()
 ┃   ┃   ┣━━ class Person
-┃   ┃   ┣━━     Person([string]$name)
-┃   ┃   ┣━━     [string]Greet()
-┃   ┃   ┣━━     [string]GreetMany([int]$times)
-┃   ┃   ┣━━     [string]GreetWithDetails([string]$greeting, [int]$times)
-┃   ┃   ┣━━     [string]GreetMultiline(
-┃   ┃   ┃           [string]$greeting,
-┃   ┃   ┃           [int]$times
+┃   ┃   ┣━━     Person($name)
+┃   ┃   ┣━━     Greet()
+┃   ┃   ┣━━     GreetMany($times)
+┃   ┃   ┣━━     GreetWithDetails($greeting, $times)
+┃   ┃   ┣━━     GreetMultiline(
+┃   ┃   ┃           $greeting,
+┃   ┃   ┃           $times
 ┃   ┃   ┃       )
-┃   ┃   ┣━━     NoReturn([int]$times)
+┃   ┃   ┣━━     NoReturn($times)
 ┃   ┃   ┣━━     NoReturnNoArgs()
 ┃   ┃   ┣━━ function Say-Hello([Person]$person)
 ┃   ┃   ┣━━ function Multi-Hello([Person]$personA, [Person]$personB)
 ┃   ┃   ┣━━ function Switch-Item
-┃   ┃   ┣━━   param ([switch]$on)
+┃   ┃   ┣━━   param ($on)
 ┃   ┃   ┣━━ function Get-SmallFiles
 ┃   ┃   ┣━━   param (
 ┃   ┃   ┃         [PSDefaultValue(Help = '100')]
@@ -1045,18 +1051,18 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━   [OutputType("System.Int32", ParameterSetName="ID")]
 ┃   ┃   ┣━━   [OutputType([String], ParameterSetName="Name")]
 ┃   ┃   ┣━━   Param (
-┃   ┃   ┃       [parameter(Mandatory=$true, ParameterSetName="ID")]
+┃   ┃   ┃       
 ┃   ┃   ┃       [Int[]]
 ┃   ┃   ┃       $UserID,
-┃   ┃   ┃       [parameter(Mandatory=$true, ParameterSetName="Name")]
+┃   ┃   ┃       
 ┃   ┃   ┃       [String[]]
 ┃   ┃   ┃       $UserName)
-┃   ┃   ┣━━ filter Get-ErrorLog ([switch]$Message)
+┃   ┃   ┣━━ filter Get-ErrorLog ($Message)
 ┃   ┃   ┗━━ function global:MultilineSignature(
-┃   ┃         [string]$param1,
-┃   ┃         [int]$param2,
+┃   ┃         $param1,
+┃   ┃         $param2,
 ┃   ┃         [Parameter(Mandatory=$true)]
-┃   ┃         [string]$param3
+┃   ┃         $param3
 ┃   ┃       )
 ┃   ┣━━ 📄 ScalaTest.scala (217 tokens, 41 lines)
 ┃   ┃   ┣━━ def sumOfSquares(x: Int, y: Int): Int
@@ -1421,11 +1427,11 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┃       ).
 ┃   ┃   ┣━━ -spec guarded(X) -> X when X :: tuple().
 ┃   ┃   ┣━━ -spec edge_case(
-┃   ┃   ┃           {integer(), any()} | [any()]
+┃   ┃   ┃           {integer(), any()} | 
 ┃   ┃   ┃       ) -> processed, integer(), any()} | [{item, any()}].
-┃   ┃   ┣━━ -spec complex_function({integer(), any()} | [any()]) -> 
+┃   ┃   ┣━━ -spec complex_function({integer(), any()} | ) -> 
 ┃   ┃   ┃       {processed, integer(), any()} | [{item, any()}].
-┃   ┃   ┣━━ -spec list_manipulation([integer()]) -> [integer()].
+┃   ┃   ┣━━ -spec list_manipulation() -> .
 ┃   ┃   ┣━━ -spec overload(T1, T2) -> T3
 ┃   ┃   ┃           ; (T4, T5) -> T6.
 ┃   ┃   ┣━━ -spec multiguard({X, integer()}) -> X when X :: atom()
@@ -1448,9 +1454,9 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃             G.SelectionSet fragments Variable
 ┃   ┃           )
 ┃   ┣━━ 📄 mathematica_test.nb (132 tokens, 21 lines)
-┃   ┃   ┣━━ person[name_]
+┃   ┃   ┣━━ person
 ┃   ┃   ┣━━ sayHello[]
-┃   ┃   ┗━━ sumList[list_List]
+┃   ┃   ┗━━ sumList
 ┃   ┣━━ 📄 matlab_test.m (45 tokens, 12 lines)
 ┃   ┃   ┣━━ classdef HelloWorld -> function greet
 ┃   ┃   ┗━━ function loneFun
@@ -1483,7 +1489,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ mod my_module
 ┃   ┃   ┣━━     pub struct AlsoVisibleStruct<T>(T, T)
 ┃   ┃   ┣━━ macro_rules! say_hello
-┃   ┃   ┣━━ #[macro_export]
+┃   ┃   ┣━━ #
 ┃   ┃   ┃   macro_rules! hello_tree_plus
 ┃   ┃   ┣━━ pub mod lib
 ┃   ┃   ┣━━     pub mod interfaces
@@ -1618,10 +1624,10 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━     - [ ] Two Spaces Task 1.2
 ┃   ┃   ┣━━         - [ ] Subtask 1.2.1
 ┃   ┃   ┣━━ - [ ] Task 2
-┃   ┃   ┣━━ - [x] Task 3
+┃   ┃   ┣━━ -  Task 3
 ┃   ┃   ┣━━     - [ ] Subtask 3.1
-┃   ┃   ┣━━ - [x] Task 6
-┃   ┃   ┣━━     - [x] Subtask 6.1
+┃   ┃   ┣━━ -  Task 6
+┃   ┃   ┣━━     -  Subtask 6.1
 ┃   ┃   ┗━━         - [ ] Handle edge cases
 ┃   ┣━━ 📄 checkbox_test.txt (276 tokens, 33 lines)
 ┃   ┃   ┣━━ - [ ] fix phone number format +1
@@ -1656,11 +1662,11 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ psycopg2-binary
 ┃   ┃   ┣━━ pytest
 ┃   ┃   ┣━━ coverage
-┃   ┃   ┣━━ flask[async]
+┃   ┃   ┣━━ flask
 ┃   ┃   ┣━━ flask_cors
 ┃   ┃   ┣━━ stripe
-┃   ┃   ┣━━ pyjwt[crypto]
-┃   ┃   ┣━━ cognitojwt[async]
+┃   ┃   ┣━━ pyjwt
+┃   ┃   ┣━━ cognitojwt
 ┃   ┃   ┗━━ flask-lambda
 ┃   ┣━━ 📄 rust_todo_test.rs (109 tokens, 27 lines)
 ┃   ┃   ┣━━ TODO (Line 23): This todo tests parse_todo
@@ -1802,7 +1808,7 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
 ┃       ┣━━ const mockTickets = async () =>
 ┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
-┣━━ 📁 group6 (1 folder, 7 files) 
+┣━━ 📁 group6 (1 folder, 8 files) 
 ┃   ┣━━ 📄 catastrophic.c (4144 tokens, 581 lines)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ struct Point getOrigin()
@@ -1950,7 +1956,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┃         and "𝟬 ∈ carrier R"
 ┃   ┃   ┃         and "⋀x y z. ⟦ x ∈ carrier R; y ∈ carrier R; z ∈ carrier R ⟧ ⟹  (x ⊕ y) ⊕ z = x ⊕ (y ⊕ z)"
 ┃   ┃   ┃     shows "abelian_monoid R"
-┃   ┃   ┣━━ lemma euclidean_size_gcd_le1 [simp]:
+┃   ┃   ┣━━ lemma euclidean_size_gcd_le1 :
 ┃   ┃   ┃     assumes "a ≠ 0"
 ┃   ┃   ┃     shows "euclidean_size (gcd a b) ≤ euclidean_size a"
 ┃   ┃   ┣━━ theorem Residue_theorem:
@@ -1981,42 +1987,42 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ function Get-ScoopPackagePath
 ┃   ┃   ┣━━   param(
 ┃   ┃   ┃       [Parameter(Mandatory = $true)]
-┃   ┃   ┃       [string]$PackageName)
+┃   ┃   ┃       $PackageName)
 ┃   ┃   ┣━━ function Check-Command
 ┃   ┃   ┣━━   param(
 ┃   ┃   ┃       [Parameter(Mandatory = $true)]
-┃   ┃   ┃       [string]$Name)
+┃   ┃   ┃       $Name)
 ┃   ┃   ┣━━ function Add-ToPath
 ┃   ┃   ┣━━   param(
 ┃   ┃   ┃       [Parameter(Mandatory = $true)]
-┃   ┃   ┃       [string]$PathToAdd)
+┃   ┃   ┃       $PathToAdd)
 ┃   ┃   ┣━━ function Install-Scoop
 ┃   ┃   ┣━━ function Scoop-Install
 ┃   ┃   ┣━━   param(
 ┃   ┃   ┃       [Parameter(Mandatory = $true)]
-┃   ┃   ┃       [string]$Name,
-┃   ┃   ┃       [string]$PathToAdd)
+┃   ┃   ┃       $Name,
+┃   ┃   ┃       $PathToAdd)
 ┃   ┃   ┣━━ function Start-CondaEnv
 ┃   ┃   ┣━━ function Install-PipPackage
 ┃   ┃   ┣━━   param(
 ┃   ┃   ┃           [Parameter(Mandatory = $true)]
-┃   ┃   ┃       [string]$PackageName)
+┃   ┃   ┃       $PackageName)
 ┃   ┃   ┣━━ function Install-VSBuildTools
 ┃   ┃   ┣━━ function Install-Crate
 ┃   ┃   ┣━━   param(
 ┃   ┃   ┃           [Parameter(Mandatory = $true)]
-┃   ┃   ┃       [string]$CrateName)
+┃   ┃   ┃       $CrateName)
 ┃   ┃   ┣━━ function Get-ScoopVersion
 ┃   ┃   ┣━━ function Get-Version
 ┃   ┃   ┣━━     param(
 ┃   ┃   ┃           [Parameter(Mandatory = $true)]
-┃   ┃   ┃           [string]$ExecutablePath,
-┃   ┃   ┃           [string]$ExecutableName)
+┃   ┃   ┃           $ExecutablePath,
+┃   ┃   ┃           $ExecutableName)
 ┃   ┃   ┣━━ function Show-Requirements
 ┃   ┃   ┣━━   function Measure-Status
 ┃   ┃   ┣━━     param(
 ┃   ┃   ┃         [Parameter(Mandatory = $true)]
-┃   ┃   ┃         [string]$Name)
+┃   ┃   ┃         $Name)
 ┃   ┃   ┣━━ function Find-Profile
 ┃   ┃   ┣━━ function Edit-Profile
 ┃   ┃   ┣━━ function Set-Profile
@@ -2046,13 +2052,179 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┃    * Deconstructs an array field from the input documents to output a document for each element.
 ┃   ┃   ┃    * Each output document is the input document with the value of the array field replaced by the element.
 ┃   ┃   ┃    * @category Object
-┃   ┃   ┃    * @sig String -> {k: [v]} -> [{k: v}]
+┃   ┃   ┃    * @sig String -> {k: } -> [{k: v}]
 ┃   ┃   ┃    * @param {String} key The key to determine which property of the object should be unwound.
 ┃   ┃   ┃    * @param {Object} object The object containing the list to unwind at the property named by the key.
 ┃   ┃   ┃    * @return {List} A list of new objects, each having the given key associated to an item from the unwound list.
 ┃   ┃   ┃    */
 ┃   ┃   ┃   var unwind = _curry2(function(key, object)
 ┃   ┃   ┗━━   return _map(function(item)
+┃   ┣━━ 📄 tensorflow_flags.h (7098 tokens, 668 lines)
+┃   ┃   ┣━━ TF_DECLARE_FLAG test_only_experiment_1
+┃   ┃   ┣━━ TF_DECLARE_FLAG test_only_experiment_2
+┃   ┃   ┣━━ TF_DECLARE_FLAG enable_nested_function_shape_inference:
+┃   ┃   ┃     Allow ops such as tf.cond to invoke the ShapeRefiner on their nested functions.
+┃   ┃   ┣━━ TF_DECLARE_FLAG enable_quantized_dtypes_training:
+┃   ┃   ┃     Set quantized dtypes, like tf.qint8, to be trainable.
+┃   ┃   ┣━━ TF_DECLARE_FLAG graph_building_optimization:
+┃   ┃   ┃     Optimize graph building for faster tf.function tracing.
+┃   ┃   ┣━━ TF_DECLARE_FLAG saved_model_fingerprinting:
+┃   ┃   ┃     Add fingerprint to SavedModels.
+┃   ┃   ┣━━ TF_DECLARE_FLAG more_stack_traces:
+┃   ┃   ┃     Enable experimental code that preserves and propagates graph node stack traces in C++.
+┃   ┃   ┣━━ TF_DECLARE_FLAG publish_function_graphs:
+┃   ┃   ┃     Enables the publication of partitioned function graphs via StatsPublisherInterface. Disabling this flag can reduce
+┃   ┃   ┃   memory consumption.
+┃   ┃   ┣━━ TF_DECLARE_FLAG enable_aggressive_constant_replication:
+┃   ┃   ┃     Replicate constants across CPU devices and even for local CPUs within the same task if available.
+┃   ┃   ┣━━ TF_DECLARE_FLAG enable_colocation_key_propagation_in_while_op_lowering:
+┃   ┃   ┃     If true, colocation key attributes for the ops will be propagated during while op lowering to switch/merge ops.
+┃   ┃   ┣━━ Flag tf_xla_auto_jit:
+┃   ┃   ┃     Control compilation of operators into XLA computations on CPU and GPU devices.  0 = use ConfigProto setting; -1 = 
+┃   ┃   ┃   off; 1 = on for things very likely to be improved; 2 = on for everything; (experimental) fusible = only for 
+┃   ┃   ┃   Tensorflow operations that XLA knows how to fuse. If set to single-gpu(<N>) then this resolves to <N> for single-GPU
+┃   ┃   ┃   graphs (graphs that have at least one node placed on a GPU and no more than one GPU is in use through the entire 
+┃   ┃   ┃   graph) and 0 otherwise.  Experimental.
+┃   ┃   ┣━━ Flag tf_xla_min_cluster_size:
+┃   ┃   ┃     Minimum number of operators in an XLA compilation. Ignored for operators placed on an XLA device or operators 
+┃   ┃   ┃   explicitly marked for compilation.
+┃   ┃   ┣━━ Flag tf_xla_max_cluster_size:
+┃   ┃   ┃     Maximum number of operators in an XLA compilation.
+┃   ┃   ┣━━ Flag tf_xla_cluster_exclude_ops:
+┃   ┃   ┃     (experimental) Exclude the operations from auto-clustering. If multiple, separate them with commas. Where, 
+┃   ┃   ┃   Some_other_ops.
+┃   ┃   ┣━━ Flag tf_xla_clustering_debug:
+┃   ┃   ┃     Dump graphs during XLA compilation.
+┃   ┃   ┣━━ Flag tf_xla_cpu_global_jit:
+┃   ┃   ┃     Enables global JIT compilation for CPU via SessionOptions.
+┃   ┃   ┣━━ Flag tf_xla_clustering_fuel:
+┃   ┃   ┃     Places an artificial limit on the number of ops marked as eligible for clustering.
+┃   ┃   ┣━━ Flag tf_xla_disable_deadness_safety_checks_for_debugging:
+┃   ┃   ┃     Disable deadness related safety checks when clustering (this is unsound).
+┃   ┃   ┣━━ Flag tf_xla_disable_resource_variable_safety_checks_for_debugging:
+┃   ┃   ┃     Disable resource variables related safety checks when clustering (this is unsound).
+┃   ┃   ┣━━ Flag tf_xla_deterministic_cluster_names:
+┃   ┃   ┃     Causes the function names assigned by auto clustering to be deterministic from run to run.
+┃   ┃   ┣━━ Flag tf_xla_persistent_cache_directory:
+┃   ┃   ┃     If non-empty, JIT-compiled executables are saved to and loaded from the specified file system directory path. 
+┃   ┃   ┃   Empty by default.
+┃   ┃   ┣━━ Flag tf_xla_persistent_cache_device_types:
+┃   ┃   ┃     If non-empty, the persistent cache will only be used for the specified devices (comma separated). Each device type
+┃   ┃   ┃   should be able to be converted to.
+┃   ┃   ┣━━ Flag tf_xla_persistent_cache_read_only:
+┃   ┃   ┃     If true, the persistent cache will be read-only.
+┃   ┃   ┣━━ Flag tf_xla_disable_strict_signature_checks:
+┃   ┃   ┃     If true, entires loaded into the XLA compile cache will not have their signatures checked strictly. Defaults to 
+┃   ┃   ┃   false.
+┃   ┃   ┣━━ Flag tf_xla_persistent_cache_prefix:
+┃   ┃   ┃     Specifies the persistance cache prefix. Default is.
+┃   ┃   ┣━━ Flag tf_xla_sparse_core_disable_table_stacking:
+┃   ┃   ┃     Disable table stacking for all the tables passed to the SparseCore mid level API.
+┃   ┃   ┣━━ Flag tf_xla_sparse_core_minibatch_max_division_level:
+┃   ┃   ┃     Max level of division to split input data into minibatches.
+┃   ┃   ┣━━ Flag tf_xla_sparse_core_stacking_mem_limit_bytes:
+┃   ┃   ┃     If non-zero, limits the size of the activations for a given table to be below these many bytes.
+┃   ┃   ┣━━ Flag tf_xla_sparse_core_stacking_table_shard_limit_bytes:
+┃   ┃   ┃     If non-zero, limits the size of any table shard to be below these many bytes.
+┃   ┃   ┣━━ Flag always_specialize
+┃   ┃   ┣━━ Flag cost_driven_async_parallel_for
+┃   ┃   ┣━━ Flag enable_crash_reproducer
+┃   ┃   ┣━━ Flag log_query_of_death
+┃   ┃   ┣━━ Flag vectorize
+┃   ┃   ┣━━ Flag tf_xla_enable_lazy_compilation
+┃   ┃   ┣━━ Flag tf_xla_print_cluster_outputs:
+┃   ┃   ┃     If true then insert Print nodes to print out values produced by XLA clusters.
+┃   ┃   ┣━━ Flag tf_xla_check_cluster_input_numerics:
+┃   ┃   ┃     If true then insert CheckNumerics nodes to check all cluster inputs.
+┃   ┃   ┣━━ Flag tf_xla_check_cluster_output_numerics:
+┃   ┃   ┃     If true then insert CheckNumerics nodes to check all cluster outputs.
+┃   ┃   ┣━━ Flag tf_xla_disable_constant_folding:
+┃   ┃   ┃     If true then disables constant folding on TF graph before XLA compilation.
+┃   ┃   ┣━━ Flag tf_xla_disable_full_embedding_pipelining:
+┃   ┃   ┃     If true then disables full embedding pipelining and instead use strict SparseCore / TensorCore sequencing.
+┃   ┃   ┣━━ Flag tf_xla_embedding_parallel_iterations:
+┃   ┃   ┃     If >0 then use this many parallel iterations in embedding_pipelining and embedding_sequency. By default, use the 
+┃   ┃   ┃   parallel_iterations on the original model WhileOp.
+┃   ┃   ┣━━ Flag tf_xla_compile_on_demand:
+┃   ┃   ┃     Switch a device into 'on-demand' mode, where instead of autoclustering ops are compiled one by one just-in-time.
+┃   ┃   ┣━━ Flag tf_xla_enable_xla_devices:
+┃   ┃   ┃     Generate XLA_* devices, where placing a computation on such a device forces compilation by XLA. Deprecated.
+┃   ┃   ┣━━ Flag tf_xla_always_defer_compilation
+┃   ┃   ┣━━ Flag tf_xla_async_compilation:
+┃   ┃   ┃     When lazy compilation is enabled, asynchronous compilation starts the cluster compilation in the background, and 
+┃   ┃   ┃   the fallback path is executed until the compilation has finished.
+┃   ┃   ┣━━ Flag tf_xla_use_device_api_for_xla_launch:
+┃   ┃   ┃     If true, uses Device API (PjRt) for single device compilation and execution of functions marked for JIT 
+┃   ┃   ┃   compilation i.e. jit_compile=True. Defaults to false.
+┃   ┃   ┣━━ Flag tf_xla_use_device_api_for_compile_on_demand:
+┃   ┃   ┃     If true, uses Device API (PjRt) for compiling and executing ops one by one in 'on-demand' mode. Defaults to false.
+┃   ┃   ┣━━ Flag tf_xla_use_device_api_for_auto_jit:
+┃   ┃   ┃     If true, uses Device API (PjRt) for compilation and execution when auto-clustering is enabled. Defaults to false.
+┃   ┃   ┣━━ Flag tf_xla_use_device_api:
+┃   ┃   ┃     If true, uses Device API (PjRt) for compilation and execution of ops one-by-one in 'on-demand' mode, for functions
+┃   ┃   ┃   marked for JIT compilation, or when auto-clustering is enabled. Defaults to false.
+┃   ┃   ┣━━ Flag tf_xla_enable_device_api_for_gpu:
+┃   ┃   ┃     If true, uses Device API (PjRt) for TF GPU device. This is a helper flag so that individual tests can turn on PjRt
+┃   ┃   ┃   for GPU specifically.
+┃   ┃   ┣━━ Flag tf_xla_call_module_disabled_checks:
+┃   ┃   ┃     A comma-sepated list of directives specifying the safety checks to be skipped when compiling XlaCallModuleOp. See 
+┃   ┃   ┃   the op documentation for the recognized values.
+┃   ┃   ┣━━ Flag tf_mlir_enable_mlir_bridge:
+┃   ┃   ┃     Enables experimental MLIR-Based TensorFlow Compiler Bridge.
+┃   ┃   ┣━━ Flag tf_mlir_enable_merge_control_flow_pass:
+┃   ┃   ┃     Enables MergeControlFlow pass for MLIR-Based TensorFlow Compiler Bridge.
+┃   ┃   ┣━━ Flag tf_mlir_enable_convert_control_to_data_outputs_pass:
+┃   ┃   ┃     Enables MLIR-Based TensorFlow Compiler Bridge.
+┃   ┃   ┣━━ Flag tf_mlir_enable_strict_clusters:
+┃   ┃   ┃     Do not allow clusters that have cyclic control dependencies.
+┃   ┃   ┣━━ Flag tf_mlir_enable_multiple_local_cpu_devices:
+┃   ┃   ┃     Enable multiple local CPU devices. CPU ops which are outside compiled inside the tpu cluster will also be 
+┃   ┃   ┃   replicated across multiple cpu devices.
+┃   ┃   ┣━━ Flag tf_dump_graphs_in_tfg:
+┃   ┃   ┃     When tf_dump_graphs_in_tfg is true, graphs after transformations are dumped in MLIR TFG dialect and not in 
+┃   ┃   ┃   GraphDef.
+┃   ┃   ┣━━ Flag tf_mlir_enable_generic_outside_compilation:
+┃   ┃   ┃     Enables OutsideCompilation passes for MLIR-Based TensorFlow Generic Compiler Bridge.
+┃   ┃   ┣━━ Flag tf_mlir_enable_tpu_variable_runtime_reformatting_pass:
+┃   ┃   ┃     Enables TPUVariableRuntimeReformatting pass for MLIR-Based TensorFlow Compiler Bridge. This enables weight update 
+┃   ┃   ┃   sharding and creates TPUReshardVariables ops.
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG test_only_experiment_1
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG test_only_experiment_2
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG enable_nested_function_shape_inference
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG enable_quantized_dtypes_training
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG graph_building_optimization
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG op_building_optimization
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG saved_model_fingerprinting
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG tf_shape_default_int64
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG more_stack_traces
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG publish_function_graphs
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG enable_aggressive_constant_replication
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG enable_colocation_key_propagation_in_while_op_lowering
+┃   ┃   ┣━━ #define TENSORFLOW_CORE_CONFIG_FLAG_DEFS_H_
+┃   ┃   ┣━━ class Flags
+┃   ┃   ┣━━ bool SetterForXlaAutoJitFlag(const string& value)
+┃   ┃   ┣━━ bool SetterForXlaCallModuleDisabledChecks(const string& value)
+┃   ┃   ┣━━ void AppendMarkForCompilationPassFlagsInternal(std::vector<Flag>* flag_list)
+┃   ┃   ┣━━ void AllocateAndParseJitRtFlags()
+┃   ┃   ┣━━ void AllocateAndParseFlags()
+┃   ┃   ┣━━ void ResetFlags()
+┃   ┃   ┣━━ bool SetXlaAutoJitFlagFromFlagString(const string& value)
+┃   ┃   ┣━━ BuildXlaOpsPassFlags* GetBuildXlaOpsPassFlags()
+┃   ┃   ┣━━ MarkForCompilationPassFlags* GetMarkForCompilationPassFlags()
+┃   ┃   ┣━━ XlaSparseCoreFlags* GetXlaSparseCoreFlags()
+┃   ┃   ┣━━ XlaDeviceFlags* GetXlaDeviceFlags()
+┃   ┃   ┣━━ XlaOpsCommonFlags* GetXlaOpsCommonFlags()
+┃   ┃   ┣━━ XlaCallModuleFlags* GetXlaCallModuleFlags()
+┃   ┃   ┣━━ MlirCommonFlags* GetMlirCommonFlags()
+┃   ┃   ┣━━ void ResetJitCompilerFlags()
+┃   ┃   ┣━━ const JitRtFlags& GetJitRtFlags()
+┃   ┃   ┣━━ ConfigProto::Experimental::MlirBridgeRollout GetMlirBridgeRolloutState(
+┃   ┃   ┃       std::optional<const ConfigProto> config_proto)
+┃   ┃   ┣━━ void AppendMarkForCompilationPassFlags(std::vector<Flag>* flag_list)
+┃   ┃   ┣━━ void DisableXlaCompilation()
+┃   ┃   ┣━━ void EnableXlaCompilation()
+┃   ┃   ┣━━ bool FailOnXlaCompilation()
+┃   ┃   ┗━━ #define TF_PY_DECLARE_FLAG(flag_name)
 ┃   ┣━━ 📄 test.f (200 tokens, 31 lines)
 ┃   ┃   ┣━━ MODULE basic_mod
 ┃   ┃   ┣━━     TYPE :: person
@@ -2095,8 +2267,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.28) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 74 file(s), 5,759 line(s), 41,377 token(s) in 0.46 second(s).
+tree_plus v(1.0.29) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 75 file(s), 6,427 line(s), 48,475 token(s) in 0.52 second(s).
 
 ```
 <!-- t2-end -->
@@ -2340,7 +2512,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 ┃   ┃   ┣━━ mod my_module
 ┃   ┃   ┣━━     pub struct AlsoVisibleStruct<T>(T, T)
 ┃   ┃   ┣━━ macro_rules! say_hello
-┃   ┃   ┣━━ #[macro_export]
+┃   ┃   ┣━━ #
 ┃   ┃   ┃   macro_rules! hello_tree_plus
 ┃   ┃   ┣━━ pub mod lib
 ┃   ┃   ┣━━     pub mod interfaces
@@ -2537,7 +2709,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃    * Deconstructs an array field from the input documents to output a document for each element.
         ┃    * Each output document is the input document with the value of the array field replaced by the element.
         ┃    * @category Object
-        ┃    * @sig String -> {k: [v]} -> [{k: v}]
+        ┃    * @sig String -> {k: } -> [{k: v}]
         ┃    * @param {String} key The key to determine which property of the object should be unwound.
         ┃    * @param {Object} object The object containing the list to unwind at the property named by the key.
         ┃    * @return {List} A list of new objects, each having the given key associated to an item from the unwound list.
@@ -2545,7 +2717,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.28) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.29) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 6 folder(s), 16 file(s), 1,919 line(s), 13,124 token(s) in 0.14 second(s).
 
 ```
@@ -2571,7 +2743,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.28) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.29) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
