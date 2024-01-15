@@ -58,12 +58,14 @@ def read_file(
 
 def parse_file(file_path: Union[str, Path]) -> List[str]:
     "Parse a file and return a List[str] of its major components."
+    # always convert to str since this was built on 'os', not pathlib
+    debug_print(f"parse_file: {file_path=}")
     if isinstance(file_path, Path):
         file_path = str(file_path)
     base_file_path, file_extension = os.path.splitext(file_path)
     file_name = os.path.basename(base_file_path)
     file_extension = file_extension.lower()
-    debug_print(f"{file_path=} {file_name=} {file_extension=}")
+    debug_print(f"parse_file: {file_path=} {file_name=} {file_extension=}")
     components = []
 
     # handle sqlite databases before trying to open the file
@@ -78,6 +80,9 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
     if file_extension == ".csv":
         n_lines = 3
     contents = read_file(file_path, n_lines=n_lines)
+
+    # just once
+    in_tensorflow = "tensorflow" in file_path
 
     if file_extension in JS_EXTENSIONS:
         if file_path.endswith(".d.ts"):
@@ -116,7 +121,13 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
     #     components = parse_c(contents)
     # components = func_timeout(1, parse_c, (contents,))
     elif file_extension in C_EXTENSIONS:
-        components = parse_c(contents)
+        # special case: handling flags
+        if in_tensorflow and file_extension in (".cc", ".h") and "flags" in file_name:
+            components = parse_tensorflow_flags(contents)
+            more_components = parse_c(contents)
+            components.extend(more_components)
+        else:
+            components = parse_c(contents)
     elif file_extension == ".php":
         components = parse_php(contents)
     elif file_extension == ".rs":
@@ -222,11 +233,74 @@ def extract_and_debug_print_groups(match: re.Match, named_only: bool = False) ->
             if group:
                 numbered_groups[i] = group
     for k, v in match.groupdict().items():
-        if v:
+        if v or k == "blank_line":
             numbered_groups[k] = v
     debug_print("groups:")
     debug_print(numbered_groups)
     return numbered_groups
+
+
+def assemble_tensorflow_flag(
+    flag_type: str, flag: str, description: Optional[List[str]] = None
+) -> str:
+    flag = f"[bold red]{flag_type}[/bold red] [bold blue]{flag}[/bold blue]"
+    if description:
+        flag += ":\n\t" + " ".join(line.strip() for line in description)
+        if not flag.endswith("."):
+            flag += "."
+    # flag += ")"
+    return flag
+
+
+def parse_tensorflow_flags(contents: str) -> List[str]:
+    debug_print("parse_tensorflow_flags")
+    pattern = re.compile(
+        r"^(?: |\{)+(?P<flag_type>Flag|TF_PY_DECLARE_FLAG|TF_DECLARE_FLAG)\((?:\s*?)\"?(?P<flag_name>\w+)?\"?|"
+        r"^\s+\"(?P<flag_description>[\w* \-\/=;><,:+().']+)(?=\.\s?\")?|"
+        r"(?P<blank_line>^$)",
+        re.MULTILINE,
+    )
+    components = []
+    carry_flag_type = None
+    carry_flag = None
+    carry_description = None
+    for n, match in enumerate(pattern.finditer(contents)):
+        debug_print(f"parse_tensorflow_flags {n=} {match=}")
+        debug_print(
+            f"parse_tensorflow_flags {carry_flag_type=} {carry_flag=} {carry_description=}"
+        )
+        component = None
+        groups = extract_and_debug_print_groups(match, named_only=True)
+        if "flag_name" in groups:
+            if carry_flag:
+                component = assemble_tensorflow_flag(
+                    carry_flag_type, carry_flag, carry_description
+                )
+                carry_flag_type = None
+                carry_flag = None
+                carry_description = None
+            carry_flag_type = groups["flag_type"]
+            carry_flag = groups["flag_name"]
+        elif "flag_description" in groups:
+            if carry_flag is None:  # skip false positives
+                continue
+            description = groups["flag_description"]
+            if carry_description is None:
+                carry_description = [description]
+            else:
+                carry_description.append(description)
+        elif "blank_line" in groups and carry_flag is not None:
+            # handling the edge case of inadvertent connections
+            component = assemble_tensorflow_flag(
+                carry_flag_type, carry_flag, carry_description
+            )
+            carry_flag_type = None
+            carry_flag = None
+            carry_description = None
+        if component:
+            debug_print(f"COMPONENT:", component)
+            components.append(component)
+    return components
 
 
 def parse_rst(contents: str) -> List[str]:

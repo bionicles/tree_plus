@@ -8,29 +8,31 @@ library_demo:
 
 # benchmark, dual core, library coverage, with line numbers for missing tests
 coverage:
-	time py.test -n 2 --cov=tree_plus_src --cov-report=term-missing tests
+	time py.test -n 2 --cov=tree_plus_src --cov-report=term-missing --cov-report=lcov:coverage/lcov.info tests/*.py 
 
 # DEVELOP with `make debug`
 debug: 
 	nodemon -L -V
 
 .PHONY: debug_command
-debug_command: test_parallel test_tp_dotdot test_e2e test_cli test_programs test_deploy
+debug_command: test_parallel
 
 # TESTS
+N_WORKERS=10
+# parallel unit tests (for dev rig)
+test_parallel:
+	time (py.test -n $(N_WORKERS) --cov=tree_plus_src --cov-report=term-missing --cov-report=lcov:coverage/lcov.info -vv tests/test_*.py)
+
 # sequential unit tests (for CI)
 test_sequential:
 	pytest tests/test_more_language_units.py tests/test_units.py tests/test_engine.py -vv
-
-# parallel unit tests (for dev rig)
-test_parallel:
-	py.test -n 8 tests/test_more_language_units.py tests/test_units.py tests/test_engine.py -vv
 
 # just to crank on language features, easy to debug on this
 test_more_languages:
 	pytest tests/test_more_language_units.py -vv
 
-test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
+test: test_parallel
+# test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
 
 # first we'll do our unit tests (most likely to need fast debug)
 test_units:

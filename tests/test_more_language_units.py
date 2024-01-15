@@ -1866,6 +1866,136 @@ def test_more_languages_isabelle_symbol_replacement():
     # assert 0
 
 
+TF_FLAGS_EXPECTATION = [
+    "[bold red]TF_DECLARE_FLAG[/bold red] [bold blue]test_only_experiment_1[/bold blue]",
+    "[bold red]TF_DECLARE_FLAG[/bold red] [bold blue]test_only_experiment_2[/bold blue]",
+    "[bold red]TF_DECLARE_FLAG[/bold red] [bold blue]enable_nested_function_shape_inference[/bold blue]:Allow ops such as tf.cond to invoke the ShapeRefiner on their nested functions.",
+    "[bold red]TF_DECLARE_FLAG[/bold red] [bold blue]enable_quantized_dtypes_training[/bold blue]:Set quantized dtypes, like tf.qint8, to be trainable.",
+    "[bold red]TF_DECLARE_FLAG[/bold red] [bold blue]graph_building_optimization[/bold blue]:Optimize graph building for faster tf.function tracing.",
+    "[bold red]TF_DECLARE_FLAG[/bold red] [bold blue]saved_model_fingerprinting[/bold blue]:Add fingerprint to SavedModels.",
+    "[bold red]TF_DECLARE_FLAG[/bold red] [bold blue]more_stack_traces[/bold blue]:Enable experimental code that preserves and propagates graph node stack traces in C++.",
+    "[bold red]TF_DECLARE_FLAG[/bold red] [bold blue]publish_function_graphs[/bold blue]:Enables the publication of partitioned function graphs via StatsPublisherInterface. Disabling this flag can reduce memory consumption.",
+    "[bold red]TF_DECLARE_FLAG[/bold red] [bold blue]enable_aggressive_constant_replication[/bold blue]:Replicate constants across CPU devices and even for local CPUs within the same task if available.",
+    "[bold red]TF_DECLARE_FLAG[/bold red] [bold blue]enable_colocation_key_propagation_in_while_op_lowering[/bold blue]:If true, colocation key attributes for the ops will be propagated during while op lowering to switch/merge ops.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_auto_jit[/bold blue]:Control compilation of operators into XLA computations on CPU and GPU devices.  0 = use ConfigProto setting; -1 = off; 1 = on for things very likely to be improved; 2 = on for everything; (experimental) fusible = only for Tensorflow operations that XLA knows how to fuse. If set to single-gpu(<N>) then this resolves to <N> for single-GPU graphs (graphs that have at least one node placed on a GPU and no more than one GPU is in use through the entire graph) and 0 otherwise.  Experimental.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_min_cluster_size[/bold blue]:Minimum number of operators in an XLA compilation. Ignored for operators placed on an XLA device or operators explicitly marked for compilation.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_max_cluster_size[/bold blue]:Maximum number of operators in an XLA compilation.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_cluster_exclude_ops[/bold blue]:(experimental) Exclude the operations from auto-clustering. If multiple, separate them with commas. Where, Some_other_ops.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_clustering_debug[/bold blue]:Dump graphs during XLA compilation.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_cpu_global_jit[/bold blue]:Enables global JIT compilation for CPU via SessionOptions.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_clustering_fuel[/bold blue]:Places an artificial limit on the number of ops marked as eligible for clustering.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_disable_deadness_safety_checks_for_debugging[/bold blue]:Disable deadness related safety checks when clustering (this is unsound).",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_disable_resource_variable_safety_checks_for_debugging[/bold blue]:Disable resource variables related safety checks when clustering (this is unsound).",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_deterministic_cluster_names[/bold blue]:Causes the function names assigned by auto clustering to be deterministic from run to run.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_persistent_cache_directory[/bold blue]:If non-empty, JIT-compiled executables are saved to and loaded from the specified file system directory path. Empty by default.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_persistent_cache_device_types[/bold blue]:If non-empty, the persistent cache will only be used for the specified devices (comma separated). Each device type should be able to be converted to.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_persistent_cache_read_only[/bold blue]:If true, the persistent cache will be read-only.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_disable_strict_signature_checks[/bold blue]:If true, entires loaded into the XLA compile cache will not have their signatures checked strictly. Defaults to false.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_persistent_cache_prefix[/bold blue]:Specifies the persistance cache prefix. Default is.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_sparse_core_disable_table_stacking[/bold blue]:Disable table stacking for all the tables passed to the SparseCore mid level API.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_sparse_core_minibatch_max_division_level[/bold blue]:Max level of division to split input data into minibatches.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_sparse_core_stacking_mem_limit_bytes[/bold blue]:If non-zero, limits the size of the activations for a given table to be below these many bytes.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_sparse_core_stacking_table_shard_limit_bytes[/bold blue]:If non-zero, limits the size of any table shard to be below these many bytes.",
+    "[bold red]Flag[/bold red] [bold blue]always_specialize[/bold blue]",
+    "[bold red]Flag[/bold red] [bold blue]cost_driven_async_parallel_for[/bold blue]",
+    "[bold red]Flag[/bold red] [bold blue]enable_crash_reproducer[/bold blue]",
+    "[bold red]Flag[/bold red] [bold blue]log_query_of_death[/bold blue]",
+    "[bold red]Flag[/bold red] [bold blue]vectorize[/bold blue]",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_enable_lazy_compilation[/bold blue]",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_print_cluster_outputs[/bold blue]:If true then insert Print nodes to print out values produced by XLA clusters.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_check_cluster_input_numerics[/bold blue]:If true then insert CheckNumerics nodes to check all cluster inputs.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_check_cluster_output_numerics[/bold blue]:If true then insert CheckNumerics nodes to check all cluster outputs.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_disable_constant_folding[/bold blue]:If true then disables constant folding on TF graph before XLA compilation.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_disable_full_embedding_pipelining[/bold blue]:If true then disables full embedding pipelining and instead use strict SparseCore / TensorCore sequencing.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_embedding_parallel_iterations[/bold blue]:If >0 then use this many parallel iterations in embedding_pipelining and embedding_sequency. By default, use the parallel_iterations on the original model WhileOp.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_compile_on_demand[/bold blue]:Switch a device into 'on-demand' mode, where instead of autoclustering ops are compiled one by one just-in-time.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_enable_xla_devices[/bold blue]:Generate XLA_* devices, where placing a computation on such a device forces compilation by XLA. Deprecated.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_always_defer_compilation[/bold blue]",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_async_compilation[/bold blue]:When lazy compilation is enabled, asynchronous compilation starts the cluster compilation in the background, and the fallback path is executed until the compilation has finished.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_use_device_api_for_xla_launch[/bold blue]:If true, uses Device API (PjRt) for single device compilation and execution of functions marked for JIT compilation i.e. jit_compile=True. Defaults to false.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_use_device_api_for_compile_on_demand[/bold blue]:If true, uses Device API (PjRt) for compiling and executing ops one by one in 'on-demand' mode. Defaults to false.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_use_device_api_for_auto_jit[/bold blue]:If true, uses Device API (PjRt) for compilation and execution when auto-clustering is enabled. Defaults to false.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_use_device_api[/bold blue]:If true, uses Device API (PjRt) for compilation and execution of ops one-by-one in 'on-demand' mode, for functions marked for JIT compilation, or when auto-clustering is enabled. Defaults to false.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_enable_device_api_for_gpu[/bold blue]:If true, uses Device API (PjRt) for TF GPU device. This is a helper flag so that individual tests can turn on PjRt for GPU specifically.",
+    "[bold red]Flag[/bold red] [bold blue]tf_xla_call_module_disabled_checks[/bold blue]:A comma-sepated list of directives specifying the safety checks to be skipped when compiling XlaCallModuleOp. See the op documentation for the recognized values.",
+    "[bold red]Flag[/bold red] [bold blue]tf_mlir_enable_mlir_bridge[/bold blue]:Enables experimental MLIR-Based TensorFlow Compiler Bridge.",
+    "[bold red]Flag[/bold red] [bold blue]tf_mlir_enable_merge_control_flow_pass[/bold blue]:Enables MergeControlFlow pass for MLIR-Based TensorFlow Compiler Bridge.",
+    "[bold red]Flag[/bold red] [bold blue]tf_mlir_enable_convert_control_to_data_outputs_pass[/bold blue]:Enables MLIR-Based TensorFlow Compiler Bridge.",
+    "[bold red]Flag[/bold red] [bold blue]tf_mlir_enable_strict_clusters[/bold blue]:Do not allow clusters that have cyclic control dependencies.",
+    "[bold red]Flag[/bold red] [bold blue]tf_mlir_enable_multiple_local_cpu_devices[/bold blue]:Enable multiple local CPU devices. CPU ops which are outside compiled inside the tpu cluster will also be replicated across multiple cpu devices.",
+    "[bold red]Flag[/bold red] [bold blue]tf_dump_graphs_in_tfg[/bold blue]:When tf_dump_graphs_in_tfg is true, graphs after transformations are dumped in MLIR TFG dialect and not in GraphDef.",
+    "[bold red]Flag[/bold red] [bold blue]tf_mlir_enable_generic_outside_compilation[/bold blue]:Enables OutsideCompilation passes for MLIR-Based TensorFlow Generic Compiler Bridge.",
+    "[bold red]Flag[/bold red] [bold blue]tf_mlir_enable_tpu_variable_runtime_reformatting_pass[/bold blue]:Enables TPUVariableRuntimeReformatting pass for MLIR-Based TensorFlow Compiler Bridge. This enables weight update sharding and creates TPUReshardVariables ops.",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]test_only_experiment_1[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]test_only_experiment_2[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]enable_nested_function_shape_inference[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]enable_quantized_dtypes_training[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]graph_building_optimization[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]op_building_optimization[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]saved_model_fingerprinting[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]tf_shape_default_int64[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]more_stack_traces[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]publish_function_graphs[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]enable_aggressive_constant_replication[/bold blue]",
+    "[bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]enable_colocation_key_propagation_in_while_op_lowering[/bold blue]",
+    "#define TENSORFLOW_CORE_CONFIG_FLAG_DEFS_H_",
+    "class Flags",
+    "bool SetterForXlaAutoJitFlag(const string& value)",
+    "bool SetterForXlaCallModuleDisabledChecks(const string& value)",
+    "void AppendMarkForCompilationPassFlagsInternal(std::vector<Flag>* flag_list)",
+    "void AllocateAndParseJitRtFlags()",
+    "void AllocateAndParseFlags()",
+    "void ResetFlags()",
+    "bool SetXlaAutoJitFlagFromFlagString(const string& value)",
+    "BuildXlaOpsPassFlags* GetBuildXlaOpsPassFlags()",
+    "MarkForCompilationPassFlags* GetMarkForCompilationPassFlags()",
+    "XlaSparseCoreFlags* GetXlaSparseCoreFlags()",
+    "XlaDeviceFlags* GetXlaDeviceFlags()",
+    "XlaOpsCommonFlags* GetXlaOpsCommonFlags()",
+    "XlaCallModuleFlags* GetXlaCallModuleFlags()",
+    "MlirCommonFlags* GetMlirCommonFlags()",
+    "void ResetJitCompilerFlags()",
+    "const JitRtFlags& GetJitRtFlags()",
+    "ConfigProto::Experimental::MlirBridgeRollout GetMlirBridgeRolloutState(    std::optional<const ConfigProto> config_proto)",
+    "void AppendMarkForCompilationPassFlags(std::vector<Flag>* flag_list)",
+    "void DisableXlaCompilation()",
+    "void EnableXlaCompilation()",
+    "bool FailOnXlaCompilation()",
+    "#define TF_PY_DECLARE_FLAG(flag_name)",
+]
+
+
+import re
+
+
+def remove_newlines_and_tabs(content: str) -> str:
+    return re.sub(r"[\n\t]*", "", content)
+
+
+def test_more_languages_tensorflow_flags():
+    file = "tests/more_languages/group6/tensorflow_flags.h"
+
+    print(file)
+    results = parse_file(file)
+    print("results")
+    # yeah, not the best way to make an expectation
+    # substitutes = ["TF_FLAGS_EXPECTATION = ["]
+    substitutes = []
+    for result in results:
+        # print(result)
+        substitute = remove_newlines_and_tabs(result)
+        # print(substitute)
+        # substitutes.append(f'    "{substitute}",')
+        substitutes.append(substitute)
+    # substitutes.append("]")
+    # with open("tests/tensorflow_expectation.py", "w+") as outfile:
+    #     outfile.writelines(substitutes)
+    assert substitutes == TF_FLAGS_EXPECTATION
+    # assert 0
+    # print("expected", TF_FLAGS_EXPECTATION)
+    # assert result == TF_FLAGS_EXPECTATION
+
+
 # TODO:
 # @pytest.mark.parametrize(
 #     "file,expected",

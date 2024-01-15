@@ -151,7 +151,7 @@ def safe_print(
             # reduce the tab size to fit content
             tab_size=2,
             width=128 if os.environ.get("TREE_PLUS_UPDATE_README") == "YES" else None,
-            markup=markup,
+            # markup=markup,
             highlight=highlight,
             style=style,
             theme=Theme({"repr.ipv6": "default"}),

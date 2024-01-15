@@ -19,6 +19,24 @@ def test_imports():
     assert callable(tree_plus.parse_file)
 
 
+def test_tree_plus_on_parent_directory():
+    result = subprocess.run(
+        [
+            "cd",
+            "tests/dot_dot/nested_dir",
+            "&&",
+            "pytest",
+            "-k",
+            "test_tree_plus_dotdot",
+            "-vv",
+        ],
+        capture_output=True,
+        shell=True,
+        text=True,
+    )
+    assert result.returncode == 0
+
+
 def test_tree_plus_help():
     result = subprocess.run(["tree_plus", "--help"], capture_output=True, text=True)
     assert result.returncode == 0
