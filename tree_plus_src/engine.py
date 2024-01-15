@@ -144,6 +144,7 @@ def safe_print(
     style: Optional[str] = None,
     highlight: bool = True,
     markup: bool = False,
+    capturing: bool = False,
 ):
     try:
         # Attempt to print the tree normally
@@ -151,12 +152,17 @@ def safe_print(
             # reduce the tab size to fit content
             tab_size=2,
             width=128 if os.environ.get("TREE_PLUS_UPDATE_README") == "YES" else None,
-            # markup=markup,
+            markup=markup,
             highlight=highlight,
             style=style,
             theme=Theme({"repr.ipv6": "default"}),
         )
-        console.print(tree)
+        if capturing:
+            with console.capture() as capture:
+                console.print(tree)
+            return capture.get()
+        else:
+            console.print(tree)
     except UnicodeEncodeError as e:
         debug_print(f"UnicodeEncodeError printing tree normally: ", e)
         try:

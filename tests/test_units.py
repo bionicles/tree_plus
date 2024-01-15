@@ -20,6 +20,24 @@ import tree_plus_src as tree_plus
 # TODO: test debug_disabled
 
 
+def test_engine_safe_print_macro_export():
+    print("with markup=True")
+    output_markup = tree_plus.safe_print(
+        "#[macro_export]",
+        capturing=True,
+        markup=True,
+    )
+    print(output_markup)
+    print("with markup=False")
+    output = tree_plus.safe_print(
+        "#[macro_export]",
+        capturing=True,
+        markup=False,
+    )
+    print(output)
+    assert "#[macro_export]" in output
+
+
 def test_engine_parse_ignore_default():
     ignored = tree_plus.parse_ignore()
     tree_plus.debug_print(f"{ignored=}")
