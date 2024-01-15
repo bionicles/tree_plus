@@ -243,7 +243,7 @@ def extract_and_debug_print_groups(match: re.Match, named_only: bool = False) ->
 def assemble_tensorflow_flag(
     flag_type: str, flag: str, description: Optional[List[str]] = None
 ) -> str:
-    flag = f"[bold red]{flag_type}[/bold red] [bold blue]{flag}[/bold blue]"
+    flag = f"{flag_type}('{flag}')"
     if description:
         flag += ":\n\t" + " ".join(line.strip() for line in description)
         if not flag.endswith("."):

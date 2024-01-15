@@ -18,7 +18,7 @@ debug:
 debug_command: test_parallel
 
 # TESTS
-N_WORKERS=10
+N_WORKERS=12
 # parallel unit tests (for dev rig)
 test_parallel:
 	time (py.test -n $(N_WORKERS) --cov=tree_plus_src --cov-report=term-missing --cov-report=lcov:coverage/lcov.info -vv tests/test_*.py)

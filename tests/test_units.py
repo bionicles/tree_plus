@@ -21,21 +21,49 @@ import tree_plus_src as tree_plus
 
 
 def test_engine_safe_print_macro_export():
+    expectation = "#[macro_export]"
     print("with markup=True")
     output_markup = tree_plus.safe_print(
-        "#[macro_export]",
+        expectation,
         capturing=True,
         markup=True,
     )
     print(output_markup)
     print("with markup=False")
     output = tree_plus.safe_print(
-        "#[macro_export]",
+        expectation,
         capturing=True,
         markup=False,
     )
     print(output)
-    assert "#[macro_export]" in output
+    assert expectation in output
+    print("with markup=None")
+    output_markup_none = tree_plus.safe_print(
+        expectation,
+        capturing=True,
+        markup=None,
+    )
+    print(output_markup_none)
+    assert expectation in output_markup_none
+    # https://rich.readthedocs.io/en/latest/markup.html#escaping
+    from rich.markup import escape
+
+    print(f"with markup=True on escape({expectation})")
+    output_markup_true_escape = tree_plus.safe_print(
+        escape(expectation),
+        capturing=True,
+        markup=True,
+    )
+    print(output_markup_true_escape)
+    assert expectation in output_markup_true_escape
+    print("with markup default")
+    default_output = tree_plus.safe_print(
+        expectation,
+        capturing=True,
+        # markup=False,
+    )
+    print(default_output)
+    assert expectation in default_output
 
 
 def test_engine_parse_ignore_default():
