@@ -70,7 +70,7 @@ tree_plus -i tests
 ┃           ┗━━     - Publish to PyPI
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📁 coverage (1 folder, 1 file) 
-┃   ┗━━ 📄 lcov.info (48223 tokens, 2148 lines)
+┃   ┗━━ 📄 lcov.info (48311 tokens, 2152 lines)
 ┣━━ 📄 LICENSE (2123 tokens, 81 lines)
 ┣━━ 📄 Makefile (672 tokens, 102 lines)
 ┃   ┣━━ SHELL := /bin/bash
@@ -119,7 +119,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (41746 tokens, 2762 lines)
+┣━━ 📄 README.md (43082 tokens, 2764 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -352,7 +352,7 @@ tree_plus -i tests
     ┃   ┣━━ @lru_cache
     ┃   ┃   def _replace_symbol(match: re.Match) -> str
     ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-    ┣━━ 📄 parse_file.py (22106 tokens, 2403 lines)
+    ┣━━ 📄 parse_file.py (22093 tokens, 2403 lines)
     ┃   ┣━━ BUG (Line 669): catastrophic backtracking in some c files
     ┃   ┣━━ @lru_cache(maxsize=None)
     ┃   ┃   def read_file(
@@ -448,10 +448,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.30"
+        ┗━━ __version__ = "1.0.31"
 
-tree_plus v(1.0.30) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 25 file(s), 10,133 line(s), 134,986 token(s) in 0.25 second(s).
+tree_plus v(1.0.31) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 25 file(s), 10,139 line(s), 136,397 token(s) in 0.25 second(s).
 
 ```
 <!-- t1-end -->
@@ -498,7 +498,7 @@ Options:
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
   -h, -H, --help         Show this message and exit.
 
-  v(1.0.30) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.31) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -2061,147 +2061,146 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┃   var unwind = _curry2(function(key, object)
 ┃   ┃   ┗━━   return _map(function(item)
 ┃   ┣━━ 📄 tensorflow_flags.h (7098 tokens, 668 lines)
-┃   ┃   ┣━━ [bold red]TF_DECLARE_FLAG[/bold red] [bold blue]test_only_experiment_1[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_DECLARE_FLAG[/bold red] [bold blue]test_only_experiment_2[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_DECLARE_FLAG[/bold red] [bold blue]enable_nested_function_shape_inference[/bold blue]:
+┃   ┃   ┣━━ TF_DECLARE_FLAG('test_only_experiment_1')
+┃   ┃   ┣━━ TF_DECLARE_FLAG('test_only_experiment_2')
+┃   ┃   ┣━━ TF_DECLARE_FLAG('enable_nested_function_shape_inference'):
 ┃   ┃   ┃     Allow ops such as tf.cond to invoke the ShapeRefiner on their nested functions.
-┃   ┃   ┣━━ [bold red]TF_DECLARE_FLAG[/bold red] [bold blue]enable_quantized_dtypes_training[/bold blue]:
+┃   ┃   ┣━━ TF_DECLARE_FLAG('enable_quantized_dtypes_training'):
 ┃   ┃   ┃     Set quantized dtypes, like tf.qint8, to be trainable.
-┃   ┃   ┣━━ [bold red]TF_DECLARE_FLAG[/bold red] [bold blue]graph_building_optimization[/bold blue]:
+┃   ┃   ┣━━ TF_DECLARE_FLAG('graph_building_optimization'):
 ┃   ┃   ┃     Optimize graph building for faster tf.function tracing.
-┃   ┃   ┣━━ [bold red]TF_DECLARE_FLAG[/bold red] [bold blue]saved_model_fingerprinting[/bold blue]:
+┃   ┃   ┣━━ TF_DECLARE_FLAG('saved_model_fingerprinting'):
 ┃   ┃   ┃     Add fingerprint to SavedModels.
-┃   ┃   ┣━━ [bold red]TF_DECLARE_FLAG[/bold red] [bold blue]more_stack_traces[/bold blue]:
+┃   ┃   ┣━━ TF_DECLARE_FLAG('more_stack_traces'):
 ┃   ┃   ┃     Enable experimental code that preserves and propagates graph node stack traces in C++.
-┃   ┃   ┣━━ [bold red]TF_DECLARE_FLAG[/bold red] [bold blue]publish_function_graphs[/bold blue]:
+┃   ┃   ┣━━ TF_DECLARE_FLAG('publish_function_graphs'):
 ┃   ┃   ┃     Enables the publication of partitioned function graphs via StatsPublisherInterface. Disabling this flag can reduce
 ┃   ┃   ┃   memory consumption.
-┃   ┃   ┣━━ [bold red]TF_DECLARE_FLAG[/bold red] [bold blue]enable_aggressive_constant_replication[/bold blue]:
+┃   ┃   ┣━━ TF_DECLARE_FLAG('enable_aggressive_constant_replication'):
 ┃   ┃   ┃     Replicate constants across CPU devices and even for local CPUs within the same task if available.
-┃   ┃   ┣━━ [bold red]TF_DECLARE_FLAG[/bold red] [bold blue]enable_colocation_key_propagation_in_while_op_lowering[/bold blue]:
+┃   ┃   ┣━━ TF_DECLARE_FLAG('enable_colocation_key_propagation_in_while_op_lowering'):
 ┃   ┃   ┃     If true, colocation key attributes for the ops will be propagated during while op lowering to switch/merge ops.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_auto_jit[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_auto_jit'):
 ┃   ┃   ┃     Control compilation of operators into XLA computations on CPU and GPU devices.  0 = use ConfigProto setting; -1 = 
 ┃   ┃   ┃   off; 1 = on for things very likely to be improved; 2 = on for everything; (experimental) fusible = only for 
 ┃   ┃   ┃   Tensorflow operations that XLA knows how to fuse. If set to single-gpu(<N>) then this resolves to <N> for single-GPU
 ┃   ┃   ┃   graphs (graphs that have at least one node placed on a GPU and no more than one GPU is in use through the entire 
 ┃   ┃   ┃   graph) and 0 otherwise.  Experimental.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_min_cluster_size[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_min_cluster_size'):
 ┃   ┃   ┃     Minimum number of operators in an XLA compilation. Ignored for operators placed on an XLA device or operators 
 ┃   ┃   ┃   explicitly marked for compilation.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_max_cluster_size[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_max_cluster_size'):
 ┃   ┃   ┃     Maximum number of operators in an XLA compilation.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_cluster_exclude_ops[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_cluster_exclude_ops'):
 ┃   ┃   ┃     (experimental) Exclude the operations from auto-clustering. If multiple, separate them with commas. Where, 
 ┃   ┃   ┃   Some_other_ops.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_clustering_debug[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_clustering_debug'):
 ┃   ┃   ┃     Dump graphs during XLA compilation.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_cpu_global_jit[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_cpu_global_jit'):
 ┃   ┃   ┃     Enables global JIT compilation for CPU via SessionOptions.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_clustering_fuel[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_clustering_fuel'):
 ┃   ┃   ┃     Places an artificial limit on the number of ops marked as eligible for clustering.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_disable_deadness_safety_checks_for_debugging[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_disable_deadness_safety_checks_for_debugging'):
 ┃   ┃   ┃     Disable deadness related safety checks when clustering (this is unsound).
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_disable_resource_variable_safety_checks_for_debugging[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_disable_resource_variable_safety_checks_for_debugging'):
 ┃   ┃   ┃     Disable resource variables related safety checks when clustering (this is unsound).
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_deterministic_cluster_names[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_deterministic_cluster_names'):
 ┃   ┃   ┃     Causes the function names assigned by auto clustering to be deterministic from run to run.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_persistent_cache_directory[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_persistent_cache_directory'):
 ┃   ┃   ┃     If non-empty, JIT-compiled executables are saved to and loaded from the specified file system directory path. 
 ┃   ┃   ┃   Empty by default.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_persistent_cache_device_types[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_persistent_cache_device_types'):
 ┃   ┃   ┃     If non-empty, the persistent cache will only be used for the specified devices (comma separated). Each device type
 ┃   ┃   ┃   should be able to be converted to.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_persistent_cache_read_only[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_persistent_cache_read_only'):
 ┃   ┃   ┃     If true, the persistent cache will be read-only.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_disable_strict_signature_checks[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_disable_strict_signature_checks'):
 ┃   ┃   ┃     If true, entires loaded into the XLA compile cache will not have their signatures checked strictly. Defaults to 
 ┃   ┃   ┃   false.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_persistent_cache_prefix[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_persistent_cache_prefix'):
 ┃   ┃   ┃     Specifies the persistance cache prefix. Default is.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_sparse_core_disable_table_stacking[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_sparse_core_disable_table_stacking'):
 ┃   ┃   ┃     Disable table stacking for all the tables passed to the SparseCore mid level API.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_sparse_core_minibatch_max_division_level[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_sparse_core_minibatch_max_division_level'):
 ┃   ┃   ┃     Max level of division to split input data into minibatches.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_sparse_core_stacking_mem_limit_bytes[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_sparse_core_stacking_mem_limit_bytes'):
 ┃   ┃   ┃     If non-zero, limits the size of the activations for a given table to be below these many bytes.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_sparse_core_stacking_table_shard_limit_bytes[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_sparse_core_stacking_table_shard_limit_bytes'):
 ┃   ┃   ┃     If non-zero, limits the size of any table shard to be below these many bytes.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]always_specialize[/bold blue]
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]cost_driven_async_parallel_for[/bold blue]
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]enable_crash_reproducer[/bold blue]
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]log_query_of_death[/bold blue]
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]vectorize[/bold blue]
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_enable_lazy_compilation[/bold blue]
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_print_cluster_outputs[/bold blue]:
+┃   ┃   ┣━━ Flag('always_specialize')
+┃   ┃   ┣━━ Flag('cost_driven_async_parallel_for')
+┃   ┃   ┣━━ Flag('enable_crash_reproducer')
+┃   ┃   ┣━━ Flag('log_query_of_death')
+┃   ┃   ┣━━ Flag('vectorize')
+┃   ┃   ┣━━ Flag('tf_xla_enable_lazy_compilation')
+┃   ┃   ┣━━ Flag('tf_xla_print_cluster_outputs'):
 ┃   ┃   ┃     If true then insert Print nodes to print out values produced by XLA clusters.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_check_cluster_input_numerics[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_check_cluster_input_numerics'):
 ┃   ┃   ┃     If true then insert CheckNumerics nodes to check all cluster inputs.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_check_cluster_output_numerics[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_check_cluster_output_numerics'):
 ┃   ┃   ┃     If true then insert CheckNumerics nodes to check all cluster outputs.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_disable_constant_folding[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_disable_constant_folding'):
 ┃   ┃   ┃     If true then disables constant folding on TF graph before XLA compilation.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_disable_full_embedding_pipelining[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_disable_full_embedding_pipelining'):
 ┃   ┃   ┃     If true then disables full embedding pipelining and instead use strict SparseCore / TensorCore sequencing.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_embedding_parallel_iterations[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_embedding_parallel_iterations'):
 ┃   ┃   ┃     If >0 then use this many parallel iterations in embedding_pipelining and embedding_sequency. By default, use the 
 ┃   ┃   ┃   parallel_iterations on the original model WhileOp.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_compile_on_demand[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_compile_on_demand'):
 ┃   ┃   ┃     Switch a device into 'on-demand' mode, where instead of autoclustering ops are compiled one by one just-in-time.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_enable_xla_devices[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_enable_xla_devices'):
 ┃   ┃   ┃     Generate XLA_* devices, where placing a computation on such a device forces compilation by XLA. Deprecated.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_always_defer_compilation[/bold blue]
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_async_compilation[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_always_defer_compilation')
+┃   ┃   ┣━━ Flag('tf_xla_async_compilation'):
 ┃   ┃   ┃     When lazy compilation is enabled, asynchronous compilation starts the cluster compilation in the background, and 
 ┃   ┃   ┃   the fallback path is executed until the compilation has finished.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_use_device_api_for_xla_launch[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_use_device_api_for_xla_launch'):
 ┃   ┃   ┃     If true, uses Device API (PjRt) for single device compilation and execution of functions marked for JIT 
 ┃   ┃   ┃   compilation i.e. jit_compile=True. Defaults to false.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_use_device_api_for_compile_on_demand[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_use_device_api_for_compile_on_demand'):
 ┃   ┃   ┃     If true, uses Device API (PjRt) for compiling and executing ops one by one in 'on-demand' mode. Defaults to false.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_use_device_api_for_auto_jit[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_use_device_api_for_auto_jit'):
 ┃   ┃   ┃     If true, uses Device API (PjRt) for compilation and execution when auto-clustering is enabled. Defaults to false.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_use_device_api[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_use_device_api'):
 ┃   ┃   ┃     If true, uses Device API (PjRt) for compilation and execution of ops one-by-one in 'on-demand' mode, for functions
 ┃   ┃   ┃   marked for JIT compilation, or when auto-clustering is enabled. Defaults to false.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_enable_device_api_for_gpu[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_enable_device_api_for_gpu'):
 ┃   ┃   ┃     If true, uses Device API (PjRt) for TF GPU device. This is a helper flag so that individual tests can turn on PjRt
 ┃   ┃   ┃   for GPU specifically.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_xla_call_module_disabled_checks[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_xla_call_module_disabled_checks'):
 ┃   ┃   ┃     A comma-sepated list of directives specifying the safety checks to be skipped when compiling XlaCallModuleOp. See 
 ┃   ┃   ┃   the op documentation for the recognized values.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_mlir_enable_mlir_bridge[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_mlir_enable_mlir_bridge'):
 ┃   ┃   ┃     Enables experimental MLIR-Based TensorFlow Compiler Bridge.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_mlir_enable_merge_control_flow_pass[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_mlir_enable_merge_control_flow_pass'):
 ┃   ┃   ┃     Enables MergeControlFlow pass for MLIR-Based TensorFlow Compiler Bridge.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_mlir_enable_convert_control_to_data_outputs_pass[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_mlir_enable_convert_control_to_data_outputs_pass'):
 ┃   ┃   ┃     Enables MLIR-Based TensorFlow Compiler Bridge.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_mlir_enable_strict_clusters[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_mlir_enable_strict_clusters'):
 ┃   ┃   ┃     Do not allow clusters that have cyclic control dependencies.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_mlir_enable_multiple_local_cpu_devices[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_mlir_enable_multiple_local_cpu_devices'):
 ┃   ┃   ┃     Enable multiple local CPU devices. CPU ops which are outside compiled inside the tpu cluster will also be 
 ┃   ┃   ┃   replicated across multiple cpu devices.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_dump_graphs_in_tfg[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_dump_graphs_in_tfg'):
 ┃   ┃   ┃     When tf_dump_graphs_in_tfg is true, graphs after transformations are dumped in MLIR TFG dialect and not in 
 ┃   ┃   ┃   GraphDef.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_mlir_enable_generic_outside_compilation[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_mlir_enable_generic_outside_compilation'):
 ┃   ┃   ┃     Enables OutsideCompilation passes for MLIR-Based TensorFlow Generic Compiler Bridge.
-┃   ┃   ┣━━ [bold red]Flag[/bold red] [bold blue]tf_mlir_enable_tpu_variable_runtime_reformatting_pass[/bold blue]:
+┃   ┃   ┣━━ Flag('tf_mlir_enable_tpu_variable_runtime_reformatting_pass'):
 ┃   ┃   ┃     Enables TPUVariableRuntimeReformatting pass for MLIR-Based TensorFlow Compiler Bridge. This enables weight update 
 ┃   ┃   ┃   sharding and creates TPUReshardVariables ops.
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]test_only_experiment_1[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]test_only_experiment_2[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]enable_nested_function_shape_inference[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]enable_quantized_dtypes_training[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]graph_building_optimization[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]op_building_optimization[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]saved_model_fingerprinting[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]tf_shape_default_int64[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]more_stack_traces[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]publish_function_graphs[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]enable_aggressive_constant_replication[/bold blue]
-┃   ┃   ┣━━ [bold red]TF_PY_DECLARE_FLAG[/bold red] [bold blue]enable_colocation_key_propagation_in_while_op_lowering[/bold 
-┃   ┃   ┃   blue]
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('test_only_experiment_1')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('test_only_experiment_2')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('enable_nested_function_shape_inference')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('enable_quantized_dtypes_training')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('graph_building_optimization')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('op_building_optimization')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('saved_model_fingerprinting')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('tf_shape_default_int64')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('more_stack_traces')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('publish_function_graphs')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('enable_aggressive_constant_replication')
+┃   ┃   ┣━━ TF_PY_DECLARE_FLAG('enable_colocation_key_propagation_in_while_op_lowering')
 ┃   ┃   ┣━━ #define TENSORFLOW_CORE_CONFIG_FLAG_DEFS_H_
 ┃   ┃   ┣━━ class Flags
 ┃   ┃   ┣━━ bool SetterForXlaAutoJitFlag(const string& value)
@@ -2269,8 +2268,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.30) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 75 file(s), 6,427 line(s), 48,475 token(s) in 0.53 second(s).
+tree_plus v(1.0.31) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 75 file(s), 6,427 line(s), 48,475 token(s) in 0.52 second(s).
 
 ```
 <!-- t2-end -->
@@ -2719,7 +2718,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.30) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.31) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 6 folder(s), 16 file(s), 1,919 line(s), 13,124 token(s) in 0.14 second(s).
 
 ```
@@ -2745,7 +2744,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.30) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.31) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
