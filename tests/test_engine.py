@@ -377,3 +377,10 @@ def test_engine_class_treeplus_stats():
     tp1_stats = tp1.stats()
     # assert tp1_stats == f"2 folders, 2 files, 2 lines, 2 tokens"
     assert tp1_stats == f"2 folder(s), 2 file(s), 2 line(s), 2 token(s)"
+    tp1.n_folders = None
+    tp1.n_files = None
+    tp1.n_lines = None
+    tp1.n_tokens = None
+    tp1_stats = tp1.stats()
+    # assert tp1_stats == f"2 folders, 2 files, 2 lines, 2 tokens"
+    assert tp1_stats == f"(?) folder(s), (?) file(s), (?) line(s), (?) token(s)"

@@ -105,7 +105,30 @@ class TreePlus:
         # stats += f", {self.n_lines} line{'' if self.n_lines == 1 else 's'}"
         # stats += f", {self.n_tokens} token{'' if self.n_tokens == 1 else 's'}"
         # faster:
-        stats = f"{self.n_folders:,} folder(s), {self.n_files:,} file(s), {self.n_lines:,} line(s), {self.n_tokens:,} token(s)"
+        debug_print("self.n_folders:", self.n_folders)
+        debug_print("self.n_files:", self.n_files)
+        debug_print("self.n_lines:", self.n_lines)
+        debug_print("self.n_tokens:", self.n_tokens)
+        if self.n_folders is None:
+            folders = "(?)"
+        else:
+            folders = f"{self.n_folders:,}"
+        if self.n_files is None:
+            files = "(?)"
+        else:
+            files = f"{self.n_files:,}"
+        if self.n_lines is None:
+            lines = "(?)"
+        else:
+            lines = f"{self.n_lines:,}"
+        if self.n_tokens is None:
+            tokens = "(?)"
+        else:
+            tokens = f"{self.n_tokens:,}"
+        try:
+            stats = f"{folders} folder(s), {files} file(s), {lines} line(s), {tokens} token(s)"
+        except Exception as e:
+            debug_print(f"Exception e: {type(e)} = {e}")
         return stats
 
 
