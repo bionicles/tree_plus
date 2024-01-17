@@ -119,7 +119,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (42,078 tokens, 2,763 lines)
+┣━━ 📄 README.md (42,098 tokens, 2,763 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -217,14 +217,14 @@ tree_plus -i tests
     ┃   ┃   )
     ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
     ┃   ┗━━ def main()
-    ┣━━ 📄 engine.py (6,273 tokens, 749 lines)
+    ┣━━ 📄 engine.py (6,333 tokens, 759 lines)
     ┃   ┣━━ TODO (Line 40): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
-    ┃   ┣━━ TODO (Line 419): research & decide about globs as paths instead of as filters
-    ┃   ┣━━ NOTE (Line 453): here we add directly input file_paths to the amortized glob matches
-    ┃   ┣━━ TODO (Line 526): decide if we apply glob patterns to glob paths (currently NO)
-    ┃   ┣━━ TODO (Line 565): decide between glob and rglob in _from_glob
-    ┃   ┣━━ TODO (Line 572): decide if we need to re-amortize the globs in the glob seed
-    ┃   ┣━━ TODO (Line 574): clarify ignore in glob seed context, skipping for now
+    ┃   ┣━━ TODO (Line 427): research & decide about globs as paths instead of as filters
+    ┃   ┣━━ NOTE (Line 461): here we add directly input file_paths to the amortized glob matches
+    ┃   ┣━━ TODO (Line 534): decide if we apply glob patterns to glob paths (currently NO)
+    ┃   ┣━━ TODO (Line 573): decide between glob and rglob in _from_glob
+    ┃   ┣━━ TODO (Line 580): decide if we need to re-amortize the globs in the glob seed
+    ┃   ┣━━ TODO (Line 582): clarify ignore in glob seed context, skipping for now
     ┃   ┣━━ class Category(Enum)
     ┃   ┣━━ @dataclass
     ┃   ┃   class TreePlus
@@ -448,10 +448,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.33"
+        ┗━━ __version__ = "1.0.34"
 
-tree_plus v(1.0.33) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 25 file(s), 10,190 line(s), 136,144 token(s) in 0.25 second(s).
+tree_plus v(1.0.34) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 25 file(s), 10,200 line(s), 136,224 token(s) in 0.26 second(s).
 
 ```
 <!-- t1-end -->
@@ -498,7 +498,7 @@ Options:
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
   -H, -h, --help         Show this message and exit.
 
-  v(1.0.33) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.34) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -2268,8 +2268,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.33) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 75 file(s), 6,427 line(s), 48,475 token(s) in 0.51 second(s).
+tree_plus v(1.0.34) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 75 file(s), 6,427 line(s), 48,475 token(s) in 0.52 second(s).
 
 ```
 <!-- t2-end -->
@@ -2718,7 +2718,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.33) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.34) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 6 folder(s), 16 file(s), 1,919 line(s), 13,124 token(s) in 0.14 second(s).
 
 ```
@@ -2744,7 +2744,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.33) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.34) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
