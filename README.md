@@ -70,8 +70,8 @@ tree_plus -i tests
 ┃           ┗━━     - Publish to PyPI
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📁 coverage (1 folder, 1 file) 
-┃   ┗━━ 📄 lcov.info (48311 tokens, 2152 lines)
-┣━━ 📄 LICENSE (2123 tokens, 81 lines)
+┃   ┗━━ 📄 lcov.info (48,771 tokens, 2,173 lines)
+┣━━ 📄 LICENSE (2,123 tokens, 81 lines)
 ┣━━ 📄 Makefile (672 tokens, 102 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
@@ -104,7 +104,7 @@ tree_plus -i tests
 ┃   ┣━━ t3
 ┃   ┣━━ t4
 ┃   ┗━━ t5
-┣━━ 📄 nodemon.json (129 tokens, 24 lines)
+┣━━ 📄 nodemon.json (140 tokens, 25 lines)
 ┣━━ 📄 pyproject.toml (347 tokens, 41 lines)
 ┃   ┣━━ name: tree_plus
 ┃   ┣━━ version: N/A
@@ -119,7 +119,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (42078 tokens, 2763 lines)
+┣━━ 📄 README.md (42,078 tokens, 2,763 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -156,7 +156,7 @@ tree_plus -i tests
 ┃   ┃           didnt: str,
 ┃   ┃           happen: tuple,
 ┃   ┃       ) -> ItHappened
-┃   ┣━━ 📄 stub_tests.py (1162 tokens, 180 lines)
+┃   ┣━━ 📄 stub_tests.py (1,162 tokens, 180 lines)
 ┃   ┃   ┣━━ TODO (Line 124): fix this path",
 ┃   ┃   ┣━━ TODO (Line 126): fill in these stubs:",
 ┃   ┃   ┣━━ @lru_cache
@@ -184,7 +184,7 @@ tree_plus -i tests
 ┃       ┣━━ def test_class_vehicle()
 ┃       ┗━━ def test_class_car()
 ┗━━ 📁 tree_plus_src (2 folders, 9 files) 
-    ┣━━ 📄 count_tokens_lines.py (805 tokens, 139 lines)
+    ┣━━ 📄 count_tokens_lines.py (868 tokens, 144 lines)
     ┃   ┣━━ TODO (Line 14): show off how well we parse_todo!
     ┃   ┣━━ @dataclass(frozen=True)
     ┃   ┃   class TokenLineCount
@@ -200,7 +200,7 @@ tree_plus -i tests
     ┃   ┣━━ def enable_debug()
     ┃   ┗━━ @contextmanager
     ┃       def debug_disabled()
-    ┣━━ 📄 deploy.py (1771 tokens, 210 lines)
+    ┣━━ 📄 deploy.py (1,771 tokens, 210 lines)
     ┃   ┣━━ def extract(path: str = None) -> str
     ┃   ┣━━ def load(content: str = None, path: str = None)
     ┃   ┣━━ def extract_version(source_path: str = None) -> Tuple[int, int, int]
@@ -217,14 +217,14 @@ tree_plus -i tests
     ┃   ┃   )
     ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
     ┃   ┗━━ def main()
-    ┣━━ 📄 engine.py (6225 tokens, 747 lines)
+    ┣━━ 📄 engine.py (6,273 tokens, 749 lines)
     ┃   ┣━━ TODO (Line 40): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
-    ┃   ┣━━ TODO (Line 417): research & decide about globs as paths instead of as filters
-    ┃   ┣━━ NOTE (Line 451): here we add directly input file_paths to the amortized glob matches
-    ┃   ┣━━ TODO (Line 524): decide if we apply glob patterns to glob paths (currently NO)
-    ┃   ┣━━ TODO (Line 563): decide between glob and rglob in _from_glob
-    ┃   ┣━━ TODO (Line 570): decide if we need to re-amortize the globs in the glob seed
-    ┃   ┣━━ TODO (Line 572): clarify ignore in glob seed context, skipping for now
+    ┃   ┣━━ TODO (Line 419): research & decide about globs as paths instead of as filters
+    ┃   ┣━━ NOTE (Line 453): here we add directly input file_paths to the amortized glob matches
+    ┃   ┣━━ TODO (Line 526): decide if we apply glob patterns to glob paths (currently NO)
+    ┃   ┣━━ TODO (Line 565): decide between glob and rglob in _from_glob
+    ┃   ┣━━ TODO (Line 572): decide if we need to re-amortize the globs in the glob seed
+    ┃   ┣━━ TODO (Line 574): clarify ignore in glob seed context, skipping for now
     ┃   ┣━━ class Category(Enum)
     ┃   ┣━━ @dataclass
     ┃   ┃   class TreePlus
@@ -325,7 +325,7 @@ tree_plus -i tests
     ┃           file_path: Path = None,
     ┃           components: List[str] = None,
     ┃       ) -> Union[Syntax, str]
-    ┣━━ 📄 ignore.py (2335 tokens, 329 lines)
+    ┣━━ 📄 ignore.py (2,335 tokens, 329 lines)
     ┃   ┣━━ TODO (Line 129): incorporate gitignore
     ┃   ┣━━ def _is_all_str(x: Any) -> bool
     ┃   ┣━━ def can_parse(x) -> bool
@@ -348,11 +348,11 @@ tree_plus -i tests
     ┃           ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
     ┃           globs: Optional[AmortizedGlobs] = None,
     ┃       ) -> bool
-    ┣━━ 📄 isabelle_symbols.py (4084 tokens, 462 lines)
+    ┣━━ 📄 isabelle_symbols.py (4,084 tokens, 462 lines)
     ┃   ┣━━ @lru_cache
     ┃   ┃   def _replace_symbol(match: re.Match) -> str
     ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-    ┣━━ 📄 parse_file.py (22093 tokens, 2403 lines)
+    ┣━━ 📄 parse_file.py (22,093 tokens, 2,403 lines)
     ┃   ┣━━ BUG (Line 669): catastrophic backtracking in some c files
     ┃   ┣━━ @lru_cache(maxsize=None)
     ┃   ┃   def read_file(
@@ -448,10 +448,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.32"
+        ┗━━ __version__ = "1.0.33"
 
-tree_plus v(1.0.32) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 25 file(s), 10,161 line(s), 135,562 token(s) in 0.26 second(s).
+tree_plus v(1.0.33) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 25 file(s), 10,190 line(s), 136,144 token(s) in 0.25 second(s).
 
 ```
 <!-- t1-end -->
@@ -498,7 +498,7 @@ Options:
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
   -H, -h, --help         Show this message and exit.
 
-  v(1.0.32) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.33) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -1098,7 +1098,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ alias md='make debug'
 ┃   ┃   ┣━━ add_alias()
 ┃   ┃   ┗━━ create_conda_env()
-┃   ┣━━ 📄 cpp_test.cpp (1737 tokens, 259 lines)
+┃   ┣━━ 📄 cpp_test.cpp (1,737 tokens, 259 lines)
 ┃   ┃   ┣━━ class Person
 ┃   ┃   ┣━━ public:
 ┃   ┃   ┣━━     Person(std::string n) : name(n)
@@ -1218,7 +1218,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ s_downloadButton.Clicked += async (o, e) =>
 ┃   ┃   ┣━━ [HttpGet, Route("DotNetCount")]
 ┃   ┃   ┗━━ static public async Task<int> GetDotNetCount(string URL)
-┃   ┣━━ 📄 hallucination.tex (1465 tokens, 127 lines)
+┃   ┣━━ 📄 hallucination.tex (1,465 tokens, 127 lines)
 ┃   ┃   ┣━━ Harnessing the Master Algorithm: Strategies for AI LLMs to Mitigate Hallucinations
 ┃   ┃   ┣━━ Hallucinated Pedro Domingos et al.
 ┃   ┃   ┣━━ Christmas Eve 2023
@@ -1749,7 +1749,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━     build: 'ng build'
 ┃   ┃   ┣━━     watch: 'ng build --watch --configuration development'
 ┃   ┃   ┗━━     test: 'ng test'
-┃   ┗━━ 📄 tickets.component.ts (6950 tokens, 903 lines)
+┃   ┗━━ 📄 tickets.component.ts (6,950 tokens, 903 lines)
 ┃       ┣━━ interface EnrichedTicket extends Ticket
 ┃       ┣━━ interface SpinConfig
 ┃       ┣━━ interface RotationState
@@ -1810,7 +1810,7 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┣━━ const mockTickets = async () =>
 ┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
 ┣━━ 📁 group6 (1 folder, 8 files) 
-┃   ┣━━ 📄 catastrophic.c (4144 tokens, 581 lines)
+┃   ┣━━ 📄 catastrophic.c (4,144 tokens, 581 lines)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ struct Point getOrigin()
 ┃   ┃   ┣━━ float mul_two_floats(float x1, float x2)
@@ -1914,7 +1914,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ #define EXPORT_SYMBOL __declspec(dllexport)
 ┃   ┃   ┣━━ #define EXPORT_SYMBOL __attribute__ ((visibility("default")))
 ┃   ┃   ┗━━ EXPORT_SYMBOL PyMODINIT_FUNC PyInit_cpu_feature_guard(void)
-┃   ┣━━ 📄 fractal.thy (2183 tokens, 148 lines)
+┃   ┣━━ 📄 fractal.thy (2,183 tokens, 148 lines)
 ┃   ┃   ┣━━ Title:      fractal.thy
 ┃   ┃   ┣━━ Author:     Isabelle/HOL Contributors!
 ┃   ┃   ┣━━ Author:     edge cases r us
@@ -1979,7 +1979,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┃                (is "eventually (λn. _ = -?g' n) _")
 ┃   ┃   ┃     shows   "(λn. fps_nth F n - g n) ∈ O(λn. 1 / r ^ n)" (is "(λn. ?c n - _) ∈ O(_)")
 ┃   ┃   ┗━━ end
-┃   ┣━━ 📄 Microsoft.PowerShell_profile.ps1 (3854 tokens, 498 lines)
+┃   ┣━━ 📄 Microsoft.PowerShell_profile.ps1 (3,854 tokens, 498 lines)
 ┃   ┃   ┣━━ function Log($message)
 ┃   ┃   ┣━━ function Remove-ChocolateyFromPath
 ┃   ┃   ┣━━ function Show-Profiles
@@ -2060,7 +2060,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┃    */
 ┃   ┃   ┃   var unwind = _curry2(function(key, object)
 ┃   ┃   ┗━━   return _map(function(item)
-┃   ┣━━ 📄 tensorflow_flags.h (7098 tokens, 668 lines)
+┃   ┣━━ 📄 tensorflow_flags.h (7,098 tokens, 668 lines)
 ┃   ┃   ┣━━ TF_DECLARE_FLAG('test_only_experiment_1')
 ┃   ┃   ┣━━ TF_DECLARE_FLAG('test_only_experiment_2')
 ┃   ┃   ┣━━ TF_DECLARE_FLAG('enable_nested_function_shape_inference'):
@@ -2268,8 +2268,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.32) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 75 file(s), 6,427 line(s), 48,475 token(s) in 0.52 second(s).
+tree_plus v(1.0.33) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 75 file(s), 6,427 line(s), 48,475 token(s) in 0.51 second(s).
 
 ```
 <!-- t2-end -->
@@ -2624,7 +2624,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 ┃   ┃         },
 ┃   ┃         { path: '**', component: PageNotFoundComponent },
 ┃   ┃       ];
-┃   ┗━━ 📄 tickets.component.ts (6950 tokens, 903 lines)
+┃   ┗━━ 📄 tickets.component.ts (6,950 tokens, 903 lines)
 ┃       ┣━━ interface EnrichedTicket extends Ticket
 ┃       ┣━━ interface SpinConfig
 ┃       ┣━━ interface RotationState
@@ -2718,7 +2718,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.32) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.33) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 6 folder(s), 16 file(s), 1,919 line(s), 13,124 token(s) in 0.14 second(s).
 
 ```
@@ -2744,7 +2744,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.32) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.33) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
