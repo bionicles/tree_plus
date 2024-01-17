@@ -19,6 +19,7 @@
     "**/*.pyc", 
     "tree_plus.egg-info",
     "tests/version_increments/*",
-    "tests/readme_updates/*"
+    "tests/readme_updates/*",
+    "tree_plus_programs/test_stub_tests.py"
   ]
 }

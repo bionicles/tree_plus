@@ -215,12 +215,14 @@ def into_rich_tree(*, root: TreePlus = None) -> Tree:
     if root.category is Category.FILE:
         label = f"{FILE_CHAR} {root.name}"
         if root.n_tokens is not None and root.n_lines is not None:
-            label += f" ({root.n_tokens} token{'' if root.n_tokens == 1 else 's'}, {root.n_lines} line{'' if root.n_lines == 1 else 's'})"
+            label += f" ({root.n_tokens:,} token{'' if root.n_tokens == 1 else 's'}, {root.n_lines:,} line{'' if root.n_lines == 1 else 's'})"
+        elif root.n_tokens is None and root.n_lines is not None:
+            label += f" ({root.n_lines:,} line{'' if root.n_lines == 1 else 's'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_tree.add(subtree)
     elif root.category is Category.FOLDER:
-        label = f"{FOLDER_CHAR} {root.name} ({root.n_folders} folder{'' if root.n_folders == 1 else 's'}, {root.n_files} file{'' if root.n_files == 1 else 's'})"
+        label = f"{FOLDER_CHAR} {root.name} ({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'}, {root.n_files:,} file{'' if root.n_files == 1 else 's'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             # RECURSION HERE
@@ -229,14 +231,14 @@ def into_rich_tree(*, root: TreePlus = None) -> Tree:
         counts = f" "
         rich_tree.label += counts
     elif root.category is Category.ROOT:
-        label = f"{ROOT_CHAR} {root.name} ({root.n_folders} folder{'' if root.n_folders == 1 else 's'}, {root.n_files} file{'' if root.n_files == 1 else 's'})"
+        label = f"{ROOT_CHAR} {root.name} ({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'}, {root.n_files:,} file{'' if root.n_files == 1 else 's'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_subtree = into_rich_tree(root=subtree)
             rich_tree.add(rich_subtree)
     elif root.category is Category.GLOB:
         n_matches = len(root.subtrees)
-        label = f"{GLOB_CHAR} {root.name} ({n_matches} match{'' if n_matches == 1 else 'es'})"
+        label = f"{GLOB_CHAR} {root.name} ({n_matches:,} match{'' if n_matches == 1 else 'es'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_subtree = into_rich_tree(root=subtree)

@@ -114,6 +114,11 @@ def count_tokens_lines(file_path: Union[str, Path]) -> Optional[TokenLineCount]:
     debug_print(f"count_tokens_lines {file_path=}")
     _prefix, file_extension = os.path.splitext(file_path)
     debug_print(f"count_tokens_lines {file_extension=}")
+    # counting CSV is too slow
+    # if file_extension == ".csv":
+    #     with open(file_path, "rb") as csv_file:
+    #         n_lines = sum(1 for _ in csv_file)
+    #     return TokenLineCount(n_tokens=None, n_lines=n_lines)
     if os.path.isdir(file_path) or file_extension in extensions_not_to_count:
         debug_print(f"count_tokens_lines not counting {file_path=}")
         return None
