@@ -49,6 +49,14 @@ FILE_CHAR = ":page_facing_up:" if operate_normally else "[file]"
 GLOB_CHAR = ":cyclone:" if operate_normally else "[glob]"
 
 
+THEME = {
+    "repr.ipv6": "default",
+    "repr.call": "bold red",
+    "repr.str": "bold blue",
+    "repr.tag_name": "bold red",
+}
+
+
 class Category(Enum):
     "PUBLIC: TreePlus"
     ROOT = 1
@@ -148,7 +156,7 @@ def tree_to_string(tree: Tree) -> str:
         # soft_wrap=True,
         # markup=False,
         # highlight=False,
-        theme=Theme({"repr.ipv6": "default"}),
+        theme=Theme({"repr.ipv6": "default"}),  # maybe unnecessary given no_color
     )
     with console.capture() as capture:
         console.print(tree, markup=False)
@@ -178,7 +186,7 @@ def safe_print(
             markup=markup,
             highlight=highlight,
             style=style,
-            theme=Theme({"repr.ipv6": "default"}),
+            theme=Theme(THEME),
         )
         if capturing:
             with console.capture() as capture:
@@ -702,6 +710,8 @@ BACKUP_LEXERS = {
     "kt": "kotlin",
     "cbl": "cobol",
     "rst": "markdown",
+    "cc": "cpp",
+    "h": "c",
 }
 
 DENY_SUFFIXES = {"json"}
