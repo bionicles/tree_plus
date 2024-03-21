@@ -21,7 +21,7 @@ def extract_tokens_lines(line: str) -> Optional[tree_plus.TokenLineCount]:
         r"\((?P<n_tokens>\d+) tokens, (?P<n_lines>\d+) lines\)", line
     ):
         tree_plus.debug_print(f"extract_tokens_lines: {match=}")
-        groups = tree_plus.extract_and_debug_print_groups(match)
+        groups = tree_plus.extract_groups(match)
         if "n_tokens" in groups and "n_lines" in groups:
             return tree_plus.TokenLineCount(
                 n_tokens=int(groups["n_tokens"]), n_lines=int(groups["n_lines"])
@@ -80,7 +80,7 @@ def test_e2e_empty_folder():
 
 
 EXPECTATION_1 = """📁 path_to_test (1 folder, 6 files)
-┣━━ 📄 class_method_type.py (533 tokens, 100 lines)
+┣━━ 📄 class_method_type.py (541 tokens, 103 lines)
 ┃   ┣━━ T = TypeVar("T")
 ┃   ┣━━ def parse_py(contents: str) -> List[str]
 ┃   ┣━━ class MyClass
@@ -110,8 +110,9 @@ EXPECTATION_1 = """📁 path_to_test (1 folder, 6 files)
 ┃   ┣━━     def __getitem__(self, index: int, /) -> T
 ┃   ┣━━     @classmethod
 ┃   ┃       def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
-┃   ┗━━     @classmethod
-┃           def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
+┃   ┣━━     @classmethod
+┃   ┃       def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
+┃   ┗━━ class Router(hk.Module)
 ┣━━ 📄 empty.py (0 tokens, 0 lines)
 ┣━━ 📄 file.md (12 tokens, 2 lines)
 ┃   ┗━━ # Hello, world!

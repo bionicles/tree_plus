@@ -152,6 +152,7 @@ class TestDataclass""",
     def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"''',
                 """    @classmethod
     def from_str(cls, toolbox, string: str, score=None) -> 'Algo'""",
+                "class Router(hk.Module)",
             ],
         ),
     ],

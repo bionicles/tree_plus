@@ -19,7 +19,7 @@ from .ignore import (  # noqa F401
     amortize_globs,
 )
 
-from .parse_file import parse_file, parse_markers, extract_and_debug_print_groups
+from .parse_file import parse_file, parse_markers, extract_groups
 from .count_tokens_lines import (
     TokenLineCount,
     count_tokens_lines,

@@ -98,3 +98,6 @@ class list[T]:
     @classmethod
     def from_str(cls, toolbox, string: str, score=None) -> 'Algo':
         ...
+
+class Router(hk.Module):
+    ...

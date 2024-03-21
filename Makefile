@@ -21,7 +21,7 @@ debug_command: test_parallel
 N_WORKERS=12
 # parallel unit tests (for dev rig)
 test_parallel:
-	time (py.test -n $(N_WORKERS) --cov=tree_plus_src --cov-report=term-missing --cov-report=lcov:coverage/lcov.info -vv tests/test_*.py)
+	time (py.test --durations=0 -n $(N_WORKERS) --cov=tree_plus_src --cov-report=term-missing --cov-report=lcov:coverage/lcov.info -vv tests/test_*.py)
 
 # sequential unit tests (for CI)
 test_sequential:

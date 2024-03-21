@@ -224,17 +224,18 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
     return total_components
 
 
-def extract_and_debug_print_groups(match: re.Match, named_only: bool = False) -> dict:
+def extract_groups(match: re.Match, named_only: bool = False) -> dict:
     "filter and debug print non-None match groups"
     numbered_groups = {}
-    if not named_only:
-        for i in range(len(match.groups())):
-            group = match.group(i)
-            if group:
-                numbered_groups[i] = group
-    for k, v in match.groupdict().items():
-        if v or k == "blank_line":
-            numbered_groups[k] = v
+    if match is not None:
+        if not named_only:
+            for i in range(len(match.groups())):
+                group = match.group(i)
+                if group:
+                    numbered_groups[i] = group
+        for k, v in match.groupdict().items():
+            if v or k == "blank_line":
+                numbered_groups[k] = v
     debug_print("groups:")
     debug_print(numbered_groups)
     return numbered_groups
@@ -270,7 +271,7 @@ def parse_tensorflow_flags(contents: str) -> List[str]:
             f"parse_tensorflow_flags {carry_flag_type=} {carry_flag=} {carry_description=}"
         )
         component = None
-        groups = extract_and_debug_print_groups(match, named_only=True)
+        groups = extract_groups(match, named_only=True)
         if "flag_name" in groups:
             if carry_flag:
                 component = assemble_tensorflow_flag(
@@ -313,7 +314,7 @@ def parse_rst(contents: str) -> List[str]:
     components = []
     for n, match in enumerate(pattern.finditer(contents)):
         debug_print(f"parse_rst {n=} {match=}")
-        groups = extract_and_debug_print_groups(match, named_only=True)
+        groups = extract_groups(match, named_only=True)
         component = None
         if "rst_header" in groups:
             prefix = "# " if "heading" in groups else "- "
@@ -376,7 +377,7 @@ def parse_c(contents: str) -> List[str]:
     for n, match in enumerate(combined_pattern.finditer(contents)):
         component = None  # just in case!
         debug_print(f"parse_cpp {n=} {match=}")
-        groups = extract_and_debug_print_groups(match, named_only=True)
+        groups = extract_groups(match, named_only=True)
         if "function" in groups:
             component = groups["function"]
             public_or_private = None
@@ -391,9 +392,9 @@ def parse_c(contents: str) -> List[str]:
             name = (
                 groups["type_struct_name1"]
                 if "type_struct_name1" in groups
-                else groups["type_struct_name2"]
-                if "type_struct_name2" in groups
-                else ""
+                else (
+                    groups["type_struct_name2"] if "type_struct_name2" in groups else ""
+                )
             )
             if name:
                 component = f"typedef struct {name}"
@@ -472,7 +473,7 @@ def parse_isabelle(contents: str) -> List[str]:
     components = []
     for n, match in enumerate(pattern.finditer(contents)):
         debug_print(f"parse_isabelle {n=} {match=}")
-        groups = extract_and_debug_print_groups(match, named_only=True)
+        groups = extract_groups(match, named_only=True)
         component = None
         if "title" in groups:
             component = groups["title"]
@@ -524,7 +525,7 @@ def parse_fortran(contents: str) -> List[str]:
     for n, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_fortran {n=} {match=}")
         component = None
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         if "signature" in groups and "ending" in groups:
             component = groups["signature"] + groups["ending"]
         elif "programstart" in groups and "programend" in groups:
@@ -571,7 +572,7 @@ def parse_ts(contents: str) -> List[str]:
     seen_jsdoc = False
     for match_number, match in enumerate(combined_ts_pattern.finditer(contents)):
         debug_print(f"parse_ts: {match_number=} {match=}")
-        groups = extract_and_debug_print_groups(match, named_only=True)
+        groups = extract_groups(match, named_only=True)
         component = None
         if "arrow" in groups:
             component = groups["arrow"]
@@ -655,7 +656,7 @@ def parse_ts(contents: str) -> List[str]:
 
 #     for n, match in enumerate(combined_pattern.finditer(contents)):
 #         debug_print(f"parse_cpp {n=} {match=}")
-#         groups = extract_and_debug_print_groups(match)
+#         groups = extract_groups(match)
 #         component = match.group().strip()
 #         # fix a minor visual defect
 #         component = component
@@ -692,7 +693,7 @@ def parse_ts(contents: str) -> List[str]:
 
 #     for n, match in enumerate(combined_pattern.finditer(contents)):
 #         debug_print(f"parse_c {n=} {match=}")
-#         _ = extract_and_debug_print_groups(match)
+#         _ = extract_groups(match)
 #         component = match.group().strip()
 #         if component.startswith("typedef"):
 #             # Extract only the typedef struct name
@@ -721,7 +722,7 @@ combined_py_pattern = re.compile(
     # Functions and Methods, capturing indentation and multiline signatures
     r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\],. ]+)?)\s*:|"
     # Classes
-    r"(class \w+(\[.*\])?(\([\w\s,]*\))?):|"
+    r"(class \w+(\[.*\])?(\([\w\s,\.]*\))?):|"
     # Decorators
     r"\n( *@\w+(\(.*\))?)\n|"
     # TypeVar
@@ -746,7 +747,7 @@ def parse_py(contents: str) -> List[str]:
     components = []
     decorator_carry = []
     for match_number, match in enumerate(combined_py_pattern.finditer(contents)):
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         debug_print(f"parse_py: {match_number=} {match=}")
         component = None
         # Function or Method is 1
@@ -798,7 +799,7 @@ def parse_rb(contents: str) -> List[str]:
     for n, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_rb: {n=} {match=}")
         component = None
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         component = groups[0]
         if component:
             debug_print(f"parse_rb {component=}")
@@ -862,7 +863,7 @@ def parse_erl(contents: str) -> List[str]:
 
     components = []
     for n, match in enumerate(combined_pattern.finditer(contents)):
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         debug_print(f"parse_erl match {n}:\n", groups)
         component = None
         if 1 in groups:  # spec
@@ -906,7 +907,7 @@ def parse_rs(contents: str) -> List[str]:
     components = []
 
     for n, match in enumerate(combined_pattern.finditer(contents)):
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         debug_print(f"parse_rs match {n}:\n", groups)
         component = None
         # functions, group 1
@@ -951,7 +952,7 @@ def parse_mathematica(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_mathematica match_number: {match_number}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         component = groups[1]
         components.append(component)
 
@@ -970,7 +971,7 @@ def parse_r(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_r match_number: {match_number}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         component = match.group().strip().rstrip("(")
         components.append(component)
 
@@ -991,7 +992,7 @@ def parse_zig(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_zig match_number: {match_number}")
-        groups = extract_and_debug_print_groups(match)  # this debug prints the matches
+        groups = extract_groups(match)  # this debug prints the matches
         if 1 in groups:
             component = groups[1]
         else:
@@ -1015,7 +1016,7 @@ def parse_hs(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_hs match_number: {match_number}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         if groups:
             component = groups[0].strip()
             debug_print(component)
@@ -1057,7 +1058,7 @@ def parse_lisp(content: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(content)):
         debug_print(f"parse_lisp match_number: {match_number}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         if groups:
             components.append(groups[0].replace("(", ""))
 
@@ -1293,7 +1294,7 @@ def parse_cs(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_cs_pattern.finditer(contents)):
         debug_print(f"parse_cs: {match_number=} {match=}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         # Interfaces, Enums, Delegates, Structs, Classes
         if 1 in groups:
             component = groups[1]
@@ -1402,7 +1403,7 @@ def parse_go(contents: str) -> List[str]:
     for n, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_go: {n=} {match=}")
         component = None
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         if 1 in groups:
             component = groups[1]
         elif 3 in groups:
@@ -1436,7 +1437,7 @@ def parse_swift(contents: str) -> List[str]:
 
     for n, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_swift {n=} {match=}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         component = None
         if 1 in groups:
             component = groups[1]
@@ -1850,7 +1851,7 @@ def parse_cbl(content: str) -> List[str]:
     end_program = None
     for match_number, match in enumerate(combined_pattern.finditer(content)):
         debug_print(f"parse_cbl: match_number={match_number} match={match}")
-        groups = extract_and_debug_print_groups(match, named_only=True)
+        groups = extract_groups(match, named_only=True)
         component = None
         if "numbered" in groups:
             component = groups["numbered"]
@@ -1933,7 +1934,7 @@ def parse_java(contents: str) -> List[str]:
     components = []
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_java: {match_number=} {match=}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         if 1 in groups:  # Class
             component = groups[1].rstrip()
         elif 7 in groups:  # Method
@@ -1973,7 +1974,7 @@ def parse_jl(contents: str) -> List[str]:
 
     for n, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_jl: {n=} {match=}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         if 4 in groups:
             component = groups[1] + groups[4]
         else:
@@ -2006,7 +2007,7 @@ def parse_kt(contents: str) -> List[str]:
 
     for match_number, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_kt: {match_number=} {match=}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         component = groups[0]
         if component:
             component = remove_c_comments(component).rstrip().replace(", \n", ",\n")
@@ -2209,7 +2210,7 @@ def parse_ps1(contents: str) -> List[str]:
     components = []
     for n, match in enumerate(pattern.finditer(contents)):
         debug_print(f"parse_ps1 {n=} {match=}")
-        groups = extract_and_debug_print_groups(match, named_only=True)
+        groups = extract_groups(match, named_only=True)
         component = None
         if "function" in groups:
             component = groups["function"]
@@ -2287,7 +2288,7 @@ def parse_scala(contents: str) -> List[str]:
 
     for n, match in enumerate(combined_pattern.finditer(contents)):
         debug_print(f"parse_scala: {n=} {match=}")
-        groups = extract_and_debug_print_groups(match)
+        groups = extract_groups(match)
         component = groups[0]  # Get the matched component
         if component:
             components.append(component)

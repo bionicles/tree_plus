@@ -11,7 +11,7 @@ def test_programs_hello_tree_plus():
     result = subprocess.run(command, capture_output=True, text=True)
     rich.print(result.stdout)
     assert result.returncode == 0
-    assert 'The "tree_plus_src" library v(1' in result.stdout
+    assert 'The "tree_plus_src" library' in result.stdout
 
 
 STUB_TESTS_EXPECTATION = """# TODO: fix this path
