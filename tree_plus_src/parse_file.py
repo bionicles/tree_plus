@@ -25,6 +25,7 @@ FORTRAN_EXTENSIONS = {
     ".F",
     ".F90",
 }
+MATHEMATICA_EXTENSIONS = {".nb", ".wl"}
 
 
 @lru_cache(maxsize=None)
@@ -208,7 +209,7 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
             components = parse_matlab(contents)
     elif file_extension.lower() == ".r":
         components = parse_r(contents)
-    elif file_extension.lower() == ".nb":
+    elif file_extension.lower() in MATHEMATICA_EXTENSIONS:
         components = parse_mathematica(contents)
     elif file_extension == ".matlab":
         components = parse_matlab(contents)
@@ -882,50 +883,72 @@ def parse_erl(contents: str) -> List[str]:
     return components
 
 
+# combined_pattern = re.compile(
+#     # functions
+#     # r"(pub\s+)?(fn\s+[a-z_][a-z_0-9]*\s*(<[^>]+>)?\s*\([^)]*\)\s*(->\s*[^{]*)?(where\s*[^{]*)?|"
+#     # r"\n( *(pub )?(async )?fn [\w_]*(\<.*\>)?(\([^)]*\))( -> ([^;{]*))?)|"
+#     # r"\n?( *(pub )?(async )?fn [\w_]*(\<.*\>)?\(([^{]*?(?=\) -> ))(([^;{])*)?)|"
+#     r"\n(?P<indent>\s*)(?P<pub>pub\s+)?(?P<async>async\s+)?fn\s+(?P<name>[\w_]+)(?P<generics><.*>)?\((?P<params>(?:[^()]+|\((?P<nested>[^()]+)\))*)\)(?P<return_type>\s+->\s+(?P<return>[^;{]*))?(?P<where_clause>\s*(?:where\n(?P<where>.*)?)?)?|"
+#     # structs and impls with generics
+#     # r"struct\s+[A-Z]\w*|impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?|"
+#     # r"^( *(pub)? ?struct\s+[A-Z]\w*|impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?)"
+#     r"\n(( *(((pub )?struct)|impl))[^{;]*) ?[{;]|"
+#     # trait, enum, or mod
+#     # r"trait\s+[A-Z]\w*|enum\s+[A-Z]\w*|mod\s+[a-z_][a-z_0-9]*|"
+#     r"\n(( *)?(pub )?(trait|enum|mod)\s+\w*(<[^{]*>)?)|"
+#     # r"macro_rules!\s+[a-z_][a-z_0-9]*)",
+#     r"\n((#\[macro_export\]\n)?macro_rules!\s+[a-z_][a-z_0-9]*)",
+#     re.MULTILINE,
+# )
+# Combined regex pattern to match all components
+# combined_pattern = re.compile(
+#     # functions
+#     r"\n(?P<function_match>\s*(?P<function_pub>pub\s+)?(?P<function_async>async\s+)?fn\s+(?P<function_name>[\w_]+)(?P<function_generics><.*>)?\((?P<function_params>(?:[^()]+|\((?P<function_nested>[^()]+)\))*)\)(?P<function_return_type>\s+->\s+(?P<function_return>[^;{]*))?(?P<function_where_clause>\s*(?:where\n(?P<function_where>.*)?)?)?)|"
+#     # structs and impls with generics
+#     r"\n(?P<struct_impl_match>(( *((?P<struct_impl_pub>pub\s+)?struct)|impl))[^{;]*) ?[{;]|"
+#     # trait, enum, or mod
+#     r"\n(?P<trait_enum_mod_match> *(?P<trait_enum_mod_pub>pub\s+)?(trait|enum|mod)\s+\w*(<[^{]*>)?)|"
+#     # macro
+#     r"\n(?P<macro_match>((#\[macro_export\]\n)?macro_rules!\s+[a-z_][a-z_0-9]*))",
+#     re.MULTILINE,
+# )
+
+
 def parse_rs(contents: str) -> List[str]:
     debug_print("parse_rs")
 
     contents = remove_c_comments(contents)
 
-    # Combined regex pattern to match all components
     combined_pattern = re.compile(
         # functions
-        # r"(pub\s+)?(fn\s+[a-z_][a-z_0-9]*\s*(<[^>]+>)?\s*\([^)]*\)\s*(->\s*[^{]*)?(where\s*[^{]*)?|"
-        r"\n( *(pub )?(async )?fn [\w_]*(\<.*\>)?(\([^)]*\))( -> ([^;{]*))?)|"
+        r"\n(?P<function>\s*(?:pub\s+)?(?:async\s+)?fn\s+(?:[\w_]+)(?:<.*>)?\((?P<function_params>(?:[^()]+|\((?P<function_nested>[^()]+)\))*)\)(?P<function_return_type>\s+->\s+(?:[^;{]*))?(?P<function_where_clause>\s*(?:where\n(?P<function_where>.*)?)?)?)|"
         # structs and impls with generics
-        # r"struct\s+[A-Z]\w*|impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?|"
-        # r"^( *(pub)? ?struct\s+[A-Z]\w*|impl\s+([A-Z]\w*)(\s+for\s+[A-Z]\w*)?)"
-        r"\n(( *(((pub )?struct)|impl))[^{;]*) ?[{;]|"
+        r"\n(?P<struct_impl>(?: *((?:pub\s+)?struct)|impl)[^{;]*?) ?[{;]|"
         # trait, enum, or mod
-        # r"trait\s+[A-Z]\w*|enum\s+[A-Z]\w*|mod\s+[a-z_][a-z_0-9]*|"
-        r"\n(( *)?(pub )?(trait|enum|mod)\s+\w*(<[^{]*>)?)|"
-        # r"macro_rules!\s+[a-z_][a-z_0-9]*)",
-        r"\n((#\[macro_export\]\n)?macro_rules!\s+[a-z_][a-z_0-9]*)",
+        r"\n(?P<trait_enum_mod> *(?:pub\s+)?(trait|enum|mod)\s+\w*(<[^{]*>)?)|"
+        # macro
+        r"\n(?P<macro>((#\[macro_export\]\n)?macro_rules!\s+[a-z_][a-z_0-9]*))",
         re.MULTILINE,
     )
-
     components = []
 
     for n, match in enumerate(combined_pattern.finditer(contents)):
         groups = extract_groups(match)
-        debug_print(f"parse_rs match {n}:\n", groups)
         component = None
-        # functions, group 1
-        if 1 in groups:
-            component = groups[1].rstrip().rstrip(",")
+        # functions
+        if groups.get("function"):
+            component = groups["function"].rstrip().rstrip(",")
         # struct or impl
-        elif 8 in groups:
-            component = groups[8].rstrip()
+        elif groups.get("struct_impl"):
+            component = groups["struct_impl"].rstrip()
         # trait, enum, mod
-        elif 13 in groups:
-            component = groups[13]
+        elif groups.get("trait_enum_mod"):
+            component = groups["trait_enum_mod"]
         # macro
-        elif 18 in groups:
-            component = groups[18]
+        elif groups.get("macro"):
+            component = groups["macro"]
         if component:
-            # component = Text(component)
-            # component = Syntax(component, lexer=RustLexer())
-            components.append(component)
+            components.append(component.lstrip("\n"))
 
     return components
 

@@ -157,3 +157,10 @@ fn main() {
     let pair = Pair { first: 10, second: 20 };
     println!("Result: {}", pair.transform(5));
 }
+
+async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
+where
+    Bion: Cool
+{
+    println!("Bion is cool!");
+}

@@ -1169,6 +1169,9 @@ where
                 "impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>",
                 "    fn transform(&self, input: T) -> T",
                 "fn main()",
+                """async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
+where
+    Bion: Cool""",
             ],
         ),
         (
