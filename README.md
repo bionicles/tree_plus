@@ -70,9 +70,9 @@ tree_plus -i tests
 ┃           ┗━━     - Publish to PyPI
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📁 coverage (1 folder, 1 file) 
-┃   ┗━━ 📄 lcov.info (48,771 tokens, 2,173 lines)
+┃   ┗━━ 📄 lcov.info (48,873 tokens, 2,175 lines)
 ┣━━ 📄 LICENSE (2,123 tokens, 81 lines)
-┣━━ 📄 Makefile (672 tokens, 102 lines)
+┣━━ 📄 Makefile (677 tokens, 102 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ library_demo
@@ -352,8 +352,8 @@ tree_plus -i tests
     ┃   ┣━━ @lru_cache
     ┃   ┃   def _replace_symbol(match: re.Match) -> str
     ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-    ┣━━ 📄 parse_file.py (22,093 tokens, 2,403 lines)
-    ┃   ┣━━ BUG (Line 669): catastrophic backtracking in some c files
+    ┣━━ 📄 parse_file.py (22,021 tokens, 2,404 lines)
+    ┃   ┣━━ BUG (Line 670): catastrophic backtracking in some c files
     ┃   ┣━━ @lru_cache(maxsize=None)
     ┃   ┃   def read_file(
     ┃   ┃       file_path: str,
@@ -361,7 +361,7 @@ tree_plus -i tests
     ┃   ┃       n_lines: Optional[int] = None,
     ┃   ┃   ) -> str
     ┃   ┣━━ def parse_file(file_path: Union[str, Path]) -> List[str]
-    ┃   ┣━━ def extract_and_debug_print_groups(match: re.Match, named_only: bool = False) -> dict
+    ┃   ┣━━ def extract_groups(match: re.Match, named_only: bool = False) -> dict
     ┃   ┣━━ def assemble_tensorflow_flag(
     ┃   ┃       flag_type: str, flag: str, description: Optional[List[str]] = None
     ┃   ┃   ) -> str
@@ -448,10 +448,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.34"
+        ┗━━ __version__ = "1.0.35"
 
-tree_plus v(1.0.34) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 25 file(s), 10,200 line(s), 136,224 token(s) in 0.26 second(s).
+tree_plus v(1.0.35) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 25 file(s), 10,203 line(s), 136,259 token(s) in 0.23 second(s).
 
 ```
 <!-- t1-end -->
@@ -498,7 +498,7 @@ Options:
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
   -H, -h, --help         Show this message and exit.
 
-  v(1.0.34) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.35) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -2268,8 +2268,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.34) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 75 file(s), 6,427 line(s), 48,475 token(s) in 0.52 second(s).
+tree_plus v(1.0.35) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 75 file(s), 6,427 line(s), 48,475 token(s) in 0.51 second(s).
 
 ```
 <!-- t2-end -->
@@ -2718,7 +2718,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.34) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.35) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 6 folder(s), 16 file(s), 1,919 line(s), 13,124 token(s) in 0.14 second(s).
 
 ```
@@ -2744,7 +2744,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.34) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.35) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
