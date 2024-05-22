@@ -33,7 +33,7 @@
 <!-- t1-start -->
 ```sh
 tree_plus -i tests
-📁 tree_plus (5 folders, 25 files) 
+📁 tree_plus (5 folders, 26 files) 
 ┣━━ 📄 .env.test (5 tokens, 1 line)
 ┃   ┗━━ DEBUG_TREE_PLUS
 ┣━━ 📁 .github (2 folders, 3 files) 
@@ -70,9 +70,9 @@ tree_plus -i tests
 ┃           ┗━━     - Publish to PyPI
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📁 coverage (1 folder, 1 file) 
-┃   ┗━━ 📄 lcov.info (48,876 tokens, 2,175 lines)
+┃   ┗━━ 📄 lcov.info (48,829 tokens, 2,173 lines)
 ┣━━ 📄 LICENSE (2,123 tokens, 81 lines)
-┣━━ 📄 Makefile (677 tokens, 102 lines)
+┣━━ 📄 Makefile (678 tokens, 102 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ library_demo
@@ -81,7 +81,7 @@ tree_plus -i tests
 ┃   ┣━━ .PHONY: debug_command
 ┃   ┣━━ debug_command: test_parallel
 ┃   ┣━━ test_parallel
-┃   ┣━━ test_sequential
+┃   ┣━━ test_sequential:p
 ┃   ┣━━ test_more_languages
 ┃   ┣━━ test: test_parallel
 ┃   ┣━━ test_units
@@ -119,7 +119,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (42,095 tokens, 2,763 lines)
+┣━━ 📄 README.md (42,199 tokens, 2,769 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -146,7 +146,7 @@ tree_plus -i tests
 ┃           syntax: bool,
 ┃           concise: bool,
 ┃       )
-┣━━ 📁 tree_plus_programs (1 folder, 3 files) 
+┣━━ 📁 tree_plus_programs (1 folder, 4 files) 
 ┃   ┣━━ 📄 hello_tree_plus.py (528 tokens, 80 lines)
 ┃   ┃   ┣━━ class ItHappened
 ┃   ┃   ┣━━ def main()
@@ -156,6 +156,19 @@ tree_plus -i tests
 ┃   ┃           didnt: str,
 ┃   ┃           happen: tuple,
 ┃   ┃       ) -> ItHappened
+┃   ┣━━ 📄 rewrite.py (1,462 tokens, 220 lines)
+┃   ┃   ┣━━ class ModelName(Enum)
+┃   ┃   ┣━━ def rewrite_module(
+┃   ┃   ┃       input_path: str,
+┃   ┃   ┃       output_path: Optional[str],
+┃   ┃   ┃       rewrite_ok: bool,
+┃   ┃   ┃       suffix: Optional[str] = ".rs",
+┃   ┃   ┃   ) -> Tuple[List[str], str, bool]
+┃   ┃   ┗━━ def main(
+┃   ┃           input_path: Path,
+┃   ┃           output_path: Optional[Path],
+┃   ┃           rewrite_ok: bool,
+┃   ┃       )
 ┃   ┣━━ 📄 stub_tests.py (1,162 tokens, 180 lines)
 ┃   ┃   ┣━━ TODO (Line 124): fix this path",
 ┃   ┃   ┣━━ TODO (Line 126): fill in these stubs:",
@@ -448,10 +461,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.36"
+        ┗━━ __version__ = "1.0.37"
 
-tree_plus v(1.0.36) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 25 file(s), 10,226 line(s), 136,969 token(s) in 0.23 second(s).
+tree_plus v(1.0.37) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 26 file(s), 10,450 line(s), 138,489 token(s) in 0.24 second(s).
 
 ```
 <!-- t1-end -->
@@ -496,9 +509,9 @@ Options:
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
   -s, -S, --syntax       Enables Syntax Highlighting (WIP).
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
-  -H, -h, --help         Show this message and exit.
+  -h, -H, --help         Show this message and exit.
 
-  v(1.0.36) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.37) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -2271,8 +2284,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.36) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 75 file(s), 6,434 line(s), 48,517 token(s) in 0.49 second(s).
+tree_plus v(1.0.37) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 75 file(s), 6,434 line(s), 48,517 token(s) in 0.50 second(s).
 
 ```
 <!-- t2-end -->
@@ -2724,7 +2737,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.36) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.37) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 6 folder(s), 16 file(s), 1,926 line(s), 13,166 token(s) in 0.14 second(s).
 
 ```
@@ -2750,7 +2763,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.36) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.37) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
