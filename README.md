@@ -120,7 +120,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (42,382 tokens, 2,782 lines)
+┣━━ 📄 README.md (42,480 tokens, 2,788 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -157,8 +157,8 @@ tree_plus -i tests
 ┃   ┃           didnt: str,
 ┃   ┃           happen: tuple,
 ┃   ┃       ) -> ItHappened
-┃   ┣━━ 📄 rewrite.py (2,237 tokens, 305 lines)
-┃   ┃   ┣━━ TODO (Line 211): research various kwargs for huggingface / torch performance
+┃   ┣━━ 📄 rewrite.py (2,265 tokens, 306 lines)
+┃   ┃   ┣━━ TODO (Line 212): research various kwargs for huggingface / torch performance
 ┃   ┃   ┣━━ class ModelName(Enum)
 ┃   ┃   ┣━━ def rewrite_module(
 ┃   ┃   ┃       max_length: int,
@@ -465,10 +465,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.38"
+        ┗━━ __version__ = "1.0.39"
 
-tree_plus v(1.0.38) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 26 file(s), 10,571 line(s), 139,743 token(s) in 0.23 second(s).
+tree_plus v(1.0.39) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 26 file(s), 10,578 line(s), 139,869 token(s) in 0.23 second(s).
 
 ```
 <!-- t1-end -->
@@ -515,7 +515,7 @@ Options:
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
   -h, -H, --help         Show this message and exit.
 
-  v(1.0.38) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.39) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -2290,7 +2290,7 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.38) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.39) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
 8 folder(s), 76 file(s), 6,436 line(s), 48,530 token(s) in 0.50 second(s).
 
 ```
@@ -2743,7 +2743,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.38) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.39) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 6 folder(s), 16 file(s), 1,926 line(s), 13,166 token(s) in 0.14 second(s).
 
 ```
@@ -2769,7 +2769,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.38) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.39) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
