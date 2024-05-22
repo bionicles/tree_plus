@@ -54,12 +54,13 @@ console = Console(
 
 
 class ModelName(Enum):
-    MISTRAL = "mistralai/Mistral-7B-Instruct-v0.2"
+    MISTRAL_3 = "mistralai/Mistral-7B-Instruct-v0.3"
+    MISTRAL_2 = "mistralai/Mistral-7B-Instruct-v0.2"
     # HERMES = "TheBloke/OpenHermes-2.5-Mistral-7B-AWQ" # disabled for 32k uncertainty
     # PHI = "microsoft/Phi-3-medium-128k-instruct"
 
 
-DEFAULT_MODEL = ModelName.MISTRAL.value
+DEFAULT_MODEL = ModelName.MISTRAL_3.value
 
 tokenizer = AutoTokenizer.from_pretrained(
     DEFAULT_MODEL,
