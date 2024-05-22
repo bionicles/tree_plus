@@ -70,12 +70,13 @@ tree_plus -i tests
 ┃           ┗━━     - Publish to PyPI
 ┣━━ 📄 .gitignore (210 tokens, 50 lines)
 ┣━━ 📁 coverage (1 folder, 1 file) 
-┃   ┗━━ 📄 lcov.info (48,829 tokens, 2,173 lines)
+┃   ┗━━ 📄 lcov.info (48,981 tokens, 2,180 lines)
 ┣━━ 📄 LICENSE (2,123 tokens, 81 lines)
-┣━━ 📄 Makefile (678 tokens, 102 lines)
+┣━━ 📄 Makefile (712 tokens, 105 lines)
 ┃   ┣━━ SHELL := /bin/bash
 ┃   ┣━━ cli
 ┃   ┣━━ library_demo
+┃   ┣━━ rewrite_demo
 ┃   ┣━━ coverage
 ┃   ┣━━ debug
 ┃   ┣━━ .PHONY: debug_command
@@ -119,7 +120,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (42,199 tokens, 2,769 lines)
+┣━━ 📄 README.md (42,382 tokens, 2,782 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -156,18 +157,21 @@ tree_plus -i tests
 ┃   ┃           didnt: str,
 ┃   ┃           happen: tuple,
 ┃   ┃       ) -> ItHappened
-┃   ┣━━ 📄 rewrite.py (1,462 tokens, 220 lines)
+┃   ┣━━ 📄 rewrite.py (2,237 tokens, 305 lines)
+┃   ┃   ┣━━ TODO (Line 211): research various kwargs for huggingface / torch performance
 ┃   ┃   ┣━━ class ModelName(Enum)
 ┃   ┃   ┣━━ def rewrite_module(
+┃   ┃   ┃       max_length: int,
+┃   ┃   ┃       fill_context: bool,
 ┃   ┃   ┃       input_path: str,
 ┃   ┃   ┃       output_path: Optional[str],
-┃   ┃   ┃       rewrite_ok: bool,
 ┃   ┃   ┃       suffix: Optional[str] = ".rs",
 ┃   ┃   ┃   ) -> Tuple[List[str], str, bool]
 ┃   ┃   ┗━━ def main(
+┃   ┃           fill_context: bool,
+┃   ┃           length: int,
 ┃   ┃           input_path: Path,
 ┃   ┃           output_path: Optional[Path],
-┃   ┃           rewrite_ok: bool,
 ┃   ┃       )
 ┃   ┣━━ 📄 stub_tests.py (1,162 tokens, 180 lines)
 ┃   ┃   ┣━━ TODO (Line 124): fix this path",
@@ -213,7 +217,7 @@ tree_plus -i tests
     ┃   ┣━━ def enable_debug()
     ┃   ┗━━ @contextmanager
     ┃       def debug_disabled()
-    ┣━━ 📄 deploy.py (1,771 tokens, 210 lines)
+    ┣━━ 📄 deploy.py (1,878 tokens, 223 lines)
     ┃   ┣━━ def extract(path: str = None) -> str
     ┃   ┣━━ def load(content: str = None, path: str = None)
     ┃   ┣━━ def extract_version(source_path: str = None) -> Tuple[int, int, int]
@@ -365,7 +369,7 @@ tree_plus -i tests
     ┃   ┣━━ @lru_cache
     ┃   ┃   def _replace_symbol(match: re.Match) -> str
     ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-    ┣━━ 📄 parse_file.py (22,731 tokens, 2,427 lines)
+    ┣━━ 📄 parse_file.py (22,734 tokens, 2,427 lines)
     ┃   ┣━━ BUG (Line 671): catastrophic backtracking in some c files
     ┃   ┣━━ @lru_cache(maxsize=None)
     ┃   ┃   def read_file(
@@ -461,10 +465,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.37"
+        ┗━━ __version__ = "1.0.38"
 
-tree_plus v(1.0.37) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 26 file(s), 10,450 line(s), 138,489 token(s) in 0.24 second(s).
+tree_plus v(1.0.38) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 26 file(s), 10,571 line(s), 139,743 token(s) in 0.23 second(s).
 
 ```
 <!-- t1-end -->
@@ -511,7 +515,7 @@ Options:
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
   -h, -H, --help         Show this message and exit.
 
-  v(1.0.37) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.38) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -619,7 +623,7 @@ make library_demo
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages
-📁 more_languages (8 folders, 75 files) 
+📁 more_languages (8 folders, 76 files) 
 ┣━━ 📁 group1 (1 folder, 11 files) 
 ┃   ┣━━ 📄 addamt.cobol (408 tokens, 41 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION.
@@ -1825,7 +1829,7 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
 ┃       ┣━━ const mockTickets = async () =>
 ┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
-┣━━ 📁 group6 (1 folder, 8 files) 
+┣━━ 📁 group6 (1 folder, 9 files) 
 ┃   ┣━━ 📄 catastrophic.c (4,144 tokens, 581 lines)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ struct Point getOrigin()
@@ -2044,6 +2048,8 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ function Edit-Profile
 ┃   ┃   ┣━━ function Set-Profile
 ┃   ┃   ┗━━ function Show-Profile
+┃   ┣━━ 📄 python_complex_class.py (13 tokens, 2 lines)
+┃   ┃   ┗━━ class Box(Space[NDArray[Any]])
 ┃   ┣━━ 📄 ramda__cloneRegExp.js (105 tokens, 9 lines)
 ┃   ┃   ┗━━ export default function _cloneRegExp(pattern)
 ┃   ┣━━ 📄 ramda_prop.js (747 tokens, 86 lines)
@@ -2284,8 +2290,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.37) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 75 file(s), 6,434 line(s), 48,517 token(s) in 0.50 second(s).
+tree_plus v(1.0.38) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 76 file(s), 6,436 line(s), 48,530 token(s) in 0.50 second(s).
 
 ```
 <!-- t2-end -->
@@ -2737,7 +2743,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.37) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.38) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 6 folder(s), 16 file(s), 1,926 line(s), 13,166 token(s) in 0.14 second(s).
 
 ```
@@ -2763,7 +2769,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.37) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.38) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
