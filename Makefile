@@ -24,7 +24,7 @@ test_parallel:
 	time (py.test --durations=0 -n $(N_WORKERS) --cov=tree_plus_src --cov-report=term-missing --cov-report=lcov:coverage/lcov.info -vv tests/test_*.py)
 
 # sequential unit tests (for CI)
-test_sequential:
+test_sequential:p
 	pytest tests/test_more_language_units.py tests/test_units.py tests/test_engine.py -vv
 
 # just to crank on language features, easy to debug on this
