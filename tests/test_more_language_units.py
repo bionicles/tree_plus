@@ -1842,6 +1842,10 @@ var unwind = _curry2(function(key, object)""",
             "tests/more_languages/group6/ramda__cloneRegExp.js",
             ["export default function _cloneRegExp(pattern)"],
         ),
+        (
+            "tests/more_languages/group6/python_complex_class.py",
+            ["class Box(Space[NDArray[Any]])"],
+        ),
     ],
 )
 def test_more_languages_group_6(

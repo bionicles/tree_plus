@@ -6,6 +6,9 @@ cli:
 library_demo:
 	python tree_plus_programs/hello_tree_plus.py
 
+rewrite_demo:
+	time tree_plus_programs/rewrite.py -l 3333 tests/more_languages/group1/CUSTOMER-INVOICE.CBL customer_invoice.erl
+
 # benchmark, dual core, library coverage, with line numbers for missing tests
 coverage:
 	time py.test -n 2 --cov=tree_plus_src --cov-report=term-missing --cov-report=lcov:coverage/lcov.info tests/*.py 

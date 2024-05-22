@@ -21,9 +21,22 @@ def load(content: str = None, path: str = None):
     assert content is not None
     assert isinstance(content, str)
     assert path is not None
+    # print(
+    #     f"{type(path)=}",
+    # )
+    # print(
+    #     f"{path=}",
+    # )
     if not os.path.exists(path):
         # make directories
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        try:
+            # i think the issue is "./xyz.rs" has a dirname of "" which doesn't exist,
+            # so we need to resolve the path and guard against the empty path
+            if parent_dir := os.path.dirname(path) != "":
+                os.makedirs(parent_dir, exist_ok=True)
+        except Exception as e:  # and catch exceptions to be sure
+            print(e)
+            print("trying to continue...")
     try:
         with open(path, "w+") as f:
             f.write(content)
