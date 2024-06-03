@@ -157,21 +157,21 @@ tree_plus -i tests
 ┃   ┃           didnt: str,
 ┃   ┃           happen: tuple,
 ┃   ┃       ) -> ItHappened
-┃   ┣━━ 📄 rewrite.py (2,265 tokens, 306 lines)
-┃   ┃   ┣━━ TODO (Line 212): research various kwargs for huggingface / torch performance
+┃   ┣━━ 📄 rewrite.py (2,340 tokens, 314 lines)
+┃   ┃   ┣━━ TODO (Line 218): research various kwargs for huggingface / torch performance
 ┃   ┃   ┣━━ class ModelName(Enum)
 ┃   ┃   ┣━━ def rewrite_module(
 ┃   ┃   ┃       max_length: int,
 ┃   ┃   ┃       fill_context: bool,
-┃   ┃   ┃       input_path: str,
+┃   ┃   ┃       input_path: Path,
 ┃   ┃   ┃       output_path: Optional[str],
 ┃   ┃   ┃       suffix: Optional[str] = ".rs",
-┃   ┃   ┃   ) -> Tuple[List[str], str, bool]
+┃   ┃   ┃   )
 ┃   ┃   ┗━━ def main(
 ┃   ┃           fill_context: bool,
 ┃   ┃           length: int,
 ┃   ┃           input_path: Path,
-┃   ┃           output_path: Optional[Path],
+┃   ┃           output_path: Optional[click.Path],
 ┃   ┃       )
 ┃   ┣━━ 📄 stub_tests.py (1,162 tokens, 180 lines)
 ┃   ┃   ┣━━ TODO (Line 124): fix this path",
@@ -217,31 +217,31 @@ tree_plus -i tests
     ┃   ┣━━ def enable_debug()
     ┃   ┗━━ @contextmanager
     ┃       def debug_disabled()
-    ┣━━ 📄 deploy.py (1,878 tokens, 223 lines)
-    ┃   ┣━━ def extract(path: str = None) -> str
-    ┃   ┣━━ def load(content: str = None, path: str = None)
-    ┃   ┣━━ def extract_version(source_path: str = None) -> Tuple[int, int, int]
+    ┣━━ 📄 deploy.py (1,912 tokens, 224 lines)
+    ┃   ┣━━ def extract(path: Optional[str] = None) -> str
+    ┃   ┣━━ def load(content: Optional[str] = None, path: Optional[str] = None)
+    ┃   ┣━━ def extract_version(source_path: Optional[str] = None) -> Tuple[int, int, int]
     ┃   ┣━━ def increment_version(
-    ┃   ┃       source_path: str = None,
-    ┃   ┃       sink_path: str = None,
+    ┃   ┃       source_path: Optional[str] = None,
+    ┃   ┃       sink_path: Optional[str] = None,
     ┃   ┃   )
-    ┃   ┣━━ def run_command(command: str = None, debug: bool = False)
+    ┃   ┣━━ def run_command(command: Optional[str] = None, debug: bool = False)
     ┃   ┣━━ def replace_readme_section(
-    ┃   ┃       source_path: str = None,
-    ┃   ┃       sink_path: str = None,
-    ┃   ┃       marker: str = None,
-    ┃   ┃       command: str = None,
+    ┃   ┃       source_path: Optional[str] = None,
+    ┃   ┃       sink_path: Optional[str] = None,
+    ┃   ┃       marker: Optional[str] = None,
+    ┃   ┃       command: Optional[str] = None,
     ┃   ┃   )
-    ┃   ┣━━ def update_readme(source_path: str = None, sink_path: str = None)
+    ┃   ┣━━ def update_readme(source_path: Optional[str] = None, sink_path: Optional[str] = None)
     ┃   ┗━━ def main()
-    ┣━━ 📄 engine.py (6,333 tokens, 759 lines)
-    ┃   ┣━━ TODO (Line 40): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
-    ┃   ┣━━ TODO (Line 427): research & decide about globs as paths instead of as filters
-    ┃   ┣━━ NOTE (Line 461): here we add directly input file_paths to the amortized glob matches
-    ┃   ┣━━ TODO (Line 534): decide if we apply glob patterns to glob paths (currently NO)
-    ┃   ┣━━ TODO (Line 573): decide between glob and rglob in _from_glob
-    ┃   ┣━━ TODO (Line 580): decide if we need to re-amortize the globs in the glob seed
-    ┃   ┣━━ TODO (Line 582): clarify ignore in glob seed context, skipping for now
+    ┣━━ 📄 engine.py (6,443 tokens, 770 lines)
+    ┃   ┣━━ TODO (Line 41): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
+    ┃   ┣━━ TODO (Line 432): research & decide about globs as paths instead of as filters
+    ┃   ┣━━ NOTE (Line 467): here we add directly input file_paths to the amortized glob matches
+    ┃   ┣━━ TODO (Line 540): decide if we apply glob patterns to glob paths (currently NO)
+    ┃   ┣━━ TODO (Line 584): decide between glob and rglob in _from_glob
+    ┃   ┣━━ TODO (Line 591): decide if we need to re-amortize the globs in the glob seed
+    ┃   ┣━━ TODO (Line 593): clarify ignore in glob seed context, skipping for now
     ┃   ┣━━ class Category(Enum)
     ┃   ┣━━ @dataclass
     ┃   ┃   class TreePlus
@@ -266,7 +266,7 @@ tree_plus -i tests
     ┃   ┃       capturing: bool = False,
     ┃   ┃   )
     ┃   ┣━━ def _make_rich_tree(label: str) -> Tree
-    ┃   ┣━━ def into_rich_tree(*, root: TreePlus = None) -> Tree
+    ┃   ┣━━ def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree
     ┃   ┣━━ @lru_cache
     ┃   ┃   def categorize(
     ┃   ┃       x: Union[Path, Tuple[str], str],
@@ -275,10 +275,10 @@ tree_plus -i tests
     ┃   ┃       raise_if_component: bool = True,
     ┃   ┃   ) -> Category
     ┃   ┣━━ def from_seed(
-    ┃   ┃       maybe_seed_str=None,
+    ┃   ┃       maybe_seed_str: Optional[str] = None,
     ┃   ┃       *,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
-    ┃   ┃       maybe_globs: Optional[Tuple[str]] = None,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[Tuple[str, ...]] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       override_ignore: bool = False,
     ┃   ┃       concise: bool = False,
@@ -286,38 +286,41 @@ tree_plus -i tests
     ┃   ┣━━ def from_seeds(
     ┃   ┃       maybe_seed_strs: Optional[Tuple[str]] = None,
     ┃   ┃       *,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
-    ┃   ┃       maybe_globs: Optional[Tuple[str]] = None,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[Tuple[str, ...]] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       override_ignore: bool = False,
     ┃   ┃       concise: bool = False,
     ┃   ┃   ) -> TreePlus
-    ┃   ┣━━ def _reduce_forest(*, forest: Tuple[TreePlus] = None) -> TreePlus
+    ┃   ┣━━ def _reduce_forest(
+    ┃   ┃       *,
+    ┃   ┃       forest: Tuple[TreePlus, ...],
+    ┃   ┃   ) -> TreePlus
     ┃   ┣━━ def _map_seeds(
     ┃   ┃       *,
-    ┃   ┃       seeds: Tuple[str] = None,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
-    ┃   ┃       maybe_globs: Optional[Tuple[str]] = None,
+    ┃   ┃       seeds: Optional[Tuple[str, ...]] = None,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_globs: Optional[Tuple[str, ...]] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       concise: bool = False,
-    ┃   ┃   ) -> Tuple[TreePlus]
+    ┃   ┃   ) -> Tuple[TreePlus, ...]
     ┃   ┣━━ def _from_seed(
     ┃   ┃       *,
     ┃   ┃       seed_path: Optional[Path] = None,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     ┃   ┃       maybe_globs: Optional[AmortizedGlobs] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       concise: bool = False,
     ┃   ┃   ) -> TreePlus
     ┃   ┣━━ def _add_subtree(
     ┃   ┃       *,
-    ┃   ┃       root: TreePlus = None,
-    ┃   ┃       subtree: TreePlus = None,
+    ┃   ┃       root: TreePlus,
+    ┃   ┃       subtree: TreePlus,
     ┃   ┃   )
     ┃   ┣━━ def _from_glob(
     ┃   ┃       *,
     ┃   ┃       pattern: str,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     ┃   ┃       maybe_globs: Optional[AmortizedGlobs] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       concise: bool = False,
@@ -325,7 +328,7 @@ tree_plus -i tests
     ┃   ┣━━ def _from_folder(
     ┃   ┃       *,
     ┃   ┃       folder_path: Path,
-    ┃   ┃       maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃   ┃       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     ┃   ┃       maybe_globs: Optional[AmortizedGlobs] = None,
     ┃   ┃       syntax_highlighting: bool = False,
     ┃   ┃       concise: bool = False,
@@ -339,38 +342,40 @@ tree_plus -i tests
     ┃   ┣━━ def _get_lexer(file_path: Path) -> str
     ┃   ┗━━ def _syntax_highlight(
     ┃           *,
-    ┃           file_path: Path = None,
-    ┃           components: List[str] = None,
-    ┃       ) -> Union[Syntax, str]
-    ┣━━ 📄 ignore.py (2,335 tokens, 329 lines)
+    ┃           file_path: Path,
+    ┃           components: List[str],
+    ┃       ) -> Union[List[Syntax], List[str]]
+    ┣━━ 📄 ignore.py (2,352 tokens, 331 lines)
     ┃   ┣━━ TODO (Line 129): incorporate gitignore
     ┃   ┣━━ def _is_all_str(x: Any) -> bool
     ┃   ┣━━ def can_parse(x) -> bool
     ┃   ┣━━ @lru_cache
     ┃   ┃   def parse_ignore(
     ┃   ┃       maybe_ignore_tuple: Optional[Tuple[str]] = None, override: bool = False
-    ┃   ┃   ) -> Optional[Tuple[str]]
+    ┃   ┃   ) -> Optional[Tuple[str, ...]]
     ┃   ┣━━ @lru_cache
     ┃   ┃   def is_glob(x: str) -> bool
     ┃   ┣━━ @lru_cache
     ┃   ┃   def parse_globs(
     ┃   ┃       maybe_globs_tuple: Optional[Tuple[str]] = None,
-    ┃   ┃   ) -> Tuple[str]
+    ┃   ┃   ) -> Optional[Tuple[str]]
     ┃   ┣━━ @dataclass(frozen=True)
     ┃   ┃   class AmortizedGlobs
-    ┃   ┣━━ def amortize_globs(paths: Tuple[Path], globs: Tuple[str]) -> Optional[AmortizedGlobs]
+    ┃   ┣━━ def amortize_globs(
+    ┃   ┃       paths: Tuple[Path, ...], globs: Tuple[str, ...]
+    ┃   ┃   ) -> Optional[AmortizedGlobs]
     ┃   ┗━━ @lru_cache(maxsize=None)
     ┃       def should_ignore(
     ┃           path: Path,
-    ┃           ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ┃           ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     ┃           globs: Optional[AmortizedGlobs] = None,
     ┃       ) -> bool
     ┣━━ 📄 isabelle_symbols.py (4,084 tokens, 462 lines)
     ┃   ┣━━ @lru_cache
     ┃   ┃   def _replace_symbol(match: re.Match) -> str
     ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-    ┣━━ 📄 parse_file.py (22,734 tokens, 2,427 lines)
-    ┃   ┣━━ BUG (Line 671): catastrophic backtracking in some c files
+    ┣━━ 📄 parse_file.py (22,744 tokens, 2,428 lines)
+    ┃   ┣━━ BUG (Line 672): catastrophic backtracking in some c files
     ┃   ┣━━ @lru_cache(maxsize=None)
     ┃   ┃   def read_file(
     ┃   ┃       file_path: str,
@@ -465,10 +470,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.39"
+        ┗━━ __version__ = "1.0.40"
 
-tree_plus v(1.0.39) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 26 file(s), 10,578 line(s), 139,869 token(s) in 0.23 second(s).
+tree_plus v(1.0.40) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 26 file(s), 0 line(s), 0 token(s) in 0.24 second(s).
 
 ```
 <!-- t1-end -->
@@ -513,9 +518,9 @@ Options:
   -d, -D, --debug        Enables $DEBUG_TREE_PLUS.
   -s, -S, --syntax       Enables Syntax Highlighting (WIP).
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
-  -h, -H, --help         Show this message and exit.
+  -H, -h, --help         Show this message and exit.
 
-  v(1.0.39) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.40) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -623,7 +628,7 @@ make library_demo
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages
-📁 more_languages (8 folders, 76 files) 
+📁 more_languages (8 folders, 77 files) 
 ┣━━ 📁 group1 (1 folder, 11 files) 
 ┃   ┣━━ 📄 addamt.cobol (408 tokens, 41 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION.
@@ -1590,7 +1595,7 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┣━━ output "instance_public_ip"
 ┃       ┣━━ locals
 ┃       ┗━━ module "vpc"
-┣━━ 📁 group5 (1 folder, 18 files) 
+┣━━ 📁 group5 (1 folder, 19 files) 
 ┃   ┣━━ 📄 ansible_test.yml (60 tokens, 15 lines)
 ┃   ┃   ┣━━ Install package
 ┃   ┃   ┣━━ Start service
@@ -1665,6 +1670,9 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━    cognitoUserPoolId
 ┃   ┃   ┣━━    cognitoAppClientId
 ┃   ┃   ┗━━    apiurl
+┃   ┣━━ 📄 hello_world.pyi (26 tokens, 3 lines)
+┃   ┃   ┗━━ @final
+┃   ┃       class dtype(Generic[_DTypeScalar_co])
 ┃   ┣━━ 📄 k8s_test.yaml (171 tokens, 38 lines)
 ┃   ┃   ┣━━ apps/v1.Deployment -> my-app
 ┃   ┃   ┣━━ v1.Service -> my-service
@@ -2290,8 +2298,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.39) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 76 file(s), 6,436 line(s), 48,530 token(s) in 0.50 second(s).
+tree_plus v(1.0.40) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 77 file(s), 0 line(s), 0 token(s) in 0.50 second(s).
 
 ```
 <!-- t2-end -->
@@ -2743,8 +2751,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.39) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-6 folder(s), 16 file(s), 1,926 line(s), 13,166 token(s) in 0.14 second(s).
+tree_plus v(1.0.40) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+6 folder(s), 16 file(s), 0 line(s), 0 token(s) in 0.14 second(s).
 
 ```
 <!-- t3-end -->
@@ -2769,8 +2777,8 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.39) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
-1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
+tree_plus v(1.0.40) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+1 folder(s), 8 file(s), 0 line(s), 0 token(s) in 0.02 second(s).
 
 ```
 <!-- t4-end -->
