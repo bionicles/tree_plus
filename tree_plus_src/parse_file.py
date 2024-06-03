@@ -26,6 +26,7 @@ FORTRAN_EXTENSIONS = {
     ".F90",
 }
 MATHEMATICA_EXTENSIONS = {".nb", ".wl"}
+PYTHON_EXTENSIONS = {".py", ".pyi"}
 
 
 @lru_cache(maxsize=None)
@@ -99,7 +100,7 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
                 components = parse_angular_app_module(contents) + components
             elif "environment" == file_name or "environment." in file_name:  # paranoid
                 components = parse_environment_ts(contents)
-    elif file_extension == ".py":
+    elif file_extension in PYTHON_EXTENSIONS:
         components = parse_py(contents)
         if isinstance(components, SyntaxError):
             components = [f"SyntaxError: {components}"]
@@ -725,7 +726,7 @@ combined_py_pattern = re.compile(
     # Classes
     r"(class \w+(\[.*\])?(\([\w\[\]\s,\.]*\))?):|"
     # Decorators
-    r"\n( *@\w+(\(.*\))?)\n|"
+    r"^( *@\w+(\(.*\))?)\n|"
     # TypeVar
     r"\n(\w+ = TypeVar\([^)]+\))|"
     # Version

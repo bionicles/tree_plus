@@ -1622,6 +1622,13 @@ def test_more_languages_group4(
                 "   apiurl",
             ],
         ),
+        (
+            "tests/more_languages/group5/hello_world.pyi",
+            [
+                """@final
+class dtype(Generic[_DTypeScalar_co])"""
+            ],
+        ),
     ],
 )
 def test_more_languages_group5(

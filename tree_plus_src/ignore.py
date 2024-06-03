@@ -169,7 +169,7 @@ is_parsed_ignore = can_parse
 @lru_cache
 def parse_ignore(
     maybe_ignore_tuple: Optional[Tuple[str]] = None, override: bool = False
-) -> Optional[Tuple[str]]:
+) -> Optional[Tuple[str, ...]]:
     "make_ignore: Give me tuple[str] or give me None"
     debug_print(f"parse_ignore: input {maybe_ignore_tuple=}")
     if maybe_ignore_tuple is None:
@@ -204,7 +204,7 @@ def is_glob(x: str) -> bool:
 @lru_cache
 def parse_globs(
     maybe_globs_tuple: Optional[Tuple[str]] = None,
-) -> Tuple[str]:
+) -> Optional[Tuple[str]]:
     "make_globs: Give me tuple[str] as in ('*.rs',) or give me None"
     debug_print(f"make_globs: input {maybe_globs_tuple=}")
     if not maybe_globs_tuple:
@@ -224,12 +224,14 @@ def parse_globs(
 
 @dataclass(frozen=True)
 class AmortizedGlobs:
-    paths: Tuple[Path]
-    globs: Tuple[str]
+    paths: Tuple[Path, ...]
+    globs: Tuple[str, ...]
     matches: FrozenSet[Path]
 
 
-def amortize_globs(paths: Tuple[Path], globs: Tuple[str]) -> Optional[AmortizedGlobs]:
+def amortize_globs(
+    paths: Tuple[Path, ...], globs: Tuple[str, ...]
+) -> Optional[AmortizedGlobs]:
     "amortize glob lookup"
     if not paths:
         debug_print(f"amortize_glob_prefixes: no paths")
@@ -269,7 +271,7 @@ def amortize_globs(paths: Tuple[Path], globs: Tuple[str]) -> Optional[AmortizedG
 @lru_cache(maxsize=None)
 def should_ignore(
     path: Path,
-    ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     globs: Optional[AmortizedGlobs] = None,
 ) -> bool:
     "Determine if a given path should be ignored based on ignore FROZENSET"

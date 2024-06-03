@@ -1,5 +1,6 @@
 from typing import (
     List,
+    Sequence,
     Tuple,
     Optional,
     Union,
@@ -75,7 +76,7 @@ class TreePlus:
     n_files: int = 0
     n_lines: Optional[int] = 0
     n_tokens: Optional[int] = 0
-    subtrees: List[Union["TreePlus", str]] = field(default_factory=list)
+    subtrees: List[Union["TreePlus", Syntax, str]] = field(default_factory=list)
 
     def is_root(self) -> bool:
         return self.category is Category.ROOT
@@ -135,9 +136,10 @@ class TreePlus:
             tokens = f"{self.n_tokens:,}"
         try:
             stats = f"{folders} folder(s), {files} file(s), {lines} line(s), {tokens} token(s)"
+            return stats
         except Exception as e:
             debug_print(f"Exception e: {type(e)} = {e}")
-        return stats
+        return ""
 
 
 @lru_cache
@@ -215,7 +217,7 @@ def _make_rich_tree(label: str) -> Tree:
     return Tree(label, guide_style=STYLE, highlight=True)
 
 
-def into_rich_tree(*, root: TreePlus = None) -> Tree:
+def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
     "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
     if not isinstance(root, TreePlus):
         raise TypeError(f"tree_plus.into_rich_tree got non-TreePlus {root=}")
@@ -228,28 +230,28 @@ def into_rich_tree(*, root: TreePlus = None) -> Tree:
             label += f" ({root.n_lines:,} line{'' if root.n_lines == 1 else 's'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
-            rich_tree.add(subtree)
+            rich_tree.add(subtree)  # type: ignore
     elif root.category is Category.FOLDER:
         label = f"{FOLDER_CHAR} {root.name} ({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'}, {root.n_files:,} file{'' if root.n_files == 1 else 's'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             # RECURSION HERE
-            rich_subtree = into_rich_tree(root=subtree)
+            rich_subtree = into_rich_tree(root=subtree)  # type: ignore
             rich_tree.add(rich_subtree)
         counts = f" "
-        rich_tree.label += counts
+        rich_tree.label += counts  # type: ignore
     elif root.category is Category.ROOT:
         label = f"{ROOT_CHAR} {root.name} ({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'}, {root.n_files:,} file{'' if root.n_files == 1 else 's'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
-            rich_subtree = into_rich_tree(root=subtree)
+            rich_subtree = into_rich_tree(root=subtree)  # type: ignore
             rich_tree.add(rich_subtree)
     elif root.category is Category.GLOB:
         n_matches = len(root.subtrees)
         label = f"{GLOB_CHAR} {root.name} ({n_matches:,} match{'' if n_matches == 1 else 'es'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
-            rich_subtree = into_rich_tree(root=subtree)
+            rich_subtree = into_rich_tree(root=subtree)  # type: ignore
             rich_tree.add(rich_subtree)
     if not rich_tree:
         raise TypeError(f"engine.into_rich_tree: unsupported {root=}")
@@ -305,10 +307,10 @@ def categorize(
 
 
 def from_seed(
-    maybe_seed_str=None,
+    maybe_seed_str: Optional[str] = None,
     *,
-    maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
-    maybe_globs: Optional[Tuple[str]] = None,
+    maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
+    maybe_globs: Optional[Tuple[str, ...]] = None,
     syntax_highlighting: bool = False,
     override_ignore: bool = False,
     concise: bool = False,
@@ -318,7 +320,7 @@ def from_seed(
         f"from_seed {maybe_seed_str=} {maybe_globs=} {override_ignore=} {syntax_highlighting=}"
     )
     return from_seeds(
-        maybe_seed_strs=(maybe_seed_str,),
+        maybe_seed_strs=None if maybe_seed_str is None else (maybe_seed_str,),
         maybe_ignore=maybe_ignore,
         maybe_globs=maybe_globs,
         syntax_highlighting=syntax_highlighting,
@@ -330,8 +332,8 @@ def from_seed(
 def from_seeds(
     maybe_seed_strs: Optional[Tuple[str]] = None,
     *,
-    maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
-    maybe_globs: Optional[Tuple[str]] = None,
+    maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
+    maybe_globs: Optional[Tuple[str, ...]] = None,
     syntax_highlighting: bool = False,
     override_ignore: bool = False,
     concise: bool = False,
@@ -375,7 +377,10 @@ def from_seeds(
         raise e
 
 
-def _reduce_forest(*, forest: Tuple[TreePlus] = None) -> TreePlus:
+def _reduce_forest(
+    *,
+    forest: Tuple[TreePlus, ...],
+) -> TreePlus:
     "PRIVATE: merge a forest of trees into a single root"
     root = TreePlus(
         category=Category.ROOT,
@@ -388,12 +393,12 @@ def _reduce_forest(*, forest: Tuple[TreePlus] = None) -> TreePlus:
 
 def _map_seeds(
     *,
-    seeds: Tuple[str] = None,
-    maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
-    maybe_globs: Optional[Tuple[str]] = None,
+    seeds: Optional[Tuple[str, ...]] = None,
+    maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
+    maybe_globs: Optional[Tuple[str, ...]] = None,
     syntax_highlighting: bool = False,
     concise: bool = False,
-) -> Tuple[TreePlus]:
+) -> Tuple[TreePlus, ...]:
     "PRIVATE (MAPPER): grow a forest from a tuple of seed strings"
     debug_print(f"_map_seeds {seeds=}, {maybe_ignore=}, {maybe_globs=}")
     assert seeds is not None and isinstance(
@@ -438,6 +443,7 @@ def _map_seeds(
         else:
             print(f"WARNING: _map_seeds got a BAD SEED {seed=} {category=}")
             continue
+    folder_paths = tuple(folder_paths)
     debug_print("_map_seeds CATEGORIZED SEEDS")
     debug_print("_map_seeds FOLDER PATHS", folder_paths)
     debug_print("_map_seeds FILE PATHS", file_paths)
@@ -468,7 +474,7 @@ def _map_seeds(
     parsed_seeds = tuple(os_sorted(chain(folder_paths, file_paths, glob_paths)))
     debug_print("_map_seeds os_sorted SEEDS", seeds)
     if not parsed_seeds:
-        return []
+        return ()
     forest = []
     for n, parsed_seed in enumerate(parsed_seeds):
         debug_print(f"_map_seeds invoking _from_seed {n=} {parsed_seed=}")
@@ -489,13 +495,13 @@ def _map_seeds(
         )
         forest.append(seed_tree_plus)
     debug_print(f"_map_seeds  DONE!")
-    return forest
+    return tuple(forest)
 
 
 def _from_seed(
     *,
     seed_path: Optional[Path] = None,
-    maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[AmortizedGlobs] = None,
     syntax_highlighting: bool = False,
     concise: bool = False,
@@ -543,8 +549,8 @@ def _from_seed(
 
 def _add_subtree(
     *,
-    root: TreePlus = None,
-    subtree: TreePlus = None,
+    root: TreePlus,
+    subtree: TreePlus,
 ):
     "PRIVATE: add a subtree TreePlus to a root TreePlus"
     # debug_print(f"_add_subtree {root=} {subtree=}")
@@ -554,7 +560,12 @@ def _add_subtree(
     elif subtree.is_folder():
         root.n_folders += 1
         root.n_files += subtree.n_files
-    if subtree.n_tokens is not None and subtree.n_lines is not None:
+    if (
+        root.n_tokens is not None
+        and root.n_lines
+        and subtree.n_tokens is not None
+        and subtree.n_lines is not None
+    ):
         root.n_tokens += subtree.n_tokens
         root.n_lines += subtree.n_lines
 
@@ -562,7 +573,7 @@ def _add_subtree(
 def _from_glob(
     *,
     pattern: str,
-    maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[AmortizedGlobs] = None,
     syntax_highlighting: bool = False,
     concise: bool = False,
@@ -608,7 +619,7 @@ def _from_glob(
 def _from_folder(
     *,
     folder_path: Path,
-    maybe_ignore: Optional[Tuple[str]] = DEFAULT_IGNORE,
+    maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[AmortizedGlobs] = None,
     syntax_highlighting: bool = False,
     concise: bool = False,
@@ -695,7 +706,7 @@ def _from_file(
     debug_print(f"engine._from_file got counts:", counts)
     # debug_print(f"engine._from_file got components:", components)
     file_tree_plus = TreePlus(
-        subtrees=components,
+        subtrees=components,  # type: ignore
         category=Category.FILE,
         name=file_path.name,
         n_folders=0,
@@ -734,9 +745,9 @@ def _get_lexer(file_path: Path) -> str:
 
 def _syntax_highlight(
     *,
-    file_path: Path = None,
-    components: List[str] = None,
-) -> Union[Syntax, str]:
+    file_path: Path,
+    components: List[str],
+) -> Union[List[Syntax], List[str]]:
     "PRIVATE: either Syntax highlighting, or fallback to str"
     debug_print(
         f"_syntax_highlight {len(components)} component(s) from file_path={file_path}"

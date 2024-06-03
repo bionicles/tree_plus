@@ -20,6 +20,7 @@
 from pathlib import Path
 from typing import Optional, Tuple, List
 from enum import Enum
+import sys
 
 from rich.console import Console
 from rich.theme import Theme
@@ -40,6 +41,10 @@ import tree_plus_src as tp
 
 DEFAULT_MAX_LENGTH = 256  # short default for fast demos
 MAX_CONTEXT = 32_768
+
+APPLE = sys.platform == "darwin"
+NVIDIA = not APPLE
+
 
 install(show_locals=True)
 
@@ -75,7 +80,7 @@ model = AutoModelForCausalLM.from_pretrained(
     # device_map="auto",
     torch_dtype="auto",
     attn_implementation="flash_attention_2",
-    device_map="cuda",
+    device_map="auto",
     trust_remote_code=True,
 )
 
@@ -88,10 +93,10 @@ template = """{% for message in messages %}
 def rewrite_module(
     max_length: int,
     fill_context: bool,
-    input_path: str,
+    input_path: Path,
     output_path: Optional[str],
     suffix: Optional[str] = ".rs",
-) -> Tuple[List[str], str, bool]:
+):
     category = tp.engine.categorize(input_path)
     if category is not tp.engine.Category.FILE:
         raise ValueError("only files for now!")
@@ -182,28 +187,29 @@ Write the simplest category member of complete, correct, test-driven, same funct
         add_generation_prompt=True,
         chat_template=template,
     )
-    console.print(Panel(processed_chat, title="processed_chat", box=box.HORIZONTALS))
+    console.print(Panel(processed_chat, title="processed_chat", box=box.HORIZONTALS))  # type: ignore
 
-    input_ids = tokenizer(processed_chat, return_tensors="pt").to(model.device)
-    streamer = TextStreamer(tokenizer, skip_prompt=True)
+    input_ids = tokenizer(processed_chat, return_tensors="pt").to(model.device)  # type: ignore
+    streamer = TextStreamer(tokenizer, skip_prompt=True)  # type: ignore
 
     # Prepare to generate
-    # for some reason, I have tensorflow and torch happening, looks like this is torch, actually, whoops!
-    start_event = torch.cuda.Event(enable_timing=True)
-    end_event = torch.cuda.Event(enable_timing=True)
-    torch.cuda.reset_peak_memory_stats(model.device)
-    torch.cuda.empty_cache()
-    torch.cuda.synchronize()
-
+    # Generate the code
     if fill_context:
         n_tokens = len(input_ids.tokens())
         max_new_tokens = MAX_CONTEXT - n_tokens
     else:
         max_new_tokens = max_length
-
-    # Generate the code
     console.rule("Begin Generation")
-    start_event.record()
+    # for some reason, I have tensorflow and torch happening, looks like this is torch, actually, whoops!
+    start_event = None
+    end_event = None
+    if NVIDIA:
+        start_event = torch.cuda.Event(enable_timing=True)
+        end_event = torch.cuda.Event(enable_timing=True)
+        torch.cuda.reset_peak_memory_stats(model.device)
+        torch.cuda.empty_cache()
+        torch.cuda.synchronize()
+        start_event.record()  # type: ignore
     response = model.generate(
         **input_ids,
         do_sample=False,
@@ -213,18 +219,20 @@ Write the simplest category member of complete, correct, test-driven, same funct
     )
 
     # finish the timer and flush the gpu kernels
-    end_event.record()
-    torch.cuda.synchronize()
     console.rule("End Generation")
+    if NVIDIA:
+        end_event.record()  # type: ignore
+        torch.cuda.synchronize()
 
-    # log some statistics
-    max_memory = torch.cuda.max_memory_allocated(model.device)
-    console.print("Max memory (MB): ", max_memory * 1e-6)
-    new_tokens = response.shape[1] - input_ids.input_ids.shape[1]
-    console.print(
-        "Throughput (tokens/sec): ",
-        new_tokens / (start_event.elapsed_time(end_event) * 1.0e-3),
-    )
+        # log some statistics
+        max_memory = torch.cuda.max_memory_allocated(model.device)
+        console.print("Max memory (MB): ", max_memory * 1e-6)
+        new_tokens = response.shape[1] - input_ids.input_ids.shape[1]
+        if start_event is not None and end_event is not None:
+            console.print(
+                "Throughput (tokens/sec): ",
+                new_tokens / (start_event.elapsed_time(end_event) * 1.0e-3),
+            )
 
     # I think the conversation length calculation may be off due to the skipping of special tokens
     # Might need to remove these later for accuracy !
@@ -239,7 +247,7 @@ Write the simplest category member of complete, correct, test-driven, same funct
     # assert 0 # oops
 
     # save the new code to the output path
-    tp.deploy.load(content=convo_output, path=_output_path)
+    tp.deploy.load(content=convo_output, path=str(_output_path))
 
 
 this_file_path = Path(__file__)
@@ -277,7 +285,7 @@ def main(
     fill_context: bool,
     length: int,
     input_path: Path,
-    output_path: Optional[Path],
+    output_path: Optional[click.Path],
     # rewrite_ok: bool,
 ):
     "rewrite input_path as output_path"
@@ -296,7 +304,7 @@ def main(
         fill_context=fill_context,
         max_length=length,
         input_path=input_path,
-        output_path=output_path,
+        output_path=str(output_path),
     )
     console.print(command_panel)
 

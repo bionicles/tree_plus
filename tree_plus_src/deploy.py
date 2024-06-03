@@ -1,11 +1,11 @@
 # tree_plus_src/deploy.py
-from typing import Tuple
+from typing import Optional, Tuple
 import subprocess
 import re
 import os
 
 
-def extract(path: str = None) -> str:
+def extract(path: Optional[str] = None) -> str:
     assert path is not None
     assert os.path.exists(path)
     try:
@@ -17,7 +17,7 @@ def extract(path: str = None) -> str:
         raise e
 
 
-def load(content: str = None, path: str = None):
+def load(content: Optional[str] = None, path: Optional[str] = None):
     assert content is not None
     assert isinstance(content, str)
     assert path is not None
@@ -32,7 +32,7 @@ def load(content: str = None, path: str = None):
         try:
             # i think the issue is "./xyz.rs" has a dirname of "" which doesn't exist,
             # so we need to resolve the path and guard against the empty path
-            if parent_dir := os.path.dirname(path) != "":
+            if (parent_dir := os.path.dirname(path)) != "":
                 os.makedirs(parent_dir, exist_ok=True)
         except Exception as e:  # and catch exceptions to be sure
             print(e)
@@ -45,7 +45,7 @@ def load(content: str = None, path: str = None):
         raise e
 
 
-def extract_version(source_path: str = None) -> Tuple[int, int, int]:
+def extract_version(source_path: Optional[str] = None) -> Tuple[int, int, int]:
     assert source_path is not None
     assert source_path.endswith(".py")
     assert os.path.exists(source_path)
@@ -58,8 +58,8 @@ def extract_version(source_path: str = None) -> Tuple[int, int, int]:
 
 
 def increment_version(
-    source_path: str = None,
-    sink_path: str = None,
+    source_path: Optional[str] = None,
+    sink_path: Optional[str] = None,
 ):
     assert source_path is not None
     assert sink_path is not None
@@ -89,22 +89,23 @@ def increment_version(
     print("increment_version complete")
 
 
-def run_command(command: str = None, debug: bool = False):
+def run_command(command: Optional[str] = None, debug: bool = False):
     assert command is not None
     assert isinstance(debug, bool)
     if command.startswith("make"):
         command = command.replace("make", "make --no-print-directory")
+    environ = None
     if not debug:
-        env = os.environ.copy()
-        env.update({"DEBUG_TREE_PLUS": "0"})
-    return subprocess.check_output(command, shell=True, env=env).decode()
+        environ = os.environ.copy()
+        environ.update({"DEBUG_TREE_PLUS": "0"})
+    return subprocess.check_output(command, shell=True, env=environ).decode()
 
 
 def replace_readme_section(
-    source_path: str = None,
-    sink_path: str = None,
-    marker: str = None,
-    command: str = None,
+    source_path: Optional[str] = None,
+    sink_path: Optional[str] = None,
+    marker: Optional[str] = None,
+    command: Optional[str] = None,
 ):
     # paranoia
     assert source_path is not None
@@ -148,7 +149,7 @@ def replace_readme_section(
     print(f"wrote to '{sink_path}'")
 
 
-def update_readme(source_path: str = None, sink_path: str = None):
+def update_readme(source_path: Optional[str] = None, sink_path: Optional[str] = None):
     assert source_path is not None
     assert source_path.endswith(".md")
     assert os.path.exists(source_path)
