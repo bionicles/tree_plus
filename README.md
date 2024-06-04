@@ -82,9 +82,9 @@ tree_plus -i tests
 ┃   ┣━━ .PHONY: debug_command
 ┃   ┣━━ debug_command: test_parallel
 ┃   ┣━━ test_parallel
-┃   ┣━━ test_sequential:p
+┃   ┣━━ test_sequential
 ┃   ┣━━ test_more_languages
-┃   ┣━━ test: test_parallel
+┃   ┣━━ test: test_sequential
 ┃   ┣━━ test_units
 ┃   ┣━━ test_tp_dotdot
 ┃   ┣━━ test_e2e
@@ -120,7 +120,7 @@ tree_plus -i tests
 ┃   ┣━━     tomli
 ┃   ┗━━     natsort>=7.1
 ┣━━ 📄 pytest.ini (21 tokens, 5 lines)
-┣━━ 📄 README.md (42,480 tokens, 2,788 lines)
+┣━━ 📄 README.md (42,607 tokens, 2,796 lines)
 ┃   ┣━━ # Tree Plus
 ┃   ┣━━ ## Example Output:
 ┃   ┣━━ - [ ] Demonstrate Parsed Checkboxes
@@ -374,8 +374,8 @@ tree_plus -i tests
     ┃   ┣━━ @lru_cache
     ┃   ┃   def _replace_symbol(match: re.Match) -> str
     ┃   ┗━━ def replace_isabelle_symbols(content: str) -> str
-    ┣━━ 📄 parse_file.py (22,744 tokens, 2,428 lines)
-    ┃   ┣━━ BUG (Line 672): catastrophic backtracking in some c files
+    ┣━━ 📄 parse_file.py (22,931 tokens, 2,446 lines)
+    ┃   ┣━━ BUG (Line 690): catastrophic backtracking in some c files
     ┃   ┣━━ @lru_cache(maxsize=None)
     ┃   ┃   def read_file(
     ┃   ┃       file_path: str,
@@ -470,10 +470,10 @@ tree_plus -i tests
     ┃       ┣━━ add_alias()
     ┃       ┗━━ create_conda_env()
     ┗━━ 📄 version.py (18 tokens, 2 lines)
-        ┗━━ __version__ = "1.0.40"
+        ┗━━ __version__ = "1.0.41"
 
-tree_plus v(1.0.40) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 26 file(s), 0 line(s), 0 token(s) in 0.24 second(s).
+tree_plus v(1.0.41) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 26 file(s), 0 line(s), 0 token(s) in 0.23 second(s).
 
 ```
 <!-- t1-end -->
@@ -520,7 +520,7 @@ Options:
   -c, -C, --concise      Enables Syntax Highlighting (WIP).
   -H, -h, --help         Show this message and exit.
 
-  v(1.0.40) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.41) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -628,7 +628,7 @@ make library_demo
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages
-📁 more_languages (8 folders, 77 files) 
+📁 more_languages (8 folders, 80 files) 
 ┣━━ 📁 group1 (1 folder, 11 files) 
 ┃   ┣━━ 📄 addamt.cobol (408 tokens, 41 lines)
 ┃   ┃   ┣━━ IDENTIFICATION DIVISION.
@@ -1129,7 +1129,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ int main()
 ┃   ┃   ┣━━ void printMessage(const std::string &message)
 ┃   ┃   ┣━━ template<typename T>
-┃   ┃   ┣━━ void printVector(const std::vector<T>& vec)
+┃   ┃   ┃   void printVector(const std::vector<T>& vec)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━     Point(int x, int y) : x(x), y(y)
 ┃   ┃   ┣━━ class Animal
@@ -1837,7 +1837,7 @@ tree_plus -i group_todo tests/more_languages
 ┃       ┣━━ async function mockMoreTickets(): Promise<Ticket[]>
 ┃       ┣━━ const mockTickets = async () =>
 ┃       ┗━━ const renderQRCode = async (text: String): Promise<string> =>
-┣━━ 📁 group6 (1 folder, 9 files) 
+┣━━ 📁 group6 (1 folder, 12 files) 
 ┃   ┣━━ 📄 catastrophic.c (4,144 tokens, 581 lines)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━ struct Point getOrigin()
@@ -1870,7 +1870,7 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ int main()
 ┃   ┃   ┣━━ void printMessage(const std::string &message)
 ┃   ┃   ┣━━ template<typename T>
-┃   ┃   ┣━━ void printVector(const std::vector<T>& vec)
+┃   ┃   ┃   void printVector(const std::vector<T>& vec)
 ┃   ┃   ┣━━ struct Point
 ┃   ┃   ┣━━     Point(int x, int y) : x(x), y(y)
 ┃   ┃   ┣━━ class Animal
@@ -1942,6 +1942,19 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ #define EXPORT_SYMBOL __declspec(dllexport)
 ┃   ┃   ┣━━ #define EXPORT_SYMBOL __attribute__ ((visibility("default")))
 ┃   ┃   ┗━━ EXPORT_SYMBOL PyMODINIT_FUNC PyInit_cpu_feature_guard(void)
+┃   ┣━━ 📄 cpp_examples_impl.cc (66 tokens, 10 lines)
+┃   ┃   ┣━━ PYBIND11_MODULE(cpp_examples, m)
+┃   ┃   ┗━━     m.def("add", &add<int>, "An example function to add two numbers.")
+┃   ┣━━ 📄 cpp_examples_impl.cu (47 tokens, 10 lines)
+┃   ┃   ┣━━ template <typename T>
+┃   ┃   ┃   T add(T a, T b)
+┃   ┃   ┗━━ template <>
+┃   ┃       int add<int>(int a, int b)
+┃   ┣━━ 📄 cpp_examples_impl.h (26 tokens, 7 lines)
+┃   ┃   ┣━━ template <typename T>
+┃   ┃   ┃   T add(T a, T b)
+┃   ┃   ┗━━ template <>
+┃   ┃       int add<int>(int, int)
 ┃   ┣━━ 📄 fractal.thy (2,183 tokens, 148 lines)
 ┃   ┃   ┣━━ Title:      fractal.thy
 ┃   ┃   ┣━━ Author:     Isabelle/HOL Contributors!
@@ -2255,7 +2268,8 @@ tree_plus -i group_todo tests/more_languages
 ┃   ┃   ┣━━ void DisableXlaCompilation()
 ┃   ┃   ┣━━ void EnableXlaCompilation()
 ┃   ┃   ┣━━ bool FailOnXlaCompilation()
-┃   ┃   ┗━━ #define TF_PY_DECLARE_FLAG(flag_name)
+┃   ┃   ┣━━ #define TF_PY_DECLARE_FLAG(flag_name)
+┃   ┃   ┗━━ PYBIND11_MODULE(flags_pybind, m)
 ┃   ┣━━ 📄 test.f (200 tokens, 31 lines)
 ┃   ┃   ┣━━ MODULE basic_mod
 ┃   ┃   ┣━━     TYPE :: person
@@ -2298,8 +2312,8 @@ tree_plus -i group_todo tests/more_languages
         ┣━━   define set-up
         ┗━━   define traverse
 
-tree_plus v(1.0.40) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-8 folder(s), 77 file(s), 0 line(s), 0 token(s) in 0.50 second(s).
+tree_plus v(1.0.41) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+8 folder(s), 80 file(s), 0 line(s), 0 token(s) in 0.51 second(s).
 
 ```
 <!-- t2-end -->
@@ -2751,7 +2765,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         ┃   var unwind = _curry2(function(key, object)
         ┗━━   return _map(function(item)
 
-tree_plus v(1.0.40) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.41) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 6 folder(s), 16 file(s), 0 line(s), 0 token(s) in 0.14 second(s).
 
 ```
@@ -2777,7 +2791,7 @@ tree_plus tests/more_languages/group_todo
 ┣━━ 📄 testTypings.d.ts (149 tokens, 23 lines)
 ┗━━ 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.40) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.41) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 0 line(s), 0 token(s) in 0.02 second(s).
 
 ```
