@@ -39,8 +39,8 @@ C_EXPECTATION = [
     "void globalGreet()",
     "int main()",
     "void printMessage(const std::string &message)",
-    "template<typename T>",
-    "void printVector(const std::vector<T>& vec)",
+    """template<typename T>
+void printVector(const std::vector<T>& vec)""",
     "struct Point",
     "    Point(int x, int y) : x(x), y(y)",
     "class Animal",
@@ -1853,6 +1853,31 @@ var unwind = _curry2(function(key, object)""",
             "tests/more_languages/group6/python_complex_class.py",
             ["class Box(Space[NDArray[Any]])"],
         ),
+        (
+            "tests/more_languages/group6/cpp_examples_impl.cu",
+            [
+                """template <typename T>
+T add(T a, T b)""",
+                """template <>
+int add<int>(int a, int b)""",
+            ],
+        ),
+        (
+            "tests/more_languages/group6/cpp_examples_impl.h",
+            [
+                """template <typename T>
+T add(T a, T b)""",
+                """template <>
+int add<int>(int, int)""",
+            ],
+        ),
+        (
+            "tests/more_languages/group6/cpp_examples_impl.cc",
+            [
+                "PYBIND11_MODULE(cpp_examples, m)",
+                '    m.def("add", &add<int>, "An example function to add two numbers.")',
+            ],
+        ),
     ],
 )
 def test_more_languages_group_6(
@@ -1976,6 +2001,7 @@ TF_FLAGS_EXPECTATION = [
     "void EnableXlaCompilation()",
     "bool FailOnXlaCompilation()",
     "#define TF_PY_DECLARE_FLAG(flag_name)",
+    "PYBIND11_MODULE(flags_pybind, m)",
 ]
 
 

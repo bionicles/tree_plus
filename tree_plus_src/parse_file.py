@@ -12,7 +12,7 @@ BINARY_CHECK_SIZE = 1024
 TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
 LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
 JS_EXTENSIONS = {".js", ".jsx", ".ts", ".tsx"}
-C_EXTENSIONS = {".c", ".cpp", ".cc", ".h"}
+C_EXTENSIONS = {".c", ".cpp", ".cc", ".h", ".cu"}
 COBOL_EXTENSIONS = {".cbl", ".cobol"}
 FORTRAN_EXTENSIONS = {
     ".f",
@@ -352,7 +352,8 @@ def parse_c(contents: str) -> List[str]:
         # Functions first (most common)
         r"^(?P<function> *(?P<modifier>[\w:]+ )?(?P<function_return_type>[\w:*&]+(?P<generics>\s?<[^>]*>\s?)? )(?P<function_name>[\w*&[\]]+)\([^\)]*\)(?=\s{))|"
         # templates
-        r"^(?P<template>template ?<.*?>[^\{^;^=\n]*(?=\s))|"
+        # r"^(?P<template>template ?<.*?>[^\{^;^=\n]*(?=\s))|"
+        r"^(?P<template>(?P<template_body>template ?<.*?>[\s\S]*?)(?P<tail>;|{|\)))|"
         # hashtag macros
         r"^(?P<macro>#(?:define)(?P<invocation>\s\w+( ?\w* ?\(.*\))?)?)|"
         # Methods
@@ -368,6 +369,10 @@ def parse_c(contents: str) -> List[str]:
         r"^(?P<enum>(?:enum) (?:class )?\w+(?: : \w+)?)|"
         # public or private sections
         r"^(?P<public_or_private> *(public|private):)|"
+        # pybind modules
+        r"^(?P<pybind11>PYBIND11_MODULE[\s\S]*?)(?={)|"
+        # pybind defs
+        r"^(?P<def> *\w+\.def\(\"[\s\S]*?(?=;))|"
         # static definitions seem important
         r"^(?P<other_static>static (struct )?(?P<static_kind>\w+) \w+(\[\])?(?= =))",
         # functions
@@ -413,16 +418,29 @@ def parse_c(contents: str) -> List[str]:
             component = groups["enum"]
             public_or_private = None  # right?
         elif "template" in groups:
-            component = groups["template"].rstrip("\n")
+            component = (
+                groups["template_body"]
+                .rstrip("\n")
+                .rstrip(" ")
+                .rstrip("\n")
+                .rstrip("\n")
+            )
+            if groups["tail"].startswith(")"):
+                component += ")"
             public_or_private = None  # right?
         elif "macro" in groups:
             component = groups["macro"]
             public_or_private = None  # right?
         elif "other_static" in groups:
             component = groups["other_static"]
+        elif "pybind11" in groups:
+            component = groups["pybind11"]
+        elif "def" in groups:
+            component = groups["def"]
         if component:
             debug_print(f"{component=}")
             component = component
+            component = component.rstrip("\n").rstrip(" ")
             components.append(component)
 
     return components
