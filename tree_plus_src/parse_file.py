@@ -12,7 +12,7 @@ BINARY_CHECK_SIZE = 1024
 TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
 LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
 JS_EXTENSIONS = {".js", ".jsx", ".ts", ".tsx"}
-C_EXTENSIONS = {".c", ".cpp", ".cc", ".h", ".cu"}
+C_EXTENSIONS = {".c", ".cpp", ".cc", ".h", ".cu", ".cuh"}
 COBOL_EXTENSIONS = {".cbl", ".cobol"}
 FORTRAN_EXTENSIONS = {
     ".f",
