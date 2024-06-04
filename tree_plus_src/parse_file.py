@@ -1,6 +1,6 @@
 # tree_plus_src/parse_file.py
 from functools import lru_cache
-from typing import List, Tuple, Optional, Union
+from typing import List, Sequence, Tuple, Optional, Union
 from pathlib import Path
 import json
 import os
@@ -264,9 +264,9 @@ def parse_tensorflow_flags(contents: str) -> List[str]:
         re.MULTILINE,
     )
     components = []
+    carry_description = None
     carry_flag_type = None
     carry_flag = None
-    carry_description = None
     for n, match in enumerate(pattern.finditer(contents)):
         debug_print(f"parse_tensorflow_flags {n=} {match=}")
         debug_print(
@@ -275,13 +275,13 @@ def parse_tensorflow_flags(contents: str) -> List[str]:
         component = None
         groups = extract_groups(match, named_only=True)
         if "flag_name" in groups:
-            if carry_flag:
+            if carry_flag_type and carry_flag:
                 component = assemble_tensorflow_flag(
                     carry_flag_type, carry_flag, carry_description
                 )
+                carry_description = None
                 carry_flag_type = None
                 carry_flag = None
-                carry_description = None
             carry_flag_type = groups["flag_type"]
             carry_flag = groups["flag_name"]
         elif "flag_description" in groups:
@@ -292,14 +292,14 @@ def parse_tensorflow_flags(contents: str) -> List[str]:
                 carry_description = [description]
             else:
                 carry_description.append(description)
-        elif "blank_line" in groups and carry_flag is not None:
+        elif "blank_line" in groups and carry_flag and carry_flag_type:
             # handling the edge case of inadvertent connections
             component = assemble_tensorflow_flag(
                 carry_flag_type, carry_flag, carry_description
             )
+            carry_description = None
             carry_flag_type = None
             carry_flag = None
-            carry_description = None
         if component:
             debug_print(f"COMPONENT:", component)
             components.append(component)
@@ -1252,6 +1252,7 @@ def parse_pyproject_toml(contents: str) -> List[str]:
     debug_print("parse_pyproject_toml data:", data)
     components = []
 
+    project_info = None
     if "project" in data:
         project_info = data["project"]
         debug_print("parse_pyproject_toml project_info:", project_info)
@@ -1268,7 +1269,7 @@ def parse_pyproject_toml(contents: str) -> List[str]:
                 if "License ::" in classifier:
                     components.append(classifier)
 
-    if "dependencies" in project_info:
+    if project_info and "dependencies" in project_info:
         dependencies = project_info["dependencies"]
         components.append("dependencies:")
         for dep in dependencies:
@@ -2298,7 +2299,9 @@ def parse_matlab(content: str) -> List[str]:
         remaining_content = remaining_content.replace(class_content, "")
 
         class_name_pattern = r"classdef\s+(\w+)"
-        class_name = re.search(class_name_pattern, class_content, re.DOTALL).group(1)
+        class_name = re.search(class_name_pattern, class_content, re.DOTALL)
+        if class_name:
+            class_name = class_name.group(1)
 
         method_pattern = r"methods.*?function\s+(\w+)\("
         method_matches = re.findall(method_pattern, class_content, re.DOTALL)
@@ -2376,34 +2379,35 @@ def parse_md(content: str) -> List[str]:
             elif task_pattern.match(line.lstrip()):
                 indent_level = len(line) - len(line.lstrip())
                 task_match = task_pattern.match(line.lstrip())
-                task_text = task_match.group(2)
-                is_checked = "[x]" in line or "[X]" in line
-                # print(f"Checked: {is_checked} Line: {line}")
-                task = (
-                    indent_level * " "
-                    + ("- [x] " if is_checked else "- [ ] ")
-                    + task_text
-                )
-                # For every task, we first remove ancestors that are not parents of the current task
-                # This is identified by comparing their indentation level.
-                checked_ancestors = [
-                    a for a in checked_ancestors if len(a[0]) < len(task)
-                ]
-                # If the task is checked, we add it to the list of ancestors but don't add to the final output yet.
-                # The second element of the tuple is a flag to indicate whether this ancestor should be included in the output.
-                if is_checked:
-                    ancestor_tuple = (task, False)
-                    # print(f"ADD ANCESTOR: {ancestor_tuple=}")
-                    checked_ancestors.append(ancestor_tuple)
-                # If the task is not checked, we update the flag for all ancestors as they should be included in the final output
-                # Then add these ancestors to the output and finally add the current task.
-                else:
-                    checked_ancestors = [(a[0], True) for a in checked_ancestors]
-                    ancestors_to_add = [a[0] for a in checked_ancestors if a[1]]
-                    # print(f"ADD ANCESTOR(S) {ancestors_to_add=}")
-                    headers_and_tasks.extend(ancestors_to_add)
-                    # print(f"ADD TASK {task}")
-                    headers_and_tasks.append(task)
+                if task_match:
+                    task_text = task_match.group(2)
+                    is_checked = "[x]" in line or "[X]" in line
+                    # print(f"Checked: {is_checked} Line: {line}")
+                    task: str = (
+                        indent_level * " "
+                        + ("- [x] " if is_checked else "- [ ] ")
+                        + task_text
+                    )
+                    # For every task, we first remove ancestors that are not parents of the current task
+                    # This is identified by comparing their indentation level.
+                    checked_ancestors: Sequence[Tuple[str, bool]] = [
+                        a for a in checked_ancestors if len(a[0]) < len(task)
+                    ]
+                    # If the task is checked, we add it to the list of ancestors but don't add to the final output yet.
+                    # The second element of the tuple is a flag to indicate whether this ancestor should be included in the output.
+                    if is_checked:
+                        ancestor_tuple: Tuple[str, bool] = (task, False)
+                        # print(f"ADD ANCESTOR: {ancestor_tuple=}")
+                        checked_ancestors.append(ancestor_tuple)
+                    # If the task is not checked, we update the flag for all ancestors as they should be included in the final output
+                    # Then add these ancestors to the output and finally add the current task.
+                    else:
+                        checked_ancestors = [(a[0], True) for a in checked_ancestors]
+                        ancestors_to_add = [a[0] for a in checked_ancestors if a[1]]
+                        # print(f"ADD ANCESTOR(S) {ancestors_to_add=}")
+                        headers_and_tasks.extend(ancestors_to_add)
+                        # print(f"ADD TASK {task}")
+                        headers_and_tasks.append(task)
 
     return headers_and_tasks
 
