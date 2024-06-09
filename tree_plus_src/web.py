@@ -22,18 +22,18 @@ ACTION_NAMES = (
 N_GOOGLE_RESULTS = 2  # small number of initial results to make room for recursion
 LINK_STYLE = "#0C7BDC"  # web link blue color
 
+# TODO: re-enable tree plus web actions
+
 
 def create_url(kind: Action, query: str) -> str:
     "builds urls to GET"
     url = None
-    match kind:
-
-        case "search_wikipedia":
-            url = create_wikipedia_search_url(query)
-        case "wiki":
-            url = create_wikipedia_url(query)
-        case "search_google":
-            url = create_google_search_url(query)
+    if kind == "search_wikipedia":
+        url = create_wikipedia_search_url(query)
+    elif kind == "wiki":
+        url = create_wikipedia_url(query)
+    elif kind == "search_google":
+        url = create_google_search_url(query)
     assert url is not None
     return url
 
@@ -41,13 +41,12 @@ def create_url(kind: Action, query: str) -> str:
 def create_link(kind: Action, query: str) -> str:
     "builds links to click"
     link = None
-    match kind:
-        case "search_wikipedia":
-            link = create_wikipedia_search_link(query)
-        case "search_google":
-            link = create_google_search_link(query)
-        case "search_stack_overflow":
-            link = create_stack_overflow_search_link(query)
+    if kind == "search_wikipedia":
+        link = create_wikipedia_search_link(query)
+    elif kind == "wiki":
+        link = create_google_search_link(query)
+    elif kind == "search_google":
+        link = create_stack_overflow_search_link(query)
     assert link is not None
     return link
 
