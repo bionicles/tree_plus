@@ -322,7 +322,8 @@ def process_tag(tag, components) -> Optional[str]:
         return f"# {component}"
     elif tag.name.startswith("h"):
         level = int(tag.name[1])
-        return f"\t{'#' * level} {component.replace('\n', '')}"
+        replaced_component = component.replace("\n", "")
+        return f"\t{'#' * level} {replaced_component}"
     elif tag.name == "a":
         url = tag.get("href")
         return f"[link={url}]{component}[/link]"

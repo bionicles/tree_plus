@@ -117,20 +117,21 @@ def create_stack_overflow_search_link(
 
 
 from typing import Tuple, Optional, Mapping
-from googlesearch import search, SearchResult
+
+# from googlesearch import search, SearchResult
 
 
-def search_google(
-    query: str, n_rows: int = N_GOOGLE_RESULTS
-) -> Tuple[SearchResult, ...]:
-    results = tuple(search(query, advanced=True, safe="", num_results=n_rows))
-    # df = pl.DataFrame(
-    #     [
-    #         dict(title=result.title, url=result.url, description=result.description)
-    #         for result in results
-    #     ]
-    # )
-    return results
+# def search_google(
+#     query: str, n_rows: int = N_GOOGLE_RESULTS
+# ) -> Tuple[SearchResult, ...]:
+#     results = tuple(search(query, advanced=True, safe="", num_results=n_rows))
+#     # df = pl.DataFrame(
+#     #     [
+#     #         dict(title=result.title, url=result.url, description=result.description)
+#     #         for result in results
+#     #     ]
+#     # )
+#     return results
 
 
 from rich.table import Table
