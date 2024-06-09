@@ -11,15 +11,15 @@ import tree_plus_src as tree_plus
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 EXPECTATION_1 = """📁 dot_dot
-┣━━ 📄 my_test_file.py
-┃   ┗━━ def dot_dot_dot()
-┗━━ 📁 nested_dir
-    ┣━━ 📄 .env.test
-    ┃   ┗━━ DEBUG_TREE_PLUS
-    ┣━━ 📄 pytest.ini
-    ┗━━ 📄 test_tp_dotdot.py
-        ┣━━ def ignore_tokens_lines_test(text: str) -> str
-        ┗━━ def test_tree_plus_dotdot()
+├── 📄 my_test_file.py
+│   └── def dot_dot_dot()
+└── 📁 nested_dir
+    ├── 📄 .env.test
+    │   └── DEBUG_TREE_PLUS
+    ├── 📄 pytest.ini
+    └── 📄 test_tp_dotdot.py
+        ├── def ignore_tokens_lines_test(text: str) -> str
+        └── def test_tree_plus_dotdot()
 """
 
 

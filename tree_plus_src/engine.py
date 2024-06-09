@@ -282,7 +282,7 @@ def process_hacker_news_item(
         item_name = Markdown(item_text)
     elif item_name and item_text:
         item_name = Panel(item_name, title=item_number)
-        item_name = Tree(item_name)
+        item_name = _make_rich_tree(item_name)
         item_name.add(Markdown(item_text))
 
     # item_counts = count_tokens_lines_from_contents(item_name)
@@ -413,7 +413,12 @@ def _make_rich_tree(
     highlight: bool = True,
 ) -> Tree:
     "PRIVATE: build 1 renderable rich.tree.Tree instance"
-    return Tree(label, style=style, guide_style=guide_style, highlight=highlight)
+    return Tree(
+        label,
+        style="bold " + style,
+        guide_style=guide_style,
+        highlight=highlight,
+    )
 
 
 def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:

@@ -43,8 +43,8 @@ test_more_languages:
 test_group7:
 	pytest tests/test_more_language_units.py -vv -k group7
 
-test: test_sequential
-# test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
+# test: test_sequential 
+test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
 
 # first we'll do our unit tests (most likely to need fast debug)
 test_units:

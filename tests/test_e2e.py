@@ -32,7 +32,7 @@ def extract_tokens_lines(line: str) -> Optional[tree_plus.TokenLineCount]:
 test_directory = "tests/path_to_test"
 
 EXPECTATION_0 = """📄 file.py (19 tokens, 3 lines)
-┗━━ def hello_world()
+└── def hello_world()
 """
 
 
@@ -60,7 +60,7 @@ def test_e2e_single_file():
 
 
 EXPECTATION_EMPTY = """📁 empty_folder (2 folders, 0 files)
-┗━━ 📁 is_empty (1 folder, 0 files)
+└── 📁 is_empty (1 folder, 0 files)
 """
 
 EMPTY = "tests/empty_folder"
@@ -80,47 +80,47 @@ def test_e2e_empty_folder():
 
 
 EXPECTATION_1 = """📁 path_to_test (1 folder, 6 files)
-┣━━ 📄 class_method_type.py (541 tokens, 103 lines)
-┃   ┣━━ T = TypeVar("T")
-┃   ┣━━ def parse_py(contents: str) -> List[str]
-┃   ┣━━ class MyClass
-┃   ┣━━     @staticmethod
-┃   ┃       def physical_element_aval(dtype) -> core.ShapedArray
-┃   ┣━━     def my_method(self)
-┃   ┣━━     @staticmethod
-┃   ┃       def my_typed_method(obj: dict) -> int
-┃   ┣━━     def my_multiline_signature_method(
-┃   ┃           self,
-┃   ┃           alice: str = None,
-┃   ┃           bob: int = None,
-┃   ┃       ) -> tuple
-┃   ┣━━ @lru_cache(maxsize=None)
-┃   ┃   def my_multiline_signature_function(
-┃   ┃       tree: tuple = (),
-┃   ┃       plus: str = "+",
-┃   ┃   ) -> tuple
-┃   ┣━━ class LogLevelEnum(str, Enum)
-┃   ┣━━ class Algo(BaseModel)
-┃   ┣━━ @dataclass
-┃   ┃   class TestDataclass
-┃   ┣━━ A = TypeVar("A", str, bytes)
-┃   ┣━━ def omega_yikes(file: str, expected: List[str]) -> bool
-┃   ┣━━ def ice[T](args: Iterable[T] = ())
-┃   ┣━━ class list[T]
-┃   ┣━━     def __getitem__(self, index: int, /) -> T
-┃   ┣━━     @classmethod
-┃   ┃       def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
-┃   ┣━━     @classmethod
-┃   ┃       def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
-┃   ┗━━ class Router(hk.Module)
-┣━━ 📄 empty.py (0 tokens, 0 lines)
-┣━━ 📄 file.md (12 tokens, 2 lines)
-┃   ┗━━ # Hello, world!
-┣━━ 📄 file.py (19 tokens, 3 lines)
-┃   ┗━━ def hello_world()
-┣━━ 📄 file.txt (11 tokens, 2 lines)
-┗━━ 📄 version.py (19 tokens, 2 lines)
-    ┗━━ __version__ = "1.2.3"
+├── 📄 class_method_type.py (541 tokens, 103 lines)
+│   ├── T = TypeVar("T")
+│   ├── def parse_py(contents: str) -> List[str]
+│   ├── class MyClass
+│   ├──     @staticmethod
+│   │       def physical_element_aval(dtype) -> core.ShapedArray
+│   ├──     def my_method(self)
+│   ├──     @staticmethod
+│   │       def my_typed_method(obj: dict) -> int
+│   ├──     def my_multiline_signature_method(
+│   │           self,
+│   │           alice: str = None,
+│   │           bob: int = None,
+│   │       ) -> tuple
+│   ├── @lru_cache(maxsize=None)
+│   │   def my_multiline_signature_function(
+│   │       tree: tuple = (),
+│   │       plus: str = "+",
+│   │   ) -> tuple
+│   ├── class LogLevelEnum(str, Enum)
+│   ├── class Algo(BaseModel)
+│   ├── @dataclass
+│   │   class TestDataclass
+│   ├── A = TypeVar("A", str, bytes)
+│   ├── def omega_yikes(file: str, expected: List[str]) -> bool
+│   ├── def ice[T](args: Iterable[T] = ())
+│   ├── class list[T]
+│   ├──     def __getitem__(self, index: int, /) -> T
+│   ├──     @classmethod
+│   │       def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
+│   ├──     @classmethod
+│   │       def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
+│   └── class Router(hk.Module)
+├── 📄 empty.py (0 tokens, 0 lines)
+├── 📄 file.md (12 tokens, 2 lines)
+│   └── # Hello, world!
+├── 📄 file.py (19 tokens, 3 lines)
+│   └── def hello_world()
+├── 📄 file.txt (11 tokens, 2 lines)
+└── 📄 version.py (19 tokens, 2 lines)
+    └── __version__ = "1.2.3"
 """
 
 
@@ -139,10 +139,10 @@ def test_e2e_multiple_directories():
     with tree_plus.debug_disabled():
         result = tree_plus.from_seeds((test_directory, test_directory2))
     assert isinstance(result, tree_plus.TreePlus)
-    print("test_e2e_multiple_directories tree")
+    print("test_e2e_multiple_directories result")
     result.render()
     result_str = result.into_str()
-    print("test_e2e_multiple_directories result\n", result_str)
+    print("test_e2e_multiple_directories result_str\n", result_str)
     unified_tree_symbols = unify_tree_symbols(result_str)
     assert unified_tree_symbols == unify_tree_symbols(EXPECTATION_1)
     assert unified_tree_symbols.count("📁 path_to_test") == 1
