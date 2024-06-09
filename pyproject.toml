@@ -15,7 +15,7 @@ classifiers = [
     "Intended Audience :: Developers",
     "Topic :: Utilities",
 ]
-dependencies = ["tiktoken", "PyYAML", "click", "rich", "tomli", "natsort>=7.1", "fake_useragent"]
+dependencies = ["tiktoken", "PyYAML", "click", "rich", "tomli", "natsort>=7.1", "fake_useragent", "bs4"]
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-dotenv", "pytest-xdist"]
