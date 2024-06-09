@@ -180,6 +180,7 @@ def create_sqlite_test_db(
                 "function ()",
                 "function outerFunction(outerParam)",
                 "  function innerFunction(innerParam)",
+                '  innerFunction("inner")',
                 "const myObject = {",
                 "  myMethod: function (stuff)",
                 "let myArrowObject = {",
@@ -212,6 +213,7 @@ def create_sqlite_test_db(
                 "  present()",
                 "class Model extends Car",
                 "  constructor(brand, mod)",
+                "    super(brand)",
                 "  show()",
             ],
         ),
@@ -258,6 +260,7 @@ def create_sqlite_test_db(
   b: string;
   c: () => Promise<string>;
 }): Promise<string>""",
+                '  return("Standalone function with parameters")',
                 """const tsArrowFunctionSigned = ({
   a,
   b,
@@ -291,6 +294,7 @@ def create_sqlite_test_db(
     lastName: string,
     private jobTitle: string
   )""",
+                "    super(firstName, lastName)",
                 "  describe(): string",
                 "interface Shape",
                 "interface Square extends Shape",
@@ -1434,6 +1438,11 @@ def test_more_languages_group4(
             "tests/more_languages/group5/app.component.ts",
             [
                 "export class AppComponent",
+                """  constructor(
+    private http: HttpClient,
+    private loginService: LoginService,
+    private stripeService: StripeService
+  )""",
                 "  constructor(private loginService: LoginService)",
                 "  checkSession()",
                 "  async goToEvent(event_id: string)",
@@ -1467,6 +1476,9 @@ def test_more_languages_group4(
     cleanup: () => void
   )""",
                 "    const animate = (currentTime: number) =>",
+                "        requestAnimationFrame(animate)",
+                "        cleanup()",
+                "    requestAnimationFrame(animate)",
                 "  private getNext90Degree(currentRotation: number): number",
                 "  private getCurrentRotation(matrix: string): number",
                 "  ngAfterViewInit()",
@@ -2034,6 +2046,91 @@ def test_more_languages_tensorflow_flags():
         substitute = remove_newlines_and_tabs(result)
         substitutes.append(substitute)
     assert substitutes == TF_FLAGS_EXPECTATION
+
+
+ANGULAR_CRUD_EXPECTATION = [
+    "interface DBCommand<T = any>",
+    "export class IndexedDbService",
+    "    constructor()",
+    "    async create_connection({ db_name = 'client_db', table_name }: DBCommand)",
+    "                upgrade(db)",
+    "    async create_model({ db_name, table_name, model }: DBCommand)",
+    "        verify_matching({ table_name, model })",
+    "    async read_key({ db_name, table_name, key }: DBCommand)",
+    "    async update_model({ db_name, table_name, model }: DBCommand)",
+    "        verify_matching({ table_name, model })",
+    "    async delete_key({ db_name, table_name, key }: DBCommand)",
+    """    async list_table({
+        db_name,
+        table_name,
+        where,
+    }: DBCommand & { where?: { [key: string]: string | number } })""",
+    "    async search_table(criteria: SearchCriteria)",
+]
+WGSL_EXPECTATION = [
+    """@binding(0) @group(0) var<uniform> frame : u32;
+@vertex
+fn vtx_main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f""",
+    """@fragment
+fn frag_main() -> @location(0) vec4f""",
+]
+# (
+#     "tests/more_languages/group6/yc.html",
+#     [
+#         "Hacker News\nnew | past | comments | ask | show | jobs | submit \nlogin",
+#         "1. Don't be terrified of Pale Fire (unherd.com)",
+#         "2. Hacking millions of modems and investigating who hacked my modem (samcurry.net)",
+#         "3. Creating a Safari webarchive from the command line (alexwlchan.net)",
+#         "4. Claude is unavailable for some users. Web and Mobile. (anthropic.com)",
+#         "5. A breakthrough towards the Riemann hypothesis (mathstodon.xyz)",
+#         "6. Electing the Doge of Venice: analysis of a 13th Century protocol [pdf] (2007) (rangevoting.org)",
+#         "7. Koheesio: Nike's Python-based framework to build advanced data-pipelines (github.com/nike-inc)",
+#         "8. Diffusion on syntax trees for program synthesis (tree-diffusion.github.io)",
+#         "9. Encryption at Rest: Whose Threat Model Is It Anyway? (scottarc.blog)",
+#         "10. Show HN: Allocate poker chips optimally with mixed-integer nonlinear programming (github.com/jstrieb)",
+#         "11. ht: Headless Terminal (github.com/andyk)",
+#         "12.  Langfuse (YC W23): Hiring Product Engineer (In-Person, Open Source) (github.com/langfuse)",
+#         "13. New telescope images of Jupiter's moon Io rival those from spacecraft (phys.org)",
+#         "14. Intel's Lion Cove Architecture Preview (chipsandcheese.com)",
+#         "15. Reverse Z in 3D graphics (and why it's so awesome) (tomhultonharrop.com)",
+#         "16. The Moral Economy of the Shire (nathangoldwag.wordpress.com)",
+#         "17. Psychedelics are challenging the standard of randomized controlled trials (theatlantic.com)",
+#         "18. Why YC went to DC (ycombinator.com)",
+#         "19. How many photons are received per bit transmitted from Voyager 1? (physics.stackexchange.com)",
+#         "20. Ganjifa (wikipedia.org)",
+#         "21. At the Webster Apartments (theparisreview.org)",
+#         "22. Ligra – an open source image projector based off of flea marked parts (github.com/jana-marie)",
+#         "23. Special-use domain 'home.arpa.' (2018) (ietf.org)",
+#         "24. “You Are My Friend”: Early Androids and Artificial Speech (publicdomainreview.org)",
+#         "25. Seeing Like a Data Structure (belfercenter.org)",
+#         "26. Show HN: Brioche – A new Nix-like package manager (brioche.dev)",
+#         "27. Feynman Computer Science Lecture – Hardware, Software, Heuristics (1985) [video] (youtube.com)",
+#         "28. Grokfast: Accelerated Grokking by Amplifying Slow Gradients (arxiv.org)",
+#         "29. Show HN: I made a tiny camera with super long battery life (toaster.llc)",
+#         "30. Optimizing 128-bit Division (2020) (danlark.org)",
+#         "More",
+#     ],
+# ),
+
+
+@pytest.mark.parametrize(
+    "file,expected",
+    [
+        ("tests/more_languages/group7/angular_crud.ts", ANGULAR_CRUD_EXPECTATION),
+        # ("tests/more_languages/group7/wgsl_test.wgsl", WGSL_EXPECTATION),
+        # ("tests/more_languages/group7/AAPLShaders.metal", METAL_EXPECTATION),
+    ],
+)
+def test_more_languages_group_7(
+    file: str,
+    expected: List[str],
+):
+    print(f"{file=}")
+
+    result = parse_file(file)
+    print("result", result)
+    print("expected", expected)
+    assert result == expected
 
 
 # TODO:

@@ -18,7 +18,12 @@ debug:
 	nodemon -L -V
 
 .PHONY: debug_command
-debug_command: test_parallel
+debug_command: html_demo
+
+html_demo:
+	tree_plus https://en.wikipedia.org/wiki/Zero_ring
+	# tree_plus --yc
+
 
 # TESTS
 N_WORKERS=12
@@ -33,6 +38,10 @@ test_sequential:
 # just to crank on language features, easy to debug on this
 test_more_languages:
 	pytest tests/test_more_language_units.py -vv
+
+# just to crank on language features, easy to debug on this
+test_group7:
+	pytest tests/test_more_language_units.py -vv -k group7
 
 test: test_sequential
 # test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy

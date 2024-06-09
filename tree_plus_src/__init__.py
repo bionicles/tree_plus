@@ -23,6 +23,7 @@ from .parse_file import parse_file, parse_markers, extract_groups
 from .count_tokens_lines import (
     TokenLineCount,
     count_tokens_lines,
+    count_tokens_lines_from_contents,
     add_tokens_lines,
 )
 from .deploy import extract, load, run_command, replace_readme_section, update_readme
@@ -33,4 +34,8 @@ from .engine import (
     from_seeds,
     from_seed,
     safe_print,
+)
+from .web import (
+    create_url,
+    create_link,
 )

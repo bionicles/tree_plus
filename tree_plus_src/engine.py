@@ -1,5 +1,8 @@
 from typing import (
+    FrozenSet,
+    Iterable,
     List,
+    Literal,
     Sequence,
     Tuple,
     Optional,
@@ -20,13 +23,19 @@ import re
 from rich.console import Console
 from rich.syntax import Syntax
 from rich.theme import Theme
+from rich.table import Table
 from rich.tree import Tree
+from rich.text import Text
+from rich.markdown import Markdown
+
 from natsort import os_sorted
+
 
 from tree_plus_src import (
     debug_print,
     parse_file,
     count_tokens_lines,
+    count_tokens_lines_from_contents,
     TokenLineCount,
     should_ignore,
     DEFAULT_IGNORE,
@@ -48,13 +57,22 @@ ROOT_CHAR = ":cactus:" if operate_normally else "[root]"
 FOLDER_CHAR = ":file_folder:" if operate_normally else "[folder]"
 FILE_CHAR = ":page_facing_up:" if operate_normally else "[file]"
 GLOB_CHAR = ":cyclone:" if operate_normally else "[glob]"
+URL_CHAR = ":spider_web:" if operate_normally else "[url]"
+TAG_CHAR = ""
+colors = {
+    "colorblind_gold": "#FFC20A",
+    "colorblind_blue": "#0C7BDC",
+    "fde": "#877348",
+    "cyberpink": "#d600ff",
+    "cybercyan": "#00b8ff",
+}
 
 
 THEME = {
     "repr.ipv6": "default",
-    "repr.call": "bold red",
-    "repr.str": "bold blue",
-    "repr.tag_name": "bold red",
+    "repr.call": colors["colorblind_blue"],
+    "repr.str": colors["colorblind_blue"],
+    "repr.tag_name": colors["colorblind_blue"],
 }
 
 
@@ -65,18 +83,32 @@ class Category(Enum):
     FOLDER = 3
     FILE = 4
     COMPONENT = 5
+    URL = 6
+    TAG = 7
+
+
+from rich.pretty import Pretty
+from rich.panel import Panel
 
 
 @dataclass
 class TreePlus:
     "PUBLIC: data structure"
     category: Category = Category.COMPONENT
-    name: str = ""
+    name: Union[str, Panel, Text, Markdown, Table, Pretty] = ""
     n_folders: int = 0
     n_files: int = 0
     n_lines: Optional[int] = 0
     n_tokens: Optional[int] = 0
-    subtrees: List[Union["TreePlus", Syntax, str]] = field(default_factory=list)
+    # TODO: clarify subtree types -- make this a DataFrame tbh
+    subtrees: Union[
+        List["TreePlus"],
+        List[Syntax],
+        List[Markdown],
+        List[Table],
+        List[Text],
+        List[str],
+    ] = field(default_factory=list)
 
     def is_root(self) -> bool:
         return self.category is Category.ROOT
@@ -93,6 +125,9 @@ class TreePlus:
     def is_component(self) -> bool:
         return self.category is Category.COMPONENT
 
+    def is_url(self) -> bool:
+        return self.category is Category.URL
+
     def into_rich_tree(self) -> Tree:
         "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
         return into_rich_tree(root=self)
@@ -101,9 +136,22 @@ class TreePlus:
         "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
         return tree_to_string(into_rich_tree(root=self))
 
-    def render(self):
+    def render(
+        self,
+        style: str | None = None,
+        highlight: bool = False,
+        markup: bool = True,
+        capturing: bool = False,
+    ):
         "PUBLIC: Safely print a TreePlus"
-        safe_print(into_rich_tree(root=self))
+        _inner_tree = into_rich_tree(root=self)
+        safe_print(
+            _inner_tree,
+            style=style,
+            highlight=highlight,
+            markup=markup,
+            capturing=capturing,
+        )
 
     def stats(self) -> str:
         "PUBLIC: statistics"
@@ -114,6 +162,7 @@ class TreePlus:
         # stats += f", {self.n_lines} line{'' if self.n_lines == 1 else 's'}"
         # stats += f", {self.n_tokens} token{'' if self.n_tokens == 1 else 's'}"
         # faster:
+        debug_print("stats:")
         debug_print("self.n_folders:", self.n_folders)
         debug_print("self.n_files:", self.n_files)
         debug_print("self.n_lines:", self.n_lines)
@@ -142,6 +191,144 @@ class TreePlus:
         return ""
 
 
+Articles = Tuple[Tuple[dict, Tuple[dict, ...]], ...]
+
+
+from rich.pretty import Pretty
+from bs4 import BeautifulSoup, PageElement
+
+from rich.markdown import Markdown
+
+
+A_TAG_PATTERN = r'<a href="(?P<href>.*?)">(?P<text>.*?)</a>'
+
+
+def from_hacker_news_articles(
+    articles: Articles,
+    depth: int = 0,
+    max_depth: int = -1,
+    title: Union[str, Panel, Text, Table, Markdown, Pretty] = "Hacker News Front Page",
+    parent_num: Tuple[int, ...] = (),
+) -> TreePlus:
+    "construct a TreePlus given articles hlist from web.articles_from_hacker_news"
+    article_forest = []
+    total_files = 0
+
+    for i, (article, kids) in enumerate(articles, start=1):
+        article_tree = process_hacker_news_item(
+            article,
+            kids,  # type: ignore
+            depth,
+            max_depth,
+            parent_num + (i,),
+        )
+        article_forest.append(article_tree)
+        total_files += article_tree.n_files
+
+    article_root = TreePlus(
+        category=Category.URL,
+        name=title,
+        subtrees=article_forest,
+        n_files=total_files,
+    )
+    return article_root
+
+
+def format_link(
+    url: str,
+    text: str,
+    color: str = colors["colorblind_blue"],
+) -> str:
+    return f"[{color}][link={url}]{text}[/link][/{color}]"
+
+
+from rich.tree import Tree
+
+
+def process_hacker_news_item(
+    item: dict,
+    kids: Articles,
+    depth: int,
+    max_depth: int,
+    parent_num: Tuple[int, ...],
+    parser: Union[Literal["lxml"], Literal["html.parser"]] = "html.parser",
+) -> TreePlus:
+    item_number = f"{'.'.join(str(n) for n in parent_num)}. "
+    item_name = ""
+    if "title" in item:
+        title_text = item["title"]
+        if "url" in item:
+            url = item["url"]
+            title_text = format_link(url, title_text)
+        item_name = f"{title_text}"
+    item_text = ""
+    if "text" in item:
+        item_html = item["text"]
+        item_soup = BeautifulSoup(item_html, features=parser)
+        item_links = rich_links_from_soup(item_soup)
+        item_links = "\n".join(item_links)
+        item_text = item_soup.get_text()
+        item_text += item_links
+        if item_text:
+            item_text = " " + item_text
+        # item_with_links = re.sub(A_TAG_PATTERN, replace_link, item_text)
+        # item_markdown = markdownify.markdownify(item_with_links, autolinks=False)
+
+    if not item_name and not item_text:
+        raise ValueError("neither name nor value")
+    elif item_name and not item_text:
+        pass
+    elif not item_name and item_text:
+        item_name = Markdown(item_text)
+    elif item_name and item_text:
+        item_name = Panel(item_name, title=item_number)
+        item_name = Tree(item_name)
+        item_name.add(Markdown(item_text))
+
+    # item_counts = count_tokens_lines_from_contents(item_name)
+    kid_trees = []
+
+    if max_depth < 0 or (max_depth > 0 and depth < max_depth):
+        for j, (kid, kid_comments) in enumerate(kids, start=1):
+            kid_subtree = process_hacker_news_item(
+                kid,
+                kid_comments,  # type: ignore
+                depth + 1,
+                max_depth,
+                parent_num + (j,),
+            )
+            kid_trees.append(kid_subtree)
+
+    item_tree = TreePlus(
+        category=Category.URL,
+        name=Panel(
+            item_name,
+            title=f"{item_number}[{colors['colorblind_blue']}][link=https://news.ycombinator.com/item?id={item['id']}]{item['type'].title()} {item['id']:,}[/link][/{colors['colorblind_blue']}]",
+            title_align="left",
+        ),
+        subtrees=kid_trees,
+        n_files=1 + len(kids),
+        # n_lines=item_counts.n_lines,
+        # n_tokens=item_counts.n_tokens,
+    )
+    return item_tree
+
+
+def rich_links_from_soup(
+    item_soup: BeautifulSoup,
+    recursive: bool = True,
+) -> List[str]:
+    item_links = item_soup.find_all("a", recursive=recursive)
+    links = []
+    for i, link in enumerate(item_links, start=1):
+        url = link["href"]
+        text = link.text
+        color = colors["colorblind_blue"]
+        rich_link = f"\n- {i}. {url}"
+        links.append(rich_link)
+    return links
+
+
 @lru_cache
 def remove_trailing_space(x: str) -> str:
     # debug_print("remove_trailing_space")
@@ -151,17 +338,22 @@ def remove_trailing_space(x: str) -> str:
     return y
 
 
-def tree_to_string(tree: Tree) -> str:
+def tree_to_string(
+    tree: Tree,
+    markup: bool = False,
+    highlight: bool = False,
+) -> str:
     console = Console(
         # force_terminal=True,
         no_color=True,
         # soft_wrap=True,
-        # markup=False,
-        # highlight=False,
+        markup=markup,
+        highlight=highlight,
+        style=colors["colorblind_gold"],
         theme=Theme({"repr.ipv6": "default"}),  # maybe unnecessary given no_color
     )
     with console.capture() as capture:
-        console.print(tree, markup=False)
+        console.print(tree, markup=markup, highlight=highlight)
     captured_str = capture.get()
     # captured_str = ansi_escape.sub("", captured_str)
     captured_str = remove_trailing_space(captured_str)
@@ -173,7 +365,7 @@ def clean_string(input_str: str) -> str:
 
 
 def safe_print(
-    tree: Tree,
+    tree: Union[Tree, str],
     style: Optional[str] = None,
     highlight: bool = True,
     markup: bool = False,
@@ -184,6 +376,7 @@ def safe_print(
         console = Console(
             # reduce the tab size to fit content
             tab_size=2,
+            # NOTE: sometimes we need wider trees (deploy)
             width=128 if os.environ.get("TREE_PLUS_UPDATE_README") == "YES" else None,
             markup=markup,
             highlight=highlight,
@@ -195,12 +388,15 @@ def safe_print(
                 console.print(tree)
             return capture.get()
         else:
-            console.print(tree)
+            console.print(tree, highlight=highlight, markup=markup, style=style)
     except UnicodeEncodeError as e:
         debug_print(f"UnicodeEncodeError printing tree normally: ", e)
         try:
             debug_print(f"Attempt to print a cleaned version of the tree:")
-            tree_string = tree_to_string(tree)
+            if isinstance(tree, Tree):
+                tree_string = tree_to_string(tree, markup=markup, highlight=highlight)
+            else:
+                tree_string = tree
             # debug_print(f"{tree_string=}")
             clean_tree_string = clean_string(tree_string)
             # debug_print(f"{clean_tree_string=}")
@@ -210,11 +406,14 @@ def safe_print(
             print(e)
 
 
-STYLE = "bold"
-
-
-def _make_rich_tree(label: str) -> Tree:
-    return Tree(label, guide_style=STYLE, highlight=True)
+def _make_rich_tree(
+    label,
+    style: str = colors["colorblind_gold"],
+    guide_style: str = colors["colorblind_blue"],
+    highlight: bool = True,
+) -> Tree:
+    "PRIVATE: build 1 renderable rich.tree.Tree instance"
+    return Tree(label, style=style, guide_style=guide_style, highlight=highlight)
 
 
 def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
@@ -241,7 +440,9 @@ def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
         counts = f" "
         rich_tree.label += counts  # type: ignore
     elif root.category is Category.ROOT:
-        label = f"{ROOT_CHAR} {root.name} ({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'}, {root.n_files:,} file{'' if root.n_files == 1 else 's'})"
+        label = f"{ROOT_CHAR} {root.name}"
+        if root.n_tokens and root.n_lines:
+            label += f"({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'}, {root.n_files:,} file{'' if root.n_files == 1 else 's'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_subtree = into_rich_tree(root=subtree)  # type: ignore
@@ -253,9 +454,46 @@ def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
         for subtree in root.subtrees:
             rich_subtree = into_rich_tree(root=subtree)  # type: ignore
             rich_tree.add(rich_subtree)
+    elif root.category is Category.URL:
+        n_matches = len(root.subtrees)
+        if isinstance(root.name, str):
+            label = f"{URL_CHAR}  {root.name}"
+            if root.n_tokens and root.n_lines:
+                label += f" ({root.n_tokens:,} token{'' if root.n_tokens == 1 else 's'}, {root.n_lines:,} line{'' if root.n_lines == 1 else 's'})"
+        else:
+            label = root.name
+        rich_tree = _make_rich_tree(label)
+        for subtree in root.subtrees:
+            if isinstance(subtree, TreePlus):
+                # subtree = tree_to_string(subtree.into_rich_tree())
+                rich_subtree = into_rich_tree(root=subtree)  # type: ignore
+                rich_tree.add(rich_subtree)
+            elif isinstance(
+                subtree, (str, Markdown, Text, Syntax, Table, Pretty, Panel)
+            ):
+                rich_tree.add(subtree)
+                # rich_subtree = into_rich_tree(root=subtree)  # type: ignore
+    elif root.category is Category.TAG:
+        label = f"{TAG_CHAR} {root.name}"
+        rich_tree = _make_rich_tree(label)
+        for subtree in root.subtrees:
+            rich_subtree = into_rich_tree(root=subtree)  # type: ignore
+            rich_tree.add(rich_subtree)
     if not rich_tree:
         raise TypeError(f"engine.into_rich_tree: unsupported {root=}")
     return rich_tree
+
+
+def is_url(x: str) -> bool:
+    x_is_url = (
+        x.startswith("http://")
+        or x.startswith("https://")
+        or x.startswith("www.")
+        or x.endswith(".com")
+        or x.endswith(".org")
+    )
+    debug_print(f"{x=} {'IS' if x_is_url else 'IS NOT'} a url")
+    return x_is_url
 
 
 @lru_cache
@@ -263,6 +501,7 @@ def categorize(
     x: Union[Path, Tuple[str], str],
     check_strs_globs: bool = True,
     check_strs_paths: bool = True,
+    check_strs_urls: bool = True,
     raise_if_component: bool = True,
 ) -> Category:
     "assign x to a category enum DEFAULTS TO CHECK GLOBS AND PATHS"
@@ -271,9 +510,11 @@ def categorize(
     if isinstance(x, str):  # STR first, happy path
         # could deactivate checking for performance
         y = Category.COMPONENT
-        if check_strs_globs and is_glob(x):
+        if check_strs_urls and is_url(x):
+            y = Category.URL
+        elif check_strs_globs and is_glob(x):
             y = Category.GLOB
-        if y is not Category.GLOB and check_strs_paths:
+        elif y is not Category.GLOB and check_strs_paths:
             if os.path.exists(x):
                 if os.path.isfile(x):
                     y = Category.FILE
@@ -307,7 +548,7 @@ def categorize(
 
 
 def from_seed(
-    maybe_seed_str: Optional[str] = None,
+    maybe_seed: Optional[Union[str, TreePlus]] = None,
     *,
     maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[Tuple[str, ...]] = None,
@@ -315,12 +556,12 @@ def from_seed(
     override_ignore: bool = False,
     concise: bool = False,
 ) -> TreePlus:
-    "PUBLIC: Construct a TreePlus from maybe_seed_strs = tuple[str] or None"
+    "PUBLIC: Construct a TreePlus from maybe_seed = Union[str, TreePlus] or None"
     debug_print(
-        f"from_seed {maybe_seed_str=} {maybe_globs=} {override_ignore=} {syntax_highlighting=}"
+        f"from_seed {maybe_seed=} {maybe_globs=} {override_ignore=} {syntax_highlighting=}"
     )
     return from_seeds(
-        maybe_seed_strs=None if maybe_seed_str is None else (maybe_seed_str,),
+        maybe_seeds=None if maybe_seed is None else (maybe_seed,),
         maybe_ignore=maybe_ignore,
         maybe_globs=maybe_globs,
         syntax_highlighting=syntax_highlighting,
@@ -330,7 +571,7 @@ def from_seed(
 
 
 def from_seeds(
-    maybe_seed_strs: Optional[Tuple[str]] = None,
+    maybe_seeds: Optional[Tuple[Union[str, TreePlus], ...]] = None,
     *,
     maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[Tuple[str, ...]] = None,
@@ -338,21 +579,22 @@ def from_seeds(
     override_ignore: bool = False,
     concise: bool = False,
 ) -> TreePlus:
-    "PUBLIC: Construct a TreePlus from maybe_seed_strs = tuple[str] or None"
+    "PUBLIC: Construct a TreePlus from maybe_seeds = tuple[str] or None"
     debug_print(
-        f"from_seeds {maybe_seed_strs=} {maybe_globs=} {syntax_highlighting=} {override_ignore=} {concise=}"
+        f"from_seeds {maybe_seeds=} {maybe_globs=} {syntax_highlighting=} {override_ignore=} {concise=}"
     )
     try:
         # default to current working directory
-        if not maybe_seed_strs:
+        if not maybe_seeds:
             debug_print(f"tree_plus.from_root defaulting to current working directory")
-            maybe_seed_strs = (str(Path.cwd()),)
-        if not all(isinstance(s, str) for s in maybe_seed_strs):
+            maybe_seeds = (str(Path.cwd()),)
+        if not all(isinstance(s, (str, TreePlus)) for s in maybe_seeds):
             raise TypeError(
-                f"tree_plus.from_root tuple must contain str, got {maybe_seed_strs}"
+                f"tree_plus.from_root tuple must contain str, got {maybe_seeds}"
             )
         # dedupe
-        seeds = tuple(set(maybe_seed_strs))
+        seeds = tuple(set(s for s in maybe_seeds if isinstance(s, str)))
+        seeds += tuple(s for s in maybe_seeds if isinstance(s, TreePlus))
         if maybe_ignore != DEFAULT_IGNORE:
             maybe_ignore = parse_ignore(maybe_ignore, override=override_ignore)
         # mapper
@@ -393,7 +635,7 @@ def _reduce_forest(
 
 def _map_seeds(
     *,
-    seeds: Optional[Tuple[str, ...]] = None,
+    seeds: Optional[Tuple[Union[str, TreePlus], ...]] = None,
     maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[Tuple[str, ...]] = None,
     syntax_highlighting: bool = False,
@@ -407,15 +649,22 @@ def _map_seeds(
     folder_paths = []
     file_paths = []
     glob_paths = []
+    url_paths = []
+    trees_done = []
     debug_print(f"_map_seeds BEGIN CATEGORIZING SEEDS!")
     for seed in seeds:
+        if isinstance(seed, TreePlus):
+            trees_done.append(seed)
+            continue
         if not isinstance(seed, str):
             print(f"WARNING: non-str seed, skipping {seed=}")
         try:
+            # web actions sometimes independently handle trees
             category = categorize(
                 seed,
                 check_strs_globs=True,
                 check_strs_paths=True,
+                check_strs_urls=True,
                 raise_if_component=True,
             )
         except Exception as e:
@@ -424,6 +673,8 @@ def _map_seeds(
         if category is Category.FILE:
             file_seed_path = Path(seed)
             file_paths.append(file_seed_path)
+        elif category is Category.URL:
+            url_paths.append(seed)
         elif category is Category.FOLDER:
             folder_seed_path = Path(seed)
             folder_paths.append(folder_seed_path)
@@ -448,6 +699,7 @@ def _map_seeds(
     debug_print("_map_seeds FOLDER PATHS", folder_paths)
     debug_print("_map_seeds FILE PATHS", file_paths)
     debug_print("_map_seeds GLOB PATHS", glob_paths)
+    debug_print("_map_seeds URL PATHS", url_paths)
     # debug_print("_map_seeds MAYBE_GLOBS BEFORE MERGE", maybe_globs)
     # debug_print("_map_seeds GLOB_PATHS BEFORE MERGE", glob_paths)
     # globs = tuple(set(chain(maybe_globs, glob_paths)))
@@ -471,19 +723,27 @@ def _map_seeds(
         globs = None
     debug_print("_map_seeds GLOBS", globs)
     # assert 0, "manually inspect tree_plus_src/engine.py _map_seeds glob amortization"
-    parsed_seeds = tuple(os_sorted(chain(folder_paths, file_paths, glob_paths)))
+    url_paths = [(Category.URL, url_path) for url_path in url_paths]
+    parsed_seeds = tuple(
+        os_sorted(chain(folder_paths, file_paths, glob_paths, url_paths, trees_done))
+    )
     debug_print("_map_seeds os_sorted SEEDS", seeds)
     if not parsed_seeds:
         return ()
     forest = []
     for n, parsed_seed in enumerate(parsed_seeds):
         debug_print(f"_map_seeds invoking _from_seed {n=} {parsed_seed=}")
+        is_url = False
+        if isinstance(parsed_seed, Tuple):
+            parsed_seed = parsed_seed[1]
+            is_url = True
         seed_tree_plus = _from_seed(
             seed_path=parsed_seed,
             maybe_ignore=maybe_ignore,
             maybe_globs=globs,
             syntax_highlighting=syntax_highlighting,
             concise=concise,
+            is_url=is_url,
         )
         assert isinstance(seed_tree_plus, TreePlus)
         debug_print(f"_map_seeds got TreePlus from seed {n=}")
@@ -492,6 +752,7 @@ def _map_seeds(
             seed_tree_plus.is_file()
             or seed_tree_plus.is_folder()
             or seed_tree_plus.is_glob()
+            or seed_tree_plus.is_url()
         )
         forest.append(seed_tree_plus)
     debug_print(f"_map_seeds  DONE!")
@@ -500,46 +761,62 @@ def _map_seeds(
 
 def _from_seed(
     *,
-    seed_path: Optional[Path] = None,
+    seed_path: Optional[Union[Path, str]] = None,
     maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[AmortizedGlobs] = None,
     syntax_highlighting: bool = False,
     concise: bool = False,
+    is_url: bool = False,
 ) -> TreePlus:
     "PRIVATE: dispatcher to either file or folder"
     if seed_path is None:
         debug_print(f"tree_plus.from_seed defaulting to current working directory")
         seed_path = Path.cwd()
+    elif isinstance(seed_path, TreePlus):
+        return seed_path
     else:
-        if not isinstance(seed_path, Path):
-            raise TypeError(f"tree_plus::from_path: not a pathlib.Path: {seed_path=}")
+        if not isinstance(seed_path, (Path, str)):
+            raise TypeError(
+                f"tree_plus::from_path: not a pathlib.Path or str: {seed_path=}"
+            )
     try:
-        if seed_path.is_file():
-            result = _from_file(
-                file_path=seed_path,
+        if isinstance(seed_path, str) and is_url:
+            result = _from_url(
+                url=seed_path,
                 syntax_highlighting=syntax_highlighting,
                 concise=concise,
             )
-        elif seed_path.is_dir():
-            result = _from_folder(
-                folder_path=seed_path,
-                maybe_ignore=maybe_ignore,
-                maybe_globs=maybe_globs,
-                syntax_highlighting=syntax_highlighting,
-                concise=concise,
-            )
-        else:
-            seed_pattern = str(seed_path)
-            if not is_glob(seed_pattern):
-                raise TypeError(
-                    f"tree_plus::from_path: not a file or folder: {seed_path=}"
+        elif isinstance(seed_path, Path) and not is_url:
+            if seed_path.is_file():
+                result = _from_file(
+                    file_path=seed_path,
+                    syntax_highlighting=syntax_highlighting,
+                    concise=concise,
                 )
-            result = _from_glob(
-                pattern=seed_pattern,
-                maybe_ignore=maybe_ignore,
-                maybe_globs=None,  # TODO: decide if we apply glob patterns to glob paths (currently NO)
-                syntax_highlighting=syntax_highlighting,
-                concise=concise,
+            elif seed_path.is_dir():
+                result = _from_folder(
+                    folder_path=seed_path,
+                    maybe_ignore=maybe_ignore,
+                    maybe_globs=maybe_globs,
+                    syntax_highlighting=syntax_highlighting,
+                    concise=concise,
+                )
+            else:
+                seed_pattern = str(seed_path)
+                if not is_glob(seed_pattern):
+                    raise TypeError(
+                        f"tree_plus::from_path: not a file or folder: {seed_path=}"
+                    )
+                result = _from_glob(
+                    pattern=seed_pattern,
+                    maybe_ignore=maybe_ignore,
+                    maybe_globs=None,  # TODO: decide if we apply glob patterns to glob paths (currently NO)
+                    syntax_highlighting=syntax_highlighting,
+                    concise=concise,
+                )
+        else:
+            raise ValueError(
+                f"need a Path or (str and is_url), got {seed_path} {is_url}"
             )
         return result
     except Exception as e:
@@ -554,7 +831,7 @@ def _add_subtree(
 ):
     "PRIVATE: add a subtree TreePlus to a root TreePlus"
     # debug_print(f"_add_subtree {root=} {subtree=}")
-    root.subtrees.append(subtree)
+    root.subtrees.append(subtree)  # type: ignore
     if subtree.is_file():
         root.n_files += 1
     elif subtree.is_folder():
@@ -678,17 +955,22 @@ def _from_file(
     file_path: Path,
     syntax_highlighting: bool = False,
     concise: bool = False,
+    max_tokens: int = 100_000,
 ) -> TreePlus:
     "PRIVATE: parse a file_path into a TreePlus"
     debug_print(f"engine._from_file {file_path=}")
     assert file_path.is_file(), f"tree_plus._from_file got a non-file {file_path=}"
+    counts = TokenLineCount(0, 0)
     try:
-        counts = count_tokens_lines(file_path)
+        new_counts = count_tokens_lines(file_path)
+        if new_counts:
+            counts = new_counts
     except Exception as e:
         debug_print(f"engine._from_file counts Exception {e=}")
-        counts = TokenLineCount(0, 0)
     try:
-        components = parse_file(file_path) if not concise else []
+        components = []
+        if not concise and (counts is not None and counts.n_tokens <= max_tokens):
+            components = parse_file(file_path)
     except Exception as e:
         debug_print(f"engine._from_file components Exception {e=}")
         components = []
@@ -717,12 +999,165 @@ def _from_file(
     return file_tree_plus
 
 
+import tempfile
+import requests
+from tree_plus_src.parse_file import parse_html
+from tree_plus_src.count_tokens_lines import count_tokens_lines_from_contents
+from rich.text import Text
+from rich.markdown import Markdown
+from fake_useragent import UserAgent
+from bs4 import Tag, NavigableString
+
+ua = UserAgent(browsers=["chrome"])
+
+
+def _from_url(
+    *,
+    url: str,
+    syntax_highlighting: bool = False,
+    concise: bool = False,
+) -> TreePlus:
+    "PRIVATE: build TreePlus from a URL (not recursive for now)"
+    debug_print(f"engine._from_url {url=}")
+    try:
+        if not (url.startswith("http://") or url.startswith("https://")):
+            url = f"https://{url}"
+        html_response = requests.get(url, headers={"User-Agent": ua.random})
+        html_text = html_response.text
+        count = count_tokens_lines_from_contents(html_text)
+        if concise:
+            components = []
+        elif url.endswith(".md"):
+            components = parse_file(url, contents=html_text)
+        else:
+            components = [_from_html_text(html_text)]
+        # if syntax_highlighting:
+        # debug_print(f"_from_file SYNTAX HIGHLIGHTING {url=}")
+        # try:
+        # new_components = _syntax_highlight(
+        #     file_path=Path("index.html"),
+        #     components=components,
+        # )
+        # new_components = [Text(component) for component in components]
+        # print("new_components", new_components)
+        # assert len(new_components) == len(components), "length mismatch"
+        # components = new_components
+        # except Exception as e:
+        #     debug_print(f"engine._from_file syntax highlighting exception {e=}")
+        url_tree_plus = TreePlus(
+            subtrees=components,
+            # type: ignore
+            category=Category.URL,
+            name=url,
+            n_folders=0,
+            n_files=1,
+            n_tokens=count.n_tokens,
+            n_lines=count.n_lines,
+        )
+        return url_tree_plus
+    except Exception as e:
+        raise e
+
+
+from rich.tree import Tree
+
+
+def _from_html_text(contents: str) -> TreePlus:
+    soup = BeautifulSoup(contents, "html.parser")
+    soup_tree = _from_soup(soup)
+    assert soup_tree is not None
+    return soup_tree
+
+
+def empty_tag_tree(n: str = "?"):
+    return TreePlus(Category.TAG, n, subtrees=[])
+
+
+# def _from_soup(
+#     tag: Union[Tag, NavigableString, BeautifulSoup, PageElement], tree=None
+# ) -> TreePlus:
+#     if not tree:
+#         tree = empty_tag_tree()
+
+#     subtrees = []
+#     if isinstance(tag, NavigableString):
+#         tag_string = " ".join(tag.stripped_strings)
+#         tree.name = Panel(Markdown(tag_string))  # type: ignore
+#     elif isinstance(tag, Tag):
+#         tree.name = Panel(Markdown(tag.name))
+#         for child_tag in tag.children:
+#             child_tree = _from_soup(child_tag)
+#             subtrees.append(child_tree)
+#     elif isinstance(tag, BeautifulSoup):
+#         tree.name = "BeautifulSoup"
+#         for child_tag in tag.children:
+#             child_tree = _from_soup(child_tag)
+#             subtrees.append(child_tree)
+
+#     tree.subtrees = subtrees
+#     return tree
+
+default_keepers = frozenset({"title", "h1", "h2", "h3", "table", "tr", "ol", "li"})
+
+
+def union_from_element(elem: PageElement) -> Union[Tag, NavigableString]:
+    "to satisfy the type checker about the elem"
+    if isinstance(elem, Tag):
+        return elem
+    elif isinstance(elem, NavigableString):
+        return elem
+    else:
+        raise ValueError(f"NOT IN UNION: {elem}")
+
+
+def _from_soup(
+    tag: Union[Tag, NavigableString],
+    tree: Optional[TreePlus] = None,
+    keepers: FrozenSet[str] = default_keepers,
+) -> Optional[TreePlus]:
+    if not tree:
+        tree = empty_tag_tree()
+
+    subtrees = []
+    if isinstance(tag, NavigableString):
+        tag_string = "\n".join(tag.stripped_strings)
+        tree.name = tag_string  # type: ignore
+        if not tag_string:
+            return None
+    elif isinstance(tag, Tag):
+        tag_attrs = tag.attrs
+        tag_attrs_strings = [f"\n{k}={v}" for k, v in tag_attrs.items()]
+        tag_attrs_string = " ".join(tag_attrs_strings)
+        if tag_attrs_string:
+            tag_attrs_string = " " + tag_attrs_string
+        tree.name = f"<{tag.name}{tag_attrs_string}>"
+
+        for child_tag in tag.children:
+            # NOTE: this is only to satisfy the type checker
+            child_tag_union = union_from_element(child_tag)
+            subtree = _from_soup(
+                child_tag_union, tree=empty_tag_tree(), keepers=keepers
+            )
+            if subtree is None:
+                continue
+            subtrees.append(subtree)
+
+    tree.subtrees = subtrees
+    return tree
+
+
+def ordered_list_from(l: Iterable[str]) -> List[str]:
+    return [f" - {i}. {x}" for i, x in enumerate(l, start=1)]
+
+
 BACKUP_LEXERS = {
     "kt": "kotlin",
     "cbl": "cobol",
     "rst": "markdown",
     "cc": "cpp",
     "h": "c",
+    "md": "markdown",
+    "html": "markdown",
 }
 
 DENY_SUFFIXES = {"json"}

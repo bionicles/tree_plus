@@ -1,5 +1,5 @@
 # tree_plus_cli.py
-from typing import Optional, Union, Tuple
+from typing import List, Optional, Union, Tuple
 from time import perf_counter
 
 import click
@@ -9,11 +9,14 @@ from tree_plus_src import (  # noqa E402
     debug_print,
     __version__,
     engine as tree_plus,
+    TreePlus,
     DEFAULT_IGNORE,
+    web,
 )
 
 
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h", "-H"])
+DEFAULT_QUERY = "best tree data structures"
 
 
 @click.command(
@@ -75,18 +78,44 @@ CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h", "-H"])
     "-C",
     is_flag=True,
     default=False,
-    help="Enables Syntax Highlighting (WIP).",
+    help="Omit module components.",
+)
+@click.option(
+    "--yc",
+    "--hn",
+    is_flag=True,
+    help=f"Include ycombinator (False)",
+    default=False,
+)
+@click.option(
+    "--number",
+    "-n",
+    "-N",
+    help="number of results (--yc mode only, default 3)",
+    default=3,
+)
+@click.option(
+    "--max-depth",
+    "-m",
+    "-M",
+    help="maximum number of steps (depth / level) from root (--yc mode only, default 3)",
+    default=3,
 )
 @click.argument("paths", nargs=-1, type=click.UNPROCESSED)  # Accepts multiple arguments
 def main(
-    glob: Optional[Tuple[str]],
-    paths: Optional[Union[str, Tuple[str]]],
-    ignore: Tuple[str],
+    glob: Optional[Tuple[str, ...]],
+    paths: Optional[Union[str, Tuple[str, ...]]],
+    ignore: Tuple[str, ...],
     override: bool,
     debug: bool,
     version: bool,
     syntax: bool,
     concise: bool,
+    # web_action: Optional[Tuple[str, ...]],
+    # query: Optional[Tuple[str, ...]],
+    yc: bool,
+    number: int,
+    max_depth: int,
 ):
     """A `tree` util enhanced with tokens, lines, and components.
 
@@ -117,7 +146,20 @@ def main(
         \b
         Concise Mode (No Parsing)
             > tree_plus -c
+
+        \b
+        URL + Tag Categories (tree plus for the web)
+            > tree_plus https://en.wikipedia.org/wiki/Binary_search_tree
+
+        \b
+        Hacker News Mode (3 articles, max depth 3)
+            > tree_plus --yc
+
+        \b
+        Hacker News Mode (6 articles, max depth 6)
+            > tree_plus --yc -n 6 -m 6
     """
+    start_time = perf_counter()
     if debug:
         enable_debug()
     if version:
@@ -125,34 +167,46 @@ def main(
         return
     debug_print(f"tree_plus main received {paths=} {ignore=} {glob=}")
 
+    _paths: Tuple[Union[str, TreePlus], ...] = ()
     if isinstance(paths, str):
-        paths = (paths,)
+        _paths = (paths,)
+    elif isinstance(paths, tuple):
+        _paths = paths
     assert ignore is None or isinstance(
         ignore, tuple
     ), f"{ignore=} must be None or Tuple[str]"
     assert glob is None or isinstance(
         glob, tuple
     ), f"{glob=} must be None or Tuple[str]"
+
     og_ignore = ignore
     if not ignore and not override:
         ignore = DEFAULT_IGNORE
-    start_time = perf_counter()
+
+    if yc:
+        hacker_news_articles = web.articles_from_hacker_news(
+            max_depth=max_depth, n_articles=number
+        )
+        article_comment_tree = tree_plus.from_hacker_news_articles(hacker_news_articles)
+        _paths += (article_comment_tree,)
+
     root = tree_plus.from_seeds(
-        paths,
+        _paths,
         maybe_ignore=ignore,
         maybe_globs=glob,
         syntax_highlighting=syntax,
         override_ignore=override,
         concise=concise,
     )
-    root.render()
-    line1 = f"\n[link=https://github.com/bionicles/tree_plus/blob/main/README.md]tree_plus[/link] v({__version__}) ignore={og_ignore} globs={glob}"
+    root.render(markup=True, highlight=True)
+    yc_part = f" yc={yc} n={number} m={max_depth}" if yc else ""
+    line1 = f"\n[link=https://github.com/bionicles/tree_plus/blob/main/README.md]tree_plus[/link] v({__version__}){yc_part} ignore={og_ignore} globs={glob}"
     line1 += f" {concise=} {paths=}" if concise else f" {syntax=} {paths=}"
     line2 = f"\n{root.stats()} in {perf_counter() - start_time:.02f} second(s)."
     tree_plus.safe_print(
         line1 + line2,
-        style="bold white on black",
-        # highlight=False,
+        # style="bold white on black",
+        highlight=True,
         markup=True,
     )
 

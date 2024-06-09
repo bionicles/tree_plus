@@ -62,6 +62,15 @@ def test_engine_categorize_file():
     assert category is engine.Category.FILE, "file 3"
 
 
+def test_engine_categorize_url():
+    category = engine.categorize("https://news.ycombinator.com")
+    assert category is engine.Category.URL, "file 1"
+    category = engine.categorize("www.cnbc.com")
+    assert category is engine.Category.URL, "file 2"
+    category = engine.categorize("https://crates.io/search?q=async")
+    assert category is engine.Category.URL, "file 3"
+
+
 def test_engine__new():
     x = engine.TreePlus()
     assert is_(engine.TreePlus, x)
@@ -117,7 +126,7 @@ def test_engine__syntax_highlight():
     rich_print(ys)
     assert is_(list, ys)
     for yi in ys:
-        print(yi.lexer)
+        # print(yi.lexer)
         assert is_(Syntax, yi)
 
 
@@ -320,7 +329,7 @@ def test_engine__reduce_forest():
     root_rich_tree = root.into_rich_tree()
     rich_print(root_rich_tree)
     root_str = root.into_str()
-    assert "Root (1 folder," in root_str
+    assert "path_to_test (1 folder," in root_str
     assert "tokens," in root_str
     assert "test_engine.py" in root_str
 

@@ -125,13 +125,25 @@ def count_tokens_lines(file_path: Union[str, Path]) -> Optional[TokenLineCount]:
     debug_print(f"count_tokens_lines counting {file_path=}")
 
     contents = read_file(file_path)
-    if not contents.strip():
+    # if not contents.strip():
+    #     return TokenLineCount(n_tokens=0, n_lines=0)
+    # n_tokens = len(encoder.encode(contents, disallowed_special=()))
+    # n_lines = len(contents.splitlines())
+    count = count_tokens_lines_from_contents(contents)
+    debug_print(f"count_tokens_lines {count=}")
+    return count
+
+
+from rich.markdown import Markdown
+
+
+def count_tokens_lines_from_contents(contents: Union[str, Markdown]) -> TokenLineCount:
+    "Count OpenAI tokens and lines in a string."
+    if not isinstance(contents, str) or not contents.strip():
         return TokenLineCount(n_tokens=0, n_lines=0)
     n_tokens = len(encoder.encode(contents, disallowed_special=()))
     n_lines = len(contents.splitlines())
-    count = TokenLineCount(n_tokens=n_tokens, n_lines=n_lines)
-    debug_print(f"count_tokens_lines {count=}")
-    return count
+    return TokenLineCount(n_tokens=n_tokens, n_lines=n_lines)
 
 
 def add_tokens_lines(

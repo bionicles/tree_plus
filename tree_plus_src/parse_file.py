@@ -1,6 +1,6 @@
 # tree_plus_src/parse_file.py
 from functools import lru_cache
-from typing import List, Sequence, Tuple, Optional, Union
+from typing import Dict, List, Sequence, Tuple, Optional, Union
 from pathlib import Path
 import json
 import os
@@ -58,7 +58,10 @@ def read_file(
             return ""
 
 
-def parse_file(file_path: Union[str, Path]) -> List[str]:
+def parse_file(
+    file_path: Union[str, Path],
+    contents: Optional[str] = None,
+) -> List[str]:
     "Parse a file and return a List[str] of its major components."
     # always convert to str since this was built on 'os', not pathlib
     debug_print(f"parse_file: {file_path=}")
@@ -74,14 +77,20 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
     if file_extension == ".db" or file_extension == ".sqlite":
         return parse_db(file_path)
 
-    # skip binary files
-    if is_binary(file_path):
+    # skip reading binary files
+    if not contents and is_binary(file_path):
         return components
 
     n_lines = None
     if file_extension == ".csv":
         n_lines = 3
-    contents = read_file(file_path, n_lines=n_lines)
+
+    if contents is None:
+        debug_print("reading file because no contents given")
+        contents = read_file(file_path, n_lines=n_lines)
+    else:
+        debug_print(contents)
+        contents = contents
 
     # just once
     in_tensorflow = "tensorflow" in file_path
@@ -93,7 +102,7 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
             components = parse_ts(contents)
             # angular here
             if "spec.ts" in file_path:
-                components = parse_angular_spec(contents) + components
+                components = parse_angular_spec(contents)
             if "app-routing.module" in file_path:
                 components = parse_angular_routes(contents) + components
             elif "app.module" in file_path:
@@ -220,6 +229,8 @@ def parse_file(file_path: Union[str, Path]) -> List[str]:
         components = parse_cbl(contents)
     elif file_extension == ".apl":
         components = parse_apl(contents)
+    elif file_extension == ".html":
+        components = parse_html(contents)
 
     bugs_todos_and_notes = parse_markers(contents)
     total_components = bugs_todos_and_notes + components
@@ -241,6 +252,275 @@ def extract_groups(match: re.Match, named_only: bool = False) -> dict:
     debug_print("groups:")
     debug_print(numbered_groups)
     return numbered_groups
+
+
+from bs4 import BeautifulSoup
+from rich.panel import Panel
+
+
+def parse_html(contents: str) -> List[str]:
+    return []
+    # disabled for now
+    # components = components_from_html(contents)
+    # return components
+
+
+# if tag.name == "tr" and len(tag.find_all("tr")) > 1:
+#     continue
+# component = component.replace("  ", " ").replace("[edit]", "")
+#
+# if tag.name in "tr":
+# component = re.sub(r"^\s{2,}", "", component, flags=re.MULTILINE)
+# component = re.sub(r"\n+", " ", component)
+
+# if component.startswith("  "):
+#     component = component[2:]
+
+
+DENY_HTML = "\n"
+
+import re
+from bs4 import BeautifulSoup
+from rich import print as rprint
+from rich.panel import Panel
+from rich.markdown import Markdown
+from rich.text import Text
+from rich.table import Table
+from typing import List, Optional, Tuple
+
+tags_allowed = (
+    "title",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    # "ol",
+    "table",
+    # "tr",
+    # "p",
+)
+
+
+# BUG: HTML tree doesn't look awesome (yet)
+# TODO: Fix HTML in TreePlus (How?)
+def process_tag(tag, components) -> Optional[str]:
+    component = (
+        tag.get_text(" ")
+        .strip("\n")
+        .replace("  ", " ")
+        .replace(" . ", ". ")
+        .replace(" , ", ", ")
+    )
+    if not component:
+        return None
+    if component in [c[0] for c in components]:
+        return None
+
+    if tag.name == "title":
+        return f"# {component}"
+    elif tag.name.startswith("h"):
+        level = int(tag.name[1])
+        return f"\t{'#' * level} {component.replace('\n', '')}"
+    elif tag.name == "a":
+        url = tag.get("href")
+        return f"[link={url}]{component}[/link]"
+    elif tag.name in ("section", "tr", "p", "ol"):
+        return prettify_tr(component)
+    return component
+
+
+# , source: Optional[str] = None # customization is possible
+def components_from_html(contents: str) -> List[str]:
+    soup = BeautifulSoup(contents, "html.parser")
+    components = []
+    body = soup.body
+    if body is None:
+        return []
+
+    # BUG: this repeatedly finds tags, need to avoid repeating ourselves
+    for tag in body.find_all(tags_allowed):
+        component = process_tag(tag, components)
+        if component:
+            components.append(component)
+
+    return components
+
+
+def prettify_tr(component: str) -> str:
+    lines = component.splitlines()
+    output_str = ""
+    n = 0
+    for line in lines:
+        stripped_line = line.strip().replace("  ", " ")
+        if not stripped_line:
+            continue
+        if n == 0:
+            formatted_line = f"# {stripped_line}"
+        else:
+            formatted_line = f"\n\t{n}. {stripped_line}"
+        output_str += formatted_line
+        n += 1
+    return output_str
+
+
+def hierarchical_numbering(components):
+    stack = []
+    numbered_components = []
+    for i, (component, pretty_component) in enumerate(components):
+        level = len(re.findall(r"#", pretty_component)) - 1
+        while stack and stack[-1][1] >= level:
+            stack.pop()
+        if stack:
+            prefix = ".".join(str(s[1]) for s in stack) + "."
+            numbered_components.append(f"{prefix}{level+1}. {component}")
+        else:
+            numbered_components.append(f"{level+1}. {component}")
+        stack.append((component, level))
+    return numbered_components
+
+
+OOPS = re.compile(r"(?P<screwup>(?P<lower>[a-z])(?P<upper>[A-Z]))")
+parser = "html.parser"
+# parser = "html5lib"
+# from rich.markdown import Markdown
+# from rich.text import Text
+
+# tags_allowed = (
+#     "title",
+#     "h1",
+#     "h2",
+#     "h3",
+#     "h4",
+#     "h5",
+#     "h6",
+#     "ol",
+#     # "ul",
+#     # "section",
+#     "tr",
+#     # "p",
+# )
+
+
+# def components_from_html(
+#     contents: str,
+#     source: Optional[str] = None,
+# ) -> List[str]:
+#     soup = BeautifulSoup(contents, parser)
+#     components = []
+
+#     body = soup.body
+#     if body is None:
+#         return []
+
+#     for tag in body.find_all(tags_allowed):
+#         if tag == body.contents:
+#             continue
+
+#         component = (
+#             tag.get_text(" ")
+#             .strip("\n")
+#             .replace("  ", " ")
+#             .replace(" . ", ". ")
+#             .replace(" , ", ", ")
+#         )
+
+#         if not component:
+#             continue
+
+#         if component in components:
+#             continue
+
+#         debug_print(tag)
+#         pretty_component = None
+
+#         if tag.name == "title":
+#             pretty_component = f"# {component}"
+
+#         if tag.name in ("h1", "h2", "h3", "h4", "h5", "h6"):
+#             n = int(tag.name[1])
+#             pretty_component = f"\t{'#' * n} {component.replace("\n", "")}"
+
+#         if "mathcal" in component:
+#             pretty_component = Text(component)
+#         else:
+#             if tag.name in ("section", "tr", "p", "ol"):
+#                 if tag.name == "p":
+#                     component = component.replace("\n", " ").replace("  ", " ")
+#                 pretty_component = prettify_tr(component)
+
+#         pretty_component = pretty_component or component
+#         debug_print(Panel(pretty_component, title=tag.name))
+#         components.append((component, pretty_component))
+
+#     subbed_components = []
+#     for i, (component, pretty_component) in enumerate(components):
+#         if isinstance(pretty_component, (Markdown, Text)):
+#             subbed_components.append(pretty_component)
+#         else:
+#             for j, other_component in enumerate(components[i:]):
+#                 if isinstance(other_component, str) and other_component in component:
+#                     components.pop(i)
+#                     break
+#             subbed_component = (
+#                 component.replace("\n\n", "\n").strip().replace("\r", " ")
+#             )
+#             subbed_components.append(subbed_component)
+
+#     # return subbed_components
+#     return subbed_components
+
+
+# ONLY_DIGITS = re.compile(r"^(\d\.)+$")
+
+
+# def prettify_tr(component: str, ul=1) -> str:
+#     lines = component.splitlines()
+#     output_str = ""
+#     n = 0
+#     for line in lines:
+#         stripped_line = line.strip().strip(" ").replace("  ", " ")
+#         if all(c.isdigit() or c in ". \n" for c in stripped_line):
+#             continue
+#         if len(stripped_line) <= 1:
+#             continue
+#         if not stripped_line:
+#             continue
+#         if stripped_line.lower() in output_str.lower():
+#             continue
+#         if n == 0:
+#             formatted_line = f"# {stripped_line}"
+#         else:
+#             formatted_line = f"\n\t- {n}. {stripped_line}"
+#         output_str += formatted_line
+#         n += 1
+#     return output_str
+
+# output = "".join(output)
+
+
+# m := OOPS.search(subbed_component):
+#             groups = extract_groups(m, named_only=True)
+#             # subbed_component = subbed_component.replace(
+#             #     groups["screwup"], f"{groups['lower']} !!! {groups['upper']}"
+#             # )
+# def prettify_ol(component: str) -> str:
+#     lines = component.splitlines()
+#     output = []
+#     n = 0
+#     for line in lines:
+#         stripped_line = line.strip()
+#         if len(stripped_line) <= 1:
+#             continue
+#         if n == 0:
+#             formatted_line = f"# {line}"
+#         else:
+#             formatted_line = f"\n\t- {n}. {line}"
+#         output.append(formatted_line)
+#         n += 1
+#     output = "".join(output)
+#     return output
 
 
 def assemble_tensorflow_flag(
@@ -572,8 +852,10 @@ def remove_c_comments(contents: str) -> str:
 combined_ts_pattern = re.compile(
     r"^(?P<function> *?(?P<function_export>export (?P<function_default>default )?)?(?P<preamble>(?P<preceding_paren>\(?)|(?P<assignment>(?P<type>const|var|let) \w+ = )|(?P<returns>return )|(?P<key>\w+: )?)(?P<function_async> *?async)? *?(?P<wrapper>\w+\()?function ?\w*(?P<function_generics><.*?>)?(?P<function_args>\([\s\S]*?\))(?P<function_return_type>:\s.*?)?(?= {))|"
     r"^(?P<arrow> *(?P<arrow_export>export (?P<arrow_default>default )?)?(?P<mutability>(const|let|var) )?\w+(?P<colon_or_equals>:|(?: =))(?: async)?[^\(](?P<arrow_args>\((?P<arrow_inner_args>(?P<arrow_positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<arrow_destructuring>{[\s\S]*?}(?P<arrow_destructuring_type_hint>:\s{[\s\S]*?})?))\))(?P<arrow_return_hint>: [\w<>]+)? =>)|"
-    r"^(?P<method> +(?P<private>private )?(?P<static>static )?(?P<async>async )?(?P<method_name>\w+)(?P<method_generics>\<.*?\>)?(?P<method_args>\((?P<method_inner_args>(?P<method_positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<method_destructuring>{[\s\S]*?}(?P<method_destructuring_type_hint>:\s{[\s\S]*?})?))\))(?P<method_return_hint>:\s[^\{;]*?)?)?(?P<fin>(?: {(?P<space_or_close>\s|})))|"
-    r"^(?P<class_or_interface>(?P<export>export (?:default )?)?(?P<data_type>class|interface)\s+?(?P<structure_name>[\w<>, ]+?)(?P<inheritance>\s+?(?:extends|implements)\s+?[\w<>, ]+)?)(?=\s)|"
+    # r"^(?P<method> +(?P<private>private )?(?P<static>static )?(?P<async>async )?(?P<method_name>\w+)(?P<method_generics><[^>]*?>)?(?P<method_args>\((?P<method_inner_args>(?P<method_positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<method_destructuring>{[\s\S]*?(?P<method_destructuring_type_hint>\s{[\s\S]*?})?))\)?)(?P<method_return_hint>:\s[^\{;]*?(?P<where> & { where\??:[\s\S]*(?={\s)))?)?(?P<fin>(?:;| {(?P<space_or_close>{|\s|})))|"
+    # 3 failed r"^(?P<method> +(?P<private>private )?(?P<static>static )?(?P<async>async )?(?P<method_name>\w+)(?P<method_generics><[^>]*?>)?(?P<method_args>\((?P<method_inner_args>(?P<method_positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<method_destructuring>{[\s\S]*?(?P<method_destructuring_type_hint>\s{[\s\S]*?})?))\))(?P<method_return_hint>:\s[^\{;]*?(?P<where> & { where\??:[\s\S]*(?={\s))?)?)?(?P<fin>(?:;| {(?P<space_or_close>{|\s)))|"
+    r"^(?P<method> +(?P<private>private )?(?P<static>static )?(?P<async>async )?(?P<method_name>\w+)(?P<method_generics><[^>]*?>)?(?P<method_args>\((?P<method_inner_args>(?P<method_positional_args>[\w\s,:?/()>\"|<\'=]*?)|(?P<method_destructuring>{[\s\S]*?(?P<method_destructuring_type_hint>\s{[\s\S]*?})?))\))(?P<method_return_hint>:\s[^\{;]*?(?P<where> & { where\??:[\s\S]*(?={\s))?)?)?(?P<fin>(?:;| {(?P<space_or_close>\s|})))|"
+    r"^(?P<class_or_interface>(?P<export>export (?:default )?)?(?P<data_type>class|interface)\s+?(?P<structure_name>[\w, ]+?)(?P<class_or_interface_generics><.*>)?(?P<inheritance>\s+?(?:extends|implements)\s+?[\w<>, ]+)?)(?=\s)|"
     r"^(?P<type_definition>type\s+?(?P<type_name>\w+)(?P<generics>[\w<>, ]+?)?)(?=\s=\s)|"
     r"^(?P<jsdoc> +\* +@(?P<tag>category|typedefn|sig|param|returns?)(?P<multiline> {{?[\s\S]*?}?})?.*(?=$))|"
     r"^(?P<jsdoc_untagged> \* \w+.*)$|"
@@ -2073,42 +2355,51 @@ def parse_lua(content: str) -> List[str]:
     return components
 
 
+# TODO: update parse_objective_c to avoid fixed unrolling
 def parse_objective_c(content: str) -> List[str]:
     components = []
 
     interface_pattern = r"@interface\s+(\w+).*?:\s+NSObject\s*"
     interface_matches = re.findall(interface_pattern, content, re.DOTALL)
+    class_name = None
 
     for interface_match in interface_matches:
         class_name = interface_match
         components.append(f"@interface {class_name}")
 
-    interface_method_pattern = (
-        r"@interface\s+\w+.*?:\s+NSObject\s*[-\s]*\((.*?)\)\s+(.*?);\s*"
-    )
-    interface_method_matches = re.findall(interface_method_pattern, content, re.DOTALL)
+    if class_name is not None:
+        interface_method_pattern = (
+            r"@interface\s+\w+.*?:\s+NSObject\s*[-\s]*\((.*?)\)\s+(.*?);\s*"
+        )
+        interface_method_matches = re.findall(
+            interface_method_pattern, content, re.DOTALL
+        )
 
-    for interface_method_match in interface_method_matches:
-        return_type = interface_method_match[0]
-        method = interface_method_match[1].rstrip()
-        components.append(f"@interface {class_name} -> ({return_type}) {method}")
+        for interface_method_match in interface_method_matches:
+            return_type = interface_method_match[0]
+            method = interface_method_match[1].rstrip()
+            components.append(f"@interface {class_name} -> ({return_type}) {method}")
 
-    implementation_pattern = r"@implementation\s+(\w+)\s*\n"
-    implementation_matches = re.findall(implementation_pattern, content, re.DOTALL)
+        implementation_pattern = r"@implementation\s+(\w+)\s*\n"
+        implementation_matches = re.findall(implementation_pattern, content, re.DOTALL)
 
-    for implementation_match in implementation_matches:
-        class_name = implementation_match
-        components.append(f"@implementation {class_name}")
+        for implementation_match in implementation_matches:
+            class_name = implementation_match
+            components.append(f"@implementation {class_name}")
 
-    implementation_method_pattern = r"@implementation\s+\w+\s*\n- \((.*?)\)\s+(.*?){"
-    implementation_method_matches = re.findall(
-        implementation_method_pattern, content, re.DOTALL
-    )
+        implementation_method_pattern = (
+            r"@implementation\s+\w+\s*\n- \((.*?)\)\s+(.*?){"
+        )
+        implementation_method_matches = re.findall(
+            implementation_method_pattern, content, re.DOTALL
+        )
 
-    for implementation_method_match in implementation_method_matches:
-        return_type = implementation_method_match[0]
-        method = implementation_method_match[1].rstrip()
-        components.append(f"@implementation {class_name} -> ({return_type}) {method}")
+        for implementation_method_match in implementation_method_matches:
+            return_type = implementation_method_match[0]
+            method = implementation_method_match[1].rstrip()
+            components.append(
+                f"@implementation {class_name} -> ({return_type}) {method}"
+            )
 
     function_pattern = r"(void)\s+(\w+)\(\)\s*{"
     function_matches = re.findall(function_pattern, content, re.DOTALL)
