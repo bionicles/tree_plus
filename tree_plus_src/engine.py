@@ -138,7 +138,7 @@ class TreePlus:
 
     def render(
         self,
-        style: str | None = None,
+        style: Optional[str] = None,
         highlight: bool = False,
         markup: bool = True,
         capturing: bool = False,
