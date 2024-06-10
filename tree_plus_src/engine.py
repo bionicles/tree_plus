@@ -1,4 +1,5 @@
 from typing import (
+    Dict,
     FrozenSet,
     Iterable,
     List,
@@ -21,12 +22,19 @@ import re
 # time limit on file parsing makes sense
 # from func_timeout import func_timeout
 from rich.console import Console
+from rich.pretty import Pretty
 from rich.syntax import Syntax
 from rich.theme import Theme
 from rich.table import Table
 from rich.tree import Tree
 from rich.text import Text
 from rich.markdown import Markdown
+import requests
+from rich.markdown import Markdown
+from fake_useragent import UserAgent
+from bs4 import Tag, NavigableString
+
+from bs4 import BeautifulSoup, PageElement
 
 from natsort import os_sorted
 
@@ -59,6 +67,7 @@ FILE_CHAR = ":page_facing_up:" if operate_normally else "[file]"
 GLOB_CHAR = ":cyclone:" if operate_normally else "[glob]"
 URL_CHAR = ":spider_web:" if operate_normally else "[url]"
 TAG_CHAR = ""
+
 colors = {
     "colorblind_gold": "#FFC20A",
     "colorblind_blue": "#0C7BDC",
@@ -66,10 +75,15 @@ colors = {
     "cyberpink": "#d600ff",
     "cybercyan": "#00b8ff",
 }
-
+BLUE = colors["colorblind_blue"]
+GOLD = colors["colorblind_gold"]
+FDE = colors["fde"]
+CYBERPINK = colors["cyberpink"]
+CYBERCYAN = colors["cybercyan"]
 
 THEME = {
     "repr.ipv6": "default",
+    "repr.ipv4": "default",
     "repr.call": colors["colorblind_blue"],
     "repr.str": colors["colorblind_blue"],
     "repr.tag_name": colors["colorblind_blue"],
@@ -111,21 +125,27 @@ class TreePlus:
     ] = field(default_factory=list)
 
     def is_root(self) -> bool:
+        "Category.ROOT"
         return self.category is Category.ROOT
 
     def is_folder(self) -> bool:
+        "Category.FOLDER"
         return self.category is Category.FOLDER
 
     def is_file(self) -> bool:
+        "Category.FILE"
         return self.category is Category.FILE
 
     def is_glob(self) -> bool:
+        "Category.GLOB"
         return self.category is Category.GLOB
 
     def is_component(self) -> bool:
+        "Category.COMPONENT"
         return self.category is Category.COMPONENT
 
     def is_url(self) -> bool:
+        "Category.URL"
         return self.category is Category.URL
 
     def into_rich_tree(self) -> Tree:
@@ -144,7 +164,7 @@ class TreePlus:
         capturing: bool = False,
     ):
         "PUBLIC: Safely print a TreePlus"
-        _inner_tree = into_rich_tree(root=self)
+        _inner_tree: Tree = into_rich_tree(root=self)
         safe_print(
             _inner_tree,
             style=style,
@@ -155,178 +175,39 @@ class TreePlus:
 
     def stats(self) -> str:
         "PUBLIC: statistics"
-        # grammar-focused:
-        # stats = ""
-        # stats += f"{self.n_folders} folder{'' if self.n_folders == 1 else 's'}"
-        # stats += f", {self.n_files} file{'' if self.n_files == 1 else 's'}"
-        # stats += f", {self.n_lines} line{'' if self.n_lines == 1 else 's'}"
-        # stats += f", {self.n_tokens} token{'' if self.n_tokens == 1 else 's'}"
-        # faster:
-        debug_print("stats:")
-        debug_print("self.n_folders:", self.n_folders)
-        debug_print("self.n_files:", self.n_files)
-        debug_print("self.n_lines:", self.n_lines)
-        debug_print("self.n_tokens:", self.n_tokens)
-        if self.n_folders is None:
-            folders = "(?)"
-        else:
-            folders = f"{self.n_folders:,}"
-        if self.n_files is None:
-            files = "(?)"
-        else:
-            files = f"{self.n_files:,}"
-        if self.n_lines is None:
-            lines = "(?)"
-        else:
-            lines = f"{self.n_lines:,}"
-        if self.n_tokens is None:
-            tokens = "(?)"
-        else:
-            tokens = f"{self.n_tokens:,}"
-        try:
-            stats = f"{folders} folder(s), {files} file(s), {lines} line(s), {tokens} token(s)"
-            return stats
-        except Exception as e:
-            debug_print(f"Exception e: {type(e)} = {e}")
-        return ""
+        return stats(self)
 
 
-Articles = Tuple[Tuple[dict, Tuple[dict, ...]], ...]
-
-
-from rich.pretty import Pretty
-from bs4 import BeautifulSoup, PageElement
-
-from rich.markdown import Markdown
-
-
-A_TAG_PATTERN = r'<a href="(?P<href>.*?)">(?P<text>.*?)</a>'
-
-
-def from_hacker_news_articles(
-    articles: Articles,
-    depth: int = 0,
-    max_depth: int = -1,
-    title: Union[str, Panel, Text, Table, Markdown, Pretty] = "Hacker News Front Page",
-    parent_num: Tuple[int, ...] = (),
-) -> TreePlus:
-    "construct a TreePlus given articles hlist from web.articles_from_hacker_news"
-    article_forest = []
-    total_files = 0
-
-    for i, (article, kids) in enumerate(articles, start=1):
-        article_tree = process_hacker_news_item(
-            article,
-            kids,  # type: ignore
-            depth,
-            max_depth,
-            parent_num + (i,),
+def stats(tree: TreePlus) -> str:
+    debug_print("stats:")
+    debug_print("tree.n_folders:", tree.n_folders)
+    debug_print("tree.n_files:", tree.n_files)
+    debug_print("tree.n_lines:", tree.n_lines)
+    debug_print("tree.n_tokens:", tree.n_tokens)
+    if tree.n_folders is None:
+        folders = "(?)"
+    else:
+        folders = f"{tree.n_folders:,}"
+    if tree.n_files is None:
+        files = "(?)"
+    else:
+        files = f"{tree.n_files:,}"
+    if tree.n_lines is None:
+        lines = "(?)"
+    else:
+        lines = f"{tree.n_lines:,}"
+    if tree.n_tokens is None:
+        tokens = "(?)"
+    else:
+        tokens = f"{tree.n_tokens:,}"
+    try:
+        stats = (
+            f"{folders} folder(s), {files} file(s), {lines} line(s), {tokens} token(s)"
         )
-        article_forest.append(article_tree)
-        total_files += article_tree.n_files
-
-    article_root = TreePlus(
-        category=Category.URL,
-        name=title,
-        subtrees=article_forest,
-        n_files=total_files,
-    )
-    return article_root
-
-
-def format_link(
-    url: str,
-    text: str,
-    color: str = colors["colorblind_blue"],
-) -> str:
-    return f"[{color}][link={url}]{text}[/link][/{color}]"
-
-
-from rich.tree import Tree
-
-
-def process_hacker_news_item(
-    item: dict,
-    kids: Articles,
-    depth: int,
-    max_depth: int,
-    parent_num: Tuple[int, ...],
-    parser: Union[Literal["lxml"], Literal["html.parser"]] = "html.parser",
-) -> TreePlus:
-    item_number = f"{'.'.join(str(n) for n in parent_num)}. "
-    item_name = ""
-    if "title" in item:
-        title_text = item["title"]
-        if "url" in item:
-            url = item["url"]
-            title_text = format_link(url, title_text)
-        item_name = f"{title_text}"
-    item_text = ""
-    if "text" in item:
-        item_html = item["text"]
-        item_soup = BeautifulSoup(item_html, features=parser)
-        item_links = rich_links_from_soup(item_soup)
-        item_links = "\n".join(item_links)
-        item_text = item_soup.get_text()
-        item_text += item_links
-        if item_text:
-            item_text = " " + item_text
-        # item_with_links = re.sub(A_TAG_PATTERN, replace_link, item_text)
-        # item_markdown = markdownify.markdownify(item_with_links, autolinks=False)
-
-    if not item_name and not item_text:
-        raise ValueError("neither name nor value")
-    elif item_name and not item_text:
-        pass
-    elif not item_name and item_text:
-        item_name = Markdown(item_text)
-    elif item_name and item_text:
-        item_name = Panel(item_name, title=item_number)
-        item_name = _make_rich_tree(item_name)
-        item_name.add(Markdown(item_text))
-
-    # item_counts = count_tokens_lines_from_contents(item_name)
-    kid_trees = []
-
-    if max_depth < 0 or (max_depth > 0 and depth < max_depth):
-        for j, (kid, kid_comments) in enumerate(kids, start=1):
-            kid_subtree = process_hacker_news_item(
-                kid,
-                kid_comments,  # type: ignore
-                depth + 1,
-                max_depth,
-                parent_num + (j,),
-            )
-            kid_trees.append(kid_subtree)
-
-    item_tree = TreePlus(
-        category=Category.URL,
-        name=Panel(
-            item_name,
-            title=f"{item_number}[{colors['colorblind_blue']}][link=https://news.ycombinator.com/item?id={item['id']}]{item['type'].title()} {item['id']:,}[/link][/{colors['colorblind_blue']}]",
-            title_align="left",
-        ),
-        subtrees=kid_trees,
-        n_files=1 + len(kids),
-        # n_lines=item_counts.n_lines,
-        # n_tokens=item_counts.n_tokens,
-    )
-    return item_tree
-
-
-def rich_links_from_soup(
-    item_soup: BeautifulSoup,
-    recursive: bool = True,
-) -> List[str]:
-    item_links = item_soup.find_all("a", recursive=recursive)
-    links = []
-    for i, link in enumerate(item_links, start=1):
-        url = link["href"]
-        text = link.text
-        color = colors["colorblind_blue"]
-        rich_link = f"\n- {i}. {url}"
-        links.append(rich_link)
-    return links
+        return stats
+    except Exception as e:
+        debug_print(f"Exception e: {type(e)} = {e}")
+    return ""
 
 
 @lru_cache
@@ -946,6 +827,7 @@ def _from_folder(
     return folder_tree_plus
 
 
+# TODO: re-enable func_timeout for parsing
 # def _parse(file_path: str, timeout=TIMEOUT_SECONDS) -> List[str]:
 #     try:
 #         components = func_timeout(timeout, parse_file, args=(file_path,))
@@ -1004,15 +886,6 @@ def _from_file(
     return file_tree_plus
 
 
-import tempfile
-import requests
-from tree_plus_src.parse_file import parse_html
-from tree_plus_src.count_tokens_lines import count_tokens_lines_from_contents
-from rich.text import Text
-from rich.markdown import Markdown
-from fake_useragent import UserAgent
-from bs4 import Tag, NavigableString
-
 ua = UserAgent(browsers=["chrome"])
 
 
@@ -1035,20 +908,8 @@ def _from_url(
         elif url.endswith(".md"):
             components = parse_file(url, contents=html_text)
         else:
-            components = [_from_html_text(html_text)]
-        # if syntax_highlighting:
-        # debug_print(f"_from_file SYNTAX HIGHLIGHTING {url=}")
-        # try:
-        # new_components = _syntax_highlight(
-        #     file_path=Path("index.html"),
-        #     components=components,
-        # )
-        # new_components = [Text(component) for component in components]
-        # print("new_components", new_components)
-        # assert len(new_components) == len(components), "length mismatch"
-        # components = new_components
-        # except Exception as e:
-        #     debug_print(f"engine._from_file syntax highlighting exception {e=}")
+            components = [_from_html_text(html_text, maybe_url_base=url)]
+
         url_tree_plus = TreePlus(
             subtrees=components,
             # type: ignore
@@ -1064,45 +925,34 @@ def _from_url(
         raise e
 
 
-from rich.tree import Tree
+default_keepers = frozenset({"title", "h1", "h2", "h3", "table", "tr", "ol", "li"})
+
+import urllib.parse
 
 
-def _from_html_text(contents: str) -> TreePlus:
+def base_url(url: str, with_path: bool = False) -> str:
+    parsed = urllib.parse.urlparse(url)
+    path = "/".join(parsed.path.split("/")[:-1]) if with_path else ""
+    parsed = parsed._replace(path=path)
+    parsed = parsed._replace(params="")
+    parsed = parsed._replace(query="")
+    parsed = parsed._replace(fragment="")
+    parsed_url = parsed.geturl()
+    parsed_url = str(parsed_url)
+    return parsed_url
+
+
+def _from_html_text(contents: str, maybe_url_base: Optional[str] = None) -> TreePlus:
     soup = BeautifulSoup(contents, "html.parser")
-    soup_tree = _from_soup(soup)
+    if maybe_url_base:
+        maybe_url_base = base_url(maybe_url_base)
+    soup_tree = _from_soup(soup, maybe_url_base=maybe_url_base)
     assert soup_tree is not None
     return soup_tree
 
 
 def empty_tag_tree(n: str = "?"):
     return TreePlus(Category.TAG, n, subtrees=[])
-
-
-# def _from_soup(
-#     tag: Union[Tag, NavigableString, BeautifulSoup, PageElement], tree=None
-# ) -> TreePlus:
-#     if not tree:
-#         tree = empty_tag_tree()
-
-#     subtrees = []
-#     if isinstance(tag, NavigableString):
-#         tag_string = " ".join(tag.stripped_strings)
-#         tree.name = Panel(Markdown(tag_string))  # type: ignore
-#     elif isinstance(tag, Tag):
-#         tree.name = Panel(Markdown(tag.name))
-#         for child_tag in tag.children:
-#             child_tree = _from_soup(child_tag)
-#             subtrees.append(child_tree)
-#     elif isinstance(tag, BeautifulSoup):
-#         tree.name = "BeautifulSoup"
-#         for child_tag in tag.children:
-#             child_tree = _from_soup(child_tag)
-#             subtrees.append(child_tree)
-
-#     tree.subtrees = subtrees
-#     return tree
-
-default_keepers = frozenset({"title", "h1", "h2", "h3", "table", "tr", "ol", "li"})
 
 
 def union_from_element(elem: PageElement) -> Union[Tag, NavigableString]:
@@ -1115,14 +965,36 @@ def union_from_element(elem: PageElement) -> Union[Tag, NavigableString]:
         raise ValueError(f"NOT IN UNION: {elem}")
 
 
+def node_index_str_from_tuple(
+    node_index: Tuple[int, ...],
+    prefix: str = "(",
+    suffix: str = ")",
+    number_color: str = CYBERCYAN,
+    dot_color: str = GOLD,
+) -> str:
+    node_index_str = ""
+    for node_index_i in node_index:
+        node_index_str += f"[{number_color}]{node_index_i}[/{number_color}][{dot_color}].[/{dot_color}]"
+    node_index_str = f"{prefix}{node_index_str}{suffix}"
+    return node_index_str
+
+
 def _from_soup(
     tag: Union[Tag, NavigableString],
     tree: Optional[TreePlus] = None,
-    keepers: FrozenSet[str] = default_keepers,
+    node_index: Tuple[int, ...] = (),
+    maybe_url_base: Optional[str] = None,
+    hrefs: Optional[Dict[str, list]] = None,
 ) -> Optional[TreePlus]:
     if not tree:
         tree = empty_tag_tree()
 
+    if node_index == () and not hrefs:
+        hrefs = {
+            "node_index_str": [],
+            "href": [],
+        }
+    assert hrefs is not None
     subtrees = []
     if isinstance(tag, NavigableString):
         tag_string = "\n".join(tag.stripped_strings)
@@ -1131,24 +1003,187 @@ def _from_soup(
             return None
     elif isinstance(tag, Tag):
         tag_attrs = tag.attrs
+
+        node_index_str = node_index_str_from_tuple(node_index)
+        # prepend the base url if it's available and the href points to a slash route
+        if tag.name == "a":
+            debug_print("a")
+            if "href" in tag_attrs:
+                href = tag_attrs["href"]
+                print("href", href)
+                if href.startswith("/") and maybe_url_base is not None:
+                    print("startswith slash!")
+                    href_with_base = f"{maybe_url_base}{tag_attrs["href"]}"
+                    tag_attrs["href"] = href_with_base
+                    href = href_with_base
+                hrefs["node_index_str"].append(node_index_str)
+                hrefs["href"].append(tag_attrs["href"])
+
         tag_attrs_strings = [f"\n{k}={v}" for k, v in tag_attrs.items()]
         tag_attrs_string = " ".join(tag_attrs_strings)
         if tag_attrs_string:
             tag_attrs_string = " " + tag_attrs_string
-        tree.name = f"<{tag.name}{tag_attrs_string}>"
+        tree.name = f"<{tag.name}{tag_attrs_string}> at {node_index_str}"
 
+        child_n = 1
         for child_tag in tag.children:
             # NOTE: this is only to satisfy the type checker
             child_tag_union = union_from_element(child_tag)
             subtree = _from_soup(
-                child_tag_union, tree=empty_tag_tree(), keepers=keepers
+                child_tag_union,
+                tree=empty_tag_tree(),
+                node_index=node_index + (child_n,),
+                maybe_url_base=maybe_url_base,
+                hrefs=hrefs,
             )
             if subtree is None:
                 continue
             subtrees.append(subtree)
+            child_n += 1
 
     tree.subtrees = subtrees
+
+    if node_index == () and hrefs["node_index_str"]:
+        hrefs_table = Table("href_n", "node_index", "href")
+        for href_n, (node_index_str, href) in enumerate(
+            zip(hrefs["node_index_str"], hrefs["href"]), start=1
+        ):
+            hrefs_table.add_row(str(href_n), node_index_str, href)
+
+        table_tree = empty_tag_tree()
+        table_tree.name = hrefs_table
+        tree.subtrees.append(table_tree)
+
     return tree
+
+
+Articles = Tuple[Tuple[dict, Tuple[dict, ...]], ...]
+
+
+A_TAG_PATTERN = r'<a href="(?P<href>.*?)">(?P<text>.*?)</a>'
+
+
+def from_hacker_news_articles(
+    articles: Articles,
+    depth: int = 0,
+    max_depth: int = -1,
+    title: Union[str, Panel, Text, Table, Markdown, Pretty] = "Hacker News Front Page",
+    parent_num: Tuple[int, ...] = (),
+) -> TreePlus:
+    "construct a TreePlus given articles hlist from web.articles_from_hacker_news"
+    article_forest = []
+    total_files = 0
+
+    for i, (article, kids) in enumerate(articles, start=1):
+        article_tree = process_hacker_news_item(
+            article,
+            kids,  # type: ignore
+            depth,
+            max_depth,
+            parent_num + (i,),
+        )
+        article_forest.append(article_tree)
+        total_files += article_tree.n_files
+
+    article_root = TreePlus(
+        category=Category.URL,
+        name=title,
+        subtrees=article_forest,
+        n_files=total_files,
+    )
+    return article_root
+
+
+def format_link(
+    url: str,
+    text: str,
+    color: str = colors["colorblind_blue"],
+) -> str:
+    return f"[{color}][link={url}]{text}[/link][/{color}]"
+
+
+def process_hacker_news_item(
+    item: dict,
+    kids: Articles,
+    depth: int,
+    max_depth: int,
+    parent_num: Tuple[int, ...],
+    parser: Union[Literal["lxml"], Literal["html.parser"]] = "html.parser",
+) -> TreePlus:
+    item_number = f"{'.'.join(str(n) for n in parent_num)}. "
+    item_name = ""
+    if "title" in item:
+        title_text = item["title"]
+        if "url" in item:
+            url = item["url"]
+            title_text = format_link(url, title_text)
+        item_name = f"{title_text}"
+    item_text = ""
+    if "text" in item:
+        item_html = item["text"]
+        item_soup = BeautifulSoup(item_html, features=parser)
+        item_links = rich_links_from_soup(item_soup)
+        item_links = "\n".join(item_links)
+        item_text = item_soup.get_text()
+        item_text += item_links
+        if item_text:
+            item_text = " " + item_text
+        # item_with_links = re.sub(A_TAG_PATTERN, replace_link, item_text)
+        # item_markdown = markdownify.markdownify(item_with_links, autolinks=False)
+
+    if not item_name and not item_text:
+        raise ValueError("neither name nor value")
+    elif item_name and not item_text:
+        pass
+    elif not item_name and item_text:
+        item_name = Markdown(item_text)
+    elif item_name and item_text:
+        item_name = Panel(item_name, title=item_number)
+        item_name = _make_rich_tree(item_name)
+        item_name.add(Markdown(item_text))
+
+    # item_counts = count_tokens_lines_from_contents(item_name)
+    kid_trees = []
+
+    if max_depth < 0 or (max_depth > 0 and depth < max_depth):
+        for j, (kid, kid_comments) in enumerate(kids, start=1):
+            kid_subtree = process_hacker_news_item(
+                kid,
+                kid_comments,  # type: ignore
+                depth + 1,
+                max_depth,
+                parent_num + (j,),
+            )
+            kid_trees.append(kid_subtree)
+
+    item_tree = TreePlus(
+        category=Category.URL,
+        name=Panel(
+            item_name,
+            title=f"{item_number}[{colors['colorblind_blue']}][link=https://news.ycombinator.com/item?id={item['id']}]{item['type'].title()} {item['id']:,}[/link][/{colors['colorblind_blue']}]",
+            title_align="left",
+        ),
+        subtrees=kid_trees,
+        n_files=1 + len(kids),
+        # n_lines=item_counts.n_lines,
+        # n_tokens=item_counts.n_tokens,
+    )
+    return item_tree
+
+
+def rich_links_from_soup(
+    item_soup: BeautifulSoup,
+    recursive: bool = True,
+) -> List[str]:
+    item_links = item_soup.find_all("a", recursive=recursive)
+    links = []
+    for i, link in enumerate(item_links, start=1):
+        url = link["href"]
+        text = link.text
+        color = colors["colorblind_blue"]
+        rich_link = f"\n- {i}. {url}"
+        links.append(rich_link)
+    return links
 
 
 def ordered_list_from(l: Iterable[str]) -> List[str]:
