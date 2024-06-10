@@ -1073,7 +1073,7 @@ def _from_soup(
             if "href" in tag_attrs:
                 href = tag_attrs["href"]
                 if href.startswith("/") and maybe_url_base is not None:
-                    href_with_base = f"{maybe_url_base}{tag_attrs["href"]}"
+                    href_with_base = f"{maybe_url_base}{href}"
                     tag_attrs["href"] = href_with_base
                     href = href_with_base
                 hrefs["node_index_str"].append(node_index_str)
