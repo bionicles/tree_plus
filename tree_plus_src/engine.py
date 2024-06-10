@@ -123,6 +123,7 @@ class TreePlus:
         List[Text],
         List[str],
     ] = field(default_factory=list)
+    hrefs: Optional[Dict[str, list]] = None
 
     def is_root(self) -> bool:
         "Category.ROOT"
@@ -173,9 +174,59 @@ class TreePlus:
             capturing=capturing,
         )
 
+        if (
+            self.hrefs
+            and "node_index_str" in self.hrefs
+            and self.hrefs["node_index_str"]
+        ):
+            hrefs_tree_plus = from_hrefs(self.hrefs, root_panel_text=self.name)
+            if hrefs_tree_plus is None:
+                return
+            hrefs_tree = hrefs_tree_plus.into_rich_tree()
+            from rich import print as rprint
+
+            rprint(hrefs_tree)
+
     def stats(self) -> str:
         "PUBLIC: statistics"
         return stats(self)
+
+
+def from_hrefs(hrefs: dict, root_panel_text) -> Optional[TreePlus]:
+    root = empty_tag_tree()
+    # hrefs_table = Table("href_n", "node_index", "href", highlight=True)
+    subtrees: List[TreePlus] = []
+    if not hrefs["node_index_str"]:
+        return None
+
+    href_n = 1
+    for node_index_str, href in zip(hrefs["node_index_str"], hrefs["href"]):
+        if href.startswith("#"):
+            continue
+        node = empty_tag_tree()
+        # node.name = f"{node_index_str} {href}"
+        node.name = Panel(
+            f"[{BLUE}]{href}[/{BLUE}]",
+            title=f"[{href_n}] {node_index_str}",
+            title_align="left",
+            expand=False,
+        )
+        subtrees.append(node)
+        href_n += 1
+
+    # hrefs_table_panel = "Links"
+    if root_panel_text is None:
+        root_panel_text = "Links"
+    if isinstance(root_panel_text, str):
+        root_panel_text = Panel(
+            f"[{BLUE}]{root_panel_text}[/{BLUE}]",
+            title=f"[0] ()",
+            title_align="left",
+            expand=False,
+        )
+    root.name = root_panel_text
+    root.subtrees = subtrees
+    return root
 
 
 def stats(tree: TreePlus) -> str:
@@ -246,14 +297,13 @@ def clean_string(input_str: str) -> str:
 
 
 def safe_print(
-    tree: Union[Tree, str],
+    tree: Union[Tree, Panel, str],
     style: Optional[str] = None,
     highlight: bool = True,
     markup: bool = False,
     capturing: bool = False,
 ):
     try:
-        # Attempt to print the tree normally
         console = Console(
             # reduce the tab size to fit content
             tab_size=2,
@@ -264,12 +314,18 @@ def safe_print(
             style=style,
             theme=Theme(THEME),
         )
+        # Attempt to print the tree normally
         if capturing:
             with console.capture() as capture:
                 console.print(tree)
             return capture.get()
         else:
-            console.print(tree, highlight=highlight, markup=markup, style=style)
+            console.print(
+                tree,
+                highlight=highlight,
+                markup=markup,
+                style=style,
+            )
     except UnicodeEncodeError as e:
         debug_print(f"UnicodeEncodeError printing tree normally: ", e)
         try:
@@ -360,7 +416,10 @@ def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
                 rich_tree.add(subtree)
                 # rich_subtree = into_rich_tree(root=subtree)  # type: ignore
     elif root.category is Category.TAG:
-        label = f"{TAG_CHAR} {root.name}"
+        if isinstance(root.name, str):
+            label = f"{TAG_CHAR} {root.name}"
+        else:
+            label = root.name
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_subtree = into_rich_tree(root=subtree)  # type: ignore
@@ -903,12 +962,14 @@ def _from_url(
         html_response = requests.get(url, headers={"User-Agent": ua.random})
         html_text = html_response.text
         count = count_tokens_lines_from_contents(html_text)
+        hrefs = None
         if concise:
             components = []
         elif url.endswith(".md"):
             components = parse_file(url, contents=html_text)
         else:
             components = [_from_html_text(html_text, maybe_url_base=url)]
+            hrefs = components[0].hrefs
 
         url_tree_plus = TreePlus(
             subtrees=components,
@@ -919,6 +980,7 @@ def _from_url(
             n_files=1,
             n_tokens=count.n_tokens,
             n_lines=count.n_lines,
+            hrefs=hrefs,
         )
         return url_tree_plus
     except Exception as e:
@@ -927,10 +989,10 @@ def _from_url(
 
 default_keepers = frozenset({"title", "h1", "h2", "h3", "table", "tr", "ol", "li"})
 
-import urllib.parse
-
 
 def base_url(url: str, with_path: bool = False) -> str:
+    import urllib.parse
+
     parsed = urllib.parse.urlparse(url)
     path = "/".join(parsed.path.split("/")[:-1]) if with_path else ""
     parsed = parsed._replace(path=path)
@@ -1010,9 +1072,7 @@ def _from_soup(
             debug_print("a")
             if "href" in tag_attrs:
                 href = tag_attrs["href"]
-                print("href", href)
                 if href.startswith("/") and maybe_url_base is not None:
-                    print("startswith slash!")
                     href_with_base = f"{maybe_url_base}{tag_attrs["href"]}"
                     tag_attrs["href"] = href_with_base
                     href = href_with_base
@@ -1042,17 +1102,7 @@ def _from_soup(
             child_n += 1
 
     tree.subtrees = subtrees
-
-    if node_index == () and hrefs["node_index_str"]:
-        hrefs_table = Table("href_n", "node_index", "href")
-        for href_n, (node_index_str, href) in enumerate(
-            zip(hrefs["node_index_str"], hrefs["href"]), start=1
-        ):
-            hrefs_table.add_row(str(href_n), node_index_str, href)
-
-        table_tree = empty_tag_tree()
-        table_tree.name = hrefs_table
-        tree.subtrees.append(table_tree)
+    tree.hrefs = hrefs
 
     return tree
 
