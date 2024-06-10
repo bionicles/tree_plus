@@ -124,7 +124,7 @@ tree_plus -i tests
 │   ├──     fake_useragent
 │   └──     bs4
 ├── 📄 pytest.ini (21 tokens, 5 lines)
-├── 📄 README.md (42,851 tokens, 2,810 lines)
+├── 📄 README.md (37,140 tokens, 3,032 lines)
 │   ├── # Tree Plus
 │   ├── ## Example Output:
 │   ├── - [ ] Demonstrate Parsed Checkboxes
@@ -243,17 +243,18 @@ tree_plus -i tests
     │   │   )
     │   ├── def update_readme(source_path: Optional = None, sink_path: Optional = None)
     │   └── def main()
-    ├── 📄 engine.py (9,808 tokens, 1,210 lines)
-    │   ├── TODO (Line 50): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
-    │   ├── TODO (Line 103): clarify subtree types -- make this a DataFrame tbh
-    │   ├── NOTE (Line 379): sometimes we need wider trees (deploy)
-    │   ├── TODO (Line 688): research & decide about globs as paths instead of as filters
-    │   ├── NOTE (Line 724): here we add directly input file_paths to the amortized glob matches
-    │   ├── TODO (Line 818): decide if we apply glob patterns to glob paths (currently NO)
-    │   ├── TODO (Line 866): decide between glob and rglob in _from_glob
-    │   ├── TODO (Line 873): decide if we need to re-amortize the globs in the glob seed
-    │   ├── TODO (Line 875): clarify ignore in glob seed context, skipping for now
-    │   ├── NOTE (Line 1141): this is only to satisfy the type checker
+    ├── 📄 engine.py (10,379 tokens, 1,295 lines)
+    │   ├── TODO (Line 58): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
+    │   ├── TODO (Line 117): clarify subtree types -- make this a DataFrame tbh
+    │   ├── NOTE (Line 310): sometimes we need wider trees (deploy)
+    │   ├── TODO (Line 628): research & decide about globs as paths instead of as filters
+    │   ├── NOTE (Line 664): here we add directly input file_paths to the amortized glob matches
+    │   ├── TODO (Line 758): decide if we apply glob patterns to glob paths (currently NO)
+    │   ├── TODO (Line 806): decide between glob and rglob in _from_glob
+    │   ├── TODO (Line 813): decide if we need to re-amortize the globs in the glob seed
+    │   ├── TODO (Line 815): clarify ignore in glob seed context, skipping for now
+    │   ├── TODO (Line 889): re-enable func_timeout for parsing
+    │   ├── NOTE (Line 1090): this is only to satisfy the type checker
     │   ├── class Category(Enum)
     │   ├── @dataclass
     │   │   class TreePlus
@@ -273,30 +274,8 @@ tree_plus -i tests
     │   │           capturing: bool = False,
     │   │       )
     │   ├──     def stats(self) -> str
-    │   ├── def from_hacker_news_articles(
-    │   │       articles: Articles,
-    │   │       depth: int = 0,
-    │   │       max_depth: int = -1,
-    │   │       title: Union = "Hacker News Front Page",
-    │   │       parent_num: Tuple = (),
-    │   │   ) -> TreePlus
-    │   ├── def format_link(
-    │   │       url: str,
-    │   │       text: str,
-    │   │       color: str = colors["colorblind_blue"],
-    │   │   ) -> str
-    │   ├── def process_hacker_news_item(
-    │   │       item: dict,
-    │   │       kids: Articles,
-    │   │       depth: int,
-    │   │       max_depth: int,
-    │   │       parent_num: Tuple,
-    │   │       parser: Union[Literal["lxml"], Literal["html.parser"]] = "html.parser",
-    │   │   ) -> TreePlus
-    │   ├── def rich_links_from_soup(
-    │   │       item_soup: BeautifulSoup,
-    │   │       recursive: bool = True,
-    │   │   ) -> List
+    │   ├── def from_hrefs(hrefs: dict, root_panel_text) -> Optional[TreePlus]
+    │   ├── def stats(tree: TreePlus) -> str
     │   ├── @lru_cache
     │   │   def remove_trailing_space(x: str) -> str
     │   ├── def tree_to_string(
@@ -306,7 +285,7 @@ tree_plus -i tests
     │   │   ) -> str
     │   ├── def clean_string(input_str: str) -> str
     │   ├── def safe_print(
-    │   │       tree: Union[Tree, str],
+    │   │       tree: Union[Tree, Panel, str],
     │   │       style: Optional = None,
     │   │       highlight: bool = True,
     │   │       markup: bool = False,
@@ -401,14 +380,48 @@ tree_plus -i tests
     │   │       syntax_highlighting: bool = False,
     │   │       concise: bool = False,
     │   │   ) -> TreePlus
-    │   ├── def _from_html_text(contents: str) -> TreePlus
+    │   ├── def base_url(url: str, with_path: bool = False) -> str
+    │   ├── def _from_html_text(contents: str, maybe_url_base: Optional = None) -> TreePlus
     │   ├── def empty_tag_tree(n: str = "?")
     │   ├── def union_from_element(elem: PageElement) -> Union[Tag, NavigableString]
+    │   ├── def node_index_str_from_tuple(
+    │   │       node_index: Tuple,
+    │   │       prefix: str = "(",
+    │   │       suffix: str = ")",
+    │   │       number_color: str = CYBERCYAN,
+    │   │       dot_color: str = GOLD,
+    │   │   ) -> str
     │   ├── def _from_soup(
     │   │       tag: Union[Tag, NavigableString],
     │   │       tree: Optional[TreePlus] = None,
-    │   │       keepers: FrozenSet = default_keepers,
+    │   │       node_index: Tuple = (),
+    │   │       maybe_url_base: Optional = None,
+    │   │       hrefs: Optional[Dict] = None,
     │   │   ) -> Optional[TreePlus]
+    │   ├── def from_hacker_news_articles(
+    │   │       articles: Articles,
+    │   │       depth: int = 0,
+    │   │       max_depth: int = -1,
+    │   │       title: Union = "Hacker News Front Page",
+    │   │       parent_num: Tuple = (),
+    │   │   ) -> TreePlus
+    │   ├── def format_link(
+    │   │       url: str,
+    │   │       text: str,
+    │   │       color: str = colors["colorblind_blue"],
+    │   │   ) -> str
+    │   ├── def process_hacker_news_item(
+    │   │       item: dict,
+    │   │       kids: Articles,
+    │   │       depth: int,
+    │   │       max_depth: int,
+    │   │       parent_num: Tuple,
+    │   │       parser: Union[Literal["lxml"], Literal["html.parser"]] = "html.parser",
+    │   │   ) -> TreePlus
+    │   ├── def rich_links_from_soup(
+    │   │       item_soup: BeautifulSoup,
+    │   │       recursive: bool = True,
+    │   │   ) -> List
     │   ├── def ordered_list_from(l: Iterable) -> List
     │   ├── def _get_lexer(file_path: Path) -> str
     │   └── def _syntax_highlight(
@@ -553,7 +566,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (18 tokens, 2 lines)
-    │   └── __version__ = "1.0.43"
+    │   └── __version__ = "1.0.44"
     └── 📄 web.py (2,304 tokens, 321 lines)
         ├── TODO (Line 25): re-enable tree plus web actions
         ├── NOTE (Line 167): no point in the answers since there's no content
@@ -614,8 +627,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.43) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 27 file(s), 0 line(s), 0 token(s) in 0.28 second(s).
+tree_plus v(1.0.44) ignore=('tests',) globs=() syntax=False paths=()
+5 folder(s), 27 file(s), 0 line(s), 0 token(s) in 0.29 second(s).
 
 ```
 <!-- t1-end -->
@@ -675,7 +688,7 @@ Options:
                                root (--yc mode only, default 3)
   -h, -H, --help               Show this message and exit.
 
-  v(1.0.43) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.44) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -2503,8 +2516,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.43) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 86 file(s), 0 line(s), 0 token(s) in 0.58 second(s).
+tree_plus v(1.0.44) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 86 file(s), 0 line(s), 0 token(s) in 0.61 second(s).
 
 ```
 <!-- t2-end -->
@@ -2987,7 +3000,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.43) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.44) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 7 folder(s), 17 file(s), 0 line(s), 0 token(s) in 0.16 second(s).
 
 ```
@@ -3013,7 +3026,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 testTypings.d.ts (149 tokens, 23 lines)
 └── 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.43) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.44) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 0 line(s), 0 token(s) in 0.02 second(s).
 
 ```
