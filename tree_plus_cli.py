@@ -78,7 +78,7 @@ DEFAULT_QUERY = "best tree data structures"
     "-C",
     is_flag=True,
     default=False,
-    help="Omit module components.",
+    help="Omit module components. (False)",
 )
 @click.option(
     "--yc",
@@ -101,6 +101,13 @@ DEFAULT_QUERY = "best tree data structures"
     help="maximum number of steps (depth / level) from root (--yc mode only, default 3)",
     default=3,
 )
+@click.option(
+    "--links",
+    "-l",
+    "-L",
+    help="include links (web mode only, default False)",
+    is_flag=True,
+)
 @click.argument("paths", nargs=-1, type=click.UNPROCESSED)  # Accepts multiple arguments
 def main(
     glob: Optional[Tuple[str, ...]],
@@ -116,6 +123,7 @@ def main(
     yc: bool,
     number: int,
     max_depth: int,
+    links: bool,
 ):
     """A `tree` util enhanced with tokens, lines, and components.
 
@@ -199,6 +207,8 @@ def main(
         concise=concise,
     )
     root.render(markup=True, highlight=True)
+    if links:
+        root.render_hrefs()
     yc_part = f" yc={yc} n={number} m={max_depth}" if yc else ""
     line1 = f"\n[link=https://github.com/bionicles/tree_plus/blob/main/README.md]tree_plus[/link] v({__version__}){yc_part} ignore={og_ignore} globs={glob}"
     line1 += f" {concise=} {paths=}" if concise else f" {syntax=} {paths=}"

@@ -75,11 +75,17 @@ colors = {
     "cyberpink": "#d600ff",
     "cybercyan": "#00b8ff",
 }
+
+BLACK = "black"
 BLUE = colors["colorblind_blue"]
 GOLD = colors["colorblind_gold"]
 FDE = colors["fde"]
 CYBERPINK = colors["cyberpink"]
 CYBERCYAN = colors["cybercyan"]
+
+# NOTE: you can customize the color here, and we could make this functional
+LINK_COLOR = f"{BLUE} on black"
+TEXT_COLOR = f"{GOLD} on black"
 
 THEME = {
     "repr.ipv6": "default",
@@ -174,25 +180,47 @@ class TreePlus:
             capturing=capturing,
         )
 
+    def render_hrefs(self):
+
+        subtree_href_tree_pluses = []
         if (
             self.hrefs
             and "node_index_str" in self.hrefs
             and self.hrefs["node_index_str"]
         ):
             hrefs_tree_plus = from_hrefs(self.hrefs, root_panel_text=self.name)
-            if hrefs_tree_plus is None:
-                return
-            hrefs_tree = hrefs_tree_plus.into_rich_tree()
-            from rich import print as rprint
+            subtree_href_tree_pluses.append(hrefs_tree_plus)
+        elif self.subtrees:
+            for i, subtree in enumerate(self.subtrees, start=1):
+                if isinstance(subtree, TreePlus) and subtree.hrefs is not None:
+                    hrefs_tree_plus = from_hrefs(
+                        subtree.hrefs, root_panel_text=self.name
+                    )
+                    subtree_href_tree_pluses.append(hrefs_tree_plus)
 
-            rprint(hrefs_tree)
+        if not subtree_href_tree_pluses:
+            return
+
+        from rich import print as rprint
+
+        hrefs_root = TreePlus(
+            Category.URL,
+            Panel("Links", expand=False),
+            subtrees=subtree_href_tree_pluses,
+        )
+        hrefs_rich_tree = hrefs_root.into_rich_tree()
+        rprint(hrefs_rich_tree)
 
     def stats(self) -> str:
         "PUBLIC: statistics"
         return stats(self)
 
 
-def from_hrefs(hrefs: dict, root_panel_text) -> Optional[TreePlus]:
+def from_hrefs(
+    hrefs: dict,
+    root_panel_text,
+    link_color: str = LINK_COLOR,
+) -> Optional[TreePlus]:
     root = empty_tag_tree()
     # hrefs_table = Table("href_n", "node_index", "href", highlight=True)
     subtrees: List[TreePlus] = []
@@ -206,8 +234,8 @@ def from_hrefs(hrefs: dict, root_panel_text) -> Optional[TreePlus]:
         node = empty_tag_tree()
         # node.name = f"{node_index_str} {href}"
         node.name = Panel(
-            f"[{BLUE}]{href}[/{BLUE}]",
-            title=f"[{href_n}] {node_index_str}",
+            f"[{link_color}]{href}[/{link_color}]",
+            title=f"[{href_n}] at {node_index_str}",
             title_align="left",
             expand=False,
         )
@@ -219,8 +247,8 @@ def from_hrefs(hrefs: dict, root_panel_text) -> Optional[TreePlus]:
         root_panel_text = "Links"
     if isinstance(root_panel_text, str):
         root_panel_text = Panel(
-            f"[{BLUE}]{root_panel_text}[/{BLUE}]",
-            title=f"[0] ()",
+            f"[{link_color}]{root_panel_text}[/{link_color}]",
+            title=f"[0] at ()",
             title_align="left",
             expand=False,
         )
@@ -274,6 +302,7 @@ def tree_to_string(
     tree: Tree,
     markup: bool = False,
     highlight: bool = False,
+    text_style: str = TEXT_COLOR,
 ) -> str:
     console = Console(
         # force_terminal=True,
@@ -281,7 +310,7 @@ def tree_to_string(
         # soft_wrap=True,
         markup=markup,
         highlight=highlight,
-        style=colors["colorblind_gold"],
+        style=text_style,
         theme=Theme({"repr.ipv6": "default"}),  # maybe unnecessary given no_color
     )
     with console.capture() as capture:
@@ -335,7 +364,10 @@ def safe_print(
             else:
                 tree_string = tree
             # debug_print(f"{tree_string=}")
-            clean_tree_string = clean_string(tree_string)
+            if isinstance(tree_string, str):
+                clean_tree_string = clean_string(tree_string)
+            else:
+                clean_tree_string = tree_string
             # debug_print(f"{clean_tree_string=}")
             print(clean_tree_string)
         except Exception as e:
@@ -345,8 +377,8 @@ def safe_print(
 
 def _make_rich_tree(
     label,
-    style: str = colors["colorblind_gold"],
-    guide_style: str = colors["colorblind_blue"],
+    style: str = TEXT_COLOR,
+    guide_style: str = LINK_COLOR,
     highlight: bool = True,
 ) -> Tree:
     "PRIVATE: build 1 renderable rich.tree.Tree instance"
@@ -1072,14 +1104,18 @@ def _from_soup(
             debug_print("a")
             if "href" in tag_attrs:
                 href = tag_attrs["href"]
-                if href.startswith("/") and maybe_url_base is not None:
-                    href_with_base = f"{maybe_url_base}{href}"
-                    tag_attrs["href"] = href_with_base
-                    href = href_with_base
-                hrefs["node_index_str"].append(node_index_str)
+                if maybe_url_base is not None:
+                    if href.startswith("./"):
+                        href = href.lstrip(".")
+                    if href.startswith("/"):
+                        href_with_base = f"{maybe_url_base}{href}"
+                        tag_attrs["href"] = href_with_base
+                        href = href_with_base
+                    hrefs["node_index_str"].append(node_index_str)
                 hrefs["href"].append(tag_attrs["href"])
 
-        tag_attrs_strings = [f"\n{k}={v}" for k, v in tag_attrs.items()]
+        maybe_newline = "\n" if len(tag_attrs) > 1 else ""
+        tag_attrs_strings = [f"{maybe_newline}{k}={v}" for k, v in tag_attrs.items()]
         tag_attrs_string = " ".join(tag_attrs_strings)
         if tag_attrs_string:
             tag_attrs_string = " " + tag_attrs_string
@@ -1147,9 +1183,9 @@ def from_hacker_news_articles(
 def format_link(
     url: str,
     text: str,
-    color: str = colors["colorblind_blue"],
+    link_color: str = LINK_COLOR,
 ) -> str:
-    return f"[{color}][link={url}]{text}[/link][/{color}]"
+    return f"[{link_color}][link={url}]{text}[/link][/{link_color}]"
 
 
 def process_hacker_news_item(
@@ -1159,6 +1195,7 @@ def process_hacker_news_item(
     max_depth: int,
     parent_num: Tuple[int, ...],
     parser: Union[Literal["lxml"], Literal["html.parser"]] = "html.parser",
+    link_color: str = LINK_COLOR,
 ) -> TreePlus:
     item_number = f"{'.'.join(str(n) for n in parent_num)}. "
     item_name = ""
@@ -1210,7 +1247,7 @@ def process_hacker_news_item(
         category=Category.URL,
         name=Panel(
             item_name,
-            title=f"{item_number}[{colors['colorblind_blue']}][link=https://news.ycombinator.com/item?id={item['id']}]{item['type'].title()} {item['id']:,}[/link][/{colors['colorblind_blue']}]",
+            title=f"{item_number}[{link_color}][link=https://news.ycombinator.com/item?id={item['id']}]{item['type'].title()} {item['id']:,}[/link][/{link_color}]",
             title_align="left",
         ),
         subtrees=kid_trees,
@@ -1229,8 +1266,8 @@ def rich_links_from_soup(
     links = []
     for i, link in enumerate(item_links, start=1):
         url = link["href"]
-        text = link.text
-        color = colors["colorblind_blue"]
+        # text = link.text
+        # color = colors["colorblind_blue"]
         rich_link = f"\n- {i}. {url}"
         links.append(rich_link)
     return links
