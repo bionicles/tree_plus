@@ -33,7 +33,7 @@
 <!-- t1-start -->
 ```sh
 tree_plus -i tests
-📁 tree_plus (5 folders, 27 files) 
+📁 tree_plus (7 folders, 27 files) 
 ├── 📄 .env.test (5 tokens, 1 line)
 │   └── DEBUG_TREE_PLUS
 ├── 📁 .github (2 folders, 3 files) 
@@ -124,7 +124,7 @@ tree_plus -i tests
 │   ├──     fake_useragent
 │   └──     bs4
 ├── 📄 pytest.ini (21 tokens, 5 lines)
-├── 📄 README.md (37,328 tokens, 3,045 lines)
+├── 📄 README.md (37,440 tokens, 3,055 lines)
 │   ├── # Tree Plus
 │   ├── ## Example Output:
 │   ├── - [ ] Demonstrate Parsed Checkboxes
@@ -140,7 +140,7 @@ tree_plus -i tests
 │   ├── ## Languages Todo:
 │   ├── ## Oppose Unfair Business Practices
 │   └── ## License
-├── 📄 tree_plus_cli.py (1,404 tokens, 225 lines)
+├── 📄 tree_plus_cli.py (1,426 tokens, 229 lines)
 │   └── def main(
 │           glob: Optional[Tuple],
 │           paths: Optional[Union[str, Tuple]],
@@ -244,22 +244,33 @@ tree_plus -i tests
     │   │   )
     │   ├── def update_readme(source_path: Optional = None, sink_path: Optional = None)
     │   └── def main()
-    ├── 📄 engine.py (10,635 tokens, 1,332 lines)
-    │   ├── TODO (Line 58): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
-    │   ├── NOTE (Line 86): you can customize the color here, and we could make this functional
-    │   ├── TODO (Line 123): clarify subtree types -- make this a DataFrame tbh
-    │   ├── NOTE (Line 339): sometimes we need wider trees (deploy)
-    │   ├── TODO (Line 660): research & decide about globs as paths instead of as filters
-    │   ├── NOTE (Line 696): here we add directly input file_paths to the amortized glob matches
-    │   ├── TODO (Line 790): decide if we apply glob patterns to glob paths (currently NO)
-    │   ├── TODO (Line 838): decide between glob and rglob in _from_glob
-    │   ├── TODO (Line 845): decide if we need to re-amortize the globs in the glob seed
-    │   ├── TODO (Line 847): clarify ignore in glob seed context, skipping for now
-    │   ├── TODO (Line 921): re-enable func_timeout for parsing
-    │   ├── NOTE (Line 1126): this is only to satisfy the type checker
+    ├── 📄 engine.py (11,060 tokens, 1,383 lines)
+    │   ├── TODO (Line 59): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
+    │   ├── NOTE (Line 87): you can customize the color here, and we could make this functional
+    │   ├── TODO (Line 120): clarify subtree types -- make this a DataFrame tbh
+    │   ├── NOTE (Line 386): sometimes we need wider trees (deploy)
+    │   ├── TODO (Line 707): research & decide about globs as paths instead of as filters
+    │   ├── NOTE (Line 743): here we add directly input file_paths to the amortized glob matches
+    │   ├── TODO (Line 837): decide if we apply glob patterns to glob paths (currently NO)
+    │   ├── NOTE (Line 860): switching these eager tallies to lazy properties
+    │   ├── TODO (Line 887): decide between glob and rglob in _from_glob
+    │   ├── TODO (Line 894): decide if we need to re-amortize the globs in the glob seed
+    │   ├── TODO (Line 896): clarify ignore in glob seed context, skipping for now
+    │   ├── TODO (Line 969): re-enable func_timeout for parsing
+    │   ├── NOTE (Line 1174): this is only to satisfy the type checker
     │   ├── class Category(Enum)
     │   ├── @dataclass
     │   │   class TreePlus
+    │   ├──     @property
+    │   │       def has_tree_plus_subtrees(self) -> Optional
+    │   ├──     @property
+    │   │       def n_folders(self) -> int
+    │   ├──     @property
+    │   │       def n_files(self) -> int
+    │   ├──     @property
+    │   │       def n_lines(self) -> int
+    │   ├──     @property
+    │   │       def n_tokens(self) -> int
     │   ├──     def is_root(self) -> bool
     │   ├──     def is_folder(self) -> bool
     │   ├──     def is_file(self) -> bool
@@ -282,7 +293,7 @@ tree_plus -i tests
     │   │       root_panel_text,
     │   │       link_color: str = LINK_COLOR,
     │   │   ) -> Optional[TreePlus]
-    │   ├── def stats(tree: TreePlus) -> str
+    │   ├── def stats_from_tree_plus(tree: TreePlus) -> str
     │   ├── @lru_cache
     │   │   def remove_trailing_space(x: str) -> str
     │   ├── def tree_to_string(
@@ -426,7 +437,7 @@ tree_plus -i tests
     │   │       parent_num: Tuple,
     │   │       parser: Union[Literal["lxml"], Literal["html.parser"]] = "html.parser",
     │   │       link_color: str = LINK_COLOR,
-    │   │   ) -> TreePlus
+    │   │   ) -> Optional[TreePlus]
     │   ├── def rich_links_from_soup(
     │   │       item_soup: BeautifulSoup,
     │   │       recursive: bool = True,
@@ -575,7 +586,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (18 tokens, 2 lines)
-    │   └── __version__ = "1.0.45"
+    │   └── __version__ = "1.0.46"
     └── 📄 web.py (2,304 tokens, 321 lines)
         ├── TODO (Line 25): re-enable tree plus web actions
         ├── NOTE (Line 167): no point in the answers since there's no content
@@ -636,8 +647,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.45) ignore=('tests',) globs=() syntax=False paths=()
-5 folder(s), 27 file(s), 0 line(s), 0 token(s) in 0.29 second(s).
+tree_plus v(1.0.46) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,205 line(s), 145,227 token(s) in 0.30 second(s).
 
 ```
 <!-- t1-end -->
@@ -653,7 +664,7 @@ Usage: tree_plus [OPTIONS] [PATHS]...
 
   Wrap patterns in quotes: -i "*.py" / -g "*.rs"
 
-  Examples:
+  Usage Examples:
 
           Show tree_plus_src and tests simultaneously
               > tree_plus tree_plus_src tests
@@ -673,13 +684,16 @@ Usage: tree_plus [OPTIONS] [PATHS]...
           Concise Mode (No Parsing)
               > tree_plus -c
 
-          URL + Tag Categories (tree plus for the web)
-              > tree_plus https://en.wikipedia.org/wiki/Binary_search_tree
+          URL + Tag Categories for a website
+              > tree_plus example.com
+
+          URL + Tag Categories for multiple websites with a link tree
+              > tree_plus example.com example.org -l
 
           Hacker News Mode (3 articles, max depth 3)
               > tree_plus --yc
 
-          Hacker News Mode (6 articles, max depth 6)
+          Hacker News Mode (6 articles, max depth 6, warning, slow!)
               > tree_plus --yc -n 6 -m 6
 
 Options:
@@ -696,9 +710,9 @@ Options:
   -m, -M, --max-depth INTEGER  maximum number of steps (depth / level) from
                                root (--yc mode only, default 3)
   -l, -L, --links              include links (web mode only, default False)
-  -H, -h, --help               Show this message and exit.
+  -h, -H, --help               Show this message and exit.
 
-  v(1.0.45) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.46) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -2526,8 +2540,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.45) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 86 file(s), 0 line(s), 0 token(s) in 0.59 second(s).
+tree_plus v(1.0.46) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 86 file(s), 7,503 line(s), 68,658 token(s) in 0.63 second(s).
 
 ```
 <!-- t2-end -->
@@ -3010,8 +3024,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.45) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 0 line(s), 0 token(s) in 0.17 second(s).
+tree_plus v(1.0.46) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,074 line(s), 14,130 token(s) in 0.17 second(s).
 
 ```
 <!-- t3-end -->
@@ -3036,8 +3050,8 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 testTypings.d.ts (149 tokens, 23 lines)
 └── 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.45) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
-1 folder(s), 8 file(s), 0 line(s), 0 token(s) in 0.02 second(s).
+tree_plus v(1.0.46) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
 <!-- t4-end -->
