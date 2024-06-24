@@ -372,24 +372,34 @@ def test_engine_class_treeplus_stats():
     tp1_stats = tp1.stats()
     # assert tp1_stats == f"0 folders, 0 files, 0 lines, 0 tokens"
     assert tp1_stats == f"0 folder(s), 0 file(s), 0 line(s), 0 token(s)"
-    tp1.n_folders = 1
-    tp1.n_files = 1
-    tp1.n_lines = 1
-    tp1.n_tokens = 1
+    tp1 = engine.TreePlus(category=engine.Category.FOLDER)
     tp1_stats = tp1.stats()
-    # assert tp1_stats == f"1 folder, 1 file, 1 line, 1 token"
+    tp1.render()
+    assert tp1_stats == f"1 folder(s), 0 file(s), 0 line(s), 0 token(s)"
+    tp2 = engine.TreePlus(category=engine.Category.FILE, line_count=1, token_count=1)
+    tp1.subtrees.append(tp2)
+    tp1_stats = tp1.stats()
+    tp1.render()
     assert tp1_stats == f"1 folder(s), 1 file(s), 1 line(s), 1 token(s)"
-    tp1.n_folders = 2
-    tp1.n_files = 2
-    tp1.n_lines = 2
-    tp1.n_tokens = 2
-    tp1_stats = tp1.stats()
-    # assert tp1_stats == f"2 folders, 2 files, 2 lines, 2 tokens"
-    assert tp1_stats == f"2 folder(s), 2 file(s), 2 line(s), 2 token(s)"
-    tp1.n_folders = None
-    tp1.n_files = None
-    tp1.n_lines = None
-    tp1.n_tokens = None
-    tp1_stats = tp1.stats()
-    # assert tp1_stats == f"2 folders, 2 files, 2 lines, 2 tokens"
-    assert tp1_stats == f"(?) folder(s), (?) file(s), (?) line(s), (?) token(s)"
+
+    # tp1.n_folders = 1
+    # tp1.n_files = 1
+    # tp1.n_lines = 1
+    # tp1.n_tokens = 1
+    # tp1_stats = tp1.stats()
+    # # assert tp1_stats == f"1 folder, 1 file, 1 line, 1 token"
+    # assert tp1_stats == f"1 folder(s), 1 file(s), 1 line(s), 1 token(s)"
+    # tp1.n_folders = 2
+    # tp1.n_files = 2
+    # tp1.n_lines = 2
+    # tp1.n_tokens = 2
+    # tp1_stats = tp1.stats()
+    # # assert tp1_stats == f"2 folders, 2 files, 2 lines, 2 tokens"
+    # assert tp1_stats == f"2 folder(s), 2 file(s), 2 line(s), 2 token(s)"
+    # tp1.n_folders = None
+    # tp1.n_files = None
+    # tp1.n_lines = None
+    # tp1.n_tokens = None
+    # tp1_stats = tp1.stats()
+    # # assert tp1_stats == f"2 folders, 2 files, 2 lines, 2 tokens"
+    # assert tp1_stats == f"(?) folder(s), (?) file(s), (?) line(s), (?) token(s)"

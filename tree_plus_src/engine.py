@@ -21,6 +21,7 @@ import re
 
 # time limit on file parsing makes sense
 # from func_timeout import func_timeout
+from rich.panel import Panel
 from rich.console import Console
 from rich.pretty import Pretty
 from rich.syntax import Syntax
@@ -107,19 +108,15 @@ class Category(Enum):
     TAG = 7
 
 
-from rich.pretty import Pretty
-from rich.panel import Panel
-
-
 @dataclass
 class TreePlus:
     "PUBLIC: data structure"
     category: Category = Category.COMPONENT
     name: Union[str, Panel, Text, Markdown, Table, Pretty] = ""
-    n_folders: int = 0
-    n_files: int = 0
-    n_lines: Optional[int] = 0
-    n_tokens: Optional[int] = 0
+    # n_folders: int = 0
+    # n_files: int = 0
+    line_count: int = 0
+    token_count: int = 0
     # TODO: clarify subtree types -- make this a DataFrame tbh
     subtrees: Union[
         List["TreePlus"],
@@ -130,6 +127,56 @@ class TreePlus:
         List[str],
     ] = field(default_factory=list)
     hrefs: Optional[Dict[str, list]] = None
+
+    @property
+    def has_tree_plus_subtrees(self) -> Optional[bool]:
+        if len(self.subtrees) == 0:
+            return None
+        return isinstance(self.subtrees[0], TreePlus)
+
+    @property
+    def n_folders(self) -> int:
+        if self.has_tree_plus_subtrees:
+            return sum(
+                subtree.n_folders
+                for subtree in self.subtrees
+                if isinstance(subtree, TreePlus)
+            ) + (1 if self.is_folder() else 0)
+        else:
+            return 1 if self.is_folder() else 0
+
+    @property
+    def n_files(self) -> int:
+        if self.has_tree_plus_subtrees:
+            return sum(
+                subtree.n_files
+                for subtree in self.subtrees
+                if isinstance(subtree, TreePlus)
+            ) + (1 if self.is_file() or self.is_url() else 0)
+        else:
+            return 1 if self.is_file() or self.is_url() else 0
+
+    @property
+    def n_lines(self) -> int:
+        if self.has_tree_plus_subtrees:
+            return self.line_count + sum(
+                subtree.n_lines
+                for subtree in self.subtrees
+                if isinstance(subtree, TreePlus)
+            )
+        else:
+            return self.line_count if self.is_file() else 0
+
+    @property
+    def n_tokens(self) -> int:
+        if self.has_tree_plus_subtrees:
+            return self.token_count + sum(
+                subtree.n_tokens
+                for subtree in self.subtrees
+                if isinstance(subtree, TreePlus)
+            )
+        else:
+            return self.token_count if self.is_file() else 0
 
     def is_root(self) -> bool:
         "Category.ROOT"
@@ -213,7 +260,7 @@ class TreePlus:
 
     def stats(self) -> str:
         "PUBLIC: statistics"
-        return stats(self)
+        return stats_from_tree_plus(self)
 
 
 def from_hrefs(
@@ -257,28 +304,28 @@ def from_hrefs(
     return root
 
 
-def stats(tree: TreePlus) -> str:
+def stats_from_tree_plus(tree: TreePlus) -> str:
     debug_print("stats:")
     debug_print("tree.n_folders:", tree.n_folders)
     debug_print("tree.n_files:", tree.n_files)
     debug_print("tree.n_lines:", tree.n_lines)
     debug_print("tree.n_tokens:", tree.n_tokens)
-    if tree.n_folders is None:
-        folders = "(?)"
-    else:
-        folders = f"{tree.n_folders:,}"
-    if tree.n_files is None:
-        files = "(?)"
-    else:
-        files = f"{tree.n_files:,}"
-    if tree.n_lines is None:
-        lines = "(?)"
-    else:
-        lines = f"{tree.n_lines:,}"
-    if tree.n_tokens is None:
-        tokens = "(?)"
-    else:
-        tokens = f"{tree.n_tokens:,}"
+    # if tree.n_folders is None:
+    #     folders = "(?)"
+    # # else:
+    # # if tree.n_files is None:
+    # #     files = "(?)"
+    # # else:
+    # if tree.n_lines is None:
+    #     lines = "(?)"
+    # else:
+    # if tree.n_tokens is None:
+    #     tokens = "(?)"
+    # else:
+    folders = f"{tree.n_folders:,}"
+    files = f"{tree.n_files:,}"
+    lines = f"{tree.n_lines:,}"
+    tokens = f"{tree.n_tokens:,}"
     try:
         stats = (
             f"{folders} folder(s), {files} file(s), {lines} line(s), {tokens} token(s)"
@@ -809,19 +856,21 @@ def _add_subtree(
     "PRIVATE: add a subtree TreePlus to a root TreePlus"
     # debug_print(f"_add_subtree {root=} {subtree=}")
     root.subtrees.append(subtree)  # type: ignore
-    if subtree.is_file():
-        root.n_files += 1
-    elif subtree.is_folder():
-        root.n_folders += 1
-        root.n_files += subtree.n_files
-    if (
-        root.n_tokens is not None
-        and root.n_lines
-        and subtree.n_tokens is not None
-        and subtree.n_lines is not None
-    ):
-        root.n_tokens += subtree.n_tokens
-        root.n_lines += subtree.n_lines
+
+    # NOTE: switching these eager tallies to lazy properties
+    # if subtree.is_file():
+    #     root.n_files += 1
+    # elif subtree.is_folder():
+    #     root.n_folders += 1
+    #     root.n_files += subtree.n_files
+    # if (
+    #     root.n_tokens is not None
+    #     and root.n_lines
+    #     and subtree.n_tokens is not None
+    #     and subtree.n_lines is not None
+    # ):
+    #     root.n_tokens += subtree.n_tokens
+    #     root.n_lines += subtree.n_lines
 
 
 def _from_glob(
@@ -891,7 +940,6 @@ def _from_folder(
     folder_tree_plus = TreePlus(
         category=Category.FOLDER,
         name=folder_path.resolve().name,  # FIXES THE Path(".").name == "" bug
-        n_folders=1,
     )
     for subtree_n, subtree_path in enumerate(subtree_paths):
         # debug_print(f"engine._from_folder {subtree_n=} {subtree_path=}")
@@ -969,10 +1017,10 @@ def _from_file(
         subtrees=components,  # type: ignore
         category=Category.FILE,
         name=file_path.name,
-        n_folders=0,
-        n_files=1,
-        n_tokens=None if counts is None else counts.n_tokens,
-        n_lines=None if counts is None else counts.n_lines,
+        # n_folders=0,
+        # n_files=1,
+        token_count=None if counts is None else counts.n_tokens,
+        line_count=None if counts is None else counts.n_lines,
     )
     return file_tree_plus
 
@@ -1008,10 +1056,10 @@ def _from_url(
             # type: ignore
             category=Category.URL,
             name=url,
-            n_folders=0,
-            n_files=1,
-            n_tokens=count.n_tokens,
-            n_lines=count.n_lines,
+            # n_folders=0,
+            # n_files=1,
+            token_count=count.n_tokens,
+            line_count=count.n_lines,
             hrefs=hrefs,
         )
         return url_tree_plus
@@ -1168,6 +1216,8 @@ def from_hacker_news_articles(
             max_depth,
             parent_num + (i,),
         )
+        if article_tree is None:
+            continue
         article_forest.append(article_tree)
         total_files += article_tree.n_files
 
@@ -1175,7 +1225,7 @@ def from_hacker_news_articles(
         category=Category.URL,
         name=title,
         subtrees=article_forest,
-        n_files=total_files,
+        # n_files=total_files,
     )
     return article_root
 
@@ -1196,7 +1246,7 @@ def process_hacker_news_item(
     parent_num: Tuple[int, ...],
     parser: Union[Literal["lxml"], Literal["html.parser"]] = "html.parser",
     link_color: str = LINK_COLOR,
-) -> TreePlus:
+) -> Optional[TreePlus]:
     item_number = f"{'.'.join(str(n) for n in parent_num)}. "
     item_name = ""
     if "title" in item:
@@ -1219,7 +1269,8 @@ def process_hacker_news_item(
         # item_markdown = markdownify.markdownify(item_with_links, autolinks=False)
 
     if not item_name and not item_text:
-        raise ValueError("neither name nor value")
+        # raise ValueError("neither name nor value")
+        return None
     elif item_name and not item_text:
         pass
     elif not item_name and item_text:
@@ -1251,9 +1302,9 @@ def process_hacker_news_item(
             title_align="left",
         ),
         subtrees=kid_trees,
-        n_files=1 + len(kids),
-        # n_lines=item_counts.n_lines,
-        # n_tokens=item_counts.n_tokens,
+        # n_files=1 + len(kids),
+        # _n_lines=item_counts.n_lines,
+        # _n_tokens=item_counts.n_tokens,
     )
     return item_tree
 

@@ -129,7 +129,7 @@ def main(
 
     Wrap patterns in quotes: -i "*.py" / -g "*.rs"
 
-    Examples:
+    Usage Examples:
 
         \b
         Show tree_plus_src and tests simultaneously
@@ -156,15 +156,19 @@ def main(
             > tree_plus -c
 
         \b
-        URL + Tag Categories (tree plus for the web)
-            > tree_plus https://en.wikipedia.org/wiki/Binary_search_tree
+        URL + Tag Categories for a website
+            > tree_plus example.com
+
+        \b
+        URL + Tag Categories for multiple websites with a link tree
+            > tree_plus example.com example.org -l
 
         \b
         Hacker News Mode (3 articles, max depth 3)
             > tree_plus --yc
 
         \b
-        Hacker News Mode (6 articles, max depth 6)
+        Hacker News Mode (6 articles, max depth 6, warning, slow!)
             > tree_plus --yc -n 6 -m 6
     """
     start_time = perf_counter()
