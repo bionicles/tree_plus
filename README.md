@@ -124,7 +124,7 @@ tree_plus -i tests
 │   ├──     fake_useragent
 │   └──     bs4
 ├── 📄 pytest.ini (21 tokens, 5 lines)
-├── 📄 README.md (37,440 tokens, 3,055 lines)
+├── 📄 README.md (37,602 tokens, 3,069 lines)
 │   ├── # Tree Plus
 │   ├── ## Example Output:
 │   ├── - [ ] Demonstrate Parsed Checkboxes
@@ -586,7 +586,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (18 tokens, 2 lines)
-    │   └── __version__ = "1.0.46"
+    │   └── __version__ = "1.0.47"
     └── 📄 web.py (2,304 tokens, 321 lines)
         ├── TODO (Line 25): re-enable tree plus web actions
         ├── NOTE (Line 167): no point in the answers since there's no content
@@ -647,8 +647,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.46) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 12,205 line(s), 145,227 token(s) in 0.30 second(s).
+tree_plus v(1.0.47) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,219 line(s), 145,389 token(s) in 0.32 second(s).
 
 ```
 <!-- t1-end -->
@@ -712,7 +712,7 @@ Options:
   -l, -L, --links              include links (web mode only, default False)
   -h, -H, --help               Show this message and exit.
 
-  v(1.0.46) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.47) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -2540,8 +2540,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.46) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 86 file(s), 7,503 line(s), 68,658 token(s) in 0.63 second(s).
+tree_plus v(1.0.47) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 86 file(s), 7,503 line(s), 68,658 token(s) in 0.60 second(s).
 
 ```
 <!-- t2-end -->
@@ -3024,7 +3024,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.46) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.47) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 7 folder(s), 17 file(s), 2,074 line(s), 14,130 token(s) in 0.17 second(s).
 
 ```
@@ -3050,7 +3050,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 testTypings.d.ts (149 tokens, 23 lines)
 └── 📄 vba_test.bas (72 tokens, 16 lines)
 
-tree_plus v(1.0.46) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.47) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
 
 ```
