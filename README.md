@@ -586,7 +586,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (18 tokens, 2 lines)
-    │   └── __version__ = "1.0.47"
+    │   └── __version__ = "1.0.48"
     └── 📄 web.py (2,304 tokens, 321 lines)
         ├── TODO (Line 25): re-enable tree plus web actions
         ├── NOTE (Line 167): no point in the answers since there's no content
@@ -647,8 +647,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.47) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 12,219 line(s), 145,389 token(s) in 0.32 second(s).
+tree_plus v(1.0.48) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,219 line(s), 145,389 token(s) in 0.29 second(s).
 
 ```
 <!-- t1-end -->
@@ -710,9 +710,9 @@ Options:
   -m, -M, --max-depth INTEGER  maximum number of steps (depth / level) from
                                root (--yc mode only, default 3)
   -l, -L, --links              include links (web mode only, default False)
-  -h, -H, --help               Show this message and exit.
+  -H, -h, --help               Show this message and exit.
 
-  v(1.0.47) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.48) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -820,7 +820,7 @@ make library_demo
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages
-📁 more_languages (9 folders, 86 files) 
+📁 more_languages (9 folders, 82 files) 
 ├── 📁 group1 (1 folder, 11 files) 
 │   ├── 📄 addamt.cobol (408 tokens, 41 lines)
 │   │   ├── IDENTIFICATION DIVISION.
@@ -2494,29 +2494,25 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── # libtorch (C++-only)
 │   │   └── - Building libtorch using Python
 │   └── 📄 yc.html (12,015 tokens, 169 lines)
-├── 📁 group7 (1 folder, 5 files) 
-│   ├── 📄 AAPLShaders.metal (5,597 tokens, 566 lines)
-│   ├── 📄 angular_crud.ts (964 tokens, 148 lines)
-│   │   ├── interface DBCommand<T = any>
-│   │   ├── export class IndexedDbService
-│   │   ├──     constructor()
-│   │   ├──     async create_connection({ db_name = 'client_db', table_name }: DBCommand)
-│   │   ├──                 upgrade(db)
-│   │   ├──     async create_model({ db_name, table_name, model }: DBCommand)
-│   │   ├──         verify_matching({ table_name, model })
-│   │   ├──     async read_key({ db_name, table_name, key }: DBCommand)
-│   │   ├──     async update_model({ db_name, table_name, model }: DBCommand)
-│   │   ├──         verify_matching({ table_name, model })
-│   │   ├──     async delete_key({ db_name, table_name, key }: DBCommand)
-│   │   ├──     async list_table({
-│   │   │           db_name,
-│   │   │           table_name,
-│   │   │           where,
-│   │   │       }: DBCommand & { where?: { : string | number } })
-│   │   └──     async search_table(criteria: SearchCriteria)
-│   ├── 📄 forward.frag (863 tokens, 88 lines)
-│   ├── 📄 forward.vert (373 tokens, 49 lines)
-│   └── 📄 wgsl_test.wgsl (151 tokens, 17 lines)
+├── 📁 group7 (1 folder, 1 file) 
+│   └── 📄 angular_crud.ts (964 tokens, 148 lines)
+│       ├── interface DBCommand<T = any>
+│       ├── export class IndexedDbService
+│       ├──     constructor()
+│       ├──     async create_connection({ db_name = 'client_db', table_name }: DBCommand)
+│       ├──                 upgrade(db)
+│       ├──     async create_model({ db_name, table_name, model }: DBCommand)
+│       ├──         verify_matching({ table_name, model })
+│       ├──     async read_key({ db_name, table_name, key }: DBCommand)
+│       ├──     async update_model({ db_name, table_name, model }: DBCommand)
+│       ├──         verify_matching({ table_name, model })
+│       ├──     async delete_key({ db_name, table_name, key }: DBCommand)
+│       ├──     async list_table({
+│       │           db_name,
+│       │           table_name,
+│       │           where,
+│       │       }: DBCommand & { where?: { : string | number } })
+│       └──     async search_table(criteria: SearchCriteria)
 └── 📁 group_lisp (1 folder, 4 files) 
     ├── 📄 clojure_test.clj (726 tokens, 86 lines)
     │   ├── defprotocol P
@@ -2540,8 +2536,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.47) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 86 file(s), 7,503 line(s), 68,658 token(s) in 0.60 second(s).
+tree_plus v(1.0.48) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 82 file(s), 6,783 line(s), 61,674 token(s) in 0.60 second(s).
 
 ```
 <!-- t2-end -->
@@ -3024,8 +3020,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.47) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,074 line(s), 14,130 token(s) in 0.17 second(s).
+tree_plus v(1.0.48) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,074 line(s), 14,130 token(s) in 0.16 second(s).
 
 ```
 <!-- t3-end -->
@@ -3040,18 +3036,22 @@ Help me **add to** and **priorize** this list of languages to support!
 <!-- t4-start -->
 ```sh
 tree_plus tests/more_languages/group_todo
-📁 group_todo (1 folder, 8 files) 
+📁 group_todo (1 folder, 12 files) 
+├── 📄 AAPLShaders.metal (5,597 tokens, 566 lines)
 ├── 📄 crystal_test.cr (56 tokens, 15 lines)
 ├── 📄 dart_test.dart (106 tokens, 24 lines)
 ├── 📄 elixir_test.exs (49 tokens, 10 lines)
+├── 📄 forward.frag (863 tokens, 88 lines)
+├── 📄 forward.vert (373 tokens, 49 lines)
 ├── 📄 nodemon.json (120 tokens, 21 lines)
 ├── 📄 sas_test.sas (104 tokens, 22 lines)
 ├── 📄 test_setup_py.test (118 tokens, 24 lines)
 ├── 📄 testTypings.d.ts (149 tokens, 23 lines)
-└── 📄 vba_test.bas (72 tokens, 16 lines)
+├── 📄 vba_test.bas (72 tokens, 16 lines)
+└── 📄 wgsl_test.wgsl (151 tokens, 17 lines)
 
-tree_plus v(1.0.47) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
-1 folder(s), 8 file(s), 155 line(s), 774 token(s) in 0.02 second(s).
+tree_plus v(1.0.48) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+1 folder(s), 12 file(s), 875 line(s), 7,758 token(s) in 0.02 second(s).
 
 ```
 <!-- t4-end -->
