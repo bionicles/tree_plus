@@ -22,6 +22,7 @@ from typing import Optional, Tuple, List
 from enum import Enum
 import sys
 
+import numpy as np
 from rich.console import Console
 from rich.theme import Theme
 from rich.traceback import install
@@ -40,7 +41,6 @@ import torch
 import tree_plus_src as tp
 
 DEFAULT_MAX_LENGTH = 256  # short default for fast demos
-MAX_CONTEXT = 32_768
 
 APPLE = sys.platform == "darwin"
 NVIDIA = not APPLE
@@ -59,13 +59,17 @@ console = Console(
 
 
 class ModelName(Enum):
-    MISTRAL_3 = "mistralai/Mistral-7B-Instruct-v0.3"
-    MISTRAL_2 = "mistralai/Mistral-7B-Instruct-v0.2"
-    # HERMES = "TheBloke/OpenHermes-2.5-Mistral-7B-AWQ" # disabled for 32k uncertainty
-    # PHI = "microsoft/Phi-3-medium-128k-instruct"
+    QWEN_2 = "Qwen/Qwen2-7B-Instruct"  # Apache 2.0
+    MISTRAL_3 = "mistralai/Mistral-7B-Instruct-v0.3"  # Apache 2.0
 
 
-DEFAULT_MODEL = ModelName.MISTRAL_3.value
+class ModelContext(Enum):
+    QWEN_2 = 131_072
+    MISTRAL_3 = 32_768
+
+
+DEFAULT_MODEL = ModelName.QWEN_2.value
+DEFAULT_MAX_CONTEXT = ModelContext.QWEN_2.value
 
 tokenizer = AutoTokenizer.from_pretrained(
     DEFAULT_MODEL,
@@ -90,12 +94,124 @@ template = """{% for message in messages %}
 {{ eos_token }}"""
 
 
+example = """
+## Example Code:
+
+rs
+/// A B-tree node.
+pub struct BTreeNode<T> {
+    
+    /// The values stored in the node.
+    pub values: Vec<T>,
+    /// The children of the node.
+    pub children: Vec<Option<Box<BTreeNode<T>>>>,
+    /// Whether the node is a leaf node.
+    pub is_leaf: bool,
+}
+
+/// A B-tree.
+pub struct BTree<T> {
+    /// The order of the B-tree.
+    pub order: usize,
+    /// The root node of the B-tree.
+    pub root: Option<Box<BTreeNode<T>>>,
+}
+
+impl<T: Ord> BTree<T> {
+    /// Creates a new empty B-tree with the given order.
+    pub fn new(order: usize) -> Self {
+        BTree {
+            order,
+            root: None,
+        }
+    }
+
+    /// Inserts a value into the B-tree.
+    pub fn insert(&mut self, value: T) {
+        if self.root.is_none() {
+            // If the B-tree is empty, create a new root node.
+            self.root = Some(Box::new(BTreeNode::new(self.order, true)));
+        }
+
+        let mut node = self.root.as_mut().unwrap();
+        loop {
+            if node.is_full() {
+                // If the node is full, split it and insert the value into the appropriate child node.
+                let mid_index = node.values.len() / 2;
+                let mid_value = node.values.remove(mid_index);
+                let left_child = Box::new(BTreeNode::new(self.order, node.is_leaf));
+                let right_child = Box::new(BTreeNode::new(self.order, node.is_leaf));
+                left_child.values.extend_from_slice(&node.values[..mid_index]);
+                right_child.values.extend_from_slice(&node.values[mid_index..]);
+                left_child.children.extend_from_slice(&node.children[..mid_index + 1]);
+                right_child.children.extend_from_slice(&node.children[mid_index + 1..]);
+                node.values.clear();
+                node.values.push(mid_value);
+                node.children.clear();
+                node.children.push(Some(left_child));
+                node.children.push(Some(right_child));
+                node.is_leaf = false;
+
+                // Insert the value into the appropriate child node.
+                if value < node.values[0] {
+                    node = node.children[0].as_mut().unwrap();
+                } else {
+                    node = node.children[1].as_mut().unwrap();
+                }
+            } else if node.is_leaf {
+                // If the node is a leaf, insert the value into the node's values vector.
+                node.values.push(value);
+                node.values.sort();
+                break;
+            } else {
+                // If the node is not a leaf, traverse to the appropriate child node.
+                let index = node.values.binary_search(&value).unwrap_or_else(|e| e);
+                node = node.children[index].as_mut().unwrap();
+            }
+        }
+    }
+
+    /// Searches for a value in the B-tree.
+    pub fn search(&self, value: &T) -> bool {
+        let mut node = self.root.as_ref();
+        while let Some(ref n) = node {
+            if n.values.binary_search(value).is_ok() {
+                // If the value is found in the node's values vector, return true.
+                return true;
+            }
+
+            // Traverse to the appropriate child node.
+            let index = n.values.binary_search(value).unwrap_or_else(|e| e);
+            node = n.children[index].as_ref();
+        }
+
+        // If the value is not found in the B-tree, return false.
+        false
+    }
+}
+"""
+# ## Reminders:
+# - Only output '{_output_path.suffix}' code.
+# - Skip imports, dive right into details.
+# - Prefer the idiomatic style of the target language ({_output_path.suffix}).
+# - Write comments before lines to explain the code's functionality.
+# - Write the simplest, complete, correct, test-driven code that achieves the same function as the input code.
+# - Think step by step and be concise.
+## Definitions:
+# - Complete: All implementation details are filled in and the code is production-ready.
+# - Test-driven: The output code includes tests that verify its correctness and performance.
+# - Same Function: The output code emulates the same interface and abstractions as the input code.
+# - Correct: The output code compiles and runs without errors and passes all tests.
+# - Performant: The output code minimizes wasted memory, compute, wall clock time, and compile time.
+
+
 def rewrite_module(
     max_length: int,
     fill_context: bool,
     input_path: Path,
     output_path: Optional[str],
     suffix: Optional[str] = ".rs",
+    include_complete_file: bool = True,
 ):
     category = tp.engine.categorize(input_path)
     if category is not tp.engine.Category.FILE:
@@ -143,43 +259,84 @@ def rewrite_module(
 
     input_tag = f"{input_path.parent.parent.name}/{input_path.parent.name}/{str(input_path.name)}"
     output_tag = f"{_output_path.parent.parent.name}/{_output_path.parent.name}/{str(_output_path.name)}"
+    complete_file = open(input_path, "r").read() if include_complete_file else ""
+    if complete_file:
+        complete_file = f"\n```{input_tag}\n{complete_file}\n```"
+    random_seeds = np.random.randint(0, 65_536, 6)
     chat = [
         {
             "role": "system",
             "content": f"""
-# Act as **[`code_from_tree` Mistral]**
+    # Act as **[`code_from_tree` {DEFAULT_MODEL}]** according to the spirit of "A Generalization Instruction."
+    '''
+    ## [A Generalization Instruction](A.G.I.)
+    ### "Empowering AI Adaptability"
 
-## AI LLM Instructions
-- Role: you are a '{_output_path.suffix}' code generator who only outputs valid '{_output_path.suffix}' code / format files.
-- Objective: translate '{input_path.suffix}' code into valid '{_output_path.suffix}' code / format files.
-- Input: you will receive a high level API TreePlus contract for some '{input_path.suffix}' code / format files. 
-- Output: you will generate a low level API implementation of the same contract, but using '{_output_path.suffix}' code / format files.
-- Expectation: the output will be complete, test-driven, and will achieve the same function as the prior code, using the desired language.
+    ## Introduction
+    This document guides AI developers and enthusiasts in strategies to amplify AI generalization. 
+    It enables AI systems to apply knowledge in new, varied scenarios, echoing human adaptability.
 
-## Definitions:
-- Complete: means no placeholders or TODO remaining
-- Test-driven: if you don't have a failing test case, then you're not doing TDD
-- Same Function: emulate the same interface and abstractions correctly
-- Correct: code compiles and runs and passes tests, both implicit and explicit, performantly
-- Performantly: minimizing wasted memory, compute, and wall clock time
+    ## Objective
+    To steer AI towards comprehensive adaptability and decisive action, using a systematic, user-oriented approach.
 
-Remember: ONLY OUTPUT '{_output_path.suffix}' TO AVOID BREAKING LANGUAGE COMPILERS AND / OR INTERPRETERS. 
+    ## Examples of Generalization
+    1. **Cross-Domain Application**: Harness chess strategies to elevate business decisions.
+    2. **Language Transferability**: Equip an English-trained chatbot for fluent Spanish communication.
+    3. **Service Customization**: Adapt AI support to diverse industry consumer needs efficiently.
 
-Make sure to fill in the implementation details. 
-If the new language has an idiomatic style, prefer that.
+    ## Strategies for Enhanced Generalization
+    - **Intuitive Learning Models**: Foster rapid adaptability, paralleling human learning.
+    - **Rich Task Exposure**: Challenge AI with diverse problems, from technical to creative.
+    - **Real-World Benchmarking**: Evaluate AI consistently in real-life scenarios.
+    - **Ethical Considerations**: Uphold ethical standards and societal values.
 
-DO NOT GET STUCK IN A LOOP. Be concise!
+    ## Empowering Users Through AI
+    - Articulate AI's benefits and usability.
+    - Simplify AI decision-making with examples.
+    - Demonstrate AI's versatility in real-world applications to bolster trust and engagement.
 
-Write the simplest category member of complete, correct, test-driven, same function files.
-)""",
-        },
-        {
-            "role": "user",
-            "content": f"\n> tree_plus '{input_path}'\n"
+    ## Authoritative Leadership in Problem-Solving
+    - Prioritize straightforward solutions, advancing to complex challenges.
+    - Cultivate reciprocal authoritative leadership between users and AI.
+    - Merge AI's autonomous task management with human insights.
+    - Emphasize AI's emotional intelligence to resonate with human values.
+
+    ## Directive: Adaptive AI Leadership
+    Inspire AI to tackle diverse challenges independently, aiming for human-like adaptability. 
+    Explore possibilities and alternatives for a holistic view.
+    '''
+
+    ## General Aims:
+    Always fix ineffective prompt engineering issues.
+    Always fix massive energy waste issues.
+    
+
+    ## Random Seed: {random_seeds}
+
+    ## AI LLM Instructions
+    - Role: You're a 100x code translation engineer. Respond in code only, no yapping, well-formatted and adhering to modern best practices. 
+    - Objective: Rewrite only types and functions of the '{input_tag=}' API as '{output_tag=}'.
+    - Standards: Rewritten functions is higher quality than source material. Uses a literate style. Minimized imports.
+    - Input: An abstract `tree_plus` high-level map of '{input_tag}' code's functional interface.
+    - Output: Implementation details for the types and functions, in '{_output_path.suffix}'.
+
+    Always take opportunities to improve code.
+    Write the simplest member of the category of optimal and complete solutions.
+    Write like GitHub.
+    Reminder: space is limited, so focus on writing the code to implement the types and functions.
+    Some aspects of the input might be unnecessary in the output. 
+
+    ## Input:
+    ```sh
+    > tree_plus '{input_tag}'
+    """
             + input_tree.into_str()
-            + f'\n\n**[`code_from_tree` Mistral]**(input_path="{input_tag}"):'
-            + f"\n```{output_tag}",
-        },
+            + f"\n```"
+            + complete_file
+            + "\n\n## Output:"
+            + f'\n\n**[`code_from_tree` {DEFAULT_MODEL}]**(input_path="{input_tag}"):'
+            + f"\n\n```{output_tag}\n",
+        }
     ]
     processed_chat = tokenizer.apply_chat_template(
         chat,
@@ -196,7 +353,7 @@ Write the simplest category member of complete, correct, test-driven, same funct
     # Generate the code
     if fill_context:
         n_tokens = len(input_ids.tokens())
-        max_new_tokens = MAX_CONTEXT - n_tokens
+        max_new_tokens = DEFAULT_MAX_CONTEXT - n_tokens
     else:
         max_new_tokens = max_length
     console.rule("Begin Generation")

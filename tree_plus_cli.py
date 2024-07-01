@@ -110,6 +110,7 @@ DEFAULT_QUERY = "best tree data structures"
 )
 @click.argument("paths", nargs=-1, type=click.UNPROCESSED)  # Accepts multiple arguments
 def main(
+    # these are NON-MUTUALLY-EXCLUSIVE OPTIONS
     glob: Optional[Tuple[str, ...]],
     paths: Optional[Union[str, Tuple[str, ...]]],
     ignore: Tuple[str, ...],
@@ -129,7 +130,7 @@ def main(
 
     Wrap patterns in quotes: -i "*.py" / -g "*.rs"
 
-    Usage Examples:
+    Example Invocations (These are not subcomands, you idiot):
 
         \b
         Show tree_plus_src and tests simultaneously
@@ -227,3 +228,9 @@ def main(
 
 if __name__ == "__main__":
     main()
+
+
+# How many COMMANDS in the `tree_plus` CLI?
+# There are ZERO. You just call `tree_plus` [options] [paths].
+# If I were to rewrite this with clap, how many commands would there be? ZERO.
+# How many subcommands would there be? Zero!

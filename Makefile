@@ -6,8 +6,9 @@ cli:
 library_demo:
 	python tree_plus_programs/hello_tree_plus.py
 
+# @echo "python tree_plus_programs/rewrite.py -l 2048 tree_plus_src/engine.py tree_plus_engine.rs"
 rewrite_demo:
-	time tree_plus_programs/rewrite.py -l 3333 tests/more_languages/group1/CUSTOMER-INVOICE.CBL customer_invoice.erl
+	python tree_plus_programs/rewrite.py -l 2048 tree_plus_src/engine.py tree_plus_engine.rs
 
 # benchmark, dual core, library coverage, with line numbers for missing tests
 coverage:

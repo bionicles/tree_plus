@@ -1025,7 +1025,7 @@ combined_py_pattern = re.compile(
     # Functions and Methods, capturing indentation and multiline signatures
     r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\],. ]+)?)\s*:|"
     # Classes
-    r"(class \w+(\[.*\])?(\([\w\[\]\s,\.]*\))?):|"
+    r"(class \w+(\[.*\])?(\([\w\[\]\s,=\.]*\))?):|"
     # Decorators
     r"^( *@\w+(\(.*\))?)\n|"
     # TypeVar
