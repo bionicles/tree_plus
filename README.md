@@ -124,7 +124,7 @@ tree_plus -i tests
 │   ├──     fake_useragent
 │   └──     bs4
 ├── 📄 pytest.ini (21 tokens, 5 lines)
-├── 📄 README.md (37,605 tokens, 3,071 lines)
+├── 📄 README.md (37,528 tokens, 3,053 lines)
 │   ├── # Tree Plus
 │   ├── ## Example Output:
 │   ├── - [ ] Demonstrate Parsed Checkboxes
@@ -141,6 +141,21 @@ tree_plus -i tests
 │   ├── ## Oppose Unfair Business Practices
 │   └── ## License
 ├── 📄 tree_plus_cli.py (1,512 tokens, 236 lines)
+│   └── def main(
+│           glob: Optional[Tuple],
+│           paths: Optional[Union[str, Tuple]],
+│           ignore: Tuple,
+│           override: bool,
+│           debug: bool,
+│           version: bool,
+│           syntax: bool,
+│           concise: bool,
+│       
+│           yc: bool,
+│           number: int,
+│           max_depth: int,
+│           links: bool,
+│       )
 ├── 📁 tree_plus_programs (1 folder, 4 files) 
 │   ├── 📄 hello_tree_plus.py (528 tokens, 80 lines)
 │   │   ├── class ItHappened
@@ -155,6 +170,14 @@ tree_plus -i tests
 │   │   ├── TODO (Line 375): research various kwargs for huggingface / torch performance
 │   │   ├── class ModelName(Enum)
 │   │   ├── class ModelContext(Enum)
+│   │   ├── def rewrite_module(
+│   │   │       max_length: int,
+│   │   │       fill_context: bool,
+│   │   │       input_path: Path,
+│   │   │       output_path: Optional,
+│   │   │       suffix: Optional = ".rs",
+│   │   │       include_complete_file: bool = True,
+│   │   │   )
 │   │   └── def main(
 │   │           fill_context: bool,
 │   │           length: int,
@@ -457,12 +480,12 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (25,432 tokens, 2,754 lines)
+    ├── 📄 parse_file.py (25,410 tokens, 2,750 lines)
     │   ├── BUG (Line 306): HTML tree doesn't look awesome (yet)
     │   ├── TODO (Line 307): Fix HTML in TreePlus (How?)
     │   ├── BUG (Line 343): this repeatedly finds tags, need to avoid repeating ourselves
     │   ├── BUG (Line 973): catastrophic backtracking in some c files
-    │   ├── TODO (Line 2371): update parse_objective_c to avoid fixed unrolling
+    │   ├── TODO (Line 2367): update parse_objective_c to avoid fixed unrolling
     │   ├── @lru_cache(maxsize=None)
     │   │   def read_file(
     │   │       file_path: str,
@@ -566,7 +589,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (18 tokens, 2 lines)
-    │   └── __version__ = "1.0.50"
+    │   └── __version__ = "1.0.51"
     └── 📄 web.py (2,304 tokens, 321 lines)
         ├── TODO (Line 25): re-enable tree plus web actions
         ├── NOTE (Line 167): no point in the answers since there's no content
@@ -627,8 +650,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.50) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 12,398 line(s), 146,894 token(s) in 0.29 second(s).
+tree_plus v(1.0.51) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,376 line(s), 146,795 token(s) in 0.31 second(s).
 
 ```
 <!-- t1-end -->
@@ -692,7 +715,7 @@ Options:
   -l, -L, --links              include links (web mode only, default False)
   -h, -H, --help               Show this message and exit.
 
-  v(1.0.50) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.51) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -2493,10 +2516,13 @@ tree_plus -i group_todo tests/more_languages
 │   │   │           where,
 │   │   │       }: DBCommand & { where?: { : string | number } })
 │   │   └──     async search_table(criteria: SearchCriteria)
-│   └── 📄 dataclass.py (120 tokens, 24 lines)
+│   └── 📄 dataclass.py (186 tokens, 36 lines)
 │       ├── @dataclass(frozen=True, slots=True, kw_only=True)
 │       │   class Tool(Protocol)
-│       └──     def execute(self, *args, **kwargs)
+│       ├──     def execute(self, *args, **kwargs)
+│       ├──     @property
+│       │       def edge_case(self) -> str
+│       └──     def should_still_see_me(self, x: bool = True) -> "Tool"
 └── 📁 group_lisp (1 folder, 4 files) 
     ├── 📄 clojure_test.clj (726 tokens, 86 lines)
     │   ├── defprotocol P
@@ -2520,8 +2546,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.50) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 83 file(s), 6,807 line(s), 61,794 token(s) in 0.59 second(s).
+tree_plus v(1.0.51) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 83 file(s), 6,819 line(s), 61,860 token(s) in 0.59 second(s).
 
 ```
 <!-- t2-end -->
@@ -3004,8 +3030,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.50) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,074 line(s), 14,130 token(s) in 0.16 second(s).
+tree_plus v(1.0.51) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,074 line(s), 14,130 token(s) in 0.17 second(s).
 
 ```
 <!-- t3-end -->
@@ -3034,7 +3060,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (72 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (151 tokens, 17 lines)
 
-tree_plus v(1.0.50) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.51) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 875 line(s), 7,758 token(s) in 0.02 second(s).
 
 ```
