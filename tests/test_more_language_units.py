@@ -2067,6 +2067,13 @@ ANGULAR_CRUD_EXPECTATION = [
     }: DBCommand & { where?: { [key: string]: string | number } })""",
     "    async search_table(criteria: SearchCriteria)",
 ]
+
+DATACLASS_EXPECTATION = [
+    """@dataclass(frozen=True, slots=True, kw_only=True)
+class Tool(Protocol)""",
+    "    def execute(self, *args, **kwargs)",
+]
+
 WGSL_EXPECTATION = [
     """@binding(0) @group(0) var<uniform> frame : u32;
 @vertex
@@ -2117,6 +2124,7 @@ fn frag_main() -> @location(0) vec4f""",
     "file,expected",
     [
         ("tests/more_languages/group7/angular_crud.ts", ANGULAR_CRUD_EXPECTATION),
+        ("tests/more_languages/group7/dataclass.py", DATACLASS_EXPECTATION),
         # ("tests/more_languages/group7/wgsl_test.wgsl", WGSL_EXPECTATION),
         # ("tests/more_languages/group7/AAPLShaders.metal", METAL_EXPECTATION),
     ],

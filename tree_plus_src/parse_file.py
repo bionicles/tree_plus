@@ -1042,11 +1042,23 @@ combined_py_pattern = re.compile(
 # from pygments.lexers.python import PythonLexer
 
 
+docstring_pattern = re.compile(r"^\s*\"\"\"[\s\S]+?\"\"\"", re.MULTILINE)
+
+
+def remove_docstrings(source):
+    """
+    Remove docstrings from a source code string.
+    """
+    # Matches triple-quoted strings (single or double quotes)
+    return docstring_pattern.sub("", source)
+
+
 def parse_py(contents: str) -> List[str]:
     debug_print("parse_py")
 
     # remove comments in multiline signatures
     contents = remove_py_comments(contents)
+    contents = remove_docstrings(contents)
     components = []
     decorator_carry = []
     for match_number, match in enumerate(combined_py_pattern.finditer(contents)):
