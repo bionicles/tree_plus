@@ -72,7 +72,7 @@ tree_plus -i tests
 ├── 📁 coverage (1 folder, 1 file) 
 │   └── 📄 lcov.info (48,981 tokens, 2,180 lines)
 ├── 📄 LICENSE (2,123 tokens, 81 lines)
-├── 📄 Makefile (768 tokens, 114 lines)
+├── 📄 Makefile (788 tokens, 115 lines)
 │   ├── SHELL := /bin/bash
 │   ├── cli
 │   ├── library_demo
@@ -124,7 +124,7 @@ tree_plus -i tests
 │   ├──     fake_useragent
 │   └──     bs4
 ├── 📄 pytest.ini (21 tokens, 5 lines)
-├── 📄 README.md (37,602 tokens, 3,069 lines)
+├── 📄 README.md (37,570 tokens, 3,069 lines)
 │   ├── # Tree Plus
 │   ├── ## Example Output:
 │   ├── - [ ] Demonstrate Parsed Checkboxes
@@ -140,7 +140,7 @@ tree_plus -i tests
 │   ├── ## Languages Todo:
 │   ├── ## Oppose Unfair Business Practices
 │   └── ## License
-├── 📄 tree_plus_cli.py (1,426 tokens, 229 lines)
+├── 📄 tree_plus_cli.py (1,512 tokens, 236 lines)
 │   └── def main(
 │           glob: Optional[Tuple],
 │           paths: Optional[Union[str, Tuple]],
@@ -166,15 +166,17 @@ tree_plus -i tests
 │   │           didnt: str,
 │   │           happen: tuple,
 │   │       ) -> ItHappened
-│   ├── 📄 rewrite.py (2,340 tokens, 314 lines)
-│   │   ├── TODO (Line 218): research various kwargs for huggingface / torch performance
+│   ├── 📄 rewrite.py (3,659 tokens, 471 lines)
+│   │   ├── TODO (Line 375): research various kwargs for huggingface / torch performance
 │   │   ├── class ModelName(Enum)
+│   │   ├── class ModelContext(Enum)
 │   │   ├── def rewrite_module(
 │   │   │       max_length: int,
 │   │   │       fill_context: bool,
 │   │   │       input_path: Path,
 │   │   │       output_path: Optional,
 │   │   │       suffix: Optional = ".rs",
+│   │   │       include_complete_file: bool = True,
 │   │   │   )
 │   │   └── def main(
 │   │           fill_context: bool,
@@ -478,7 +480,7 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (25,355 tokens, 2,742 lines)
+    ├── 📄 parse_file.py (25,356 tokens, 2,742 lines)
     │   ├── BUG (Line 306): HTML tree doesn't look awesome (yet)
     │   ├── TODO (Line 307): Fix HTML in TreePlus (How?)
     │   ├── BUG (Line 343): this repeatedly finds tags, need to avoid repeating ourselves
@@ -586,7 +588,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (18 tokens, 2 lines)
-    │   └── __version__ = "1.0.48"
+    │   └── __version__ = "1.0.49"
     └── 📄 web.py (2,304 tokens, 321 lines)
         ├── TODO (Line 25): re-enable tree plus web actions
         ├── NOTE (Line 167): no point in the answers since there's no content
@@ -647,8 +649,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.48) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 12,219 line(s), 145,389 token(s) in 0.29 second(s).
+tree_plus v(1.0.49) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,384 line(s), 146,783 token(s) in 0.30 second(s).
 
 ```
 <!-- t1-end -->
@@ -664,7 +666,7 @@ Usage: tree_plus [OPTIONS] [PATHS]...
 
   Wrap patterns in quotes: -i "*.py" / -g "*.rs"
 
-  Usage Examples:
+  Example Invocations (These are not subcomands, you idiot):
 
           Show tree_plus_src and tests simultaneously
               > tree_plus tree_plus_src tests
@@ -712,7 +714,7 @@ Options:
   -l, -L, --links              include links (web mode only, default False)
   -H, -h, --help               Show this message and exit.
 
-  v(1.0.48) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.49) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -2536,8 +2538,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.48) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 82 file(s), 6,783 line(s), 61,674 token(s) in 0.60 second(s).
+tree_plus v(1.0.49) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 82 file(s), 6,783 line(s), 61,674 token(s) in 0.59 second(s).
 
 ```
 <!-- t2-end -->
@@ -3020,8 +3022,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.48) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,074 line(s), 14,130 token(s) in 0.16 second(s).
+tree_plus v(1.0.49) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,074 line(s), 14,130 token(s) in 0.17 second(s).
 
 ```
 <!-- t3-end -->
@@ -3050,7 +3052,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (72 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (151 tokens, 17 lines)
 
-tree_plus v(1.0.48) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.49) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 875 line(s), 7,758 token(s) in 0.02 second(s).
 
 ```
