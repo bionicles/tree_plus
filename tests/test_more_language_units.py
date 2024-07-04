@@ -2072,6 +2072,9 @@ DATACLASS_EXPECTATION = [
     """@dataclass(frozen=True, slots=True, kw_only=True)
 class Tool(Protocol)""",
     "    def execute(self, *args, **kwargs)",
+    """    @property
+    def edge_case(self) -> str""",
+    '    def should_still_see_me(self, x: bool = True) -> "Tool"',
 ]
 
 WGSL_EXPECTATION = [
