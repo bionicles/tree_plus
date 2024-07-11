@@ -230,7 +230,8 @@ class AmortizedGlobs:
 
 
 def amortize_globs(
-    paths: Tuple[Path, ...], globs: Tuple[str, ...]
+    paths: Tuple[Path, ...],
+    globs: Tuple[str, ...],
 ) -> Optional[AmortizedGlobs]:
     "amortize glob lookup"
     if not paths:

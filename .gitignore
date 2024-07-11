@@ -41,6 +41,9 @@ detritus/
 tests/.pytest_cache
 .pytest_cache
 
+# ignore the absurdly huge jsonl file
+absurdly_huge.jsonl
+
 # deployment stuff
 tests/version_increments/test_sink_version.py
 tests/version_increments/dry_run_version.py

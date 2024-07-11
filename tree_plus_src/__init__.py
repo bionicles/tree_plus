@@ -22,8 +22,10 @@ from .ignore import (  # noqa F401
 from .parse_file import parse_file, parse_markers, extract_groups
 from .count_tokens_lines import (
     TokenLineCount,
+    TokenizerName,
     count_tokens_lines,
-    count_tokens_lines_from_contents,
+    count_openai_tokens_lines_from_contents,
+    count_wc_tokens_lines_from_path,
     add_tokens_lines,
 )
 from .deploy import extract, load, run_command, replace_readme_section, update_readme

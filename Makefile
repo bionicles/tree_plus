@@ -19,14 +19,20 @@ debug:
 	nodemon -L -V
 
 .PHONY: debug_command
-debug_command: html_demo
+# debug_command: test
+debug_command: test_group7
 
 html_demo:
 	tree_plus https://en.wikipedia.org/wiki/Zero_ring
 	# tree_plus --yc
 
+# test data for the jsonl tokenization
+absurdly-huge-jsonl:
+	python tests/build_absurdly_huge_jsonl.py
 
 # TESTS
+test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
+
 N_WORKERS=12
 # parallel unit tests (for dev rig)
 test_parallel:
@@ -44,8 +50,6 @@ test_more_languages:
 test_group7:
 	pytest tests/test_more_language_units.py -vv -k group7
 
-# test: test_sequential 
-test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
 
 # first we'll do our unit tests (most likely to need fast debug)
 test_units:

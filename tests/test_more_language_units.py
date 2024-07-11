@@ -2084,6 +2084,18 @@ fn vtx_main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec
     """@fragment
 fn frag_main() -> @location(0) vec4f""",
 ]
+
+JSONL_EXPECTATION = [
+    "SMILES: str",
+    "Yield: float",
+    "Temperature: int",
+    "Pressure: float",
+    "Solvent: str",
+    "Success: bool",
+    "Reaction_Conditions: dict",
+    "Products: list",
+    "EdgeCasesMissed: None",
+]
 # (
 #     "tests/more_languages/group6/yc.html",
 #     [
@@ -2128,6 +2140,7 @@ fn frag_main() -> @location(0) vec4f""",
     [
         ("tests/more_languages/group7/angular_crud.ts", ANGULAR_CRUD_EXPECTATION),
         ("tests/more_languages/group7/dataclass.py", DATACLASS_EXPECTATION),
+        ("tests/more_languages/group7/absurdly_huge.jsonl", JSONL_EXPECTATION),
         # ("tests/more_languages/group7/wgsl_test.wgsl", WGSL_EXPECTATION),
         # ("tests/more_languages/group7/AAPLShaders.metal", METAL_EXPECTATION),
     ],

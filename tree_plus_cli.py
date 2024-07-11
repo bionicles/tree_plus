@@ -13,6 +13,7 @@ from tree_plus_src import (  # noqa E402
     DEFAULT_IGNORE,
     web,
 )
+from tree_plus_src.count_tokens_lines import TokenizerName
 
 
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h", "-H"])
@@ -108,6 +109,20 @@ DEFAULT_QUERY = "best tree data structures"
     help="include links (web mode only, default False)",
     is_flag=True,
 )
+@click.option(
+    "--tiktoken",
+    "-t",
+    help="a shorthand for tiktoken with the gpt4o tokenizer",
+    is_flag=True,
+    default=False,
+)
+@click.option(
+    "--tokenizer-name",
+    "-T",
+    help="name of the tokenizer to use, for now only 'gpt4o' works",
+    default=None,
+    type=str,
+)
 @click.argument("paths", nargs=-1, type=click.UNPROCESSED)  # Accepts multiple arguments
 def main(
     # these are NON-MUTUALLY-EXCLUSIVE OPTIONS
@@ -125,6 +140,8 @@ def main(
     number: int,
     max_depth: int,
     links: bool,
+    tiktoken: bool,
+    tokenizer_name: Optional[str],
 ):
     """A `tree` util enhanced with tokens, lines, and components.
 
@@ -171,6 +188,10 @@ def main(
         \b
         Hacker News Mode (6 articles, max depth 6, warning, slow!)
             > tree_plus --yc -n 6 -m 6
+
+        \b
+        Use the Tiktoken gpt4o Model Tokenizer to tokenize Rust files
+            > tree_plus -t -g '*.rs'
     """
     start_time = perf_counter()
     if debug:
@@ -203,6 +224,15 @@ def main(
         article_comment_tree = tree_plus.from_hacker_news_articles(hacker_news_articles)
         _paths += (article_comment_tree,)
 
+    _tokenizer_name = TokenizerName.WC
+    match (tiktoken, tokenizer_name):
+        case (False, None) | (True, "wc"):
+            pass
+        case (True, None) | (_, "gpt4o"):
+            _tokenizer_name = TokenizerName.GPT4O
+        case (_, "gpt4"):
+            _tokenizer_name = TokenizerName.GPT4O
+
     root = tree_plus.from_seeds(
         _paths,
         maybe_ignore=ignore,
@@ -210,6 +240,7 @@ def main(
         syntax_highlighting=syntax,
         override_ignore=override,
         concise=concise,
+        tokenizer_name=_tokenizer_name,
     )
     root.render(markup=True, highlight=True)
     if links:
@@ -229,8 +260,8 @@ def main(
 if __name__ == "__main__":
     main()
 
-
-# How many COMMANDS in the `tree_plus` CLI?
+# Reminder to those rewriting this in Rust:
+# How many commands are there in the `tree_plus` CLI?
 # There are ZERO. You just call `tree_plus` [options] [paths].
 # If I were to rewrite this with clap, how many commands would there be? ZERO.
 # How many subcommands would there be? Zero!

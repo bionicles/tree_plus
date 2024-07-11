@@ -52,7 +52,10 @@ def unify_tree_symbols(tree_string):
 
 
 def test_e2e_single_file():
-    result = tree_plus.from_seed(f"{test_directory}/file.py")
+    result = tree_plus.from_seed(
+        f"{test_directory}/file.py",
+        tokenizer_name=tree_plus.TokenizerName.GPT4,
+    )
     assert isinstance(result, tree_plus.TreePlus)
     result.render()
     result_str = result.into_str()
@@ -79,7 +82,93 @@ def test_e2e_empty_folder():
     assert unify_tree_symbols(result_str) == EXPECTATION_EMPTY
 
 
-EXPECTATION_1 = """📁 path_to_test (1 folder, 6 files)
+EXPECTATION_1_WC = """📁 path_to_test (1 folder, 6 files)
+├── 📄 class_method_type.py (530 tokens, 102 lines)
+│   ├── T = TypeVar("T")
+│   ├── def parse_py(contents: str) -> List[str]
+│   ├── class MyClass
+│   ├──     @staticmethod
+│   │       def physical_element_aval(dtype) -> core.ShapedArray
+│   ├──     def my_method(self)
+│   ├──     @staticmethod
+│   │       def my_typed_method(obj: dict) -> int
+│   ├──     def my_multiline_signature_method(
+│   │           self,
+│   │           alice: str = None,
+│   │           bob: int = None,
+│   │       ) -> tuple
+│   ├── @lru_cache(maxsize=None)
+│   │   def my_multiline_signature_function(
+│   │       tree: tuple = (),
+│   │       plus: str = "+",
+│   │   ) -> tuple
+│   ├── class LogLevelEnum(str, Enum)
+│   ├── class Algo(BaseModel)
+│   ├── @dataclass
+│   │   class TestDataclass
+│   ├── A = TypeVar("A", str, bytes)
+│   ├── def omega_yikes(file: str, expected: List[str]) -> bool
+│   ├── def ice[T](args: Iterable[T] = ())
+│   ├── class list[T]
+│   ├──     def __getitem__(self, index: int, /) -> T
+│   ├──     @classmethod
+│   │       def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
+│   ├──     @classmethod
+│   │       def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
+│   └── class Router(hk.Module)
+├── 📄 empty.py (0 tokens, 0 lines)
+├── 📄 file.md (11 tokens, 2 lines)
+│   └── # Hello, world!
+├── 📄 file.py (18 tokens, 3 lines)
+│   └── def hello_world()
+├── 📄 file.txt (10 tokens, 2 lines)
+└── 📄 version.py (13 tokens, 2 lines)
+    └── __version__ = "1.2.3"
+"""
+EXPECTATION_1_GPT4 = """📁 path_to_test (1 folder, 6 files)
+├── 📄 class_method_type.py (541 tokens, 103 lines)
+│   ├── T = TypeVar("T")
+│   ├── def parse_py(contents: str) -> List[str]
+│   ├── class MyClass
+│   ├──     @staticmethod
+│   │       def physical_element_aval(dtype) -> core.ShapedArray
+│   ├──     def my_method(self)
+│   ├──     @staticmethod
+│   │       def my_typed_method(obj: dict) -> int
+│   ├──     def my_multiline_signature_method(
+│   │           self,
+│   │           alice: str = None,
+│   │           bob: int = None,
+│   │       ) -> tuple
+│   ├── @lru_cache(maxsize=None)
+│   │   def my_multiline_signature_function(
+│   │       tree: tuple = (),
+│   │       plus: str = "+",
+│   │   ) -> tuple
+│   ├── class LogLevelEnum(str, Enum)
+│   ├── class Algo(BaseModel)
+│   ├── @dataclass
+│   │   class TestDataclass
+│   ├── A = TypeVar("A", str, bytes)
+│   ├── def omega_yikes(file: str, expected: List[str]) -> bool
+│   ├── def ice[T](args: Iterable[T] = ())
+│   ├── class list[T]
+│   ├──     def __getitem__(self, index: int, /) -> T
+│   ├──     @classmethod
+│   │       def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
+│   ├──     @classmethod
+│   │       def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
+│   └── class Router(hk.Module)
+├── 📄 empty.py (0 tokens, 0 lines)
+├── 📄 file.md (12 tokens, 2 lines)
+│   └── # Hello, world!
+├── 📄 file.py (19 tokens, 3 lines)
+│   └── def hello_world()
+├── 📄 file.txt (11 tokens, 2 lines)
+└── 📄 version.py (19 tokens, 2 lines)
+    └── __version__ = "1.2.3"
+"""
+EXPECTATION_1_GPT4O = """📁 path_to_test (1 folder, 6 files)
 ├── 📄 class_method_type.py (541 tokens, 103 lines)
 │   ├── T = TypeVar("T")
 │   ├── def parse_py(contents: str) -> List[str]
@@ -124,32 +213,55 @@ EXPECTATION_1 = """📁 path_to_test (1 folder, 6 files)
 """
 
 
-def test_e2e_single_directory():
-    result = tree_plus.from_seeds((test_directory,))
+@pytest.mark.parametrize(
+    "tokenizer_name,expectation",
+    [
+        (tree_plus.TokenizerName.WC, EXPECTATION_1_WC),
+        (tree_plus.TokenizerName.GPT4, EXPECTATION_1_GPT4),
+        (tree_plus.TokenizerName.GPT4O, EXPECTATION_1_GPT4O),
+    ],
+)
+def test_e2e_single_directory(tokenizer_name, expectation):
+    result = tree_plus.from_seeds((test_directory,), tokenizer_name=tokenizer_name)
     assert isinstance(result, tree_plus.TreePlus)
     print("test_e2e_single_directory tree\n")
     result.render()
     result_str = result.into_str()
     print("test_e2e_single_directory result_str\n", result_str)
-    assert unify_tree_symbols(result_str) == unify_tree_symbols(EXPECTATION_1)
+    assert unify_tree_symbols(result_str) == unify_tree_symbols(expectation)
 
 
-def test_e2e_multiple_directories():
+@pytest.mark.parametrize(
+    "tokenizer_name,expectation",
+    [
+        (tree_plus.TokenizerName.WC, EXPECTATION_1_WC),
+        (tree_plus.TokenizerName.GPT4, EXPECTATION_1_GPT4),
+        (tree_plus.TokenizerName.GPT4O, EXPECTATION_1_GPT4O),
+    ],
+)
+def test_e2e_multiple_directories(tokenizer_name, expectation):
     test_directory2 = "tests/path_to_test"
     with tree_plus.debug_disabled():
-        result = tree_plus.from_seeds((test_directory, test_directory2))
+        result = tree_plus.from_seeds(
+            (test_directory, test_directory2),
+            tokenizer_name=tokenizer_name,
+        )
     assert isinstance(result, tree_plus.TreePlus)
     print("test_e2e_multiple_directories result")
     result.render()
     result_str = result.into_str()
     print("test_e2e_multiple_directories result_str\n", result_str)
     unified_tree_symbols = unify_tree_symbols(result_str)
-    assert unified_tree_symbols == unify_tree_symbols(EXPECTATION_1)
+    assert unified_tree_symbols == unify_tree_symbols(expectation)
     assert unified_tree_symbols.count("📁 path_to_test") == 1
 
 
 def test_e2e_glob():
-    result = tree_plus.from_seed("tests/more_languages", maybe_globs=("*.*s",))
+    result = tree_plus.from_seed(
+        "tests/more_languages",
+        maybe_globs=("*.*s",),
+        tokenizer_name=tree_plus.TokenizerName.GPT4,
+    )
     assert isinstance(result, tree_plus.TreePlus)
     result_str = result.into_str()
     print(result_str)
@@ -171,6 +283,7 @@ def test_e2e_ignore_parameter_filetype():
     result = tree_plus.from_seed(
         "tests/more_languages/group1",
         maybe_ignore=("*.kt",),
+        tokenizer_name=tree_plus.TokenizerName.GPT4,
     )
     assert isinstance(result, tree_plus.TreePlus)
     result.render()
@@ -182,6 +295,7 @@ def test_e2e_ignore_parameter_directory():
     result = tree_plus.from_seed(
         "tests/more_languages",
         maybe_ignore=("group2",),
+        tokenizer_name=tree_plus.TokenizerName.GPT4,
     )
     assert isinstance(result, tree_plus.TreePlus)
     result_str = result.into_str()

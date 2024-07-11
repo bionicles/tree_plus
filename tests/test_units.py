@@ -16,6 +16,7 @@ import pytest
 # )
 
 import tree_plus_src as tree_plus
+from tree_plus_src.count_tokens_lines import TokenizerName
 
 # TODO: test debug_disabled
 
@@ -201,7 +202,50 @@ def test_units_parse_markers():
         ),
     ],
 )
-def test_units_token_counting(file, expected):
+def test_units_token_counting_gpt4(file, expected):
+    result = tree_plus.count_tokens_lines(file, tokenizer_name=TokenizerName.GPT4)
+    assert isinstance(result, tree_plus.TokenLineCount)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "file,expected",
+    [
+        (
+            "tests/path_to_test/file.py",
+            tree_plus.TokenLineCount(n_tokens=19, n_lines=3),
+        ),
+        (
+            "tests/path_to_test/empty.py",
+            tree_plus.TokenLineCount(n_tokens=0, n_lines=0),
+        ),
+    ],
+)
+def test_units_token_counting_gpt4(file, expected):
+    result = tree_plus.count_tokens_lines(file, tokenizer_name=TokenizerName.GPT4)
+    assert isinstance(result, tree_plus.TokenLineCount)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "file,expected",
+    [
+        (
+            "tests/more_languages/group7/absurdly_huge.jsonl",
+            tree_plus.TokenLineCount(n_tokens=2782500, n_lines=42000),
+        ),
+        (
+            "tests/path_to_test/file.py",
+            tree_plus.TokenLineCount(n_tokens=18, n_lines=3),
+        ),
+        (
+            "tests/path_to_test/empty.py",
+            tree_plus.TokenLineCount(n_tokens=0, n_lines=0),
+        ),
+    ],
+)
+def test_units_token_counting_wc(file, expected):
     result = tree_plus.count_tokens_lines(file)
+    print(result)
     assert isinstance(result, tree_plus.TokenLineCount)
     assert result == expected

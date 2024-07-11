@@ -34,18 +34,16 @@ import requests
 from rich.markdown import Markdown
 from fake_useragent import UserAgent
 from bs4 import Tag, NavigableString
-
 from bs4 import BeautifulSoup, PageElement
-
 from natsort import os_sorted
-
 
 from tree_plus_src import (
     debug_print,
     parse_file,
     count_tokens_lines,
-    count_tokens_lines_from_contents,
     TokenLineCount,
+    TokenizerName,
+    count_openai_tokens_lines_from_contents,
     should_ignore,
     DEFAULT_IGNORE,
     is_glob,
@@ -89,11 +87,15 @@ LINK_COLOR = f"{BLUE} on black"
 TEXT_COLOR = f"{GOLD} on black"
 
 THEME = {
-    "repr.ipv6": "default",
-    "repr.ipv4": "default",
-    "repr.call": colors["colorblind_blue"],
-    "repr.str": colors["colorblind_blue"],
-    "repr.tag_name": colors["colorblind_blue"],
+    "repr.tag_start": GOLD,
+    "repr.tag_name": GOLD,
+    "repr.tag_contents": GOLD,
+    "repr.tag_end": GOLD,
+    "repr.ipv6": GOLD,
+    "repr.ipv4": GOLD,
+    "repr.call": BLUE,
+    "repr.str": BLUE,
+    "repr.tag_name": BLUE,
 }
 
 
@@ -576,6 +578,7 @@ def from_seed(
     *,
     maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[Tuple[str, ...]] = None,
+    tokenizer_name: TokenizerName = TokenizerName.WC,
     syntax_highlighting: bool = False,
     override_ignore: bool = False,
     concise: bool = False,
@@ -590,6 +593,7 @@ def from_seed(
         maybe_globs=maybe_globs,
         syntax_highlighting=syntax_highlighting,
         override_ignore=override_ignore,
+        tokenizer_name=tokenizer_name,
         concise=concise,
     )
 
@@ -602,6 +606,7 @@ def from_seeds(
     syntax_highlighting: bool = False,
     override_ignore: bool = False,
     concise: bool = False,
+    tokenizer_name: TokenizerName = TokenizerName.WC,
 ) -> TreePlus:
     "PUBLIC: Construct a TreePlus from maybe_seeds = tuple[str] or None"
     debug_print(
@@ -628,6 +633,7 @@ def from_seeds(
             maybe_globs=maybe_globs,
             syntax_highlighting=syntax_highlighting,
             concise=concise,
+            tokenizer_name=tokenizer_name,
         )
         # reducer
         n_subtrees = len(subtrees)
@@ -663,6 +669,7 @@ def _map_seeds(
     maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[Tuple[str, ...]] = None,
     syntax_highlighting: bool = False,
+    tokenizer_name: TokenizerName = TokenizerName.WC,
     concise: bool = False,
 ) -> Tuple[TreePlus, ...]:
     "PRIVATE (MAPPER): grow a forest from a tuple of seed strings"
@@ -766,6 +773,7 @@ def _map_seeds(
             maybe_ignore=maybe_ignore,
             maybe_globs=globs,
             syntax_highlighting=syntax_highlighting,
+            tokenizer_name=tokenizer_name,
             concise=concise,
             is_url=is_url,
         )
@@ -789,6 +797,7 @@ def _from_seed(
     maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[AmortizedGlobs] = None,
     syntax_highlighting: bool = False,
+    tokenizer_name: TokenizerName = TokenizerName.WC,
     concise: bool = False,
     is_url: bool = False,
 ) -> TreePlus:
@@ -815,6 +824,7 @@ def _from_seed(
                 result = _from_file(
                     file_path=seed_path,
                     syntax_highlighting=syntax_highlighting,
+                    tokenizer_name=tokenizer_name,
                     concise=concise,
                 )
             elif seed_path.is_dir():
@@ -823,6 +833,7 @@ def _from_seed(
                     maybe_ignore=maybe_ignore,
                     maybe_globs=maybe_globs,
                     syntax_highlighting=syntax_highlighting,
+                    tokenizer_name=tokenizer_name,
                     concise=concise,
                 )
             else:
@@ -836,6 +847,7 @@ def _from_seed(
                     maybe_ignore=maybe_ignore,
                     maybe_globs=None,  # TODO: decide if we apply glob patterns to glob paths (currently NO)
                     syntax_highlighting=syntax_highlighting,
+                    tokenizer_name=tokenizer_name,
                     concise=concise,
                 )
         else:
@@ -879,6 +891,7 @@ def _from_glob(
     maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[AmortizedGlobs] = None,
     syntax_highlighting: bool = False,
+    tokenizer_name: TokenizerName = TokenizerName.WC,
     concise: bool = False,
 ) -> TreePlus:
     "PRIVATE: handle a glob seed"
@@ -902,12 +915,14 @@ def _from_glob(
                 maybe_ignore=maybe_ignore,
                 maybe_globs=maybe_globs,
                 syntax_highlighting=syntax_highlighting,
+                tokenizer_name=tokenizer_name,
                 concise=concise,
             )
         elif glob_path.is_file():
             subtree_plus = _from_file(
                 file_path=glob_path,
                 syntax_highlighting=syntax_highlighting,
+                tokenizer_name=tokenizer_name,
                 concise=concise,
             )
         else:
@@ -925,6 +940,7 @@ def _from_folder(
     maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,
     maybe_globs: Optional[AmortizedGlobs] = None,
     syntax_highlighting: bool = False,
+    tokenizer_name: TokenizerName = TokenizerName.WC,
     concise: bool = False,
 ) -> TreePlus:
     "PRIVATE: walk a folder and construct a tree"
@@ -951,12 +967,14 @@ def _from_folder(
                 maybe_ignore=maybe_ignore,
                 maybe_globs=maybe_globs,
                 syntax_highlighting=syntax_highlighting,
+                tokenizer_name=tokenizer_name,
                 concise=concise,
             )
         elif subtree_path.is_file():
             subtree_plus = _from_file(
                 file_path=subtree_path,
                 syntax_highlighting=syntax_highlighting,
+                tokenizer_name=tokenizer_name,
                 concise=concise,
             )
         else:
@@ -980,15 +998,16 @@ def _from_file(
     *,
     file_path: Path,
     syntax_highlighting: bool = False,
+    tokenizer_name: TokenizerName = TokenizerName.WC,
+    max_tokens: int = 1_000_000_000,
     concise: bool = False,
-    max_tokens: int = 100_000,
 ) -> TreePlus:
     "PRIVATE: parse a file_path into a TreePlus"
     debug_print(f"engine._from_file {file_path=}")
     assert file_path.is_file(), f"tree_plus._from_file got a non-file {file_path=}"
     counts = TokenLineCount(0, 0)
     try:
-        new_counts = count_tokens_lines(file_path)
+        new_counts = count_tokens_lines(file_path, tokenizer_name=tokenizer_name)
         if new_counts:
             counts = new_counts
     except Exception as e:
@@ -1041,7 +1060,7 @@ def _from_url(
             url = f"https://{url}"
         html_response = requests.get(url, headers={"User-Agent": ua.random})
         html_text = html_response.text
-        count = count_tokens_lines_from_contents(html_text)
+        count = count_openai_tokens_lines_from_contents(html_text)
         hrefs = None
         if concise:
             components = []

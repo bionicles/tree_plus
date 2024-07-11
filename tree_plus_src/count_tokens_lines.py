@@ -1,14 +1,16 @@
 # tree_plus_src/count_tokens_lines.py
 from dataclasses import dataclass
+from enum import Enum
+import subprocess
 from typing import Optional, Union
 from pathlib import Path
 import os
 
-import tiktoken
 from tree_plus_src.debug import debug_print
 from tree_plus_src.parse_file import read_file
 
-encoder = tiktoken.encoding_for_model("gpt-4")
+tiktoken = None
+encoder = None
 
 
 # TODO: show off how well we parse_todo!
@@ -105,7 +107,17 @@ extensions_not_to_count = {
 }
 
 
-def count_tokens_lines(file_path: Union[str, Path]) -> Optional[TokenLineCount]:
+class TokenizerName(Enum):
+    WC = "wc"
+    GPT4O = "gpt4o"
+    GPT4 = "gpt-4"
+
+
+def count_tokens_lines(
+    file_path: Union[str, Path],
+    *,
+    tokenizer_name: TokenizerName = TokenizerName.WC,
+) -> Optional[TokenLineCount]:
     """
     Count the number of lines and OpenAI tokens in a file.
     """
@@ -124,12 +136,15 @@ def count_tokens_lines(file_path: Union[str, Path]) -> Optional[TokenLineCount]:
         return None
     debug_print(f"count_tokens_lines counting {file_path=}")
 
-    contents = read_file(file_path)
-    # if not contents.strip():
-    #     return TokenLineCount(n_tokens=0, n_lines=0)
-    # n_tokens = len(encoder.encode(contents, disallowed_special=()))
-    # n_lines = len(contents.splitlines())
-    count = count_tokens_lines_from_contents(contents)
+    match tokenizer_name:
+        case TokenizerName.GPT4O | TokenizerName.GPT4:
+            contents = read_file(file_path)
+            count = count_openai_tokens_lines_from_contents(
+                contents,
+                tokenizer_name=tokenizer_name,
+            )
+        case TokenizerName.WC:
+            count = count_wc_tokens_lines_from_path(file_path)
     debug_print(f"count_tokens_lines {count=}")
     return count
 
@@ -137,12 +152,38 @@ def count_tokens_lines(file_path: Union[str, Path]) -> Optional[TokenLineCount]:
 from rich.markdown import Markdown
 
 
-def count_tokens_lines_from_contents(contents: Union[str, Markdown]) -> TokenLineCount:
+def count_openai_tokens_lines_from_contents(
+    contents: Union[str, Markdown],
+    *,
+    tokenizer_name: TokenizerName = TokenizerName.GPT4,
+) -> TokenLineCount:
     "Count OpenAI tokens and lines in a string."
+    assert (
+        tokenizer_name is not TokenizerName.WC
+    ), "can't use wc as a tiktoken tokenizer"
+    # lazy import tiktoken and make the encoder only if needed
+    global tiktoken
+    global encoder
+    if encoder is None:
+        import tiktoken
+
+        encoder = tiktoken.encoding_for_model(tokenizer_name.value)
     if not isinstance(contents, str) or not contents.strip():
         return TokenLineCount(n_tokens=0, n_lines=0)
     n_tokens = len(encoder.encode(contents, disallowed_special=()))
     n_lines = len(contents.splitlines())
+    return TokenLineCount(n_tokens=n_tokens, n_lines=n_lines)
+
+
+# source: @StasBekman on X
+def count_wc_tokens_lines_from_path(file_path: str) -> TokenLineCount:
+    """Count OpenAI tokens and lines in a file."""
+    # Use the wc command to count the number of lines and characters
+    result = subprocess.run(["wc", "-ml", file_path], stdout=subprocess.PIPE, text=True)
+    output = result.stdout.strip()
+    n_lines, n_characters = map(int, output.split()[:2])
+    # 1 token ~= 4 chars in English
+    n_tokens = n_characters // 4
     return TokenLineCount(n_tokens=n_tokens, n_lines=n_lines)
 
 

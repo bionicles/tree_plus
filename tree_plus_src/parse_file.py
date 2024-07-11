@@ -1,10 +1,12 @@
 # tree_plus_src/parse_file.py
 from functools import lru_cache
-from typing import Dict, List, Sequence, Tuple, Optional, Union
+from typing import List, Sequence, Tuple, Optional, Union
 from pathlib import Path
 import json
 import os
 import re
+
+from bs4 import BeautifulSoup
 
 from tree_plus_src.debug import debug_print
 
@@ -81,9 +83,12 @@ def parse_file(
     if not contents and is_binary(file_path):
         return components
 
+    # decide how many lines to read, don't need so many for big data files!
     n_lines = None
     if file_extension == ".csv":
         n_lines = 3
+    elif file_extension == ".jsonl":
+        n_lines = 2
 
     if contents is None:
         debug_print("reading file because no contents given")
@@ -139,10 +144,12 @@ def parse_file(
             components.extend(more_components)
         else:
             components = parse_c(contents)
-    elif file_extension == ".php":
-        components = parse_php(contents)
     elif file_extension == ".rs":
         components = parse_rs(contents)
+    elif file_extension == ".php":
+        components = parse_php(contents)
+    elif file_extension == ".jsonl":
+        components = parse_jsonl(contents)
     elif file_extension == ".kt":
         components = parse_kt(contents)
     elif file_extension == ".swift":
@@ -279,14 +286,6 @@ def parse_html(contents: str) -> List[str]:
 
 DENY_HTML = "\n"
 
-import re
-from bs4 import BeautifulSoup
-from rich import print as rprint
-from rich.panel import Panel
-from rich.markdown import Markdown
-from rich.text import Text
-from rich.table import Table
-from typing import List, Optional, Tuple
 
 tags_allowed = (
     "title",
@@ -301,6 +300,22 @@ tags_allowed = (
     # "tr",
     # "p",
 )
+
+
+def parse_jsonl(content: str) -> List[str]:
+    first_line = content.split("\n")[0]
+    data = json.loads(first_line)
+    result = []
+    for key, value in data.items():
+        if isinstance(value, list):
+            result.append(f"{key}: list")
+        elif isinstance(value, dict):
+            result.append(f"{key}: dict")
+        elif value is None:
+            result.append(f"{key}: None")
+        else:
+            result.append(f"{key}: {type(value).__name__}")
+    return result
 
 
 # BUG: HTML tree doesn't look awesome (yet)
