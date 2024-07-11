@@ -34,13 +34,13 @@
 ```sh
 tree_plus -i tests
 📁 tree_plus (7 folders, 27 files) 
-├── 📄 .env.test (5 tokens, 1 line)
+├── 📄 .env.test (4 tokens, 0 lines)
 │   └── DEBUG_TREE_PLUS
 ├── 📁 .github (2 folders, 3 files) 
-│   ├── 📄 dependabot.yml (107 tokens, 11 lines)
+│   ├── 📄 dependabot.yml (128 tokens, 11 lines)
 │   │   └── Unsupported YAML Category
 │   └── 📁 workflows (1 folder, 2 files) 
-│       ├── 📄 microsoft.yml (323 tokens, 40 lines)
+│       ├── 📄 microsoft.yml (283 tokens, 40 lines)
 │       │   ├── Microsoft
 │       │   ├──   job: build
 │       │   ├──     - Set up Python ${{ matrix.python-version }}
@@ -49,7 +49,7 @@ tree_plus -i tests
 │       │   ├──     - Set PYTHONUTF8 for Windows
 │       │   ├──     - Run generic tests
 │       │   └──     - Run specific test
-│       └── 📄 unix.yml (715 tokens, 88 lines)
+│       └── 📄 unix.yml (663 tokens, 87 lines)
 │           ├── Linux & MacOS
 │           ├──   job: test
 │           ├──     - Set up Python ${{ matrix.python-version }}
@@ -68,11 +68,11 @@ tree_plus -i tests
 │           ├──     - Build Again
 │           ├──     - Commit Updates
 │           └──     - Publish to PyPI
-├── 📄 .gitignore (210 tokens, 50 lines)
+├── 📄 .gitignore (202 tokens, 52 lines)
 ├── 📁 coverage (1 folder, 1 file) 
-│   └── 📄 lcov.info (48,981 tokens, 2,180 lines)
-├── 📄 LICENSE (2,123 tokens, 81 lines)
-├── 📄 Makefile (788 tokens, 115 lines)
+│   └── 📄 lcov.info (17,359 tokens, 2,180 lines)
+├── 📄 LICENSE (2,744 tokens, 81 lines)
+├── 📄 Makefile (737 tokens, 118 lines)
 │   ├── SHELL := /bin/bash
 │   ├── cli
 │   ├── library_demo
@@ -80,13 +80,14 @@ tree_plus -i tests
 │   ├── coverage
 │   ├── debug
 │   ├── .PHONY: debug_command
-│   ├── debug_command: html_demo
+│   ├── debug_command: test_group7
 │   ├── html_demo
+│   ├── absurdly-huge-jsonl
+│   ├── test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
 │   ├── test_parallel
 │   ├── test_sequential
 │   ├── test_more_languages
 │   ├── test_group7
-│   ├── test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
 │   ├── test_units
 │   ├── test_tp_dotdot
 │   ├── test_e2e
@@ -107,8 +108,8 @@ tree_plus -i tests
 │   ├── t3
 │   ├── t4
 │   └── t5
-├── 📄 nodemon.json (140 tokens, 25 lines)
-├── 📄 pyproject.toml (356 tokens, 41 lines)
+├── 📄 nodemon.json (112 tokens, 24 lines)
+├── 📄 pyproject.toml (346 tokens, 40 lines)
 │   ├── name: tree_plus
 │   ├── version: N/A
 │   ├── description: A `tree` util enhanced with tokens, lines, and components.
@@ -123,8 +124,8 @@ tree_plus -i tests
 │   ├──     natsort>=7.1
 │   ├──     fake_useragent
 │   └──     bs4
-├── 📄 pytest.ini (21 tokens, 5 lines)
-├── 📄 README.md (37,528 tokens, 3,053 lines)
+├── 📄 pytest.ini (20 tokens, 4 lines)
+├── 📄 README.md (31,319 tokens, 3,078 lines)
 │   ├── # Tree Plus
 │   ├── ## Example Output:
 │   ├── - [ ] Demonstrate Parsed Checkboxes
@@ -140,7 +141,7 @@ tree_plus -i tests
 │   ├── ## Languages Todo:
 │   ├── ## Oppose Unfair Business Practices
 │   └── ## License
-├── 📄 tree_plus_cli.py (1,512 tokens, 236 lines)
+├── 📄 tree_plus_cli.py (1,821 tokens, 280 lines)
 │   └── def main(
 │           glob: Optional[Tuple],
 │           paths: Optional[Union[str, Tuple]],
@@ -155,9 +156,11 @@ tree_plus -i tests
 │           number: int,
 │           max_depth: int,
 │           links: bool,
+│           tiktoken: bool,
+│           tokenizer_name: Optional,
 │       )
 ├── 📁 tree_plus_programs (1 folder, 4 files) 
-│   ├── 📄 hello_tree_plus.py (528 tokens, 80 lines)
+│   ├── 📄 hello_tree_plus.py (545 tokens, 80 lines)
 │   │   ├── class ItHappened
 │   │   ├── def main()
 │   │   └── def trees(
@@ -166,7 +169,7 @@ tree_plus -i tests
 │   │           didnt: str,
 │   │           happen: tuple,
 │   │       ) -> ItHappened
-│   ├── 📄 rewrite.py (3,659 tokens, 471 lines)
+│   ├── 📄 rewrite.py (4,017 tokens, 471 lines)
 │   │   ├── TODO (Line 375): research various kwargs for huggingface / torch performance
 │   │   ├── class ModelName(Enum)
 │   │   ├── class ModelContext(Enum)
@@ -184,7 +187,7 @@ tree_plus -i tests
 │   │           input_path: Path,
 │   │           output_path: Optional,
 │   │       )
-│   ├── 📄 stub_tests.py (1,162 tokens, 180 lines)
+│   ├── 📄 stub_tests.py (1,348 tokens, 180 lines)
 │   │   ├── TODO (Line 124): fix this path",
 │   │   ├── TODO (Line 126): fill in these stubs:",
 │   │   ├── @lru_cache
@@ -202,7 +205,7 @@ tree_plus -i tests
 │   │   │   )
 │   │   ├── class Vehicle
 │   │   └── class Car(Vehicle)
-│   └── 📄 test_stub_tests.py (83 tokens, 20 lines)
+│   └── 📄 test_stub_tests.py (79 tokens, 20 lines)
 │       ├── TODO (Line 1): fix this path
 │       ├── TODO (Line 3): fill in these stubs:
 │       ├── def test_remove_decorators()
@@ -212,16 +215,26 @@ tree_plus -i tests
 │       ├── def test_class_vehicle()
 │       └── def test_class_car()
 └── 📁 tree_plus_src (2 folders, 10 files) 
-    ├── 📄 count_tokens_lines.py (970 tokens, 156 lines)
-    │   ├── TODO (Line 14): show off how well we parse_todo!
+    ├── 📄 count_tokens_lines.py (1,307 tokens, 209 lines)
+    │   ├── TODO (Line 16): show off how well we parse_todo!
     │   ├── @dataclass(frozen=True)
     │   │   class TokenLineCount
-    │   ├── def count_tokens_lines(file_path: Union) -> Optional[TokenLineCount]
-    │   ├── def count_tokens_lines_from_contents(contents: Union) -> TokenLineCount
+    │   ├── class TokenizerName(Enum)
+    │   ├── def count_tokens_lines(
+    │   │       file_path: Union,
+    │   │       *,
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
+    │   │   ) -> Optional[TokenLineCount]
+    │   ├── def count_openai_tokens_lines_from_contents(
+    │   │       contents: Union,
+    │   │       *,
+    │   │       tokenizer_name: TokenizerName = TokenizerName.GPT4,
+    │   │   ) -> TokenLineCount
+    │   ├── def count_wc_tokens_lines_from_path(file_path: str) -> TokenLineCount
     │   └── def add_tokens_lines(
     │           lhs_count: TokenLineCount, rhs_count: TokenLineCount
     │       ) -> TokenLineCount
-    ├── 📄 debug.py (167 tokens, 39 lines)
+    ├── 📄 debug.py (186 tokens, 39 lines)
     │   ├── def disable_debug()
     │   ├── @lru_cache
     │   │   def debug_enabled()
@@ -229,7 +242,7 @@ tree_plus -i tests
     │   ├── def enable_debug()
     │   └── @contextmanager
     │       def debug_disabled()
-    ├── 📄 deploy.py (1,912 tokens, 224 lines)
+    ├── 📄 deploy.py (1,999 tokens, 224 lines)
     │   ├── def extract(path: Optional = None) -> str
     │   ├── def load(content: Optional = None, path: Optional = None)
     │   ├── def extract_version(source_path: Optional = None) -> Tuple
@@ -246,20 +259,20 @@ tree_plus -i tests
     │   │   )
     │   ├── def update_readme(source_path: Optional = None, sink_path: Optional = None)
     │   └── def main()
-    ├── 📄 engine.py (11,060 tokens, 1,383 lines)
-    │   ├── TODO (Line 59): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
-    │   ├── NOTE (Line 87): you can customize the color here, and we could make this functional
-    │   ├── TODO (Line 120): clarify subtree types -- make this a DataFrame tbh
-    │   ├── NOTE (Line 386): sometimes we need wider trees (deploy)
-    │   ├── TODO (Line 707): research & decide about globs as paths instead of as filters
-    │   ├── NOTE (Line 743): here we add directly input file_paths to the amortized glob matches
-    │   ├── TODO (Line 837): decide if we apply glob patterns to glob paths (currently NO)
-    │   ├── NOTE (Line 860): switching these eager tallies to lazy properties
-    │   ├── TODO (Line 887): decide between glob and rglob in _from_glob
-    │   ├── TODO (Line 894): decide if we need to re-amortize the globs in the glob seed
-    │   ├── TODO (Line 896): clarify ignore in glob seed context, skipping for now
-    │   ├── TODO (Line 969): re-enable func_timeout for parsing
-    │   ├── NOTE (Line 1174): this is only to satisfy the type checker
+    ├── 📄 engine.py (11,807 tokens, 1,402 lines)
+    │   ├── TODO (Line 57): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
+    │   ├── NOTE (Line 85): you can customize the color here, and we could make this functional
+    │   ├── TODO (Line 122): clarify subtree types -- make this a DataFrame tbh
+    │   ├── NOTE (Line 388): sometimes we need wider trees (deploy)
+    │   ├── TODO (Line 714): research & decide about globs as paths instead of as filters
+    │   ├── NOTE (Line 750): here we add directly input file_paths to the amortized glob matches
+    │   ├── TODO (Line 848): decide if we apply glob patterns to glob paths (currently NO)
+    │   ├── NOTE (Line 872): switching these eager tallies to lazy properties
+    │   ├── TODO (Line 900): decide between glob and rglob in _from_glob
+    │   ├── TODO (Line 907): decide if we need to re-amortize the globs in the glob seed
+    │   ├── TODO (Line 909): clarify ignore in glob seed context, skipping for now
+    │   ├── TODO (Line 987): re-enable func_timeout for parsing
+    │   ├── NOTE (Line 1193): this is only to satisfy the type checker
     │   ├── class Category(Enum)
     │   ├── @dataclass
     │   │   class TreePlus
@@ -333,6 +346,7 @@ tree_plus -i tests
     │   │       *,
     │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
     │   │       maybe_globs: Optional[Tuple] = None,
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
     │   │       syntax_highlighting: bool = False,
     │   │       override_ignore: bool = False,
     │   │       concise: bool = False,
@@ -345,6 +359,7 @@ tree_plus -i tests
     │   │       syntax_highlighting: bool = False,
     │   │       override_ignore: bool = False,
     │   │       concise: bool = False,
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
     │   │   ) -> TreePlus
     │   ├── def _reduce_forest(
     │   │       *,
@@ -356,6 +371,7 @@ tree_plus -i tests
     │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
     │   │       maybe_globs: Optional[Tuple] = None,
     │   │       syntax_highlighting: bool = False,
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
     │   │       concise: bool = False,
     │   │   ) -> Tuple[TreePlus, ...]
     │   ├── def _from_seed(
@@ -364,6 +380,7 @@ tree_plus -i tests
     │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
     │   │       maybe_globs: Optional[AmortizedGlobs] = None,
     │   │       syntax_highlighting: bool = False,
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
     │   │       concise: bool = False,
     │   │       is_url: bool = False,
     │   │   ) -> TreePlus
@@ -378,6 +395,7 @@ tree_plus -i tests
     │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
     │   │       maybe_globs: Optional[AmortizedGlobs] = None,
     │   │       syntax_highlighting: bool = False,
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
     │   │       concise: bool = False,
     │   │   ) -> TreePlus
     │   ├── def _from_folder(
@@ -386,14 +404,16 @@ tree_plus -i tests
     │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
     │   │       maybe_globs: Optional[AmortizedGlobs] = None,
     │   │       syntax_highlighting: bool = False,
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
     │   │       concise: bool = False,
     │   │   ) -> TreePlus
     │   ├── def _from_file(
     │   │       *,
     │   │       file_path: Path,
     │   │       syntax_highlighting: bool = False,
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
+    │   │       max_tokens: int = 1_000_000_000,
     │   │       concise: bool = False,
-    │   │       max_tokens: int = 100_000,
     │   │   ) -> TreePlus
     │   ├── def _from_url(
     │   │       *,
@@ -451,7 +471,7 @@ tree_plus -i tests
     │           file_path: Path,
     │           components: List,
     │       ) -> Union[List[Syntax], List]
-    ├── 📄 ignore.py (2,352 tokens, 331 lines)
+    ├── 📄 ignore.py (2,344 tokens, 332 lines)
     │   ├── TODO (Line 129): incorporate gitignore
     │   ├── def _is_all_str(x: Any) -> bool
     │   ├── def can_parse(x) -> bool
@@ -468,7 +488,8 @@ tree_plus -i tests
     │   ├── @dataclass(frozen=True)
     │   │   class AmortizedGlobs
     │   ├── def amortize_globs(
-    │   │       paths: Tuple[Path, ...], globs: Tuple
+    │   │       paths: Tuple[Path, ...],
+    │   │       globs: Tuple,
     │   │   ) -> Optional[AmortizedGlobs]
     │   └── @lru_cache(maxsize=None)
     │       def should_ignore(
@@ -476,16 +497,16 @@ tree_plus -i tests
     │           ignore: Optional[Tuple] = DEFAULT_IGNORE,
     │           globs: Optional[AmortizedGlobs] = None,
     │       ) -> bool
-    ├── 📄 isabelle_symbols.py (4,084 tokens, 462 lines)
+    ├── 📄 isabelle_symbols.py (2,146 tokens, 462 lines)
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (25,410 tokens, 2,750 lines)
-    │   ├── BUG (Line 306): HTML tree doesn't look awesome (yet)
-    │   ├── TODO (Line 307): Fix HTML in TreePlus (How?)
-    │   ├── BUG (Line 343): this repeatedly finds tags, need to avoid repeating ourselves
-    │   ├── BUG (Line 973): catastrophic backtracking in some c files
-    │   ├── TODO (Line 2367): update parse_objective_c to avoid fixed unrolling
+    ├── 📄 parse_file.py (24,916 tokens, 2,765 lines)
+    │   ├── BUG (Line 321): HTML tree doesn't look awesome (yet)
+    │   ├── TODO (Line 322): Fix HTML in TreePlus (How?)
+    │   ├── BUG (Line 358): this repeatedly finds tags, need to avoid repeating ourselves
+    │   ├── BUG (Line 988): catastrophic backtracking in some c files
+    │   ├── TODO (Line 2382): update parse_objective_c to avoid fixed unrolling
     │   ├── @lru_cache(maxsize=None)
     │   │   def read_file(
     │   │       file_path: str,
@@ -498,6 +519,7 @@ tree_plus -i tests
     │   │   ) -> List
     │   ├── def extract_groups(match: re.Match, named_only: bool = False) -> dict
     │   ├── def parse_html(contents: str) -> List
+    │   ├── def parse_jsonl(content: str) -> List
     │   ├── def process_tag(tag, components) -> Optional
     │   ├── def components_from_html(contents: str) -> List
     │   ├── def prettify_tr(component: str) -> str
@@ -585,12 +607,12 @@ tree_plus -i tests
     │   ├── def parse_txt(content: str) -> List
     │   └── def parse_markers(content: str) -> List
     ├── 📁 scripts (1 folder, 1 file) 
-    │   └── 📄 alias_tree_plus.sh (277 tokens, 31 lines)
+    │   └── 📄 alias_tree_plus.sh (241 tokens, 30 lines)
     │       ├── add_alias()
     │       └── create_conda_env()
-    ├── 📄 version.py (18 tokens, 2 lines)
-    │   └── __version__ = "1.0.51"
-    └── 📄 web.py (2,304 tokens, 321 lines)
+    ├── 📄 version.py (12 tokens, 1 line)
+    │   └── __version__ = "1.0.52"
+    └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO (Line 25): re-enable tree plus web actions
         ├── NOTE (Line 167): no point in the answers since there's no content
         ├── def create_url(kind: Action, query: str) -> str
@@ -650,8 +672,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.51) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 12,376 line(s), 146,795 token(s) in 0.31 second(s).
+tree_plus v(1.0.52) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,531 line(s), 109,094 token(s) in 0.24 second(s).
 
 ```
 <!-- t1-end -->
@@ -699,6 +721,9 @@ Usage: tree_plus [OPTIONS] [PATHS]...
           Hacker News Mode (6 articles, max depth 6, warning, slow!)
               > tree_plus --yc -n 6 -m 6
 
+          Use the Tiktoken gpt4o Model Tokenizer to tokenize Rust files
+              > tree_plus -t -g '*.rs'
+
 Options:
   -i, -I, --ignore TEXT        Patterns to ignore, in quotes: -i "*.java"
   -o, -O, --override           Override DEFAULT_IGNORE (includes ignored
@@ -713,9 +738,13 @@ Options:
   -m, -M, --max-depth INTEGER  maximum number of steps (depth / level) from
                                root (--yc mode only, default 3)
   -l, -L, --links              include links (web mode only, default False)
+  -t, --tiktoken               a shorthand for tiktoken with the gpt4o
+                               tokenizer
+  -T, --tokenizer-name TEXT    name of the tokenizer to use, for now only
+                               'gpt4o' works
   -h, -H, --help               Show this message and exit.
 
-  v(1.0.51) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.52) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -823,9 +852,9 @@ make library_demo
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages
-📁 more_languages (9 folders, 83 files) 
+📁 more_languages (9 folders, 84 files) 
 ├── 📁 group1 (1 folder, 11 files) 
-│   ├── 📄 addamt.cobol (408 tokens, 41 lines)
+│   ├── 📄 addamt.cobol (441 tokens, 40 lines)
 │   │   ├── IDENTIFICATION DIVISION.
 │   │   ├── PROGRAM-ID.
 │   │   │              ADDAMT.
@@ -842,7 +871,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── 01  MORE-DATA.
 │   │   ├── PROCEDURE DIVISION.
 │   │   └── 100-MAIN.
-│   ├── 📄 CUSTOMER-INVOICE.CBL (547 tokens, 60 lines)
+│   ├── 📄 CUSTOMER-INVOICE.CBL (412 tokens, 60 lines)
 │   │   ├── IDENTIFICATION DIVISION.
 │   │   ├── PROGRAM-ID. CUSTOMER-INVOICE.
 │   │   ├── AUTHOR. JANE DOE.
@@ -878,7 +907,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── 1000-PROCESS-RECORDS.
 │   │   ├── 1100-UPDATE-CUSTOMER-BALANCE.
 │   │   └── END PROGRAM CUSTOMER-INVOICE.
-│   ├── 📄 JavaTest.java (470 tokens, 87 lines)
+│   ├── 📄 JavaTest.java (578 tokens, 86 lines)
 │   │   ├── abstract class LivingBeing
 │   │   ├──     abstract void breathe()
 │   │   ├── interface Communicator
@@ -904,7 +933,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──     String home(@RequestParam(value = "name", defaultValue = "World") String name,
 │   │   │                   @RequestParam(value = "age", defaultValue = "30") int age)
 │   │   └──     public static void main(String[] args)
-│   ├── 📄 JuliaTest.jl (482 tokens, 63 lines)
+│   ├── 📄 JuliaTest.jl (381 tokens, 63 lines)
 │   │   ├── module JuliaTest_EdgeCase
 │   │   ├── struct Location
 │   │   │       name::String 
@@ -937,7 +966,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   │       kwargs...) where {uType, duType, tType, isinplace}
 │   │   │   end
 │   │   └── end
-│   ├── 📄 KotlinTest.kt (998 tokens, 172 lines)
+│   ├── 📄 KotlinTest.kt (974 tokens, 171 lines)
 │   │   ├── data class Person(val name: String)
 │   │   ├── fun greet(person: Person)
 │   │   ├── fun <T> processItems(items: List<T>, processor: (T) -> Unit)
@@ -1001,7 +1030,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── operator fun Point.unaryMinus()
 │   │   ├── abstract class Polygon
 │   │   └──     abstract fun draw()
-│   ├── 📄 lesson.cbl (682 tokens, 79 lines)
+│   ├── 📄 lesson.cbl (635 tokens, 78 lines)
 │   │   ├── IDENTIFICATION DIVISION.
 │   │   ├── PROGRAM-ID.    CBL0002.
 │   │   ├── AUTHOR.        Otto B. Fun.
@@ -1042,22 +1071,22 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── CLOSE-STOP.
 │   │   ├── READ-RECORD.
 │   │   └── WRITE-RECORD.
-│   ├── 📄 LuaTest.lua (84 tokens, 16 lines)
+│   ├── 📄 LuaTest.lua (83 tokens, 16 lines)
 │   │   ├── function HelloWorld.new
 │   │   ├── function HelloWorld.greet
 │   │   └── function say_hello
-│   ├── 📄 ObjectiveCTest.m (59 tokens, 16 lines)
+│   ├── 📄 ObjectiveCTest.m (62 tokens, 16 lines)
 │   │   ├── @interface HelloWorld
 │   │   ├── @interface HelloWorld -> (void) sayHello
 │   │   ├── @implementation HelloWorld
 │   │   ├── @implementation HelloWorld -> (void) sayHello
 │   │   └── void sayHelloWorld()
-│   ├── 📄 OcamlTest.ml (53 tokens, 12 lines)
+│   ├── 📄 OcamlTest.ml (49 tokens, 12 lines)
 │   │   ├── type color
 │   │   ├── class hello
 │   │   ├── class hello -> method say_hello
 │   │   └── let main ()
-│   ├── 📄 test.js (755 tokens, 154 lines)
+│   ├── 📄 test.js (757 tokens, 154 lines)
 │   │   ├── class MyClass
 │   │   ├──   myMethod()
 │   │   ├──   async asyncMethod(a, b)
@@ -1115,7 +1144,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──   constructor(brand, mod)
 │   │   ├──     super(brand)
 │   │   └──   show()
-│   └── 📄 test.ts (871 tokens, 166 lines)
+│   └── 📄 test.ts (832 tokens, 165 lines)
 │       ├── type MyType
 │       ├── interface MyInterface
 │       ├── class TsClass
@@ -1195,11 +1224,11 @@ tree_plus -i group_todo tests/more_languages
 │       ├── interface Shape
 │       └── interface Square extends Shape
 ├── 📁 group2 (1 folder, 8 files) 
-│   ├── 📄 apl_test.apl (44 tokens, 5 lines)
+│   ├── 📄 apl_test.apl (28 tokens, 5 lines)
 │   │   ├── :Namespace HelloWorld
 │   │   ├── :Namespace HelloWorld -> hello ← 'Hello, World!'
 │   │   └── :Namespace HelloWorld -> plus ← {⍺+⍵}
-│   ├── 📄 c_test.c (886 tokens, 142 lines)
+│   ├── 📄 c_test.c (837 tokens, 142 lines)
 │   │   ├── struct Point
 │   │   ├── struct Point getOrigin()
 │   │   ├── float mul_two_floats(float x1, float x2)
@@ -1222,7 +1251,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)
 │   │   ├──     while((ln = listNext(&li)))
 │   │   └── static struct config
-│   ├── 📄 go_test.go (169 tokens, 46 lines)
+│   ├── 📄 go_test.go (179 tokens, 46 lines)
 │   │   ├── type Greeting struct
 │   │   ├── func (g Greeting) sayHello()
 │   │   ├── func createGreeting(m string) Greeting
@@ -1236,18 +1265,18 @@ tree_plus -i group_todo tests/more_languages
 │   │   │   ) (resultType, error)
 │   │   ├── type resultType struct
 │   │   └── func main()
-│   ├── 📄 PerlTest.pl (75 tokens, 20 lines)
+│   ├── 📄 PerlTest.pl (63 tokens, 20 lines)
 │   │   ├── package PerlTest
 │   │   ├── package PerlTest -> sub new
 │   │   ├── package PerlTest -> sub hello
 │   │   └── package PerlTest -> sub say_hello
-│   ├── 📄 PhpTest.php (74 tokens, 19 lines)
+│   ├── 📄 PhpTest.php (70 tokens, 19 lines)
 │   │   ├── class HelloWorld
 │   │   ├── class HelloWorld -> function sayHello
 │   │   ├── function greet
 │   │   ├── class Person
 │   │   └── class Person -> function __construct
-│   ├── 📄 PowershellTest.ps1 (523 tokens, 89 lines)
+│   ├── 📄 PowershellTest.ps1 (459 tokens, 89 lines)
 │   │   ├── function Say-Nothing()
 │   │   ├── class Person
 │   │   ├──     Person($name)
@@ -1286,7 +1315,7 @@ tree_plus -i group_todo tests/more_languages
 │   │         [Parameter(Mandatory=$true)]
 │   │         $param3
 │   │       )
-│   ├── 📄 ScalaTest.scala (217 tokens, 41 lines)
+│   ├── 📄 ScalaTest.scala (171 tokens, 40 lines)
 │   │   ├── def sumOfSquares(x: Int, y: Int): Int
 │   │   ├── trait Bark
 │   │   ├──   def bark: String
@@ -1312,14 +1341,14 @@ tree_plus -i group_todo tests/more_languages
 │       ├── City
 │       └── Email
 ├── 📁 group3 (1 folder, 16 files) 
-│   ├── 📄 bash_test.sh (154 tokens, 23 lines)
+│   ├── 📄 bash_test.sh (127 tokens, 22 lines)
 │   │   ├── echo_hello_world()
 │   │   ├── function fun_echo_hello_world()
 │   │   ├── export SECRET
 │   │   ├── alias md='make debug'
 │   │   ├── add_alias()
 │   │   └── create_conda_env()
-│   ├── 📄 cpp_test.cpp (1,737 tokens, 259 lines)
+│   ├── 📄 cpp_test.cpp (1,670 tokens, 259 lines)
 │   │   ├── class Person
 │   │   ├── public:
 │   │   ├──     Person(std::string n) : name(n)
@@ -1380,7 +1409,7 @@ tree_plus -i group_todo tests/more_languages
 │   │           int group_size,
 │   │           int bits,
 │   │           StreamOrDevice s)
-│   ├── 📄 csharp_test.cs (850 tokens, 147 lines)
+│   ├── 📄 csharp_test.cs (957 tokens, 146 lines)
 │   │   ├── public interface IExcelTemplate
 │   │   ├──     void LoadTemplate(string templateFilePath)
 │   │   ├──     void LoadData(Dictionary<string, string> data)
@@ -1439,7 +1468,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── s_downloadButton.Clicked += async (o, e) =>
 │   │   ├── [HttpGet, Route("DotNetCount")]
 │   │   └── static public async Task<int> GetDotNetCount(string URL)
-│   ├── 📄 hallucination.tex (1,465 tokens, 127 lines)
+│   ├── 📄 hallucination.tex (1,633 tokens, 126 lines)
 │   │   ├── Harnessing the Master Algorithm: Strategies for AI LLMs to Mitigate Hallucinations
 │   │   ├── Hallucinated Pedro Domingos et al.
 │   │   ├── Christmas Eve 2023
@@ -1465,7 +1494,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── 7 Conclusion
 │   │   ├──   7.1 Summarizing Key Findings
 │   │   └──   7.2 The Next Steps in AI Development
-│   ├── 📄 ruby_test.rb (157 tokens, 37 lines)
+│   ├── 📄 ruby_test.rb (138 tokens, 37 lines)
 │   │   ├── module Greeter
 │   │   ├──   def self.say_hello
 │   │   ├── class HelloWorld
@@ -1481,7 +1510,7 @@ tree_plus -i group_todo tests/more_languages
 │   │             cords: [],
 │   │             branches: Time.now
 │   │           )
-│   ├── 📄 swift_test.swift (525 tokens, 110 lines)
+│   ├── 📄 swift_test.swift (469 tokens, 110 lines)
 │   │   ├── class Person
 │   │   ├──     init(name: String)
 │   │   ├──     func greet()
@@ -1512,7 +1541,7 @@ tree_plus -i group_todo tests/more_languages
 │   │           address: String, 
 │   │           phoneNumber: String
 │   │       )
-│   ├── 📄 test.lean (384 tokens, 43 lines)
+│   ├── 📄 test.lean (289 tokens, 42 lines)
 │   │   ├── # Advanced Topics in Group Theory
 │   │   ├── section GroupDynamics
 │   │   ├── lemma group_stability (G : Type*) [Group G] (H : Subgroup G)
@@ -1524,7 +1553,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── lemma complex_lemma {X Y : Type*} [SomeClass X] [AnotherClass Y]
 │   │   │     (f : X → Y) (g : Y → X)
 │   │   └── end ConstructiveApproach
-│   ├── 📄 test.capnp (143 tokens, 31 lines)
+│   ├── 📄 test.capnp (117 tokens, 30 lines)
 │   │   ├── struct Employee
 │   │   ├──   id @0 :Int32
 │   │   ├──   name @1 :Text
@@ -1543,7 +1572,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──     retired @6 :Void
 │   │   ├── struct Company
 │   │   └──   employees @0 :List(Employee)
-│   ├── 📄 test.graphql (83 tokens, 21 lines)
+│   ├── 📄 test.graphql (66 tokens, 21 lines)
 │   │   ├── type Query
 │   │   ├──     getBooks: [Book]
 │   │   ├──     getAuthors: [Author]
@@ -1558,7 +1587,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──     id: ID
 │   │   ├──     name: String
 │   │   └──     books: [Book]
-│   ├── 📄 test.proto (150 tokens, 34 lines)
+│   ├── 📄 test.proto (142 tokens, 34 lines)
 │   │   ├── syntax = "proto3"
 │   │   ├── service EmployeeService
 │   │   ├──     rpc GetEmployee(EmployeeId) returns (EmployeeInfo)
@@ -1586,7 +1615,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──    id integer primary key
 │   │   ├──    title text not null
 │   │   └──    credits integer not null
-│   ├── 📄 test_Cargo.toml (165 tokens, 19 lines)
+│   ├── 📄 test_Cargo.toml (119 tokens, 18 lines)
 │   │   ├── name: test_cargo
 │   │   ├── version: 0.1.0
 │   │   ├── description: A test Cargo.toml
@@ -1594,14 +1623,14 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── dependencies:
 │   │   ├──   clap 4.4
 │   │   └──   sqlx 0.7 (features: runtime-tokio, tls-rustls)
-│   ├── 📄 test_json_rpc_2_0.json (48 tokens, 6 lines)
+│   ├── 📄 test_json_rpc_2_0.json (26 tokens, 6 lines)
 │   │   ├── jsonrpc: 2.0
 │   │   ├── method: subtract
 │   │   ├── params:
 │   │   ├──     minuend: 42
 │   │   ├──     subtrahend: 23
 │   │   └── id: 1
-│   ├── 📄 test_openapi.yaml (507 tokens, 93 lines)
+│   ├── 📄 test_openapi.yaml (753 tokens, 92 lines)
 │   │   ├── openapi: 3.0.1
 │   │   ├──     title: TODO Plugin
 │   │   ├──     description: A plugin to create and manage TODO lists using ChatGPT.
@@ -1613,7 +1642,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──         GET (getTodos): Get the list of todos
 │   │   ├──         POST (addTodo): Add a todo to the list
 │   │   └──         DELETE (deleteTodo): Delete a todo from the list
-│   ├── 📄 test_openrpc.json (224 tokens, 44 lines)
+│   ├── 📄 test_openrpc.json (225 tokens, 44 lines)
 │   │   ├── openrpc: 1.2.1
 │   │   ├── info:
 │   │   ├──     title: Demo Petstore
@@ -1623,7 +1652,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──         params:
 │   │   ├──             - limit: integer
 │   │   └──         result: pets = An array of pets
-│   └── 📄 test_pyproject.toml (311 tokens, 39 lines)
+│   └── 📄 test_pyproject.toml (304 tokens, 39 lines)
 │       ├── name: tree_plus
 │       ├── version: 1.0.8
 │       ├── description: A `tree` util enhanced with tokens, lines, and components.
@@ -1636,7 +1665,7 @@ tree_plus -i group_todo tests/more_languages
 │       ├──     rich
 │       └──     tomli
 ├── 📁 group4 (1 folder, 10 files) 
-│   ├── 📄 erl_test.erl (512 tokens, 69 lines)
+│   ├── 📄 erl_test.erl (480 tokens, 68 lines)
 │   │   ├── -module(erl_test).
 │   │   ├── -record(person).
 │   │   ├── -type ra_peer_status().
@@ -1660,7 +1689,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   │           ; ([Y]) -> Y when Y :: number().
 │   │   ├── -record(multiline).
 │   │   └── -record(maybe_undefined).
-│   ├── 📄 haskell_test.hs (373 tokens, 41 lines)
+│   ├── 📄 haskell_test.hs (414 tokens, 41 lines)
 │   │   ├── data Person
 │   │   ├── greet :: Person -> String
 │   │   └── resolveVariables ::
@@ -1675,19 +1704,19 @@ tree_plus -i group_todo tests/more_languages
 │   │           ( [G.Directive Variable],
 │   │             G.SelectionSet fragments Variable
 │   │           )
-│   ├── 📄 mathematica_test.nb (132 tokens, 21 lines)
+│   ├── 📄 mathematica_test.nb (133 tokens, 21 lines)
 │   │   ├── person
 │   │   ├── sayHello[]
 │   │   └── sumList
-│   ├── 📄 matlab_test.m (45 tokens, 12 lines)
+│   ├── 📄 matlab_test.m (48 tokens, 12 lines)
 │   │   ├── classdef HelloWorld -> function greet
 │   │   └── function loneFun
-│   ├── 📄 RTest.R (367 tokens, 47 lines)
+│   ├── 📄 RTest.R (367 tokens, 46 lines)
 │   │   ├── class(person)
 │   │   ├── greet.Person <- function
 │   │   ├── ensure_between = function
 │   │   └── run_intermediate_annealing_process = function
-│   ├── 📄 rust_test.rs (932 tokens, 166 lines)
+│   ├── 📄 rust_test.rs (786 tokens, 165 lines)
 │   │   ├── enum Days
 │   │   ├── struct Point
 │   │   ├── impl Point
@@ -1746,7 +1775,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   └── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
 │   │       where
 │   │           Bion: Cool
-│   ├── 📄 test.zig (436 tokens, 61 lines)
+│   ├── 📄 test.zig (397 tokens, 60 lines)
 │   │   ├── pub fn add(a: i32, b: i32) i32
 │   │   ├── test "add function"
 │   │   ├── const BunBuildOptions = struct
@@ -1766,7 +1795,7 @@ tree_plus -i group_todo tests/more_languages
 │   │           y: []f32,
 │   │           y_add: usize,
 │   │       ) void
-│   ├── 📄 test_fsharp.fs (127 tokens, 27 lines)
+│   ├── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │   │   ├── module TestFSharp
 │   │   ├── type Person = {
 │   │   ├── let add x y =
@@ -1779,14 +1808,14 @@ tree_plus -i group_todo tests/more_languages
 │   │   │       (c: float)
 │   │   │       : (int * string) option =
 │   │   └── type Result<'T> =
-│   ├── 📄 test_tcl_tk.tcl (66 tokens, 17 lines)
+│   ├── 📄 test_tcl_tk.tcl (54 tokens, 16 lines)
 │   │   ├── proc sayHello {}
 │   │   ├── proc arrg { input }
 │   │   └── proc multiLine {
 │   │           x,
 │   │           y
 │   │       }
-│   └── 📄 tf_test.tf (288 tokens, 39 lines)
+│   └── 📄 tf_test.tf (202 tokens, 38 lines)
 │       ├── provider "aws"
 │       ├── resource "aws_instance" "example"
 │       ├── data "aws_ami" "ubuntu"
@@ -1795,11 +1824,11 @@ tree_plus -i group_todo tests/more_languages
 │       ├── locals
 │       └── module "vpc"
 ├── 📁 group5 (1 folder, 19 files) 
-│   ├── 📄 ansible_test.yml (60 tokens, 15 lines)
+│   ├── 📄 ansible_test.yml (55 tokens, 14 lines)
 │   │   ├── Install package
 │   │   ├── Start service
 │   │   └── Create user
-│   ├── 📄 app-routing.module.ts (242 tokens, 28 lines)
+│   ├── 📄 app-routing.module.ts (287 tokens, 28 lines)
 │   │   ├── const routes: Routes = [
 │   │   │       { path: '', redirectTo: 'login', pathMatch: 'full' },
 │   │   │       { path: '*', redirectTo: 'login' },
@@ -1812,13 +1841,13 @@ tree_plus -i group_todo tests/more_languages
 │   │   │       { path: 'profile', component: ProfileComponent },
 │   │   │   ];
 │   │   └── export class AppRoutingModule
-│   ├── 📄 app.component.spec.ts (307 tokens, 48 lines)
+│   ├── 📄 app.component.spec.ts (410 tokens, 47 lines)
 │   │   ├── describe 'AppComponent'
 │   │   ├──     it should create the app
 │   │   ├──     it should welcome the user
 │   │   ├──     it should welcome 'Jimbo'
 │   │   └──     it should request login if not logged in
-│   ├── 📄 app.component.ts (243 tokens, 45 lines)
+│   ├── 📄 app.component.ts (271 tokens, 45 lines)
 │   │   ├── export class AppComponent
 │   │   ├──   constructor(
 │   │   │       private http: HttpClient,
@@ -1829,7 +1858,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──   checkSession()
 │   │   ├──   async goToEvent(event_id: string)
 │   │   └──   valInvitedBy(event: any, event_id: string)
-│   ├── 📄 app.module.ts (269 tokens, 43 lines)
+│   ├── 📄 app.module.ts (374 tokens, 43 lines)
 │   │   ├── @NgModule({
 │   │   │       declarations: [
 │   │   │           AppComponent,
@@ -1841,7 +1870,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   │           RewardsComponent,
 │   │   │           ProfileComponent
 │   │   └── export class AppModule
-│   ├── 📄 checkbox_test.md (263 tokens, 22 lines)
+│   ├── 📄 checkbox_test.md (176 tokens, 21 lines)
 │   │   ├── # My Checkbox Test
 │   │   ├── ## My No Parens Test
 │   │   ├── ## My Empty href Test
@@ -1859,7 +1888,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── -  Task 6
 │   │   ├──     -  Subtask 6.1
 │   │   └──         - [ ] Handle edge cases
-│   ├── 📄 checkbox_test.txt (276 tokens, 33 lines)
+│   ├── 📄 checkbox_test.txt (257 tokens, 33 lines)
 │   │   ├── - [ ] fix phone number format +1
 │   │   ├── - [ ] add forgot password
 │   │   ├── - [ ] ? add email verification
@@ -1868,20 +1897,20 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── - [ ] user can use option to buy ticket at 2-referred price
 │   │   ├── - [ ] CTA refer 2 people to get instant lower price
 │   │   └── - [ ] form to send referrals
-│   ├── 📄 environment.test.ts (193 tokens, 19 lines)
+│   ├── 📄 environment.test.ts (197 tokens, 19 lines)
 │   │   ├── environment:
 │   │   ├──    production
 │   │   ├──    cognitoUserPoolId
 │   │   ├──    cognitoAppClientId
 │   │   └──    apiurl
-│   ├── 📄 hello_world.pyi (26 tokens, 3 lines)
+│   ├── 📄 hello_world.pyi (22 tokens, 3 lines)
 │   │   └── @final
 │   │       class dtype(Generic[_DTypeScalar_co])
-│   ├── 📄 k8s_test.yaml (171 tokens, 38 lines)
+│   ├── 📄 k8s_test.yaml (140 tokens, 37 lines)
 │   │   ├── apps/v1.Deployment -> my-app
 │   │   ├── v1.Service -> my-service
 │   │   └── v1.ConfigMap -> my-config
-│   ├── 📄 Makefile (882 tokens, 85 lines)
+│   ├── 📄 Makefile (714 tokens, 84 lines)
 │   │   ├── include dotenv/dev.env
 │   │   ├── .PHONY: dev
 │   │   ├── dev
@@ -1891,7 +1920,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── damage-report
 │   │   ├── tail-logs
 │   │   └── cloud
-│   ├── 📄 requirements_test.txt (40 tokens, 10 lines)
+│   ├── 📄 requirements_test.txt (29 tokens, 10 lines)
 │   │   ├── psycopg2-binary
 │   │   ├── pytest
 │   │   ├── coverage
@@ -1901,7 +1930,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── pyjwt
 │   │   ├── cognitojwt
 │   │   └── flask-lambda
-│   ├── 📄 rust_todo_test.rs (109 tokens, 27 lines)
+│   ├── 📄 rust_todo_test.rs (92 tokens, 26 lines)
 │   │   ├── TODO (Line 23): This todo tests parse_todo
 │   │   ├── enum Color
 │   │   ├── struct Point
@@ -1910,7 +1939,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── impl Drawable for Point
 │   │   ├──     fn draw(&self)
 │   │   └── fn main()
-│   ├── 📄 sql_test.sql (300 tokens, 52 lines)
+│   ├── 📄 sql_test.sql (270 tokens, 51 lines)
 │   │   ├── CREATE TABLE promoters
 │   │   ├──    user_id serial PRIMARY KEY,
 │   │   ├──    type varchar(20) NOT NULL,
@@ -1933,7 +1962,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──    performer varchar(64) NOT NULL,
 │   │   ├──    rewards json,
 │   │   └──    created timestamp
-│   ├── 📄 standard-app-routing.module.ts (93 tokens, 17 lines)
+│   ├── 📄 standard-app-routing.module.ts (100 tokens, 16 lines)
 │   │   └── const routes: Routes = [
 │   │         { path: '', component: HomeComponent },
 │   │         {
@@ -1946,7 +1975,7 @@ tree_plus -i group_todo tests/more_languages
 │   │         },
 │   │         { path: '**', component: PageNotFoundComponent },
 │   │       ];
-│   ├── 📄 test.env (242 tokens, 26 lines)
+│   ├── 📄 test.env (190 tokens, 25 lines)
 │   │   ├── PROMO_PATH
 │   │   ├── PRODUCTION
 │   │   ├── SQL_SCHEMA_PATH
@@ -1967,12 +1996,12 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── COGNITO_APP_CLIENT_ID
 │   │   ├── AWS_REGION
 │   │   └── STRIPE_SECRET_KEY
-│   ├── 📄 testJsonSchema.json (294 tokens, 49 lines)
+│   ├── 📄 testJsonSchema.json (421 tokens, 48 lines)
 │   │   ├── $schema: http://json-schema.org/draft-07/schema#
 │   │   ├── type: object
 │   │   ├── title: random_test
 │   │   └── description: A promoter's activites related to events
-│   ├── 📄 testPackage.json (458 tokens, 44 lines)
+│   ├── 📄 testPackage.json (349 tokens, 43 lines)
 │   │   ├── name: 'promo-app'
 │   │   ├── version: 0.0.0
 │   │   ├── scripts:
@@ -1981,7 +2010,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──     build: 'ng build'
 │   │   ├──     watch: 'ng build --watch --configuration development'
 │   │   └──     test: 'ng test'
-│   └── 📄 tickets.component.ts (6,950 tokens, 903 lines)
+│   └── 📄 tickets.component.ts (7,160 tokens, 903 lines)
 │       ├── interface EnrichedTicket extends Ticket
 │       ├── interface SpinConfig
 │       ├── interface RotationState
@@ -2045,7 +2074,7 @@ tree_plus -i group_todo tests/more_languages
 │       ├── const mockTickets = async () =>
 │       └── const renderQRCode = async (text: String): Promise<string> =>
 ├── 📁 group6 (1 folder, 13 files) 
-│   ├── 📄 catastrophic.c (4,144 tokens, 581 lines)
+│   ├── 📄 catastrophic.c (3,906 tokens, 581 lines)
 │   │   ├── struct Point
 │   │   ├── struct Point getOrigin()
 │   │   ├── float mul_two_floats(float x1, float x2)
@@ -2149,20 +2178,20 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── #define EXPORT_SYMBOL __declspec(dllexport)
 │   │   ├── #define EXPORT_SYMBOL __attribute__ ((visibility("default")))
 │   │   └── EXPORT_SYMBOL PyMODINIT_FUNC PyInit_cpu_feature_guard(void)
-│   ├── 📄 cpp_examples_impl.cc (66 tokens, 10 lines)
+│   ├── 📄 cpp_examples_impl.cc (60 tokens, 10 lines)
 │   │   ├── PYBIND11_MODULE(cpp_examples, m)
 │   │   └──     m.def("add", &add<int>, "An example function to add two numbers.")
-│   ├── 📄 cpp_examples_impl.cu (47 tokens, 10 lines)
+│   ├── 📄 cpp_examples_impl.cu (37 tokens, 10 lines)
 │   │   ├── template <typename T>
 │   │   │   T add(T a, T b)
 │   │   └── template <>
 │   │       int add<int>(int a, int b)
-│   ├── 📄 cpp_examples_impl.h (26 tokens, 7 lines)
+│   ├── 📄 cpp_examples_impl.h (22 tokens, 6 lines)
 │   │   ├── template <typename T>
 │   │   │   T add(T a, T b)
 │   │   └── template <>
 │   │       int add<int>(int, int)
-│   ├── 📄 fractal.thy (2,183 tokens, 148 lines)
+│   ├── 📄 fractal.thy (1,712 tokens, 147 lines)
 │   │   ├── Title:      fractal.thy
 │   │   ├── Author:     Isabelle/HOL Contributors!
 │   │   ├── Author:     edge cases r us
@@ -2227,7 +2256,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   │                (is "eventually (λn. _ = -?g' n) _")
 │   │   │     shows   "(λn. fps_nth F n - g n) ∈ O(λn. 1 / r ^ n)" (is "(λn. ?c n - _) ∈ O(_)")
 │   │   └── end
-│   ├── 📄 Microsoft.PowerShell_profile.ps1 (3,854 tokens, 498 lines)
+│   ├── 📄 Microsoft.PowerShell_profile.ps1 (3,346 tokens, 497 lines)
 │   │   ├── function Log($message)
 │   │   ├── function Remove-ChocolateyFromPath
 │   │   ├── function Show-Profiles
@@ -2276,11 +2305,11 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── function Edit-Profile
 │   │   ├── function Set-Profile
 │   │   └── function Show-Profile
-│   ├── 📄 python_complex_class.py (13 tokens, 2 lines)
+│   ├── 📄 python_complex_class.py (10 tokens, 2 lines)
 │   │   └── class Box(Space[NDArray[Any]])
-│   ├── 📄 ramda__cloneRegExp.js (105 tokens, 9 lines)
+│   ├── 📄 ramda__cloneRegExp.js (173 tokens, 9 lines)
 │   │   └── export default function _cloneRegExp(pattern)
-│   ├── 📄 ramda_prop.js (747 tokens, 86 lines)
+│   ├── 📄 ramda_prop.js (646 tokens, 85 lines)
 │   │   ├── /**
 │   │   │    * Returns a function that when supplied an object returns the indicated
 │   │   │    * property of that object, if it exists.
@@ -2310,7 +2339,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   │    */
 │   │   │   var unwind = _curry2(function(key, object)
 │   │   └──   return _map(function(item)
-│   ├── 📄 tensorflow_flags.h (7,098 tokens, 668 lines)
+│   ├── 📄 tensorflow_flags.h (7,628 tokens, 668 lines)
 │   │   ├── TF_DECLARE_FLAG('test_only_experiment_1')
 │   │   ├── TF_DECLARE_FLAG('test_only_experiment_2')
 │   │   ├── TF_DECLARE_FLAG('enable_nested_function_shape_inference'):
@@ -2477,7 +2506,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── bool FailOnXlaCompilation()
 │   │   ├── #define TF_PY_DECLARE_FLAG(flag_name)
 │   │   └── PYBIND11_MODULE(flags_pybind, m)
-│   ├── 📄 test.f (200 tokens, 31 lines)
+│   ├── 📄 test.f (181 tokens, 30 lines)
 │   │   ├── MODULE basic_mod
 │   │   ├──     TYPE :: person
 │   │   │           CHARACTER(LEN=50) :: name
@@ -2493,12 +2522,22 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── END MODULE basic_mod
 │   │   └── PROGRAM HelloFortran
 │   │       END PROGRAM HelloFortran
-│   ├── 📄 torch.rst (53 tokens, 9 lines)
+│   ├── 📄 torch.rst (60 tokens, 8 lines)
 │   │   ├── # libtorch (C++-only)
 │   │   └── - Building libtorch using Python
-│   └── 📄 yc.html (12,015 tokens, 169 lines)
-├── 📁 group7 (1 folder, 2 files) 
-│   ├── 📄 angular_crud.ts (964 tokens, 148 lines)
+│   └── 📄 yc.html (9,063 tokens, 169 lines)
+├── 📁 group7 (1 folder, 3 files) 
+│   ├── 📄 absurdly_huge.jsonl (8,347 tokens, 126 lines)
+│   │   ├── SMILES: str
+│   │   ├── Yield: float
+│   │   ├── Temperature: int
+│   │   ├── Pressure: float
+│   │   ├── Solvent: str
+│   │   ├── Success: bool
+│   │   ├── Reaction_Conditions: dict
+│   │   ├── Products: list
+│   │   └── EdgeCasesMissed: None
+│   ├── 📄 angular_crud.ts (1,192 tokens, 148 lines)
 │   │   ├── interface DBCommand<T = any>
 │   │   ├── export class IndexedDbService
 │   │   ├──     constructor()
@@ -2524,7 +2563,7 @@ tree_plus -i group_todo tests/more_languages
 │       │       def edge_case(self) -> str
 │       └──     def should_still_see_me(self, x: bool = True) -> "Tool"
 └── 📁 group_lisp (1 folder, 4 files) 
-    ├── 📄 clojure_test.clj (726 tokens, 86 lines)
+    ├── 📄 clojure_test.clj (682 tokens, 85 lines)
     │   ├── defprotocol P
     │   ├── defrecord Person
     │   ├── defn -main
@@ -2533,12 +2572,12 @@ tree_plus -i group_todo tests/more_languages
     │   ├── defn config
     │   ├── defmacro with-os
     │   └── defrecord SetFullElement
-    ├── 📄 LispTest.lisp (31 tokens, 6 lines)
+    ├── 📄 LispTest.lisp (25 tokens, 6 lines)
     │   ├── defstruct person
     │   └── defun greet
-    ├── 📄 racket_struct.rkt (17 tokens, 2 lines)
+    ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     │   └── struct point
-    └── 📄 test_scheme.scm (389 tokens, 45 lines)
+    └── 📄 test_scheme.scm (360 tokens, 44 lines)
         ├── define topological-sort
         ├──   define table
         ├──   define queue
@@ -2546,8 +2585,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.51) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 83 file(s), 6,819 line(s), 61,860 token(s) in 0.59 second(s).
+tree_plus v(1.0.52) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 6,906 line(s), 66,183 token(s) in 0.62 second(s).
 
 ```
 <!-- t2-end -->
@@ -2558,7 +2597,7 @@ tree_plus v(1.0.51) ignore=('group_todo',) globs=() syntax=False paths=('tests/m
 tree_plus -g "*.*s" -i group_todo tests/more_languages
 📁 more_languages (7 folders, 17 files) 
 ├── 📁 group1 (1 folder, 2 files) 
-│   ├── 📄 test.js (755 tokens, 154 lines)
+│   ├── 📄 test.js (757 tokens, 154 lines)
 │   │   ├── class MyClass
 │   │   ├──   myMethod()
 │   │   ├──   async asyncMethod(a, b)
@@ -2616,7 +2655,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   ├──   constructor(brand, mod)
 │   │   ├──     super(brand)
 │   │   └──   show()
-│   └── 📄 test.ts (871 tokens, 166 lines)
+│   └── 📄 test.ts (832 tokens, 165 lines)
 │       ├── type MyType
 │       ├── interface MyInterface
 │       ├── class TsClass
@@ -2696,7 +2735,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │       ├── interface Shape
 │       └── interface Square extends Shape
 ├── 📁 group3 (1 folder, 1 file) 
-│   └── 📄 csharp_test.cs (850 tokens, 147 lines)
+│   └── 📄 csharp_test.cs (957 tokens, 146 lines)
 │       ├── public interface IExcelTemplate
 │       ├──     void LoadTemplate(string templateFilePath)
 │       ├──     void LoadData(Dictionary<string, string> data)
@@ -2756,7 +2795,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │       ├── [HttpGet, Route("DotNetCount")]
 │       └── static public async Task<int> GetDotNetCount(string URL)
 ├── 📁 group4 (1 folder, 3 files) 
-│   ├── 📄 haskell_test.hs (373 tokens, 41 lines)
+│   ├── 📄 haskell_test.hs (414 tokens, 41 lines)
 │   │   ├── data Person
 │   │   ├── greet :: Person -> String
 │   │   └── resolveVariables ::
@@ -2771,7 +2810,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │           ( [G.Directive Variable],
 │   │             G.SelectionSet fragments Variable
 │   │           )
-│   ├── 📄 rust_test.rs (932 tokens, 166 lines)
+│   ├── 📄 rust_test.rs (786 tokens, 165 lines)
 │   │   ├── enum Days
 │   │   ├── struct Point
 │   │   ├── impl Point
@@ -2830,7 +2869,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   └── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
 │   │       where
 │   │           Bion: Cool
-│   └── 📄 test_fsharp.fs (127 tokens, 27 lines)
+│   └── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │       ├── module TestFSharp
 │       ├── type Person = {
 │       ├── let add x y =
@@ -2844,7 +2883,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │       │       : (int * string) option =
 │       └── type Result<'T> =
 ├── 📁 group5 (1 folder, 8 files) 
-│   ├── 📄 app-routing.module.ts (242 tokens, 28 lines)
+│   ├── 📄 app-routing.module.ts (287 tokens, 28 lines)
 │   │   ├── const routes: Routes = [
 │   │   │       { path: '', redirectTo: 'login', pathMatch: 'full' },
 │   │   │       { path: '*', redirectTo: 'login' },
@@ -2857,13 +2896,13 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   │       { path: 'profile', component: ProfileComponent },
 │   │   │   ];
 │   │   └── export class AppRoutingModule
-│   ├── 📄 app.component.spec.ts (307 tokens, 48 lines)
+│   ├── 📄 app.component.spec.ts (410 tokens, 47 lines)
 │   │   ├── describe 'AppComponent'
 │   │   ├──     it should create the app
 │   │   ├──     it should welcome the user
 │   │   ├──     it should welcome 'Jimbo'
 │   │   └──     it should request login if not logged in
-│   ├── 📄 app.component.ts (243 tokens, 45 lines)
+│   ├── 📄 app.component.ts (271 tokens, 45 lines)
 │   │   ├── export class AppComponent
 │   │   ├──   constructor(
 │   │   │       private http: HttpClient,
@@ -2874,7 +2913,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   ├──   checkSession()
 │   │   ├──   async goToEvent(event_id: string)
 │   │   └──   valInvitedBy(event: any, event_id: string)
-│   ├── 📄 app.module.ts (269 tokens, 43 lines)
+│   ├── 📄 app.module.ts (374 tokens, 43 lines)
 │   │   ├── @NgModule({
 │   │   │       declarations: [
 │   │   │           AppComponent,
@@ -2886,13 +2925,13 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   │           RewardsComponent,
 │   │   │           ProfileComponent
 │   │   └── export class AppModule
-│   ├── 📄 environment.test.ts (193 tokens, 19 lines)
+│   ├── 📄 environment.test.ts (197 tokens, 19 lines)
 │   │   ├── environment:
 │   │   ├──    production
 │   │   ├──    cognitoUserPoolId
 │   │   ├──    cognitoAppClientId
 │   │   └──    apiurl
-│   ├── 📄 rust_todo_test.rs (109 tokens, 27 lines)
+│   ├── 📄 rust_todo_test.rs (92 tokens, 26 lines)
 │   │   ├── TODO (Line 23): This todo tests parse_todo
 │   │   ├── enum Color
 │   │   ├── struct Point
@@ -2901,7 +2940,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   ├── impl Drawable for Point
 │   │   ├──     fn draw(&self)
 │   │   └── fn main()
-│   ├── 📄 standard-app-routing.module.ts (93 tokens, 17 lines)
+│   ├── 📄 standard-app-routing.module.ts (100 tokens, 16 lines)
 │   │   └── const routes: Routes = [
 │   │         { path: '', component: HomeComponent },
 │   │         {
@@ -2914,7 +2953,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │         },
 │   │         { path: '**', component: PageNotFoundComponent },
 │   │       ];
-│   └── 📄 tickets.component.ts (6,950 tokens, 903 lines)
+│   └── 📄 tickets.component.ts (7,160 tokens, 903 lines)
 │       ├── interface EnrichedTicket extends Ticket
 │       ├── interface SpinConfig
 │       ├── interface RotationState
@@ -2978,9 +3017,9 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │       ├── const mockTickets = async () =>
 │       └── const renderQRCode = async (text: String): Promise<string> =>
 ├── 📁 group6 (1 folder, 2 files) 
-│   ├── 📄 ramda__cloneRegExp.js (105 tokens, 9 lines)
+│   ├── 📄 ramda__cloneRegExp.js (173 tokens, 9 lines)
 │   │   └── export default function _cloneRegExp(pattern)
-│   └── 📄 ramda_prop.js (747 tokens, 86 lines)
+│   └── 📄 ramda_prop.js (646 tokens, 85 lines)
 │       ├── /**
 │       │    * Returns a function that when supplied an object returns the indicated
 │       │    * property of that object, if it exists.
@@ -3011,7 +3050,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │       │   var unwind = _curry2(function(key, object)
 │       └──   return _map(function(item)
 └── 📁 group7 (1 folder, 1 file) 
-    └── 📄 angular_crud.ts (964 tokens, 148 lines)
+    └── 📄 angular_crud.ts (1,192 tokens, 148 lines)
         ├── interface DBCommand<T = any>
         ├── export class IndexedDbService
         ├──     constructor()
@@ -3030,8 +3069,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.51) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,074 line(s), 14,130 token(s) in 0.17 second(s).
+tree_plus v(1.0.52) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,067 line(s), 14,740 token(s) in 0.16 second(s).
 
 ```
 <!-- t3-end -->
@@ -3047,21 +3086,21 @@ Help me **add to** and **priorize** this list of languages to support!
 ```sh
 tree_plus tests/more_languages/group_todo
 📁 group_todo (1 folder, 12 files) 
-├── 📄 AAPLShaders.metal (5,597 tokens, 566 lines)
-├── 📄 crystal_test.cr (56 tokens, 15 lines)
-├── 📄 dart_test.dart (106 tokens, 24 lines)
-├── 📄 elixir_test.exs (49 tokens, 10 lines)
-├── 📄 forward.frag (863 tokens, 88 lines)
-├── 📄 forward.vert (373 tokens, 49 lines)
-├── 📄 nodemon.json (120 tokens, 21 lines)
-├── 📄 sas_test.sas (104 tokens, 22 lines)
-├── 📄 test_setup_py.test (118 tokens, 24 lines)
-├── 📄 testTypings.d.ts (149 tokens, 23 lines)
-├── 📄 vba_test.bas (72 tokens, 16 lines)
-└── 📄 wgsl_test.wgsl (151 tokens, 17 lines)
+├── 📄 AAPLShaders.metal (5,780 tokens, 566 lines)
+├── 📄 crystal_test.cr (48 tokens, 15 lines)
+├── 📄 dart_test.dart (108 tokens, 24 lines)
+├── 📄 elixir_test.exs (39 tokens, 10 lines)
+├── 📄 forward.frag (739 tokens, 87 lines)
+├── 📄 forward.vert (359 tokens, 48 lines)
+├── 📄 nodemon.json (118 tokens, 20 lines)
+├── 📄 sas_test.sas (97 tokens, 22 lines)
+├── 📄 test_setup_py.test (133 tokens, 24 lines)
+├── 📄 testTypings.d.ts (158 tokens, 23 lines)
+├── 📄 vba_test.bas (67 tokens, 16 lines)
+└── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.51) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
-1 folder(s), 12 file(s), 875 line(s), 7,758 token(s) in 0.02 second(s).
+tree_plus v(1.0.52) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.04 second(s).
 
 ```
 <!-- t4-end -->
