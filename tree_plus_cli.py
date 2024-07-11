@@ -224,14 +224,27 @@ def main(
         article_comment_tree = tree_plus.from_hacker_news_articles(hacker_news_articles)
         _paths += (article_comment_tree,)
 
+    # TOO SOON! need to support py38, thanks CI/CD testing matrix!
+    # _tokenizer_name = TokenizerName.WC
+    # match (tiktoken, tokenizer_name):
+    #     case (False, None) | (True, "wc"):
+    #         pass
+    #     case (True, None) | (_, "gpt4o"):
+    #         _tokenizer_name = TokenizerName.GPT4O
+    #     case (_, "gpt4"):
+    #         _tokenizer_name = TokenizerName.GPT4O
+
     _tokenizer_name = TokenizerName.WC
-    match (tiktoken, tokenizer_name):
-        case (False, None) | (True, "wc"):
-            pass
-        case (True, None) | (_, "gpt4o"):
-            _tokenizer_name = TokenizerName.GPT4O
-        case (_, "gpt4"):
-            _tokenizer_name = TokenizerName.GPT4O
+    if (not tiktoken and tokenizer_name is None) or (
+        tiktoken and tokenizer_name == "wc"
+    ):
+        pass
+    elif (tiktoken and tokenizer_name is None) or (tokenizer_name == "gpt4o"):
+        _tokenizer_name = TokenizerName.GPT4O
+    elif tokenizer_name == "gpt4":
+        _tokenizer_name = TokenizerName.GPT4
+    else:
+        raise ValueError(f"unsupported {tiktoken=} {tokenizer_name=}")
 
     root = tree_plus.from_seeds(
         _paths,

@@ -136,15 +136,27 @@ def count_tokens_lines(
         return None
     debug_print(f"count_tokens_lines counting {file_path=}")
 
-    match tokenizer_name:
-        case TokenizerName.GPT4O | TokenizerName.GPT4:
-            contents = read_file(file_path)
-            count = count_openai_tokens_lines_from_contents(
-                contents,
-                tokenizer_name=tokenizer_name,
-            )
-        case TokenizerName.WC:
-            count = count_wc_tokens_lines_from_path(file_path)
+    # TOO SOON! py38 failed on this
+    # match tokenizer_name:
+    #     case TokenizerName.GPT4O | TokenizerName.GPT4:
+    #         contents = read_file(file_path)
+    #         count = count_openai_tokens_lines_from_contents(
+    #             contents,
+    #             tokenizer_name=tokenizer_name,
+    #         )
+    #     case TokenizerName.WC:
+    #         count = count_wc_tokens_lines_from_path(file_path)
+
+    if tokenizer_name is TokenizerName.GPT4O or tokenizer_name is TokenizerName.GPT4:
+        contents = read_file(file_path)
+        count = count_openai_tokens_lines_from_contents(
+            contents,
+            tokenizer_name=tokenizer_name,
+        )
+    elif tokenizer_name == TokenizerName.WC:
+        count = count_wc_tokens_lines_from_path(file_path)
+    else:
+        raise ValueError(f"unsupported {tokenizer_name=}")
     debug_print(f"count_tokens_lines {count=}")
     return count
 
