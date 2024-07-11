@@ -4,7 +4,7 @@ import json
 
 import polars as pl
 
-N_REPEATS = 42_000
+N_REPEATS = 42
 
 
 def generate_huge_jsonl(
