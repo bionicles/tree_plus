@@ -28,6 +28,78 @@
 
 `pip install -U tree_plus`
 
+## Usage
+Here's how `tree_plus --help` looks (`-h` and `-H` both also work) 
+<!-- t5-start -->
+```sh
+tree_plus -h
+Usage: tree_plus [OPTIONS] [PATHS]...
+
+  A `tree` util enhanced with tokens, lines, and components.
+
+  Wrap patterns in quotes: -i "*.py" / -g "*.rs"
+
+  Example Invocations (These are not subcomands, you idiot):
+
+          Show tree_plus_src and tests simultaneously
+              > tree_plus tree_plus_src tests
+
+          Show files matching "*.*s" within tests/more_languages
+              > tree_plus -g "*.*s" tests/more_languages
+
+          Ignore Java files
+              > tree_plus -i "*.java" tests
+
+          Override DEFAULT_IGNORE: Only ignore .ini files.
+              > tree_plus -o -i "*.ini" tests/dot_dot
+
+          Syntax Highlight python files in src and tests
+              > tree_plus -s tree_plus_src/*.py tests/*.py
+
+          Concise Mode (No Parsing)
+              > tree_plus -c
+
+          URL + Tag Categories for a website
+              > tree_plus example.com
+
+          URL + Tag Categories for multiple websites with a link tree
+              > tree_plus example.com example.org -l
+
+          Hacker News Mode (3 articles, max depth 3)
+              > tree_plus --yc
+
+          Hacker News Mode (6 articles, max depth 6, warning, slow!)
+              > tree_plus --yc -n 6 -m 6
+
+          Use the Tiktoken gpt4o Model Tokenizer to tokenize Rust files
+              > tree_plus -t -g '*.rs'
+
+Options:
+  -i, -I, --ignore TEXT        Patterns to ignore, in quotes: -i "*.java"
+  -o, -O, --override           Override DEFAULT_IGNORE (includes ignored
+                               content): -o -i "*.java"
+  -g, -G, --glob TEXT          Patterns to find, in quotes: -g "*.rs"
+  -v, -V, --version            Print the version and exit.
+  -d, -D, --debug              Enables $DEBUG_TREE_PLUS.
+  -s, -S, --syntax             Enables Syntax Highlighting (WIP).
+  -c, -C, --concise            Omit module components. (False)
+  --yc, --hn                   Include ycombinator (False)
+  -n, -N, --number INTEGER     number of results (--yc mode only, default 3)
+  -m, -M, --max-depth INTEGER  maximum number of steps (depth / level) from
+                               root (--yc mode only, default 3)
+  -l, -L, --links              include links (web mode only, default False)
+  -t, --tiktoken               a shorthand for tiktoken with the gpt4o
+                               tokenizer
+  -T, --tokenizer-name TEXT    name of the tokenizer to use, for now only
+                               'gpt4o' works
+  -h, -H, --help               Show this message and exit.
+
+  v(1.0.52) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+
+```
+<!-- t5-end -->
+
+
 ## Example Output:
 - [ ] Demonstrate Parsed Checkboxes
 <!-- t1-start -->
@@ -679,75 +751,6 @@ tree_plus v(1.0.52) ignore=('tests',) globs=() syntax=False paths=()
 <!-- t1-end -->
 - [x] Demonstrate Parsed Checkboxes
 
-Here's how `tree_plus --help` looks (`-h` and `-H` both also work) 
-<!-- t5-start -->
-```sh
-tree_plus -h
-Usage: tree_plus [OPTIONS] [PATHS]...
-
-  A `tree` util enhanced with tokens, lines, and components.
-
-  Wrap patterns in quotes: -i "*.py" / -g "*.rs"
-
-  Example Invocations (These are not subcomands, you idiot):
-
-          Show tree_plus_src and tests simultaneously
-              > tree_plus tree_plus_src tests
-
-          Show files matching "*.*s" within tests/more_languages
-              > tree_plus -g "*.*s" tests/more_languages
-
-          Ignore Java files
-              > tree_plus -i "*.java" tests
-
-          Override DEFAULT_IGNORE: Only ignore .ini files.
-              > tree_plus -o -i "*.ini" tests/dot_dot
-
-          Syntax Highlight python files in src and tests
-              > tree_plus -s tree_plus_src/*.py tests/*.py
-
-          Concise Mode (No Parsing)
-              > tree_plus -c
-
-          URL + Tag Categories for a website
-              > tree_plus example.com
-
-          URL + Tag Categories for multiple websites with a link tree
-              > tree_plus example.com example.org -l
-
-          Hacker News Mode (3 articles, max depth 3)
-              > tree_plus --yc
-
-          Hacker News Mode (6 articles, max depth 6, warning, slow!)
-              > tree_plus --yc -n 6 -m 6
-
-          Use the Tiktoken gpt4o Model Tokenizer to tokenize Rust files
-              > tree_plus -t -g '*.rs'
-
-Options:
-  -i, -I, --ignore TEXT        Patterns to ignore, in quotes: -i "*.java"
-  -o, -O, --override           Override DEFAULT_IGNORE (includes ignored
-                               content): -o -i "*.java"
-  -g, -G, --glob TEXT          Patterns to find, in quotes: -g "*.rs"
-  -v, -V, --version            Print the version and exit.
-  -d, -D, --debug              Enables $DEBUG_TREE_PLUS.
-  -s, -S, --syntax             Enables Syntax Highlighting (WIP).
-  -c, -C, --concise            Omit module components. (False)
-  --yc, --hn                   Include ycombinator (False)
-  -n, -N, --number INTEGER     number of results (--yc mode only, default 3)
-  -m, -M, --max-depth INTEGER  maximum number of steps (depth / level) from
-                               root (--yc mode only, default 3)
-  -l, -L, --links              include links (web mode only, default False)
-  -t, --tiktoken               a shorthand for tiktoken with the gpt4o
-                               tokenizer
-  -T, --tokenizer-name TEXT    name of the tokenizer to use, for now only
-                               'gpt4o' works
-  -h, -H, --help               Show this message and exit.
-
-  v(1.0.52) --- https://github.com/bionicles/tree_plus/blob/main/README.md
-
-```
-<!-- t5-end -->
 
 ## Start Quick!
 

@@ -97,11 +97,11 @@ pub mod lib {
 // Define a flow function
 pub fn flow<S1, S2, S3, S4, E, T, L>(
     source: S1, // edge
-    extractor: E, 
-    inbox: S2, 
-    transformer: T, 
-    outbox: S3, 
-    loader: L, 
+    extractor: E,
+    inbox: S2,
+    transformer: T,
+    outbox: S3,
+    loader: L,
     sink: &mut S4,
 ) -> Result<(), Box<dyn Error>>
 where
@@ -164,3 +164,26 @@ where
 {
     println!("Bion is cool!");
 }
+
+// reproduces a catastrophic backtracking error
+#[macro_export]
+macro_rules! unit {
+        impl crate::lib::Lensable<(), $unit_dtype> for $unit_name {
+            fn insert(
+                &mut self,
+                key: (),
+                value: $unit_dtype,
+            ) -> Result<Option<$unit_dtype>, ETLError> {
+                if key == () {
+                    let old_value = self.0 as $unit_dtype;
+                    self.0 = value as $unit_dtype;
+                    Ok(Some(old_value))
+                } else {
+                    Err(ETLError::KeyError)
+                }
+            }
+            // other methods omitted as they did not trigger the issue
+        }
+        // other impls omitted, as they did not trigger the issue
+    }
+};

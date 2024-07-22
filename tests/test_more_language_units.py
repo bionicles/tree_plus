@@ -1148,11 +1148,11 @@ macro_rules! hello_tree_plus""",
                 "    mod engine",
                 """pub fn flow<S1, S2, S3, S4, E, T, L>(
     source: S1,
-    extractor: E, 
-    inbox: S2, 
-    transformer: T, 
-    outbox: S3, 
-    loader: L, 
+    extractor: E,
+    inbox: S2,
+    transformer: T,
+    outbox: S3,
+    loader: L,
     sink: &mut S4,
 ) -> Result<(), Box<dyn Error>>
 where
@@ -1176,6 +1176,13 @@ where
                 """async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
 where
     Bion: Cool""",
+                """#[macro_export]
+macro_rules! unit""",
+                """            fn insert(
+                &mut self,
+                key: (),
+                value: $unit_dtype,
+            ) -> Result<Option<$unit_dtype>, ETLError>""",
             ],
         ),
         (
@@ -1314,8 +1321,8 @@ def test_more_languages_group4(
 ):
     print(f"{file=}")
     result = parse_file(file)
-    print(f"{result=}")
-    print(f"{expected=}")
+    print("expectation", expected)
+    print("reality", result)
     assert result == expected
     # assert 0
 

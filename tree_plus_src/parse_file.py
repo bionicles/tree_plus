@@ -1238,6 +1238,9 @@ def parse_erl(contents: str) -> List[str]:
 #     re.MULTILINE,
 # )
 
+# this caused catastrophic backtracking in the macro impl Lensable for ND
+# r"\n(?P<function>\s*(?:pub\s+)?(?:async\s+)?fn\s+(?:[\w_]+)(?:<.*>)?\((?P<function_params>(?:[^()]+|\((?P<function_nested>[^()]+)\))*)\)(?P<function_return_type>\s+->\s+(?:[^;{]*))?(?P<function_where_clause>\s*(?:where\n(?P<function_where>.*)?)?)?)|"
+
 
 def parse_rs(contents: str) -> List[str]:
     debug_print("parse_rs")
@@ -1246,7 +1249,7 @@ def parse_rs(contents: str) -> List[str]:
 
     combined_pattern = re.compile(
         # functions
-        r"\n(?P<function>\s*(?:pub\s+)?(?:async\s+)?fn\s+(?:[\w_]+)(?:<.*>)?\((?P<function_params>(?:[^()]+|\((?P<function_nested>[^()]+)\))*)\)(?P<function_return_type>\s+->\s+(?:[^;{]*))?(?P<function_where_clause>\s*(?:where\n(?P<function_where>.*)?)?)?)|"
+        r"^(?P<function>\s*(?:pub\s+)?(?:async\s+)?fn\s+(?:[\w_]+)(?:<[^>]*>)?\((?P<function_params>[^;{]*))|"
         # structs and impls with generics
         r"\n(?P<struct_impl>(?: *((?:pub\s+)?struct)|impl)[^{;]*?) ?[{;]|"
         # trait, enum, or mod
@@ -1262,7 +1265,7 @@ def parse_rs(contents: str) -> List[str]:
         component = None
         # functions
         if groups.get("function"):
-            component = groups["function"].rstrip().rstrip(",")
+            component = groups["function"].rstrip().rstrip(",").rstrip("\n").rstrip(";")
         # struct or impl
         elif groups.get("struct_impl"):
             component = groups["struct_impl"].rstrip()
