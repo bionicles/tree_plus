@@ -85,16 +85,18 @@ Options:
   -c, -C, --concise            Omit module components. (False)
   --yc, --hn                   Include ycombinator (False)
   -n, -N, --number INTEGER     number of results (--yc mode only, default 3)
-  -m, -M, --max-depth INTEGER  maximum number of steps (depth / level) from
-                               root (--yc mode only, default 3)
+  -m, -M, --max-depth INTEGER  max number of steps (depth / level) from root
+                               (--yc mode only, default 3)
   -l, -L, --links              include links (web mode only, default False)
   -t, --tiktoken               a shorthand for tiktoken with the gpt4o
                                tokenizer
   -T, --tokenizer-name TEXT    name of the tokenizer to use, for now only
                                'gpt4o' works
-  -h, -H, --help               Show this message and exit.
+  --timeout FLOAT              regex timeout in seconds (optional, default
+                               0.6)
+  -H, -h, --help               Show this message and exit.
 
-  v(1.0.53) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.54) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -144,7 +146,7 @@ tree_plus -i tests
 ├── 📁 coverage (1 folder, 1 file) 
 │   └── 📄 lcov.info (17,359 tokens, 2,180 lines)
 ├── 📄 LICENSE (2,744 tokens, 81 lines)
-├── 📄 Makefile (737 tokens, 118 lines)
+├── 📄 Makefile (743 tokens, 120 lines)
 │   ├── SHELL := /bin/bash
 │   ├── cli
 │   ├── library_demo
@@ -152,7 +154,7 @@ tree_plus -i tests
 │   ├── coverage
 │   ├── debug
 │   ├── .PHONY: debug_command
-│   ├── debug_command: test_group7
+│   ├── debug_command: test
 │   ├── html_demo
 │   ├── absurdly-huge-jsonl
 │   ├── test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
@@ -179,9 +181,10 @@ tree_plus -i tests
 │   ├── t2
 │   ├── t3
 │   ├── t4
-│   └── t5
+│   ├── t5
+│   └── t6
 ├── 📄 nodemon.json (112 tokens, 24 lines)
-├── 📄 pyproject.toml (346 tokens, 40 lines)
+├── 📄 pyproject.toml (364 tokens, 51 lines)
 │   ├── name: tree_plus
 │   ├── version: N/A
 │   ├── description: A `tree` util enhanced with tokens, lines, and components.
@@ -195,9 +198,40 @@ tree_plus -i tests
 │   ├──     tomli
 │   ├──     natsort>=7.1
 │   ├──     fake_useragent
-│   └──     bs4
+│   ├──     bs4
+│   ├──     func_timeout
+│   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (31,733 tokens, 3,120 lines)
+├── 📄 README.md (31,889 tokens, 3,142 lines)
+│   ├── TODO: research various kwargs for huggingface
+│   ├── TODO: fix this path
+│   ├── TODO: fill in these stubs
+│   ├── TODO: fix this path
+│   ├── TODO: fill in these stubs
+│   ├── TODO: show off how well we parse_todo
+│   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR
+│   ├── NOTE: you can customize the color here
+│   ├── TODO: clarify subtree types
+│   ├── NOTE: sometimes we need wider trees
+│   ├── TODO: research
+│   ├── NOTE: here we add directly input file_paths to the amortized glob matches
+│   ├── TODO: decide if we apply glob patterns to glob paths
+│   ├── NOTE: switching these eager tallies to lazy properties
+│   ├── TODO: decide between glob and rglob in _from_glob
+│   ├── TODO: decide if we need to re
+│   ├── TODO: clarify ignore in glob seed context
+│   ├── TODO: re
+│   ├── NOTE: this is only to satisfy the type checker
+│   ├── TODO: incorporate gitignore
+│   ├── BUG: HTML tree doesn
+│   ├── TODO: Fix HTML in TreePlus
+│   ├── BUG: this repeatedly finds tags
+│   ├── BUG: catastrophic backtracking in some c files
+│   ├── TODO: update parse_objective_c to avoid fixed unrolling
+│   ├── TODO: re
+│   ├── NOTE: no point in the answers since there
+│   ├── TODO: This todo tests parse_todo
+│   ├── TODO: This todo tests parse_todo
 │   ├── # Tree Plus
 │   ├── ## Usage
 │   ├── ## Example Output:
@@ -210,11 +244,13 @@ tree_plus -i tests
 │   ├── ### Alias Usage
 │   ├── ## Library Usage:
 │   ├── ## Moar Languages
+│   ├── ### Currently Tested Languages:
+│   ├── ### Without the -c "Concise" Flag:
 │   ├── ## Got Globs?
 │   ├── ## Languages Todo:
 │   ├── ## Oppose Unfair Business Practices
 │   └── ## License
-├── 📄 tree_plus_cli.py (1,821 tokens, 280 lines)
+├── 📄 tree_plus_cli.py (1,890 tokens, 292 lines)
 │   └── def main(
 │           glob: Optional[Tuple],
 │           paths: Optional[Union[str, Tuple]],
@@ -231,6 +267,7 @@ tree_plus -i tests
 │           links: bool,
 │           tiktoken: bool,
 │           tokenizer_name: Optional,
+│           timeout: Optional,
 │       )
 ├── 📁 tree_plus_programs (1 folder, 4 files) 
 │   ├── 📄 hello_tree_plus.py (545 tokens, 80 lines)
@@ -243,7 +280,7 @@ tree_plus -i tests
 │   │           happen: tuple,
 │   │       ) -> ItHappened
 │   ├── 📄 rewrite.py (4,017 tokens, 471 lines)
-│   │   ├── TODO (Line 375): research various kwargs for huggingface / torch performance
+│   │   ├── TODO: research various kwargs for huggingface
 │   │   ├── class ModelName(Enum)
 │   │   ├── class ModelContext(Enum)
 │   │   ├── def rewrite_module(
@@ -261,8 +298,8 @@ tree_plus -i tests
 │   │           output_path: Optional,
 │   │       )
 │   ├── 📄 stub_tests.py (1,348 tokens, 180 lines)
-│   │   ├── TODO (Line 124): fix this path",
-│   │   ├── TODO (Line 126): fill in these stubs:",
+│   │   ├── TODO: fix this path
+│   │   ├── TODO: fill in these stubs
 │   │   ├── @lru_cache
 │   │   │   def remove_decorators(component: str) -> str
 │   │   ├── def make_import_path(path: Path) -> str
@@ -279,8 +316,8 @@ tree_plus -i tests
 │   │   ├── class Vehicle
 │   │   └── class Car(Vehicle)
 │   └── 📄 test_stub_tests.py (79 tokens, 20 lines)
-│       ├── TODO (Line 1): fix this path
-│       ├── TODO (Line 3): fill in these stubs:
+│       ├── TODO: fix this path
+│       ├── TODO: fill in these stubs
 │       ├── def test_remove_decorators()
 │       ├── def test_make_import_path()
 │       ├── def test_stub_tests()
@@ -288,8 +325,8 @@ tree_plus -i tests
 │       ├── def test_class_vehicle()
 │       └── def test_class_car()
 └── 📁 tree_plus_src (2 folders, 10 files) 
-    ├── 📄 count_tokens_lines.py (1,307 tokens, 209 lines)
-    │   ├── TODO (Line 16): show off how well we parse_todo!
+    ├── 📄 count_tokens_lines.py (1,316 tokens, 209 lines)
+    │   ├── TODO: show off how well we parse_todo
     │   ├── @dataclass(frozen=True)
     │   │   class TokenLineCount
     │   ├── class TokenizerName(Enum)
@@ -315,7 +352,7 @@ tree_plus -i tests
     │   ├── def enable_debug()
     │   └── @contextmanager
     │       def debug_disabled()
-    ├── 📄 deploy.py (1,999 tokens, 224 lines)
+    ├── 📄 deploy.py (2,058 tokens, 230 lines)
     │   ├── def extract(path: Optional = None) -> str
     │   ├── def load(content: Optional = None, path: Optional = None)
     │   ├── def extract_version(source_path: Optional = None) -> Tuple
@@ -332,20 +369,18 @@ tree_plus -i tests
     │   │   )
     │   ├── def update_readme(source_path: Optional = None, sink_path: Optional = None)
     │   └── def main()
-    ├── 📄 engine.py (11,807 tokens, 1,402 lines)
-    │   ├── TODO (Line 57): MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
-    │   ├── NOTE (Line 85): you can customize the color here, and we could make this functional
-    │   ├── TODO (Line 122): clarify subtree types -- make this a DataFrame tbh
-    │   ├── NOTE (Line 388): sometimes we need wider trees (deploy)
-    │   ├── TODO (Line 714): research & decide about globs as paths instead of as filters
-    │   ├── NOTE (Line 750): here we add directly input file_paths to the amortized glob matches
-    │   ├── TODO (Line 848): decide if we apply glob patterns to glob paths (currently NO)
-    │   ├── NOTE (Line 872): switching these eager tallies to lazy properties
-    │   ├── TODO (Line 900): decide between glob and rglob in _from_glob
-    │   ├── TODO (Line 907): decide if we need to re-amortize the globs in the glob seed
-    │   ├── TODO (Line 909): clarify ignore in glob seed context, skipping for now
-    │   ├── TODO (Line 987): re-enable func_timeout for parsing
-    │   ├── NOTE (Line 1193): this is only to satisfy the type checker
+    ├── 📄 engine.py (11,835 tokens, 1,417 lines)
+    │   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR
+    │   ├── NOTE: you can customize the color here
+    │   ├── TODO: clarify subtree types
+    │   ├── NOTE: sometimes we need wider trees
+    │   ├── TODO: research
+    │   ├── NOTE: directly add input file_paths to the amortized glob matches
+    │   ├── TODO: decide to apply glob patterns to glob paths
+    │   ├── TODO: decide between glob and rglob in _from_glob
+    │   ├── TODO: decide if we need to re
+    │   ├── TODO: clarify ignore in glob seed context
+    │   ├── NOTE: this is only to satisfy the type checker
     │   ├── class Category(Enum)
     │   ├── @dataclass
     │   │   class TreePlus
@@ -404,7 +439,12 @@ tree_plus -i tests
     │   │       guide_style: str = LINK_COLOR,
     │   │       highlight: bool = True,
     │   │   ) -> Tree
-    │   ├── def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree
+    │   ├── def into_rich_tree(
+    │   │       *,
+    │   │       root: Optional[TreePlus] = None,
+    │   │       timeout=INTO_RICH_TREE_TIMEOUT_SECONDS,
+    │   │   ) -> Tree
+    │   ├── def _into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree
     │   ├── def is_url(x: str) -> bool
     │   ├── @lru_cache
     │   │   def categorize(
@@ -485,7 +525,7 @@ tree_plus -i tests
     │   │       file_path: Path,
     │   │       syntax_highlighting: bool = False,
     │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
-    │   │       max_tokens: int = 1_000_000_000,
+    │   │       max_tokens: int = MAX_TOKENS,
     │   │       concise: bool = False,
     │   │   ) -> TreePlus
     │   ├── def _from_url(
@@ -537,15 +577,15 @@ tree_plus -i tests
     │   │       item_soup: BeautifulSoup,
     │   │       recursive: bool = True,
     │   │   ) -> List
-    │   ├── def ordered_list_from(l: Iterable) -> List
+    │   ├── def ordered_list_from(ordered_list: Iterable) -> List
     │   ├── def _get_lexer(file_path: Path) -> str
     │   └── def _syntax_highlight(
     │           *,
     │           file_path: Path,
     │           components: List,
     │       ) -> Union[List[Syntax], List]
-    ├── 📄 ignore.py (2,344 tokens, 332 lines)
-    │   ├── TODO (Line 129): incorporate gitignore
+    ├── 📄 ignore.py (2,342 tokens, 332 lines)
+    │   ├── TODO: incorporate gitignore
     │   ├── def _is_all_str(x: Any) -> bool
     │   ├── def can_parse(x) -> bool
     │   ├── @lru_cache
@@ -574,12 +614,15 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (24,967 tokens, 2,768 lines)
-    │   ├── BUG (Line 321): HTML tree doesn't look awesome (yet)
-    │   ├── TODO (Line 322): Fix HTML in TreePlus (How?)
-    │   ├── BUG (Line 358): this repeatedly finds tags, need to avoid repeating ourselves
-    │   ├── BUG (Line 988): catastrophic backtracking in some c files
-    │   ├── TODO (Line 2385): update parse_objective_c to avoid fixed unrolling
+    ├── 📄 parse_file.py (23,773 tokens, 2,668 lines)
+    │   ├── BUG: HTML tree doesn
+    │   ├── TODO: Fix HTML in TreePlus
+    │   ├── BUG: this repeatedly finds tags
+    │   ├── TODO: update parse_objective_c to avoid fixed unrolling
+    │   ├── TODO: update parse_ocaml to avoid forced unrolling
+    │   ├── TODO: fix parse_apl to avoid forced unrolling
+    │   ├── TODO: fix parse_perl to avoid forced unrolling
+    │   ├── def set_regex_timeout(new_timeout: float)
     │   ├── @lru_cache(maxsize=None)
     │   │   def read_file(
     │   │       file_path: str,
@@ -588,69 +631,72 @@ tree_plus -i tests
     │   │   ) -> str
     │   ├── def parse_file(
     │   │       file_path: Union,
-    │   │       contents: Optional = None,
+    │   │       content: Optional = None,
     │   │   ) -> List
-    │   ├── def extract_groups(match: re.Match, named_only: bool = False) -> dict
-    │   ├── def parse_html(contents: str) -> List
+    │   ├── def extract_groups(match: regex.Match, named_only: bool = False) -> dict
+    │   ├── def parse_html(content: str) -> List
     │   ├── def parse_jsonl(content: str) -> List
     │   ├── def process_tag(tag, components) -> Optional
-    │   ├── def components_from_html(contents: str) -> List
+    │   ├── def components_from_html(content: str) -> List
     │   ├── def prettify_tr(component: str) -> str
-    │   ├── def hierarchical_numbering(components)
     │   ├── def assemble_tensorflow_flag(
     │   │       flag_type: str, flag: str, description: Optional[List] = None
     │   │   ) -> str
-    │   ├── def parse_tensorflow_flags(contents: str) -> List
-    │   ├── def parse_rst(contents: str) -> List
-    │   ├── def parse_c(contents: str) -> List
+    │   ├── def parse_tensorflow_flags(
+    │   │       content: str, *, timeout: float = regex_timeout
+    │   │   ) -> List
+    │   ├── def parse_rst(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_c(content: str, *, timeout: float = regex_timeout) -> List
     │   ├── @lru_cache
     │   │   def is_binary_string(data: bytes) -> bool
     │   ├── @lru_cache
     │   │   def is_binary(file_path: str) -> bool
     │   ├── def clean_isabelle_text(content: str) -> str
-    │   ├── def parse_isabelle(contents: str) -> List
-    │   ├── def parse_fortran(contents: str) -> List
-    │   ├── def remove_c_comments(contents: str) -> str
-    │   ├── def parse_ts(contents: str) -> List
-    │   ├── def remove_py_comments(input_string: str) -> str
-    │   ├── def remove_docstrings(source)
-    │   ├── def parse_py(contents: str) -> List
-    │   ├── def parse_rb(contents: str) -> List
-    │   ├── def parse_fsharp(contents: str) -> List
-    │   ├── def parse_tcl(contents: str) -> List
-    │   ├── def parse_erl(contents: str) -> List
-    │   ├── def parse_rs(contents: str) -> List
-    │   ├── def parse_csv(contents: str, max_leaves=11) -> List
-    │   ├── def parse_mathematica(contents: str) -> List
-    │   ├── def parse_r(contents: str) -> List
-    │   ├── def parse_zig(contents: str) -> List
-    │   ├── def parse_hs(contents: str) -> List
-    │   ├── def parse_lisp(content: str) -> List
-    │   ├── def parse_capnp(contents: str) -> List
-    │   ├── def parse_grpc(contents: str) -> List
-    │   ├── def parse_openrpc_json(contents: str) -> List
-    │   ├── def parse_json_rpc(contents: str) -> List
-    │   ├── def parse_graphql(contents: str) -> List
+    │   ├── def parse_isabelle(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_fortran(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def remove_c_comments(content: str, *, timeout: float = regex_timeout) -> str
+    │   ├── def parse_ts(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def remove_py_comments(input_string: str, *, timeout: float = regex_timeout) -> str
+    │   ├── def remove_docstrings(source, *, timeout: float = regex_timeout) -> str
+    │   ├── def parse_py(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_rb(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_fsharp(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_tcl(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_erl(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_rs(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_csv(content: str, max_leaves=11) -> List
+    │   ├── def parse_mathematica(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_r(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_zig(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_hs(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_lisp(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_capnp(content: str) -> List
+    │   ├── def parse_grpc(content: str) -> List
+    │   ├── def parse_openrpc_json(content: str) -> List
+    │   ├── def parse_json_rpc(content: str) -> List
+    │   ├── def parse_graphql(content: str) -> List
     │   ├── def format_dependency(name, details)
-    │   ├── def parse_cargo_toml(contents: str) -> List
-    │   ├── def parse_pyproject_toml(contents: str) -> List
-    │   ├── def parse_lean(lean_content: str) -> List
-    │   ├── def parse_cs(contents: str) -> List
-    │   ├── def parse_tex(tex_content: str) -> List
-    │   ├── def parse_go(contents: str) -> List
-    │   ├── def parse_swift(contents: str) -> List
-    │   ├── def parse_bash(contents: str) -> List
-    │   ├── def parse_d_dot_ts(contents: str) -> List
-    │   ├── def parse_angular_app_module(contents: str) -> List
-    │   ├── def parse_angular_routes(content: str) -> List
-    │   ├── def parse_angular_spec(content: str) -> List
-    │   ├── def parse_environment_ts(contents: str) -> List
-    │   ├── def parse_dot_env(contents: str) -> List
-    │   ├── def parse_requirements_txt(contents: str) -> List
-    │   ├── def parse_json_schema(contents: str) -> List
-    │   ├── def parse_package_json(contents: str) -> List
-    │   ├── def parse_makefile(contents: str) -> List
-    │   ├── def parse_sql(contents: str) -> List
+    │   ├── def parse_cargo_toml(content: str) -> List
+    │   ├── def parse_pyproject_toml(content: str) -> List
+    │   ├── def parse_lean(lean_content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_cs(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_tex(tex_content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_go(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_swift(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_bash(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_d_dot_ts(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_angular_app_module(
+    │   │       content: str, *, timeout: float = regex_timeout
+    │   │   ) -> List
+    │   ├── def parse_angular_routes(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_angular_spec(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_environment_ts(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_dot_env(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_requirements_txt(content: str) -> List
+    │   ├── def parse_json_schema(content: str) -> List
+    │   ├── def parse_package_json(content: str) -> List
+    │   ├── def parse_makefile(content: str) -> List
+    │   ├── def parse_sql(content: str, *, timeout: float = regex_timeout) -> List
     │   ├── def is_openapi_yml(ymls: Tuple) -> bool
     │   ├── def is_k8s_yml(ymls: Tuple) -> bool
     │   ├── def is_ansible_yml(ymls: Tuple) -> bool
@@ -659,35 +705,37 @@ tree_plus -i tests
     │   ├── def parse_k8s(ymls: Tuple) -> List
     │   ├── def parse_ansible(ymls: Tuple) -> List
     │   ├── def parse_openapi_yml(ymls: Tuple) -> List
-    │   ├── def parse_yml(contents: str) -> List
+    │   ├── def parse_yml(content: str) -> List
     │   ├── def parse_db(db_path: str) -> List
-    │   ├── def dedent_components(components: List) -> List
-    │   ├── def parse_cbl(content: str) -> List
-    │   ├── def parse_java(contents: str) -> List
-    │   ├── def parse_jl(contents: str) -> List
-    │   ├── def parse_kt(contents: str) -> List
-    │   ├── def parse_lua(content: str) -> List
-    │   ├── def parse_objective_c(content: str) -> List
-    │   ├── def parse_ocaml(content: str) -> List
-    │   ├── def parse_apl(content: str) -> List
-    │   ├── def parse_perl(content: str) -> List
-    │   ├── def parse_php(content: str) -> List
-    │   ├── def parse_ps1(contents: str) -> List
-    │   ├── def parse_matlab(content: str) -> List
-    │   ├── def parse_scala(contents: str) -> List
-    │   ├── def parse_tf(contents: str) -> List
-    │   ├── def parse_md(content: str) -> List
-    │   ├── def parse_txt(content: str) -> List
-    │   └── def parse_markers(content: str) -> List
+    │   ├── def dedent_components(
+    │   │       components: List, *, timeout: float = regex_timeout
+    │   │   ) -> List
+    │   ├── def parse_cbl(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_java(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_jl(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_kt(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_lua(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_objective_c(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_ocaml(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_apl(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_perl(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_php(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_ps1(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_matlab(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_scala(content: str, timeout: float = regex_timeout) -> List
+    │   ├── def parse_tf(content: str, timeout: float = regex_timeout) -> List
+    │   ├── def parse_md(content: str, *, timeout: float = regex_timeout) -> List
+    │   ├── def parse_txt(content: str, *, timeout: float = regex_timeout) -> List
+    │   └── def parse_markers(content: str, *, timeout: float = regex_timeout) -> List
     ├── 📁 scripts (1 folder, 1 file) 
     │   └── 📄 alias_tree_plus.sh (241 tokens, 30 lines)
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.53"
+    │   └── __version__ = "1.0.54"
     └── 📄 web.py (2,409 tokens, 321 lines)
-        ├── TODO (Line 25): re-enable tree plus web actions
-        ├── NOTE (Line 167): no point in the answers since there's no content
+        ├── TODO: re
+        ├── NOTE: no point in the answers since there
         ├── def create_url(kind: Action, query: str) -> str
         ├── def create_link(kind: Action, query: str) -> str
         ├── def create_wikipedia_url(subterm: str) -> str
@@ -745,8 +793,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.53) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 12,576 line(s), 109,559 token(s) in 0.24 second(s).
+tree_plus v(1.0.54) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,544 line(s), 108,708 token(s) in 0.26 second(s).
 
 ```
 <!-- t1-end -->
@@ -856,6 +904,103 @@ make library_demo
 ### Currently Tested Languages:
 <!-- t6-start -->
 ```sh
+tree_plus -c -i group_todo tests/more_languages
+📁 more_languages (9 folders, 84 files) 
+├── 📁 group1 (1 folder, 11 files) 
+│   ├── 📄 addamt.cobol (441 tokens, 40 lines)
+│   ├── 📄 CUSTOMER-INVOICE.CBL (412 tokens, 60 lines)
+│   ├── 📄 JavaTest.java (578 tokens, 86 lines)
+│   ├── 📄 JuliaTest.jl (381 tokens, 63 lines)
+│   ├── 📄 KotlinTest.kt (974 tokens, 171 lines)
+│   ├── 📄 lesson.cbl (635 tokens, 78 lines)
+│   ├── 📄 LuaTest.lua (83 tokens, 16 lines)
+│   ├── 📄 ObjectiveCTest.m (62 tokens, 16 lines)
+│   ├── 📄 OcamlTest.ml (49 tokens, 12 lines)
+│   ├── 📄 test.js (757 tokens, 154 lines)
+│   └── 📄 test.ts (832 tokens, 165 lines)
+├── 📁 group2 (1 folder, 8 files) 
+│   ├── 📄 apl_test.apl (28 tokens, 5 lines)
+│   ├── 📄 c_test.c (837 tokens, 142 lines)
+│   ├── 📄 go_test.go (179 tokens, 46 lines)
+│   ├── 📄 PerlTest.pl (63 tokens, 20 lines)
+│   ├── 📄 PhpTest.php (70 tokens, 19 lines)
+│   ├── 📄 PowershellTest.ps1 (459 tokens, 89 lines)
+│   ├── 📄 ScalaTest.scala (171 tokens, 40 lines)
+│   └── 📄 test.csv (0 tokens, 0 lines)
+├── 📁 group3 (1 folder, 16 files) 
+│   ├── 📄 bash_test.sh (127 tokens, 22 lines)
+│   ├── 📄 cpp_test.cpp (1,670 tokens, 259 lines)
+│   ├── 📄 csharp_test.cs (957 tokens, 146 lines)
+│   ├── 📄 hallucination.tex (1,633 tokens, 126 lines)
+│   ├── 📄 ruby_test.rb (138 tokens, 37 lines)
+│   ├── 📄 swift_test.swift (469 tokens, 110 lines)
+│   ├── 📄 test.lean (289 tokens, 42 lines)
+│   ├── 📄 test.capnp (117 tokens, 30 lines)
+│   ├── 📄 test.graphql (66 tokens, 21 lines)
+│   ├── 📄 test.proto (142 tokens, 34 lines)
+│   ├── 📄 test.sqlite (0 tokens, 0 lines)
+│   ├── 📄 test_Cargo.toml (119 tokens, 18 lines)
+│   ├── 📄 test_json_rpc_2_0.json (26 tokens, 6 lines)
+│   ├── 📄 test_openapi.yaml (753 tokens, 92 lines)
+│   ├── 📄 test_openrpc.json (225 tokens, 44 lines)
+│   └── 📄 test_pyproject.toml (304 tokens, 39 lines)
+├── 📁 group4 (1 folder, 10 files) 
+│   ├── 📄 erl_test.erl (480 tokens, 68 lines)
+│   ├── 📄 haskell_test.hs (414 tokens, 41 lines)
+│   ├── 📄 mathematica_test.nb (133 tokens, 21 lines)
+│   ├── 📄 matlab_test.m (48 tokens, 12 lines)
+│   ├── 📄 RTest.R (367 tokens, 46 lines)
+│   ├── 📄 rust_test.rs (974 tokens, 188 lines)
+│   ├── 📄 test.zig (397 tokens, 60 lines)
+│   ├── 📄 test_fsharp.fs (92 tokens, 27 lines)
+│   ├── 📄 test_tcl_tk.tcl (54 tokens, 16 lines)
+│   └── 📄 tf_test.tf (202 tokens, 38 lines)
+├── 📁 group5 (1 folder, 19 files) 
+│   ├── 📄 ansible_test.yml (55 tokens, 14 lines)
+│   ├── 📄 app-routing.module.ts (287 tokens, 28 lines)
+│   ├── 📄 app.component.spec.ts (410 tokens, 47 lines)
+│   ├── 📄 app.component.ts (271 tokens, 45 lines)
+│   ├── 📄 app.module.ts (374 tokens, 43 lines)
+│   ├── 📄 checkbox_test.md (176 tokens, 21 lines)
+│   ├── 📄 checkbox_test.txt (257 tokens, 33 lines)
+│   ├── 📄 environment.test.ts (197 tokens, 19 lines)
+│   ├── 📄 hello_world.pyi (22 tokens, 3 lines)
+│   ├── 📄 k8s_test.yaml (140 tokens, 37 lines)
+│   ├── 📄 Makefile (714 tokens, 84 lines)
+│   ├── 📄 requirements_test.txt (29 tokens, 10 lines)
+│   ├── 📄 rust_todo_test.rs (92 tokens, 26 lines)
+│   ├── 📄 sql_test.sql (270 tokens, 51 lines)
+│   ├── 📄 standard-app-routing.module.ts (100 tokens, 16 lines)
+│   ├── 📄 test.env (190 tokens, 25 lines)
+│   ├── 📄 testJsonSchema.json (421 tokens, 48 lines)
+│   ├── 📄 testPackage.json (349 tokens, 43 lines)
+│   └── 📄 tickets.component.ts (7,160 tokens, 903 lines)
+├── 📁 group6 (1 folder, 13 files) 
+│   ├── 📄 catastrophic.c (3,906 tokens, 581 lines)
+│   ├── 📄 cpp_examples_impl.cc (60 tokens, 10 lines)
+│   ├── 📄 cpp_examples_impl.cu (37 tokens, 10 lines)
+│   ├── 📄 cpp_examples_impl.h (22 tokens, 6 lines)
+│   ├── 📄 fractal.thy (1,712 tokens, 147 lines)
+│   ├── 📄 Microsoft.PowerShell_profile.ps1 (3,346 tokens, 497 lines)
+│   ├── 📄 python_complex_class.py (10 tokens, 2 lines)
+│   ├── 📄 ramda__cloneRegExp.js (173 tokens, 9 lines)
+│   ├── 📄 ramda_prop.js (646 tokens, 85 lines)
+│   ├── 📄 tensorflow_flags.h (7,628 tokens, 668 lines)
+│   ├── 📄 test.f (181 tokens, 30 lines)
+│   ├── 📄 torch.rst (60 tokens, 8 lines)
+│   └── 📄 yc.html (9,063 tokens, 169 lines)
+├── 📁 group7 (1 folder, 3 files) 
+│   ├── 📄 absurdly_huge.jsonl (8,347 tokens, 126 lines)
+│   ├── 📄 angular_crud.ts (1,192 tokens, 148 lines)
+│   └── 📄 dataclass.py (186 tokens, 36 lines)
+└── 📁 group_lisp (1 folder, 4 files) 
+    ├── 📄 clojure_test.clj (682 tokens, 85 lines)
+    ├── 📄 LispTest.lisp (25 tokens, 6 lines)
+    ├── 📄 racket_struct.rkt (14 tokens, 1 line)
+    └── 📄 test_scheme.scm (360 tokens, 44 lines)
+
+tree_plus v(1.0.54) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 6,929 line(s), 66,371 token(s) in 0.21 second(s).
 
 ```
 <!-- t6-end -->
@@ -1949,7 +2094,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── cognitojwt
 │   │   └── flask-lambda
 │   ├── 📄 rust_todo_test.rs (92 tokens, 26 lines)
-│   │   ├── TODO (Line 23): This todo tests parse_todo
+│   │   ├── TODO: This todo tests parse_todo
 │   │   ├── enum Color
 │   │   ├── struct Point
 │   │   ├── trait Drawable
@@ -2093,6 +2238,7 @@ tree_plus -i group_todo tests/more_languages
 │       └── const renderQRCode = async (text: String): Promise<string> =>
 ├── 📁 group6 (1 folder, 13 files) 
 │   ├── 📄 catastrophic.c (3,906 tokens, 581 lines)
+│   │   ├── TODO: technically we should build this module without AVX support
 │   │   ├── struct Point
 │   │   ├── struct Point getOrigin()
 │   │   ├── float mul_two_floats(float x1, float x2)
@@ -2603,8 +2749,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.53) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 6,929 line(s), 66,371 token(s) in 0.63 second(s).
+tree_plus v(1.0.54) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 6,929 line(s), 66,371 token(s) in 0.73 second(s).
 
 ```
 <!-- t2-end -->
@@ -2957,7 +3103,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   ├──    cognitoAppClientId
 │   │   └──    apiurl
 │   ├── 📄 rust_todo_test.rs (92 tokens, 26 lines)
-│   │   ├── TODO (Line 23): This todo tests parse_todo
+│   │   ├── TODO: This todo tests parse_todo
 │   │   ├── enum Color
 │   │   ├── struct Point
 │   │   ├── trait Drawable
@@ -3094,8 +3240,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.53) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,090 line(s), 14,928 token(s) in 0.17 second(s).
+tree_plus v(1.0.54) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,090 line(s), 14,928 token(s) in 0.21 second(s).
 
 ```
 <!-- t3-end -->
@@ -3124,7 +3270,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.53) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.54) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.04 second(s).
 
 ```
