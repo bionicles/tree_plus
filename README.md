@@ -94,7 +94,7 @@ Options:
                                'gpt4o' works
   -h, -H, --help               Show this message and exit.
 
-  v(1.0.52) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.53) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -197,8 +197,9 @@ tree_plus -i tests
 │   ├──     fake_useragent
 │   └──     bs4
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (31,319 tokens, 3,078 lines)
+├── 📄 README.md (31,733 tokens, 3,120 lines)
 │   ├── # Tree Plus
+│   ├── ## Usage
 │   ├── ## Example Output:
 │   ├── - [ ] Demonstrate Parsed Checkboxes
 │   ├── ## Start Quick!
@@ -573,12 +574,12 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (24,916 tokens, 2,765 lines)
+    ├── 📄 parse_file.py (24,967 tokens, 2,768 lines)
     │   ├── BUG (Line 321): HTML tree doesn't look awesome (yet)
     │   ├── TODO (Line 322): Fix HTML in TreePlus (How?)
     │   ├── BUG (Line 358): this repeatedly finds tags, need to avoid repeating ourselves
     │   ├── BUG (Line 988): catastrophic backtracking in some c files
-    │   ├── TODO (Line 2382): update parse_objective_c to avoid fixed unrolling
+    │   ├── TODO (Line 2385): update parse_objective_c to avoid fixed unrolling
     │   ├── @lru_cache(maxsize=None)
     │   │   def read_file(
     │   │       file_path: str,
@@ -683,7 +684,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.52"
+    │   └── __version__ = "1.0.53"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO (Line 25): re-enable tree plus web actions
         ├── NOTE (Line 167): no point in the answers since there's no content
@@ -744,8 +745,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.52) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 12,531 line(s), 109,094 token(s) in 0.24 second(s).
+tree_plus v(1.0.53) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,576 line(s), 109,559 token(s) in 0.24 second(s).
 
 ```
 <!-- t1-end -->
@@ -1726,7 +1727,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── greet.Person <- function
 │   │   ├── ensure_between = function
 │   │   └── run_intermediate_annealing_process = function
-│   ├── 📄 rust_test.rs (786 tokens, 165 lines)
+│   ├── 📄 rust_test.rs (974 tokens, 188 lines)
 │   │   ├── enum Days
 │   │   ├── struct Point
 │   │   ├── impl Point
@@ -1757,11 +1758,11 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──     mod engine
 │   │   ├── pub fn flow<S1, S2, S3, S4, E, T, L>(
 │   │   │       source: S1,
-│   │   │       extractor: E, 
-│   │   │       inbox: S2, 
-│   │   │       transformer: T, 
-│   │   │       outbox: S3, 
-│   │   │       loader: L, 
+│   │   │       extractor: E,
+│   │   │       inbox: S2,
+│   │   │       transformer: T,
+│   │   │       outbox: S3,
+│   │   │       loader: L,
 │   │   │       sink: &mut S4,
 │   │   │   ) -> Result<(), Box<dyn Error>>
 │   │   │   where
@@ -1782,9 +1783,16 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
 │   │   ├──     fn transform(&self, input: T) -> T
 │   │   ├── fn main()
-│   │   └── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
-│   │       where
-│   │           Bion: Cool
+│   │   ├── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
+│   │   │   where
+│   │   │       Bion: Cool
+│   │   ├── #
+│   │   │   macro_rules! unit
+│   │   └──             fn insert(
+│   │                       &mut self,
+│   │                       key: (),
+│   │                       value: $unit_dtype,
+│   │                   ) -> Result<Option<$unit_dtype>, ETLError>
 │   ├── 📄 test.zig (397 tokens, 60 lines)
 │   │   ├── pub fn add(a: i32, b: i32) i32
 │   │   ├── test "add function"
@@ -2595,8 +2603,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.52) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 6,906 line(s), 66,183 token(s) in 0.62 second(s).
+tree_plus v(1.0.53) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 6,929 line(s), 66,371 token(s) in 0.63 second(s).
 
 ```
 <!-- t2-end -->
@@ -2820,7 +2828,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │           ( [G.Directive Variable],
 │   │             G.SelectionSet fragments Variable
 │   │           )
-│   ├── 📄 rust_test.rs (786 tokens, 165 lines)
+│   ├── 📄 rust_test.rs (974 tokens, 188 lines)
 │   │   ├── enum Days
 │   │   ├── struct Point
 │   │   ├── impl Point
@@ -2851,11 +2859,11 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   ├──     mod engine
 │   │   ├── pub fn flow<S1, S2, S3, S4, E, T, L>(
 │   │   │       source: S1,
-│   │   │       extractor: E, 
-│   │   │       inbox: S2, 
-│   │   │       transformer: T, 
-│   │   │       outbox: S3, 
-│   │   │       loader: L, 
+│   │   │       extractor: E,
+│   │   │       inbox: S2,
+│   │   │       transformer: T,
+│   │   │       outbox: S3,
+│   │   │       loader: L,
 │   │   │       sink: &mut S4,
 │   │   │   ) -> Result<(), Box<dyn Error>>
 │   │   │   where
@@ -2876,9 +2884,16 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   ├── impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
 │   │   ├──     fn transform(&self, input: T) -> T
 │   │   ├── fn main()
-│   │   └── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
-│   │       where
-│   │           Bion: Cool
+│   │   ├── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
+│   │   │   where
+│   │   │       Bion: Cool
+│   │   ├── #
+│   │   │   macro_rules! unit
+│   │   └──             fn insert(
+│   │                       &mut self,
+│   │                       key: (),
+│   │                       value: $unit_dtype,
+│   │                   ) -> Result<Option<$unit_dtype>, ETLError>
 │   └── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │       ├── module TestFSharp
 │       ├── type Person = {
@@ -3079,8 +3094,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.52) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,067 line(s), 14,740 token(s) in 0.16 second(s).
+tree_plus v(1.0.53) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,090 line(s), 14,928 token(s) in 0.17 second(s).
 
 ```
 <!-- t3-end -->
@@ -3109,7 +3124,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.52) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.53) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.04 second(s).
 
 ```
