@@ -11,7 +11,7 @@ import regex
 from tree_plus_src.debug import debug_print
 
 global regex_timeout
-regex_timeout = 0.3  # seconds
+regex_timeout = 0.6  # seconds
 
 BINARY_CHECK_SIZE = 1024
 TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})

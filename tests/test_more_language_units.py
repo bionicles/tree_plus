@@ -24,6 +24,9 @@ C_EXPECTATION = [
     # "    char name[50];",
     "typedef struct PersonA",
     # "    char name[50];",
+    # "    const char *hostsocket;",
+    # "    int tls;",
+    # "    struct cliSSLconfig sslconfig;",
     "int main()",
     "int* getArrayStart(int arr[], int size)",
     """long complexFunctionWithMultipleArguments(
