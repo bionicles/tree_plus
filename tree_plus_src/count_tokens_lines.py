@@ -17,7 +17,7 @@ encoder = None
 
 
 # TODO: show off how well we parse_todo!
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)  # , slots=True) # slots added py310
 class TokenLineCount:
     n_tokens: int = 0
     n_lines: int = 0
