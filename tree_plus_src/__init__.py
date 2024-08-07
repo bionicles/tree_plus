@@ -20,11 +20,10 @@ from .ignore import (  # noqa F401
 )
 
 from .parse_file import (
-    regex_timeout,
+    DEFAULT_REGEX_TIMEOUT,
     parse_file,
     parse_markers,
     extract_groups,
-    set_regex_timeout,
 )
 from .count_tokens_lines import (
     TokenLineCount,

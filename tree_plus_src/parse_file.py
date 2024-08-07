@@ -6,12 +6,12 @@ import json
 import os
 
 from bs4 import BeautifulSoup
+from func_timeout import FunctionTimedOut
 import regex
 
 from tree_plus_src.debug import debug_print
 
-global regex_timeout
-regex_timeout = 0.6  # seconds
+DEFAULT_REGEX_TIMEOUT = 0.7  # seconds
 
 BINARY_CHECK_SIZE = 1024
 TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
@@ -34,10 +34,11 @@ MATHEMATICA_EXTENSIONS = {".nb", ".wl"}
 PYTHON_EXTENSIONS = {".py", ".pyi"}
 
 
-def set_regex_timeout(new_timeout: float):
-    global regex_timeout
-    regex_timeout = new_timeout
-    print(f"{regex_timeout=}")
+# # set_regex_timeout appears not to work, just pass the argument
+# def set_regex_timeout(new_timeout: float):
+#     global regex_timeout
+#     regex_timeout = new_timeout
+#     print(f"{regex_timeout=}")
 
 
 @lru_cache(maxsize=None)
@@ -72,185 +73,205 @@ def read_file(
 def parse_file(
     file_path: Union[str, Path],
     content: Optional[str] = None,
+    regex_timeout: Optional[float] = None,
 ) -> List[str]:
     "Parse a file and return a List[str] of its major components."
     # always convert to str since this was built on 'os', not pathlib
-    debug_print(f"parse_file: {file_path=}")
-    if isinstance(file_path, Path):
-        file_path = str(file_path)
-    base_file_path, file_extension = os.path.splitext(file_path)
-    file_name = os.path.basename(base_file_path)
-    file_extension = file_extension.lower()
-    debug_print(f"parse_file: {file_path=} {file_name=} {file_extension=}")
-    components = []
+    try:
+        debug_print(f"parse_file: {file_path=}")
+        if isinstance(file_path, Path):
+            file_path = str(file_path)
+        base_file_path, file_extension = os.path.splitext(file_path)
+        file_name = os.path.basename(base_file_path)
+        file_extension = file_extension.lower()
+        debug_print(f"parse_file: {file_path=} {file_name=} {file_extension=}")
+        components = []
 
-    # handle sqlite databases before trying to open the file
-    if file_extension == ".db" or file_extension == ".sqlite":
-        return parse_db(file_path)
+        # handle sqlite databases before trying to open the file
+        if file_extension == ".db" or file_extension == ".sqlite":
+            return parse_db(file_path)
 
-    # skip reading binary files
-    if not content and is_binary(file_path):
-        return components
+        # skip reading binary files
+        if not content and is_binary(file_path):
+            return components
 
-    # decide how many lines to read, don't need so many for big data files!
-    n_lines = None
-    if file_extension == ".csv":
-        n_lines = 3
-    elif file_extension == ".jsonl":
-        n_lines = 2
+        # decide how many lines to read, don't need so many for big data files!
+        n_lines = None
+        if file_extension == ".csv":
+            n_lines = 3
+        elif file_extension == ".jsonl":
+            n_lines = 2
 
-    if content is None:
-        debug_print("reading file because no content given")
-        content = read_file(file_path, n_lines=n_lines)
-    else:
-        debug_print(content)
-        content = content
-
-    # just once
-    in_tensorflow = "tensorflow" in file_path
-
-    if file_extension in JS_EXTENSIONS:
-        if file_path.endswith(".d.ts"):
-            components = parse_d_dot_ts(content)
+        if content is None:
+            debug_print("reading file because no content given")
+            content = read_file(file_path, n_lines=n_lines)
         else:
-            components = parse_ts(content)
-            # angular here
-            if "spec.ts" in file_path:
-                components = parse_angular_spec(content)
-            if "app-routing.module" in file_path:
-                components = parse_angular_routes(content) + components
-            elif "app.module" in file_path:
-                components = parse_angular_app_module(content) + components
-            elif "environment" == file_name or "environment." in file_name:  # paranoid
-                components = parse_environment_ts(content)
-    elif file_extension in PYTHON_EXTENSIONS:
-        components = parse_py(content)
-        if isinstance(components, SyntaxError):
-            components = [f"SyntaxError: {components}"]
-    elif file_extension == ".md":
-        components = parse_md(content)
-    elif file_extension == ".rst":
-        components = parse_rst(content)
-    elif file_extension == ".json":
-        if "package.json" in file_path.lower():
-            components = parse_package_json(content)
-        elif "$schema" in content:  # not great!
-            components = parse_json_schema(content)
-        elif 'jsonrpc": "2' in content:
-            components = parse_json_rpc(content)
-        elif 'openrpc": "' in content:
-            components = parse_openrpc_json(content)
-    elif file_extension in (".yml", ".yaml"):
-        components = parse_yml(content)
-    # elif file_extension == ".c":
-    #     components = parse_c(content)
-    # components = func_timeout(1, parse_c, (content,))
-    elif file_extension in C_EXTENSIONS:
-        # special case: handling flags
-        if in_tensorflow and file_extension in (".cc", ".h") and "flags" in file_name:
-            components = parse_tensorflow_flags(content)
-            more_components = parse_c(content)
-            components.extend(more_components)
-        else:
-            components = parse_c(content)
-    elif file_extension == ".rs":
-        components = parse_rs(content)
-    elif file_extension == ".php":
-        components = parse_php(content)
-    elif file_extension == ".jsonl":
-        components = parse_jsonl(content)
-    elif file_extension == ".kt":
-        components = parse_kt(content)
-    elif file_extension == ".swift":
-        components = parse_swift(content)
-    elif file_extension == ".go":
-        components = parse_go(content)
-    elif file_extension == ".sh":
-        components = parse_bash(content)
-    elif file_extension == ".ps1":
-        components = parse_ps1(content)
-    elif file_extension == ".zig":
-        components = parse_zig(content)
-    elif file_extension == ".rb":
-        components = parse_rb(content)
-    elif file_name == "Makefile":
-        components = parse_makefile(content)
-    elif file_extension == ".sql":
-        components = parse_sql(content)
-    elif file_extension == ".env" or file_name.startswith(".env"):
-        components = parse_dot_env(content)
-    elif file_extension == ".txt":
-        if "requirements" in file_name:
-            components = parse_requirements_txt(content)
-        else:
-            components = parse_txt(content)
-    elif file_extension == ".graphql":
-        components = parse_graphql(content)
-    elif file_extension == ".cs":
-        components = parse_cs(content)
-    elif file_extension == ".jl":
-        components = parse_jl(content)
-    elif file_extension == ".scala":
-        components = parse_scala(content)
-    elif file_extension == ".java":
-        components = parse_java(content)
-    elif file_path.endswith("Cargo.toml"):
-        components = parse_cargo_toml(content)
-    elif file_path.endswith("pyproject.toml"):
-        components = parse_pyproject_toml(content)
-    elif file_extension == ".csv":
-        components = parse_csv(content)
-    elif file_extension == ".pl":
-        components = parse_perl(content)
-    elif file_extension == ".hs":
-        components = parse_hs(content)
-    elif file_extension == ".fs":
-        components = parse_fsharp(content)
-    elif file_extension in LISP_EXTENSIONS:
-        components = parse_lisp(content)
-    elif file_extension in {".erl", ".hrl"}:
-        components = parse_erl(content)
-    elif file_extension == ".capnp":
-        components = parse_capnp(content)
-    elif file_extension == ".proto":
-        components = parse_grpc(content)
-    elif file_extension == ".tex":
-        components = parse_tex(content)
-    elif file_extension == ".lean":
-        components = parse_lean(content)
-    elif file_extension in FORTRAN_EXTENSIONS:
-        components = parse_fortran(content)
-    elif file_extension == ".tf":
-        components = parse_tf(content)
-    elif file_extension == ".thy":
-        components = parse_isabelle(content)
-    elif file_extension == ".lua":
-        components = parse_lua(content)
-    elif file_extension == ".tcl":
-        components = parse_tcl(content)
-    elif file_extension == ".m":
-        if "@interface" in content or "@implementation" in content:
-            components = parse_objective_c(content)
-        elif "classdef" in content or "methods" in content:
-            components = parse_matlab(content)
-    elif file_extension.lower() == ".r":
-        components = parse_r(content)
-    elif file_extension.lower() in MATHEMATICA_EXTENSIONS:
-        components = parse_mathematica(content)
-    elif file_extension == ".matlab":
-        components = parse_matlab(content)
-    elif file_extension == ".ml":
-        components = parse_ocaml(content)
-    elif file_extension.lower() in COBOL_EXTENSIONS:
-        components = parse_cbl(content)
-    elif file_extension == ".apl":
-        components = parse_apl(content)
-    elif file_extension == ".html":
-        components = parse_html(content)
+            debug_print(content)
+            content = content
 
-    bugs_todos_and_notes = parse_markers(content)
-    total_components = bugs_todos_and_notes + components
-    return total_components
+        _regex_timeout = DEFAULT_REGEX_TIMEOUT
+        if regex_timeout is not None and regex_timeout > 0:
+            _regex_timeout = regex_timeout
+
+        # just once
+        in_tensorflow = "tensorflow" in file_path
+
+        if file_extension in JS_EXTENSIONS:
+            if file_path.endswith(".d.ts"):
+                components = parse_d_dot_ts(content, timeout=_regex_timeout)
+            else:
+                components = parse_ts(content, timeout=_regex_timeout)
+                # angular here
+                if "spec.ts" in file_path:
+                    components = parse_angular_spec(content, timeout=_regex_timeout)
+                if "app-routing.module" in file_path:
+                    components = (
+                        parse_angular_routes(content, timeout=_regex_timeout)
+                        + components
+                    )
+                elif "app.module" in file_path:
+                    components = (
+                        parse_angular_app_module(content, timeout=_regex_timeout)
+                        + components
+                    )
+                elif (
+                    "environment" == file_name or "environment." in file_name
+                ):  # paranoid
+                    components = parse_environment_ts(content, timeout=_regex_timeout)
+        elif file_extension in PYTHON_EXTENSIONS:
+            components = parse_py(content, timeout=_regex_timeout)
+            if isinstance(components, SyntaxError):
+                components = [f"SyntaxError: {components}"]
+        elif file_extension == ".md":
+            components = parse_md(content, timeout=_regex_timeout)
+        elif file_extension == ".rst":
+            components = parse_rst(content, timeout=_regex_timeout)
+        elif file_extension == ".json":
+            if "package.json" in file_path.lower():
+                components = parse_package_json(content)
+            elif "$schema" in content:  # not great!
+                components = parse_json_schema(content)
+            elif 'jsonrpc": "2' in content:
+                components = parse_json_rpc(content)
+            elif 'openrpc": "' in content:
+                components = parse_openrpc_json(content)
+        elif file_extension in (".yml", ".yaml"):
+            components = parse_yml(content)
+        # elif file_extension == ".c":
+        #     components = parse_c(content, timeout=_regex_timeout)
+        # components = func_timeout(1, parse_c, (content,))
+        elif file_extension in C_EXTENSIONS:
+            # special case: handling flags
+            if (
+                in_tensorflow
+                and file_extension in (".cc", ".h")
+                and "flags" in file_name
+            ):
+                components = parse_tensorflow_flags(content, timeout=_regex_timeout)
+                more_components = parse_c(content, timeout=_regex_timeout)
+                components.extend(more_components)
+            else:
+                components = parse_c(content, timeout=_regex_timeout)
+        elif file_extension == ".rs":
+            components = parse_rs(content, timeout=_regex_timeout)
+        elif file_extension == ".php":
+            components = parse_php(content, timeout=_regex_timeout)
+        elif file_extension == ".jsonl":
+            components = parse_jsonl(content)
+        elif file_extension == ".kt":
+            components = parse_kt(content, timeout=_regex_timeout)
+        elif file_extension == ".swift":
+            components = parse_swift(content, timeout=_regex_timeout)
+        elif file_extension == ".go":
+            components = parse_go(content, timeout=_regex_timeout)
+        elif file_extension == ".sh":
+            components = parse_bash(content, timeout=_regex_timeout)
+        elif file_extension == ".ps1":
+            components = parse_ps1(content, timeout=_regex_timeout)
+        elif file_extension == ".zig":
+            components = parse_zig(content, timeout=_regex_timeout)
+        elif file_extension == ".rb":
+            components = parse_rb(content, timeout=_regex_timeout)
+        elif file_name == "Makefile":
+            components = parse_makefile(content)
+        elif file_extension == ".sql":
+            components = parse_sql(content, timeout=_regex_timeout)
+        elif file_extension == ".env" or file_name.startswith(".env"):
+            components = parse_dot_env(content, timeout=_regex_timeout)
+        elif file_extension == ".txt":
+            if "requirements" in file_name:
+                components = parse_requirements_txt(content)
+            else:
+                components = parse_txt(content, timeout=_regex_timeout)
+        elif file_extension == ".graphql":
+            components = parse_graphql(content)
+        elif file_extension == ".cs":
+            components = parse_cs(content, timeout=_regex_timeout)
+        elif file_extension == ".jl":
+            components = parse_jl(content, timeout=_regex_timeout)
+        elif file_extension == ".scala":
+            components = parse_scala(content, timeout=_regex_timeout)
+        elif file_extension == ".java":
+            components = parse_java(content, timeout=_regex_timeout)
+        elif file_path.endswith("Cargo.toml"):
+            components = parse_cargo_toml(content)
+        elif file_path.endswith("pyproject.toml"):
+            components = parse_pyproject_toml(content)
+        elif file_extension == ".csv":
+            components = parse_csv(content)
+        elif file_extension == ".pl":
+            components = parse_perl(content, timeout=_regex_timeout)
+        elif file_extension == ".hs":
+            components = parse_hs(content, timeout=_regex_timeout)
+        elif file_extension == ".fs":
+            components = parse_fsharp(content, timeout=_regex_timeout)
+        elif file_extension in LISP_EXTENSIONS:
+            components = parse_lisp(content, timeout=_regex_timeout)
+        elif file_extension in {".erl", ".hrl"}:
+            components = parse_erl(content, timeout=_regex_timeout)
+        elif file_extension == ".capnp":
+            components = parse_capnp(content)
+        elif file_extension == ".proto":
+            components = parse_grpc(content)
+        elif file_extension == ".tex":
+            components = parse_tex(content, timeout=_regex_timeout)
+        elif file_extension == ".lean":
+            components = parse_lean(content, timeout=_regex_timeout)
+        elif file_extension in FORTRAN_EXTENSIONS:
+            components = parse_fortran(content, timeout=_regex_timeout)
+        elif file_extension == ".tf":
+            components = parse_tf(content, timeout=_regex_timeout)
+        elif file_extension == ".thy":
+            components = parse_isabelle(content, timeout=_regex_timeout)
+        elif file_extension == ".lua":
+            components = parse_lua(content, timeout=_regex_timeout)
+        elif file_extension == ".tcl":
+            components = parse_tcl(content, timeout=_regex_timeout)
+        elif file_extension == ".m":
+            if "@interface" in content or "@implementation" in content:
+                components = parse_objective_c(content, timeout=_regex_timeout)
+            elif "classdef" in content or "methods" in content:
+                components = parse_matlab(content, timeout=_regex_timeout)
+        elif file_extension.lower() == ".r":
+            components = parse_r(content, timeout=_regex_timeout)
+        elif file_extension.lower() in MATHEMATICA_EXTENSIONS:
+            components = parse_mathematica(content, timeout=_regex_timeout)
+        elif file_extension == ".matlab":
+            components = parse_matlab(content, timeout=_regex_timeout)
+        elif file_extension == ".ml":
+            components = parse_ocaml(content, timeout=_regex_timeout)
+        elif file_extension.lower() in COBOL_EXTENSIONS:
+            components = parse_cbl(content, timeout=_regex_timeout)
+        elif file_extension == ".apl":
+            components = parse_apl(content, timeout=_regex_timeout)
+        elif file_extension == ".html":
+            components = parse_html(content)
+
+        bugs_todos_and_notes = parse_markers(content, timeout=_regex_timeout)
+        total_components = bugs_todos_and_notes + components
+        return total_components
+    except FunctionTimedOut:
+        return []
 
 
 def extract_groups(match: regex.Match, named_only: bool = False) -> dict:
@@ -400,7 +421,7 @@ def assemble_tensorflow_flag(
 
 
 def parse_tensorflow_flags(
-    content: str, *, timeout: float = regex_timeout
+    content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
 ) -> List[str]:
     debug_print("parse_tensorflow_flags")
     pattern = regex.compile(
@@ -454,7 +475,7 @@ def parse_tensorflow_flags(
     return components
 
 
-def parse_rst(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_rst(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_rst")
     pattern = regex.compile(
         r"^(?P<rst_header>(?P<content>.*)$\s(?P<line>(?P<subheading>-+)|(?P<heading>=+))(?=$))",
@@ -492,7 +513,7 @@ def parse_rst(content: str, *, timeout: float = regex_timeout) -> List[str]:
 
 
 # refactor with newer regex learning to cover more and avoid catastrophic backtracking
-def parse_c(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_cpp")
     content = remove_c_comments(content)
 
@@ -621,7 +642,9 @@ def clean_isabelle_text(content: str) -> str:
     return string.replace('"', "'").replace("'", '"')
 
 
-def parse_isabelle(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_isabelle(
+    content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
+) -> List[str]:
     from tree_plus_src.isabelle_symbols import replace_isabelle_symbols
 
     debug_print("parse_isabelle")
@@ -673,7 +696,7 @@ def parse_isabelle(content: str, *, timeout: float = regex_timeout) -> List[str]
     return components
 
 
-def parse_fortran(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_fortran(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_fortran")
 
     # remove comments
@@ -716,7 +739,7 @@ def parse_fortran(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def remove_c_comments(content: str, *, timeout: float = regex_timeout) -> str:
+def remove_c_comments(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> str:
     c_comment_pattern = regex.compile(
         r"(\s)*//.*(\s*,\s*|\s*\))?$|\s*/\*.*?\*/",
         regex.MULTILINE,
@@ -725,7 +748,7 @@ def remove_c_comments(content: str, *, timeout: float = regex_timeout) -> str:
     return c_comment_pattern.sub("", content, timeout=timeout)
 
 
-def parse_ts(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_ts(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_ts")
     content = remove_c_comments(content, timeout=timeout)
 
@@ -807,7 +830,9 @@ def parse_ts(content: str, *, timeout: float = regex_timeout) -> List[str]:
 # Define the regular expression pattern for comments
 
 
-def remove_py_comments(input_string: str, *, timeout: float = regex_timeout) -> str:
+def remove_py_comments(
+    input_string: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
+) -> str:
     "Replace # comments with a newline character"
     py_rb_comment_pattern = regex.compile(
         r"\s*#.*\n",
@@ -819,7 +844,7 @@ def remove_py_comments(input_string: str, *, timeout: float = regex_timeout) -> 
 # Combined regex pattern to match Python components
 
 
-def remove_docstrings(source, *, timeout: float = regex_timeout) -> str:
+def remove_docstrings(source, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> str:
     docstring_pattern = regex.compile(
         r"(?::)\s^\s+\"\"\"[\s\S]+?\"\"\"",
         regex.MULTILINE,
@@ -828,7 +853,7 @@ def remove_docstrings(source, *, timeout: float = regex_timeout) -> str:
     return docstring_pattern.sub(":", source, timeout=timeout)
 
 
-def parse_py(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_py(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print(f"parse_py {timeout=}")
 
     combined_py_pattern = regex.compile(
@@ -889,7 +914,7 @@ def parse_py(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_rb(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_rb(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_rb")
     content = remove_py_comments(content, timeout=timeout)
 
@@ -916,7 +941,7 @@ def parse_rb(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_fsharp(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_fsharp(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_fsharp")
 
     combined_pattern = regex.compile(
@@ -940,7 +965,7 @@ def parse_fsharp(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_tcl(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_tcl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_tcl")
 
     combined_pattern = regex.compile(
@@ -956,7 +981,7 @@ def parse_tcl(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_erl(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_erl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_erl")
 
     combined_pattern = regex.compile(
@@ -993,7 +1018,7 @@ def parse_erl(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_rs(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_rs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_rs")
 
     content = remove_c_comments(content)
@@ -1046,7 +1071,9 @@ def parse_csv(content: str, max_leaves=11) -> List[str]:
     return [f"{len(columns)} columns"]
 
 
-def parse_mathematica(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_mathematica(
+    content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
+) -> List[str]:
     combined_pattern = regex.compile(
         r"((\w+\[.*?\]))\s*:=.*?(?=\n\n|\Z)",
         cache_pattern=True,
@@ -1065,7 +1092,7 @@ def parse_mathematica(content: str, *, timeout: float = regex_timeout) -> List[s
     return components
 
 
-def parse_r(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_r(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     combined_pattern = regex.compile(
         # class and whatever's inside
         r"class\(.*\)|"
@@ -1087,7 +1114,7 @@ def parse_r(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_zig(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_zig(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_zig")
     content = remove_c_comments(content)
     combined_pattern = regex.compile(
@@ -1114,7 +1141,7 @@ def parse_zig(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_hs(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_hs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     components = []
 
     # Combined regex pattern for Haskell components
@@ -1140,7 +1167,7 @@ def parse_hs(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_lisp(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_lisp(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     components = []
 
     # Combined regex pattern for various Lisp components
@@ -1337,7 +1364,9 @@ def parse_pyproject_toml(content: str) -> List[str]:
     return components
 
 
-def parse_lean(lean_content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_lean(
+    lean_content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
+) -> List[str]:
     debug_print("parse_lean")
     components = []
 
@@ -1371,7 +1400,7 @@ def parse_lean(lean_content: str, *, timeout: float = regex_timeout) -> List[str
     return components
 
 
-def parse_cs(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_cs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     # Updated regex pattern to match all components including method signatures
     combined_cs_pattern = regex.compile(
         # Interfaces, Enums, Delegates, Structs, Classes
@@ -1438,7 +1467,7 @@ def parse_cs(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_tex(tex_content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_tex(tex_content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_tex")
 
     # Regex for title, author, and date
@@ -1499,7 +1528,7 @@ def parse_tex(tex_content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_go(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_go(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_go")
 
     # Combined regex pattern to match Go components
@@ -1531,7 +1560,7 @@ def parse_go(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_swift(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_swift(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_swift")
 
     content = remove_c_comments(content)
@@ -1565,7 +1594,7 @@ def parse_swift(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_bash(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_bash(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_bash")
 
     # Combined regex pattern to match Go components
@@ -1600,7 +1629,9 @@ def parse_bash(content: str, *, timeout: float = regex_timeout) -> List[str]:
 
 
 # (declare|export) (default)?(\w+ \w+(<.*>)?(\(.*\))?(: \w+)?)
-def parse_d_dot_ts(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_d_dot_ts(
+    content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
+) -> List[str]:
     debug_print(content)
     d_dot_ts_pattern = regex.compile(
         r"(declare|export) (default)?(\w+ \w+(<.*>)?(\(.*\))?(: \w+)?)",
@@ -1614,7 +1645,7 @@ def parse_d_dot_ts(content: str, *, timeout: float = regex_timeout) -> List[str]
 
 
 def parse_angular_app_module(
-    content: str, *, timeout: float = regex_timeout
+    content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
 ) -> List[str]:
     debug_print("parse_angular_app_module")
     pattern = regex.compile(
@@ -1627,7 +1658,9 @@ def parse_angular_app_module(
     return []
 
 
-def parse_angular_routes(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_angular_routes(
+    content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
+) -> List[str]:
     routes_pattern = regex.compile(r"(const routes: Routes = \[\n(?:.|\n)*?\];)")
     routes_match = routes_pattern.findall(content, timeout=timeout)
     if routes_match:
@@ -1636,7 +1669,9 @@ def parse_angular_routes(content: str, *, timeout: float = regex_timeout) -> Lis
     return []
 
 
-def parse_angular_spec(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_angular_spec(
+    content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
+) -> List[str]:
     describe_pattern = regex.compile(r"(\t*| *)describe\('(.*)'", cache_pattern=True)
     it_pattern = regex.compile(r"(\t*| *)it\(('|\")(.*)('|\")", cache_pattern=True)
     components = []
@@ -1659,7 +1694,9 @@ def parse_angular_spec(content: str, *, timeout: float = regex_timeout) -> List[
     return components
 
 
-def parse_environment_ts(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_environment_ts(
+    content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
+) -> List[str]:
     debug_print("parse_environment_ts")
     environment_ts_key_pattern = regex.compile(r"(?P<key>\w+):")  # no cache as rare
     lines = content.splitlines()
@@ -1688,7 +1725,7 @@ def parse_environment_ts(content: str, *, timeout: float = regex_timeout) -> Lis
     return keepers
 
 
-def parse_dot_env(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_dot_env(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_dot_env")
     keepers = []
     key_pattern = regex.compile(r"([A-Z|_]*)=", cache_pattern=True)
@@ -1760,7 +1797,7 @@ def parse_makefile(content: str) -> List[str]:
     return commands
 
 
-def parse_sql(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_sql(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     # Pattern to find the "CREATE TABLE" statements
     pattern_create_table = regex.compile(
         r"CREATE TABLE (\w+) \((.*?)\);",
@@ -1941,7 +1978,7 @@ def parse_db(db_path: str) -> List[str]:
 
 
 def dedent_components(
-    components: List[str], *, timeout: float = regex_timeout
+    components: List[str], *, timeout: float = DEFAULT_REGEX_TIMEOUT
 ) -> List[str]:
     dedent_amount = min(
         len(component) - len(component.lstrip(" ")) for component in components
@@ -1959,7 +1996,7 @@ def dedent_components(
     return dedented_components
 
 
-def parse_cbl(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_cbl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_cbl")
 
     # Regex pattern to match significant lines or sections with indentation
@@ -2048,7 +2085,7 @@ def parse_cbl(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_java(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_java(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_java")
     content = remove_c_comments(content)
     # Combined regex pattern to match Java components
@@ -2094,7 +2131,7 @@ def parse_java(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_jl(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_jl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_jl")
     content = remove_py_comments(content)
     combined_pattern = regex.compile(
@@ -2127,7 +2164,7 @@ def parse_jl(content: str, *, timeout: float = regex_timeout) -> List[str]:
 
 
 # edge case ends like \)( = \w+\(.*\))
-def parse_kt(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_kt(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_kt")
     # Combined regex pattern to match Kotlin constructs as single groups
     combined_pattern = regex.compile(
@@ -2155,7 +2192,7 @@ def parse_kt(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_lua(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_lua(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     components = []
 
     # Find function declarations, but ignore arguments
@@ -2170,7 +2207,9 @@ def parse_lua(content: str, *, timeout: float = regex_timeout) -> List[str]:
 
 
 # TODO: update parse_objective_c to avoid fixed unrolling
-def parse_objective_c(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_objective_c(
+    content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
+) -> List[str]:
     components = []
 
     interface_pattern = regex.compile(
@@ -2254,7 +2293,7 @@ def parse_objective_c(content: str, *, timeout: float = regex_timeout) -> List[s
 
 
 # TODO: update parse_ocaml to avoid forced unrolling
-def parse_ocaml(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_ocaml(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     components = []
 
     type_pattern = regex.compile(
@@ -2315,7 +2354,7 @@ def parse_ocaml(content: str, *, timeout: float = regex_timeout) -> List[str]:
 
 
 # TODO: fix parse_apl to avoid forced unrolling
-def parse_apl(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_apl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     components = []
 
     namespace_pattern = regex.compile(
@@ -2345,7 +2384,7 @@ def parse_apl(content: str, *, timeout: float = regex_timeout) -> List[str]:
 
 
 # TODO: fix parse_perl to avoid forced unrolling
-def parse_perl(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_perl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     # Regular expression to find package name and subroutine names
     package_regex = regex.compile(
         r"^package\s+([\w\d_]+);", regex.MULTILINE, cache_pattern=True
@@ -2369,7 +2408,7 @@ def parse_perl(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return package_names + subroutine_names
 
 
-def parse_php(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_php(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     # Regular expression to find class names and their bodies, function names
     class_regex = regex.compile(
         r"(class\s+([\w\d_]+)\s*{([^}]*)})", regex.MULTILINE, cache_pattern=True
@@ -2409,7 +2448,7 @@ def parse_php(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return [component for _, component in components]
 
 
-def parse_ps1(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_ps1(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_ps1")
     content = remove_py_comments(content)
     pattern = regex.compile(
@@ -2465,7 +2504,7 @@ def parse_ps1(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_matlab(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_matlab(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     components = []
 
     class_pattern = regex.compile(
@@ -2513,7 +2552,7 @@ def parse_matlab(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_scala(content: str, timeout: float = regex_timeout) -> List[str]:
+def parse_scala(content: str, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_scala:")
     # Combined regex pattern to match Scala components
     combined_pattern = regex.compile(
@@ -2537,7 +2576,7 @@ def parse_scala(content: str, timeout: float = regex_timeout) -> List[str]:
     return components
 
 
-def parse_tf(content: str, timeout: float = regex_timeout) -> List[str]:
+def parse_tf(content: str, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     tf_pattern = regex.compile(
         r'(provider|resource|data|variable|output|locals|module)\s+("[^"]*"\s*"[^"]*"|"[^"]*"|\'[^\']*\'|[^\s]*)\s*[{"{]',
         regex.MULTILINE,
@@ -2547,7 +2586,7 @@ def parse_tf(content: str, timeout: float = regex_timeout) -> List[str]:
     return [f"{match[0]} {match[1]}" if match[1] else match[0] for match in matches]
 
 
-def parse_md(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_md(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     in_code_block = False
     lines = content.splitlines()
     headers_and_tasks = []
@@ -2626,7 +2665,7 @@ def parse_md(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return headers_and_tasks
 
 
-def parse_txt(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_txt(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     # Update the regex pattern to exclude lines with checked boxes.
     # The [\s*] will match spaces or '*', but not 'x' or 'X'.
     checkbox_pattern = regex.compile(
@@ -2652,7 +2691,7 @@ def parse_txt(content: str, *, timeout: float = regex_timeout) -> List[str]:
     return parsed_checkboxes
 
 
-def parse_markers(content: str, *, timeout: float = regex_timeout) -> List[str]:
+def parse_markers(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     marker_pattern = regex.compile(
         r"(?P<marker>(?P<mark>BUG|TODO|NOTE)(?P<mention> ?\([@\w ]+\) ?)?: (?P<msg>[\w \.]+))",
         cache_pattern=True,

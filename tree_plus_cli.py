@@ -11,8 +11,7 @@ from tree_plus_src import (  # noqa E402
     engine as tree_plus,
     TreePlus,
     DEFAULT_IGNORE,
-    regex_timeout,
-    set_regex_timeout,
+    DEFAULT_REGEX_TIMEOUT,
     web,
 )
 from tree_plus_src.count_tokens_lines import TokenizerName
@@ -127,7 +126,7 @@ DEFAULT_QUERY = "best tree data structures"
 )
 @click.option(
     "--timeout",
-    help=f"regex timeout in seconds (optional, default {regex_timeout})",
+    help=f"regex timeout in seconds (optional, default {DEFAULT_REGEX_TIMEOUT})",
     default=None,
     type=float,
 )
@@ -255,8 +254,9 @@ def main(
     else:
         raise ValueError(f"unsupported {tiktoken=} {tokenizer_name=}")
 
-    if timeout is not None and isinstance(timeout, float) and timeout > 0:
-        set_regex_timeout(timeout)
+    # guard against negative timeouts
+    if timeout is not None and timeout <= 0:
+        timeout = None
 
     root = tree_plus.from_seeds(
         _paths,
@@ -266,6 +266,7 @@ def main(
         override_ignore=override,
         concise=concise,
         tokenizer_name=_tokenizer_name,
+        regex_timeout=timeout,
     )
     root.render(markup=True, highlight=True)
     if links:

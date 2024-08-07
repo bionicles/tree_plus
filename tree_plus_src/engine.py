@@ -640,6 +640,7 @@ def from_seeds(
     override_ignore: bool = False,
     concise: bool = False,
     tokenizer_name: TokenizerName = TokenizerName.WC,
+    regex_timeout: Optional[float] = None,
 ) -> TreePlus:
     "PUBLIC: Construct a TreePlus from maybe_seeds = tuple[str] or None"
     debug_print(
@@ -668,6 +669,7 @@ def from_seeds(
             syntax_highlighting=syntax_highlighting,
             concise=concise,
             tokenizer_name=tokenizer_name,
+            regex_timeout=regex_timeout,
         )
         # reducer
         n_subtrees = len(subtrees)
@@ -705,6 +707,7 @@ def _map_seeds(
     maybe_globs: Optional[Tuple[str, ...]] = None,
     syntax_highlighting: bool = False,
     tokenizer_name: TokenizerName = TokenizerName.WC,
+    regex_timeout: Optional[float] = None,
     concise: bool = False,
 ) -> Tuple[TreePlus, ...]:
     "PRIVATE (MAPPER): grow a forest from a tuple of seed strings"
@@ -807,6 +810,7 @@ def _map_seeds(
             maybe_globs=globs,
             syntax_highlighting=syntax_highlighting,
             tokenizer_name=tokenizer_name,
+            regex_timeout=regex_timeout,
             concise=concise,
             is_url=is_url,
         )
@@ -833,6 +837,7 @@ def _from_seed(
     maybe_globs: Optional[AmortizedGlobs] = None,
     syntax_highlighting: bool = False,
     tokenizer_name: TokenizerName = TokenizerName.WC,
+    regex_timeout: Optional[float] = None,
     concise: bool = False,
     is_url: bool = False,
 ) -> TreePlus:
@@ -860,6 +865,7 @@ def _from_seed(
                     file_path=seed_path,
                     syntax_highlighting=syntax_highlighting,
                     tokenizer_name=tokenizer_name,
+                    regex_timeout=regex_timeout,
                     concise=concise,
                 )
             elif seed_path.is_dir():
@@ -869,6 +875,7 @@ def _from_seed(
                     maybe_globs=maybe_globs,
                     syntax_highlighting=syntax_highlighting,
                     tokenizer_name=tokenizer_name,
+                    regex_timeout=regex_timeout,
                     concise=concise,
                 )
             else:
@@ -884,6 +891,7 @@ def _from_seed(
                     maybe_globs=None,
                     syntax_highlighting=syntax_highlighting,
                     tokenizer_name=tokenizer_name,
+                    regex_timeout=regex_timeout,
                     concise=concise,
                 )
         else:
@@ -913,6 +921,7 @@ def _from_glob(
     maybe_globs: Optional[AmortizedGlobs] = None,
     syntax_highlighting: bool = False,
     tokenizer_name: TokenizerName = TokenizerName.WC,
+    regex_timeout: Optional[float] = None,
     concise: bool = False,
 ) -> TreePlus:
     "PRIVATE: handle a glob seed"
@@ -962,6 +971,7 @@ def _from_folder(
     maybe_globs: Optional[AmortizedGlobs] = None,
     syntax_highlighting: bool = False,
     tokenizer_name: TokenizerName = TokenizerName.WC,
+    regex_timeout: Optional[float] = None,
     concise: bool = False,
 ) -> TreePlus:
     "PRIVATE: walk a folder and construct a tree"
@@ -989,6 +999,7 @@ def _from_folder(
                 maybe_globs=maybe_globs,
                 syntax_highlighting=syntax_highlighting,
                 tokenizer_name=tokenizer_name,
+                regex_timeout=regex_timeout,
                 concise=concise,
             )
         elif subtree_path.is_file():
@@ -996,6 +1007,7 @@ def _from_folder(
                 file_path=subtree_path,
                 syntax_highlighting=syntax_highlighting,
                 tokenizer_name=tokenizer_name,
+                regex_timeout=regex_timeout,
                 concise=concise,
             )
         else:
@@ -1011,6 +1023,7 @@ def _from_file(
     syntax_highlighting: bool = False,
     tokenizer_name: TokenizerName = TokenizerName.WC,
     max_tokens: int = MAX_TOKENS,
+    regex_timeout: Optional[float] = None,
     concise: bool = False,
 ) -> TreePlus:
     "PRIVATE: parse a file_path into a TreePlus"
@@ -1026,7 +1039,10 @@ def _from_file(
     try:
         components = []
         if not concise and (counts is not None and counts.n_tokens <= max_tokens):
-            components = parse_file(file_path)
+            components = parse_file(
+                file_path,
+                regex_timeout=regex_timeout,
+            )
     except Exception as e:
         debug_print(f"engine._from_file components Exception {e=}")
         components = []
