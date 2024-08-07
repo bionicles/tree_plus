@@ -11,6 +11,8 @@ from tree_plus_src import parse_file, replace_isabelle_symbols
 C_EXPECTATION = [
     "TODO: technically we should build this module without AVX support",
     "struct Point",
+    # "    int x;",
+    # "    int y;",
     "struct Point getOrigin()",
     "float mul_two_floats(float x1, float x2)",
     "enum days",
@@ -19,7 +21,9 @@ C_EXPECTATION = [
     "char getFirstCharacter(char *str)",
     "void greet(Person p)",
     "typedef struct Person",
+    # "    char name[50];",
     "typedef struct PersonA",
+    # "    char name[50];",
     "int main()",
     "int* getArrayStart(int arr[], int size)",
     """long complexFunctionWithMultipleArguments(
@@ -33,6 +37,8 @@ C_EXPECTATION = [
     "static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)",
     "    while((ln = listNext(&li)))",
     "static struct config",
+    # "    aeEventLoop *el;",
+    # "    cliConnInfo conn_info;",
     "class Person",
     "public:",
     "    Person(std::string n) : name(n)",
