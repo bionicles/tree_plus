@@ -192,6 +192,15 @@ void printVector(const std::vector<T>& vec) {
     std::cout << std::endl;
 }
 
+// tricky example (thanks to X)
+struct foo{
+    char x;
+    struct foo_in{
+          char* y;
+          short z;
+    } inner;
+};
+
 // Struct example
 struct Point {
     int x, y;

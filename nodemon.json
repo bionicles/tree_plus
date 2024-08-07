@@ -10,7 +10,7 @@
     "test.sqlite",
     "pytest.ini"
   ],
-  "exec": "make debug_command || exit 1",
+  "exec": "make debug-command || exit 1",
   "env": {
     "DEBUG_TREE_PLUS": "1"
   },

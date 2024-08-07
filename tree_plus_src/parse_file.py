@@ -1,6 +1,6 @@
 # tree_plus_src/parse_file.py
 from functools import lru_cache
-from typing import List, Sequence, Tuple, Optional, Union
+from typing import List, Literal, Sequence, Tuple, Optional, Union
 from pathlib import Path
 import json
 import os
@@ -32,13 +32,6 @@ FORTRAN_EXTENSIONS = {
 }
 MATHEMATICA_EXTENSIONS = {".nb", ".wl"}
 PYTHON_EXTENSIONS = {".py", ".pyi"}
-
-
-# # set_regex_timeout appears not to work, just pass the argument
-# def set_regex_timeout(new_timeout: float):
-#     global regex_timeout
-#     regex_timeout = new_timeout
-#     print(f"{regex_timeout=}")
 
 
 @lru_cache(maxsize=None)
@@ -392,22 +385,6 @@ def prettify_tr(component: str) -> str:
     return output_str
 
 
-# def hierarchical_numbering(components):
-#     stack = []
-#     numbered_components = []
-#     for i, (component, pretty_component) in enumerate(components):
-#         level = len(regex.findall(r"#", pretty_component)) - 1
-#         while stack and stack[-1][1] >= level:
-#             stack.pop()
-#         if stack:
-#             prefix = ".".join(str(s[1]) for s in stack) + "."
-#             numbered_components.append(f"{prefix}{level+1}. {component}")
-#         else:
-#             numbered_components.append(f"{level+1}. {component}")
-#         stack.append((component, level))
-#     return numbered_components
-
-
 def assemble_tensorflow_flag(
     flag_type: str, flag: str, description: Optional[List[str]] = None
 ) -> str:
@@ -499,20 +476,7 @@ def parse_rst(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[s
     return components
 
 
-# r"\n((template<.*?>)?\n(\w+::)?(\w+) \w+\([\s\S]*?\))",
-# r"((template<.*?>)?\n(\w+::)?(\w+)\s+\w+\([\s\S]*?\))",
-# r"\n(template.*)\n|"
-# r"\n(((\w+::)?(\w+))\s+\w+\([\s\S]*?\))",
-# r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\)\s*)\s*{",
-# r"\n(\b[\w:]+(?:<[^>]*>)?\s+\w+\s*\([^)]*\))\s*(?=\{)",
-
-# ^(?P<typedef_struct>typedef\s+struct\s+(?P<name1>\w+)?\s*\{[^}]*\}\s*(?P<name2>\w+)(?=;\s))
-
-# wow:
-# r"^(?P<method> +(?P<virtual>virtual )?(?P<method_return_type>\w+ )?~?(?P<method_name>\w+)(?P<args>\(.*?\)[^,](?P<const_override>( const)?( override)?)?)(?P<postfix>(\s^ *)?(?P<colon>\s?:\s).*?)?)(?=(\s{)|(?=.*=.*;\n)|(?=\s^))|"
-
-
-# refactor with newer regex learning to cover more and avoid catastrophic backtracking
+# 2024-08-07 - switched the regex engine, added timeout, added struct fields, enum variants, class properties
 def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_cpp")
     content = remove_c_comments(content)
@@ -522,23 +486,25 @@ def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str
         # Functions first (most common)
         r"^(?P<function> *(?P<modifier>[\w:]+ )?(?P<function_return_type>[\w:*&]+(?P<generics>\s?<[^>]*>\s?)? )(?P<function_name>[\w*&[\]]+)\([^\)]*\)(?=\s{))|"
         # templates
-        # r"^(?P<template>template ?<.*?>[^\{^;^=\n]*(?=\s))|"
         r"^(?P<template>(?P<template_body>template ?<.*?>[\s\S]*?)(?P<tail>;|{|\)))|"
         # hashtag macros
         r"^(?P<macro>#(?:define)(?P<invocation>\s\w+( ?\w* ?\(.*\))?)?)|"
         # Methods
         r"(?<!\\\n)^(?P<method> +(?P<virtual>virtual |static )?(?P<method_return_type>\w+ )?~?(?P<method_name>[*\w]+)(?P<args>\(.*\)(?P<const_override>( const)?( override)?)?)(?P<postfix>(\s^ *)?(?P<colon>\s?:\s).*?)?)(?=(\s{)|(?=.*=.*;\n)|(?=\s^))|"
         # typedef struct
-        r"^(?P<typedef_struct>typedef struct\s?(?P<type_struct_name1>\w+)?(?P<body>\s\{[\s\S]*?(?P<closing>\} (?P<type_struct_name2>\w+))))|"
+        r"^(?P<typedef_struct>typedef struct\s?(?P<type_struct_name1>\w+)?)$|"
+        # weird closing names
+        r"^(?P<closing> *\} (?!else)(?P<type_struct_name2>\w+);?)|"
         # structs
-        r"^(?P<struct>(?:static )?struct(?P<struct_name> \w+)?(?=\s\{))|"
-        # typedef struct weirdness with two names
+        r"^(?P<struct> *(?:static )?struct(?P<struct_name> \w+)?(?=\s?\{))|"
         # class
         r"^(?P<class>class \w+(?P<inheritance>\s?:(?P<mod>\s\w+\s\w+,?)*)?)|"
         # enums (maybe class)
         r"^(?P<enum>(?:enum) (?:class )?\w+(?: : \w+)?)|"
+        # struct and enum fields
+        r"^(?P<struct_or_enum_field> +(?!return)(?P<maybe_const>const )?(?P<maybe_struct>struct )?(?P<type_hint>(?P<module_path> (?P<module_path_part>\w+::)+)?\w+\*?)(?P<field_name_or_names> (?P<maybe_pointer>\*)?\w+?(?P<index>\[[^\]]+\])?,?)*(?P<field_is>(?P<an_enum_variant>(?P<maybe_enum_equals> = .*?)?,|\n(?=}))|(?P<a_struct_field>;$))]?)(?P<maybe_comment> //.*)?|"
         # public or private sections
-        r"^(?P<public_or_private> *(public|private):)|"
+        r"^(?P<public_private_protected> *(public|private|protected):)|"
         # pybind modules
         r"^(?P<pybind11>PYBIND11_MODULE[\s\S]*?)(?={)|"
         # pybind defs
@@ -551,44 +517,44 @@ def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str
     )
 
     components = []
-    public_or_private = None
+
+    context_name: Literal["", "struct", "enum", "class"] = ""
     for n, match in enumerate(combined_pattern.finditer(content, timeout=timeout)):
         component = None  # just in case!
         debug_print(f"parse_cpp {n=} {match=}")
         groups = extract_groups(match, named_only=True)
         if "function" in groups:
+            context_name = ""
             component = groups["function"]
-            public_or_private = None
+
         elif "method" in groups:
-            if public_or_private is not None:
-                components.append(public_or_private)
-                public_or_private = None
             component = groups["method"].rstrip(";")
         elif "struct" in groups:
+            context_name = "struct"
             component = groups["struct"]
         elif "typedef_struct" in groups:
-            name = (
-                groups["type_struct_name1"]
-                if "type_struct_name1" in groups
-                else (
-                    groups["type_struct_name2"] if "type_struct_name2" in groups else ""
-                )
-            )
+            context_name = "struct"
+            name = groups.get("type_struct_name1", "")
             if name:
                 component = f"typedef struct {name}"
             else:
-                component = None
-        elif "public_or_private" in groups:
-            # carrying this but not adding it eagerly to avoid scope confusion
-            public_or_private = groups["public_or_private"]
-            continue
+                component = "typedef struct"
+        elif "closing" in groups:
+            context_name = ""
+            component = groups["closing"]
+        elif "public_private_protected" in groups:
+            component = groups["public_private_protected"]
+
         elif "class" in groups:
+            context_name = "class"
             component = groups["class"]
-            public_or_private = None  # right?
+
         elif "enum" in groups:
+            context_name = "enum"
             component = groups["enum"]
-            public_or_private = None  # right?
+
         elif "template" in groups:
+            context_name = ""
             component = (
                 groups["template_body"]
                 .rstrip("\n")
@@ -598,16 +564,26 @@ def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str
             )
             if groups["tail"].startswith(")"):
                 component += ")"
-            public_or_private = None  # right?
+
         elif "macro" in groups:
+            context_name = ""
             component = groups["macro"]
-            public_or_private = None  # right?
+
         elif "other_static" in groups:
+            context_name = ""
             component = groups["other_static"]
         elif "pybind11" in groups:
+            context_name = ""
             component = groups["pybind11"]
         elif "def" in groups:
+            context_name = ""
             component = groups["def"]
+        elif context_name == "enum" and "an_enum_variant" in groups:
+            component = groups["struct_or_enum_field"]
+        elif context_name in {"struct", "class"} and "a_struct_field" in groups:
+            component = groups["struct_or_enum_field"]
+        elif context_name in {"struct", "class"} and "var_char" in groups:
+            component = groups["var_char"]
         if component:
             debug_print(f"{component=}")
             component = component
@@ -827,9 +803,6 @@ def parse_ts(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
     return components
 
 
-# Define the regular expression pattern for comments
-
-
 def remove_py_comments(
     input_string: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
 ) -> str:
@@ -908,7 +881,6 @@ def parse_py(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
 
         if component:
             assert isinstance(component, str)
-            # component = Syntax(component, "python")
             components.append(component)
 
     return components
