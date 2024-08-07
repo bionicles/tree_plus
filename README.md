@@ -39,7 +39,7 @@ Usage: tree_plus [OPTIONS] [PATHS]...
 
   Wrap patterns in quotes: -i "*.py" / -g "*.rs"
 
-  Example Invocations (These are not subcomands, you idiot):
+  Example Invocations:
 
           Show tree_plus_src and tests simultaneously
               > tree_plus tree_plus_src tests
@@ -852,6 +852,13 @@ make library_demo
 
 ## Moar Languages
 
+### Currently Tested Languages:
+<!-- t6-start -->
+```sh
+
+```
+<!-- t6-end -->
+### Without the -c "Concise" Flag:
 <!-- t2-start -->
 ```sh
 tree_plus -i group_todo tests/more_languages

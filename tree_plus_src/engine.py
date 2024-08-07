@@ -1,10 +1,8 @@
 from typing import (
     Dict,
-    FrozenSet,
     Iterable,
     List,
     Literal,
-    Sequence,
     Tuple,
     Optional,
     Union,
@@ -19,8 +17,11 @@ import sys
 import os
 import re
 
-# time limit on file parsing makes sense
-# from func_timeout import func_timeout
+# time limit on file parsing makes sense,
+# but regex crashes anyway because it's in C
+# we can implement those timeouts with "regex" over "re"
+# however, we still benefit from func_timeout on rendering
+from func_timeout import func_timeout, FunctionTimedOut
 from rich.panel import Panel
 from rich.console import Console
 from rich.pretty import Pretty
@@ -31,7 +32,6 @@ from rich.tree import Tree
 from rich.text import Text
 from rich.markdown import Markdown
 import requests
-from rich.markdown import Markdown
 from fake_useragent import UserAgent
 from bs4 import Tag, NavigableString
 from bs4 import BeautifulSoup, PageElement
@@ -53,10 +53,11 @@ from tree_plus_src import (
     parse_ignore,
 )
 
-# MAX ALLOWED PARSE_FILE RUNTIME HERE
 # TODO: MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
-TIMEOUT_SECONDS = 0.5
-
+# MAX ALLOWED INTO_RICH_TREE RUNTIME
+INTO_RICH_TREE_TIMEOUT_SECONDS = 1.0
+# MAX TOKENS BEFORE SKIP (TOO BIG FILES)
+MAX_TOKENS = 1_000_000
 
 # emojis here
 operate_normally = platform.system() != "Windows" or sys.stdout.encoding != "cp1252"
@@ -88,7 +89,6 @@ TEXT_COLOR = f"{GOLD} on black"
 
 THEME = {
     "repr.tag_start": GOLD,
-    "repr.tag_name": GOLD,
     "repr.tag_contents": GOLD,
     "repr.tag_end": GOLD,
     "repr.ipv6": GOLD,
@@ -101,6 +101,7 @@ THEME = {
 
 class Category(Enum):
     "PUBLIC: TreePlus"
+
     ROOT = 1
     GLOB = 2
     FOLDER = 3
@@ -113,6 +114,7 @@ class Category(Enum):
 @dataclass
 class TreePlus:
     "PUBLIC: data structure"
+
     category: Category = Category.COMPONENT
     name: Union[str, Panel, Text, Markdown, Table, Pretty] = ""
     # n_folders: int = 0
@@ -210,7 +212,9 @@ class TreePlus:
 
     def into_str(self) -> str:
         "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
-        return tree_to_string(into_rich_tree(root=self))
+        this_rich_tree = into_rich_tree(root=self)
+        this_rich_tree_string = tree_to_string(this_rich_tree)
+        return this_rich_tree_string
 
     def render(
         self,
@@ -230,7 +234,6 @@ class TreePlus:
         )
 
     def render_hrefs(self):
-
         subtree_href_tree_pluses = []
         if (
             self.hrefs
@@ -297,7 +300,7 @@ def from_hrefs(
     if isinstance(root_panel_text, str):
         root_panel_text = Panel(
             f"[{link_color}]{root_panel_text}[/{link_color}]",
-            title=f"[0] at ()",
+            title="[0] at ()",
             title_align="left",
             expand=False,
         )
@@ -312,18 +315,7 @@ def stats_from_tree_plus(tree: TreePlus) -> str:
     debug_print("tree.n_files:", tree.n_files)
     debug_print("tree.n_lines:", tree.n_lines)
     debug_print("tree.n_tokens:", tree.n_tokens)
-    # if tree.n_folders is None:
-    #     folders = "(?)"
-    # # else:
-    # # if tree.n_files is None:
-    # #     files = "(?)"
-    # # else:
-    # if tree.n_lines is None:
-    #     lines = "(?)"
-    # else:
-    # if tree.n_tokens is None:
-    #     tokens = "(?)"
-    # else:
+
     folders = f"{tree.n_folders:,}"
     files = f"{tree.n_files:,}"
     lines = f"{tree.n_lines:,}"
@@ -405,9 +397,9 @@ def safe_print(
                 style=style,
             )
     except UnicodeEncodeError as e:
-        debug_print(f"UnicodeEncodeError printing tree normally: ", e)
+        debug_print("UnicodeEncodeError printing tree normally: ", e)
         try:
-            debug_print(f"Attempt to print a cleaned version of the tree:")
+            debug_print("Attempt to print a cleaned version of the tree:")
             if isinstance(tree, Tree):
                 tree_string = tree_to_string(tree, markup=markup, highlight=highlight)
             else:
@@ -439,40 +431,74 @@ def _make_rich_tree(
     )
 
 
-def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
+def into_rich_tree(
+    *,
+    root: Optional[TreePlus] = None,
+    timeout=INTO_RICH_TREE_TIMEOUT_SECONDS,
+) -> Tree:
     "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
+    try:
+        this_rich_tree = func_timeout(
+            timeout=timeout,
+            func=_into_rich_tree,
+            kwargs=dict(root=root),
+        )
+    except FunctionTimedOut as e:
+        print("into_rich_tree FunctionTimedOut:", e)
+        this_rich_tree = _make_rich_tree(label=root.name)
+        this_rich_tree.add("FunctionTimedOut(into_rich_tree)")
+    return this_rich_tree
+
+
+def _into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
+    "PRIVATE (TIMEOUT): Convert a TreePlus into a rich.tree.Tree to render"
     if not isinstance(root, TreePlus):
         raise TypeError(f"tree_plus.into_rich_tree got non-TreePlus {root=}")
     rich_tree = None
     if root.category is Category.FILE:
+        debug_print(f"{root.name} as file")
         label = f"{FILE_CHAR} {root.name}"
         if root.n_tokens is not None and root.n_lines is not None:
-            label += f" ({root.n_tokens:,} token{'' if root.n_tokens == 1 else 's'}, {root.n_lines:,} line{'' if root.n_lines == 1 else 's'})"
+            label += (
+                f" ({root.n_tokens:,} token{'' if root.n_tokens == 1 else 's'}, "
+                f"{root.n_lines:,} line{'' if root.n_lines == 1 else 's'})"
+            )
         elif root.n_tokens is None and root.n_lines is not None:
             label += f" ({root.n_lines:,} line{'' if root.n_lines == 1 else 's'})"
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_tree.add(subtree)  # type: ignore
     elif root.category is Category.FOLDER:
-        label = f"{FOLDER_CHAR} {root.name} ({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'}, {root.n_files:,} file{'' if root.n_files == 1 else 's'})"
+        debug_print(f"{root.name} as folder")
+        label = (
+            f"{FOLDER_CHAR} {root.name} ({root.n_folders:,}"
+            f" folder{'' if root.n_folders == 1 else 's'}, {root.n_files:,}"
+            f" file{'' if root.n_files == 1 else 's'})"
+        )
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             # RECURSION HERE
             rich_subtree = into_rich_tree(root=subtree)  # type: ignore
             rich_tree.add(rich_subtree)
-        counts = f" "
+        counts = " "
         rich_tree.label += counts  # type: ignore
     elif root.category is Category.ROOT:
         label = f"{ROOT_CHAR} {root.name}"
         if root.n_tokens and root.n_lines:
-            label += f"({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'}, {root.n_files:,} file{'' if root.n_files == 1 else 's'})"
+            label += (
+                f"({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'},"
+                f" {root.n_files:,} file{'' if root.n_files == 1 else 's'})"
+            )
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_subtree = into_rich_tree(root=subtree)  # type: ignore
             rich_tree.add(rich_subtree)
     elif root.category is Category.GLOB:
         n_matches = len(root.subtrees)
-        label = f"{GLOB_CHAR} {root.name} ({n_matches:,} match{'' if n_matches == 1 else 'es'})"
+        label = (
+            f"{GLOB_CHAR} {root.name} ({n_matches:,}"
+            f" match{'' if n_matches == 1 else 'es'})"
+        )
         rich_tree = _make_rich_tree(label)
         for subtree in root.subtrees:
             rich_subtree = into_rich_tree(root=subtree)  # type: ignore
@@ -482,7 +508,10 @@ def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
         if isinstance(root.name, str):
             label = f"{URL_CHAR}  {root.name}"
             if root.n_tokens and root.n_lines:
-                label += f" ({root.n_tokens:,} token{'' if root.n_tokens == 1 else 's'}, {root.n_lines:,} line{'' if root.n_lines == 1 else 's'})"
+                label += (
+                    f" ({root.n_tokens:,} token{'' if root.n_tokens == 1 else 's'},"
+                    f" {root.n_lines:,} line{'' if root.n_lines == 1 else 's'})"
+                )
         else:
             label = root.name
         rich_tree = _make_rich_tree(label)
@@ -506,7 +535,9 @@ def into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
             rich_subtree = into_rich_tree(root=subtree)  # type: ignore
             rich_tree.add(rich_subtree)
     if not rich_tree:
-        raise TypeError(f"engine.into_rich_tree: unsupported {root=}")
+        raise TypeError(
+            f"engine.into_rich_tree: unsupported {root.category=} {root.name=}"
+        )
     return rich_tree
 
 
@@ -560,7 +591,8 @@ def categorize(
             )
     else:
         raise TypeError(
-            "engine.categorize not pathlib.Path, tuple[str] or str (glob|path|code) input {x=}"
+            "engine.categorize not pathlib.Path,"
+            " tuple[str] or str (glob|path|code) input {x=}"
         )
     # DECISION ENDS
     if y:
@@ -585,7 +617,8 @@ def from_seed(
 ) -> TreePlus:
     "PUBLIC: Construct a TreePlus from maybe_seed = Union[str, TreePlus] or None"
     debug_print(
-        f"from_seed {maybe_seed=} {maybe_globs=} {override_ignore=} {syntax_highlighting=}"
+        f"from_seed {maybe_seed=} {maybe_globs=}"
+        f" {override_ignore=} {syntax_highlighting=}"
     )
     return from_seeds(
         maybe_seeds=None if maybe_seed is None else (maybe_seed,),
@@ -610,12 +643,13 @@ def from_seeds(
 ) -> TreePlus:
     "PUBLIC: Construct a TreePlus from maybe_seeds = tuple[str] or None"
     debug_print(
-        f"from_seeds {maybe_seeds=} {maybe_globs=} {syntax_highlighting=} {override_ignore=} {concise=}"
+        f"from_seeds {maybe_seeds=} {maybe_globs=} "
+        f" {syntax_highlighting=} {override_ignore=} {concise=}"
     )
     try:
         # default to current working directory
         if not maybe_seeds:
-            debug_print(f"tree_plus.from_root defaulting to current working directory")
+            debug_print("tree_plus.from_root defaulting to current working directory")
             maybe_seeds = (str(Path.cwd()),)
         if not all(isinstance(s, (str, TreePlus)) for s in maybe_seeds):
             raise TypeError(
@@ -643,6 +677,7 @@ def from_seeds(
             root = subtrees[0]
         else:
             root = _reduce_forest(forest=subtrees)
+        debug_print(f"return a root ... {root.category=}")
         return root
     except Exception as e:
         debug_print(f"tree_plus.from_root Exception {e=}")
@@ -682,7 +717,7 @@ def _map_seeds(
     glob_paths = []
     url_paths = []
     trees_done = []
-    debug_print(f"_map_seeds BEGIN CATEGORIZING SEEDS!")
+    debug_print("_map_seeds BEGIN CATEGORIZING SEEDS!")
     for seed in seeds:
         if isinstance(seed, TreePlus):
             trees_done.append(seed)
@@ -731,23 +766,21 @@ def _map_seeds(
     debug_print("_map_seeds FILE PATHS", file_paths)
     debug_print("_map_seeds GLOB PATHS", glob_paths)
     debug_print("_map_seeds URL PATHS", url_paths)
-    # debug_print("_map_seeds MAYBE_GLOBS BEFORE MERGE", maybe_globs)
-    # debug_print("_map_seeds GLOB_PATHS BEFORE MERGE", glob_paths)
-    # globs = tuple(set(chain(maybe_globs, glob_paths)))
-    # debug_print("_map_seeds GLOBS AFTER MERGE", globs)
+
     if maybe_globs:
         if not folder_paths:
             folder_paths = (Path.cwd(),)
         globs = amortize_globs(paths=folder_paths, globs=maybe_globs)
         if globs and file_paths:
             print(
-                f"_map_seeds WARNING: {len(file_paths)} file and {len(glob_paths)} glob path(s) directly provided \nwill dodge glob filter"
+                f"_map_seeds WARNING: {len(file_paths)} file and {len(glob_paths)}"
+                f" glob path(s) directly provided \nwill dodge glob filter"
             )
             print("\t\t\t(...because we assume you did this on purpose...)")
             globs = AmortizedGlobs(
                 paths=globs.paths,
                 globs=globs.globs,  # nice naming, bionicles
-                # NOTE: here we add directly input file_paths to the amortized glob matches
+                # NOTE: directly add input file_paths to the amortized glob matches
                 matches=globs.matches.union(frozenset(file_paths)),
             )
     else:
@@ -787,8 +820,10 @@ def _map_seeds(
             or seed_tree_plus.is_url()
         )
         forest.append(seed_tree_plus)
-    debug_print(f"_map_seeds  DONE!")
-    return tuple(forest)
+    debug_print("_map_seeds  DONE!")
+    forest_tuple = tuple(forest)
+    debug_print(f"{len(forest_tuple)=}")
+    return forest_tuple
 
 
 def _from_seed(
@@ -803,7 +838,7 @@ def _from_seed(
 ) -> TreePlus:
     "PRIVATE: dispatcher to either file or folder"
     if seed_path is None:
-        debug_print(f"tree_plus.from_seed defaulting to current working directory")
+        debug_print("tree_plus.from_seed defaulting to current working directory")
         seed_path = Path.cwd()
     elif isinstance(seed_path, TreePlus):
         return seed_path
@@ -845,7 +880,8 @@ def _from_seed(
                 result = _from_glob(
                     pattern=seed_pattern,
                     maybe_ignore=maybe_ignore,
-                    maybe_globs=None,  # TODO: decide if we apply glob patterns to glob paths (currently NO)
+                    # TODO: decide to apply glob patterns to glob paths (currently NO)
+                    maybe_globs=None,
                     syntax_highlighting=syntax_highlighting,
                     tokenizer_name=tokenizer_name,
                     concise=concise,
@@ -868,21 +904,6 @@ def _add_subtree(
     "PRIVATE: add a subtree TreePlus to a root TreePlus"
     # debug_print(f"_add_subtree {root=} {subtree=}")
     root.subtrees.append(subtree)  # type: ignore
-
-    # NOTE: switching these eager tallies to lazy properties
-    # if subtree.is_file():
-    #     root.n_files += 1
-    # elif subtree.is_folder():
-    #     root.n_folders += 1
-    #     root.n_files += subtree.n_files
-    # if (
-    #     root.n_tokens is not None
-    #     and root.n_lines
-    #     and subtree.n_tokens is not None
-    #     and subtree.n_lines is not None
-    # ):
-    #     root.n_tokens += subtree.n_tokens
-    #     root.n_lines += subtree.n_lines
 
 
 def _from_glob(
@@ -984,22 +1005,12 @@ def _from_folder(
     return folder_tree_plus
 
 
-# TODO: re-enable func_timeout for parsing
-# def _parse(file_path: str, timeout=TIMEOUT_SECONDS) -> List[str]:
-#     try:
-#         components = func_timeout(timeout, parse_file, args=(file_path,))
-#         return components
-#     except Exception as e:
-#         print(f"WARNING: parse_file Exception\n{e}")
-#         return []
-
-
 def _from_file(
     *,
     file_path: Path,
     syntax_highlighting: bool = False,
     tokenizer_name: TokenizerName = TokenizerName.WC,
-    max_tokens: int = 1_000_000_000,
+    max_tokens: int = MAX_TOKENS,
     concise: bool = False,
 ) -> TreePlus:
     "PRIVATE: parse a file_path into a TreePlus"
@@ -1030,7 +1041,7 @@ def _from_file(
             debug_print(f"engine._from_file syntax highlighting exception {e=}")
     else:
         debug_print(f"_from_file NOT SYNTAX HIGHLIGHTING {file_path=}")
-    debug_print(f"engine._from_file got counts:", counts)
+    debug_print("engine._from_file got counts:", counts)
     # debug_print(f"engine._from_file got components:", components)
     file_tree_plus = TreePlus(
         subtrees=components,  # type: ignore
@@ -1135,7 +1146,10 @@ def node_index_str_from_tuple(
 ) -> str:
     node_index_str = ""
     for node_index_i in node_index:
-        node_index_str += f"[{number_color}]{node_index_i}[/{number_color}][{dot_color}].[/{dot_color}]"
+        node_index_str += (
+            f"[{number_color}]{node_index_i}[/{number_color}]"
+            f"[{dot_color}].[/{dot_color}]"
+        )
     node_index_str = f"{prefix}{node_index_str}{suffix}"
     return node_index_str
 
@@ -1317,13 +1331,14 @@ def process_hacker_news_item(
         category=Category.URL,
         name=Panel(
             item_name,
-            title=f"{item_number}[{link_color}][link=https://news.ycombinator.com/item?id={item['id']}]{item['type'].title()} {item['id']:,}[/link][/{link_color}]",
+            title=(
+                f"{item_number}[{link_color}][link=https://news.ycombinator.com/"
+                f"item?id={item['id']}]{item['type'].title()}"
+                f" {item['id']:,}[/link][/{link_color}]"
+            ),
             title_align="left",
         ),
         subtrees=kid_trees,
-        # n_files=1 + len(kids),
-        # _n_lines=item_counts.n_lines,
-        # _n_tokens=item_counts.n_tokens,
     )
     return item_tree
 
@@ -1343,8 +1358,8 @@ def rich_links_from_soup(
     return links
 
 
-def ordered_list_from(l: Iterable[str]) -> List[str]:
-    return [f" - {i}. {x}" for i, x in enumerate(l, start=1)]
+def ordered_list_from(ordered_list: Iterable[str]) -> List[str]:
+    return [f" - {i}. {x}" for i, x in enumerate(ordered_list, start=1)]
 
 
 BACKUP_LEXERS = {

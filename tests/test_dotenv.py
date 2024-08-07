@@ -1,5 +1,4 @@
 # tests/test_dotenv.py
-import pytest
 import os
 
 from tree_plus_src import debug_print

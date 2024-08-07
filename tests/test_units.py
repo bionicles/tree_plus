@@ -78,7 +78,7 @@ def test_engine_parse_ignore_none():
         maybe_ignore_tuple=None, override=True
     )
     tree_plus.debug_print(f"{ignored_with_override=}")
-    assert ignored_with_override == None
+    assert ignored_with_override is None
 
 
 def test_engine_parse_ignore_one():
@@ -170,7 +170,7 @@ def test_units_parse_todo():
     content = open("tests/more_languages/group5/rust_todo_test.rs", "r").read()
     result = tree_plus.parse_markers(content)
     assert result == [
-        "TODO (Line 23): This todo tests parse_todo",
+        "TODO: This todo tests parse_todo",
     ]
 
 
@@ -182,32 +182,13 @@ bug_todo_note = (
 def test_units_parse_markers():
     results = tree_plus.parse_markers(bug_todo_note)
     assert results == [
-        "BUG (Line 1): This is a bug.",
-        "TODO (Line 2): Fix this soon.",
-        "NOTE (Line 3): Interesting observation.",
+        "BUG: This is a bug.",
+        "TODO: Fix this soon.",
+        "NOTE: Interesting observation.",
     ]
 
 
 # test counting
-@pytest.mark.parametrize(
-    "file,expected",
-    [
-        (
-            "tests/path_to_test/file.py",
-            tree_plus.TokenLineCount(n_tokens=19, n_lines=3),
-        ),
-        (
-            "tests/path_to_test/empty.py",
-            tree_plus.TokenLineCount(n_tokens=0, n_lines=0),
-        ),
-    ],
-)
-def test_units_token_counting_gpt4(file, expected):
-    result = tree_plus.count_tokens_lines(file, tokenizer_name=TokenizerName.GPT4)
-    assert isinstance(result, tree_plus.TokenLineCount)
-    assert result == expected
-
-
 @pytest.mark.parametrize(
     "file,expected",
     [

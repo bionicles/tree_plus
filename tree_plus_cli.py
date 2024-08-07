@@ -1,5 +1,5 @@
 # tree_plus_cli.py
-from typing import List, Optional, Union, Tuple
+from typing import Optional, Union, Tuple
 from time import perf_counter
 
 import click
@@ -11,6 +11,8 @@ from tree_plus_src import (  # noqa E402
     engine as tree_plus,
     TreePlus,
     DEFAULT_IGNORE,
+    regex_timeout,
+    set_regex_timeout,
     web,
 )
 from tree_plus_src.count_tokens_lines import TokenizerName
@@ -85,7 +87,7 @@ DEFAULT_QUERY = "best tree data structures"
     "--yc",
     "--hn",
     is_flag=True,
-    help=f"Include ycombinator (False)",
+    help="Include ycombinator (False)",
     default=False,
 )
 @click.option(
@@ -99,7 +101,7 @@ DEFAULT_QUERY = "best tree data structures"
     "--max-depth",
     "-m",
     "-M",
-    help="maximum number of steps (depth / level) from root (--yc mode only, default 3)",
+    help="max number of steps (depth / level) from root (--yc mode only, default 3)",
     default=3,
 )
 @click.option(
@@ -123,6 +125,12 @@ DEFAULT_QUERY = "best tree data structures"
     default=None,
     type=str,
 )
+@click.option(
+    "--timeout",
+    help=f"regex timeout in seconds (optional, default {regex_timeout})",
+    default=None,
+    type=float,
+)
 @click.argument("paths", nargs=-1, type=click.UNPROCESSED)  # Accepts multiple arguments
 def main(
     # these are NON-MUTUALLY-EXCLUSIVE OPTIONS
@@ -142,12 +150,13 @@ def main(
     links: bool,
     tiktoken: bool,
     tokenizer_name: Optional[str],
+    timeout: Optional[float],
 ):
     """A `tree` util enhanced with tokens, lines, and components.
 
     Wrap patterns in quotes: -i "*.py" / -g "*.rs"
 
-    Example Invocations (These are not subcomands, you idiot):
+    Example Invocations:
 
         \b
         Show tree_plus_src and tests simultaneously
@@ -245,6 +254,9 @@ def main(
         _tokenizer_name = TokenizerName.GPT4
     else:
         raise ValueError(f"unsupported {tiktoken=} {tokenizer_name=}")
+
+    if timeout is not None and isinstance(timeout, float) and timeout > 0:
+        set_regex_timeout(timeout)
 
     root = tree_plus.from_seeds(
         _paths,

@@ -9,6 +9,7 @@ import sqlite3
 from tree_plus_src import parse_file, replace_isabelle_symbols
 
 C_EXPECTATION = [
+    "TODO: technically we should build this module without AVX support",
     "struct Point",
     "struct Point getOrigin()",
     "float mul_two_floats(float x1, float x2)",

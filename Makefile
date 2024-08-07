@@ -19,8 +19,7 @@ debug:
 	nodemon -L -V
 
 .PHONY: debug_command
-# debug_command: test
-debug_command: test_group7
+debug_command: test
 
 html_demo:
 	tree_plus https://en.wikipedia.org/wiki/Zero_ring
@@ -117,3 +116,6 @@ t4:
 
 t5:
 	tree_plus -h
+
+t6:
+	tree_plus -c -i group_todo tests/more_languages

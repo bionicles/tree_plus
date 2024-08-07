@@ -19,7 +19,13 @@ from .ignore import (  # noqa F401
     amortize_globs,
 )
 
-from .parse_file import parse_file, parse_markers, extract_groups
+from .parse_file import (
+    regex_timeout,
+    parse_file,
+    parse_markers,
+    extract_groups,
+    set_regex_timeout,
+)
 from .count_tokens_lines import (
     TokenLineCount,
     TokenizerName,

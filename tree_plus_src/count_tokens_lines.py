@@ -1,10 +1,13 @@
 # tree_plus_src/count_tokens_lines.py
 from dataclasses import dataclass
-from enum import Enum
-import subprocess
-from typing import Optional, Union
 from pathlib import Path
+from typing import Optional, Union
+from enum import Enum
+
+import subprocess
 import os
+
+from rich.markdown import Markdown
 
 from tree_plus_src.debug import debug_print
 from tree_plus_src.parse_file import read_file
@@ -14,7 +17,7 @@ encoder = None
 
 
 # TODO: show off how well we parse_todo!
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class TokenLineCount:
     n_tokens: int = 0
     n_lines: int = 0
@@ -159,9 +162,6 @@ def count_tokens_lines(
         raise ValueError(f"unsupported {tokenizer_name=}")
     debug_print(f"count_tokens_lines {count=}")
     return count
-
-
-from rich.markdown import Markdown
 
 
 def count_openai_tokens_lines_from_contents(

@@ -1,5 +1,5 @@
 # tree_plus_src/ignore.py
-from typing import Optional, Tuple, Union, Any, FrozenSet
+from typing import Optional, Tuple, Any, FrozenSet
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -235,10 +235,10 @@ def amortize_globs(
 ) -> Optional[AmortizedGlobs]:
     "amortize glob lookup"
     if not paths:
-        debug_print(f"amortize_glob_prefixes: no paths")
+        debug_print("amortize_glob_prefixes: no paths")
         return None
     if not globs:
-        debug_print(f"amortize_glob_prefixes: no globs")
+        debug_print("amortize_glob_prefixes: no globs")
         return None
     matches = set()
     for path in paths:

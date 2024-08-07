@@ -1,5 +1,13 @@
 # Medium Readme
 
+<!-- t5-start -->
+```sh
+this 5th text should be removed
+```
+<!-- t5-end -->
+
+5th remaining text
+
 <!-- t1-start -->
 ```sh
 this 1st text should be removed
@@ -8,13 +16,13 @@ this 1st text should be removed
 
 1st remaining text
 
-<!-- t5-start -->
+<!-- t6-start -->
 ```sh
-this 5th text should be removed
+this 6th text should be removed
 ```
-<!-- t5-end -->
+<!-- t6-end -->
 
-5th remaining text
+6th remaining text
 
 <!-- t2-start -->
 ```sh

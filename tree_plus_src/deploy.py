@@ -6,6 +6,7 @@ import os
 
 
 def extract(path: Optional[str] = None) -> str:
+    "get the content of the given path"
     assert path is not None
     assert os.path.exists(path)
     try:
@@ -18,6 +19,7 @@ def extract(path: Optional[str] = None) -> str:
 
 
 def load(content: Optional[str] = None, path: Optional[str] = None):
+    "write the content to the given path"
     assert content is not None
     assert isinstance(content, str)
     assert path is not None
@@ -82,7 +84,7 @@ def increment_version(
         print(f"increment_version extracted {major=} {minor=} {patch=}")
         new_patch = patch + 1
         new_line = f'__version__ = "{major}.{minor}.{new_patch}"'
-        print(f"increment_version new line:\n", new_line)
+        print("increment_version new line:\n", new_line)
         new_content_lines.append(new_line)
     new_content = "\n".join(new_content_lines)
     load(new_content, sink_path)
@@ -115,7 +117,7 @@ def replace_readme_section(
     assert marker is not None
     assert marker.startswith("t")
     assert int(marker[1]) > 0
-    assert int(marker[1]) < 6
+    assert int(marker[1]) < 7
     assert command is not None
     assert "make t" in command
 
@@ -175,6 +177,10 @@ def update_readme(source_path: Optional[str] = None, sink_path: Optional[str] = 
         source_path=sink_path, sink_path=sink_path, marker="t5", command="make t5"
     )
     print("update_readme handled t5")
+    replace_readme_section(
+        source_path=sink_path, sink_path=sink_path, marker="t6", command="make t6"
+    )
+    print("update_readme handled t6")
     print("deploy::update_readme done")
 
 
