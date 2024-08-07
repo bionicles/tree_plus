@@ -94,9 +94,9 @@ Options:
                                'gpt4o' works
   --timeout FLOAT              regex timeout in seconds (optional, default
                                0.7)
-  -h, -H, --help               Show this message and exit.
+  -H, -h, --help               Show this message and exit.
 
-  v(1.0.55) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.56) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -146,30 +146,30 @@ tree_plus -i tests
 ├── 📁 coverage (1 folder, 1 file) 
 │   └── 📄 lcov.info (17,359 tokens, 2,180 lines)
 ├── 📄 LICENSE (2,744 tokens, 81 lines)
-├── 📄 Makefile (743 tokens, 120 lines)
+├── 📄 Makefile (770 tokens, 121 lines)
 │   ├── SHELL := /bin/bash
 │   ├── cli
-│   ├── library_demo
-│   ├── rewrite_demo
+│   ├── library-demo
+│   ├── rewrite-demo
 │   ├── coverage
 │   ├── debug
-│   ├── .PHONY: debug_command
-│   ├── debug_command: test
-│   ├── html_demo
+│   ├── .PHONY: debug-command
+│   ├── debug-command: test
+│   ├── html-demo
 │   ├── absurdly-huge-jsonl
-│   ├── test: test_sequential test_tp_dotdot test_e2e test_cli test_programs test_deploy
-│   ├── test_parallel
-│   ├── test_sequential
-│   ├── test_more_languages
-│   ├── test_group7
-│   ├── test_units
-│   ├── test_tp_dotdot
-│   ├── test_e2e
-│   ├── test_cli: cli
-│   ├── test_programs
-│   ├── test_deploy
+│   ├── test: test-sequential test-tp-dotdot test-e2e test-cli test-programs test-deploy
+│   ├── test-parallel
+│   ├── test-sequential
+│   ├── test-more-languages
+│   ├── test-group
+│   ├── test-units
+│   ├── test-tp-dotdot
+│   ├── test-e2e
+│   ├── test-cli: cli
+│   ├── test-programs
+│   ├── test-deploy
 │   ├── vulture: install_vulture
-│   ├── install_vulture
+│   ├── install-vulture
 │   ├── build: install-build-tool clean-dist
 │   ├── install-wheel
 │   ├── install-build-tool
@@ -202,7 +202,7 @@ tree_plus -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (33,781 tokens, 3,288 lines)
+├── 📄 README.md (34,358 tokens, 3,342 lines)
 │   ├── TODO: research various kwargs for huggingface
 │   ├── TODO: fix this path
 │   ├── TODO: fill in these stubs
@@ -231,6 +231,36 @@ tree_plus -i tests
 │   ├── TODO: re
 │   ├── NOTE: no point in the answers since there
 │   ├── TODO: This todo tests parse_todo
+│   ├── TODO: This todo tests parse_todo
+│   ├── TODO: research various kwargs for huggingface
+│   ├── TODO: fix this path
+│   ├── TODO: fill in these stubs
+│   ├── TODO: fix this path
+│   ├── TODO: fill in these stubs
+│   ├── TODO: show off how well we parse_todo
+│   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR
+│   ├── NOTE: you can customize the color here
+│   ├── TODO: clarify subtree types
+│   ├── NOTE: sometimes we need wider trees
+│   ├── TODO: research
+│   ├── NOTE: directly add input file_paths to the amortized glob matches
+│   ├── TODO: decide to apply glob patterns to glob paths
+│   ├── TODO: decide between glob and rglob in _from_glob
+│   ├── TODO: decide if we need to re
+│   ├── TODO: clarify ignore in glob seed context
+│   ├── NOTE: this is only to satisfy the type checker
+│   ├── TODO: incorporate gitignore
+│   ├── BUG: HTML tree doesn
+│   ├── TODO: Fix HTML in TreePlus
+│   ├── BUG: this repeatedly finds tags
+│   ├── TODO: update parse_objective_c to avoid fixed unrolling
+│   ├── TODO: update parse_ocaml to avoid forced unrolling
+│   ├── TODO: fix parse_apl to avoid forced unrolling
+│   ├── TODO: fix parse_perl to avoid forced unrolling
+│   ├── TODO: re
+│   ├── NOTE: no point in the answers since there
+│   ├── TODO: This todo tests parse_todo
+│   ├── TODO: technically we should build this module without AVX support
 │   ├── TODO: This todo tests parse_todo
 │   ├── TODO: research various kwargs for huggingface
 │   ├── TODO: fix this path
@@ -650,7 +680,7 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (24,508 tokens, 2,707 lines)
+    ├── 📄 parse_file.py (24,259 tokens, 2,679 lines)
     │   ├── BUG: HTML tree doesn
     │   ├── TODO: Fix HTML in TreePlus
     │   ├── BUG: this repeatedly finds tags
@@ -786,7 +816,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.55"
+    │   └── __version__ = "1.0.56"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re
         ├── NOTE: no point in the answers since there
@@ -847,8 +877,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.55) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 12,746 line(s), 111,504 token(s) in 0.27 second(s).
+tree_plus v(1.0.56) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,773 line(s), 111,859 token(s) in 0.28 second(s).
 
 ```
 <!-- t1-end -->
@@ -1030,7 +1060,7 @@ tree_plus -c -i group_todo tests/more_languages
 │   ├── 📄 testPackage.json (349 tokens, 43 lines)
 │   └── 📄 tickets.component.ts (7,160 tokens, 903 lines)
 ├── 📁 group6 (1 folder, 13 files) 
-│   ├── 📄 catastrophic.c (3,906 tokens, 581 lines)
+│   ├── 📄 catastrophic.c (3,939 tokens, 590 lines)
 │   ├── 📄 cpp_examples_impl.cc (60 tokens, 10 lines)
 │   ├── 📄 cpp_examples_impl.cu (37 tokens, 10 lines)
 │   ├── 📄 cpp_examples_impl.h (22 tokens, 6 lines)
@@ -1053,8 +1083,8 @@ tree_plus -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.55) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 6,929 line(s), 66,371 token(s) in 0.22 second(s).
+tree_plus v(1.0.56) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 6,938 line(s), 66,404 token(s) in 0.21 second(s).
 
 ```
 <!-- t6-end -->
@@ -1440,14 +1470,25 @@ tree_plus -i group_todo tests/more_languages
 │   │   └── :Namespace HelloWorld -> plus ← {⍺+⍵}
 │   ├── 📄 c_test.c (837 tokens, 142 lines)
 │   │   ├── struct Point
+│   │   ├──     int x;
+│   │   ├──     int y;
 │   │   ├── struct Point getOrigin()
 │   │   ├── float mul_two_floats(float x1, float x2)
 │   │   ├── enum days
+│   │   ├──     SUN,
+│   │   ├──     MON,
+│   │   ├──     TUE,
+│   │   ├──     WED,
+│   │   ├──     THU,
+│   │   ├──     FRI,
+│   │   ├──     SAT
 │   │   ├── long add_two_longs(long x1, long x2)
 │   │   ├── double multiplyByTwo(double num)
 │   │   ├── char getFirstCharacter(char *str)
 │   │   ├── void greet(Person p)
-│   │   ├── typedef struct Person
+│   │   ├── typedef struct
+│   │   ├──     char name[50];
+│   │   ├── } Person;
 │   │   ├── int main()
 │   │   ├── int* getArrayStart(int arr[], int size)
 │   │   ├── long complexFunctionWithMultipleArguments(
@@ -1460,7 +1501,13 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── sds sdsCatPatternString(sds base, keyPattern *pat)
 │   │   ├── static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)
 │   │   ├──     while((ln = listNext(&li)))
-│   │   └── static struct config
+│   │   ├── static struct config
+│   │   ├──     aeEventLoop *el;
+│   │   ├──     cliConnInfo conn_info;
+│   │   ├──     const char *hostsocket;
+│   │   ├──     int tls;
+│   │   ├──     struct cliSSLconfig sslconfig;
+│   │   └── } config;
 │   ├── 📄 go_test.go (179 tokens, 46 lines)
 │   │   ├── type Greeting struct
 │   │   ├── func (g Greeting) sayHello()
@@ -1560,6 +1607,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   └── create_conda_env()
 │   ├── 📄 cpp_test.cpp (1,670 tokens, 259 lines)
 │   │   ├── class Person
+│   │   ├──     std::string name;
 │   │   ├── public:
 │   │   ├──     Person(std::string n) : name(n)
 │   │   ├──     void greet()
@@ -1569,12 +1617,15 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── template<typename T>
 │   │   │   void printVector(const std::vector<T>& vec)
 │   │   ├── struct Point
+│   │   ├──     int x, y;
 │   │   ├──     Point(int x, int y) : x(x), y(y)
 │   │   ├── class Animal
 │   │   ├── public:
 │   │   ├──     Animal(const std::string &name) : name(name)
 │   │   ├──     virtual void speak() const
 │   │   ├──     virtual ~Animal()
+│   │   ├── protected:
+│   │   ├──     std::string name;
 │   │   ├── class Dog : public Animal
 │   │   ├── public:
 │   │   ├──     Dog(const std::string &name) : Animal(name)
@@ -1589,9 +1640,21 @@ tree_plus -i group_todo tests/more_languages
 │   │   │              int workspace_size, int reserve_space_size)
 │   │   ├── int main()
 │   │   ├── enum ECarTypes
+│   │   ├──   Sedan,
+│   │   ├──   Hatchback,
+│   │   ├──   SUV,
+│   │   ├──   Wagon
 │   │   ├── ECarTypes GetPreferredCarType()
 │   │   ├── enum ECarTypes : uint8_t
+│   │   ├──   Sedan,
+│   │   ├──   Hatchback,
+│   │   ├──   SUV = 254,
+│   │   ├──   Hybrid
 │   │   ├── enum class ECarTypes : uint8_t
+│   │   ├──   Sedan,
+│   │   ├──   Hatchback,
+│   │   ├──   SUV = 254,
+│   │   ├──   Hybrid
 │   │   ├── void myFunction(string fname, int age)
 │   │   ├── template <typename T> T cos(T)
 │   │   ├── template <typename T> T sin(T)
@@ -1614,6 +1677,8 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──     T *data()
 │   │   ├──     size_t size() const
 │   │   ├── class Buffer
+│   │   ├──  private:
+│   │   ├──   void* ptr_;
 │   │   └── std::tuple<array, array, array> quantize(
 │   │           const array& w,
 │   │           int group_size,
@@ -2291,18 +2356,31 @@ tree_plus -i group_todo tests/more_languages
 │       ├── const mockTickets = async () =>
 │       └── const renderQRCode = async (text: String): Promise<string> =>
 ├── 📁 group6 (1 folder, 13 files) 
-│   ├── 📄 catastrophic.c (3,906 tokens, 581 lines)
+│   ├── 📄 catastrophic.c (3,939 tokens, 590 lines)
 │   │   ├── TODO: technically we should build this module without AVX support
 │   │   ├── struct Point
+│   │   ├──     int x;
+│   │   ├──     int y;
 │   │   ├── struct Point getOrigin()
 │   │   ├── float mul_two_floats(float x1, float x2)
 │   │   ├── enum days
+│   │   ├──     SUN,
+│   │   ├──     MON,
+│   │   ├──     TUE,
+│   │   ├──     WED,
+│   │   ├──     THU,
+│   │   ├──     FRI,
+│   │   ├──     SAT
 │   │   ├── long add_two_longs(long x1, long x2)
 │   │   ├── double multiplyByTwo(double num)
 │   │   ├── char getFirstCharacter(char *str)
 │   │   ├── void greet(Person p)
-│   │   ├── typedef struct Person
+│   │   ├── typedef struct
+│   │   ├──     char name[50];
+│   │   ├── } Person;
 │   │   ├── typedef struct PersonA
+│   │   ├──     char name[50];
+│   │   ├── } PersonB;
 │   │   ├── int main()
 │   │   ├── int* getArrayStart(int arr[], int size)
 │   │   ├── long complexFunctionWithMultipleArguments(
@@ -2316,7 +2394,14 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)
 │   │   ├──     while((ln = listNext(&li)))
 │   │   ├── static struct config
+│   │   ├──     aeEventLoop *el;
+│   │   ├──     cliConnInfo conn_info;
+│   │   ├──     const char *hostsocket;
+│   │   ├──     int tls;
+│   │   ├──     struct cliSSLconfig sslconfig;
+│   │   ├── } config;
 │   │   ├── class Person
+│   │   ├──     std::string name;
 │   │   ├── public:
 │   │   ├──     Person(std::string n) : name(n)
 │   │   ├──     void greet()
@@ -2325,13 +2410,22 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── void printMessage(const std::string &message)
 │   │   ├── template<typename T>
 │   │   │   void printVector(const std::vector<T>& vec)
+│   │   ├── struct foo
+│   │   ├──     char x;
+│   │   ├──     struct foo_in
+│   │   ├──           char* y;
+│   │   ├──           short z;
+│   │   ├──     } inner;
 │   │   ├── struct Point
+│   │   ├──     int x, y;
 │   │   ├──     Point(int x, int y) : x(x), y(y)
 │   │   ├── class Animal
 │   │   ├──   public:
 │   │   ├──     Animal(const std::string &name) : name(name)
 │   │   ├──     virtual void speak() const
 │   │   ├──     virtual ~Animal()
+│   │   ├── protected:
+│   │   ├──     std::string name;
 │   │   ├── class Dog : public Animal
 │   │   ├──   public:
 │   │   ├──     Dog(const std::string &name) : Animal(name)
@@ -2350,9 +2444,21 @@ tree_plus -i group_todo tests/more_languages
 │   │   │              int workspace_size, int reserve_space_size)
 │   │   ├── int main()
 │   │   ├── enum ECarTypes
+│   │   ├──   Sedan,
+│   │   ├──   Hatchback,
+│   │   ├──   SUV,
+│   │   ├──   Wagon
 │   │   ├── ECarTypes GetPreferredCarType()
 │   │   ├── enum ECarTypes : uint8_t
+│   │   ├──   Sedan,
+│   │   ├──   Hatchback,
+│   │   ├──   SUV = 254,
+│   │   ├──   Hybrid
 │   │   ├── enum class ECarTypes : uint8_t
+│   │   ├──   Sedan,
+│   │   ├──   Hatchback,
+│   │   ├──   SUV = 254,
+│   │   ├──   Hybrid
 │   │   ├── void myFunction(string fname, int age)
 │   │   ├── template <typename T> T cos(T)
 │   │   ├── template <typename T> T sin(T)
@@ -2375,6 +2481,8 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──     T *data()
 │   │   ├──     size_t size() const
 │   │   ├── class Buffer
+│   │   ├──  private:
+│   │   ├──   void* ptr_;
 │   │   ├── std::tuple<array, array, array> quantize(
 │   │   │       const array& w,
 │   │   │       int group_size,
@@ -2700,6 +2808,7 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── TF_PY_DECLARE_FLAG('enable_colocation_key_propagation_in_while_op_lowering')
 │   │   ├── #define TENSORFLOW_CORE_CONFIG_FLAG_DEFS_H_
 │   │   ├── class Flags
+│   │   ├──  public:
 │   │   ├── bool SetterForXlaAutoJitFlag(const string& value)
 │   │   ├── bool SetterForXlaCallModuleDisabledChecks(const string& value)
 │   │   ├── void AppendMarkForCompilationPassFlagsInternal(std::vector<Flag>* flag_list)
@@ -2803,8 +2912,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.55) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 6,929 line(s), 66,371 token(s) in 0.72 second(s).
+tree_plus v(1.0.56) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 6,938 line(s), 66,404 token(s) in 0.75 second(s).
 
 ```
 <!-- t2-end -->
@@ -3294,7 +3403,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.55) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.56) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 7 folder(s), 17 file(s), 2,090 line(s), 14,928 token(s) in 0.21 second(s).
 
 ```
@@ -3324,7 +3433,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.55) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.56) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.04 second(s).
 
 ```
