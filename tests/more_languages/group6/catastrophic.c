@@ -29,6 +29,141 @@ enum days
     SAT
 };
 
+enum worker_pool_flags {
+        /*
+         * worker_pool flags
+         *
+         * A bound pool is either associated or disassociated with its CPU.
+         * While associated (!DISASSOCIATED), all workers are bound to the
+         * CPU and none has %WORKER_UNBOUND set and concurrency management
+         * is in effect.
+         *
+         * While DISASSOCIATED, the cpu may be offline and all workers have
+         * %WORKER_UNBOUND set and concurrency management disabled, and may
+         * be executing on any CPU.  The pool behaves as an unbound one.
+         *
+         * Note that DISASSOCIATED should be flipped only while holding
+         * wq_pool_attach_mutex to avoid changing binding state while
+         * worker_attach_to_pool() is in progress.
+         *
+         * As there can only be one concurrent BH execution context per CPU, a
+         * BH pool is per-CPU and always DISASSOCIATED.
+         */
+        POOL_BH                 = 1 << 0,
+        POOL_MANAGER_ACTIVE     = 1 << 1,
+        POOL_DISASSOCIATED      = 1 << 2,
+        POOL_BH_DRAINING        = 1 << 3,
+};
+
+enum worker_flags {
+        WORKER_DIE              = 1 << 1,
+        WORKER_IDLE             = 1 << 2,
+        WORKER_PREP             = 1 << 3,
+        WORKER_CPU_INTENSIVE    = 1 << 6,
+        WORKER_UNBOUND          = 1 << 7,
+        WORKER_REBOUND          = 1 << 8,
+
+        WORKER_NOT_RUNNING      = WORKER_PREP | WORKER_CPU_INTENSIVE |
+                                  WORKER_UNBOUND | WORKER_REBOUND,
+};
+
+
+/*
+ * Structure fields follow one of the following exclusion rules.
+ *
+ * I: Modifiable by initialization/destruction paths and read-only for
+ *    everyone else.
+ *
+ * P: Preemption protected.  Disabling preemption is enough and should
+ *    only be modified and accessed from the local cpu.
+ *
+ * L: pool->lock protected.  Access with pool->lock held.
+ *
+ * LN: pool->lock and wq_node_nr_active->lock protected for writes. Either for
+ *     reads.
+ *
+ * K: Only modified by worker while holding pool->lock. Can be safely read by
+ *    self, while holding pool->lock or from IRQ context if %current is the
+ *    kworker.
+ *
+ * S: Only modified by worker self.
+ *
+ * A: wq_pool_attach_mutex protected.
+ *
+ * PL: wq_pool_mutex protected.
+ *
+ * PR: wq_pool_mutex protected for writes.  RCU protected for reads.
+ *
+ * PW: wq_pool_mutex and wq->mutex protected for writes.  Either for reads.
+ *
+ * PWR: wq_pool_mutex and wq->mutex protected for writes.  Either or
+ *      RCU for reads.
+ *
+ * WQ: wq->mutex protected.
+ *
+ * WR: wq->mutex protected for writes.  RCU protected for reads.
+ *
+ * WO: wq->mutex protected for writes. Updated with WRITE_ONCE() and can be read
+ *     with READ_ONCE() without locking.
+ *
+ * MD: wq_mayday_lock protected.
+ *
+ * WD: Used internally by the watchdog.
+ */
+
+/* struct worker is defined in workqueue_internal.h */
+
+struct worker_pool {
+	raw_spinlock_t		lock;		/* the pool lock */
+	int			cpu;		/* I: the associated cpu */
+	int			node;		/* I: the associated node ID */
+	int			id;		/* I: pool ID */
+	unsigned int		flags;		/* L: flags */
+
+	unsigned long		watchdog_ts;	/* L: watchdog timestamp */
+	bool			cpu_stall;	/* WD: stalled cpu bound pool */
+
+	/*
+	 * The counter is incremented in a process context on the associated CPU
+	 * w/ preemption disabled, and decremented or reset in the same context
+	 * but w/ pool->lock held. The readers grab pool->lock and are
+	 * guaranteed to see if the counter reached zero.
+	 */
+	int			nr_running;
+
+	struct list_head	worklist;	/* L: list of pending works */
+
+	int			nr_workers;	/* L: total number of workers */
+	int			nr_idle;	/* L: currently idle workers */
+
+	struct list_head	idle_list;	/* L: list of idle workers */
+	struct timer_list	idle_timer;	/* L: worker idle timeout */
+	struct work_struct      idle_cull_work; /* L: worker idle cleanup */
+
+	struct timer_list	mayday_timer;	  /* L: SOS timer for workers */
+
+	/* a workers is either on busy_hash or idle_list, or the manager */
+	DECLARE_HASHTABLE(busy_hash, BUSY_WORKER_HASH_ORDER);
+						/* L: hash of busy workers */
+
+	struct worker		*manager;	/* L: purely informational */
+	struct list_head	workers;	/* A: attached workers */
+
+	struct ida		worker_ida;	/* worker IDs for task name */
+
+	struct workqueue_attrs	*attrs;		/* I: worker attributes */
+	struct hlist_node	hash_node;	/* PL: unbound_pool_hash node */
+	int			refcnt;		/* PL: refcnt for unbound pools */
+
+	/*
+	 * Destruction of pool is RCU protected to allow dereferences
+	 * from get_work_pool().
+	 */
+	struct rcu_head		rcu;
+};
+
+
+
 long add_two_longs(long x1, long x2)
 {
     return x1 + x2; // Use return to return a value
@@ -492,7 +627,7 @@ static int GetXCR0EAX() {
 #endif
 #endif
 
-// TODO(phawkins): technically we should build this module without AVX support
+// TODO(bionicles): technically we should use a proper parser
 // and use configure-time tests instead of __AVX__, since there is a
 // possibility that the compiler will use AVX instructions before we reach this
 // point.

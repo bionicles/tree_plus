@@ -34,6 +34,14 @@ MATHEMATICA_EXTENSIONS = {".nb", ".wl"}
 PYTHON_EXTENSIONS = {".py", ".pyi"}
 
 
+def head(n: int, content: str) -> str:
+    "return the first n lines of content"
+    content_lines = content.splitlines()
+    head_content_lines = content_lines[:n]
+    head_content = "\n".join(head_content_lines)
+    return head_content
+
+
 @lru_cache(maxsize=None)
 def read_file(
     file_path: str,
@@ -150,9 +158,7 @@ def parse_file(
                 components = parse_openrpc_json(content)
         elif file_extension in (".yml", ".yaml"):
             components = parse_yml(content)
-        # elif file_extension == ".c":
-        #     components = parse_c(content, timeout=_regex_timeout)
-        # components = func_timeout(1, parse_c, (content,))
+
         elif file_extension in C_EXTENSIONS:
             # special case: handling flags
             if (
@@ -477,10 +483,13 @@ def parse_rst(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[s
 
 
 # 2024-08-07 - switched the regex engine, added timeout, added struct fields, enum variants, class properties
+STRUCT_OR_CLASS = frozenset(("struct", "class"))
+
+
 def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_cpp")
-    content = remove_c_comments(content)
-
+    content = remove_c_comments(content, timeout=timeout)
+    # print(head(100, content))
     # Combined regex pattern to match all components
     combined_pattern = regex.compile(
         # Functions first (most common)
@@ -501,16 +510,18 @@ def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str
         r"^(?P<class>class \w+(?P<inheritance>\s?:(?P<mod>\s\w+\s\w+,?)*)?)|"
         # enums (maybe class)
         r"^(?P<enum>(?:enum) (?:class )?\w+(?: : \w+)?)|"
-        # struct and enum fields
-        r"^(?P<struct_or_enum_field> +(?!return)(?P<maybe_const>const )?(?P<maybe_struct>struct )?(?P<type_hint>(?P<module_path> (?P<module_path_part>\w+::)+)?\w+\*?)(?P<field_name_or_names> (?P<maybe_pointer>\*)?\w+?(?P<index>\[[^\]]+\])?,?)*(?P<field_is>(?P<an_enum_variant>(?P<maybe_enum_equals> = .*?)?,|\n(?=}))|(?P<a_struct_field>;$))]?)(?P<maybe_comment> //.*)?|"
-        # public or private sections
-        r"^(?P<public_private_protected> *(public|private|protected):)|"
         # pybind modules
         r"^(?P<pybind11>PYBIND11_MODULE[\s\S]*?)(?={)|"
         # pybind defs
         r"^(?P<def> *\w+\.def\(\"[\s\S]*?(?=;))|"
+        # namespace, just placehold to end class
+        r"^(?P<namespace>namespace.*)$|"
         # static definitions seem important
-        r"^(?P<other_static>static (struct )?(?P<static_kind>\w+) \w+(\[\])?(?= =))",
+        r"\n?^(?P<other_static>static (struct )?(?P<static_kind>\w+) \w+(\[\])?(?= =)).*$|"
+        # struct, class, enum fields
+        r"^(?P<struct_or_enum_field>\s+(?!return)(?P<maybe_const>const )?(?P<maybe_struct>struct )?(?P<type_hint>(?P<module_path> (?P<module_path_part>\w+::)+)?\w+\*?)(?P<field_name_or_names>\s+(?P<maybe_pointer>\*)?\w+?(?P<index>\[[^\]]+\])?,?)*(?P<field_is>(?P<an_enum_variant>(?P<maybe_enum_equals>\s+= (?!new\s)[^,;}]*?)?,|\n(?=}))|(?P<a_struct_field>;))]?)(?P<maybe_comment>\s+/[/*].*)?|"
+        # public or private sections
+        r"^(?P<public_private_protected> *(public|private|protected):)",
         # functions
         regex.MULTILINE,
         cache_pattern=True,
@@ -580,13 +591,17 @@ def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str
             component = groups["def"]
         elif context_name == "enum" and "an_enum_variant" in groups:
             component = groups["struct_or_enum_field"]
-        elif context_name in {"struct", "class"} and "a_struct_field" in groups:
+        elif context_name in STRUCT_OR_CLASS and "a_struct_field" in groups:
             component = groups["struct_or_enum_field"]
-        elif context_name in {"struct", "class"} and "var_char" in groups:
+        elif context_name in STRUCT_OR_CLASS and "var_char" in groups:
             component = groups["var_char"]
+        # TODO: gather requirements for C namespace visualization
+        elif "namespace" in groups:
+            context_name = ""
         if component:
+            if "struct_or_enum_field" in groups:
+                component = component.lstrip("\n").replace("\t", "  ")
             debug_print(f"{component=}")
-            component = component
             component = component.rstrip("\n").rstrip(" ")
             components.append(component)
 
@@ -721,7 +736,8 @@ def remove_c_comments(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -
         regex.MULTILINE,
         cache_pattern=True,
     )
-    return c_comment_pattern.sub("", content, timeout=timeout)
+    no_comments = c_comment_pattern.sub("", content, timeout=timeout)
+    return no_comments
 
 
 def parse_ts(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
