@@ -96,7 +96,7 @@ Options:
                                0.7)
   -h, -H, --help               Show this message and exit.
 
-  v(1.0.57) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.58) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -202,7 +202,7 @@ tree_plus -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (35,194 tokens, 3,451 lines)
+├── 📄 README.md (35,968 tokens, 3,520 lines)
 │   ├── TODO: research various kwargs for huggingface
 │   ├── TODO: fix this path
 │   ├── TODO: fill in these stubs
@@ -322,6 +322,37 @@ tree_plus -i tests
 │   ├── TODO: This todo tests parse_todo
 │   ├── TODO: technically we should build this module without AVX support
 │   ├── TODO: This todo tests parse_todo
+│   ├── TODO: research various kwargs for huggingface
+│   ├── TODO: fix this path
+│   ├── TODO: fill in these stubs
+│   ├── TODO: fix this path
+│   ├── TODO: fill in these stubs
+│   ├── TODO: show off how well we parse_todo
+│   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR
+│   ├── NOTE: you can customize the color here
+│   ├── TODO: clarify subtree types
+│   ├── NOTE: sometimes we need wider trees
+│   ├── TODO: research
+│   ├── NOTE: directly add input file_paths to the amortized glob matches
+│   ├── TODO: decide to apply glob patterns to glob paths
+│   ├── TODO: decide between glob and rglob in _from_glob
+│   ├── TODO: decide if we need to re
+│   ├── TODO: clarify ignore in glob seed context
+│   ├── NOTE: this is only to satisfy the type checker
+│   ├── TODO: incorporate gitignore
+│   ├── BUG: HTML tree doesn
+│   ├── TODO: Fix HTML in TreePlus
+│   ├── BUG: this repeatedly finds tags
+│   ├── TODO: gather requirements for C namespace visualization
+│   ├── TODO: update parse_objective_c to avoid fixed unrolling
+│   ├── TODO: update parse_ocaml to avoid forced unrolling
+│   ├── TODO: fix parse_apl to avoid forced unrolling
+│   ├── TODO: fix parse_perl to avoid forced unrolling
+│   ├── TODO: re
+│   ├── NOTE: no point in the answers since there
+│   ├── TODO: This todo tests parse_todo
+│   ├── TODO: technically we should use a proper parser
+│   ├── TODO: This todo tests parse_todo
 │   ├── # Tree Plus
 │   ├── ## Usage
 │   ├── ## Example Output:
@@ -371,8 +402,15 @@ tree_plus -i tests
 │   │       ) -> ItHappened
 │   ├── 📄 rewrite.py (4,017 tokens, 471 lines)
 │   │   ├── TODO: research various kwargs for huggingface
+│   │   ├── 
+│   │   │   DEFAULT_MAX_LENGTH = 256
 │   │   ├── class ModelName(Enum)
+│   │   ├──     QWEN_2 = "Qwen/Qwen2-7B-Instruct"
+│   │   ├──     MISTRAL_3 = "mistralai/Mistral-7B-Instruct-v0.3"
 │   │   ├── class ModelContext(Enum)
+│   │   ├──     QWEN_2 = 131
+│   │   ├──     MISTRAL_3 = 32
+│   │   ├──             root: None,
 │   │   ├── def rewrite_module(
 │   │   │       max_length: int,
 │   │   │       fill_context: bool,
@@ -419,7 +457,12 @@ tree_plus -i tests
     │   ├── TODO: show off how well we parse_todo
     │   ├── @dataclass(frozen=True)
     │   │   class TokenLineCount
+    │   ├──     n_tokens: int
+    │   ├──     n_lines: int
     │   ├── class TokenizerName(Enum)
+    │   ├──     WC = "wc"
+    │   ├──     GPT4O = "gpt4o"
+    │   ├──     GPT4 = "gpt-4"
     │   ├── def count_tokens_lines(
     │   │       file_path: Union,
     │   │       *,
@@ -471,9 +514,27 @@ tree_plus -i tests
     │   ├── TODO: decide if we need to re
     │   ├── TODO: clarify ignore in glob seed context
     │   ├── NOTE: this is only to satisfy the type checker
+    │   ├── 
+    │   │   INTO_RICH_TREE_TIMEOUT_SECONDS = 1
+    │   ├── 
+    │   │   BLACK = "black"
     │   ├── class Category(Enum)
+    │   ├── 
+    │   │       ROOT = 1
+    │   ├──     GLOB = 2
+    │   ├──     FOLDER = 3
+    │   ├──     FILE = 4
+    │   ├──     COMPONENT = 5
+    │   ├──     URL = 6
+    │   ├──     TAG = 7
     │   ├── @dataclass
     │   │   class TreePlus
+    │   ├──     category: Category
+    │   ├──     name: Union
+    │   ├──     line_count: int
+    │   ├──     token_count: int
+    │   ├──     subtrees: Union[
+    │   ├──     hrefs: Optional[Dict]
     │   ├──     @property
     │   │       def has_tree_plus_subtrees(self) -> Optional
     │   ├──     @property
@@ -696,6 +757,9 @@ tree_plus -i tests
     │   │   ) -> Optional[Tuple]
     │   ├── @dataclass(frozen=True)
     │   │   class AmortizedGlobs
+    │   ├──     paths: Tuple[Path, ...]
+    │   ├──     globs: Tuple
+    │   ├──     matches: FrozenSet[Path]
     │   ├── def amortize_globs(
     │   │       paths: Tuple[Path, ...],
     │   │       globs: Tuple,
@@ -710,7 +774,7 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (24,393 tokens, 2,695 lines)
+    ├── 📄 parse_file.py (24,615 tokens, 2,713 lines)
     │   ├── BUG: HTML tree doesn
     │   ├── TODO: Fix HTML in TreePlus
     │   ├── BUG: this repeatedly finds tags
@@ -719,6 +783,10 @@ tree_plus -i tests
     │   ├── TODO: update parse_ocaml to avoid forced unrolling
     │   ├── TODO: fix parse_apl to avoid forced unrolling
     │   ├── TODO: fix parse_perl to avoid forced unrolling
+    │   ├── 
+    │   │   DEFAULT_REGEX_TIMEOUT = 0
+    │   ├── 
+    │   │   BINARY_CHECK_SIZE = 1024
     │   ├── def head(n: int, content: str) -> str
     │   ├── @lru_cache(maxsize=None)
     │   │   def read_file(
@@ -733,6 +801,10 @@ tree_plus -i tests
     │   │   ) -> List
     │   ├── def extract_groups(match: regex.Match, named_only: bool = False) -> dict
     │   ├── def parse_html(content: str) -> List
+    │   ├── 
+    │   │   
+    │   │   DENY_HTML = "
+"
     │   ├── def parse_jsonl(content: str) -> List
     │   ├── def process_tag(tag, components) -> Optional
     │   ├── def components_from_html(content: str) -> List
@@ -848,10 +920,12 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.57"
+    │   └── __version__ = "1.0.58"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re
         ├── NOTE: no point in the answers since there
+        ├── 
+        │   N_GOOGLE_RESULTS = 2
         ├── def create_url(kind: Action, query: str) -> str
         ├── def create_link(kind: Action, query: str) -> str
         ├── def create_wikipedia_url(subterm: str) -> str
@@ -909,8 +983,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.57) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 12,898 line(s), 112,829 token(s) in 0.30 second(s).
+tree_plus v(1.0.58) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,985 line(s), 113,825 token(s) in 0.32 second(s).
 
 ```
 <!-- t1-end -->
@@ -1108,15 +1182,15 @@ tree_plus -c -i group_todo tests/more_languages
 ├── 📁 group7 (1 folder, 3 files) 
 │   ├── 📄 absurdly_huge.jsonl (8,347 tokens, 126 lines)
 │   ├── 📄 angular_crud.ts (1,192 tokens, 148 lines)
-│   └── 📄 dataclass.py (186 tokens, 36 lines)
+│   └── 📄 structure.py (400 tokens, 92 lines)
 └── 📁 group_lisp (1 folder, 4 files) 
     ├── 📄 clojure_test.clj (682 tokens, 85 lines)
     ├── 📄 LispTest.lisp (25 tokens, 6 lines)
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.57) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,073 line(s), 67,532 token(s) in 0.21 second(s).
+tree_plus v(1.0.58) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,129 line(s), 67,746 token(s) in 0.22 second(s).
 
 ```
 <!-- t6-end -->
@@ -2218,8 +2292,9 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──    cognitoAppClientId
 │   │   └──    apiurl
 │   ├── 📄 hello_world.pyi (22 tokens, 3 lines)
-│   │   └── @final
-│   │       class dtype(Generic[_DTypeScalar_co])
+│   │   ├── @final
+│   │   │   class dtype(Generic[_DTypeScalar_co])
+│   │   └──     names: None | tuple
 │   ├── 📄 k8s_test.yaml (140 tokens, 37 lines)
 │   │   ├── apps/v1.Deployment -> my-app
 │   │   ├── v1.Service -> my-service
@@ -2951,13 +3026,57 @@ tree_plus -i group_todo tests/more_languages
 │   │   │           where,
 │   │   │       }: DBCommand & { where?: { : string | number } })
 │   │   └──     async search_table(criteria: SearchCriteria)
-│   └── 📄 dataclass.py (186 tokens, 36 lines)
+│   └── 📄 structure.py (400 tokens, 92 lines)
+│       ├── @runtime_checkable
+│       │   class DataClass(Protocol)
+│       ├──     __dataclass_fields__: dict
+│       ├── class MyInteger(Enum)
+│       ├──     ONE = 1
+│       ├──     TWO = 2
+│       ├──     THREE = 42
+│       ├── class MyString(Enum)
+│       ├──     AAA1 = "aaa"
+│       ├──     BB_B = """edge
+│       │   case"""
 │       ├── @dataclass(frozen=True, slots=True, kw_only=True)
-│       │   class Tool(Protocol)
+│       │   class Tool
+│       ├──     name: str
+│       ├──     description: str
+│       ├──     input_model: DataClass
+│       ├──     output_model: DataClass
 │       ├──     def execute(self, *args, **kwargs)
 │       ├──     @property
 │       │       def edge_case(self) -> str
-│       └──     def should_still_see_me(self, x: bool = True) -> "Tool"
+│       ├──     def should_still_see_me(self, x: bool = True) -> "Tool"
+│       ├── @dataclass
+│       │   class MyInput[T]
+│       ├──     name: str
+│       ├──     rank: MyInteger
+│       ├──     serial_n: int
+│       ├── @dataclass
+│       │   class Thingy
+│       ├──     is_edge_case: bool
+│       ├── @dataclass
+│       │   class MyOutput
+│       ├──     orders: str
+│       ├── class MyTools(Enum)
+│       ├──     TOOL_A = Tool(
+│       │           name="complicated",
+│       │           description="edge case!",
+│       │           input_model=MyInput[Thingy],
+│       │           output_model=MyOutput,
+│       │       )
+│       ├──     TOOL_B = Tool(
+│       │           name="""super
+│       │   complicated
+│       │   """,
+│       │           description="edge case!",
+│       │           input_model=MyInput,
+│       │           output_model=MyOutput,
+│       │       )
+│       ├── @final
+│       │   class dtype(Generic[_DTypeScalar_co])
+│       └──     names: None | tuple
 └── 📁 group_lisp (1 folder, 4 files) 
     ├── 📄 clojure_test.clj (682 tokens, 85 lines)
     │   ├── defprotocol P
@@ -2981,8 +3100,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.57) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,073 line(s), 67,532 token(s) in 0.82 second(s).
+tree_plus v(1.0.58) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,129 line(s), 67,746 token(s) in 0.76 second(s).
 
 ```
 <!-- t2-end -->
@@ -3472,8 +3591,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.57) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,090 line(s), 14,928 token(s) in 0.21 second(s).
+tree_plus v(1.0.58) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,090 line(s), 14,928 token(s) in 0.20 second(s).
 
 ```
 <!-- t3-end -->
@@ -3502,7 +3621,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.57) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.58) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.04 second(s).
 
 ```
