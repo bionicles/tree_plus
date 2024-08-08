@@ -94,9 +94,9 @@ Options:
                                'gpt4o' works
   --timeout FLOAT              regex timeout in seconds (optional, default
                                0.7)
-  -H, -h, --help               Show this message and exit.
+  -h, -H, --help               Show this message and exit.
 
-  v(1.0.56) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.57) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -202,7 +202,7 @@ tree_plus -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (34,358 tokens, 3,342 lines)
+├── 📄 README.md (35,194 tokens, 3,451 lines)
 │   ├── TODO: research various kwargs for huggingface
 │   ├── TODO: fix this path
 │   ├── TODO: fill in these stubs
@@ -231,6 +231,36 @@ tree_plus -i tests
 │   ├── TODO: re
 │   ├── NOTE: no point in the answers since there
 │   ├── TODO: This todo tests parse_todo
+│   ├── TODO: This todo tests parse_todo
+│   ├── TODO: research various kwargs for huggingface
+│   ├── TODO: fix this path
+│   ├── TODO: fill in these stubs
+│   ├── TODO: fix this path
+│   ├── TODO: fill in these stubs
+│   ├── TODO: show off how well we parse_todo
+│   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR
+│   ├── NOTE: you can customize the color here
+│   ├── TODO: clarify subtree types
+│   ├── NOTE: sometimes we need wider trees
+│   ├── TODO: research
+│   ├── NOTE: directly add input file_paths to the amortized glob matches
+│   ├── TODO: decide to apply glob patterns to glob paths
+│   ├── TODO: decide between glob and rglob in _from_glob
+│   ├── TODO: decide if we need to re
+│   ├── TODO: clarify ignore in glob seed context
+│   ├── NOTE: this is only to satisfy the type checker
+│   ├── TODO: incorporate gitignore
+│   ├── BUG: HTML tree doesn
+│   ├── TODO: Fix HTML in TreePlus
+│   ├── BUG: this repeatedly finds tags
+│   ├── TODO: update parse_objective_c to avoid fixed unrolling
+│   ├── TODO: update parse_ocaml to avoid forced unrolling
+│   ├── TODO: fix parse_apl to avoid forced unrolling
+│   ├── TODO: fix parse_perl to avoid forced unrolling
+│   ├── TODO: re
+│   ├── NOTE: no point in the answers since there
+│   ├── TODO: This todo tests parse_todo
+│   ├── TODO: technically we should build this module without AVX support
 │   ├── TODO: This todo tests parse_todo
 │   ├── TODO: research various kwargs for huggingface
 │   ├── TODO: fix this path
@@ -680,14 +710,16 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (24,259 tokens, 2,679 lines)
+    ├── 📄 parse_file.py (24,393 tokens, 2,695 lines)
     │   ├── BUG: HTML tree doesn
     │   ├── TODO: Fix HTML in TreePlus
     │   ├── BUG: this repeatedly finds tags
+    │   ├── TODO: gather requirements for C namespace visualization
     │   ├── TODO: update parse_objective_c to avoid fixed unrolling
     │   ├── TODO: update parse_ocaml to avoid forced unrolling
     │   ├── TODO: fix parse_apl to avoid forced unrolling
     │   ├── TODO: fix parse_perl to avoid forced unrolling
+    │   ├── def head(n: int, content: str) -> str
     │   ├── @lru_cache(maxsize=None)
     │   │   def read_file(
     │   │       file_path: str,
@@ -816,7 +848,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.56"
+    │   └── __version__ = "1.0.57"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re
         ├── NOTE: no point in the answers since there
@@ -877,8 +909,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.56) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 12,773 line(s), 111,859 token(s) in 0.28 second(s).
+tree_plus v(1.0.57) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 12,898 line(s), 112,829 token(s) in 0.30 second(s).
 
 ```
 <!-- t1-end -->
@@ -1060,7 +1092,7 @@ tree_plus -c -i group_todo tests/more_languages
 │   ├── 📄 testPackage.json (349 tokens, 43 lines)
 │   └── 📄 tickets.component.ts (7,160 tokens, 903 lines)
 ├── 📁 group6 (1 folder, 13 files) 
-│   ├── 📄 catastrophic.c (3,939 tokens, 590 lines)
+│   ├── 📄 catastrophic.c (5,067 tokens, 725 lines)
 │   ├── 📄 cpp_examples_impl.cc (60 tokens, 10 lines)
 │   ├── 📄 cpp_examples_impl.cu (37 tokens, 10 lines)
 │   ├── 📄 cpp_examples_impl.h (22 tokens, 6 lines)
@@ -1083,8 +1115,8 @@ tree_plus -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.56) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 6,938 line(s), 66,404 token(s) in 0.21 second(s).
+tree_plus v(1.0.57) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,073 line(s), 67,532 token(s) in 0.21 second(s).
 
 ```
 <!-- t6-end -->
@@ -2356,8 +2388,8 @@ tree_plus -i group_todo tests/more_languages
 │       ├── const mockTickets = async () =>
 │       └── const renderQRCode = async (text: String): Promise<string> =>
 ├── 📁 group6 (1 folder, 13 files) 
-│   ├── 📄 catastrophic.c (3,939 tokens, 590 lines)
-│   │   ├── TODO: technically we should build this module without AVX support
+│   ├── 📄 catastrophic.c (5,067 tokens, 725 lines)
+│   │   ├── TODO: technically we should use a proper parser
 │   │   ├── struct Point
 │   │   ├──     int x;
 │   │   ├──     int y;
@@ -2371,6 +2403,43 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├──     THU,
 │   │   ├──     FRI,
 │   │   ├──     SAT
+│   │   ├── enum worker_pool_flags
+│   │   ├──         POOL_BH                 = 1 << 0,
+│   │   ├──         POOL_MANAGER_ACTIVE     = 1 << 1,
+│   │   ├──         POOL_DISASSOCIATED      = 1 << 2,
+│   │   ├──         POOL_BH_DRAINING        = 1 << 3,
+│   │   ├── enum worker_flags
+│   │   ├──         WORKER_DIE              = 1 << 1,
+│   │   ├──         WORKER_IDLE             = 1 << 2,
+│   │   ├──         WORKER_PREP             = 1 << 3,
+│   │   ├──         WORKER_CPU_INTENSIVE    = 1 << 6,
+│   │   ├──         WORKER_UNBOUND          = 1 << 7,
+│   │   ├──         WORKER_REBOUND          = 1 << 8,
+│   │   ├──         WORKER_NOT_RUNNING      = WORKER_PREP | WORKER_CPU_INTENSIVE |
+│   │   │                                     WORKER_UNBOUND | WORKER_REBOUND,
+│   │   ├── struct worker_pool
+│   │   ├──   raw_spinlock_t    lock;
+│   │   ├──   int      cpu;
+│   │   ├──   int      node;
+│   │   ├──   int      id;
+│   │   ├──   unsigned int    flags;
+│   │   ├──   unsigned long    watchdog_ts;
+│   │   ├──   bool      cpu_stall;
+│   │   ├──   int      nr_running;
+│   │   ├──   struct list_head  worklist;
+│   │   ├──   int      nr_workers;
+│   │   ├──   int      nr_idle;
+│   │   ├──   struct list_head  idle_list;
+│   │   ├──   struct timer_list  idle_timer;
+│   │   ├──   struct work_struct      idle_cull_work;
+│   │   ├──   struct timer_list  mayday_timer;
+│   │   ├──   struct worker    *manager;
+│   │   ├──   struct list_head  workers;
+│   │   ├──   struct ida    worker_ida;
+│   │   ├──   struct workqueue_attrs  *attrs;
+│   │   ├──   struct hlist_node  hash_node;
+│   │   ├──   int      refcnt;
+│   │   ├──   struct rcu_head    rcu;
 │   │   ├── long add_two_longs(long x1, long x2)
 │   │   ├── double multiplyByTwo(double num)
 │   │   ├── char getFirstCharacter(char *str)
@@ -2912,8 +2981,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.56) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 6,938 line(s), 66,404 token(s) in 0.75 second(s).
+tree_plus v(1.0.57) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,073 line(s), 67,532 token(s) in 0.82 second(s).
 
 ```
 <!-- t2-end -->
@@ -3403,7 +3472,7 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.56) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.57) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 7 folder(s), 17 file(s), 2,090 line(s), 14,928 token(s) in 0.21 second(s).
 
 ```
@@ -3433,7 +3502,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.56) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.57) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.04 second(s).
 
 ```
