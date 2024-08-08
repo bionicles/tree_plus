@@ -39,7 +39,7 @@ EXPECTATION_0 = """📄 file.py (19 tokens, 3 lines)
 def unify_tree_symbols(tree_string):
     if platform.system() == "Windows":
         # Existing mappings
-        tree_string = tree_string.replace("\u2523", "\u251C")  # '┣' in Ubuntu/MacOS
+        tree_string = tree_string.replace("\u2523", "\u251c")  # '┣' in Ubuntu/MacOS
         tree_string = tree_string.replace("\u2503", "\u2502")  # '┃' in Ubuntu/MacOS
 
         # Add mappings for the characters causing the test failures
@@ -83,7 +83,7 @@ def test_e2e_empty_folder():
 
 
 EXPECTATION_1_WC = """📁 path_to_test (1 folder, 6 files)
-├── 📄 class_method_type.py (530 tokens, 102 lines)
+├── 📄 class_method_type.py (525 tokens, 101 lines)
 │   ├── T = TypeVar("T")
 │   ├── def parse_py(contents: str) -> List[str]
 │   ├── class MyClass
@@ -103,18 +103,27 @@ EXPECTATION_1_WC = """📁 path_to_test (1 folder, 6 files)
 │   │       plus: str = "+",
 │   │   ) -> tuple
 │   ├── class LogLevelEnum(str, Enum)
-│   ├── class Algo(BaseModel)
+│   ├──     CRITICAL = "CRITICAL"
+│   ├──     GREETING = "GREETING"
+│   ├──     WARNING = "WARNING"
+│   ├──     ERROR = "ERROR"
+│   ├──     DEBUG = "DEBUG"
+│   ├──     INFO = "INFO"
+│   ├──     OFF = "OFF"
+│   ├── class Thingy(BaseModel)
+│   ├──     metric: float
 │   ├── @dataclass
 │   │   class TestDataclass
+│   ├──     tree: str
 │   ├── A = TypeVar("A", str, bytes)
 │   ├── def omega_yikes(file: str, expected: List[str]) -> bool
 │   ├── def ice[T](args: Iterable[T] = ())
 │   ├── class list[T]
 │   ├──     def __getitem__(self, index: int, /) -> T
 │   ├──     @classmethod
-│   │       def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
+│   │       def from_code(cls, toolbox, code: bytes, score=None) -> "Thingy"
 │   ├──     @classmethod
-│   │       def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
+│   │       def from_str(cls, toolbox, string: str, score=None) -> "Thingy"
 │   └── class Router(hk.Module)
 ├── 📄 empty.py (0 tokens, 0 lines)
 ├── 📄 file.md (11 tokens, 2 lines)
@@ -126,7 +135,7 @@ EXPECTATION_1_WC = """📁 path_to_test (1 folder, 6 files)
     └── __version__ = "1.2.3"
 """
 EXPECTATION_1_GPT4 = """📁 path_to_test (1 folder, 6 files)
-├── 📄 class_method_type.py (541 tokens, 103 lines)
+├── 📄 class_method_type.py (539 tokens, 101 lines)
 │   ├── T = TypeVar("T")
 │   ├── def parse_py(contents: str) -> List[str]
 │   ├── class MyClass
@@ -146,18 +155,27 @@ EXPECTATION_1_GPT4 = """📁 path_to_test (1 folder, 6 files)
 │   │       plus: str = "+",
 │   │   ) -> tuple
 │   ├── class LogLevelEnum(str, Enum)
-│   ├── class Algo(BaseModel)
+│   ├──     CRITICAL = "CRITICAL"
+│   ├──     GREETING = "GREETING"
+│   ├──     WARNING = "WARNING"
+│   ├──     ERROR = "ERROR"
+│   ├──     DEBUG = "DEBUG"
+│   ├──     INFO = "INFO"
+│   ├──     OFF = "OFF"
+│   ├── class Thingy(BaseModel)
+│   ├──     metric: float
 │   ├── @dataclass
 │   │   class TestDataclass
+│   ├──     tree: str
 │   ├── A = TypeVar("A", str, bytes)
 │   ├── def omega_yikes(file: str, expected: List[str]) -> bool
 │   ├── def ice[T](args: Iterable[T] = ())
 │   ├── class list[T]
 │   ├──     def __getitem__(self, index: int, /) -> T
 │   ├──     @classmethod
-│   │       def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
+│   │       def from_code(cls, toolbox, code: bytes, score=None) -> "Thingy"
 │   ├──     @classmethod
-│   │       def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
+│   │       def from_str(cls, toolbox, string: str, score=None) -> "Thingy"
 │   └── class Router(hk.Module)
 ├── 📄 empty.py (0 tokens, 0 lines)
 ├── 📄 file.md (12 tokens, 2 lines)
@@ -169,7 +187,7 @@ EXPECTATION_1_GPT4 = """📁 path_to_test (1 folder, 6 files)
     └── __version__ = "1.2.3"
 """
 EXPECTATION_1_GPT4O = """📁 path_to_test (1 folder, 6 files)
-├── 📄 class_method_type.py (541 tokens, 103 lines)
+├── 📄 class_method_type.py (539 tokens, 101 lines)
 │   ├── T = TypeVar("T")
 │   ├── def parse_py(contents: str) -> List[str]
 │   ├── class MyClass
@@ -189,18 +207,27 @@ EXPECTATION_1_GPT4O = """📁 path_to_test (1 folder, 6 files)
 │   │       plus: str = "+",
 │   │   ) -> tuple
 │   ├── class LogLevelEnum(str, Enum)
-│   ├── class Algo(BaseModel)
+│   ├──     CRITICAL = "CRITICAL"
+│   ├──     GREETING = "GREETING"
+│   ├──     WARNING = "WARNING"
+│   ├──     ERROR = "ERROR"
+│   ├──     DEBUG = "DEBUG"
+│   ├──     INFO = "INFO"
+│   ├──     OFF = "OFF"
+│   ├── class Thingy(BaseModel)
+│   ├──     metric: float
 │   ├── @dataclass
 │   │   class TestDataclass
+│   ├──     tree: str
 │   ├── A = TypeVar("A", str, bytes)
 │   ├── def omega_yikes(file: str, expected: List[str]) -> bool
 │   ├── def ice[T](args: Iterable[T] = ())
 │   ├── class list[T]
 │   ├──     def __getitem__(self, index: int, /) -> T
 │   ├──     @classmethod
-│   │       def from_code(cls, toolbox, code: bytes, score=None) -> "Algo"
+│   │       def from_code(cls, toolbox, code: bytes, score=None) -> "Thingy"
 │   ├──     @classmethod
-│   │       def from_str(cls, toolbox, string: str, score=None) -> 'Algo'
+│   │       def from_str(cls, toolbox, string: str, score=None) -> "Thingy"
 │   └── class Router(hk.Module)
 ├── 📄 empty.py (0 tokens, 0 lines)
 ├── 📄 file.md (12 tokens, 2 lines)

@@ -847,15 +847,19 @@ def parse_py(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
 
     combined_py_pattern = regex.compile(
         # Functions and Methods, capturing indentation and multiline signatures
-        r"^( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\],. ]+)?)\s*:|"
+        r"^(?P<def>( *def\s+\w+(\[.*\])?\s*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*(?:->\s*[\w\"'\[\],. ]+)?)\s*):|"
         # Classes
-        r"(class \w+(\[.*\])?(\([\w\[\]\s,=\.]*\))?):|"
+        r"(?P<class> *class \w+(\[.*\])?(\([\w\[\]\s,=\.]*\))?):|"
         # Decorators
-        r"^( *@\w+(\(.*\))?)\n|"
+        r"^(?P<decorator> *@\w+(\(.*\))?)\n|"
         # TypeVar
-        r"\n(\w+ = TypeVar\([^)]+\))|"
+        r"\n(?P<typevar>\w+ = TypeVar\([^)]+\))|"
         # Version
-        r"\n((__version__ = \".*\"))",
+        r"\n(?P<version>(__version__ = \".*\"))|"
+        # Enum Variants
+        r"^(?P<enum_variant>\s+[A-Z_\d]+\s+=\s+(?P<variant_value>(?P<int_value>\d+)|(?P<str_value>\"+[^\"]+\"+)|(?P<struct_value>[A-Z]\w+\([\s\S]+?(?P<closing>^\s+\)$))))|"
+        # DataClass Fields
+        r"^(?P<dataclass_field>\s+\w+:\s+[\w\[\]\|\.\, ]+).*$",
         regex.MULTILINE,
         # regex.DOTALL,  # causes dramatic over-extension of matches
         cache_pattern=True,
@@ -863,8 +867,9 @@ def parse_py(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
     # remove comments in multiline signatures
     content = remove_py_comments(content, timeout=timeout)
     content = remove_docstrings(content, timeout=timeout)
-    components = []
     decorator_carry = []
+    components = []
+    context_name: Literal["class", ""] = ""
     for match_number, match in enumerate(
         combined_py_pattern.finditer(content, timeout=timeout)
     ):
@@ -872,28 +877,41 @@ def parse_py(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
         debug_print(f"parse_py: {match_number=} {match=}")
         component = None
         # Function or Method is 1
-        if 1 in groups:
-            component = groups[1]
+        if "def" in groups:
+            context_name = ""
+            component = groups["def"]
             if decorator_carry:
                 component = "\n".join(decorator_carry) + "\n" + component
                 decorator_carry = []
 
         # Class is 2
-        elif 3 in groups:
-            component = groups[3]
+        elif "class" in groups:
+            context_name = "class"
+            component = groups["class"]
             if decorator_carry:
                 component = "\n".join(decorator_carry) + "\n" + component
                 decorator_carry = []
         # 6 is the whole decorator group
-        elif 6 in groups:
-            decorator = groups[6]
+        elif "decorator" in groups:
+            context_name = ""
+            decorator = groups["decorator"]
             decorator_carry.append(decorator)
         # 8 wraps entire TypeVar matches
-        elif 8 in groups:
-            component = groups[8]
+        elif "typevar" in groups:
+            context_name = ""
+            component = groups["typevar"]
         # 9 is __version__
-        elif 9 in groups:
-            component = groups[9]
+        elif "version" in groups:
+            context_name = ""
+            component = groups["version"]
+
+        # enum_variant
+        elif "enum_variant" in groups:
+            component = groups["enum_variant"]
+
+        elif "dataclass_field" in groups:
+            if context_name == "class":
+                component = groups["dataclass_field"].lstrip("\n").rstrip(" ")
 
         if component:
             assert isinstance(component, str)

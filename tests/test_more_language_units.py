@@ -1726,7 +1726,8 @@ def test_more_languages_group4(
             "tests/more_languages/group5/hello_world.pyi",
             [
                 """@final
-class dtype(Generic[_DTypeScalar_co])"""
+class dtype(Generic[_DTypeScalar_co])""",
+                "    names: None | tuple[builtins.str, ...]",
             ],
         ),
     ],
@@ -2159,12 +2160,56 @@ ANGULAR_CRUD_EXPECTATION = [
 ]
 
 DATACLASS_EXPECTATION = [
+    """@runtime_checkable
+class DataClass(Protocol)""",
+    "    __dataclass_fields__: dict",
+    "class MyInteger(Enum)",
+    "    ONE = 1",
+    "    TWO = 2",
+    "    THREE = 42",
+    "class MyString(Enum)",
+    '    AAA1 = "aaa"',
+    """    BB_B = \"\"\"edge
+case\"\"\"""",
     """@dataclass(frozen=True, slots=True, kw_only=True)
-class Tool(Protocol)""",
+class Tool""",
+    "    name: str",
+    "    description: str",
+    "    input_model: DataClass",
+    "    output_model: DataClass",
     "    def execute(self, *args, **kwargs)",
     """    @property
     def edge_case(self) -> str""",
     '    def should_still_see_me(self, x: bool = True) -> "Tool"',
+    """@dataclass
+class MyInput[T]""",
+    "    name: str",
+    "    rank: MyInteger",
+    "    serial_n: int",
+    """@dataclass
+class Thingy""",
+    "    is_edge_case: bool",
+    """@dataclass
+class MyOutput""",
+    "    orders: str",
+    "class MyTools(Enum)",
+    """    TOOL_A = Tool(
+        name="complicated",
+        description="edge case!",
+        input_model=MyInput[Thingy],
+        output_model=MyOutput,
+    )""",
+    """    TOOL_B = Tool(
+        name=\"\"\"super
+complicated
+\"\"\",
+        description="edge case!",
+        input_model=MyInput,
+        output_model=MyOutput,
+    )""",
+    """@final
+class dtype(Generic[_DTypeScalar_co])""",
+    "    names: None | tuple[builtins.str, ...]",
 ]
 
 WGSL_EXPECTATION = [
@@ -2229,7 +2274,7 @@ JSONL_EXPECTATION = [
     "file,expected",
     [
         ("tests/more_languages/group7/angular_crud.ts", ANGULAR_CRUD_EXPECTATION),
-        ("tests/more_languages/group7/dataclass.py", DATACLASS_EXPECTATION),
+        ("tests/more_languages/group7/structure.py", DATACLASS_EXPECTATION),
         ("tests/more_languages/group7/absurdly_huge.jsonl", JSONL_EXPECTATION),
         # ("tests/more_languages/group7/wgsl_test.wgsl", WGSL_EXPECTATION),
         # ("tests/more_languages/group7/AAPLShaders.metal", METAL_EXPECTATION),
@@ -2242,9 +2287,9 @@ def test_more_languages_group_7(
     print(f"{file=}")
 
     result = parse_file(file)
-    print("result", result)
-    print("expected", expected)
-    assert result == expected
+    print("expectation", expected)
+    print("reality", result)
+    assert expected == result
 
 
 # TODO:

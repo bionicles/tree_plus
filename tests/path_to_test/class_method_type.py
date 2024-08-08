@@ -36,7 +36,7 @@ class MyClass:
 
 @lru_cache(maxsize=None)
 def my_multiline_signature_function(
-    tree: tuple = (), # edge case
+    tree: tuple = (),  # edge case
     plus: str = "+",
 ) -> tuple:
     pass
@@ -44,7 +44,7 @@ def my_multiline_signature_function(
 
 class LogLevelEnum(str, Enum):
     CRITICAL = "CRITICAL"
-    GREEDBOT = "GREEDBOT"
+    GREETING = "GREETING"
     WARNING = "WARNING"
     ERROR = "ERROR"
     DEBUG = "DEBUG"
@@ -52,8 +52,8 @@ class LogLevelEnum(str, Enum):
     OFF = "OFF"
 
 
-class Algo(BaseModel):
-    fitness: float = 9000.99  # percent, repeating, of course
+class Thingy(BaseModel):
+    metric: float = 9000.99  # percent, repeating, of course
 
 
 @dataclass
@@ -87,17 +87,15 @@ def omega_yikes(file: str, expected: List[str]) -> bool:
 def ice[T](args: Iterable[T] = ()):
     pass
 
+
 class list[T]:
-    def __getitem__(self, index: int, /) -> T:
-        ...
+    def __getitem__(self, index: int, /) -> T: ...
 
     @classmethod
-    def from_code(cls, toolbox, code: bytes, score=None) -> "Algo":
-        ...
+    def from_code(cls, toolbox, code: bytes, score=None) -> "Thingy": ...
 
     @classmethod
-    def from_str(cls, toolbox, string: str, score=None) -> 'Algo':
-        ...
+    def from_str(cls, toolbox, string: str, score=None) -> "Thingy": ...
 
-class Router(hk.Module):
-    ...
+
+class Router(hk.Module): ...
