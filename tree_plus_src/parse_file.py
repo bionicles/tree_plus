@@ -499,9 +499,9 @@ def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str
         # hashtag macros
         r"^(?P<macro>#(?:define)(?P<invocation>\s\w+( ?\w* ?\(.*\))?)?)|"
         # Methods
-        r"(?<!\\\n)^(?P<method> +(?P<virtual>virtual |static )?(?P<method_return_type>\w+ )?~?(?P<method_name>[*\w]+)(?P<args>\(.*\)(?P<const_override>( const)?( override)?)?)(?P<postfix>(\s^ *)?(?P<colon>\s?:\s).*?)?)(?=(\s{)|(?=.*=.*;\n)|(?=\s^))|"
+        r"(?<!\\\n)^(?P<method>\s+(?P<virtual>virtual |static )?(?P<method_return_type>\w+ )?~?(?P<method_name>[*\w]+)(?P<args>\(.*\)(?P<const_override>( const)?( override)?)?)(?P<postfix>(\s^ *)?(?P<colon>\s?:\s).*?)?)(?=(\s{)|(?=.*=.*;\n)|(?=\s^))|"
         # typedef struct
-        r"^(?P<typedef_struct>typedef struct\s?(?P<type_struct_name1>\w+)?)$|"
+        r"^(?P<typedef_struct>typedef struct\s?(?P<type_struct_name1>\w+)?).*$|"
         # weird closing names
         r"^(?P<closing> *\} (?!else)(?P<type_struct_name2>\w+);?)|"
         # structs
@@ -602,7 +602,7 @@ def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str
             if "struct_or_enum_field" in groups:
                 component = component.lstrip("\n").replace("\t", "  ")
             debug_print(f"{component=}")
-            component = component.rstrip("\n").rstrip(" ")
+            component = component.rstrip("\n").lstrip("\n").rstrip(" ")
             components.append(component)
 
     return components

@@ -723,3 +723,33 @@ static struct PyModuleDef cpu_feature_guard_module = {
 EXPORT_SYMBOL PyMODINIT_FUNC PyInit_cpu_feature_guard(void) {
   return PyModule_Create(&cpu_feature_guard_module);
 }
+
+typedef struct {
+    GPT2Config config;
+    // the weights (parameters) of the model, and their sizes
+    ParameterTensors params;
+    size_t param_sizes[NUM_PARAMETER_TENSORS];
+    float* params_memory;
+    size_t num_parameters;
+    // gradients of the weights
+    ParameterTensors grads;
+    float* grads_memory;
+    // buffers for the AdamW optimizer
+    float* m_memory;
+    float* v_memory;
+    // the activations of the model, and their sizes
+    ActivationTensors acts;
+    size_t act_sizes[NUM_ACTIVATION_TENSORS];
+    float* acts_memory;
+    size_t num_activations;
+    // gradients of the activations
+    ActivationTensors grads_acts;
+    float* grads_acts_memory;
+    // other run state configuration
+    int batch_size; // the batch size (B) of current forward pass
+    int seq_len; // the sequence length (T) of current forward pass
+    int* inputs; // the input tokens for the current forward pass
+    int* targets; // the target tokens for the current forward pass
+    float mean_loss; // after a forward pass with targets, will be populated with the mea
+    n loss
+} GPT2;
