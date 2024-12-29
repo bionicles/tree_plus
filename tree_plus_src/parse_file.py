@@ -2699,7 +2699,7 @@ def parse_txt(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[s
 
 def parse_markers(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     marker_pattern = regex.compile(
-        r"(?P<marker>(?P<mark>BUG|TODO|NOTE)(?P<mention> ?\([@\w ]+\) ?)?: (?P<msg>[\w \.]+))",
+        r"(?P<marker>(?P<mark>BUG|TODO|NOTE)(?P<mention> ?\([@\w ]+\) ?)?: (?P<msg>.*))",
         cache_pattern=True,
     )
     markers = []

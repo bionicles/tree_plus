@@ -1,6 +1,12 @@
 # Tree Plus
 
-**A `tree` util enhanced with tokens, lines, and components. Why? To see the big picture!**
+#### **Ever hit context limits prompting LLMs with code?**
+**If so, you could benefit from `tree_plus`, a `tree` util enhanced with tokens, lines, and components.**
+
+### Use `tree_plus` to ...:
+- **Summarize huge codebases easily**
+- **Autogenerate API documentation**
+- **Create ideal LLM prompts**
 
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-brightgreen)](https://choosealicense.com/licenses/)
 [![Docs](https://img.shields.io/badge/docs-README-blue)](https://github.com/bionicles/tree_plus/blob/main/README.md)
