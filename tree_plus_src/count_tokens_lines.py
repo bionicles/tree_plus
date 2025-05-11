@@ -112,7 +112,7 @@ extensions_not_to_count = {
 
 class TokenizerName(Enum):
     WC = "wc"
-    GPT4O = "gpt4o"
+    GPT4O = "gpt-4o"
     GPT4 = "gpt-4"
 
 
