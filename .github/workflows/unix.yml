@@ -42,6 +42,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     environment: cicd
+    permissions:
+      id-token: write  
     steps:
       - uses: actions/checkout@v4
         with:
@@ -83,6 +85,6 @@ jobs:
           git push https://github.com/bionicles/tree_plus.git
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@v1.12.2
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+        # with:
+        #   user: __token__
+        #   password: ${{ secrets.PYPI_API_TOKEN }}
