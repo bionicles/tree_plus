@@ -1,0 +1,1 @@
+print("muhaha dynamic imports are so smart")

@@ -5,7 +5,6 @@ from pathlib import Path
 import json
 import os
 
-from bs4 import BeautifulSoup
 from func_timeout import FunctionTimedOut
 import regex
 
@@ -359,6 +358,7 @@ def process_tag(tag, components) -> Optional[str]:
 
 # , source: Optional[str] = None # customization is possible
 def components_from_html(content: str) -> List[str]:
+    from bs4 import BeautifulSoup # lazy import bs4
     soup = BeautifulSoup(content, "html.parser")
     components = []
     body = soup.body

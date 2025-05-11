@@ -438,7 +438,7 @@ def into_rich_tree(
 ) -> Tree:
     "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
     try:
-        this_rich_tree = func_timeout(
+        this_rich_tree: Tree = func_timeout( # type: ignore
             timeout=timeout,
             func=_into_rich_tree,
             kwargs=dict(root=root),

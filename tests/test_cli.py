@@ -223,3 +223,22 @@ def test_cli_on_tests():
 
     if platform.system() == "Windows":
         assert 0, "Windows always fails because of extensive visual defects"
+
+
+def test_cli_on_folder_with_evil_logging():
+    path_to_tests = os.path.dirname(os.path.abspath(__file__))
+    folder_with_evil_logging = os.path.join(path_to_tests, "folder_with_evil_logging")
+    print(folder_with_evil_logging)
+    with tree_plus.debug_disabled():
+        result = subprocess.run(
+            ["tree_plus", "."],
+            capture_output=True,
+            shell=True,
+            text=True,
+            # Set current working directory
+            cwd=folder_with_evil_logging, 
+        )
+    print(result)
+    assert result.returncode == 0
+    assert result.stderr == ""
+    # assert 0

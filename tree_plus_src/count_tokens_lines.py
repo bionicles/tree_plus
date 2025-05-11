@@ -165,7 +165,7 @@ def count_tokens_lines(
 
 
 def count_openai_tokens_lines_from_contents(
-    contents: Union[str, Markdown],
+    contents: Union[str, "Markdown"],
     *,
     tokenizer_name: TokenizerName = TokenizerName.GPT4,
 ) -> TokenLineCount:
