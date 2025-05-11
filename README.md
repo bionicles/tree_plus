@@ -102,7 +102,7 @@ Options:
                                0.7)
   -H, -h, --help               Show this message and exit.
 
-  v(1.0.59) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.60) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -120,7 +120,7 @@ tree_plus -i tests
 │   ├── 📄 dependabot.yml (128 tokens, 11 lines)
 │   │   └── Unsupported YAML Category
 │   └── 📁 workflows (1 folder, 2 files) 
-│       ├── 📄 microsoft.yml (283 tokens, 40 lines)
+│       ├── 📄 microsoft.yml (284 tokens, 40 lines)
 │       │   ├── Microsoft
 │       │   ├──   job: build
 │       │   ├──     - Set up Python ${{ matrix.python-version }}
@@ -129,7 +129,7 @@ tree_plus -i tests
 │       │   ├──     - Set PYTHONUTF8 for Windows
 │       │   ├──     - Run generic tests
 │       │   └──     - Run specific test
-│       └── 📄 unix.yml (663 tokens, 87 lines)
+│       └── 📄 unix.yml (664 tokens, 87 lines)
 │           ├── Linux & MacOS
 │           ├──   job: test
 │           ├──     - Set up Python ${{ matrix.python-version }}
@@ -208,7 +208,7 @@ tree_plus -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (36,974 tokens, 3,639 lines)
+├── 📄 README.md (37,579 tokens, 3,698 lines)
 │   ├── TODO: research various kwargs for huggingface
 │   ├── TODO: fix this path
 │   ├── TODO: fill in these stubs
@@ -390,7 +390,40 @@ tree_plus -i tests
 │   ├── TODO: This todo tests parse_todo
 │   ├── TODO: technically we should use a proper parser
 │   ├── TODO: This todo tests parse_todo
+│   ├── TODO: research various kwargs for huggingface
+│   ├── TODO: fix this path
+│   ├── TODO: fill in these stubs
+│   ├── TODO: fix this path
+│   ├── TODO: fill in these stubs
+│   ├── TODO: show off how well we parse_todo
+│   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR
+│   ├── NOTE: you can customize the color here
+│   ├── TODO: clarify subtree types
+│   ├── NOTE: sometimes we need wider trees
+│   ├── TODO: research
+│   ├── NOTE: directly add input file_paths to the amortized glob matches
+│   ├── TODO: decide to apply glob patterns to glob paths
+│   ├── TODO: decide between glob and rglob in _from_glob
+│   ├── TODO: decide if we need to re
+│   ├── TODO: clarify ignore in glob seed context
+│   ├── NOTE: this is only to satisfy the type checker
+│   ├── TODO: incorporate gitignore
+│   ├── BUG: HTML tree doesn
+│   ├── TODO: Fix HTML in TreePlus
+│   ├── BUG: this repeatedly finds tags
+│   ├── TODO: gather requirements for C namespace visualization
+│   ├── TODO: update parse_objective_c to avoid fixed unrolling
+│   ├── TODO: update parse_ocaml to avoid forced unrolling
+│   ├── TODO: fix parse_apl to avoid forced unrolling
+│   ├── TODO: fix parse_perl to avoid forced unrolling
+│   ├── TODO: re
+│   ├── NOTE: no point in the answers since there
+│   ├── TODO: This todo tests parse_todo
+│   ├── TODO: technically we should use a proper parser
+│   ├── TODO: This todo tests parse_todo
 │   ├── # Tree Plus
+│   ├── #### **Ever hit context limits prompting LLMs with code?**
+│   ├── ### Use `tree_plus` to ...:
 │   ├── ## Usage
 │   ├── ## Example Output:
 │   ├── - [ ] Demonstrate Parsed Checkboxes
@@ -408,7 +441,8 @@ tree_plus -i tests
 │   ├── ## Languages Todo:
 │   ├── ## Oppose Unfair Business Practices
 │   └── ## License
-├── 📄 tree_plus_cli.py (1,895 tokens, 293 lines)
+├── 📄 tree_plus_cli.py (2,283 tokens, 331 lines)
+│   ├── def move_cwd_to_end_of_sys_path()
 │   └── def main(
 │           glob: Optional[Tuple],
 │           paths: Optional[Union[str, Tuple]],
@@ -438,7 +472,7 @@ tree_plus -i tests
 │   │           happen: tuple,
 │   │       ) -> ItHappened
 │   ├── 📄 rewrite.py (4,017 tokens, 471 lines)
-│   │   ├── TODO: research various kwargs for huggingface
+│   │   ├── TODO: research various kwargs for huggingface / torch performance
 │   │   ├── 
 │   │   │   DEFAULT_MAX_LENGTH = 256
 │   │   ├── class ModelName(Enum)
@@ -463,8 +497,8 @@ tree_plus -i tests
 │   │           output_path: Optional,
 │   │       )
 │   ├── 📄 stub_tests.py (1,348 tokens, 180 lines)
-│   │   ├── TODO: fix this path
-│   │   ├── TODO: fill in these stubs
+│   │   ├── TODO: fix this path",
+│   │   ├── TODO: fill in these stubs:",
 │   │   ├── @lru_cache
 │   │   │   def remove_decorators(component: str) -> str
 │   │   ├── def make_import_path(path: Path) -> str
@@ -482,7 +516,7 @@ tree_plus -i tests
 │   │   └── class Car(Vehicle)
 │   └── 📄 test_stub_tests.py (79 tokens, 20 lines)
 │       ├── TODO: fix this path
-│       ├── TODO: fill in these stubs
+│       ├── TODO: fill in these stubs:
 │       ├── def test_remove_decorators()
 │       ├── def test_make_import_path()
 │       ├── def test_stub_tests()
@@ -490,15 +524,15 @@ tree_plus -i tests
 │       ├── def test_class_vehicle()
 │       └── def test_class_car()
 └── 📁 tree_plus_src (2 folders, 10 files) 
-    ├── 📄 count_tokens_lines.py (1,316 tokens, 209 lines)
-    │   ├── TODO: show off how well we parse_todo
+    ├── 📄 count_tokens_lines.py (1,317 tokens, 209 lines)
+    │   ├── TODO: show off how well we parse_todo!
     │   ├── @dataclass(frozen=True)
     │   │   class TokenLineCount
     │   ├──     n_tokens: int
     │   ├──     n_lines: int
     │   ├── class TokenizerName(Enum)
     │   ├──     WC = "wc"
-    │   ├──     GPT4O = "gpt4o"
+    │   ├──     GPT4O = "gpt-4o"
     │   ├──     GPT4 = "gpt-4"
     │   ├── def count_tokens_lines(
     │   │       file_path: Union,
@@ -539,17 +573,17 @@ tree_plus -i tests
     │   │   )
     │   ├── def update_readme(source_path: Optional = None, sink_path: Optional = None)
     │   └── def main()
-    ├── 📄 engine.py (11,999 tokens, 1,433 lines)
-    │   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR
-    │   ├── NOTE: you can customize the color here
-    │   ├── TODO: clarify subtree types
-    │   ├── NOTE: sometimes we need wider trees
-    │   ├── TODO: research
+    ├── 📄 engine.py (12,006 tokens, 1,433 lines)
+    │   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
+    │   ├── NOTE: you can customize the color here, and we could make this functional
+    │   ├── TODO: clarify subtree types -- make this a DataFrame tbh
+    │   ├── NOTE: sometimes we need wider trees (deploy)
+    │   ├── TODO: research & decide about globs as paths instead of as filters
     │   ├── NOTE: directly add input file_paths to the amortized glob matches
-    │   ├── TODO: decide to apply glob patterns to glob paths
+    │   ├── TODO: decide to apply glob patterns to glob paths (currently NO)
     │   ├── TODO: decide between glob and rglob in _from_glob
-    │   ├── TODO: decide if we need to re
-    │   ├── TODO: clarify ignore in glob seed context
+    │   ├── TODO: decide if we need to re-amortize the globs in the glob seed
+    │   ├── TODO: clarify ignore in glob seed context, skipping for now
     │   ├── NOTE: this is only to satisfy the type checker
     │   ├── 
     │   │   INTO_RICH_TREE_TIMEOUT_SECONDS = 1
@@ -811,10 +845,10 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (24,619 tokens, 2,713 lines)
-    │   ├── BUG: HTML tree doesn
-    │   ├── TODO: Fix HTML in TreePlus
-    │   ├── BUG: this repeatedly finds tags
+    ├── 📄 parse_file.py (24,623 tokens, 2,713 lines)
+    │   ├── BUG: HTML tree doesn't look awesome (yet)
+    │   ├── TODO: Fix HTML in TreePlus (How?)
+    │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
     │   ├── TODO: gather requirements for C namespace visualization
     │   ├── TODO: update parse_objective_c to avoid fixed unrolling
     │   ├── TODO: update parse_ocaml to avoid forced unrolling
@@ -957,10 +991,10 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.59"
+    │   └── __version__ = "1.0.60"
     └── 📄 web.py (2,409 tokens, 321 lines)
-        ├── TODO: re
-        ├── NOTE: no point in the answers since there
+        ├── TODO: re-enable tree plus web actions
+        ├── NOTE: no point in the answers since there's no content
         ├── 
         │   N_GOOGLE_RESULTS = 2
         ├── def create_url(kind: Action, query: str) -> str
@@ -1020,8 +1054,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.59) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 13,104 line(s), 114,835 token(s) in 0.31 second(s).
+tree_plus v(1.0.60) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 13,201 line(s), 115,842 token(s) in 0.29 second(s).
 
 ```
 <!-- t1-end -->
@@ -1226,8 +1260,8 @@ tree_plus -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.59) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,158 line(s), 68,018 token(s) in 0.21 second(s).
+tree_plus v(1.0.60) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,158 line(s), 68,018 token(s) in 0.15 second(s).
 
 ```
 <!-- t6-end -->
@@ -3159,8 +3193,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.59) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,158 line(s), 68,018 token(s) in 0.77 second(s).
+tree_plus v(1.0.60) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,158 line(s), 68,018 token(s) in 0.68 second(s).
 
 ```
 <!-- t2-end -->
@@ -3650,8 +3684,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.59) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,090 line(s), 14,928 token(s) in 0.21 second(s).
+tree_plus v(1.0.60) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,090 line(s), 14,928 token(s) in 0.18 second(s).
 
 ```
 <!-- t3-end -->
@@ -3680,8 +3714,8 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.59) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
-1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.04 second(s).
+tree_plus v(1.0.60) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.03 second(s).
 
 ```
 <!-- t4-end -->
