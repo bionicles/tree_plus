@@ -32,7 +32,6 @@ from rich.tree import Tree
 from rich.text import Text
 from rich.markdown import Markdown
 import requests
-from fake_useragent import UserAgent
 from bs4 import Tag, NavigableString
 from bs4 import BeautifulSoup, PageElement
 from natsort import os_sorted
@@ -1071,7 +1070,6 @@ def _from_file(
     return file_tree_plus
 
 
-ua = UserAgent(browsers=["chrome"])
 
 
 def _from_url(
@@ -1082,6 +1080,8 @@ def _from_url(
 ) -> TreePlus:
     "PRIVATE: build TreePlus from a URL (not recursive for now)"
     debug_print(f"engine._from_url {url=}")
+    from fake_useragent import UserAgent
+    ua = UserAgent(browsers=["chrome"])
     try:
         if not (url.startswith("http://") or url.startswith("https://")):
             url = f"https://{url}"
