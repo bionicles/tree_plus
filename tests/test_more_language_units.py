@@ -1503,6 +1503,7 @@ def test_more_languages_group4(
                 "    - Test",
                 "    - Update README",
                 "    - Build Again",
+                "    - Check dists with twine",
                 "    - Commit Updates",
                 "    - Publish to PyPI",
             ],
