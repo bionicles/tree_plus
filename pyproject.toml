@@ -38,7 +38,7 @@ repository = "https://www.github.com/bionicles/tree_plus"
 Issues = "https://github.com/bionicles/tree_plus/issues"
 
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0,<77.0"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]

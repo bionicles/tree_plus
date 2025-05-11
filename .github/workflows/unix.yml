@@ -55,7 +55,7 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - name: Install dependencies
         run: |
-          pip install build
+          pip install build twine
           pip install pytest pytest-dotenv 
           pip install pytest-xdist
       - name: Increment Version
@@ -75,6 +75,8 @@ jobs:
           TREE_PLUS_DEPLOYMENT=GO TREE_PLUS_UPDATE_README=YES python tree_plus_src/deploy.py
       - name: Build Again
         run: make build
+      - name: Check dists with twine
+        run: twine check dist/*
       - name: Commit Updates
         run: |
           git config --global user.email "bion@atomiclogic.com"
