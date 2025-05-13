@@ -1,3 +1,7 @@
+fn at_beginning<'a>(&'a str) {
+    todo!()
+}
+
 // rust_test.rs
 enum Days {
     Sun,
@@ -41,7 +45,7 @@ fn add_two_longs_longer(
     x1 + x2
 }
 
-fn multiply_by_two(num: f64) -> f64 {
+const fn multiply_by_two(num: f64) -> f64 {
     num * 2.0
 }
 
@@ -58,6 +62,16 @@ impl Drawable for Point {
         println!("Drawing point at ({}, {})", self.x, self.y);
     }
 }
+
+fn with_generic<D: Drawable>(d: D) {
+}
+fn with_generic<D>(d: D)
+where 
+    D: Drawable
+{
+} 
+
+
 
 fn main() {
     let person = Person { name: "World".into() };
@@ -187,3 +201,19 @@ macro_rules! unit {
         // other impls omitted, as they did not trigger the issue
     }
 };
+
+/// example of extractors with destructuring
+///
+/// # Errors
+/// - if rendering a route fails
+pub async fn handle_get_axum_route(
+    Session { maybe_claims }: Session,
+    Path(RouteParams {
+        alpha,
+        bravo,
+        charlie,
+        edge_case
+    }): Path<RouteParams>,
+) -> ServerResult<Response> {
+    todo!()
+}

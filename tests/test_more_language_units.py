@@ -1208,7 +1208,7 @@ def test_more_languages_group3(file: str, expected: List[str]):
     print(f"{file=}")
     if file.endswith("test.sqlite"):
         create_sqlite_test_db()
-    os.environ.get("DEBUG_TREE_PLUS") == "1"
+    # os.environ.get("DEBUG_TREE_PLUS") == "1"
     result = parse_file(file)
     print("result", result)
     print("expected", expected)
@@ -1221,6 +1221,7 @@ def test_more_languages_group3(file: str, expected: List[str]):
         (
             "tests/more_languages/group4/rust_test.rs",
             [
+                "fn at_beginning<'a>(&'a str)",
                 "enum Days",
                 "struct Point",
                 "impl Point",
@@ -1233,12 +1234,16 @@ def test_more_languages_group3(file: str, expected: List[str]):
     x1: i64,
     x2: i64,
 ) -> i64""",
-                "fn multiply_by_two(num: f64) -> f64",
+                "const fn multiply_by_two(num: f64) -> f64",
                 "fn get_first_character(s: &str) -> Option<char>",
                 "trait Drawable",
                 "    fn draw(&self)",
                 "impl Drawable for Point",
                 "    fn draw(&self)",
+                       'fn with_generic<D: Drawable>(d: D)',
+                """fn with_generic<D>(d: D)
+where 
+    D: Drawable""",
                 "fn main()",
                 "pub struct VisibleStruct",
                 "mod my_module",
@@ -1286,6 +1291,15 @@ macro_rules! unit""",
                 key: (),
                 value: $unit_dtype,
             ) -> Result<Option<$unit_dtype>, ETLError>""",
+            """pub async fn handle_get_axum_route(
+    Session { maybe_claims }: Session,
+    Path(RouteParams {
+        alpha,
+        bravo,
+        charlie,
+        edge_case
+    }): Path<RouteParams>,
+) -> ServerResult<Response>"""
             ],
         ),
         (

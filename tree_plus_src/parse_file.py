@@ -1029,6 +1029,12 @@ def parse_erl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[s
     return components
 
 
+# ^(?P<function>\s*(?P<maybe_pub>pub\s+)?(?P<maybe_async>async\s+)?fn\s+?(?P<fn_name>\w+)(?P<generics><[^>]*?>)?)(?P<argument_start>\()(?P<arguments>[&\w,:()${}\s]+?)?(?P<argument_end>\))(?P<return_type>\s->\s\w[\w()<,>\s]*?)?(?<where>\swhere(\s+?\w+:\s[\w<>+]+)+?)?(?P<block_start>(?:\s{)|;)
+# (?P<argument_start>\()(?P<arguments>[&\w,:()<>${}\/\s]+?)?(?P<argument_end>\))
+# (^\s+\w+:\s.*,$)+
+
+# (?P<maybe_pub>pub\s+?)?(?P<maybe_async_or_const>(?:async|const)\s+)?(?P<fn>fn)\s+(?P<fn_name>\w+)(?P<generics><[^>]*?>)?(?P<argument_start>\()(?P<arguments>[&\w,:()<>${}\/\s]+?)?(?P<argument_end>\))[\s\S]*?(?P<end>(?:;\s)|(?:{))
+
 def parse_rs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print("parse_rs")
 
@@ -1036,7 +1042,9 @@ def parse_rs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
 
     combined_pattern = regex.compile(
         # functions
-        r"^(?P<function>\s*(?:pub\s+)?(?:async\s+)?fn\s+(?:[\w_]+)(?:<[^>]*>)?\((?P<function_params>[^;{]*))|"
+        # r"^(?P<function>\s*(?:pub\s+)?(?:async\s+)?fn\s+(?:[\w_]+)(?:<[^>]*>)?\((?P<function_params>[^;{]*))|"
+        # r"^(?P<function>\s*(?:pub\s+)?(?:async\s+)?fn\s+(?:[\w_]+)(?:<[^>]*>)?\((?P<function_params>[^;]*->.*?)) ?{|"
+        r"^(?P<function>\s*(?P<maybe_pub>pub\s+?)?(?P<maybe_async_or_const>(?:async|const)\s+)?(?P<fn>fn)\s+(?P<fn_name>\w+)(?P<generics><[^>]*?>)?(?P<argument_start>\()(?P<arguments>[&\w,':()<>${}\/\s]+?)?(?P<argument_end>\))[\s\S]*?)(?P<end>(?:;\s)|(?:{))|"
         # structs and impls with generics
         r"\n(?P<struct_impl>(?: *((?:pub\s+)?struct)|impl)[^{;]*?) ?[{;]|"
         # trait, enum, or mod
@@ -1046,8 +1054,8 @@ def parse_rs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
         regex.MULTILINE,
         cache_pattern=True,
     )
-    components = []
 
+    components = []
     for n, match in enumerate(combined_pattern.finditer(content, timeout=timeout)):
         groups = extract_groups(match)
         component = None
