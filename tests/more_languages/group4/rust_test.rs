@@ -3,14 +3,20 @@ fn at_beginning<'a>(&'a str) {
 }
 
 // rust_test.rs
-enum Days {
+#[derive(Default)]
+pub enum Days<E: EdgeCase> {
+    #[default]
     Sun,
     Mon,
+    #[error("edge case {idx}, expected at least {} and at most {}", .limits.lo, .limits.hi)]
     Tue,
     Wed,
-    Thu,
-    Fri,
-    Sat,
+    Thu(i16, bool),
+    Fri { day: u8 },
+    Sat {
+        urday: String,
+        edge_case: E,
+    },
 }
 
 struct Point {

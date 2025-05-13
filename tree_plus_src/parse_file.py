@@ -1047,8 +1047,10 @@ def parse_rs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
         r"^(?P<function>\s*(?P<maybe_pub>pub\s+?)?(?P<maybe_async_or_const>(?:async|const)\s+)?(?P<fn>fn)\s+(?P<fn_name>\w+)(?P<generics><[^>]*?>)?(?P<argument_start>\()(?P<arguments>[&\w,':()<>${}\/\s]+?)?(?P<argument_end>\))[\s\S]*?)(?P<end>(?:;\s)|(?:{))|"
         # structs and impls with generics
         r"\n(?P<struct_impl>(?: *((?:pub\s+)?struct)|impl)[^{;]*?) ?[{;]|"
-        # trait, enum, or mod
-        r"\n(?P<trait_enum_mod> *(?:pub\s+)?(trait|enum|mod)\s+\w*(<[^{]*>)?)|"
+        # enum with variants
+        r"^\s*(?P<enum>(?P<visibility>pub\s+?)?enum (?P<enum_name>\w+)(?P<maybe_generics><[^>]*?>)? {(?P<variant>(?P<maybe_decorator>\s+#\[.*\]+?)?\s+(?P<variant_name>\w+)(?P<maybe_data>(?P<tuple_variant>\([\s\S]+?\))|(?P<struct_variant> \{[^}]+\}))?,)*\s\})\s|"
+        # trait, or mod
+        r"\n(?P<trait_mod> *(?:pub\s+)?(trait|mod)\s+\w*(<[^{]*>)?)|"
         # macro
         r"\n(?P<macro>((#\[macro_export\]\n)?macro_rules!\s+[a-z_][a-z_0-9]*))",
         regex.MULTILINE,
@@ -1066,8 +1068,10 @@ def parse_rs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
         elif groups.get("struct_impl"):
             component = groups["struct_impl"].rstrip()
         # trait, enum, mod
-        elif groups.get("trait_enum_mod"):
-            component = groups["trait_enum_mod"]
+        elif groups.get("enum"):
+            component = groups["enum"]
+        elif groups.get("trait_mod"):
+            component = groups["trait_mod"]
         # macro
         elif groups.get("macro"):
             component = groups["macro"]

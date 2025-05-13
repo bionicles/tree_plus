@@ -32,7 +32,7 @@ absurdly-huge-jsonl:
 	python tests/build_absurdly_huge_jsonl.py
 
 # TESTS
-test: test-sequential test-tp-dotdot test-e2e test-cli test-programs test-deploy
+test: test-more-languages test-sequential test-tp-dotdot test-e2e test-cli test-programs test-deploy
 
 N_WORKERS=12
 # parallel unit tests (for dev rig)
