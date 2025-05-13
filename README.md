@@ -88,7 +88,7 @@ Options:
   -g, -G, --glob TEXT          Patterns to find, in quotes: -g "*.rs"
   -v, -V, --version            Print the version and exit.
   -d, -D, --debug              Enables $DEBUG_TREE_PLUS.
-  -s, -S, --syntax             Enables Syntax Highlighting (WIP).
+  -s, -S, --syntax             DISABLE Syntax Highlighting.
   -c, -C, --concise            Omit module components. (False)
   --yc, --hn                   Include ycombinator (False)
   -n, -N, --number INTEGER     number of results (--yc mode only, default 3)
@@ -103,7 +103,7 @@ Options:
                                0.7)
   -H, -h, --help               Show this message and exit.
 
-  v(1.0.67) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.68) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -113,7 +113,7 @@ Options:
 - [ ] Demonstrate Parsed Checkboxes
 <!-- t1-start -->
 ```sh
-tree_plus -i tests
+tree_plus -s -i tests
 📁 tree_plus (7 folders, 27 files) 
 ├── 📄 .env.test (4 tokens, 0 lines)
 │   └── DEBUG_TREE_PLUS
@@ -154,7 +154,7 @@ tree_plus -i tests
 ├── 📁 coverage (1 folder, 1 file) 
 │   └── 📄 lcov.info (17,359 tokens, 2,180 lines)
 ├── 📄 LICENSE (2,744 tokens, 81 lines)
-├── 📄 Makefile (770 tokens, 121 lines)
+├── 📄 Makefile (773 tokens, 121 lines)
 │   ├── SHELL := /bin/bash
 │   ├── cli
 │   ├── library-demo
@@ -210,7 +210,7 @@ tree_plus -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (36,165 tokens, 3,583 lines)
+├── 📄 README.md (36,284 tokens, 3,593 lines)
 │   ├── # Tree Plus
 │   ├── #### **Ever hit context limits prompting LLMs with code?**
 │   ├── ### Use `tree_plus` to ...:
@@ -231,7 +231,7 @@ tree_plus -i tests
 │   ├── ## Languages Todo:
 │   ├── ## Oppose Unfair Business Practices
 │   └── ## License
-├── 📄 tree_plus_cli.py (2,285 tokens, 331 lines)
+├── 📄 tree_plus_cli.py (2,283 tokens, 331 lines)
 │   ├── def move_cwd_to_end_of_sys_path()
 │   └── def main(
 │           glob: Optional[Tuple],
@@ -263,8 +263,6 @@ tree_plus -i tests
 │   │       ) -> ItHappened
 │   ├── 📄 rewrite.py (4,017 tokens, 471 lines)
 │   │   ├── TODO: research various kwargs for huggingface / torch performance
-│   │   ├── 
-│   │   │   DEFAULT_MAX_LENGTH = 256
 │   │   ├── class ModelName(Enum)
 │   │   ├──     QWEN_2 = "Qwen/Qwen2-7B-Instruct"
 │   │   ├──     MISTRAL_3 = "mistralai/Mistral-7B-Instruct-v0.3"
@@ -374,13 +372,8 @@ tree_plus -i tests
     │   ├── TODO: decide if we need to re-amortize the globs in the glob seed
     │   ├── TODO: clarify ignore in glob seed context, skipping for now
     │   ├── NOTE: this is only to satisfy the type checker
-    │   ├── 
-    │   │   INTO_RICH_TREE_TIMEOUT_SECONDS = 1
-    │   ├── 
-    │   │   BLACK = "black"
     │   ├── class Category(Enum)
-    │   ├── 
-    │   │       ROOT = 1
+    │   ├──     ROOT = 1
     │   ├──     GLOB = 2
     │   ├──     FOLDER = 3
     │   ├──     FILE = 4
@@ -634,7 +627,7 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (25,023 tokens, 2,755 lines)
+    ├── 📄 parse_file.py (25,426 tokens, 2,802 lines)
     │   ├── BUG: HTML tree doesn't look awesome (yet)
     │   ├── TODO: Fix HTML in TreePlus (How?)
     │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
@@ -643,10 +636,6 @@ tree_plus -i tests
     │   ├── TODO: update parse_ocaml to avoid forced unrolling
     │   ├── TODO: fix parse_apl to avoid forced unrolling
     │   ├── TODO: fix parse_perl to avoid forced unrolling
-    │   ├── 
-    │   │   DEFAULT_REGEX_TIMEOUT = 0
-    │   ├── 
-    │   │   BINARY_CHECK_SIZE = 1024
     │   ├── def head(n: int, content: str) -> str
     │   ├── @lru_cache(maxsize=None)
     │   │   def read_file(
@@ -662,10 +651,6 @@ tree_plus -i tests
     │   │   ) -> List
     │   ├── def extract_groups(match: regex.Match, named_only: bool = False) -> dict
     │   ├── def parse_html(content: str) -> List
-    │   ├── 
-    │   │   
-    │   │   DENY_HTML = "
-"
     │   ├── def parse_jsonl(content: str) -> List
     │   ├── def process_tag(tag, components) -> Optional
     │   ├── def components_from_html(content: str) -> List
@@ -790,12 +775,10 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.67"
+    │   └── __version__ = "1.0.68"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
-        ├── 
-        │   N_GOOGLE_RESULTS = 2
         ├── def create_url(kind: Action, query: str) -> str
         ├── def create_link(kind: Action, query: str) -> str
         ├── def create_wikipedia_url(subterm: str) -> str
@@ -853,8 +836,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.67) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 13,136 line(s), 114,895 token(s) in 0.21 second(s).
+tree_plus v(1.0.68) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 13,193 line(s), 115,418 token(s) in 0.20 second(s).
 
 ```
 <!-- t1-end -->
@@ -964,7 +947,7 @@ make library_demo
 ### Currently Tested Languages:
 <!-- t6-start -->
 ```sh
-tree_plus -c -i group_todo tests/more_languages
+tree_plus -s -c -i group_todo tests/more_languages
 📁 more_languages (9 folders, 84 files) 
 ├── 📁 group1 (1 folder, 11 files) 
 │   ├── 📄 addamt.cobol (441 tokens, 40 lines)
@@ -1059,15 +1042,15 @@ tree_plus -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.67) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,194 line(s), 68,192 token(s) in 0.14 second(s).
+tree_plus v(1.0.68) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,194 line(s), 68,192 token(s) in 0.13 second(s).
 
 ```
 <!-- t6-end -->
 ### Without the -c "Concise" Flag:
 <!-- t2-start -->
 ```sh
-tree_plus -i group_todo tests/more_languages
+tree_plus -s -i group_todo tests/more_languages
 📁 more_languages (9 folders, 84 files) 
 ├── 📁 group1 (1 folder, 11 files) 
 │   ├── 📄 addamt.cobol (441 tokens, 40 lines)
@@ -3023,8 +3006,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.67) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,194 line(s), 68,192 token(s) in 0.55 second(s).
+tree_plus v(1.0.68) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,194 line(s), 68,192 token(s) in 0.52 second(s).
 
 ```
 <!-- t2-end -->
@@ -3032,7 +3015,7 @@ tree_plus v(1.0.67) ignore=('group_todo',) globs=() syntax=False paths=('tests/m
 
 <!-- t3-start -->
 ```sh
-tree_plus -g "*.*s" -i group_todo tests/more_languages
+tree_plus -s -g "*.*s" -i group_todo tests/more_languages
 📁 more_languages (7 folders, 17 files) 
 ├── 📁 group1 (1 folder, 2 files) 
 │   ├── 📄 test.js (757 tokens, 154 lines)
@@ -3545,8 +3528,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.67) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,126 line(s), 15,102 token(s) in 0.16 second(s).
+tree_plus v(1.0.68) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,126 line(s), 15,102 token(s) in 0.15 second(s).
 
 ```
 <!-- t3-end -->
@@ -3560,7 +3543,7 @@ Help me **add to** and **priorize** this list of languages to support!
 
 <!-- t4-start -->
 ```sh
-tree_plus tests/more_languages/group_todo
+tree_plus -s tests/more_languages/group_todo
 📁 group_todo (1 folder, 12 files) 
 ├── 📄 AAPLShaders.metal (5,780 tokens, 566 lines)
 ├── 📄 crystal_test.cr (48 tokens, 15 lines)
@@ -3575,7 +3558,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.67) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.68) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.03 second(s).
 
 ```
