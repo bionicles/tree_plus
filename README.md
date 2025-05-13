@@ -101,9 +101,9 @@ Options:
                                'gpt-4o' works
   --timeout FLOAT              regex timeout in seconds (optional, default
                                0.7)
-  -h, -H, --help               Show this message and exit.
+  -H, -h, --help               Show this message and exit.
 
-  v(1.0.66) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.67) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -154,7 +154,7 @@ tree_plus -i tests
 ├── 📁 coverage (1 folder, 1 file) 
 │   └── 📄 lcov.info (17,359 tokens, 2,180 lines)
 ├── 📄 LICENSE (2,744 tokens, 81 lines)
-├── 📄 Makefile (775 tokens, 121 lines)
+├── 📄 Makefile (770 tokens, 121 lines)
 │   ├── SHELL := /bin/bash
 │   ├── cli
 │   ├── library-demo
@@ -165,7 +165,7 @@ tree_plus -i tests
 │   ├── debug-command: test
 │   ├── html-demo
 │   ├── absurdly-huge-jsonl
-│   ├── test: test-more-languages test-sequential test-tp-dotdot test-e2e test-cli test-programs test-deploy
+│   ├── test: test-sequential test-tp-dotdot test-e2e test-cli test-programs test-deploy
 │   ├── test-parallel
 │   ├── test-sequential
 │   ├── test-more-languages
@@ -210,7 +210,7 @@ tree_plus -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (35,955 tokens, 3,549 lines)
+├── 📄 README.md (36,165 tokens, 3,583 lines)
 │   ├── # Tree Plus
 │   ├── #### **Ever hit context limits prompting LLMs with code?**
 │   ├── ### Use `tree_plus` to ...:
@@ -362,7 +362,7 @@ tree_plus -i tests
     │   │   )
     │   ├── def update_readme(source_path: Optional = None, sink_path: Optional = None)
     │   └── def main()
-    ├── 📄 engine.py (12,007 tokens, 1,433 lines)
+    ├── 📄 engine.py (12,032 tokens, 1,437 lines)
     │   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
     │   ├── NOTE: you can customize the color here, and we could make this functional
     │   ├── TODO: clarify subtree types -- make this a DataFrame tbh
@@ -416,8 +416,8 @@ tree_plus -i tests
     │   ├──     def render(
     │   │           self,
     │   │           style: Optional = None,
-    │   │           highlight: bool = False,
-    │   │           markup: bool = True,
+    │   │           highlight: bool = HIGHLIGHT,
+    │   │           markup: bool = MARKUP,
     │   │           capturing: bool = False,
     │   │       )
     │   ├──     def render_hrefs(self)
@@ -432,23 +432,23 @@ tree_plus -i tests
     │   │   def remove_trailing_space(x: str) -> str
     │   ├── def tree_to_string(
     │   │       tree: Tree,
-    │   │       markup: bool = False,
-    │   │       highlight: bool = False,
+    │   │       markup: bool = MARKUP,
+    │   │       highlight: bool = HIGHLIGHT,
     │   │       text_style: str = TEXT_COLOR,
     │   │   ) -> str
     │   ├── def clean_string(input_str: str) -> str
     │   ├── def safe_print(
     │   │       tree: Union[Tree, Panel, str, list],
     │   │       style: Optional = None,
-    │   │       highlight: bool = True,
-    │   │       markup: bool = False,
+    │   │       highlight: bool = HIGHLIGHT,
+    │   │       markup: bool = MARKUP,
     │   │       capturing: bool = False,
     │   │   )
     │   ├── def _make_rich_tree(
     │   │       label,
     │   │       style: str = TEXT_COLOR,
     │   │       guide_style: str = LINK_COLOR,
-    │   │       highlight: bool = True,
+    │   │       highlight: bool = HIGHLIGHT,
     │   │   ) -> Tree
     │   ├── def into_rich_tree(
     │   │       *,
@@ -634,7 +634,7 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (25,010 tokens, 2,730 lines)
+    ├── 📄 parse_file.py (25,023 tokens, 2,755 lines)
     │   ├── BUG: HTML tree doesn't look awesome (yet)
     │   ├── TODO: Fix HTML in TreePlus (How?)
     │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
@@ -658,6 +658,7 @@ tree_plus -i tests
     │   │       file_path: Union,
     │   │       content: Optional = None,
     │   │       regex_timeout: Optional = None,
+    │   │       syntax: bool = False,
     │   │   ) -> List
     │   ├── def extract_groups(match: regex.Match, named_only: bool = False) -> dict
     │   ├── def parse_html(content: str) -> List
@@ -697,7 +698,16 @@ tree_plus -i tests
     │   ├── def parse_fsharp(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
     │   ├── def parse_tcl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
     │   ├── def parse_erl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_rs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
+    │   ├── def parse_rs(
+    │   │       content: str, 
+    │   │       *, 
+    │   │       timeout: float = DEFAULT_REGEX_TIMEOUT, 
+    │   │       syntax: bool = False,
+    │   │   ) -> List
+    │   ├── def escape(
+    │   │       markup: str,
+    │   │   ) -> str
+    │   ├──     def escape_backslashes(match: regex.Match) -> str
     │   ├── def parse_csv(content: str, max_leaves=11) -> List
     │   ├── def parse_mathematica(
     │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
@@ -780,7 +790,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.66"
+    │   └── __version__ = "1.0.67"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
@@ -843,8 +853,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.66) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 13,073 line(s), 114,652 token(s) in 0.25 second(s).
+tree_plus v(1.0.67) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 13,136 line(s), 114,895 token(s) in 0.21 second(s).
 
 ```
 <!-- t1-end -->
@@ -1049,8 +1059,8 @@ tree_plus -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.66) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,194 line(s), 68,192 token(s) in 0.15 second(s).
+tree_plus v(1.0.67) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,194 line(s), 68,192 token(s) in 0.14 second(s).
 
 ```
 <!-- t6-end -->
@@ -1960,10 +1970,10 @@ tree_plus -i group_todo tests/more_languages
 │   ├── 📄 rust_test.rs (1,148 tokens, 224 lines)
 │   │   ├── fn at_beginning<'a>(&'a str)
 │   │   ├── pub enum Days<E: EdgeCase> {
-│   │   │       #
+│   │   │       #[default]
 │   │   │       Sun,
 │   │   │       Mon,
-│   │   │       #
+│   │   │       #[error("edge case {idx}, expected at least {} and at most {}", .limits.lo, .limits.hi)]
 │   │   │       Tue,
 │   │   │       Wed,
 │   │   │       Thu(i16, bool),
@@ -3013,8 +3023,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.66) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,194 line(s), 68,192 token(s) in 0.66 second(s).
+tree_plus v(1.0.67) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,194 line(s), 68,192 token(s) in 0.55 second(s).
 
 ```
 <!-- t2-end -->
@@ -3241,10 +3251,10 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   ├── 📄 rust_test.rs (1,148 tokens, 224 lines)
 │   │   ├── fn at_beginning<'a>(&'a str)
 │   │   ├── pub enum Days<E: EdgeCase> {
-│   │   │       #
+│   │   │       #[default]
 │   │   │       Sun,
 │   │   │       Mon,
-│   │   │       #
+│   │   │       #[error("edge case {idx}, expected at least {} and at most {}", .limits.lo, .limits.hi)]
 │   │   │       Tue,
 │   │   │       Wed,
 │   │   │       Thu(i16, bool),
@@ -3535,8 +3545,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.66) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,126 line(s), 15,102 token(s) in 0.19 second(s).
+tree_plus v(1.0.67) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,126 line(s), 15,102 token(s) in 0.16 second(s).
 
 ```
 <!-- t3-end -->
@@ -3565,7 +3575,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.66) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.67) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.03 second(s).
 
 ```

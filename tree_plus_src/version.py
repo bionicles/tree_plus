@@ -1,2 +1,2 @@
 # tree_plus_src/version.py
-__version__ = "1.0.66"
+__version__ = "1.0.67"
