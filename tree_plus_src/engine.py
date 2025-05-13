@@ -366,7 +366,7 @@ def clean_string(input_str: str) -> str:
 
 
 def safe_print(
-    tree: Union[Tree, Panel, str],
+    tree: Union[Tree, Panel, str, list],
     style: Optional[str] = None,
     highlight: bool = True,
     markup: bool = False,

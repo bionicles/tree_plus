@@ -265,9 +265,14 @@ def parse_file(
         elif file_extension == ".html":
             components = parse_html(content)
 
-        bugs_todos_and_notes = parse_markers(content, timeout=_regex_timeout)
-        total_components = bugs_todos_and_notes + components
+        # don't parse markers in markdown as an easier fix to the TODOs in README
+        if file_extension in (".txt", ".md"):
+            total_components = components
+        else:
+            bugs_todos_and_notes = parse_markers(content, timeout=_regex_timeout)
+            total_components = bugs_todos_and_notes + components
         return total_components
+        
     except FunctionTimedOut:
         return []
 

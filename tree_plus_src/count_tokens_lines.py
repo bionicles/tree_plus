@@ -112,8 +112,8 @@ extensions_not_to_count = {
 
 class TokenizerName(Enum):
     WC = "wc"
-    GPT4O = "gpt-4o"
-    GPT4 = "gpt-4"
+    GPT_4O = "gpt-4o"
+    # GPT4 = "gpt-4" # we mentioned this didn't work, and the model is deprecated
 
 
 def count_tokens_lines(
@@ -150,7 +150,7 @@ def count_tokens_lines(
     #     case TokenizerName.WC:
     #         count = count_wc_tokens_lines_from_path(file_path)
 
-    if tokenizer_name is TokenizerName.GPT4O or tokenizer_name is TokenizerName.GPT4:
+    if tokenizer_name is TokenizerName.GPT_4O:
         contents = read_file(file_path)
         count = count_openai_tokens_lines_from_contents(
             contents,
@@ -167,7 +167,7 @@ def count_tokens_lines(
 def count_openai_tokens_lines_from_contents(
     contents: Union[str, "Markdown"],
     *,
-    tokenizer_name: TokenizerName = TokenizerName.GPT4,
+    tokenizer_name: TokenizerName = TokenizerName.GPT_4O,
 ) -> TokenLineCount:
     "Count OpenAI tokens and lines in a string."
     assert (

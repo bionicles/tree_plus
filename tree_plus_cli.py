@@ -150,14 +150,14 @@ DEFAULT_QUERY = "best tree data structures"
 @click.option(
     "--tiktoken",
     "-t",
-    help="a shorthand for tiktoken with the gpt4o tokenizer",
+    help="a shorthand for tiktoken with the 'gpt-4o' tokenizer",
     is_flag=True,
     default=False,
 )
 @click.option(
     "--tokenizer-name",
     "-T",
-    help="name of the tokenizer to use, for now only 'gpt4o' works",
+    help="name of the tokenizer to use, for now only 'gpt-4o' works",
     default=None,
     type=str,
 )
@@ -285,9 +285,9 @@ def main(
     ):
         pass
     elif (tiktoken and tokenizer_name is None) or (tokenizer_name == "gpt4o"):
-        _tokenizer_name = TokenizerName.GPT4O
-    elif tokenizer_name == "gpt4":
-        _tokenizer_name = TokenizerName.GPT4
+        _tokenizer_name = TokenizerName.GPT_4O
+    # elif tokenizer_name == "gpt4":
+    #     _tokenizer_name = TokenizerName.GPT4
     else:
         raise ValueError(f"unsupported {tiktoken=} {tokenizer_name=}")
 
