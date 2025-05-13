@@ -847,6 +847,52 @@ def remove_docstrings(source, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> str:
     )
     return docstring_pattern.sub(":", source, timeout=timeout)
 
+# # Compile once, reuse often
+# _TRIPLE_QUOTED_RE = regex.compile(
+#     r'''(?sx)                # (?s)=DOTALL, (?x)=verbose
+#         (                    # --- whole triple-quoted literal ---
+#             (?:              #   1) triple double-quoted
+#                 """          #   opening delimiter
+#                 (?:[^\\]|\\.)*?   #   body (handle escaped chars)
+#                 """          #   closing delimiter
+#             )                #   or
+#           | (?:              #   2) triple single-quoted
+#                 \'\'\'       #   opening
+#                 (?:[^\\]|\\.)*?   #   body
+#                 \'\'\'       #   closing
+#             )
+#         )
+#     '''
+# )
+
+# def strip_triple_quoted(
+#     source: str, 
+#     keep_linecount: bool = True, 
+#     timeout: float = DEFAULT_REGEX_TIMEOUT
+# ) -> str:
+#     """
+#     Remove every triple-quoted string from *source*.
+
+#     Parameters
+#     ----------
+#     source : str
+#         Python source text.
+#     keep_linecount : bool, default True
+#         If True, replaced blocks are converted to a matching run of
+#         newline characters so original line numbers stay intact.
+
+#     Returns
+#     -------
+#     str
+#         Source with all docstrings / triple-quoted literals removed.
+#     """
+#     if keep_linecount:
+#         def _repl(match):
+#             return '\n' * match.group(0).count('\n')
+#         return _TRIPLE_QUOTED_RE.sub(_repl, source, timeout=timeout)
+#     else:
+#         return _TRIPLE_QUOTED_RE.sub('', source, timeout=timeout)
+
 
 def parse_py(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     debug_print(f"parse_py {timeout=}")
@@ -863,7 +909,7 @@ def parse_py(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
         # Version
         r"\n(?P<version>(__version__ = \".*\"))|"
         # Enum Variants
-        r"^(?P<enum_variant>\s+[A-Z_\d]+\s+=\s+(?P<variant_value>(?P<int_value>\d+)|(?P<str_value>\"+[^\"]+\"+)|(?P<struct_value>[A-Z]\w+\([\s\S]+?(?P<closing>^\s+\)$))))|"
+        r"^(?P<enum_variant>[ \t]+[A-Z_\d]+\s+=\s+(?P<variant_value>(?P<int_value>\d+)|(?P<str_value>\"+[^\"]+\"+)|(?P<struct_value>[A-Z]\w+\([\s\S]+?(?P<closing>^\s+\)$))))|"
         # DataClass Fields
         r"^(?P<dataclass_field>\s+\w+:\s+[\w\[\]\|\.\, ]+).*$",
         regex.MULTILINE,
@@ -873,6 +919,7 @@ def parse_py(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
     # remove comments in multiline signatures
     content = remove_py_comments(content, timeout=timeout)
     content = remove_docstrings(content, timeout=timeout)
+    # content = strip_triple_quoted(content, timeout=timeout)
     decorator_carry = []
     components = []
     context_name: Literal["class", ""] = ""

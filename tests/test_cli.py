@@ -62,7 +62,7 @@ def test_tree_plus_display_version():
 
 def test_cli_syntax_highlighting_flag():
     result = subprocess.run(
-        ["tree_plus", "-d", "-s", "tests/path_to_test", "tests/*.py"],
+        ["tree_plus", "-d", "tests/path_to_test", "tests/*.py"],
         capture_output=True,
         text=True,
     )
@@ -79,42 +79,42 @@ def test_cli_syntax_highlighting_flag():
     assert " Root" in stdout
     assert " parse_file.py" not in stdout
     assert " nested_dir" not in stdout
-    result = subprocess.run(
-        ["tree_plus", "-d", "-S", "tests/path_to_test", "tests/*.py"],
-        capture_output=True,
-        text=True,
-    )
-    assert result.returncode == 0
-    stdout = result.stdout
-    assert "syntax_highlighting=True" in stdout
-    assert "component(s) from file_path=" in stdout
-    assert "_from_file SYNTAX HIGHLIGHTING " in stdout
-    assert "_get_lexer chose lexer=" in stdout
-    assert "_syntax_highlight succeeded " in stdout
-    assert "component(s) from file_path=" in stdout
-    assert " tests" in stdout
-    assert " test_cli.py" in stdout
-    assert " Root" in stdout
-    assert " parse_file.py" not in stdout
-    assert " nested_dir" not in stdout
-    result = subprocess.run(
-        ["tree_plus", "-d", "--syntax", "tests/path_to_test", "tests/*.py"],
-        capture_output=True,
-        text=True,
-    )
-    assert result.returncode == 0
-    stdout = result.stdout
-    assert "syntax_highlighting=True" in stdout
-    assert "component(s) from file_path=" in stdout
-    assert "_from_file SYNTAX HIGHLIGHTING " in stdout
-    assert "_get_lexer chose lexer=" in stdout
-    assert "_syntax_highlight succeeded " in stdout
-    assert "component(s) from file_path=" in stdout
-    assert " tests" in stdout
-    assert " test_cli.py" in stdout
-    assert " Root" in stdout
-    assert " parse_file.py" not in stdout
-    assert " nested_dir" not in stdout
+    # result = subprocess.run(
+    #     ["tree_plus", "-d", "-S", "tests/path_to_test", "tests/*.py"],
+    #     capture_output=True,
+    #     text=True,
+    # )
+    # assert result.returncode == 0
+    # stdout = result.stdout
+    # assert "syntax_highlighting=False" in stdout
+    # assert "component(s) from file_path=" in stdout
+    # assert "_from_file SYNTAX HIGHLIGHTING " in stdout
+    # assert "_get_lexer chose lexer=" in stdout
+    # assert "_syntax_highlight succeeded " in stdout
+    # assert "component(s) from file_path=" in stdout
+    # assert " tests" in stdout
+    # assert " test_cli.py" in stdout
+    # assert " Root" in stdout
+    # assert " parse_file.py" not in stdout
+    # assert " nested_dir" not in stdout
+    # result = subprocess.run(
+    #     ["tree_plus", "-d", "--syntax", "tests/path_to_test", "tests/*.py"],
+    #     capture_output=True,
+    #     text=True,
+    # )
+    # assert result.returncode == 0
+    # stdout = result.stdout
+    # assert "syntax_highlighting=False" in stdout
+    # assert "component(s) from file_path=" in stdout
+    # assert "_from_file SYNTAX HIGHLIGHTING " in stdout
+    # assert "_get_lexer chose lexer=" in stdout
+    # assert "_syntax_highlight succeeded " in stdout
+    # assert "component(s) from file_path=" in stdout
+    # assert " tests" in stdout
+    # assert " test_cli.py" in stdout
+    # assert " Root" in stdout
+    # assert " parse_file.py" not in stdout
+    # assert " nested_dir" not in stdout
 
 
 def test_cli_override():

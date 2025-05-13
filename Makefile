@@ -104,19 +104,19 @@ clean-dist:
 	rm -rf dist/*
 
 t1:
-	tree_plus -i tests
+	tree_plus -s -i tests
 
 t2:
-	tree_plus -i group_todo tests/more_languages
+	tree_plus -s -i group_todo tests/more_languages
 
 t3:
-	tree_plus -g "*.*s" -i group_todo tests/more_languages
+	tree_plus -s -g "*.*s" -i group_todo tests/more_languages
 
 t4:
-	tree_plus tests/more_languages/group_todo
+	tree_plus -s tests/more_languages/group_todo
 
 t5:
 	tree_plus -h
 
 t6:
-	tree_plus -c -i group_todo tests/more_languages
+	tree_plus -s -c -i group_todo tests/more_languages

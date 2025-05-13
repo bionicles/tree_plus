@@ -108,8 +108,8 @@ DEFAULT_QUERY = "best tree data structures"
     "-s",
     "-S",
     is_flag=True,
-    default=False,
-    help="Enables Syntax Highlighting (WIP).",
+    default=True,
+    help="DISABLE Syntax Highlighting.",
 )
 @click.option(
     "--concise",
