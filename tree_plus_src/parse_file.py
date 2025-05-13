@@ -1081,6 +1081,7 @@ def parse_rs(
 
     return components
 
+# credit: this is from Rich python, copied here to make minor changes
 _escape = regex.compile(r"(\\*)(\[[a-z#/@][^[]*?])").sub
 def escape(
     markup: str,
@@ -1094,7 +1095,7 @@ def escape(
         str: Markup with square brackets escaped.
     """
 
-    def escape_backslashes(match: regex.Match[str]) -> str:
+    def escape_backslashes(match: regex.Match) -> str:
         """Called by re.sub replace matches."""
         backslashes, text = match.groups()
         return f"{backslashes}{backslashes}\\{text}"
