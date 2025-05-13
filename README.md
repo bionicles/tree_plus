@@ -103,7 +103,7 @@ Options:
                                0.7)
   -H, -h, --help               Show this message and exit.
 
-  v(1.0.64) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.65) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -210,7 +210,7 @@ tree_plus -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (39,374 tokens, 3,827 lines)
+├── 📄 README.md (35,701 tokens, 3,521 lines)
 │   ├── # Tree Plus
 │   ├── #### **Ever hit context limits prompting LLMs with code?**
 │   ├── ### Use `tree_plus` to ...:
@@ -634,7 +634,7 @@ tree_plus -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (24,673 tokens, 2,718 lines)
+    ├── 📄 parse_file.py (24,925 tokens, 2,726 lines)
     │   ├── BUG: HTML tree doesn't look awesome (yet)
     │   ├── TODO: Fix HTML in TreePlus (How?)
     │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
@@ -780,7 +780,7 @@ tree_plus -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.64"
+    │   └── __version__ = "1.0.65"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
@@ -843,8 +843,8 @@ tree_plus -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.64) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 13,339 line(s), 117,729 token(s) in 0.26 second(s).
+tree_plus v(1.0.65) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 13,041 line(s), 114,308 token(s) in 0.26 second(s).
 
 ```
 <!-- t1-end -->
@@ -1000,7 +1000,7 @@ tree_plus -c -i group_todo tests/more_languages
 │   ├── 📄 mathematica_test.nb (133 tokens, 21 lines)
 │   ├── 📄 matlab_test.m (48 tokens, 12 lines)
 │   ├── 📄 RTest.R (367 tokens, 46 lines)
-│   ├── 📄 rust_test.rs (974 tokens, 188 lines)
+│   ├── 📄 rust_test.rs (1,093 tokens, 218 lines)
 │   ├── 📄 test.zig (397 tokens, 60 lines)
 │   ├── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │   ├── 📄 test_tcl_tk.tcl (54 tokens, 16 lines)
@@ -1049,8 +1049,8 @@ tree_plus -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.64) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,158 line(s), 68,018 token(s) in 0.15 second(s).
+tree_plus v(1.0.65) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,188 line(s), 68,137 token(s) in 0.15 second(s).
 
 ```
 <!-- t6-end -->
@@ -1957,7 +1957,8 @@ tree_plus -i group_todo tests/more_languages
 │   │   ├── greet.Person <- function
 │   │   ├── ensure_between = function
 │   │   └── run_intermediate_annealing_process = function
-│   ├── 📄 rust_test.rs (974 tokens, 188 lines)
+│   ├── 📄 rust_test.rs (1,093 tokens, 218 lines)
+│   │   ├── fn at_beginning<'a>(&'a str)
 │   │   ├── enum Days
 │   │   ├── struct Point
 │   │   ├── impl Point
@@ -1970,12 +1971,16 @@ tree_plus -i group_todo tests/more_languages
 │   │   │       x1: i64,
 │   │   │       x2: i64,
 │   │   │   ) -> i64
-│   │   ├── fn multiply_by_two(num: f64) -> f64
+│   │   ├── const fn multiply_by_two(num: f64) -> f64
 │   │   ├── fn get_first_character(s: &str) -> Option<char>
 │   │   ├── trait Drawable
 │   │   ├──     fn draw(&self)
 │   │   ├── impl Drawable for Point
 │   │   ├──     fn draw(&self)
+│   │   ├── fn with_generic<D: Drawable>(d: D)
+│   │   ├── fn with_generic<D>(d: D)
+│   │   │   where 
+│   │   │       D: Drawable
 │   │   ├── fn main()
 │   │   ├── pub struct VisibleStruct
 │   │   ├── mod my_module
@@ -2018,11 +2023,20 @@ tree_plus -i group_todo tests/more_languages
 │   │   │       Bion: Cool
 │   │   ├── #
 │   │   │   macro_rules! unit
-│   │   └──             fn insert(
-│   │                       &mut self,
-│   │                       key: (),
-│   │                       value: $unit_dtype,
-│   │                   ) -> Result<Option<$unit_dtype>, ETLError>
+│   │   ├──             fn insert(
+│   │   │                   &mut self,
+│   │   │                   key: (),
+│   │   │                   value: $unit_dtype,
+│   │   │               ) -> Result<Option<$unit_dtype>, ETLError>
+│   │   └── pub async fn handle_get_axum_route(
+│   │           Session { maybe_claims }: Session,
+│   │           Path(RouteParams {
+│   │               alpha,
+│   │               bravo,
+│   │               charlie,
+│   │               edge_case
+│   │           }): Path<RouteParams>,
+│   │       ) -> ServerResult<Response>
 │   ├── 📄 test.zig (397 tokens, 60 lines)
 │   │   ├── pub fn add(a: i32, b: i32) i32
 │   │   ├── test "add function"
@@ -2982,8 +2996,8 @@ tree_plus -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.64) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,158 line(s), 68,018 token(s) in 0.67 second(s).
+tree_plus v(1.0.65) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,188 line(s), 68,137 token(s) in 0.68 second(s).
 
 ```
 <!-- t2-end -->
@@ -3207,7 +3221,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │           ( [G.Directive Variable],
 │   │             G.SelectionSet fragments Variable
 │   │           )
-│   ├── 📄 rust_test.rs (974 tokens, 188 lines)
+│   ├── 📄 rust_test.rs (1,093 tokens, 218 lines)
+│   │   ├── fn at_beginning<'a>(&'a str)
 │   │   ├── enum Days
 │   │   ├── struct Point
 │   │   ├── impl Point
@@ -3220,12 +3235,16 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   │       x1: i64,
 │   │   │       x2: i64,
 │   │   │   ) -> i64
-│   │   ├── fn multiply_by_two(num: f64) -> f64
+│   │   ├── const fn multiply_by_two(num: f64) -> f64
 │   │   ├── fn get_first_character(s: &str) -> Option<char>
 │   │   ├── trait Drawable
 │   │   ├──     fn draw(&self)
 │   │   ├── impl Drawable for Point
 │   │   ├──     fn draw(&self)
+│   │   ├── fn with_generic<D: Drawable>(d: D)
+│   │   ├── fn with_generic<D>(d: D)
+│   │   │   where 
+│   │   │       D: Drawable
 │   │   ├── fn main()
 │   │   ├── pub struct VisibleStruct
 │   │   ├── mod my_module
@@ -3268,11 +3287,20 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
 │   │   │       Bion: Cool
 │   │   ├── #
 │   │   │   macro_rules! unit
-│   │   └──             fn insert(
-│   │                       &mut self,
-│   │                       key: (),
-│   │                       value: $unit_dtype,
-│   │                   ) -> Result<Option<$unit_dtype>, ETLError>
+│   │   ├──             fn insert(
+│   │   │                   &mut self,
+│   │   │                   key: (),
+│   │   │                   value: $unit_dtype,
+│   │   │               ) -> Result<Option<$unit_dtype>, ETLError>
+│   │   └── pub async fn handle_get_axum_route(
+│   │           Session { maybe_claims }: Session,
+│   │           Path(RouteParams {
+│   │               alpha,
+│   │               bravo,
+│   │               charlie,
+│   │               edge_case
+│   │           }): Path<RouteParams>,
+│   │       ) -> ServerResult<Response>
 │   └── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │       ├── module TestFSharp
 │       ├── type Person = {
@@ -3473,8 +3501,8 @@ tree_plus -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.64) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,090 line(s), 14,928 token(s) in 0.19 second(s).
+tree_plus v(1.0.65) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,120 line(s), 15,047 token(s) in 0.19 second(s).
 
 ```
 <!-- t3-end -->
@@ -3503,7 +3531,7 @@ tree_plus tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.64) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.65) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.03 second(s).
 
 ```
