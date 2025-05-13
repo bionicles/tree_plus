@@ -74,6 +74,7 @@ def parse_file(
     file_path: Union[str, Path],
     content: Optional[str] = None,
     regex_timeout: Optional[float] = None,
+    syntax: bool = False,
 ) -> List[str]:
     "Parse a file and return a List[str] of its major components."
     # always convert to str since this was built on 'os', not pathlib
@@ -171,7 +172,7 @@ def parse_file(
             else:
                 components = parse_c(content, timeout=_regex_timeout)
         elif file_extension == ".rs":
-            components = parse_rs(content, timeout=_regex_timeout)
+            components = parse_rs(content, timeout=_regex_timeout, syntax=syntax)
         elif file_extension == ".php":
             components = parse_php(content, timeout=_regex_timeout)
         elif file_extension == ".jsonl":
@@ -1029,21 +1030,19 @@ def parse_erl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[s
     return components
 
 
-# ^(?P<function>\s*(?P<maybe_pub>pub\s+)?(?P<maybe_async>async\s+)?fn\s+?(?P<fn_name>\w+)(?P<generics><[^>]*?>)?)(?P<argument_start>\()(?P<arguments>[&\w,:()${}\s]+?)?(?P<argument_end>\))(?P<return_type>\s->\s\w[\w()<,>\s]*?)?(?<where>\swhere(\s+?\w+:\s[\w<>+]+)+?)?(?P<block_start>(?:\s{)|;)
-# (?P<argument_start>\()(?P<arguments>[&\w,:()<>${}\/\s]+?)?(?P<argument_end>\))
-# (^\s+\w+:\s.*,$)+
 
-# (?P<maybe_pub>pub\s+?)?(?P<maybe_async_or_const>(?:async|const)\s+)?(?P<fn>fn)\s+(?P<fn_name>\w+)(?P<generics><[^>]*?>)?(?P<argument_start>\()(?P<arguments>[&\w,:()<>${}\/\s]+?)?(?P<argument_end>\))[\s\S]*?(?P<end>(?:;\s)|(?:{))
-
-def parse_rs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
+def parse_rs(
+    content: str, 
+    *, 
+    timeout: float = DEFAULT_REGEX_TIMEOUT, 
+    syntax: bool = False,
+) -> List[str]:
     debug_print("parse_rs")
 
     content = remove_c_comments(content)
 
     combined_pattern = regex.compile(
         # functions
-        # r"^(?P<function>\s*(?:pub\s+)?(?:async\s+)?fn\s+(?:[\w_]+)(?:<[^>]*>)?\((?P<function_params>[^;{]*))|"
-        # r"^(?P<function>\s*(?:pub\s+)?(?:async\s+)?fn\s+(?:[\w_]+)(?:<[^>]*>)?\((?P<function_params>[^;]*->.*?)) ?{|"
         r"^(?P<function>\s*(?P<maybe_pub>pub\s+?)?(?P<maybe_async_or_const>(?:async|const)\s+)?(?P<fn>fn)\s+(?P<fn_name>\w+)(?P<generics><[^>]*?>)?(?P<argument_start>\()(?P<arguments>[&\w,':()<>${}\/\s]+?)?(?P<argument_end>\))[\s\S]*?)(?P<end>(?:;\s)|(?:{))|"
         # structs and impls with generics
         r"\n(?P<struct_impl>(?: *((?:pub\s+)?struct)|impl)[^{;]*?) ?[{;]|"
@@ -1068,8 +1067,10 @@ def parse_rs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
         elif groups.get("struct_impl"):
             component = groups["struct_impl"].rstrip()
         # trait, enum, mod
-        elif groups.get("enum"):
-            component = groups["enum"]
+        elif x := groups.get("enum"):
+            component = x
+            if not syntax and "maybe_decorator" in groups:
+                component = escape(component)
         elif groups.get("trait_mod"):
             component = groups["trait_mod"]
         # macro
@@ -1080,6 +1081,29 @@ def parse_rs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
 
     return components
 
+_escape = regex.compile(r"(\\*)(\[[a-z#/@][^[]*?])").sub
+def escape(
+    markup: str,
+) -> str:
+    """Escapes text so that it won't be interpreted as markup.
+
+    Args:
+        markup (str): Content to be inserted in to markup.
+
+    Returns:
+        str: Markup with square brackets escaped.
+    """
+
+    def escape_backslashes(match: regex.Match[str]) -> str:
+        """Called by re.sub replace matches."""
+        backslashes, text = match.groups()
+        return f"{backslashes}{backslashes}\\{text}"
+
+    markup = _escape(escape_backslashes, markup)
+    if markup.endswith("\\") and not markup.endswith("\\\\"):
+        return markup + "\\"
+
+    return markup
 
 def parse_csv(content: str, max_leaves=11) -> List[str]:
     debug_print("parse_csv")

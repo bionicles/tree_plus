@@ -52,6 +52,9 @@ from tree_plus_src import (
     parse_ignore,
 )
 
+HIGHLIGHT = False
+MARKUP = False
+
 # TODO: MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
 # MAX ALLOWED INTO_RICH_TREE RUNTIME
 INTO_RICH_TREE_TIMEOUT_SECONDS = 1.0
@@ -218,8 +221,8 @@ class TreePlus:
     def render(
         self,
         style: Optional[str] = None,
-        highlight: bool = False,
-        markup: bool = True,
+        highlight: bool = HIGHLIGHT,
+        markup: bool = MARKUP,
         capturing: bool = False,
     ):
         "PUBLIC: Safely print a TreePlus"
@@ -340,8 +343,8 @@ def remove_trailing_space(x: str) -> str:
 
 def tree_to_string(
     tree: Tree,
-    markup: bool = False,
-    highlight: bool = False,
+    markup: bool = MARKUP,
+    highlight: bool = HIGHLIGHT,
     text_style: str = TEXT_COLOR,
 ) -> str:
     console = Console(
@@ -368,8 +371,8 @@ def clean_string(input_str: str) -> str:
 def safe_print(
     tree: Union[Tree, Panel, str, list],
     style: Optional[str] = None,
-    highlight: bool = True,
-    markup: bool = False,
+    highlight: bool = HIGHLIGHT,
+    markup: bool = MARKUP,
     capturing: bool = False,
 ):
     try:
@@ -419,7 +422,7 @@ def _make_rich_tree(
     label,
     style: str = TEXT_COLOR,
     guide_style: str = LINK_COLOR,
-    highlight: bool = True,
+    highlight: bool = HIGHLIGHT,
 ) -> Tree:
     "PRIVATE: build 1 renderable rich.tree.Tree instance"
     return Tree(
@@ -1041,6 +1044,7 @@ def _from_file(
             components = parse_file(
                 file_path,
                 regex_timeout=regex_timeout,
+                syntax=syntax_highlighting,
             )
     except Exception as e:
         debug_print(f"engine._from_file components Exception {e=}")

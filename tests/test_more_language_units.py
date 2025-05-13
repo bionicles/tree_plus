@@ -1223,10 +1223,10 @@ def test_more_languages_group3(file: str, expected: List[str]):
             [
                 "fn at_beginning<'a>(&'a str)",
                 """pub enum Days<E: EdgeCase> {
-    #[default]
+    #\\[default]
     Sun,
     Mon,
-    #[error("edge case {idx}, expected at least {} and at most {}", .limits.lo, .limits.hi)]
+    #\\[error("edge case {idx}, expected at least {} and at most {}", .limits.lo, .limits.hi)]
     Tue,
     Wed,
     Thu(i16, bool),
