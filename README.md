@@ -103,7 +103,7 @@ Options:
                                0.7)
   -H, -h, --help               Show this message and exit.
 
-  v(1.0.68) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.69) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -210,7 +210,7 @@ tree_plus -s -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (36,284 tokens, 3,593 lines)
+├── 📄 README.md (36,195 tokens, 3,576 lines)
 │   ├── # Tree Plus
 │   ├── #### **Ever hit context limits prompting LLMs with code?**
 │   ├── ### Use `tree_plus` to ...:
@@ -360,7 +360,7 @@ tree_plus -s -i tests
     │   │   )
     │   ├── def update_readme(source_path: Optional = None, sink_path: Optional = None)
     │   └── def main()
-    ├── 📄 engine.py (12,032 tokens, 1,437 lines)
+    ├── 📄 engine.py (12,033 tokens, 1,437 lines)
     │   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
     │   ├── NOTE: you can customize the color here, and we could make this functional
     │   ├── TODO: clarify subtree types -- make this a DataFrame tbh
@@ -627,7 +627,7 @@ tree_plus -s -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (25,426 tokens, 2,802 lines)
+    ├── 📄 parse_file.py (25,427 tokens, 2,802 lines)
     │   ├── BUG: HTML tree doesn't look awesome (yet)
     │   ├── TODO: Fix HTML in TreePlus (How?)
     │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
@@ -775,7 +775,7 @@ tree_plus -s -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.68"
+    │   └── __version__ = "1.0.69"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
@@ -836,8 +836,8 @@ tree_plus -s -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.68) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 13,193 line(s), 115,418 token(s) in 0.20 second(s).
+tree_plus v(1.0.69) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 13,176 line(s), 115,331 token(s) in 0.20 second(s).
 
 ```
 <!-- t1-end -->
@@ -993,7 +993,7 @@ tree_plus -s -c -i group_todo tests/more_languages
 │   ├── 📄 mathematica_test.nb (133 tokens, 21 lines)
 │   ├── 📄 matlab_test.m (48 tokens, 12 lines)
 │   ├── 📄 RTest.R (367 tokens, 46 lines)
-│   ├── 📄 rust_test.rs (1,148 tokens, 224 lines)
+│   ├── 📄 rust_test.rs (1,193 tokens, 231 lines)
 │   ├── 📄 test.zig (397 tokens, 60 lines)
 │   ├── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │   ├── 📄 test_tcl_tk.tcl (54 tokens, 16 lines)
@@ -1042,8 +1042,8 @@ tree_plus -s -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.68) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,194 line(s), 68,192 token(s) in 0.13 second(s).
+tree_plus v(1.0.69) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,201 line(s), 68,237 token(s) in 0.13 second(s).
 
 ```
 <!-- t6-end -->
@@ -1950,7 +1950,7 @@ tree_plus -s -i group_todo tests/more_languages
 │   │   ├── greet.Person <- function
 │   │   ├── ensure_between = function
 │   │   └── run_intermediate_annealing_process = function
-│   ├── 📄 rust_test.rs (1,148 tokens, 224 lines)
+│   ├── 📄 rust_test.rs (1,193 tokens, 231 lines)
 │   │   ├── fn at_beginning<'a>(&'a str)
 │   │   ├── pub enum Days<E: EdgeCase> {
 │   │   │       #[default]
@@ -2034,15 +2034,16 @@ tree_plus -s -i group_todo tests/more_languages
 │   │   │                   key: (),
 │   │   │                   value: $unit_dtype,
 │   │   │               ) -> Result<Option<$unit_dtype>, ETLError>
-│   │   └── pub async fn handle_get_axum_route(
-│   │           Session { maybe_claims }: Session,
-│   │           Path(RouteParams {
-│   │               alpha,
-│   │               bravo,
-│   │               charlie,
-│   │               edge_case
-│   │           }): Path<RouteParams>,
-│   │       ) -> ServerResult<Response>
+│   │   ├── pub async fn handle_get_axum_route(
+│   │   │       Session { maybe_claims }: Session,
+│   │   │       Path(RouteParams {
+│   │   │           alpha,
+│   │   │           bravo,
+│   │   │           charlie,
+│   │   │           edge_case
+│   │   │       }): Path<RouteParams>,
+│   │   │   ) -> ServerResult<Response>
+│   │   └── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>
 │   ├── 📄 test.zig (397 tokens, 60 lines)
 │   │   ├── pub fn add(a: i32, b: i32) i32
 │   │   ├── test "add function"
@@ -3006,8 +3007,8 @@ tree_plus -s -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.68) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,194 line(s), 68,192 token(s) in 0.52 second(s).
+tree_plus v(1.0.69) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 84 file(s), 7,201 line(s), 68,237 token(s) in 0.52 second(s).
 
 ```
 <!-- t2-end -->
@@ -3231,7 +3232,7 @@ tree_plus -s -g "*.*s" -i group_todo tests/more_languages
 │   │           ( [G.Directive Variable],
 │   │             G.SelectionSet fragments Variable
 │   │           )
-│   ├── 📄 rust_test.rs (1,148 tokens, 224 lines)
+│   ├── 📄 rust_test.rs (1,193 tokens, 231 lines)
 │   │   ├── fn at_beginning<'a>(&'a str)
 │   │   ├── pub enum Days<E: EdgeCase> {
 │   │   │       #[default]
@@ -3315,15 +3316,16 @@ tree_plus -s -g "*.*s" -i group_todo tests/more_languages
 │   │   │                   key: (),
 │   │   │                   value: $unit_dtype,
 │   │   │               ) -> Result<Option<$unit_dtype>, ETLError>
-│   │   └── pub async fn handle_get_axum_route(
-│   │           Session { maybe_claims }: Session,
-│   │           Path(RouteParams {
-│   │               alpha,
-│   │               bravo,
-│   │               charlie,
-│   │               edge_case
-│   │           }): Path<RouteParams>,
-│   │       ) -> ServerResult<Response>
+│   │   ├── pub async fn handle_get_axum_route(
+│   │   │       Session { maybe_claims }: Session,
+│   │   │       Path(RouteParams {
+│   │   │           alpha,
+│   │   │           bravo,
+│   │   │           charlie,
+│   │   │           edge_case
+│   │   │       }): Path<RouteParams>,
+│   │   │   ) -> ServerResult<Response>
+│   │   └── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>
 │   └── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │       ├── module TestFSharp
 │       ├── type Person = {
@@ -3528,8 +3530,8 @@ tree_plus -s -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.68) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,126 line(s), 15,102 token(s) in 0.15 second(s).
+tree_plus v(1.0.69) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,133 line(s), 15,147 token(s) in 0.15 second(s).
 
 ```
 <!-- t3-end -->
@@ -3558,7 +3560,7 @@ tree_plus -s tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.68) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.69) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.03 second(s).
 
 ```
