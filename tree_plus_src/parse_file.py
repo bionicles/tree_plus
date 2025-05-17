@@ -16,7 +16,7 @@ BINARY_CHECK_SIZE = 1024
 TEXTCHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
 LISP_EXTENSIONS = {".lisp", ".clj", ".scm", ".el", ".rkt"}
 JS_EXTENSIONS = {".js", ".jsx", ".ts", ".tsx"}
-C_EXTENSIONS = {".c", ".cpp", ".cc", ".h", ".cu", ".cuh"}
+C_EXTENSIONS = {".c", ".cpp", ".cc", ".h", ".cu", ".cuh", ".hpp"}
 COBOL_EXTENSIONS = {".cbl", ".cobol"}
 FORTRAN_EXTENSIONS = {
     ".f",
@@ -493,7 +493,7 @@ STRUCT_OR_CLASS = frozenset(("struct", "class"))
 
 
 def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
-    debug_print("parse_cpp")
+    debug_print("parse_c")
     content = remove_c_comments(content, timeout=timeout)
     # print(head(100, content))
     # Combined regex pattern to match all components

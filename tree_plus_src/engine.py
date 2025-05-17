@@ -1387,6 +1387,7 @@ BACKUP_LEXERS = {
     "cbl": "cobol",
     "rst": "markdown",
     "cc": "cpp",
+    "hpp": "cpp",
     "h": "c",
     "md": "markdown",
     "html": "markdown",

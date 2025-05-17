@@ -1951,6 +1951,14 @@ END PROGRAM HelloFortran""",
             "tests/more_languages/group6/fractal.thy",
             ISABELLE_EXPECTATION,
         ),
+        # disabled because c functions ending with semicolons are invocations, not definitions
+        # that causes too many false positives
+        # (
+        #     "tests/more_languages/group6/edge_case.hpp",
+        #     [
+        #         "__global__ void spinWhileLessThanOne(volatile unsigned int *latch)",
+        #     ]
+        # ),
         (
             "tests/more_languages/group6/catastrophic.c",
             C_EXPECTATION,
