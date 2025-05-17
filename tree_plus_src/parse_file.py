@@ -1090,7 +1090,7 @@ def parse_rs(
 
     combined_pattern = regex.compile(
         # functions
-        r"^(?P<function>\s*(?P<maybe_pub>pub\s+?)?(?P<maybe_async_or_const>(?:async|const)\s+)?(?P<fn>fn)\s+(?P<fn_name>\w+)(?P<generics><[^>]*?>)?(?P<argument_start>\()(?P<arguments>[&\w,':()<>${}\/\s]+?)?(?P<argument_end>\))[\s\S]*?)(?P<end>(?:;\s)|(?:{))|"
+        r"^(?P<function>\s*(?P<maybe_pub>pub\s+?)?(?P<maybe_async_or_const>(?:async|const)\s+)?(?P<fn>fn)\s+(?P<fn_name>\w+)(?P<generics><[^>]*?>)?(?P<argument_start>\()(?P<arguments>[&\w,':[\]()<>${}\/\s]+?)?(?P<argument_end>\))[\s\S]*?)(?P<end>(?:;\s)|(?:{))|"
         # structs and impls with generics
         r"\n(?P<struct_impl>(?: *((?:pub\s+)?struct)|impl)[^{;]*?) ?[{;]|"
         # enum with variants

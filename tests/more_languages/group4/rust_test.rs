@@ -223,3 +223,10 @@ pub async fn handle_get_axum_route(
 ) -> ServerResult<Response> {
     todo!()
 }
+
+/// example with square bracket arguments
+fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8> {
+    let mut rv = vec![];
+    write_pipeline(&mut rv, cmds, atomic);
+    rv
+}

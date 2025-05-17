@@ -488,7 +488,7 @@ def _into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
         label = f"{ROOT_CHAR} {root.name}"
         if root.n_tokens and root.n_lines:
             label += (
-                f"({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'},"
+                f" ({root.n_folders:,} folder{'' if root.n_folders == 1 else 's'},"
                 f" {root.n_files:,} file{'' if root.n_files == 1 else 's'})"
             )
         rich_tree = _make_rich_tree(label)

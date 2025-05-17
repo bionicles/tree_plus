@@ -1312,7 +1312,8 @@ macro_rules! unit""",
         charlie,
         edge_case
     }): Path<RouteParams>,
-) -> ServerResult<Response>"""
+) -> ServerResult<Response>""",
+            "fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>",
             ],
         ),
         (
