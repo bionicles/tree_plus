@@ -101,9 +101,9 @@ Options:
                                'gpt-4o' works
   --timeout FLOAT              regex timeout in seconds (optional, default
                                0.7)
-  -H, -h, --help               Show this message and exit.
+  -h, -H, --help               Show this message and exit.
 
-  v(1.0.69) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.70) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -210,7 +210,7 @@ tree_plus -s -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (36,195 tokens, 3,576 lines)
+├── 📄 README.md (36,230 tokens, 3,578 lines)
 │   ├── # Tree Plus
 │   ├── #### **Ever hit context limits prompting LLMs with code?**
 │   ├── ### Use `tree_plus` to ...:
@@ -360,7 +360,7 @@ tree_plus -s -i tests
     │   │   )
     │   ├── def update_readme(source_path: Optional = None, sink_path: Optional = None)
     │   └── def main()
-    ├── 📄 engine.py (12,033 tokens, 1,437 lines)
+    ├── 📄 engine.py (12,037 tokens, 1,438 lines)
     │   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
     │   ├── NOTE: you can customize the color here, and we could make this functional
     │   ├── TODO: clarify subtree types -- make this a DataFrame tbh
@@ -627,7 +627,7 @@ tree_plus -s -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (25,427 tokens, 2,802 lines)
+    ├── 📄 parse_file.py (25,428 tokens, 2,802 lines)
     │   ├── BUG: HTML tree doesn't look awesome (yet)
     │   ├── TODO: Fix HTML in TreePlus (How?)
     │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
@@ -775,7 +775,7 @@ tree_plus -s -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.69"
+    │   └── __version__ = "1.0.70"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
@@ -836,8 +836,8 @@ tree_plus -s -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.69) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 13,176 line(s), 115,331 token(s) in 0.20 second(s).
+tree_plus v(1.0.70) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 13,179 line(s), 115,371 token(s) in 0.20 second(s).
 
 ```
 <!-- t1-end -->
@@ -948,7 +948,7 @@ make library_demo
 <!-- t6-start -->
 ```sh
 tree_plus -s -c -i group_todo tests/more_languages
-📁 more_languages (9 folders, 84 files) 
+📁 more_languages (9 folders, 85 files) 
 ├── 📁 group1 (1 folder, 11 files) 
 │   ├── 📄 addamt.cobol (441 tokens, 40 lines)
 │   ├── 📄 CUSTOMER-INVOICE.CBL (412 tokens, 60 lines)
@@ -1018,11 +1018,12 @@ tree_plus -s -c -i group_todo tests/more_languages
 │   ├── 📄 testJsonSchema.json (421 tokens, 48 lines)
 │   ├── 📄 testPackage.json (349 tokens, 43 lines)
 │   └── 📄 tickets.component.ts (7,160 tokens, 903 lines)
-├── 📁 group6 (1 folder, 13 files) 
+├── 📁 group6 (1 folder, 14 files) 
 │   ├── 📄 catastrophic.c (5,339 tokens, 754 lines)
 │   ├── 📄 cpp_examples_impl.cc (60 tokens, 10 lines)
 │   ├── 📄 cpp_examples_impl.cu (37 tokens, 10 lines)
 │   ├── 📄 cpp_examples_impl.h (22 tokens, 6 lines)
+│   ├── 📄 edge_case.hpp (426 tokens, 28 lines)
 │   ├── 📄 fractal.thy (1,712 tokens, 147 lines)
 │   ├── 📄 Microsoft.PowerShell_profile.ps1 (3,346 tokens, 497 lines)
 │   ├── 📄 python_complex_class.py (10 tokens, 2 lines)
@@ -1042,8 +1043,8 @@ tree_plus -s -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.69) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,201 line(s), 68,237 token(s) in 0.13 second(s).
+tree_plus v(1.0.70) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 85 file(s), 7,229 line(s), 68,663 token(s) in 0.14 second(s).
 
 ```
 <!-- t6-end -->
@@ -1051,7 +1052,7 @@ tree_plus v(1.0.69) ignore=('group_todo',) globs=() concise=True paths=('tests/m
 <!-- t2-start -->
 ```sh
 tree_plus -s -i group_todo tests/more_languages
-📁 more_languages (9 folders, 84 files) 
+📁 more_languages (9 folders, 85 files) 
 ├── 📁 group1 (1 folder, 11 files) 
 │   ├── 📄 addamt.cobol (441 tokens, 40 lines)
 │   │   ├── IDENTIFICATION DIVISION.
@@ -2347,7 +2348,7 @@ tree_plus -s -i group_todo tests/more_languages
 │       ├── async function mockMoreTickets(): Promise<Ticket[]>
 │       ├── const mockTickets = async () =>
 │       └── const renderQRCode = async (text: String): Promise<string> =>
-├── 📁 group6 (1 folder, 13 files) 
+├── 📁 group6 (1 folder, 14 files) 
 │   ├── 📄 catastrophic.c (5,339 tokens, 754 lines)
 │   │   ├── TODO: technically we should use a proper parser
 │   │   ├── struct Point
@@ -2568,6 +2569,7 @@ tree_plus -s -i group_todo tests/more_languages
 │   │   │   T add(T a, T b)
 │   │   └── template <>
 │   │       int add<int>(int, int)
+│   ├── 📄 edge_case.hpp (426 tokens, 28 lines)
 │   ├── 📄 fractal.thy (1,712 tokens, 147 lines)
 │   │   ├── Title:      fractal.thy
 │   │   ├── Author:     Isabelle/HOL Contributors!
@@ -3007,8 +3009,8 @@ tree_plus -s -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.69) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 84 file(s), 7,201 line(s), 68,237 token(s) in 0.52 second(s).
+tree_plus v(1.0.70) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 85 file(s), 7,229 line(s), 68,663 token(s) in 0.52 second(s).
 
 ```
 <!-- t2-end -->
@@ -3530,7 +3532,7 @@ tree_plus -s -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.69) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.70) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 7 folder(s), 17 file(s), 2,133 line(s), 15,147 token(s) in 0.15 second(s).
 
 ```
@@ -3560,7 +3562,7 @@ tree_plus -s tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.69) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.70) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.03 second(s).
 
 ```
