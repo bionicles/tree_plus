@@ -101,9 +101,9 @@ Options:
                                'gpt-4o' works
   --timeout FLOAT              regex timeout in seconds (optional, default
                                0.7)
-  -h, -H, --help               Show this message and exit.
+  -H, -h, --help               Show this message and exit.
 
-  v(1.0.70) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.71) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -210,7 +210,7 @@ tree_plus -s -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (36,230 tokens, 3,578 lines)
+├── 📄 README.md (36,253 tokens, 3,580 lines)
 │   ├── # Tree Plus
 │   ├── #### **Ever hit context limits prompting LLMs with code?**
 │   ├── ### Use `tree_plus` to ...:
@@ -627,7 +627,7 @@ tree_plus -s -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (25,428 tokens, 2,802 lines)
+    ├── 📄 parse_file.py (25,435 tokens, 2,802 lines)
     │   ├── BUG: HTML tree doesn't look awesome (yet)
     │   ├── TODO: Fix HTML in TreePlus (How?)
     │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
@@ -775,7 +775,7 @@ tree_plus -s -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.70"
+    │   └── __version__ = "1.0.71"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
@@ -836,8 +836,8 @@ tree_plus -s -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.70) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 13,179 line(s), 115,371 token(s) in 0.20 second(s).
+tree_plus v(1.0.71) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 13,181 line(s), 115,401 token(s) in 0.20 second(s).
 
 ```
 <!-- t1-end -->
@@ -1043,7 +1043,7 @@ tree_plus -s -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.70) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+tree_plus v(1.0.71) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
 9 folder(s), 85 file(s), 7,229 line(s), 68,663 token(s) in 0.14 second(s).
 
 ```
@@ -3009,8 +3009,8 @@ tree_plus -s -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.70) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 85 file(s), 7,229 line(s), 68,663 token(s) in 0.52 second(s).
+tree_plus v(1.0.71) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 85 file(s), 7,229 line(s), 68,663 token(s) in 0.53 second(s).
 
 ```
 <!-- t2-end -->
@@ -3532,7 +3532,7 @@ tree_plus -s -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.70) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.71) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 7 folder(s), 17 file(s), 2,133 line(s), 15,147 token(s) in 0.15 second(s).
 
 ```
@@ -3562,7 +3562,7 @@ tree_plus -s tests/more_languages/group_todo
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
 
-tree_plus v(1.0.70) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.71) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.03 second(s).
 
 ```
