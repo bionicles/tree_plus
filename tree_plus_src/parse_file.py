@@ -191,7 +191,7 @@ def parse_file(
             components = parse_zig(content, timeout=_regex_timeout)
         elif file_extension == ".rb":
             components = parse_rb(content, timeout=_regex_timeout)
-        elif file_name == "Makefile":
+        elif file_name == "Makefile" or file_name == "Justfile":
             components = parse_makefile(content)
         elif file_extension == ".sql":
             components = parse_sql(content, timeout=_regex_timeout)
