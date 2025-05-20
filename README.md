@@ -39,8 +39,8 @@
 Here's how `tree_plus --help` looks (`-h` and `-H` both also work) 
 <!-- t5-start -->
 ```sh
-tree_plus -h
-Usage: tree_plus [OPTIONS] [PATHS]...
+python -m tree_plus_cli -h
+Usage: tree_plus_cli.py [OPTIONS] [PATHS]...
 
   A `tree` util enhanced with tokens, lines, and components.
 
@@ -103,7 +103,7 @@ Options:
                                0.7)
   -H, -h, --help               Show this message and exit.
 
-  v(1.0.71) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.72) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -113,7 +113,7 @@ Options:
 - [ ] Demonstrate Parsed Checkboxes
 <!-- t1-start -->
 ```sh
-tree_plus -s -i tests
+python -m tree_plus_cli -s -i tests
 📁 tree_plus (7 folders, 27 files) 
 ├── 📄 .env.test (4 tokens, 0 lines)
 │   └── DEBUG_TREE_PLUS
@@ -154,7 +154,7 @@ tree_plus -s -i tests
 ├── 📁 coverage (1 folder, 1 file) 
 │   └── 📄 lcov.info (17,359 tokens, 2,180 lines)
 ├── 📄 LICENSE (2,744 tokens, 81 lines)
-├── 📄 Makefile (773 tokens, 121 lines)
+├── 📄 Makefile (801 tokens, 121 lines)
 │   ├── SHELL := /bin/bash
 │   ├── cli
 │   ├── library-demo
@@ -360,7 +360,7 @@ tree_plus -s -i tests
     │   │   )
     │   ├── def update_readme(source_path: Optional = None, sink_path: Optional = None)
     │   └── def main()
-    ├── 📄 engine.py (12,037 tokens, 1,438 lines)
+    ├── 📄 engine.py (12,042 tokens, 1,438 lines)
     │   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
     │   ├── NOTE: you can customize the color here, and we could make this functional
     │   ├── TODO: clarify subtree types -- make this a DataFrame tbh
@@ -627,7 +627,7 @@ tree_plus -s -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (25,435 tokens, 2,802 lines)
+    ├── 📄 parse_file.py (26,819 tokens, 2,928 lines)
     │   ├── BUG: HTML tree doesn't look awesome (yet)
     │   ├── TODO: Fix HTML in TreePlus (How?)
     │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
@@ -649,6 +649,8 @@ tree_plus -s -i tests
     │   │       regex_timeout: Optional = None,
     │   │       syntax: bool = False,
     │   │   ) -> List
+    │   ├── def parse_metal(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
+    │   ├── def parse_wgsl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
     │   ├── def extract_groups(match: regex.Match, named_only: bool = False) -> dict
     │   ├── def parse_html(content: str) -> List
     │   ├── def parse_jsonl(content: str) -> List
@@ -684,9 +686,9 @@ tree_plus -s -i tests
     │   ├── def parse_tcl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
     │   ├── def parse_erl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
     │   ├── def parse_rs(
-    │   │       content: str, 
-    │   │       *, 
-    │   │       timeout: float = DEFAULT_REGEX_TIMEOUT, 
+    │   │       content: str,
+    │   │       *,
+    │   │       timeout: float = DEFAULT_REGEX_TIMEOUT,
     │   │       syntax: bool = False,
     │   │   ) -> List
     │   ├── def escape(
@@ -775,7 +777,7 @@ tree_plus -s -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.71"
+    │   └── __version__ = "1.0.72"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
@@ -836,8 +838,8 @@ tree_plus -s -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.71) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 13,181 line(s), 115,401 token(s) in 0.20 second(s).
+tree_plus v(1.0.72) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 13,307 line(s), 116,818 token(s) in 0.21 second(s).
 
 ```
 <!-- t1-end -->
@@ -947,8 +949,8 @@ make library_demo
 ### Currently Tested Languages:
 <!-- t6-start -->
 ```sh
-tree_plus -s -c -i group_todo tests/more_languages
-📁 more_languages (9 folders, 85 files) 
+python -m tree_plus_cli -s -c -i group_todo tests/more_languages
+📁 more_languages (9 folders, 87 files) 
 ├── 📁 group1 (1 folder, 11 files) 
 │   ├── 📄 addamt.cobol (441 tokens, 40 lines)
 │   ├── 📄 CUSTOMER-INVOICE.CBL (412 tokens, 60 lines)
@@ -1033,26 +1035,28 @@ tree_plus -s -c -i group_todo tests/more_languages
 │   ├── 📄 test.f (181 tokens, 30 lines)
 │   ├── 📄 torch.rst (60 tokens, 8 lines)
 │   └── 📄 yc.html (9,063 tokens, 169 lines)
-├── 📁 group7 (1 folder, 3 files) 
+├── 📁 group7 (1 folder, 5 files) 
 │   ├── 📄 absurdly_huge.jsonl (8,347 tokens, 126 lines)
 │   ├── 📄 angular_crud.ts (1,192 tokens, 148 lines)
-│   └── 📄 structure.py (400 tokens, 92 lines)
+│   ├── 📄 structure.py (400 tokens, 92 lines)
+│   ├── 📄 test.wgsl (528 tokens, 87 lines)
+│   └── 📄 test.metal (272 tokens, 34 lines)
 └── 📁 group_lisp (1 folder, 4 files) 
     ├── 📄 clojure_test.clj (682 tokens, 85 lines)
     ├── 📄 LispTest.lisp (25 tokens, 6 lines)
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.71) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 85 file(s), 7,229 line(s), 68,663 token(s) in 0.14 second(s).
+tree_plus v(1.0.72) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 87 file(s), 7,350 line(s), 69,463 token(s) in 0.14 second(s).
 
 ```
 <!-- t6-end -->
 ### Without the -c "Concise" Flag:
 <!-- t2-start -->
 ```sh
-tree_plus -s -i group_todo tests/more_languages
-📁 more_languages (9 folders, 85 files) 
+python -m tree_plus_cli -s -i group_todo tests/more_languages
+📁 more_languages (9 folders, 87 files) 
 ├── 📁 group1 (1 folder, 11 files) 
 │   ├── 📄 addamt.cobol (441 tokens, 40 lines)
 │   │   ├── IDENTIFICATION DIVISION.
@@ -2906,7 +2910,7 @@ tree_plus -s -i group_todo tests/more_languages
 │   │   ├── # libtorch (C++-only)
 │   │   └── - Building libtorch using Python
 │   └── 📄 yc.html (9,063 tokens, 169 lines)
-├── 📁 group7 (1 folder, 3 files) 
+├── 📁 group7 (1 folder, 5 files) 
 │   ├── 📄 absurdly_huge.jsonl (8,347 tokens, 126 lines)
 │   │   ├── SMILES: str
 │   │   ├── Yield: float
@@ -2935,57 +2939,100 @@ tree_plus -s -i group_todo tests/more_languages
 │   │   │           where,
 │   │   │       }: DBCommand & { where?: { : string | number } })
 │   │   └──     async search_table(criteria: SearchCriteria)
-│   └── 📄 structure.py (400 tokens, 92 lines)
-│       ├── @runtime_checkable
-│       │   class DataClass(Protocol)
-│       ├──     __dataclass_fields__: dict
-│       ├── class MyInteger(Enum)
-│       ├──     ONE = 1
-│       ├──     TWO = 2
-│       ├──     THREE = 42
-│       ├── class MyString(Enum)
-│       ├──     AAA1 = "aaa"
-│       ├──     BB_B = """edge
-│       │   case"""
-│       ├── @dataclass(frozen=True, slots=True, kw_only=True)
-│       │   class Tool
-│       ├──     name: str
-│       ├──     description: str
-│       ├──     input_model: DataClass
-│       ├──     output_model: DataClass
-│       ├──     def execute(self, *args, **kwargs)
-│       ├──     @property
-│       │       def edge_case(self) -> str
-│       ├──     def should_still_see_me(self, x: bool = True) -> "Tool"
-│       ├── @dataclass
-│       │   class MyInput[T]
-│       ├──     name: str
-│       ├──     rank: MyInteger
-│       ├──     serial_n: int
-│       ├── @dataclass
-│       │   class Thingy
-│       ├──     is_edge_case: bool
-│       ├── @dataclass
-│       │   class MyOutput
-│       ├──     orders: str
-│       ├── class MyTools(Enum)
-│       ├──     TOOL_A = Tool(
-│       │           name="complicated",
-│       │           description="edge case!",
-│       │           input_model=MyInput[Thingy],
-│       │           output_model=MyOutput,
-│       │       )
-│       ├──     TOOL_B = Tool(
-│       │           name="""super
-│       │   complicated
-│       │   """,
-│       │           description="edge case!",
-│       │           input_model=MyInput,
-│       │           output_model=MyOutput,
-│       │       )
-│       ├── @final
-│       │   class dtype(Generic[_DTypeScalar_co])
-│       └──     names: None | tuple
+│   ├── 📄 structure.py (400 tokens, 92 lines)
+│   │   ├── @runtime_checkable
+│   │   │   class DataClass(Protocol)
+│   │   ├──     __dataclass_fields__: dict
+│   │   ├── class MyInteger(Enum)
+│   │   ├──     ONE = 1
+│   │   ├──     TWO = 2
+│   │   ├──     THREE = 42
+│   │   ├── class MyString(Enum)
+│   │   ├──     AAA1 = "aaa"
+│   │   ├──     BB_B = """edge
+│   │   │   case"""
+│   │   ├── @dataclass(frozen=True, slots=True, kw_only=True)
+│   │   │   class Tool
+│   │   ├──     name: str
+│   │   ├──     description: str
+│   │   ├──     input_model: DataClass
+│   │   ├──     output_model: DataClass
+│   │   ├──     def execute(self, *args, **kwargs)
+│   │   ├──     @property
+│   │   │       def edge_case(self) -> str
+│   │   ├──     def should_still_see_me(self, x: bool = True) -> "Tool"
+│   │   ├── @dataclass
+│   │   │   class MyInput[T]
+│   │   ├──     name: str
+│   │   ├──     rank: MyInteger
+│   │   ├──     serial_n: int
+│   │   ├── @dataclass
+│   │   │   class Thingy
+│   │   ├──     is_edge_case: bool
+│   │   ├── @dataclass
+│   │   │   class MyOutput
+│   │   ├──     orders: str
+│   │   ├── class MyTools(Enum)
+│   │   ├──     TOOL_A = Tool(
+│   │   │           name="complicated",
+│   │   │           description="edge case!",
+│   │   │           input_model=MyInput[Thingy],
+│   │   │           output_model=MyOutput,
+│   │   │       )
+│   │   ├──     TOOL_B = Tool(
+│   │   │           name="""super
+│   │   │   complicated
+│   │   │   """,
+│   │   │           description="edge case!",
+│   │   │           input_model=MyInput,
+│   │   │           output_model=MyOutput,
+│   │   │       )
+│   │   ├── @final
+│   │   │   class dtype(Generic[_DTypeScalar_co])
+│   │   └──     names: None | tuple
+│   ├── 📄 test.wgsl (528 tokens, 87 lines)
+│   │   ├── alias MyVec = vec4<f32>
+│   │   ├── alias AnotherVec = vec2<f32>
+│   │   ├── struct VertexInput
+│   │   ├── struct VertexOutput
+│   │   ├── struct MyUniforms
+│   │   ├── @group(0) @binding(0) var<uniform> u_mvp: mat4x4<f32>
+│   │   ├── @group(0) @binding(1) var<uniform> u_color: MyVec
+│   │   ├── @group(1) @binding(0) var my_texture: texture_2d<f32>
+│   │   ├── @group(1) @binding(1) var my_sampler: sampler
+│   │   ├── @vertex
+│   │   │   fn vs_main(in: VertexInput) -> VertexOutput
+│   │   ├── @fragment
+│   │   │   fn fs_main(in: VertexOutput) -> @location(0) vec4<f32>
+│   │   ├── @compute @workgroup_size(8, 8, 1)
+│   │   │   fn cs_main(@builtin(global_invocation_id) global_id: vec3<u32>)
+│   │   ├── fn helper_function(val: f32) -> f32
+│   │   ├── struct AnotherStruct
+│   │   └── @compute
+│   │       @workgroup_size(8, 8, 1)
+│   │       fn multi_line_edge_case(
+│   │           @builtin(global_invocation_id)
+│   │           globalId       : vec3<u32>,
+│   │           @group(1)
+│   │           @binding(0)
+│   │           srcTexture     : texture_2d<f32>,
+│   │           @group(1)
+│   │           @binding(1)
+│   │           srcSampler     : sampler,
+│   │           @group(0)
+│   │           @binding(0)
+│   │           uniformsPtr    : ptr<uniform, MyUniforms>,
+│   │           storageBuffer  : ptr<storage, array<vec4<f32>, 64>, read_write>,
+│   │       )
+│   └── 📄 test.metal (272 tokens, 34 lines)
+│       ├── struct MyData
+│       ├── kernel void myKernel(device MyData* data [],
+│       │                        uint id [])
+│       ├── float myHelperFunction(float x, float y)
+│       ├── vertex float4 vertexShader(const device packed_float3* vertex_array [],
+│       │                              unsigned int vid [])
+│       ├── fragment half4 fragmentShader(float4 P [])
+│       └── float3 computeNormalMap(ColorInOut in, texture2d<float> normalMapTexture)
 └── 📁 group_lisp (1 folder, 4 files) 
     ├── 📄 clojure_test.clj (682 tokens, 85 lines)
     │   ├── defprotocol P
@@ -3009,8 +3056,8 @@ tree_plus -s -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.71) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 85 file(s), 7,229 line(s), 68,663 token(s) in 0.53 second(s).
+tree_plus v(1.0.72) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 87 file(s), 7,350 line(s), 69,463 token(s) in 0.53 second(s).
 
 ```
 <!-- t2-end -->
@@ -3018,7 +3065,7 @@ tree_plus v(1.0.71) ignore=('group_todo',) globs=() syntax=False paths=('tests/m
 
 <!-- t3-start -->
 ```sh
-tree_plus -s -g "*.*s" -i group_todo tests/more_languages
+python -m tree_plus_cli -s -g "*.*s" -i group_todo tests/more_languages
 📁 more_languages (7 folders, 17 files) 
 ├── 📁 group1 (1 folder, 2 files) 
 │   ├── 📄 test.js (757 tokens, 154 lines)
@@ -3532,7 +3579,7 @@ tree_plus -s -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.71) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.72) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 7 folder(s), 17 file(s), 2,133 line(s), 15,147 token(s) in 0.15 second(s).
 
 ```
@@ -3547,9 +3594,70 @@ Help me **add to** and **priorize** this list of languages to support!
 
 <!-- t4-start -->
 ```sh
-tree_plus -s tests/more_languages/group_todo
+python -m tree_plus_cli -s tests/more_languages/group_todo
 📁 group_todo (1 folder, 12 files) 
 ├── 📄 AAPLShaders.metal (5,780 tokens, 566 lines)
+│   ├── struct LightingParameters
+│   ├── float Geometry(float Ndotv, float alphaG)
+│   ├── float3 computeNormalMap(ColorInOut in, texture2d<float> normalMapTexture)
+│   ├── float3 computeDiffuse(LightingParameters parameters)
+│   ├── float Distribution(float NdotH, float roughness)
+│   ├── float3 computeSpecular(LightingParameters parameters)
+│   ├── float4 equirectangularSample(float3 direction, sampler s, texture2d<float> image)
+│   ├── LightingParameters calculateParameters(ColorInOut in,
+│   │                                          AAPLCameraData cameraData,
+│   │                                          constant AAPLLightData& lightData,
+│   │                                          texture2d<float>   baseColorMap,
+│   │                                          texture2d<float>   normalMap,
+│   │                                          texture2d<float>   metallicMap,
+│   │                                          texture2d<float>   roughnessMap,
+│   │                                          texture2d<float>   ambientOcclusionMap,
+│   │                                          texture2d<float>   skydomeMap)
+│   ├── struct SkyboxVertex
+│   ├── struct SkyboxV2F
+│   ├── vertex SkyboxV2F skyboxVertex(SkyboxVertex in [],
+│   │                                    constant AAPLCameraData& cameraData [])
+│   ├── fragment float4 skyboxFragment(SkyboxV2F v [], texture2d<float> skytexture [])
+│   ├── vertex ColorInOut vertexShader(Vertex in [],
+│   │                                  constant AAPLInstanceTransform& instanceTransform [[ 
+│   │   buffer(BufferIndexInstanceTransforms) ]],
+│   │                                  constant AAPLCameraData& cameraData [[ buffer(BufferIndexCameraData) ]])
+│   ├── float2 calculateScreenCoord( float3 ndcpos )
+│   ├── fragment float4 fragmentShader(
+│   │                       ColorInOut                  in                    [],
+│   │                       constant AAPLCameraData&    cameraData            [[ buffer(BufferIndexCameraData) ]],
+│   │                       constant AAPLLightData&     lightData             [[ buffer(BufferIndexLightData) ]],
+│   │                       constant AAPLSubmeshKeypath&submeshKeypath        [[ buffer(BufferIndexSubmeshKeypath)]],
+│   │                       constant Scene*             pScene                [[ buffer(SceneIndex)]],
+│   │                       texture2d<float>            skydomeMap            [[ texture(AAPLSkyDomeTexture) ]],
+│   │                       texture2d<float>            rtReflections         [[ texture(AAPLTextureIndexReflections), 
+│   │   function_constant(is_raytracing_enabled)]])
+│   ├── fragment float4 reflectionShader(ColorInOut in [],
+│   │                                    texture2d<float> rtReflections [])
+│   ├── struct ThinGBufferOut
+│   ├── fragment ThinGBufferOut gBufferFragmentShader(ColorInOut in [])
+│   ├── kernel void rtReflection(
+│   │                texture2d< float, access::write >      outImage                [],
+│   │                texture2d< float >                     positions               [],
+│   │                texture2d< float >                     directions              [],
+│   │                texture2d< float >                     skydomeMap              [],
+│   │                constant AAPLInstanceTransform*        instanceTransforms      [],
+│   │                constant AAPLCameraData&               cameraData              [],
+│   │                constant AAPLLightData&                lightData               [],
+│   │                constant Scene*                        pScene                  [],
+│   │                instance_acceleration_structure        accelerationStructure   [],
+│   │                uint2 tid [])
+│   ├── else if ( intersection.type == raytracing::intersection_type::none )
+│   ├── struct VertexInOut
+│   ├── vertex VertexInOut vertexPassthrough( uint vid [] )
+│   ├── fragment float4 fragmentPassthrough( VertexInOut in [], texture2d< float > tin )
+│   ├── fragment float4 fragmentBloomThreshold( VertexInOut in [],
+│   │                                          texture2d< float > tin [],
+│   │                                          constant float* threshold [] )
+│   └── fragment float4 fragmentPostprocessMerge( VertexInOut in [],
+│                                                constant float& exposure [],
+│                                                texture2d< float > texture0 [],
+│                                                texture2d< float > texture1 [])
 ├── 📄 crystal_test.cr (48 tokens, 15 lines)
 ├── 📄 dart_test.dart (108 tokens, 24 lines)
 ├── 📄 elixir_test.exs (39 tokens, 10 lines)
@@ -3561,9 +3669,14 @@ tree_plus -s tests/more_languages/group_todo
 ├── 📄 testTypings.d.ts (158 tokens, 23 lines)
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
+    ├── @binding(0) @group(0) var<uniform> frame : u32
+    ├── @vertex
+    │   fn vtx_main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f
+    └── @fragment
+        fn frag_main() -> @location(0) vec4f
 
-tree_plus v(1.0.71) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
-1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.03 second(s).
+tree_plus v(1.0.72) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.06 second(s).
 
 ```
 <!-- t4-end -->
