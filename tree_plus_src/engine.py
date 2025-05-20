@@ -440,7 +440,7 @@ def into_rich_tree(
 ) -> Tree:
     "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
     try:
-        this_rich_tree: Tree = func_timeout( # type: ignore
+        this_rich_tree: Tree = func_timeout(  # type: ignore
             timeout=timeout,
             func=_into_rich_tree,
             kwargs=dict(root=root),
@@ -1074,8 +1074,6 @@ def _from_file(
     return file_tree_plus
 
 
-
-
 def _from_url(
     *,
     url: str,
@@ -1085,6 +1083,7 @@ def _from_url(
     "PRIVATE: build TreePlus from a URL (not recursive for now)"
     debug_print(f"engine._from_url {url=}")
     from fake_useragent import UserAgent
+
     ua = UserAgent(browsers=["chrome"])
     try:
         if not (url.startswith("http://") or url.startswith("https://")):
@@ -1388,6 +1387,7 @@ BACKUP_LEXERS = {
     "rst": "markdown",
     "cc": "cpp",
     "hpp": "cpp",
+    "metal": "cpp",
     "h": "c",
     "md": "markdown",
     "html": "markdown",

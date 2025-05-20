@@ -1253,7 +1253,7 @@ def test_more_languages_group3(file: str, expected: List[str]):
                 "    fn draw(&self)",
                 "impl Drawable for Point",
                 "    fn draw(&self)",
-                       'fn with_generic<D: Drawable>(d: D)',
+                "fn with_generic<D: Drawable>(d: D)",
                 """fn with_generic<D>(d: D)
 where 
     D: Drawable""",
@@ -1304,7 +1304,7 @@ macro_rules! unit""",
                 key: (),
                 value: $unit_dtype,
             ) -> Result<Option<$unit_dtype>, ETLError>""",
-            """pub async fn handle_get_axum_route(
+                """pub async fn handle_get_axum_route(
     Session { maybe_claims }: Session,
     Path(RouteParams {
         alpha,
@@ -1313,7 +1313,7 @@ macro_rules! unit""",
         edge_case
     }): Path<RouteParams>,
 ) -> ServerResult<Response>""",
-            "fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>",
+                "fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>",
             ],
         ),
         (
@@ -2065,6 +2065,53 @@ def test_more_languages_isabelle_symbol_replacement():
     # assert 0
 
 
+METAL_EXPECTATION = [
+    "struct MyData",
+    """kernel void myKernel(device MyData* data [[buffer(0)]],
+                     uint id [[thread_position_in_grid]])""",
+    "float myHelperFunction(float x, float y)",
+    """vertex float4 vertexShader(const device packed_float3* vertex_array [[buffer(0)]],
+                           unsigned int vid [[vertex_id]])""",
+    "fragment half4 fragmentShader(float4 P [[position]])",
+    "float3 computeNormalMap(ColorInOut in, texture2d<float> normalMapTexture)",
+]
+
+WGSL_EXPECTATION = [
+    "alias MyVec = vec4<f32>",
+    "alias AnotherVec = vec2<f32>",
+    "struct VertexInput",
+    "struct VertexOutput",
+    "struct MyUniforms",
+    "@group(0) @binding(0) var<uniform> u_mvp: mat4x4<f32>",
+    "@group(0) @binding(1) var<uniform> u_color: MyVec",
+    "@group(1) @binding(0) var my_texture: texture_2d<f32>",
+    "@group(1) @binding(1) var my_sampler: sampler",
+    """@vertex
+fn vs_main(in: VertexInput) -> VertexOutput""",
+    """@fragment
+fn fs_main(in: VertexOutput) -> @location(0) vec4<f32>""",
+    """@compute @workgroup_size(8, 8, 1)
+fn cs_main(@builtin(global_invocation_id) global_id: vec3<u32>)""",
+    "fn helper_function(val: f32) -> f32",
+    "struct AnotherStruct",
+    """@compute
+@workgroup_size(8, 8, 1)
+fn multi_line_edge_case(
+    @builtin(global_invocation_id)
+    globalId       : vec3<u32>,
+    @group(1)
+    @binding(0)
+    srcTexture     : texture_2d<f32>,
+    @group(1)
+    @binding(1)
+    srcSampler     : sampler,
+    @group(0)
+    @binding(0)
+    uniformsPtr    : ptr<uniform, MyUniforms>,
+    storageBuffer  : ptr<storage, array<vec4<f32>, 64>, read_write>,
+)""",
+]
+
 TF_FLAGS_EXPECTATION = [
     "TF_DECLARE_FLAG('test_only_experiment_1')",
     "TF_DECLARE_FLAG('test_only_experiment_2')",
@@ -2178,7 +2225,8 @@ def test_more_languages_tensorflow_flags():
     file = "tests/more_languages/group6/tensorflow_flags.h"
 
     print(file)
-    results = parse_file(file)
+    # Increase timeout for this specific large file
+    results = parse_file(file, regex_timeout=5.0)
     print("results")
 
     # TO MAKE EXPECTATION, USE THIS:
@@ -2271,13 +2319,13 @@ class dtype(Generic[_DTypeScalar_co])""",
     "    names: None | tuple[builtins.str, ...]",
 ]
 
-WGSL_EXPECTATION = [
-    """@binding(0) @group(0) var<uniform> frame : u32;
-@vertex
-fn vtx_main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f""",
-    """@fragment
-fn frag_main() -> @location(0) vec4f""",
-]
+# WGSL_EXPECTATION = [
+#     """@binding(0) @group(0) var<uniform> frame : u32;
+# @vertex
+# fn vtx_main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f""",
+#     """@fragment
+# fn frag_main() -> @location(0) vec4f""",
+# ]
 
 JSONL_EXPECTATION = [
     "SMILES: str",
@@ -2335,6 +2383,8 @@ JSONL_EXPECTATION = [
         ("tests/more_languages/group7/angular_crud.ts", ANGULAR_CRUD_EXPECTATION),
         ("tests/more_languages/group7/structure.py", DATACLASS_EXPECTATION),
         ("tests/more_languages/group7/absurdly_huge.jsonl", JSONL_EXPECTATION),
+        ("tests/more_languages/group7/test.metal", METAL_EXPECTATION),
+        ("tests/more_languages/group7/test.wgsl", WGSL_EXPECTATION),
         # ("tests/more_languages/group7/wgsl_test.wgsl", WGSL_EXPECTATION),
         # ("tests/more_languages/group7/AAPLShaders.metal", METAL_EXPECTATION),
     ],

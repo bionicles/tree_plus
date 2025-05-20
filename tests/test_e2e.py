@@ -349,7 +349,7 @@ def test_e2e_ignore_parameter_directory():
 def test_e2e_root_rs_glob():
     # disable_debug()
     # with tree_plus.debug_disabled():
-    result = tree_plus.from_seed(".", maybe_globs=("*.rs",))
+    result = tree_plus.from_seed(".", maybe_globs=("*.rs",), concise=True)
     result.render()
     result_str = result.into_str()
     result_lines = result_str.splitlines()
