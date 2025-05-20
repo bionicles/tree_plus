@@ -24,8 +24,8 @@ debug-command: test
 # debug-command: test-group 
 
 html-demo:
-	tree_plus https://en.wikipedia.org/wiki/Zero_ring
-	# tree_plus --yc
+	python -m tree_plus_cli https://en.wikipedia.org/wiki/Zero_ring
+	# python -m tree_plus_cli --yc
 
 # test data for the jsonl tokenization
 absurdly-huge-jsonl:
@@ -104,19 +104,19 @@ clean-dist:
 	rm -rf dist/*
 
 t1:
-	tree_plus -s -i tests
+	python -m tree_plus_cli -s -i tests
 
 t2:
-	tree_plus -s -i group_todo tests/more_languages
+	python -m tree_plus_cli -s -i group_todo tests/more_languages
 
 t3:
-	tree_plus -s -g "*.*s" -i group_todo tests/more_languages
+	python -m tree_plus_cli -s -g "*.*s" -i group_todo tests/more_languages
 
 t4:
-	tree_plus -s tests/more_languages/group_todo
+	python -m tree_plus_cli -s tests/more_languages/group_todo
 
 t5:
-	tree_plus -h
+	python -m tree_plus_cli -h
 
 t6:
-	tree_plus -s -c -i group_todo tests/more_languages
+	python -m tree_plus_cli -s -c -i group_todo tests/more_languages

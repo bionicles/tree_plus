@@ -383,7 +383,7 @@ def test_e2e_root_rs_glob():
     #         "└── 📁  (1 folder, 2 files)" in result_str,
     #     )
     # )
-    assert "📁 tree_plus (" in result_str
+    assert "📁 app (" in result_str
     # assert 0
     # assert expectation in more_languages_line
     # assert expectation in tests_line
