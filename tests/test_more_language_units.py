@@ -2086,11 +2086,30 @@ WGSL_EXPECTATION = [
     "@group(0) @binding(1) var<uniform> u_color: MyVec",
     "@group(1) @binding(0) var my_texture: texture_2d<f32>",
     "@group(1) @binding(1) var my_sampler: sampler",
-    "@vertex fn vs_main(in: VertexInput) -> VertexOutput",
-    "@fragment fn fs_main(in: VertexOutput) -> @location(0) vec4<f32>",
-    "@compute @workgroup_size(8, 8, 1) fn cs_main(@builtin(global_invocation_id) global_id: vec3<u32>)",
+    """@vertex
+fn vs_main(in: VertexInput) -> VertexOutput""",
+    """@fragment
+fn fs_main(in: VertexOutput) -> @location(0) vec4<f32>""",
+    """@compute @workgroup_size(8, 8, 1)
+fn cs_main(@builtin(global_invocation_id) global_id: vec3<u32>)""",
     "fn helper_function(val: f32) -> f32",
     "struct AnotherStruct",
+    """@compute
+@workgroup_size(8, 8, 1)
+fn multi_line_edge_case(
+    @builtin(global_invocation_id)
+    globalId       : vec3<u32>,
+    @group(1)
+    @binding(0)
+    srcTexture     : texture_2d<f32>,
+    @group(1)
+    @binding(1)
+    srcSampler     : sampler,
+    @group(0)
+    @binding(0)
+    uniformsPtr    : ptr<uniform, MyUniforms>,
+    storageBuffer  : ptr<storage, array<vec4<f32>, 64>, read_write>,
+)""",
 ]
 
 TF_FLAGS_EXPECTATION = [

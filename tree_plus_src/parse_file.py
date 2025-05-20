@@ -298,8 +298,10 @@ def parse_metal(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
     # Type: (const)? (device|threadgroup|constant)? type_name (*|&)? (attribute)?
     # More flexible type matching, allowing for C++ style type declarations including pointers and references.
     # Allows for attributes as part of the type, e.g. const device packed_float3* vertex_array [[buffer(0)]]
-    type_name_regex_str = r"(?:(?:const|device|threadgroup|constant|packed_)\s+)*\w+(?:\s*[*&])?"
-    
+    type_name_regex_str = (
+        r"(?:(?:const|device|threadgroup|constant|packed_)\s+)*\w+(?:\s*[*&])?"
+    )
+
     # Parameters: ( type_name param_name attribute, ... )
     # This is a simplified version; truly parsing C++ parameters with regex is very hard.
     # It tries to match balanced parentheses.
@@ -307,18 +309,26 @@ def parse_metal(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
     # simplified to match anything within () non-greedily
     params_regex_str = r"\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)"
 
-
     combined_pattern = regex.compile(
         # Structs: struct Name attribute {
         r"^(?P<struct>\s*struct\s+\w+\s*" + attribute_regex_str + r"\{)|"
-        
         # Kernel/Vertex/Fragment Functions: (kernel|vertex|fragment) return_type func_name params attribute {
-        r"^(?P<kernel_function>\s*(kernel|vertex|fragment)\s+" + type_name_regex_str + r"\s+\w+\s*" + params_regex_str + r"\s*" + attribute_regex_str + r"\{)|"
-        
+        r"^(?P<kernel_function>\s*(kernel|vertex|fragment)\s+"
+        + type_name_regex_str
+        + r"\s+\w+\s*"
+        + params_regex_str
+        + r"\s*"
+        + attribute_regex_str
+        + r"\{)|"
         # Other Functions: return_type func_name params attribute {
         # Negative lookahead to ensure it doesn't re-match kernel/vertex/fragment functions
-        r"^(?P<function>\s*(?!kernel|vertex|fragment)" + type_name_regex_str + r"\s+\w+\s*" + params_regex_str + r"\s*" + attribute_regex_str + r"\{)",
-        
+        r"^(?P<function>\s*(?!kernel|vertex|fragment)"
+        + type_name_regex_str
+        + r"\s+\w+\s*"
+        + params_regex_str
+        + r"\s*"
+        + attribute_regex_str
+        + r"\{)",
         regex.MULTILINE,
         cache_pattern=True,
     )
@@ -328,14 +338,14 @@ def parse_metal(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
         debug_print(f"parse_metal {n=} {match=}")
         groups = extract_groups(match, named_only=True)
         component = None
-        
+
         if "struct" in groups and groups["struct"]:
             component = groups["struct"].strip().rstrip("{").strip()
         elif "kernel_function" in groups and groups["kernel_function"]:
             component = groups["kernel_function"].strip().rstrip("{").strip()
         elif "function" in groups and groups["function"]:
             component = groups["function"].strip().rstrip("{").strip()
-        
+
         if component:
             # # Replace any sequence of whitespace characters (including newlines) with a single space
             # component = regex.sub(r'\s+', ' ', component)
@@ -343,7 +353,7 @@ def parse_metal(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
             # component = regex.sub(r'\s*\{$', '', component).strip()
             debug_print(f"parse_metal component: {component}")
             components.append(component)
-            
+
     return components
 
 
@@ -354,8 +364,7 @@ def parse_wgsl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[
     # Regex for various WGSL constructs
     # Order matters: more specific (like functions with attributes) before general
     combined_pattern = regex.compile(
-        r"^(?P<alias>alias\s+\w+\s*=\s*[\w<>,]+;)|"
-        r"^(?P<struct>struct\s+\w+\s*\{)|"
+        r"^(?P<alias>alias\s+\w+\s*=\s*[\w<>,]+;)|" r"^(?P<struct>struct\s+\w+\s*\{)|"
         # Global var: allow general non-greedy match in decorator arguments
         r"^(?P<global_var>(?:@\w+(?:\((?:.*?)\))?\s*)*var(?:<\w+>)?\s+\w+\s*:\s*[\w<>,]+;)|"
         # Function: allow general non-greedy match in decorator arguments, and robust parentheses matching for parameters
@@ -369,7 +378,7 @@ def parse_wgsl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[
         debug_print(f"parse_wgsl {n=} {match=}")
         groups = extract_groups(match, named_only=True)
         component = None
-        
+
         if "alias" in groups and groups["alias"]:
             component = groups["alias"].rstrip(";")
         elif "struct" in groups and groups["struct"]:
@@ -377,13 +386,14 @@ def parse_wgsl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[
         elif "global_var" in groups and groups["global_var"]:
             component = groups["global_var"].rstrip(";")
         elif "function" in groups and groups["function"]:
-            func_sig = regex.sub(r"\s+", " ", groups["function"])
+            func_sig = groups["function"]
+            func_sig = regex.sub(r"\n\n", "\n", func_sig)
             component = func_sig.strip().rstrip("{").strip()
-        
+
         if component:
             debug_print(f"parse_wgsl component: {component}")
             components.append(component)
-            
+
     return components
 
 
@@ -473,7 +483,8 @@ def process_tag(tag, components) -> Optional[str]:
 
 # , source: Optional[str] = None # customization is possible
 def components_from_html(content: str) -> List[str]:
-    from bs4 import BeautifulSoup # lazy import bs4
+    from bs4 import BeautifulSoup  # lazy import bs4
+
     soup = BeautifulSoup(content, "html.parser")
     components = []
     body = soup.body
@@ -523,11 +534,11 @@ def parse_tensorflow_flags(
 ) -> List[str]:
     debug_print("parse_tensorflow_flags")
     pattern = regex.compile(
-            # Match flag declarations
+        # Match flag declarations
         r"^(?: |\{)+(?P<flag_type>Flag|TF_PY_DECLARE_FLAG|TF_DECLARE_FLAG)\((?:\s*?)\"?(?P<flag_name>\w+)?\"?|"
-            # Match descriptions (greedy)
-            r"^\s+\"(?P<flag_description>[\w* \-\/=;><,:+().']+)(?=\.\s?\")?|"
-            # Match blank lines
+        # Match descriptions (greedy)
+        r"^\s+\"(?P<flag_description>[\w* \-\/=;><,:+().']+)(?=\.\s?\")?|"
+        # Match blank lines
         r"(?P<blank_line>^$)",
         regex.MULTILINE,
         cache_pattern=True,
@@ -821,8 +832,7 @@ def parse_fortran(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> Li
         # Match PROGRAM and label start and end
         r"^((?P<programstart>PROGRAM\s+\w+)[\s\S]*?(?P<programend>END PROGRAM \w+))\s?|"
         # Match MODULE without its content (so we don't consume the subroutines)
-        r"^(?P<module>MODULE \w+)|"
-        r"^(?P<endmodule>END MODULE \w+)",
+        r"^(?P<module>MODULE \w+)|" r"^(?P<endmodule>END MODULE \w+)",
         regex.MULTILINE,
         cache_pattern=True,
     )
@@ -959,6 +969,7 @@ def remove_docstrings(source, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> str:
     )
     return docstring_pattern.sub(":", source, timeout=timeout)
 
+
 # # Compile once, reuse often
 # _TRIPLE_QUOTED_RE = regex.compile(
 #     r'''(?sx)                # (?s)=DOTALL, (?x)=verbose
@@ -978,8 +989,8 @@ def remove_docstrings(source, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> str:
 # )
 
 # def strip_triple_quoted(
-#     source: str, 
-#     keep_linecount: bool = True, 
+#     source: str,
+#     keep_linecount: bool = True,
 #     timeout: float = DEFAULT_REGEX_TIMEOUT
 # ) -> str:
 #     """
@@ -1189,11 +1200,10 @@ def parse_erl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[s
     return components
 
 
-
 def parse_rs(
-    content: str, 
-    *, 
-    timeout: float = DEFAULT_REGEX_TIMEOUT, 
+    content: str,
+    *,
+    timeout: float = DEFAULT_REGEX_TIMEOUT,
     syntax: bool = False,
 ) -> List[str]:
     debug_print("parse_rs")
@@ -1240,8 +1250,11 @@ def parse_rs(
 
     return components
 
+
 # credit: this is from Rich python, copied here to make minor changes
 _escape = regex.compile(r"(\\*)(\[[a-z#/@][^[]*?])").sub
+
+
 def escape(
     markup: str,
 ) -> str:
@@ -1264,6 +1277,7 @@ def escape(
         return markup + "\\"
 
     return markup
+
 
 def parse_csv(content: str, max_leaves=11) -> List[str]:
     debug_print("parse_csv")

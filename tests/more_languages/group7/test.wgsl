@@ -51,3 +51,38 @@ fn helper_function(val: f32) -> f32 {
 struct AnotherStruct {
     data: array<f32, 4>,
 }
+
+
+@compute
+@workgroup_size(8, 8, 1)
+fn multi_line_edge_case(
+    // Built-in ID, split attribute and name on separate lines
+    @builtin(global_invocation_id)
+    globalId       : vec3<u32>,
+
+    // Texture and sampler with group/binding annotations
+    @group(1)
+    @binding(0)
+    srcTexture     : texture_2d<f32>,
+
+    @group(1)
+    @binding(1)
+    srcSampler     : sampler,
+
+    // Uniforms block pointer
+    @group(0)
+    @binding(0)
+    uniformsPtr    : ptr<uniform, MyUniforms>,
+
+    // Optional storage buffer for read/write
+    storageBuffer  : ptr<storage, array<vec4<f32>, 64>, read_write>,
+) {
+    // Compute a flat index
+    let idx = globalId.x + globalId.y * 8u;
+
+    // Sample, tint, and write out
+    let uv   = vec2<f32>(f32(globalId.x) / 8.0, f32(globalId.y) / 8.0);
+    let tex  = textureSample(srcTexture, srcSampler, uv);
+    let col  = uniformsPtr.color * tex;
+    storageBuffer[idx] = col;
+}
