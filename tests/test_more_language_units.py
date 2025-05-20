@@ -1253,7 +1253,7 @@ def test_more_languages_group3(file: str, expected: List[str]):
                 "    fn draw(&self)",
                 "impl Drawable for Point",
                 "    fn draw(&self)",
-                       'fn with_generic<D: Drawable>(d: D)',
+                "fn with_generic<D: Drawable>(d: D)",
                 """fn with_generic<D>(d: D)
 where 
     D: Drawable""",
@@ -1304,7 +1304,7 @@ macro_rules! unit""",
                 key: (),
                 value: $unit_dtype,
             ) -> Result<Option<$unit_dtype>, ETLError>""",
-            """pub async fn handle_get_axum_route(
+                """pub async fn handle_get_axum_route(
     Session { maybe_claims }: Session,
     Path(RouteParams {
         alpha,
@@ -1313,7 +1313,7 @@ macro_rules! unit""",
         edge_case
     }): Path<RouteParams>,
 ) -> ServerResult<Response>""",
-            "fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>",
+                "fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>",
             ],
         ),
         (
@@ -2067,10 +2067,13 @@ def test_more_languages_isabelle_symbol_replacement():
 
 METAL_EXPECTATION = [
     "struct MyData",
-    "kernel void myKernel(device MyData* data [[buffer(0)]], uint id [[thread_position_in_grid]])",
+    """kernel void myKernel(device MyData* data [[buffer(0)]],
+                     uint id [[thread_position_in_grid]])""",
     "float myHelperFunction(float x, float y)",
-    "vertex float4 vertexShader(const device packed_float3* vertex_array [[buffer(0)]], unsigned int vid [[vertex_id]])",
+    """vertex float4 vertexShader(const device packed_float3* vertex_array [[buffer(0)]],
+                           unsigned int vid [[vertex_id]])""",
     "fragment half4 fragmentShader(float4 P [[position]])",
+    "float3 computeNormalMap(ColorInOut in, texture2d<float> normalMapTexture)",
 ]
 
 WGSL_EXPECTATION = [
@@ -2192,30 +2195,6 @@ TF_FLAGS_EXPECTATION = [
 ]
 
 
-@pytest.mark.parametrize(
-    "file,expected",
-    [
-        (
-            "tests/more_languages/group_todo/test.metal",
-            METAL_EXPECTATION,
-        ),
-        (
-            "tests/more_languages/group_todo/test.wgsl",
-            WGSL_EXPECTATION,
-        ),
-    ],
-)
-def test_more_languages_group_todo(
-    file: str,
-    expected: List[str],
-):
-    print(f"{file=}")
-    result = parse_file(file)
-    print("result", result)
-    print("expected", expected)
-    assert result == expected
-
-
 import re
 
 
@@ -2321,13 +2300,13 @@ class dtype(Generic[_DTypeScalar_co])""",
     "    names: None | tuple[builtins.str, ...]",
 ]
 
-WGSL_EXPECTATION = [
-    """@binding(0) @group(0) var<uniform> frame : u32;
-@vertex
-fn vtx_main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f""",
-    """@fragment
-fn frag_main() -> @location(0) vec4f""",
-]
+# WGSL_EXPECTATION = [
+#     """@binding(0) @group(0) var<uniform> frame : u32;
+# @vertex
+# fn vtx_main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f""",
+#     """@fragment
+# fn frag_main() -> @location(0) vec4f""",
+# ]
 
 JSONL_EXPECTATION = [
     "SMILES: str",
@@ -2385,6 +2364,8 @@ JSONL_EXPECTATION = [
         ("tests/more_languages/group7/angular_crud.ts", ANGULAR_CRUD_EXPECTATION),
         ("tests/more_languages/group7/structure.py", DATACLASS_EXPECTATION),
         ("tests/more_languages/group7/absurdly_huge.jsonl", JSONL_EXPECTATION),
+        ("tests/more_languages/group7/test.metal", METAL_EXPECTATION),
+        ("tests/more_languages/group7/test.wgsl", WGSL_EXPECTATION),
         # ("tests/more_languages/group7/wgsl_test.wgsl", WGSL_EXPECTATION),
         # ("tests/more_languages/group7/AAPLShaders.metal", METAL_EXPECTATION),
     ],

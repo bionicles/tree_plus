@@ -337,10 +337,10 @@ def parse_metal(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
             component = groups["function"].strip().rstrip("{").strip()
         
         if component:
-            # Replace any sequence of whitespace characters (including newlines) with a single space
-            component = regex.sub(r'\s+', ' ', component)
-            # Remove trailing space before the curly brace that might have been introduced
-            component = regex.sub(r'\s*\{$', '', component).strip()
+            # # Replace any sequence of whitespace characters (including newlines) with a single space
+            # component = regex.sub(r'\s+', ' ', component)
+            # # Remove trailing space before the curly brace that might have been introduced
+            # component = regex.sub(r'\s*\{$', '', component).strip()
             debug_print(f"parse_metal component: {component}")
             components.append(component)
             
