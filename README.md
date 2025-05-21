@@ -103,7 +103,7 @@ Options:
                                0.7)
   -H, -h, --help               Show this message and exit.
 
-  v(1.0.72) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.73) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -130,7 +130,7 @@ python -m tree_plus_cli -s -i tests
 │       │   ├──     - Set PYTHONUTF8 for Windows
 │       │   ├──     - Run generic tests
 │       │   └──     - Run specific test
-│       └── 📄 unix.yml (695 tokens, 91 lines)
+│       └── 📄 unix.yml (713 tokens, 92 lines)
 │           ├── Linux & MacOS
 │           ├──   job: test
 │           ├──     - Set up Python ${{ matrix.python-version }}
@@ -210,7 +210,7 @@ python -m tree_plus_cli -s -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (36,253 tokens, 3,580 lines)
+├── 📄 README.md (38,012 tokens, 3,693 lines)
 │   ├── # Tree Plus
 │   ├── #### **Ever hit context limits prompting LLMs with code?**
 │   ├── ### Use `tree_plus` to ...:
@@ -777,7 +777,7 @@ python -m tree_plus_cli -s -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.72"
+    │   └── __version__ = "1.0.73"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
@@ -838,8 +838,8 @@ python -m tree_plus_cli -s -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.72) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 13,307 line(s), 116,818 token(s) in 0.21 second(s).
+tree_plus v(1.0.73) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 27 file(s), 13,421 line(s), 118,595 token(s) in 0.21 second(s).
 
 ```
 <!-- t1-end -->
@@ -1047,7 +1047,7 @@ python -m tree_plus_cli -s -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.72) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+tree_plus v(1.0.73) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
 9 folder(s), 87 file(s), 7,350 line(s), 69,463 token(s) in 0.14 second(s).
 
 ```
@@ -3056,8 +3056,8 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.72) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 87 file(s), 7,350 line(s), 69,463 token(s) in 0.53 second(s).
+tree_plus v(1.0.73) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 87 file(s), 7,350 line(s), 69,463 token(s) in 0.54 second(s).
 
 ```
 <!-- t2-end -->
@@ -3579,7 +3579,7 @@ python -m tree_plus_cli -s -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.72) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.73) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 7 folder(s), 17 file(s), 2,133 line(s), 15,147 token(s) in 0.15 second(s).
 
 ```
@@ -3675,7 +3675,7 @@ python -m tree_plus_cli -s tests/more_languages/group_todo
     └── @fragment
         fn frag_main() -> @location(0) vec4f
 
-tree_plus v(1.0.72) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.73) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.06 second(s).
 
 ```
