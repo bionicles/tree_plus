@@ -51,6 +51,7 @@ from tree_plus_src import (
     amortize_globs,
     parse_ignore,
 )
+from .mcp_client import parse_mcp_sync # Add this line
 
 HIGHLIGHT = False
 MARKUP = False
@@ -68,6 +69,7 @@ FOLDER_CHAR = ":file_folder:" if operate_normally else "[folder]"
 FILE_CHAR = ":page_facing_up:" if operate_normally else "[file]"
 GLOB_CHAR = ":cyclone:" if operate_normally else "[glob]"
 URL_CHAR = ":spider_web:" if operate_normally else "[url]"
+MCP_CHAR = "🌐" if operate_normally else "[MCP]"
 TAG_CHAR = ""
 
 colors = {
@@ -111,6 +113,7 @@ class Category(Enum):
     COMPONENT = 5
     URL = 6
     TAG = 7
+    MCP = 8
 
 
 @dataclass
@@ -527,6 +530,20 @@ def _into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
             ):
                 rich_tree.add(subtree)
                 # rich_subtree = into_rich_tree(root=subtree)  # type: ignore
+    elif root.category is Category.MCP:
+        # root.name is set by _from_mcp_url. It's the server identify string or just the URL / error message.
+        # root.subtrees contains the formatted component strings if not concise and if there are any.
+        label_text = f"{MCP_CHAR} {root.name}"
+        
+        # Using Text for potential future styling, and ensuring style is applied.
+        # Applied magenta style as discussed.
+        rich_tree = _make_rich_tree(Text(label_text, style="bold magenta"))
+
+        # root.subtrees are the component lines (desc, tools, resources, etc.), 
+        # excluding the server line itself if it was used for root.name.
+        # This list is empty if concise=True or if only the server line was returned/used.
+        for component_line_text in root.subtrees: 
+            rich_tree.add(Text(component_line_text))
     elif root.category is Category.TAG:
         if isinstance(root.name, str):
             label = f"{TAG_CHAR} {root.name}"
@@ -554,6 +571,7 @@ def is_url(x: str) -> bool:
     debug_print(f"{x=} {'IS' if x_is_url else 'IS NOT'} a url")
     return x_is_url
 
+MCP_URL_PATTERN = r"^https?://.*?/mcp/?$"
 
 @lru_cache
 def categorize(
@@ -569,7 +587,9 @@ def categorize(
     if isinstance(x, str):  # STR first, happy path
         # could deactivate checking for performance
         y = Category.COMPONENT
-        if check_strs_urls and is_url(x):
+        if check_strs_urls and re.match(MCP_URL_PATTERN, x):
+            y = Category.MCP
+        elif check_strs_urls and is_url(x):
             y = Category.URL
         elif check_strs_globs and is_glob(x):
             y = Category.GLOB
@@ -721,6 +741,7 @@ def _map_seeds(
     file_paths = []
     glob_paths = []
     url_paths = []
+    mcp_paths = []
     trees_done = []
     debug_print("_map_seeds BEGIN CATEGORIZING SEEDS!")
     for seed in seeds:
@@ -746,6 +767,8 @@ def _map_seeds(
             file_paths.append(file_seed_path)
         elif category is Category.URL:
             url_paths.append(seed)
+        elif category is Category.MCP:
+            mcp_paths.append(seed)
         elif category is Category.FOLDER:
             folder_seed_path = Path(seed)
             folder_paths.append(folder_seed_path)
@@ -771,6 +794,7 @@ def _map_seeds(
     debug_print("_map_seeds FILE PATHS", file_paths)
     debug_print("_map_seeds GLOB PATHS", glob_paths)
     debug_print("_map_seeds URL PATHS", url_paths)
+    debug_print("_map_seeds MCP PATHS", mcp_paths)
 
     if maybe_globs:
         if not folder_paths:
@@ -792,38 +816,51 @@ def _map_seeds(
         globs = None
     debug_print("_map_seeds GLOBS", globs)
     # assert 0, "manually inspect tree_plus_src/engine.py _map_seeds glob amortization"
-    url_paths = [(Category.URL, url_path) for url_path in url_paths]
+    url_paths_tuples = [(Category.URL, url_path) for url_path in url_paths]
+    mcp_paths_tuples = [(Category.MCP, mcp_path) for mcp_path in mcp_paths]
     parsed_seeds = tuple(
-        os_sorted(chain(folder_paths, file_paths, glob_paths, url_paths, trees_done))
+        os_sorted(chain(folder_paths, file_paths, glob_paths, url_paths_tuples, mcp_paths_tuples, trees_done))
     )
     debug_print("_map_seeds os_sorted SEEDS", seeds)
     if not parsed_seeds:
         return ()
     forest = []
-    for n, parsed_seed in enumerate(parsed_seeds):
-        debug_print(f"_map_seeds invoking _from_seed {n=} {parsed_seed=}")
-        is_url = False
-        if isinstance(parsed_seed, Tuple):
-            parsed_seed = parsed_seed[1]
-            is_url = True
+    for n, parsed_seed_item in enumerate(parsed_seeds):
+        debug_print(f"_map_seeds invoking _from_seed {n=} {parsed_seed_item=}")
+        seed_to_process: Union[Path, str, TreePlus]
+        is_mcp_url_flag: bool = False
+        is_http_url_flag: bool = False
+
+        if isinstance(parsed_seed_item, tuple): # Means it's (Category.URL, path_str) or (Category.MCP, path_str)
+            category_in_tuple, path_in_tuple = parsed_seed_item
+            seed_to_process = path_in_tuple
+            if category_in_tuple is Category.MCP:
+                is_mcp_url_flag = True
+            elif category_in_tuple is Category.URL:
+                is_http_url_flag = True
+        else: # Path or TreePlus object
+            seed_to_process = parsed_seed_item
+        
         seed_tree_plus = _from_seed(
-            seed_path=parsed_seed,
+            seed_path=seed_to_process,
             maybe_ignore=maybe_ignore,
             maybe_globs=globs,
             syntax_highlighting=syntax_highlighting,
             tokenizer_name=tokenizer_name,
             regex_timeout=regex_timeout,
             concise=concise,
-            is_url=is_url,
+            is_http_url=is_http_url_flag,
+            is_mcp_url=is_mcp_url_flag,
         )
         assert isinstance(seed_tree_plus, TreePlus)
         debug_print(f"_map_seeds got TreePlus from seed {n=}")
-        # make sure it's a file, folder, or glob
+        # make sure it's a file, folder, glob, url or mcp
         assert (
             seed_tree_plus.is_file()
             or seed_tree_plus.is_folder()
             or seed_tree_plus.is_glob()
             or seed_tree_plus.is_url()
+            or seed_tree_plus.category is Category.MCP
         )
         forest.append(seed_tree_plus)
     debug_print("_map_seeds  DONE!")
@@ -841,27 +878,57 @@ def _from_seed(
     tokenizer_name: TokenizerName = TokenizerName.WC,
     regex_timeout: Optional[float] = None,
     concise: bool = False,
-    is_url: bool = False,
+    is_http_url: bool = False,
+    is_mcp_url: bool = False,
 ) -> TreePlus:
     "PRIVATE: dispatcher to either file or folder"
     if seed_path is None:
         debug_print("tree_plus.from_seed defaulting to current working directory")
         seed_path = Path.cwd()
-    elif isinstance(seed_path, TreePlus):
+    elif isinstance(seed_path, TreePlus): # If it's already a TreePlus, return it
         return seed_path
     else:
         if not isinstance(seed_path, (Path, str)):
             raise TypeError(
-                f"tree_plus::from_path: not a pathlib.Path or str: {seed_path=}"
+                f"tree_plus::_from_seed: not a pathlib.Path or str: {seed_path=}"
             )
     try:
-        if isinstance(seed_path, str) and is_url:
-            result = _from_url(
-                url=seed_path,
-                syntax_highlighting=syntax_highlighting,
-                concise=concise,
-            )
-        elif isinstance(seed_path, Path) and not is_url:
+        if isinstance(seed_path, str):
+            if is_mcp_url:
+                result = _from_mcp_url(url=seed_path, syntax_highlighting=syntax_highlighting, concise=concise)
+            elif is_http_url:
+                result = _from_url(url=seed_path, syntax_highlighting=syntax_highlighting, concise=concise)
+            else: # String path that is not a URL, attempt to treat as Path
+                current_path = Path(seed_path)
+                if current_path.is_file():
+                    result = _from_file(
+                        file_path=current_path,
+                        syntax_highlighting=syntax_highlighting,
+                        tokenizer_name=tokenizer_name,
+                        regex_timeout=regex_timeout,
+                        concise=concise,
+                    )
+                elif current_path.is_dir():
+                    result = _from_folder(
+                        folder_path=current_path,
+                        maybe_ignore=maybe_ignore,
+                        maybe_globs=maybe_globs,
+                        syntax_highlighting=syntax_highlighting,
+                        tokenizer_name=tokenizer_name,
+                        regex_timeout=regex_timeout,
+                        concise=concise,
+                    )
+                else: # String path that is not file/dir, assume glob pattern
+                    result = _from_glob(
+                        pattern=str(current_path), # Convert Path object back to string for glob
+                        maybe_ignore=maybe_ignore,
+                        maybe_globs=None, # Globs from direct string patterns don't use amortized globs
+                        syntax_highlighting=syntax_highlighting,
+                        tokenizer_name=tokenizer_name,
+                        regex_timeout=regex_timeout,
+                        concise=concise,
+                    )
+        elif isinstance(seed_path, Path): # seed_path is already a Path object
             if seed_path.is_file():
                 result = _from_file(
                     file_path=seed_path,
@@ -880,29 +947,25 @@ def _from_seed(
                     regex_timeout=regex_timeout,
                     concise=concise,
                 )
-            else:
-                seed_pattern = str(seed_path)
-                if not is_glob(seed_pattern):
-                    raise TypeError(
-                        f"tree_plus::from_path: not a file or folder: {seed_path=}"
-                    )
+            else: # Path object that is not a file or dir, assume glob pattern
                 result = _from_glob(
-                    pattern=seed_pattern,
+                    pattern=str(seed_path), # Convert Path object to string for glob
                     maybe_ignore=maybe_ignore,
-                    # TODO: decide to apply glob patterns to glob paths (currently NO)
-                    maybe_globs=None,
+                    maybe_globs=None, # Globs from direct Path objects don't use amortized globs
                     syntax_highlighting=syntax_highlighting,
                     tokenizer_name=tokenizer_name,
                     regex_timeout=regex_timeout,
                     concise=concise,
                 )
         else:
+            # This case should ideally not be reached if inputs are correctly typed (Path, str, or TreePlus)
+            # and previous logic correctly returns TreePlus instances early.
             raise ValueError(
-                f"need a Path or (str and is_url), got {seed_path} {is_url}"
+                f"Unhandled seed_path type or combination: {type(seed_path)=}, {seed_path=}, {is_http_url=}, {is_mcp_url=}"
             )
         return result
     except Exception as e:
-        debug_print(f"tree_plus::from_seed Exception {e=}")
+        debug_print(f"tree_plus::_from_seed Exception {e=}")
         raise e
 
 
@@ -1436,3 +1499,46 @@ def _syntax_highlight(
             return components
     debug_print(f"_syntax_highlight succeeded with {lexer=}")
     return highlighted
+
+
+def _from_mcp_url(*, url: str, syntax_highlighting: bool = False, concise: bool = False) -> TreePlus:
+    """Fetches and processes MCP server capabilities."""
+    debug_print(f"engine._from_mcp_url connecting to {url=}")
+    
+    mcp_lines = parse_mcp_sync(url) # This is the list of strings from the client
+
+    server_display_name = url # Default if mcp_lines is empty or doesn't have server info
+    actual_subtrees = []
+
+    if not mcp_lines: # Handle case where client returns empty list
+        # If the message indicates an error, use it as the only subtree
+        actual_subtrees = [f"No capabilities returned or error from {url}"]
+    elif len(mcp_lines) == 1 and ("Could not fetch" in mcp_lines[0] or "error occurred" in mcp_lines[0]):
+        # Handle specific error messages from the client as the primary display name
+        # and no subtrees if it's clearly an error string.
+        server_display_name = mcp_lines[0]
+        actual_subtrees = [] # No further components if it's an error message.
+    elif concise: # Concise mode
+        if mcp_lines[0].startswith("MCP Server:"):
+            server_display_name = mcp_lines[0]
+        # actual_subtrees remains empty for concise mode, server line is the display name
+    else: # Not concise, and mcp_lines has content (and not a single error line)
+        if mcp_lines[0].startswith("MCP Server:"):
+            server_display_name = mcp_lines[0]
+            # If there are more lines (description, tools, etc.), they become subtrees
+            if len(mcp_lines) > 1:
+                actual_subtrees = mcp_lines[1:] # All lines after the server name line
+            # If only the server name line is present, actual_subtrees remains empty
+        else:
+            # If the first line isn't the server name (e.g. an unexpected client return)
+            # use all lines as subtrees, and keep url as server_display_name.
+            actual_subtrees = mcp_lines
+
+    mcp_server_node = TreePlus(
+        category=Category.MCP,
+        name=server_display_name, 
+        subtrees=actual_subtrees, 
+        line_count=len(actual_subtrees), # Lines of components
+        token_count=sum(len(s.split()) for s in actual_subtrees), # Simple word count of components
+    )
+    return mcp_server_node

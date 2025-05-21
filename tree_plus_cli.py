@@ -237,6 +237,10 @@ def main(
         \b
         Use the Tiktoken gpt4o Model Tokenizer to tokenize Rust files
             > tree_plus -t -g '*.rs'
+
+        \b
+        Display components from an MCP server (concise)
+            > tree_plus http://localhost:5123/mcp/ -c
     """
     start_time = perf_counter()
     if debug:

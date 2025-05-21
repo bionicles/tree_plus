@@ -30,12 +30,17 @@ jobs:
       run: |
         echo "DEBUG_TREE_PLUS=1" > .env.test
         echo "DEBUG_TREE_PLUS=1" > tests/dot_dot/nested_dir/.env.test
+    - name: Start MCP Test Server
+      run: make mcp-test-server
     - name: Run generic tests
       run: |
         py.test -n 2 tests/ -k "not test_tree_plus_dotdot" -vv
     - name: Run specific test
       run: |
         cd tests/dot_dot/nested_dir && pytest -k test_tree_plus_dotdot -vv && cd ../../..
+    - name: Stop MCP Test Server
+      if: always() # Ensures this step runs even if previous steps fail
+      run: make stop-mcp-test-server
 
   # CD 
   deploy:

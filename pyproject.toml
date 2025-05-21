@@ -26,6 +26,8 @@ dependencies = [
     "bs4",
     "func_timeout",
     "regex",
+    "mcp",
+    "aiohttp",
 ]
 
 [project.optional-dependencies]
