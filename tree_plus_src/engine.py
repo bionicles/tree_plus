@@ -17,6 +17,34 @@ import sys
 import os
 import re
 
+if sys.version_info.minor >= 10:
+    # Attempt to import MCP components.
+    # Ensure the 'mcp' library is installed and accessible.
+    try:
+        import asyncio
+        import threading
+        from mcp.client.streamable_http import streamablehttp_client
+        from mcp import ClientSession
+        from mcp.types import (
+            ServerCapabilities,
+            InitializeResult,
+            Implementation,
+            # ToolsCapability,
+            # PromptsCapability,
+            # ResourcesCapability,
+            ListToolsResult,
+            ListPromptsResult,
+            ListResourcesResult,
+            Tool,
+            Prompt,
+            Resource,
+        )
+    except ImportError:
+        print(
+            "ERROR: MCP library components could not be imported. "
+            "Please ensure 'mcp' is installed (e.g., 'pip install mcp')."
+        )
+
 # time limit on file parsing makes sense,
 # but regex crashes anyway because it's in C
 # we can implement those timeouts with "regex" over "re"
@@ -30,10 +58,11 @@ from rich.theme import Theme
 from rich.table import Table
 from rich.tree import Tree
 from rich.text import Text
+from rich.json import JSON
 from rich.markdown import Markdown
 import requests
-from bs4 import Tag, NavigableString
-from bs4 import BeautifulSoup, PageElement
+from bs4 import Tag, BeautifulSoup
+from bs4.element import PageElement, NavigableString
 from natsort import os_sorted
 
 from tree_plus_src import (
@@ -51,7 +80,6 @@ from tree_plus_src import (
     amortize_globs,
     parse_ignore,
 )
-from .mcp_client import parse_mcp_sync # Add this line
 
 HIGHLIGHT = False
 MARKUP = False
@@ -69,7 +97,13 @@ FOLDER_CHAR = ":file_folder:" if operate_normally else "[folder]"
 FILE_CHAR = ":page_facing_up:" if operate_normally else "[file]"
 GLOB_CHAR = ":cyclone:" if operate_normally else "[glob]"
 URL_CHAR = ":spider_web:" if operate_normally else "[url]"
-MCP_CHAR = "🌐" if operate_normally else "[MCP]"
+MCP_CHAR = ":robot:" if operate_normally else "[MCP]"
+PROMPT_CHAR = ":newspaper:" if operate_normally else "[PROMPT]"
+RESOURCE_CHAR = ":rocket:" if operate_normally else "[RESOURCE]"
+TOOL_CHAR = ":wrench:" if operate_normally else "[TOOL]"
+PROMPTS_CHAR = ":brain:" if operate_normally else "[PROMPT]"
+RESOURCES_CHAR = ":earth_americas:" if operate_normally else "[RESOURCE]"
+TOOLS_CHAR = ":toolbox:" if operate_normally else "[TOOL]"
 TAG_CHAR = ""
 
 colors = {
@@ -113,7 +147,13 @@ class Category(Enum):
     COMPONENT = 5
     URL = 6
     TAG = 7
-    MCP = 8
+    MCP_SERVER = 8
+    MCP_PROMPTS = 9
+    MCP_RESOURCES = 10
+    MCP_TOOLS = 11
+    MCP_PROMPT = 12
+    MCP_RESOURCE = 13
+    MCP_TOOL = 14
 
 
 @dataclass
@@ -211,6 +251,22 @@ class TreePlus:
         "Category.URL"
         return self.category is Category.URL
 
+    def is_mcp_server(self) -> bool:
+        "Category.MCP_SERVER"
+        return self.category is Category.MCP_SERVER
+
+    def is_mcp_prompt(self) -> bool:
+        "Category.MCP_PROMPT"
+        return self.category is Category.MCP_PROMPT
+
+    def is_mcp_resource(self) -> bool:
+        "Category.MCP_RESOURCE"
+        return self.category is Category.MCP_RESOURCE
+
+    def is_mcp_tool(self) -> bool:
+        "Category.MCP_TOOL"
+        return self.category is Category.MCP_TOOL
+
     def into_rich_tree(self) -> Tree:
         "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
         return into_rich_tree(root=self)
@@ -229,6 +285,9 @@ class TreePlus:
         capturing: bool = False,
     ):
         "PUBLIC: Safely print a TreePlus"
+        from rich import print as rprint
+
+        rprint(self)
         _inner_tree: Tree = into_rich_tree(root=self)
         safe_print(
             _inner_tree,
@@ -438,7 +497,7 @@ def _make_rich_tree(
 
 def into_rich_tree(
     *,
-    root: Optional[TreePlus] = None,
+    root: TreePlus,
     timeout=INTO_RICH_TREE_TIMEOUT_SECONDS,
 ) -> Tree:
     "PUBLIC: Convert a TreePlus into a rich.tree.Tree to render"
@@ -530,20 +589,69 @@ def _into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree:
             ):
                 rich_tree.add(subtree)
                 # rich_subtree = into_rich_tree(root=subtree)  # type: ignore
-    elif root.category is Category.MCP:
+    elif root.category is Category.MCP_SERVER:
         # root.name is set by _from_mcp_url. It's the server identify string or just the URL / error message.
         # root.subtrees contains the formatted component strings if not concise and if there are any.
         label_text = f"{MCP_CHAR} {root.name}"
-        
+
         # Using Text for potential future styling, and ensuring style is applied.
         # Applied magenta style as discussed.
-        rich_tree = _make_rich_tree(Text(label_text, style="bold magenta"))
+        rich_tree = _make_rich_tree(label_text)
 
-        # root.subtrees are the component lines (desc, tools, resources, etc.), 
+        # root.subtrees are the component lines (desc, tools, resources, etc.),
         # excluding the server line itself if it was used for root.name.
         # This list is empty if concise=True or if only the server line was returned/used.
-        for component_line_text in root.subtrees: 
-            rich_tree.add(Text(component_line_text))
+        for subtree in root.subtrees:
+            assert isinstance(
+                subtree, (TreePlus, str)
+            ), "mcp server subtree not tree_plus"
+            if isinstance(subtree, str):
+                rich_tree.add(subtree)
+            else:
+                rich_subtree = _into_rich_tree(root=subtree)
+                rich_tree.add(rich_subtree)
+    elif root.category is Category.MCP_PROMPT:
+        label_text = f"{PROMPT_CHAR} {root.name}"
+        rich_tree = _make_rich_tree(label_text)
+        for subtree in root.subtrees:
+            assert isinstance(subtree, str), "mcp prompt subtree not str"
+            rich_tree.add(subtree)
+    elif root.category is Category.MCP_RESOURCE:
+        label_text = f"{RESOURCE_CHAR} {root.name}"
+        rich_tree = _make_rich_tree(label_text)
+        for subtree in root.subtrees:
+            assert isinstance(subtree, str), "mcp resource subtree not str"
+            rich_tree.add(subtree)
+    elif root.category is Category.MCP_TOOL:
+        label_text = f"{TOOL_CHAR} {root.name}"
+        rich_tree = _make_rich_tree(label_text)
+        for subtree in root.subtrees:
+            if isinstance(subtree, dict):
+                subtree = JSON.from_data(subtree)
+                rich_tree.add(subtree)
+            elif isinstance(subtree, str):
+                rich_tree.add(subtree)
+    elif root.category is Category.MCP_PROMPTS:
+        label_text = f"{PROMPTS_CHAR} {root.name}"
+        rich_tree = _make_rich_tree(label_text)
+        for subtree in root.subtrees:
+            assert isinstance(subtree, TreePlus), "mcp prompts subtree not TreePlus"
+            rich_subtree = _into_rich_tree(root=subtree)
+            rich_tree.add(rich_subtree)
+    elif root.category is Category.MCP_RESOURCES:
+        label_text = f"{RESOURCES_CHAR} {root.name}"
+        rich_tree = _make_rich_tree(label_text)
+        for subtree in root.subtrees:
+            assert isinstance(subtree, TreePlus), "mcp resources subtree not TreePlus"
+            rich_subtree = _into_rich_tree(root=subtree)
+            rich_tree.add(rich_subtree)
+    elif root.category is Category.MCP_TOOLS:
+        label_text = f"{TOOLS_CHAR} {root.name}"
+        rich_tree = _make_rich_tree(label_text)
+        for subtree in root.subtrees:
+            assert isinstance(subtree, TreePlus), "mcp tools subtree not TreePlus"
+            rich_subtree = _into_rich_tree(root=subtree)
+            rich_tree.add(rich_subtree)
     elif root.category is Category.TAG:
         if isinstance(root.name, str):
             label = f"{TAG_CHAR} {root.name}"
@@ -571,7 +679,9 @@ def is_url(x: str) -> bool:
     debug_print(f"{x=} {'IS' if x_is_url else 'IS NOT'} a url")
     return x_is_url
 
-MCP_URL_PATTERN = r"^https?://.*?/mcp/?$"
+
+MCP_URL_PATTERN = r"^(?P<protocol>https:\/\/)?.*?\/mcp\/?$"
+
 
 @lru_cache
 def categorize(
@@ -588,7 +698,7 @@ def categorize(
         # could deactivate checking for performance
         y = Category.COMPONENT
         if check_strs_urls and re.match(MCP_URL_PATTERN, x):
-            y = Category.MCP
+            y = Category.MCP_SERVER
         elif check_strs_urls and is_url(x):
             y = Category.URL
         elif check_strs_globs and is_glob(x):
@@ -767,7 +877,7 @@ def _map_seeds(
             file_paths.append(file_seed_path)
         elif category is Category.URL:
             url_paths.append(seed)
-        elif category is Category.MCP:
+        elif category is Category.MCP_SERVER:
             mcp_paths.append(seed)
         elif category is Category.FOLDER:
             folder_seed_path = Path(seed)
@@ -817,9 +927,18 @@ def _map_seeds(
     debug_print("_map_seeds GLOBS", globs)
     # assert 0, "manually inspect tree_plus_src/engine.py _map_seeds glob amortization"
     url_paths_tuples = [(Category.URL, url_path) for url_path in url_paths]
-    mcp_paths_tuples = [(Category.MCP, mcp_path) for mcp_path in mcp_paths]
+    mcp_paths_tuples = [(Category.MCP_SERVER, mcp_path) for mcp_path in mcp_paths]
     parsed_seeds = tuple(
-        os_sorted(chain(folder_paths, file_paths, glob_paths, url_paths_tuples, mcp_paths_tuples, trees_done))
+        os_sorted(
+            chain(
+                folder_paths,
+                file_paths,
+                glob_paths,
+                url_paths_tuples,
+                mcp_paths_tuples,
+                trees_done,
+            )
+        )
     )
     debug_print("_map_seeds os_sorted SEEDS", seeds)
     if not parsed_seeds:
@@ -831,16 +950,18 @@ def _map_seeds(
         is_mcp_url_flag: bool = False
         is_http_url_flag: bool = False
 
-        if isinstance(parsed_seed_item, tuple): # Means it's (Category.URL, path_str) or (Category.MCP, path_str)
+        if isinstance(
+            parsed_seed_item, tuple
+        ):  # Means it's (Category.URL, path_str) or (Category.MCP, path_str)
             category_in_tuple, path_in_tuple = parsed_seed_item
             seed_to_process = path_in_tuple
-            if category_in_tuple is Category.MCP:
+            if category_in_tuple is Category.MCP_SERVER:
                 is_mcp_url_flag = True
             elif category_in_tuple is Category.URL:
                 is_http_url_flag = True
-        else: # Path or TreePlus object
+        else:  # Path or TreePlus object
             seed_to_process = parsed_seed_item
-        
+
         seed_tree_plus = _from_seed(
             seed_path=seed_to_process,
             maybe_ignore=maybe_ignore,
@@ -860,7 +981,7 @@ def _map_seeds(
             or seed_tree_plus.is_folder()
             or seed_tree_plus.is_glob()
             or seed_tree_plus.is_url()
-            or seed_tree_plus.category is Category.MCP
+            or seed_tree_plus.category is Category.MCP_SERVER
         )
         forest.append(seed_tree_plus)
     debug_print("_map_seeds  DONE!")
@@ -885,7 +1006,7 @@ def _from_seed(
     if seed_path is None:
         debug_print("tree_plus.from_seed defaulting to current working directory")
         seed_path = Path.cwd()
-    elif isinstance(seed_path, TreePlus): # If it's already a TreePlus, return it
+    elif isinstance(seed_path, TreePlus):  # If it's already a TreePlus, return it
         return seed_path
     else:
         if not isinstance(seed_path, (Path, str)):
@@ -895,10 +1016,16 @@ def _from_seed(
     try:
         if isinstance(seed_path, str):
             if is_mcp_url:
-                result = _from_mcp_url(url=seed_path, syntax_highlighting=syntax_highlighting, concise=concise)
+                result = from_mcp_url(
+                    url=seed_path,
+                )
             elif is_http_url:
-                result = _from_url(url=seed_path, syntax_highlighting=syntax_highlighting, concise=concise)
-            else: # String path that is not a URL, attempt to treat as Path
+                result = _from_url(
+                    url=seed_path,
+                    syntax_highlighting=syntax_highlighting,
+                    concise=concise,
+                )
+            else:  # String path that is not a URL, attempt to treat as Path
                 current_path = Path(seed_path)
                 if current_path.is_file():
                     result = _from_file(
@@ -918,17 +1045,19 @@ def _from_seed(
                         regex_timeout=regex_timeout,
                         concise=concise,
                     )
-                else: # String path that is not file/dir, assume glob pattern
+                else:  # String path that is not file/dir, assume glob pattern
                     result = _from_glob(
-                        pattern=str(current_path), # Convert Path object back to string for glob
+                        pattern=str(
+                            current_path
+                        ),  # Convert Path object back to string for glob
                         maybe_ignore=maybe_ignore,
-                        maybe_globs=None, # Globs from direct string patterns don't use amortized globs
+                        maybe_globs=None,  # Globs from direct string patterns don't use amortized globs
                         syntax_highlighting=syntax_highlighting,
                         tokenizer_name=tokenizer_name,
                         regex_timeout=regex_timeout,
                         concise=concise,
                     )
-        elif isinstance(seed_path, Path): # seed_path is already a Path object
+        elif isinstance(seed_path, Path):  # seed_path is already a Path object
             if seed_path.is_file():
                 result = _from_file(
                     file_path=seed_path,
@@ -947,11 +1076,11 @@ def _from_seed(
                     regex_timeout=regex_timeout,
                     concise=concise,
                 )
-            else: # Path object that is not a file or dir, assume glob pattern
+            else:  # Path object that is not a file or dir, assume glob pattern
                 result = _from_glob(
-                    pattern=str(seed_path), # Convert Path object to string for glob
+                    pattern=str(seed_path),  # Convert Path object to string for glob
                     maybe_ignore=maybe_ignore,
-                    maybe_globs=None, # Globs from direct Path objects don't use amortized globs
+                    maybe_globs=None,  # Globs from direct Path objects don't use amortized globs
                     syntax_highlighting=syntax_highlighting,
                     tokenizer_name=tokenizer_name,
                     regex_timeout=regex_timeout,
@@ -1131,8 +1260,8 @@ def _from_file(
         name=file_path.name,
         # n_folders=0,
         # n_files=1,
-        token_count=None if counts is None else counts.n_tokens,
-        line_count=None if counts is None else counts.n_lines,
+        token_count=0 if counts is None else counts.n_tokens,
+        line_count=0 if counts is None else counts.n_lines,
     )
     return file_tree_plus
 
@@ -1158,7 +1287,7 @@ def _from_url(
         if concise:
             components = []
         elif url.endswith(".md"):
-            components = parse_file(url, contents=html_text)
+            components = parse_file(url, content=html_text)
         else:
             components = [_from_html_text(html_text, maybe_url_base=url)]
             hrefs = components[0].hrefs
@@ -1501,44 +1630,232 @@ def _syntax_highlight(
     return highlighted
 
 
-def _from_mcp_url(*, url: str, syntax_highlighting: bool = False, concise: bool = False) -> TreePlus:
-    """Fetches and processes MCP server capabilities."""
-    debug_print(f"engine._from_mcp_url connecting to {url=}")
-    
-    mcp_lines = parse_mcp_sync(url) # This is the list of strings from the client
+if sys.version_info.minor >= 10:
+    # --- Synchronous Wrapper ---
+    def from_mcp_url(url: str) -> TreePlus:
+        """
+        Synchronous wrapper for get_mcp_capabilities_async.
+        Fetches MCP server capabilities and returns them as a list of strings.
+        """
+        try:
+            loop = asyncio.get_event_loop_policy().get_event_loop()
+            if loop.is_running():
+                debug_print(
+                    "Asyncio loop is already running. Executing in a new thread."
+                )
+                result_container: List[TreePlus] = []
+                error_container: List[Exception] = []
 
-    server_display_name = url # Default if mcp_lines is empty or doesn't have server info
-    actual_subtrees = []
+                def run_in_new_loop():
+                    new_loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(new_loop)
+                    try:
+                        result_container.append(
+                            new_loop.run_until_complete(get_mcp_capabilities_async(url))
+                        )
+                    except Exception as ex:
+                        error_container.append(ex)
+                    finally:
+                        new_loop.close()
 
-    if not mcp_lines: # Handle case where client returns empty list
-        # If the message indicates an error, use it as the only subtree
-        actual_subtrees = [f"No capabilities returned or error from {url}"]
-    elif len(mcp_lines) == 1 and ("Could not fetch" in mcp_lines[0] or "error occurred" in mcp_lines[0]):
-        # Handle specific error messages from the client as the primary display name
-        # and no subtrees if it's clearly an error string.
-        server_display_name = mcp_lines[0]
-        actual_subtrees = [] # No further components if it's an error message.
-    elif concise: # Concise mode
-        if mcp_lines[0].startswith("MCP Server:"):
-            server_display_name = mcp_lines[0]
-        # actual_subtrees remains empty for concise mode, server line is the display name
-    else: # Not concise, and mcp_lines has content (and not a single error line)
-        if mcp_lines[0].startswith("MCP Server:"):
-            server_display_name = mcp_lines[0]
-            # If there are more lines (description, tools, etc.), they become subtrees
-            if len(mcp_lines) > 1:
-                actual_subtrees = mcp_lines[1:] # All lines after the server name line
-            # If only the server name line is present, actual_subtrees remains empty
-        else:
-            # If the first line isn't the server name (e.g. an unexpected client return)
-            # use all lines as subtrees, and keep url as server_display_name.
-            actual_subtrees = mcp_lines
+                thread = threading.Thread(target=run_in_new_loop)
+                thread.start()
+                thread.join()
 
-    mcp_server_node = TreePlus(
-        category=Category.MCP,
-        name=server_display_name, 
-        subtrees=actual_subtrees, 
-        line_count=len(actual_subtrees), # Lines of components
-        token_count=sum(len(s.split()) for s in actual_subtrees), # Simple word count of components
-    )
-    return mcp_server_node
+                if error_container:
+                    # Raise the error captured in the thread
+                    # Wrap it in a generic exception to avoid asyncio.CancelledError issues if not handled by caller
+                    raise RuntimeError(
+                        f"Error in async task from thread: {error_container[0]}"
+                    ) from error_container[0]
+                if result_container:
+                    return result_container[0]
+                return TreePlus(name=url, category=Category.MCP_SERVER, subtrees=[])
+            else:
+                # No loop running, we can use the current loop.
+                return loop.run_until_complete(get_mcp_capabilities_async(url))
+        except RuntimeError as e:
+            debug_print(
+                f"RuntimeError with event loop: {e}. Creating and running a new loop."
+            )
+            # This typically means "There is no current event loop..." or the loop was closed.
+            new_loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(new_loop)
+            try:
+                return new_loop.run_until_complete(get_mcp_capabilities_async(url))
+            finally:
+                new_loop.close()
+                asyncio.set_event_loop(None)  # Clean up global loop state
+        except Exception as e:
+            import traceback
+
+            msg = f"Unexpected error in get_mcp_capabilities_sync for {url}: {type(e).__name__} - {e}"
+            debug_print()
+            debug_print(traceback.format_exc())
+            return TreePlus(name=url, category=Category.MCP_SERVER, subtrees=[msg])
+
+    # --- Core Async Function ---
+    async def get_mcp_capabilities_async(url: str) -> TreePlus:
+        """
+        Fetches and parses MCP server capabilities into a list of strings.
+        The URL should be the base endpoint of the MCP server (e.g., http://localhost:5123/mcp/).
+        """
+        output: TreePlus = TreePlus(name=url, category=Category.MCP_SERVER, subtrees=[])
+        try:
+            debug_print(f"Attempting to connect to MCP server at: {url}")
+            async with streamablehttp_client(url) as (read_stream, write_stream, _):
+                async with ClientSession(read_stream, write_stream) as session:
+                    debug_print("Initializing MCP session...")
+                    result: InitializeResult = await session.initialize()
+                    debug_print(result)
+                    capabilities: ServerCapabilities = result.capabilities
+                    debug_print("MCP session initialized.")
+
+                    if not result:
+                        msg = f"result=None from {url}."
+                        debug_print(msg)
+                        output.subtrees.append(msg)  # type: ignore
+                        return output
+
+                    server_info: Implementation = result.serverInfo
+
+                    server_name = server_info.name
+                    server_version = server_info.version
+                    protocol_version = result.protocolVersion
+
+                    output.subtrees.append(
+                        f'Server: "{server_name}" v{server_version}',  # type: ignore
+                    )
+                    output.subtrees.append(
+                        f"MCP: v{protocol_version}",  # type: ignore
+                    )
+                    if not capabilities:
+                        output.subtrees.append("\tNo reported capabilities.")  # type: ignore
+                        return output
+
+                    # Prompts
+                    if capabilities.prompts:
+                        list_prompts_result: ListPromptsResult = (
+                            await session.list_prompts()
+                        )
+                        debug_print(list_prompts_result)
+                        if list_prompts_result.prompts:
+                            prompt_subtrees = []
+                            for prompt in list_prompts_result.prompts:
+                                prompt_subtrees.append(tree_plus_from_prompt(prompt))
+                            prompts_tree = TreePlus(
+                                name="Prompts:",
+                                category=Category.MCP_PROMPTS,
+                                subtrees=prompt_subtrees,
+                            )
+                            output.subtrees.append(prompts_tree)  # type: ignore
+                    # Resources
+                    if capabilities.resources:
+                        list_resources_result: ListResourcesResult = (
+                            await session.list_resources()
+                        )
+                        debug_print(list_resources_result)
+                        if list_resources_result.resources:
+                            resource_subtrees = []
+                            for resource in list_resources_result.resources:
+                                resource_subtrees.append(
+                                    tree_plus_from_resource(resource)
+                                )
+                            resources_tree = TreePlus(
+                                name="Resources:",
+                                category=Category.MCP_RESOURCES,
+                                subtrees=resource_subtrees,
+                            )
+                            output.subtrees.append(resources_tree)  # type: ignore
+                    # Tools
+                    if capabilities.tools:
+                        list_tools_result: ListToolsResult = await session.list_tools()
+                        debug_print(list_tools_result)
+                        if list_tools_result.tools:
+                            tool_subtrees = []
+                            for tool in list_tools_result.tools:
+                                tool_subtrees.append(tree_plus_from_tool(tool))
+                            tools_tree = TreePlus(
+                                name="Tools:",
+                                category=Category.MCP_TOOLS,
+                                subtrees=tool_subtrees,
+                            )
+                            output.subtrees.append(tools_tree)  # type: ignore
+                    return output
+
+        except ConnectionRefusedError:
+            msg = f"Error: Connection refused for MCP server at {url}. Is the server running?"
+            debug_print(msg)
+            output.subtrees.append(msg)  # type: ignore
+            return output
+        except ExceptionGroup as e:
+            import traceback
+
+            print(f"Caught ExceptionGroup: {e!r}")
+            for sub_exc in e.exceptions:  # iterate sub-exceptions
+                print(f"  → Sub-exception: {type(sub_exc).__name__}: {sub_exc}")
+            debug_print(
+                f"An error occurred in get_mcp_capabilities_async for {url}: {type(e).__name__} - {e}"
+            )
+            debug_print(traceback.format_exc())
+            output.subtrees.append(
+                f"Error fetching or parsing capabilities from {url}: {type(e).__name__} - {str(e)}"  # type: ignore
+            )
+            return output
+        except Exception as e:
+            import traceback
+
+            debug_print(
+                f"An error occurred in get_mcp_capabilities_async for {url}: {type(e).__name__} - {e}"
+            )
+            debug_print(traceback.format_exc())
+            output.subtrees.append(
+                f"Error fetching or parsing capabilities from {url}: {type(e).__name__} - {str(e)}"  # type: ignore
+            )
+            return output
+
+    def tree_plus_from_resource(resource: Resource) -> TreePlus:
+        """Generate a concise string representation of a Resource."""
+        name = resource.name
+        if resource.mimeType:
+            name += f": {resource.mimeType!r}"
+        if resource.size is not None:
+            name += f" ({resource.size} bytes)"
+        subtrees = []
+        if resource.description:
+            subtrees.append(f"\t{resource.description}")
+        if resource.annotations is not None:
+            subtrees.append(f"\t{resource.annotations}")
+        resource_tree = TreePlus(
+            name=name, category=Category.MCP_RESOURCE, subtrees=subtrees
+        )
+        return resource_tree
+
+    def tree_plus_from_prompt(prompt: Prompt) -> TreePlus:
+        """Generate a concise string representation of a Prompt."""
+        subtrees = []
+        name = prompt.name
+        if prompt.description:
+            name += f': "{prompt.description}"'
+        if prompt.arguments:
+            for argument in prompt.arguments:
+                maybe_required = "required" if argument.required else "optional"
+                subtrees.append(f"\t{argument.name}:{maybe_required}")
+        prompt_tree = TreePlus(
+            name=name, category=Category.MCP_PROMPT, subtrees=subtrees
+        )
+        return prompt_tree
+
+    def tree_plus_from_tool(tool: Tool) -> TreePlus:
+        """Generate a concise string representation of a Tool."""
+        subtrees = []
+        if tool.description:
+            subtrees.append(tool.description)
+        if tool.inputSchema:
+            subtrees.append(tool.inputSchema)
+        if tool.annotations:
+            subtrees.append(tool.annotations)
+        tool_tree = TreePlus(
+            name=tool.name, category=Category.MCP_TOOL, subtrees=subtrees
+        )
+        return tool_tree

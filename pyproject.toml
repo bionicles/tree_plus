@@ -26,8 +26,8 @@ dependencies = [
     "bs4",
     "func_timeout",
     "regex",
-    "mcp",
-    "aiohttp",
+    "mcp; python_version >= '3.10'",
+    "aiohttp; python_version >= '3.10'",
 ]
 
 [project.optional-dependencies]

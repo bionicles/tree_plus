@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+.SHELLFLAGS  := -eu -o pipefail -c      # fail fast
 
 cli:
 	pip install -U -e .[dev]
@@ -31,16 +32,28 @@ html-demo:
 absurdly-huge-jsonl:
 	python tests/build_absurdly_huge_jsonl.py
 
+# # start and stop the MCP server for testing
+# mcp-test-server:
+# 	python -m tests.servers.demo_server & \
+# 	PID=$$!; \
+# 	echo $$PID > .mcp_server.pid; \
+# 	until curl -sSf http://localhost:5123/mcp/capabilities >/dev/null; do sleep 0.5; done; \
+# 	echo "Test MCP Server started with PID $$PID."
+
+# stop-mcp-test-server:
+# 	@echo "Stopping Test MCP Server..."
+# 	@if [ -f .mcp_server.pid ]; then kill `cat .mcp_server.pid`; rm .mcp_server.pid; fi
+
+# Run the demo server in the background and wait (max 30 s) until it answers.
 mcp-test-server:
-	python -m tests.servers.demo_server & \
-	PID=$$!; \
-	echo $$PID > .mcp_server.pid; \
-	until curl -sSf http://localhost:5123/mcp/capabilities >/dev/null; do sleep 0.5; done; \
-	echo "Test MCP Server started with PID $$PID."
+	@python -m tests.servers.demo_server >.mcp_server.log 2>&1 & \
+	echo $$! > .mcp_server.pid
 
 stop-mcp-test-server:
-	@echo "Stopping Test MCP Server..."
-	@if [ -f .mcp_server.pid ]; then kill `cat .mcp_server.pid`; rm .mcp_server.pid; fi
+	@echo "🧹 Stopping MCP demo server (name-based)…"
+	pkill -f -TERM 'python -m tests.servers.demo_server' || true
+	pkill -f -KILL 'python -m tests.servers.demo_server' || true
+	rm -f .mcp_server.pid 2>/dev/null || true
 
 # TESTS
 test: test-sequential test-tp-dotdot test-e2e test-cli test-programs test-deploy
@@ -52,11 +65,15 @@ test-parallel:
 
 # sequential unit tests (for CI)
 test-sequential:
-	pytest tests/test_more_language_units.py tests/test_units.py tests/test_engine.py tests/test_parse_mcp.py tests/test_cli_mcp.py -vv
+	pytest tests/test_more_language_units.py tests/test_units.py tests/test_engine.py -vv
 
 # just to crank on language features, easy to debug on this
 test-more-languages:
 	pytest tests/test_more_language_units.py -vv
+
+# just to crank on the MCP server support
+test-mcp:
+	pytest tests/test_cli_mcp.py -vv
 
 # just to crank on language features, easy to debug on this
 test-group:

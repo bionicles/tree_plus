@@ -2,9 +2,10 @@
 
 ### fix for "evil logging.py bug"
 # TLDR: if you run a CLI with dependencies that use "logging" from the python standard library
-# from within a folder with a "logging.py" 
-# python tries to dynamically import the LOCAL logging.py, 
+# from within a folder with a "logging.py"
+# python tries to dynamically import the LOCAL logging.py,
 # not the standard library version
+
 
 def move_cwd_to_end_of_sys_path():
     """
@@ -16,6 +17,7 @@ def move_cwd_to_end_of_sys_path():
     # print("GEMINI IS COOL!") # used AI to help
     import sys
     import os
+
     # Get the current working directory
     current_working_directory = os.getcwd()
 
@@ -23,7 +25,7 @@ def move_cwd_to_end_of_sys_path():
     if current_working_directory in sys.path:
         # Remove it from its current position
         # We iterate through a copy of sys.path to safely modify the original list
-        for path_entry in list(sys.path): # Iterate over a copy
+        for path_entry in list(sys.path):  # Iterate over a copy
             if path_entry == current_working_directory:
                 sys.path.remove(path_entry)
         # Append it to the end
@@ -33,6 +35,7 @@ def move_cwd_to_end_of_sys_path():
         # If not found, just append it (optional behavior, could also do nothing)
         sys.path.append(current_working_directory)
         # print(f"'{current_working_directory}' was not in sys.path. Appended it to the end.")
+
 
 move_cwd_to_end_of_sys_path()
 
@@ -117,7 +120,7 @@ DEFAULT_QUERY = "best tree data structures"
     "-C",
     is_flag=True,
     default=False,
-    help="Omit module components. (False)",
+    help="Omit module components (Faster, smaller trees). (False)",
 )
 @click.option(
     "--yc",
@@ -167,6 +170,14 @@ DEFAULT_QUERY = "best tree data structures"
     default=None,
     type=float,
 )
+@click.option(
+    "--mcp",
+    "mcp_url",  # Use a distinct variable name from any other 'url' concept
+    type=str,
+    default=None,
+    multiple=True,
+    help="URL of an open MCP server to map",
+)
 @click.argument("paths", nargs=-1, type=click.UNPROCESSED)  # Accepts multiple arguments
 def main(
     # these are NON-MUTUALLY-EXCLUSIVE OPTIONS
@@ -187,6 +198,7 @@ def main(
     tiktoken: bool,
     tokenizer_name: Optional[str],
     timeout: Optional[float],
+    mcp_url: Optional[Tuple[str, ...]],
 ):
     """A `tree` util enhanced with tokens, lines, and components.
 
@@ -239,8 +251,8 @@ def main(
             > tree_plus -t -g '*.rs'
 
         \b
-        Display components from an MCP server (concise)
-            > tree_plus http://localhost:5123/mcp/ -c
+        Display MCP server components (py310+, pip install mcp)
+            > tree_plus --mcp http://localhost:5123/mcp/
     """
     start_time = perf_counter()
     if debug:
@@ -261,6 +273,7 @@ def main(
     assert glob is None or isinstance(
         glob, tuple
     ), f"{glob=} must be None or Tuple[str]"
+    paths = _paths
 
     og_ignore = ignore
     if not ignore and not override:
@@ -272,6 +285,7 @@ def main(
         )
         article_comment_tree = tree_plus.from_hacker_news_articles(hacker_news_articles)
         _paths += (article_comment_tree,)
+        paths += ("news.ycombinator.com",)
 
     # TOO SOON! need to support py38, thanks CI/CD testing matrix!
     # _tokenizer_name = TokenizerName.WC
@@ -282,6 +296,11 @@ def main(
     #         _tokenizer_name = TokenizerName.GPT4O
     #     case (_, "gpt4"):
     #         _tokenizer_name = TokenizerName.GPT4O
+
+    if mcp_url:
+        for m_u in mcp_url:
+            _paths += (tree_plus.from_mcp_url(m_u),)
+            paths += (m_u,)
 
     _tokenizer_name = TokenizerName.WC
     if (not tiktoken and tokenizer_name is None) or (
@@ -326,7 +345,7 @@ def main(
 
 if __name__ == "__main__":
     # move_cwd_to_end_of_sys_path()
-    main() # type: ignore (click)
+    main()  # type: ignore (click)
 
 # Reminder to those rewriting this in Rust:
 # How many commands are there in the `tree_plus` CLI?
