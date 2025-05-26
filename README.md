@@ -101,9 +101,9 @@ Options:
                                'gpt-4o' works
   --timeout FLOAT              regex timeout in seconds (optional, default
                                0.7)
-  -H, -h, --help               Show this message and exit.
+  -h, -H, --help               Show this message and exit.
 
-  v(1.0.73) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.74) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -114,7 +114,7 @@ Options:
 <!-- t1-start -->
 ```sh
 python -m tree_plus_cli -s -i tests
-📁 tree_plus (7 folders, 27 files) 
+📁 tree_plus (7 folders, 28 files) 
 ├── 📄 .env.test (4 tokens, 0 lines)
 │   └── DEBUG_TREE_PLUS
 ├── 📁 .github (2 folders, 3 files) 
@@ -150,7 +150,8 @@ python -m tree_plus_cli -s -i tests
 │           ├──     - Check dists with twine
 │           ├──     - Commit Updates
 │           └──     - Publish to PyPI
-├── 📄 .gitignore (202 tokens, 52 lines)
+├── 📄 .gitignore (206 tokens, 54 lines)
+├── 📄 .mcp_server.pid (2 tokens, 1 line)
 ├── 📁 coverage (1 folder, 1 file) 
 │   └── 📄 lcov.info (17,359 tokens, 2,180 lines)
 ├── 📄 LICENSE (2,744 tokens, 81 lines)
@@ -627,7 +628,7 @@ python -m tree_plus_cli -s -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (26,819 tokens, 2,928 lines)
+    ├── 📄 parse_file.py (26,821 tokens, 2,928 lines)
     │   ├── BUG: HTML tree doesn't look awesome (yet)
     │   ├── TODO: Fix HTML in TreePlus (How?)
     │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
@@ -777,7 +778,7 @@ python -m tree_plus_cli -s -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.73"
+    │   └── __version__ = "1.0.74"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
@@ -838,8 +839,8 @@ python -m tree_plus_cli -s -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.73) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 27 file(s), 13,421 line(s), 118,595 token(s) in 0.21 second(s).
+tree_plus v(1.0.74) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 28 file(s), 13,424 line(s), 118,603 token(s) in 0.21 second(s).
 
 ```
 <!-- t1-end -->
@@ -995,7 +996,7 @@ python -m tree_plus_cli -s -c -i group_todo tests/more_languages
 │   ├── 📄 mathematica_test.nb (133 tokens, 21 lines)
 │   ├── 📄 matlab_test.m (48 tokens, 12 lines)
 │   ├── 📄 RTest.R (367 tokens, 46 lines)
-│   ├── 📄 rust_test.rs (1,193 tokens, 231 lines)
+│   ├── 📄 rust_test.rs (1,248 tokens, 239 lines)
 │   ├── 📄 test.zig (397 tokens, 60 lines)
 │   ├── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │   ├── 📄 test_tcl_tk.tcl (54 tokens, 16 lines)
@@ -1047,8 +1048,8 @@ python -m tree_plus_cli -s -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.73) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 87 file(s), 7,350 line(s), 69,463 token(s) in 0.14 second(s).
+tree_plus v(1.0.74) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 87 file(s), 7,358 line(s), 69,518 token(s) in 0.14 second(s).
 
 ```
 <!-- t6-end -->
@@ -1955,7 +1956,7 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├── greet.Person <- function
 │   │   ├── ensure_between = function
 │   │   └── run_intermediate_annealing_process = function
-│   ├── 📄 rust_test.rs (1,193 tokens, 231 lines)
+│   ├── 📄 rust_test.rs (1,248 tokens, 239 lines)
 │   │   ├── fn at_beginning<'a>(&'a str)
 │   │   ├── pub enum Days<E: EdgeCase> {
 │   │   │       #[default]
@@ -2048,7 +2049,12 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   │           edge_case
 │   │   │       }): Path<RouteParams>,
 │   │   │   ) -> ServerResult<Response>
-│   │   └── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>
+│   │   ├── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>
+│   │   └── pub async fn handle_post_yeet(
+│   │           State(auth_backend): State<AuthBackend>,
+│   │           Session { maybe_claims }: Session,
+│   │           Form(yeet_form): Form<YeetForm>,
+│   │       ) -> Result<Response, AuthError>
 │   ├── 📄 test.zig (397 tokens, 60 lines)
 │   │   ├── pub fn add(a: i32, b: i32) i32
 │   │   ├── test "add function"
@@ -3056,8 +3062,8 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.73) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 87 file(s), 7,350 line(s), 69,463 token(s) in 0.54 second(s).
+tree_plus v(1.0.74) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 87 file(s), 7,358 line(s), 69,518 token(s) in 0.53 second(s).
 
 ```
 <!-- t2-end -->
@@ -3281,7 +3287,7 @@ python -m tree_plus_cli -s -g "*.*s" -i group_todo tests/more_languages
 │   │           ( [G.Directive Variable],
 │   │             G.SelectionSet fragments Variable
 │   │           )
-│   ├── 📄 rust_test.rs (1,193 tokens, 231 lines)
+│   ├── 📄 rust_test.rs (1,248 tokens, 239 lines)
 │   │   ├── fn at_beginning<'a>(&'a str)
 │   │   ├── pub enum Days<E: EdgeCase> {
 │   │   │       #[default]
@@ -3374,7 +3380,12 @@ python -m tree_plus_cli -s -g "*.*s" -i group_todo tests/more_languages
 │   │   │           edge_case
 │   │   │       }): Path<RouteParams>,
 │   │   │   ) -> ServerResult<Response>
-│   │   └── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>
+│   │   ├── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>
+│   │   └── pub async fn handle_post_yeet(
+│   │           State(auth_backend): State<AuthBackend>,
+│   │           Session { maybe_claims }: Session,
+│   │           Form(yeet_form): Form<YeetForm>,
+│   │       ) -> Result<Response, AuthError>
 │   └── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │       ├── module TestFSharp
 │       ├── type Person = {
@@ -3579,8 +3590,8 @@ python -m tree_plus_cli -s -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.73) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,133 line(s), 15,147 token(s) in 0.15 second(s).
+tree_plus v(1.0.74) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,141 line(s), 15,202 token(s) in 0.15 second(s).
 
 ```
 <!-- t3-end -->
@@ -3675,7 +3686,7 @@ python -m tree_plus_cli -s tests/more_languages/group_todo
     └── @fragment
         fn frag_main() -> @location(0) vec4f
 
-tree_plus v(1.0.73) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.74) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.06 second(s).
 
 ```
