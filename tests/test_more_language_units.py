@@ -1314,6 +1314,11 @@ macro_rules! unit""",
     }): Path<RouteParams>,
 ) -> ServerResult<Response>""",
                 "fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>",
+                """pub async fn handle_post_yeet(
+    State(auth_backend): State<AuthBackend>,
+    Session { maybe_claims }: Session,
+    Form(yeet_form): Form<YeetForm>,
+) -> Result<Response, AuthError>""",
             ],
         ),
         (

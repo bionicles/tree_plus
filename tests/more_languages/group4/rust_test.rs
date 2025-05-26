@@ -230,3 +230,11 @@ fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8> {
     write_pipeline(&mut rv, cmds, atomic);
     rv
 }
+
+pub async fn handle_post_yeet(
+    State(auth_backend): State<AuthBackend>,
+    Session { maybe_claims }: Session,
+    Form(yeet_form): Form<YeetForm>,
+) -> Result<Response, AuthError> {
+    println!("yeet yeet!")
+}
