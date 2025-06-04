@@ -14,7 +14,7 @@
 # rewrite the tree_plus engine.py module in Rust:
 # rw -C ../tree_plus_src/engine.py ./engine.rs
 
-# for specific lenths use -l
+# for specific lengths use -l
 # rw -l 420 [input-path] [output-path]
 
 from pathlib import Path
