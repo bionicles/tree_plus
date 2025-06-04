@@ -289,8 +289,6 @@ def parse_metal(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
     # Remove comments first
     content = remove_c_comments(content, timeout=timeout)
 
-    content = remove_c_comments(content, timeout=timeout)
-
     # Attributes: [[...]]
     # Correctly handles nested brackets within attributes if any, and non-greedy matching.
     attribute_regex_str = r"(?:\[\[(?:[^\[\]]|\[[^\[\]]*\])*\]\]\s*)*"
