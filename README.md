@@ -60,8 +60,8 @@ Usage: tree_plus_cli.py [OPTIONS] [PATHS]...
           Override DEFAULT_IGNORE: Only ignore .ini files.
               > tree_plus -o -i "*.ini" tests/dot_dot
 
-          Syntax Highlight python files in src and tests
-              > tree_plus -s tree_plus_src/*.py tests/*.py
+         Disable syntax highlighting for python files in src and tests
+             > tree_plus -s tree_plus_src/*.py tests/*.py
 
           Concise Mode (No Parsing)
               > tree_plus -c
