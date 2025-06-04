@@ -101,9 +101,9 @@ Options:
                                'gpt-4o' works
   --timeout FLOAT              regex timeout in seconds (optional, default
                                0.7)
-  -h, -H, --help               Show this message and exit.
+  -H, -h, --help               Show this message and exit.
 
-  v(1.0.74) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.75) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -211,7 +211,7 @@ python -m tree_plus_cli -s -i tests
 │   ├──     func_timeout
 │   └──     regex
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (38,012 tokens, 3,693 lines)
+├── 📄 README.md (38,144 tokens, 3,704 lines)
 │   ├── # Tree Plus
 │   ├── #### **Ever hit context limits prompting LLMs with code?**
 │   ├── ### Use `tree_plus` to ...:
@@ -628,7 +628,7 @@ python -m tree_plus_cli -s -i tests
     │   ├── @lru_cache
     │   │   def _replace_symbol(match: re.Match) -> str
     │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (26,821 tokens, 2,928 lines)
+    ├── 📄 parse_file.py (26,806 tokens, 2,926 lines)
     │   ├── BUG: HTML tree doesn't look awesome (yet)
     │   ├── TODO: Fix HTML in TreePlus (How?)
     │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
@@ -778,7 +778,7 @@ python -m tree_plus_cli -s -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.74"
+    │   └── __version__ = "1.0.75"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
@@ -839,8 +839,8 @@ python -m tree_plus_cli -s -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.74) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 28 file(s), 13,424 line(s), 118,603 token(s) in 0.21 second(s).
+tree_plus v(1.0.75) ignore=('tests',) globs=() syntax=False paths=()
+7 folder(s), 28 file(s), 13,433 line(s), 118,720 token(s) in 0.21 second(s).
 
 ```
 <!-- t1-end -->
@@ -1048,7 +1048,7 @@ python -m tree_plus_cli -s -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.74) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+tree_plus v(1.0.75) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
 9 folder(s), 87 file(s), 7,358 line(s), 69,518 token(s) in 0.14 second(s).
 
 ```
@@ -3062,8 +3062,8 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.74) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 87 file(s), 7,358 line(s), 69,518 token(s) in 0.53 second(s).
+tree_plus v(1.0.75) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 87 file(s), 7,358 line(s), 69,518 token(s) in 0.54 second(s).
 
 ```
 <!-- t2-end -->
@@ -3590,7 +3590,7 @@ python -m tree_plus_cli -s -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.74) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+tree_plus v(1.0.75) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
 7 folder(s), 17 file(s), 2,141 line(s), 15,202 token(s) in 0.15 second(s).
 
 ```
@@ -3686,8 +3686,8 @@ python -m tree_plus_cli -s tests/more_languages/group_todo
     └── @fragment
         fn frag_main() -> @location(0) vec4f
 
-tree_plus v(1.0.74) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
-1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.06 second(s).
+tree_plus v(1.0.75) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.05 second(s).
 
 ```
 <!-- t4-end -->
