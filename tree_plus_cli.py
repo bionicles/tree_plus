@@ -211,7 +211,7 @@ def main(
             > tree_plus -o -i "*.ini" tests/dot_dot
 
         \b
-        Syntax Highlight python files in src and tests
+        Disable syntax highlighting for python files in src and tests
             > tree_plus -s tree_plus_src/*.py tests/*.py
 
         \b
