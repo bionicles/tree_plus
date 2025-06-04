@@ -243,11 +243,13 @@ def test_cli_on_folder_with_evil_logging():
         result = subprocess.run(
             " ".join(cmd), # Pass as a string if using shell=True and complex commands
             capture_output=True,
-            shell=True, 
+            shell=True,
             text=True,
-            cwd=folder_with_evil_logging, 
+            cwd=folder_with_evil_logging,
         )
     print(result)
     assert result.returncode == 0
     assert result.stderr == ""
-    # assert 0
+    stdout = result.stdout
+    rich_print(stdout)
+    assert "folder_with_evil_logging" in stdout or "Root" in stdout
