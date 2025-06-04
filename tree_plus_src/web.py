@@ -44,7 +44,7 @@ def create_link(kind: Action, query: str) -> str:
     if kind == "search_wikipedia":
         link = create_wikipedia_search_link(query)
     elif kind == "wiki":
-        link = create_google_search_link(query)
+        link = create_wikipedia_link(query)
     elif kind == "search_google":
         link = create_stack_overflow_search_link(query)
     assert link is not None
@@ -87,6 +87,19 @@ def create_wikipedia_search_link(
     wikipedia_search_link += f"{prefix}{subterm}{suffix}"
     wikipedia_search_link += f"[/link][/{link_style}]"
     return wikipedia_search_link
+
+
+def create_wikipedia_link(
+    subterm: str,
+    prefix: str = "",
+    suffix: str = "",
+    link_style: str = LINK_STYLE,
+) -> str:
+    wikipedia_url = create_wikipedia_url(subterm)
+    wikipedia_link = f"[{link_style}][link={wikipedia_url}]"
+    wikipedia_link += f"{prefix}{subterm}{suffix}"
+    wikipedia_link += f"[/link][/{link_style}]"
+    return wikipedia_link
 
 
 def create_google_search_link(
