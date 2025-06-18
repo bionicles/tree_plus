@@ -33,6 +33,7 @@ MATHEMATICA_EXTENSIONS = {".nb", ".wl"}
 PYTHON_EXTENSIONS = {".py", ".pyi"}
 METAL_EXTENSIONS = {".metal"}
 WGSL_EXTENSIONS = {".wgsl"}
+MARKDOWN_EXTENSIONS = {".md", ".markdown", ".mdx", ".mdc"}
 
 
 def head(n: int, content: str) -> str:
@@ -145,7 +146,7 @@ def parse_file(
             components = parse_py(content, timeout=_regex_timeout)
             if isinstance(components, SyntaxError):
                 components = [f"SyntaxError: {components}"]
-        elif file_extension == ".md":
+        elif file_extension in MARKDOWN_EXTENSIONS:
             components = parse_md(content, timeout=_regex_timeout)
         elif file_extension == ".rst":
             components = parse_rst(content, timeout=_regex_timeout)
