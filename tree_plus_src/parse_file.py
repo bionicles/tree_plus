@@ -2806,6 +2806,7 @@ def parse_tf(content: str, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     return [f"{match[0]} {match[1]}" if match[1] else match[0] for match in matches]
 
 
+markdown_languages = {ext.lstrip('.') for ext in MARKDOWN_EXTENSIONS}
 def parse_md(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     in_code_block = False
     lines = content.splitlines()
@@ -2826,61 +2827,88 @@ def parse_md(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
         cache_pattern=True,
     )
 
+    code_block_stack = []
+
     for line in lines:
-        # If we encounter a code block (indicated by ```), toggle in_code_block.
-        if line.strip().startswith("```"):
-            in_code_block = not in_code_block
-        # Only process lines that are not within a code block.
-        elif not in_code_block:
-            # If the line is a header, add it to the output list.
-            if line.startswith("#"):
-                line = line.lstrip()
-                # Remove URLs from headers.
-                clean_header = url_pattern.sub("", line, timeout=timeout)
-                clean_header = link_pattern.sub("", clean_header, timeout=timeout)
-                clean_header = clean_header.strip()
-                # Skip headers that consist only of '#' and ' '.
-                if not clean_header.lstrip("#").strip():
-                    continue
-                headers_and_tasks.append(clean_header)
-            # If the line is a task, process it accordingly.
-            elif task_pattern.match(line.lstrip(), timeout=timeout):
-                indent_level = len(line) - len(line.lstrip())
-                task_match = task_pattern.match(line.lstrip())
-                if task_match:
-                    task_text = task_match.group(2)
-                    is_checked = "[x]" in line or "[X]" in line
-                    # print(f"Checked: {is_checked} Line: {line}")
-                    task: str = (
-                        indent_level * " "
-                        + ("- [x] " if is_checked else "- [ ] ")
-                        + task_text
-                    )
-                    # For every task, we first remove ancestors
-                    # that are not parents of the current task
-                    # This is identified by comparing their indentation level.
-                    checked_ancestors: Sequence[Tuple[str, bool]] = [
-                        a for a in checked_ancestors if len(a[0]) < len(task)
-                    ]
-                    # If the task is checked, we add it to the list of ancestors
-                    # but don't add to the final output yet.
-                    # The second element of the tuple is a flag to indicate
-                    # whether this ancestor should be included in the output.
-                    if is_checked:
-                        ancestor_tuple: Tuple[str, bool] = (task, False)
-                        # print(f"ADD ANCESTOR: {ancestor_tuple=}")
-                        checked_ancestors.append(ancestor_tuple)
-                    # If the task is not checked, we update the flag for all ancestors
-                    # as they should be included in the final output
-                    # Then add these ancestors to the output
-                    # and finally add the current task.
-                    else:
-                        checked_ancestors = [(a[0], True) for a in checked_ancestors]
-                        ancestors_to_add = [a[0] for a in checked_ancestors if a[1]]
-                        # print(f"ADD ANCESTOR(S) {ancestors_to_add=}")
-                        headers_and_tasks.extend(ancestors_to_add)
-                        # print(f"ADD TASK {task}")
-                        headers_and_tasks.append(task)
+        stripped_line = line.strip()
+        # # If we encounter a code block (indicated by ```), toggle in_code_block.
+        # if line.strip().startswith("```"):
+        #     in_code_block = not in_code_block
+        # # Only process lines that are not within a code block.
+        # elif not in_code_block:
+
+        # Improved logic to handle entering/exiting nested code blocks.
+        # Robust logic to handle entering/exiting nested code blocks
+        if stripped_line.startswith("```"):
+            if code_block_stack:
+                if stripped_line == "```":
+                    code_block_stack.pop()
+                else:
+                    lang = stripped_line[3:].strip()
+                    code_block_stack.append(lang)
+            else:
+                lang = stripped_line[3:].strip()
+                code_block_stack.append(lang)
+            
+            continue
+
+        # A block is opaque if its language is NOT in our derived set of markdown languages
+        in_opaque_block = code_block_stack and code_block_stack[-1] not in markdown_languages
+
+        if in_opaque_block:
+            continue
+
+        # print(f"Processing Line: '{line[:40]}...' | Stack: {code_block_stack}")
+
+        # If the line is a header, add it to the output list.
+        if line.startswith("#"):
+            line = line.lstrip()
+            # Remove URLs from headers.
+            clean_header = url_pattern.sub("", line, timeout=timeout)
+            clean_header = link_pattern.sub("", clean_header, timeout=timeout)
+            clean_header = clean_header.strip()
+            # Skip headers that consist only of '#' and ' '.
+            if not clean_header.lstrip("#").strip():
+                continue
+            headers_and_tasks.append(clean_header)
+        # If the line is a task, process it accordingly.
+        elif task_pattern.match(line.lstrip(), timeout=timeout):
+            indent_level = len(line) - len(line.lstrip())
+            task_match = task_pattern.match(line.lstrip())
+            if task_match:
+                task_text = task_match.group(2)
+                is_checked = "[x]" in line or "[X]" in line
+                # print(f"Checked: {is_checked} Line: {line}")
+                task: str = (
+                    indent_level * " "
+                    + ("- [x] " if is_checked else "- [ ] ")
+                    + task_text
+                )
+                # For every task, we first remove ancestors
+                # that are not parents of the current task
+                # This is identified by comparing their indentation level.
+                checked_ancestors: Sequence[Tuple[str, bool]] = [
+                    a for a in checked_ancestors if len(a[0]) < len(task)
+                ]
+                # If the task is checked, we add it to the list of ancestors
+                # but don't add to the final output yet.
+                # The second element of the tuple is a flag to indicate
+                # whether this ancestor should be included in the output.
+                if is_checked:
+                    ancestor_tuple: Tuple[str, bool] = (task, False)
+                    # print(f"ADD ANCESTOR: {ancestor_tuple=}")
+                    checked_ancestors.append(ancestor_tuple)
+                # If the task is not checked, we update the flag for all ancestors
+                # as they should be included in the final output
+                # Then add these ancestors to the output
+                # and finally add the current task.
+                else:
+                    checked_ancestors = [(a[0], True) for a in checked_ancestors]
+                    ancestors_to_add = [a[0] for a in checked_ancestors if a[1]]
+                    # print(f"ADD ANCESTOR(S) {ancestors_to_add=}")
+                    headers_and_tasks.extend(ancestors_to_add)
+                    # print(f"ADD TASK {task}")
+                    headers_and_tasks.append(task)
 
     return headers_and_tasks
 
