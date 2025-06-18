@@ -1502,6 +1502,7 @@ def test_more_languages_group4(
                 "- [x] Task 6",
                 "    - [x] Subtask 6.1",
                 "        - [ ] Handle edge cases",
+                "# My Codeblock Test",
             ],
         ),
         (
