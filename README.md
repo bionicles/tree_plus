@@ -101,9 +101,9 @@ Options:
                                'gpt-4o' works
   --timeout FLOAT              regex timeout in seconds (optional, default
                                0.7)
-  -h, -H, --help               Show this message and exit.
+  -H, -h, --help               Show this message and exit.
 
-  v(1.0.77) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.78) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -778,7 +778,7 @@ python -m tree_plus_cli -s -i tests
     │       ├── add_alias()
     │       └── create_conda_env()
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.77"
+    │   └── __version__ = "1.0.78"
     └── 📄 web.py (2,409 tokens, 321 lines)
         ├── TODO: re-enable tree plus web actions
         ├── NOTE: no point in the answers since there's no content
@@ -839,7 +839,7 @@ python -m tree_plus_cli -s -i tests
                 sleep_time: float,
             ) -> Tuple[HList, ...]
 
-tree_plus v(1.0.77) ignore=('tests',) globs=() syntax=False paths=()
+tree_plus v(1.0.78) ignore=('tests',) globs=() syntax=False paths=()
 7 folder(s), 28 file(s), 13,462 line(s), 118,950 token(s) in 0.22 second(s).
 
 ```
@@ -1007,7 +1007,7 @@ python -m tree_plus_cli -s -c -i group_todo tests/more_languages
 │   ├── 📄 app.component.spec.ts (410 tokens, 47 lines)
 │   ├── 📄 app.component.ts (271 tokens, 45 lines)
 │   ├── 📄 app.module.ts (374 tokens, 43 lines)
-│   ├── 📄 checkbox_test.md (176 tokens, 21 lines)
+│   ├── 📄 checkbox_test.md (191 tokens, 29 lines)
 │   ├── 📄 checkbox_test.txt (257 tokens, 33 lines)
 │   ├── 📄 environment.test.ts (197 tokens, 19 lines)
 │   ├── 📄 hello_world.pyi (22 tokens, 3 lines)
@@ -1048,8 +1048,8 @@ python -m tree_plus_cli -s -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.77) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 87 file(s), 7,358 line(s), 69,518 token(s) in 0.14 second(s).
+tree_plus v(1.0.78) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 87 file(s), 7,366 line(s), 69,533 token(s) in 0.14 second(s).
 
 ```
 <!-- t6-end -->
@@ -2150,7 +2150,7 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   │           RewardsComponent,
 │   │   │           ProfileComponent
 │   │   └── export class AppModule
-│   ├── 📄 checkbox_test.md (176 tokens, 21 lines)
+│   ├── 📄 checkbox_test.md (191 tokens, 29 lines)
 │   │   ├── # My Checkbox Test
 │   │   ├── ## My No Parens Test
 │   │   ├── ## My Empty href Test
@@ -2167,7 +2167,8 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├──     - [ ] Subtask 3.1
 │   │   ├── -  Task 6
 │   │   ├──     -  Subtask 6.1
-│   │   └──         - [ ] Handle edge cases
+│   │   ├──         - [ ] Handle edge cases
+│   │   └── # My Codeblock Test
 │   ├── 📄 checkbox_test.txt (257 tokens, 33 lines)
 │   │   ├── - [ ] fix phone number format +1
 │   │   ├── - [ ] add forgot password
@@ -3062,8 +3063,8 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
         ├──   define set-up
         └──   define traverse
 
-tree_plus v(1.0.77) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 87 file(s), 7,358 line(s), 69,518 token(s) in 0.55 second(s).
+tree_plus v(1.0.78) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
+9 folder(s), 87 file(s), 7,366 line(s), 69,533 token(s) in 0.54 second(s).
 
 ```
 <!-- t2-end -->
@@ -3590,8 +3591,8 @@ python -m tree_plus_cli -s -g "*.*s" -i group_todo tests/more_languages
         │       }: DBCommand & { where?: { : string | number } })
         └──     async search_table(criteria: SearchCriteria)
 
-tree_plus v(1.0.77) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,141 line(s), 15,202 token(s) in 0.16 second(s).
+tree_plus v(1.0.78) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,141 line(s), 15,202 token(s) in 0.15 second(s).
 
 ```
 <!-- t3-end -->
@@ -3686,7 +3687,7 @@ python -m tree_plus_cli -s tests/more_languages/group_todo
     └── @fragment
         fn frag_main() -> @location(0) vec4f
 
-tree_plus v(1.0.77) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
+tree_plus v(1.0.78) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
 1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.05 second(s).
 
 ```
