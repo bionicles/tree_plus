@@ -103,7 +103,7 @@ Options:
                                0.7)
   -H, -h, --help               Show this message and exit.
 
-  v(1.0.78) --- https://github.com/bionicles/tree_plus/blob/main/README.md
+  v(1.0.79) --- https://github.com/bionicles/tree_plus/blob/main/README.md
 
 ```
 <!-- t5-end -->
@@ -150,7 +150,7 @@ python -m tree_plus_cli -s -i tests
 │           ├──     - Check dists with twine
 │           ├──     - Commit Updates
 │           └──     - Publish to PyPI
-├── 📄 .gitignore (206 tokens, 54 lines)
+├── 📄 .gitignore (219 tokens, 57 lines)
 ├── 📄 .mcp_server.pid (2 tokens, 1 line)
 ├── 📁 coverage (1 folder, 1 file) 
 │   └── 📄 lcov.info (17,359 tokens, 2,180 lines)
@@ -194,653 +194,653 @@ python -m tree_plus_cli -s -i tests
 │   └── t6
 ├── 📄 nodemon.json (112 tokens, 24 lines)
 ├── 📄 pyproject.toml (366 tokens, 51 lines)
-│   ├── name: tree_plus
-│   ├── version: N/A
-│   ├── description: A `tree` util enhanced with tokens, lines, and components.
-│   ├── License :: OSI Approved :: Apache Software License
-│   ├── License :: OSI Approved :: MIT License
-│   ├── dependencies:
-│   ├──     tiktoken
-│   ├──     PyYAML
-│   ├──     click
-│   ├──     rich
-│   ├──     tomli
-│   ├──     natsort>=7.1
-│   ├──     fake_useragent
-│   ├──     bs4
-│   ├──     func_timeout
-│   └──     regex
+│   ├── name: tree_plus                                                                                                         
+│   ├── version: N/A                                                                                                            
+│   ├── description: A `tree` util enhanced with tokens, lines, and components.                                                 
+│   ├── License :: OSI Approved :: Apache Software License                                                                      
+│   ├── License :: OSI Approved :: MIT License                                                                                  
+│   ├── dependencies:                                                                                                           
+│   ├──     tiktoken                                                                                                            
+│   ├──     PyYAML                                                                                                              
+│   ├──     click                                                                                                               
+│   ├──     rich                                                                                                                
+│   ├──     tomli                                                                                                               
+│   ├──     natsort>=7.1                                                                                                        
+│   ├──     fake_useragent                                                                                                      
+│   ├──     bs4                                                                                                                 
+│   ├──     func_timeout                                                                                                        
+│   └──     regex                                                                                                               
 ├── 📄 pytest.ini (20 tokens, 4 lines)
-├── 📄 README.md (38,144 tokens, 3,704 lines)
-│   ├── # Tree Plus
-│   ├── #### **Ever hit context limits prompting LLMs with code?**
-│   ├── ### Use `tree_plus` to ...:
-│   ├── ## Usage
-│   ├── ## Example Output:
-│   ├── - [ ] Demonstrate Parsed Checkboxes
-│   ├── ## Start Quick!
-│   ├── ### Prerequisites
-│   ├── ### Install Tree Plus
-│   ├── #### PyPI
-│   ├── #### Local Hackable Install
-│   ├── ### Alias Usage
-│   ├── ## Library Usage:
-│   ├── ## Moar Languages
-│   ├── ### Currently Tested Languages:
-│   ├── ### Without the -c "Concise" Flag:
-│   ├── ## Got Globs?
-│   ├── ## Languages Todo:
-│   ├── ## Oppose Unfair Business Practices
-│   └── ## License
+├── 📄 README.md (38,152 tokens, 3,705 lines)
+│   ├── # Tree Plus                                                                                                             
+│   ├── #### **Ever hit context limits prompting LLMs with code?**                                                              
+│   ├── ### Use `tree_plus` to ...:                                                                                             
+│   ├── ## Usage                                                                                                                
+│   ├── ## Example Output:                                                                                                      
+│   ├── - [ ] Demonstrate Parsed Checkboxes                                                                                     
+│   ├── ## Start Quick!                                                                                                         
+│   ├── ### Prerequisites                                                                                                       
+│   ├── ### Install Tree Plus                                                                                                   
+│   ├── #### PyPI                                                                                                               
+│   ├── #### Local Hackable Install                                                                                             
+│   ├── ### Alias Usage                                                                                                         
+│   ├── ## Library Usage:                                                                                                       
+│   ├── ## Moar Languages                                                                                                       
+│   ├── ### Currently Tested Languages:                                                                                         
+│   ├── ### Without the -c "Concise" Flag:                                                                                      
+│   ├── ## Got Globs?                                                                                                           
+│   ├── ## Languages Todo:                                                                                                      
+│   ├── ## Oppose Unfair Business Practices                                                                                     
+│   └── ## License                                                                                                              
 ├── 📄 tree_plus_cli.py (2,283 tokens, 331 lines)
-│   ├── def move_cwd_to_end_of_sys_path()
-│   └── def main(
-│           glob: Optional[Tuple],
-│           paths: Optional[Union[str, Tuple]],
-│           ignore: Tuple,
-│           override: bool,
-│           debug: bool,
-│           version: bool,
-│           syntax: bool,
-│           concise: bool,
-│       
-│           yc: bool,
-│           number: int,
-│           max_depth: int,
-│           links: bool,
-│           tiktoken: bool,
-│           tokenizer_name: Optional,
-│           timeout: Optional,
-│       )
+│   ├── def move_cwd_to_end_of_sys_path()                                                                                       
+│   └── def main(                                                                                                               
+│           glob: Optional[Tuple[str, ...]],                                                                                    
+│           paths: Optional[Union[str, Tuple[str, ...]]],                                                                       
+│           ignore: Tuple[str, ...],                                                                                            
+│           override: bool,                                                                                                     
+│           debug: bool,                                                                                                        
+│           version: bool,                                                                                                      
+│           syntax: bool,                                                                                                       
+│           concise: bool,                                                                                                      
+│                                                                                                                               
+│           yc: bool,                                                                                                           
+│           number: int,                                                                                                        
+│           max_depth: int,                                                                                                     
+│           links: bool,                                                                                                        
+│           tiktoken: bool,                                                                                                     
+│           tokenizer_name: Optional[str],                                                                                      
+│           timeout: Optional[float],                                                                                           
+│       )                                                                                                                       
 ├── 📁 tree_plus_programs (1 folder, 4 files) 
 │   ├── 📄 hello_tree_plus.py (545 tokens, 80 lines)
-│   │   ├── class ItHappened
-│   │   ├── def main()
-│   │   └── def trees(
-│   │           or_: bool,
-│   │           it: int,
-│   │           didnt: str,
-│   │           happen: tuple,
-│   │       ) -> ItHappened
+│   │   ├── class ItHappened                                                                                                    
+│   │   ├── def main()                                                                                                          
+│   │   └── def trees(                                                                                                          
+│   │           or_: bool,                                                                                                      
+│   │           it: int,                                                                                                        
+│   │           didnt: str,                                                                                                     
+│   │           happen: tuple,                                                                                                  
+│   │       ) -> ItHappened                                                                                                     
 │   ├── 📄 rewrite.py (4,017 tokens, 471 lines)
-│   │   ├── TODO: research various kwargs for huggingface / torch performance
-│   │   ├── class ModelName(Enum)
-│   │   ├──     QWEN_2 = "Qwen/Qwen2-7B-Instruct"
-│   │   ├──     MISTRAL_3 = "mistralai/Mistral-7B-Instruct-v0.3"
-│   │   ├── class ModelContext(Enum)
-│   │   ├──     QWEN_2 = 131
-│   │   ├──     MISTRAL_3 = 32
-│   │   ├──             root: None,
-│   │   ├── def rewrite_module(
-│   │   │       max_length: int,
-│   │   │       fill_context: bool,
-│   │   │       input_path: Path,
-│   │   │       output_path: Optional,
-│   │   │       suffix: Optional = ".rs",
-│   │   │       include_complete_file: bool = True,
-│   │   │   )
-│   │   └── def main(
-│   │           fill_context: bool,
-│   │           length: int,
-│   │           input_path: Path,
-│   │           output_path: Optional,
-│   │       )
+│   │   ├── TODO: research various kwargs for huggingface / torch performance                                                   
+│   │   ├── class ModelName(Enum)                                                                                               
+│   │   ├──     QWEN_2 = "Qwen/Qwen2-7B-Instruct"                                                                               
+│   │   ├──     MISTRAL_3 = "mistralai/Mistral-7B-Instruct-v0.3"                                                                
+│   │   ├── class ModelContext(Enum)                                                                                            
+│   │   ├──     QWEN_2 = 131                                                                                                    
+│   │   ├──     MISTRAL_3 = 32                                                                                                  
+│   │   ├──             root: None,                                                                                             
+│   │   ├── def rewrite_module(                                                                                                 
+│   │   │       max_length: int,                                                                                                
+│   │   │       fill_context: bool,                                                                                             
+│   │   │       input_path: Path,                                                                                               
+│   │   │       output_path: Optional[str],                                                                                     
+│   │   │       suffix: Optional[str] = ".rs",                                                                                  
+│   │   │       include_complete_file: bool = True,                                                                             
+│   │   │   )                                                                                                                   
+│   │   └── def main(                                                                                                           
+│   │           fill_context: bool,                                                                                             
+│   │           length: int,                                                                                                    
+│   │           input_path: Path,                                                                                               
+│   │           output_path: Optional[click.Path],                                                                              
+│   │       )                                                                                                                   
 │   ├── 📄 stub_tests.py (1,348 tokens, 180 lines)
-│   │   ├── TODO: fix this path",
-│   │   ├── TODO: fill in these stubs:",
-│   │   ├── @lru_cache
-│   │   │   def remove_decorators(component: str) -> str
-│   │   ├── def make_import_path(path: Path) -> str
-│   │   ├── def stub_tests(
-│   │   │       input_path: str,
-│   │   │       output_path: Optional,
-│   │   │       rewrite_ok: bool,
-│   │   │   ) -> Tuple[List, str, bool]
-│   │   ├── def main(
-│   │   │       input_path: str,
-│   │   │       output_path: Optional,
-│   │   │       rewrite_ok: bool,
-│   │   │   )
-│   │   ├── class Vehicle
-│   │   └── class Car(Vehicle)
+│   │   ├── TODO: fix this path",                                                                                               
+│   │   ├── TODO: fill in these stubs:",                                                                                        
+│   │   ├── @lru_cache                                                                                                          
+│   │   │   def remove_decorators(component: str) -> str                                                                        
+│   │   ├── def make_import_path(path: Path) -> str                                                                             
+│   │   ├── def stub_tests(                                                                                                     
+│   │   │       input_path: str,                                                                                                
+│   │   │       output_path: Optional[str],                                                                                     
+│   │   │       rewrite_ok: bool,                                                                                               
+│   │   │   ) -> Tuple[List[str], str, bool]                                                                                    
+│   │   ├── def main(                                                                                                           
+│   │   │       input_path: str,                                                                                                
+│   │   │       output_path: Optional[str],                                                                                     
+│   │   │       rewrite_ok: bool,                                                                                               
+│   │   │   )                                                                                                                   
+│   │   ├── class Vehicle                                                                                                       
+│   │   └── class Car(Vehicle)                                                                                                  
 │   └── 📄 test_stub_tests.py (79 tokens, 20 lines)
-│       ├── TODO: fix this path
-│       ├── TODO: fill in these stubs:
-│       ├── def test_remove_decorators()
-│       ├── def test_make_import_path()
-│       ├── def test_stub_tests()
-│       ├── def test_main()
-│       ├── def test_class_vehicle()
-│       └── def test_class_car()
+│       ├── TODO: fix this path                                                                                                 
+│       ├── TODO: fill in these stubs:                                                                                          
+│       ├── def test_remove_decorators()                                                                                        
+│       ├── def test_make_import_path()                                                                                         
+│       ├── def test_stub_tests()                                                                                               
+│       ├── def test_main()                                                                                                     
+│       ├── def test_class_vehicle()                                                                                            
+│       └── def test_class_car()                                                                                                
 └── 📁 tree_plus_src (2 folders, 10 files) 
     ├── 📄 count_tokens_lines.py (1,323 tokens, 209 lines)
-    │   ├── TODO: show off how well we parse_todo!
-    │   ├── @dataclass(frozen=True)
-    │   │   class TokenLineCount
-    │   ├──     n_tokens: int
-    │   ├──     n_lines: int
-    │   ├── class TokenizerName(Enum)
-    │   ├──     WC = "wc"
-    │   ├──     GPT_4O = "gpt-4o"
-    │   ├── def count_tokens_lines(
-    │   │       file_path: Union,
-    │   │       *,
-    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
-    │   │   ) -> Optional[TokenLineCount]
-    │   ├── def count_openai_tokens_lines_from_contents(
-    │   │       contents: Union,
-    │   │       *,
-    │   │       tokenizer_name: TokenizerName = TokenizerName.GPT_4O,
-    │   │   ) -> TokenLineCount
-    │   ├── def count_wc_tokens_lines_from_path(file_path: str) -> TokenLineCount
-    │   └── def add_tokens_lines(
-    │           lhs_count: TokenLineCount, rhs_count: TokenLineCount
-    │       ) -> TokenLineCount
+    │   ├── TODO: show off how well we parse_todo!                                                                              
+    │   ├── @dataclass(frozen=True)                                                                                             
+    │   │   class TokenLineCount                                                                                                
+    │   ├──     n_tokens: int                                                                                                   
+    │   ├──     n_lines: int                                                                                                    
+    │   ├── class TokenizerName(Enum)                                                                                           
+    │   ├──     WC = "wc"                                                                                                       
+    │   ├──     GPT_4O = "gpt-4o"                                                                                               
+    │   ├── def count_tokens_lines(                                                                                             
+    │   │       file_path: Union[str, Path],                                                                                    
+    │   │       *,                                                                                                              
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,                                                               
+    │   │   ) -> Optional[TokenLineCount]                                                                                       
+    │   ├── def count_openai_tokens_lines_from_contents(                                                                        
+    │   │       contents: Union[str, "Markdown"],                                                                               
+    │   │       *,                                                                                                              
+    │   │       tokenizer_name: TokenizerName = TokenizerName.GPT_4O,                                                           
+    │   │   ) -> TokenLineCount                                                                                                 
+    │   ├── def count_wc_tokens_lines_from_path(file_path: str) -> TokenLineCount                                               
+    │   └── def add_tokens_lines(                                                                                               
+    │           lhs_count: TokenLineCount, rhs_count: TokenLineCount                                                            
+    │       ) -> TokenLineCount                                                                                                 
     ├── 📄 debug.py (186 tokens, 39 lines)
-    │   ├── def disable_debug()
-    │   ├── @lru_cache
-    │   │   def debug_enabled()
-    │   ├── def debug_print(*args, **kwargs)
-    │   ├── def enable_debug()
-    │   └── @contextmanager
-    │       def debug_disabled()
+    │   ├── def disable_debug()                                                                                                 
+    │   ├── @lru_cache                                                                                                          
+    │   │   def debug_enabled()                                                                                                 
+    │   ├── def debug_print(*args, **kwargs)                                                                                    
+    │   ├── def enable_debug()                                                                                                  
+    │   └── @contextmanager                                                                                                     
+    │       def debug_disabled()                                                                                                
     ├── 📄 deploy.py (2,058 tokens, 230 lines)
-    │   ├── def extract(path: Optional = None) -> str
-    │   ├── def load(content: Optional = None, path: Optional = None)
-    │   ├── def extract_version(source_path: Optional = None) -> Tuple
-    │   ├── def increment_version(
-    │   │       source_path: Optional = None,
-    │   │       sink_path: Optional = None,
-    │   │   )
-    │   ├── def run_command(command: Optional = None, debug: bool = False)
-    │   ├── def replace_readme_section(
-    │   │       source_path: Optional = None,
-    │   │       sink_path: Optional = None,
-    │   │       marker: Optional = None,
-    │   │       command: Optional = None,
-    │   │   )
-    │   ├── def update_readme(source_path: Optional = None, sink_path: Optional = None)
-    │   └── def main()
+    │   ├── def extract(path: Optional[str] = None) -> str                                                                      
+    │   ├── def load(content: Optional[str] = None, path: Optional[str] = None)                                                 
+    │   ├── def extract_version(source_path: Optional[str] = None) -> Tuple[int, int, int]                                      
+    │   ├── def increment_version(                                                                                              
+    │   │       source_path: Optional[str] = None,                                                                              
+    │   │       sink_path: Optional[str] = None,                                                                                
+    │   │   )                                                                                                                   
+    │   ├── def run_command(command: Optional[str] = None, debug: bool = False)                                                 
+    │   ├── def replace_readme_section(                                                                                         
+    │   │       source_path: Optional[str] = None,                                                                              
+    │   │       sink_path: Optional[str] = None,                                                                                
+    │   │       marker: Optional[str] = None,                                                                                   
+    │   │       command: Optional[str] = None,                                                                                  
+    │   │   )                                                                                                                   
+    │   ├── def update_readme(source_path: Optional[str] = None, sink_path: Optional[str] = None)                               
+    │   └── def main()                                                                                                          
     ├── 📄 engine.py (12,042 tokens, 1,438 lines)
-    │   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT
-    │   ├── NOTE: you can customize the color here, and we could make this functional
-    │   ├── TODO: clarify subtree types -- make this a DataFrame tbh
-    │   ├── NOTE: sometimes we need wider trees (deploy)
-    │   ├── TODO: research & decide about globs as paths instead of as filters
-    │   ├── NOTE: directly add input file_paths to the amortized glob matches
-    │   ├── TODO: decide to apply glob patterns to glob paths (currently NO)
-    │   ├── TODO: decide between glob and rglob in _from_glob
-    │   ├── TODO: decide if we need to re-amortize the globs in the glob seed
-    │   ├── TODO: clarify ignore in glob seed context, skipping for now
-    │   ├── NOTE: this is only to satisfy the type checker
-    │   ├── class Category(Enum)
-    │   ├──     ROOT = 1
-    │   ├──     GLOB = 2
-    │   ├──     FOLDER = 3
-    │   ├──     FILE = 4
-    │   ├──     COMPONENT = 5
-    │   ├──     URL = 6
-    │   ├──     TAG = 7
-    │   ├── @dataclass
-    │   │   class TreePlus
-    │   ├──     category: Category
-    │   ├──     name: Union
-    │   ├──     line_count: int
-    │   ├──     token_count: int
-    │   ├──     subtrees: Union[
-    │   ├──     hrefs: Optional[Dict]
-    │   ├──     @property
-    │   │       def has_tree_plus_subtrees(self) -> Optional
-    │   ├──     @property
-    │   │       def n_folders(self) -> int
-    │   ├──     @property
-    │   │       def n_files(self) -> int
-    │   ├──     @property
-    │   │       def n_lines(self) -> int
-    │   ├──     @property
-    │   │       def n_tokens(self) -> int
-    │   ├──     def is_root(self) -> bool
-    │   ├──     def is_folder(self) -> bool
-    │   ├──     def is_file(self) -> bool
-    │   ├──     def is_glob(self) -> bool
-    │   ├──     def is_component(self) -> bool
-    │   ├──     def is_url(self) -> bool
-    │   ├──     def into_rich_tree(self) -> Tree
-    │   ├──     def into_str(self) -> str
-    │   ├──     def render(
-    │   │           self,
-    │   │           style: Optional = None,
-    │   │           highlight: bool = HIGHLIGHT,
-    │   │           markup: bool = MARKUP,
-    │   │           capturing: bool = False,
-    │   │       )
-    │   ├──     def render_hrefs(self)
-    │   ├──     def stats(self) -> str
-    │   ├── def from_hrefs(
-    │   │       hrefs: dict,
-    │   │       root_panel_text,
-    │   │       link_color: str = LINK_COLOR,
-    │   │   ) -> Optional[TreePlus]
-    │   ├── def stats_from_tree_plus(tree: TreePlus) -> str
-    │   ├── @lru_cache
-    │   │   def remove_trailing_space(x: str) -> str
-    │   ├── def tree_to_string(
-    │   │       tree: Tree,
-    │   │       markup: bool = MARKUP,
-    │   │       highlight: bool = HIGHLIGHT,
-    │   │       text_style: str = TEXT_COLOR,
-    │   │   ) -> str
-    │   ├── def clean_string(input_str: str) -> str
-    │   ├── def safe_print(
-    │   │       tree: Union[Tree, Panel, str, list],
-    │   │       style: Optional = None,
-    │   │       highlight: bool = HIGHLIGHT,
-    │   │       markup: bool = MARKUP,
-    │   │       capturing: bool = False,
-    │   │   )
-    │   ├── def _make_rich_tree(
-    │   │       label,
-    │   │       style: str = TEXT_COLOR,
-    │   │       guide_style: str = LINK_COLOR,
-    │   │       highlight: bool = HIGHLIGHT,
-    │   │   ) -> Tree
-    │   ├── def into_rich_tree(
-    │   │       *,
-    │   │       root: Optional[TreePlus] = None,
-    │   │       timeout=INTO_RICH_TREE_TIMEOUT_SECONDS,
-    │   │   ) -> Tree
-    │   ├── def _into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree
-    │   ├── def is_url(x: str) -> bool
-    │   ├── @lru_cache
-    │   │   def categorize(
-    │   │       x: Union[Path, Tuple, str],
-    │   │       check_strs_globs: bool = True,
-    │   │       check_strs_paths: bool = True,
-    │   │       check_strs_urls: bool = True,
-    │   │       raise_if_component: bool = True,
-    │   │   ) -> Category
-    │   ├── def from_seed(
-    │   │       maybe_seed: Optional[Union] = None,
-    │   │       *,
-    │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
-    │   │       maybe_globs: Optional[Tuple] = None,
-    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
-    │   │       syntax_highlighting: bool = False,
-    │   │       override_ignore: bool = False,
-    │   │       concise: bool = False,
-    │   │   ) -> TreePlus
-    │   ├── def from_seeds(
-    │   │       maybe_seeds: Optional[Tuple[Union, ...]] = None,
-    │   │       *,
-    │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
-    │   │       maybe_globs: Optional[Tuple] = None,
-    │   │       syntax_highlighting: bool = False,
-    │   │       override_ignore: bool = False,
-    │   │       concise: bool = False,
-    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
-    │   │       regex_timeout: Optional = None,
-    │   │   ) -> TreePlus
-    │   ├── def _reduce_forest(
-    │   │       *,
-    │   │       forest: Tuple[TreePlus, ...],
-    │   │   ) -> TreePlus
-    │   ├── def _map_seeds(
-    │   │       *,
-    │   │       seeds: Optional[Tuple[Union, ...]] = None,
-    │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
-    │   │       maybe_globs: Optional[Tuple] = None,
-    │   │       syntax_highlighting: bool = False,
-    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
-    │   │       regex_timeout: Optional = None,
-    │   │       concise: bool = False,
-    │   │   ) -> Tuple[TreePlus, ...]
-    │   ├── def _from_seed(
-    │   │       *,
-    │   │       seed_path: Optional[Union[Path, str]] = None,
-    │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
-    │   │       maybe_globs: Optional[AmortizedGlobs] = None,
-    │   │       syntax_highlighting: bool = False,
-    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
-    │   │       regex_timeout: Optional = None,
-    │   │       concise: bool = False,
-    │   │       is_url: bool = False,
-    │   │   ) -> TreePlus
-    │   ├── def _add_subtree(
-    │   │       *,
-    │   │       root: TreePlus,
-    │   │       subtree: TreePlus,
-    │   │   )
-    │   ├── def _from_glob(
-    │   │       *,
-    │   │       pattern: str,
-    │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
-    │   │       maybe_globs: Optional[AmortizedGlobs] = None,
-    │   │       syntax_highlighting: bool = False,
-    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
-    │   │       regex_timeout: Optional = None,
-    │   │       concise: bool = False,
-    │   │   ) -> TreePlus
-    │   ├── def _from_folder(
-    │   │       *,
-    │   │       folder_path: Path,
-    │   │       maybe_ignore: Optional[Tuple] = DEFAULT_IGNORE,
-    │   │       maybe_globs: Optional[AmortizedGlobs] = None,
-    │   │       syntax_highlighting: bool = False,
-    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
-    │   │       regex_timeout: Optional = None,
-    │   │       concise: bool = False,
-    │   │   ) -> TreePlus
-    │   ├── def _from_file(
-    │   │       *,
-    │   │       file_path: Path,
-    │   │       syntax_highlighting: bool = False,
-    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,
-    │   │       max_tokens: int = MAX_TOKENS,
-    │   │       regex_timeout: Optional = None,
-    │   │       concise: bool = False,
-    │   │   ) -> TreePlus
-    │   ├── def _from_url(
-    │   │       *,
-    │   │       url: str,
-    │   │       syntax_highlighting: bool = False,
-    │   │       concise: bool = False,
-    │   │   ) -> TreePlus
-    │   ├── def base_url(url: str, with_path: bool = False) -> str
-    │   ├── def _from_html_text(contents: str, maybe_url_base: Optional = None) -> TreePlus
-    │   ├── def empty_tag_tree(n: str = "?")
-    │   ├── def union_from_element(elem: PageElement) -> Union[Tag, NavigableString]
-    │   ├── def node_index_str_from_tuple(
-    │   │       node_index: Tuple,
-    │   │       prefix: str = "(",
-    │   │       suffix: str = ")",
-    │   │       number_color: str = CYBERCYAN,
-    │   │       dot_color: str = GOLD,
-    │   │   ) -> str
-    │   ├── def _from_soup(
-    │   │       tag: Union[Tag, NavigableString],
-    │   │       tree: Optional[TreePlus] = None,
-    │   │       node_index: Tuple = (),
-    │   │       maybe_url_base: Optional = None,
-    │   │       hrefs: Optional[Dict] = None,
-    │   │   ) -> Optional[TreePlus]
-    │   ├── def from_hacker_news_articles(
-    │   │       articles: Articles,
-    │   │       depth: int = 0,
-    │   │       max_depth: int = -1,
-    │   │       title: Union = "Hacker News Front Page",
-    │   │       parent_num: Tuple = (),
-    │   │   ) -> TreePlus
-    │   ├── def format_link(
-    │   │       url: str,
-    │   │       text: str,
-    │   │       link_color: str = LINK_COLOR,
-    │   │   ) -> str
-    │   ├── def process_hacker_news_item(
-    │   │       item: dict,
-    │   │       kids: Articles,
-    │   │       depth: int,
-    │   │       max_depth: int,
-    │   │       parent_num: Tuple,
-    │   │       parser: Union[Literal["lxml"], Literal["html.parser"]] = "html.parser",
-    │   │       link_color: str = LINK_COLOR,
-    │   │   ) -> Optional[TreePlus]
-    │   ├── def rich_links_from_soup(
-    │   │       item_soup: BeautifulSoup,
-    │   │       recursive: bool = True,
-    │   │   ) -> List
-    │   ├── def ordered_list_from(ordered_list: Iterable) -> List
-    │   ├── def _get_lexer(file_path: Path) -> str
-    │   └── def _syntax_highlight(
-    │           *,
-    │           file_path: Path,
-    │           components: List,
-    │       ) -> Union[List[Syntax], List]
+    │   ├── TODO: MOVE TIMEOUT_SECONDS TO ENV VAR & CLI INPUT                                                                   
+    │   ├── NOTE: you can customize the color here, and we could make this functional                                           
+    │   ├── TODO: clarify subtree types -- make this a DataFrame tbh                                                            
+    │   ├── NOTE: sometimes we need wider trees (deploy)                                                                        
+    │   ├── TODO: research & decide about globs as paths instead of as filters                                                  
+    │   ├── NOTE: directly add input file_paths to the amortized glob matches                                                   
+    │   ├── TODO: decide to apply glob patterns to glob paths (currently NO)                                                    
+    │   ├── TODO: decide between glob and rglob in _from_glob                                                                   
+    │   ├── TODO: decide if we need to re-amortize the globs in the glob seed                                                   
+    │   ├── TODO: clarify ignore in glob seed context, skipping for now                                                         
+    │   ├── NOTE: this is only to satisfy the type checker                                                                      
+    │   ├── class Category(Enum)                                                                                                
+    │   ├──     ROOT = 1                                                                                                        
+    │   ├──     GLOB = 2                                                                                                        
+    │   ├──     FOLDER = 3                                                                                                      
+    │   ├──     FILE = 4                                                                                                        
+    │   ├──     COMPONENT = 5                                                                                                   
+    │   ├──     URL = 6                                                                                                         
+    │   ├──     TAG = 7                                                                                                         
+    │   ├── @dataclass                                                                                                          
+    │   │   class TreePlus                                                                                                      
+    │   ├──     category: Category                                                                                              
+    │   ├──     name: Union[str, Panel, Text, Markdown, Table, Pretty]                                                          
+    │   ├──     line_count: int                                                                                                 
+    │   ├──     token_count: int                                                                                                
+    │   ├──     subtrees: Union[                                                                                                
+    │   ├──     hrefs: Optional[Dict[str, list]]                                                                                
+    │   ├──     @property                                                                                                       
+    │   │       def has_tree_plus_subtrees(self) -> Optional[bool]                                                              
+    │   ├──     @property                                                                                                       
+    │   │       def n_folders(self) -> int                                                                                      
+    │   ├──     @property                                                                                                       
+    │   │       def n_files(self) -> int                                                                                        
+    │   ├──     @property                                                                                                       
+    │   │       def n_lines(self) -> int                                                                                        
+    │   ├──     @property                                                                                                       
+    │   │       def n_tokens(self) -> int                                                                                       
+    │   ├──     def is_root(self) -> bool                                                                                       
+    │   ├──     def is_folder(self) -> bool                                                                                     
+    │   ├──     def is_file(self) -> bool                                                                                       
+    │   ├──     def is_glob(self) -> bool                                                                                       
+    │   ├──     def is_component(self) -> bool                                                                                  
+    │   ├──     def is_url(self) -> bool                                                                                        
+    │   ├──     def into_rich_tree(self) -> Tree                                                                                
+    │   ├──     def into_str(self) -> str                                                                                       
+    │   ├──     def render(                                                                                                     
+    │   │           self,                                                                                                       
+    │   │           style: Optional[str] = None,                                                                                
+    │   │           highlight: bool = HIGHLIGHT,                                                                                
+    │   │           markup: bool = MARKUP,                                                                                      
+    │   │           capturing: bool = False,                                                                                    
+    │   │       )                                                                                                               
+    │   ├──     def render_hrefs(self)                                                                                          
+    │   ├──     def stats(self) -> str                                                                                          
+    │   ├── def from_hrefs(                                                                                                     
+    │   │       hrefs: dict,                                                                                                    
+    │   │       root_panel_text,                                                                                                
+    │   │       link_color: str = LINK_COLOR,                                                                                   
+    │   │   ) -> Optional[TreePlus]                                                                                             
+    │   ├── def stats_from_tree_plus(tree: TreePlus) -> str                                                                     
+    │   ├── @lru_cache                                                                                                          
+    │   │   def remove_trailing_space(x: str) -> str                                                                            
+    │   ├── def tree_to_string(                                                                                                 
+    │   │       tree: Tree,                                                                                                     
+    │   │       markup: bool = MARKUP,                                                                                          
+    │   │       highlight: bool = HIGHLIGHT,                                                                                    
+    │   │       text_style: str = TEXT_COLOR,                                                                                   
+    │   │   ) -> str                                                                                                            
+    │   ├── def clean_string(input_str: str) -> str                                                                             
+    │   ├── def safe_print(                                                                                                     
+    │   │       tree: Union[Tree, Panel, str, list],                                                                            
+    │   │       style: Optional[str] = None,                                                                                    
+    │   │       highlight: bool = HIGHLIGHT,                                                                                    
+    │   │       markup: bool = MARKUP,                                                                                          
+    │   │       capturing: bool = False,                                                                                        
+    │   │   )                                                                                                                   
+    │   ├── def _make_rich_tree(                                                                                                
+    │   │       label,                                                                                                          
+    │   │       style: str = TEXT_COLOR,                                                                                        
+    │   │       guide_style: str = LINK_COLOR,                                                                                  
+    │   │       highlight: bool = HIGHLIGHT,                                                                                    
+    │   │   ) -> Tree                                                                                                           
+    │   ├── def into_rich_tree(                                                                                                 
+    │   │       *,                                                                                                              
+    │   │       root: Optional[TreePlus] = None,                                                                                
+    │   │       timeout=INTO_RICH_TREE_TIMEOUT_SECONDS,                                                                         
+    │   │   ) -> Tree                                                                                                           
+    │   ├── def _into_rich_tree(*, root: Optional[TreePlus] = None) -> Tree                                                     
+    │   ├── def is_url(x: str) -> bool                                                                                          
+    │   ├── @lru_cache                                                                                                          
+    │   │   def categorize(                                                                                                     
+    │   │       x: Union[Path, Tuple[str], str],                                                                                
+    │   │       check_strs_globs: bool = True,                                                                                  
+    │   │       check_strs_paths: bool = True,                                                                                  
+    │   │       check_strs_urls: bool = True,                                                                                   
+    │   │       raise_if_component: bool = True,                                                                                
+    │   │   ) -> Category                                                                                                       
+    │   ├── def from_seed(                                                                                                      
+    │   │       maybe_seed: Optional[Union[str, TreePlus]] = None,                                                              
+    │   │       *,                                                                                                              
+    │   │       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,                                                       
+    │   │       maybe_globs: Optional[Tuple[str, ...]] = None,                                                                  
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,                                                               
+    │   │       syntax_highlighting: bool = False,                                                                              
+    │   │       override_ignore: bool = False,                                                                                  
+    │   │       concise: bool = False,                                                                                          
+    │   │   ) -> TreePlus                                                                                                       
+    │   ├── def from_seeds(                                                                                                     
+    │   │       maybe_seeds: Optional[Tuple[Union[str, TreePlus], ...]] = None,                                                 
+    │   │       *,                                                                                                              
+    │   │       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,                                                       
+    │   │       maybe_globs: Optional[Tuple[str, ...]] = None,                                                                  
+    │   │       syntax_highlighting: bool = False,                                                                              
+    │   │       override_ignore: bool = False,                                                                                  
+    │   │       concise: bool = False,                                                                                          
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,                                                               
+    │   │       regex_timeout: Optional[float] = None,                                                                          
+    │   │   ) -> TreePlus                                                                                                       
+    │   ├── def _reduce_forest(                                                                                                 
+    │   │       *,                                                                                                              
+    │   │       forest: Tuple[TreePlus, ...],                                                                                   
+    │   │   ) -> TreePlus                                                                                                       
+    │   ├── def _map_seeds(                                                                                                     
+    │   │       *,                                                                                                              
+    │   │       seeds: Optional[Tuple[Union[str, TreePlus], ...]] = None,                                                       
+    │   │       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,                                                       
+    │   │       maybe_globs: Optional[Tuple[str, ...]] = None,                                                                  
+    │   │       syntax_highlighting: bool = False,                                                                              
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,                                                               
+    │   │       regex_timeout: Optional[float] = None,                                                                          
+    │   │       concise: bool = False,                                                                                          
+    │   │   ) -> Tuple[TreePlus, ...]                                                                                           
+    │   ├── def _from_seed(                                                                                                     
+    │   │       *,                                                                                                              
+    │   │       seed_path: Optional[Union[Path, str]] = None,                                                                   
+    │   │       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,                                                       
+    │   │       maybe_globs: Optional[AmortizedGlobs] = None,                                                                   
+    │   │       syntax_highlighting: bool = False,                                                                              
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,                                                               
+    │   │       regex_timeout: Optional[float] = None,                                                                          
+    │   │       concise: bool = False,                                                                                          
+    │   │       is_url: bool = False,                                                                                           
+    │   │   ) -> TreePlus                                                                                                       
+    │   ├── def _add_subtree(                                                                                                   
+    │   │       *,                                                                                                              
+    │   │       root: TreePlus,                                                                                                 
+    │   │       subtree: TreePlus,                                                                                              
+    │   │   )                                                                                                                   
+    │   ├── def _from_glob(                                                                                                     
+    │   │       *,                                                                                                              
+    │   │       pattern: str,                                                                                                   
+    │   │       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,                                                       
+    │   │       maybe_globs: Optional[AmortizedGlobs] = None,                                                                   
+    │   │       syntax_highlighting: bool = False,                                                                              
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,                                                               
+    │   │       regex_timeout: Optional[float] = None,                                                                          
+    │   │       concise: bool = False,                                                                                          
+    │   │   ) -> TreePlus                                                                                                       
+    │   ├── def _from_folder(                                                                                                   
+    │   │       *,                                                                                                              
+    │   │       folder_path: Path,                                                                                              
+    │   │       maybe_ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,                                                       
+    │   │       maybe_globs: Optional[AmortizedGlobs] = None,                                                                   
+    │   │       syntax_highlighting: bool = False,                                                                              
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,                                                               
+    │   │       regex_timeout: Optional[float] = None,                                                                          
+    │   │       concise: bool = False,                                                                                          
+    │   │   ) -> TreePlus                                                                                                       
+    │   ├── def _from_file(                                                                                                     
+    │   │       *,                                                                                                              
+    │   │       file_path: Path,                                                                                                
+    │   │       syntax_highlighting: bool = False,                                                                              
+    │   │       tokenizer_name: TokenizerName = TokenizerName.WC,                                                               
+    │   │       max_tokens: int = MAX_TOKENS,                                                                                   
+    │   │       regex_timeout: Optional[float] = None,                                                                          
+    │   │       concise: bool = False,                                                                                          
+    │   │   ) -> TreePlus                                                                                                       
+    │   ├── def _from_url(                                                                                                      
+    │   │       *,                                                                                                              
+    │   │       url: str,                                                                                                       
+    │   │       syntax_highlighting: bool = False,                                                                              
+    │   │       concise: bool = False,                                                                                          
+    │   │   ) -> TreePlus                                                                                                       
+    │   ├── def base_url(url: str, with_path: bool = False) -> str                                                              
+    │   ├── def _from_html_text(contents: str, maybe_url_base: Optional[str] = None) -> TreePlus                                
+    │   ├── def empty_tag_tree(n: str = "?")                                                                                    
+    │   ├── def union_from_element(elem: PageElement) -> Union[Tag, NavigableString]                                            
+    │   ├── def node_index_str_from_tuple(                                                                                      
+    │   │       node_index: Tuple[int, ...],                                                                                    
+    │   │       prefix: str = "(",                                                                                              
+    │   │       suffix: str = ")",                                                                                              
+    │   │       number_color: str = CYBERCYAN,                                                                                  
+    │   │       dot_color: str = GOLD,                                                                                          
+    │   │   ) -> str                                                                                                            
+    │   ├── def _from_soup(                                                                                                     
+    │   │       tag: Union[Tag, NavigableString],                                                                               
+    │   │       tree: Optional[TreePlus] = None,                                                                                
+    │   │       node_index: Tuple[int, ...] = (),                                                                               
+    │   │       maybe_url_base: Optional[str] = None,                                                                           
+    │   │       hrefs: Optional[Dict[str, list]] = None,                                                                        
+    │   │   ) -> Optional[TreePlus]                                                                                             
+    │   ├── def from_hacker_news_articles(                                                                                      
+    │   │       articles: Articles,                                                                                             
+    │   │       depth: int = 0,                                                                                                 
+    │   │       max_depth: int = -1,                                                                                            
+    │   │       title: Union[str, Panel, Text, Table, Markdown, Pretty] = "Hacker News Front Page",                             
+    │   │       parent_num: Tuple[int, ...] = (),                                                                               
+    │   │   ) -> TreePlus                                                                                                       
+    │   ├── def format_link(                                                                                                    
+    │   │       url: str,                                                                                                       
+    │   │       text: str,                                                                                                      
+    │   │       link_color: str = LINK_COLOR,                                                                                   
+    │   │   ) -> str                                                                                                            
+    │   ├── def process_hacker_news_item(                                                                                       
+    │   │       item: dict,                                                                                                     
+    │   │       kids: Articles,                                                                                                 
+    │   │       depth: int,                                                                                                     
+    │   │       max_depth: int,                                                                                                 
+    │   │       parent_num: Tuple[int, ...],                                                                                    
+    │   │       parser: Union[Literal["lxml"], Literal["html.parser"]] = "html.parser",                                         
+    │   │       link_color: str = LINK_COLOR,                                                                                   
+    │   │   ) -> Optional[TreePlus]                                                                                             
+    │   ├── def rich_links_from_soup(                                                                                           
+    │   │       item_soup: BeautifulSoup,                                                                                       
+    │   │       recursive: bool = True,                                                                                         
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def ordered_list_from(ordered_list: Iterable[str]) -> List[str]                                                     
+    │   ├── def _get_lexer(file_path: Path) -> str                                                                              
+    │   └── def _syntax_highlight(                                                                                              
+    │           *,                                                                                                              
+    │           file_path: Path,                                                                                                
+    │           components: List[str],                                                                                          
+    │       ) -> Union[List[Syntax], List[str]]                                                                                 
     ├── 📄 ignore.py (2,342 tokens, 332 lines)
-    │   ├── TODO: incorporate gitignore
-    │   ├── def _is_all_str(x: Any) -> bool
-    │   ├── def can_parse(x) -> bool
-    │   ├── @lru_cache
-    │   │   def parse_ignore(
-    │   │       maybe_ignore_tuple: Optional[Tuple] = None, override: bool = False
-    │   │   ) -> Optional[Tuple]
-    │   ├── @lru_cache
-    │   │   def is_glob(x: str) -> bool
-    │   ├── @lru_cache
-    │   │   def parse_globs(
-    │   │       maybe_globs_tuple: Optional[Tuple] = None,
-    │   │   ) -> Optional[Tuple]
-    │   ├── @dataclass(frozen=True)
-    │   │   class AmortizedGlobs
-    │   ├──     paths: Tuple[Path, ...]
-    │   ├──     globs: Tuple
-    │   ├──     matches: FrozenSet[Path]
-    │   ├── def amortize_globs(
-    │   │       paths: Tuple[Path, ...],
-    │   │       globs: Tuple,
-    │   │   ) -> Optional[AmortizedGlobs]
-    │   └── @lru_cache(maxsize=None)
-    │       def should_ignore(
-    │           path: Path,
-    │           ignore: Optional[Tuple] = DEFAULT_IGNORE,
-    │           globs: Optional[AmortizedGlobs] = None,
-    │       ) -> bool
+    │   ├── TODO: incorporate gitignore                                                                                         
+    │   ├── def _is_all_str(x: Any) -> bool                                                                                     
+    │   ├── def can_parse(x) -> bool                                                                                            
+    │   ├── @lru_cache                                                                                                          
+    │   │   def parse_ignore(                                                                                                   
+    │   │       maybe_ignore_tuple: Optional[Tuple[str]] = None, override: bool = False                                         
+    │   │   ) -> Optional[Tuple[str, ...]]                                                                                      
+    │   ├── @lru_cache                                                                                                          
+    │   │   def is_glob(x: str) -> bool                                                                                         
+    │   ├── @lru_cache                                                                                                          
+    │   │   def parse_globs(                                                                                                    
+    │   │       maybe_globs_tuple: Optional[Tuple[str]] = None,                                                                 
+    │   │   ) -> Optional[Tuple[str]]                                                                                           
+    │   ├── @dataclass(frozen=True)                                                                                             
+    │   │   class AmortizedGlobs                                                                                                
+    │   ├──     paths: Tuple[Path, ...]                                                                                         
+    │   ├──     globs: Tuple[str, ...]                                                                                          
+    │   ├──     matches: FrozenSet[Path]                                                                                        
+    │   ├── def amortize_globs(                                                                                                 
+    │   │       paths: Tuple[Path, ...],                                                                                        
+    │   │       globs: Tuple[str, ...],                                                                                         
+    │   │   ) -> Optional[AmortizedGlobs]                                                                                       
+    │   └── @lru_cache(maxsize=None)                                                                                            
+    │       def should_ignore(                                                                                                  
+    │           path: Path,                                                                                                     
+    │           ignore: Optional[Tuple[str, ...]] = DEFAULT_IGNORE,                                                             
+    │           globs: Optional[AmortizedGlobs] = None,                                                                         
+    │       ) -> bool                                                                                                           
     ├── 📄 isabelle_symbols.py (2,146 tokens, 462 lines)
-    │   ├── @lru_cache
-    │   │   def _replace_symbol(match: re.Match) -> str
-    │   └── def replace_isabelle_symbols(content: str) -> str
-    ├── 📄 parse_file.py (27,036 tokens, 2,955 lines)
-    │   ├── BUG: HTML tree doesn't look awesome (yet)
-    │   ├── TODO: Fix HTML in TreePlus (How?)
-    │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves
-    │   ├── TODO: gather requirements for C namespace visualization
-    │   ├── TODO: update parse_objective_c to avoid fixed unrolling
-    │   ├── TODO: update parse_ocaml to avoid forced unrolling
-    │   ├── TODO: fix parse_apl to avoid forced unrolling
-    │   ├── TODO: fix parse_perl to avoid forced unrolling
-    │   ├── def head(n: int, content: str) -> str
-    │   ├── @lru_cache(maxsize=None)
-    │   │   def read_file(
-    │   │       file_path: str,
-    │   │       raise_exceptions: bool = False,
-    │   │       n_lines: Optional = None,
-    │   │   ) -> str
-    │   ├── def parse_file(
-    │   │       file_path: Union,
-    │   │       content: Optional = None,
-    │   │       regex_timeout: Optional = None,
-    │   │       syntax: bool = False,
-    │   │   ) -> List
-    │   ├── def parse_metal(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_wgsl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def extract_groups(match: regex.Match, named_only: bool = False) -> dict
-    │   ├── def parse_html(content: str) -> List
-    │   ├── def parse_jsonl(content: str) -> List
-    │   ├── def process_tag(tag, components) -> Optional
-    │   ├── def components_from_html(content: str) -> List
-    │   ├── def prettify_tr(component: str) -> str
-    │   ├── def assemble_tensorflow_flag(
-    │   │       flag_type: str, flag: str, description: Optional[List] = None
-    │   │   ) -> str
-    │   ├── def parse_tensorflow_flags(
-    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_rst(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── @lru_cache
-    │   │   def is_binary_string(data: bytes) -> bool
-    │   ├── @lru_cache
-    │   │   def is_binary(file_path: str) -> bool
-    │   ├── def clean_isabelle_text(content: str) -> str
-    │   ├── def parse_isabelle(
-    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_fortran(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def remove_c_comments(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> str
-    │   ├── def parse_ts(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def remove_py_comments(
-    │   │       input_string: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> str
-    │   ├── def remove_docstrings(source, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> str
-    │   ├── def parse_py(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_rb(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_fsharp(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_tcl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_erl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_rs(
-    │   │       content: str,
-    │   │       *,
-    │   │       timeout: float = DEFAULT_REGEX_TIMEOUT,
-    │   │       syntax: bool = False,
-    │   │   ) -> List
-    │   ├── def escape(
-    │   │       markup: str,
-    │   │   ) -> str
-    │   ├──     def escape_backslashes(match: regex.Match) -> str
-    │   ├── def parse_csv(content: str, max_leaves=11) -> List
-    │   ├── def parse_mathematica(
-    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_r(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_zig(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_hs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_lisp(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_capnp(content: str) -> List
-    │   ├── def parse_grpc(content: str) -> List
-    │   ├── def parse_openrpc_json(content: str) -> List
-    │   ├── def parse_json_rpc(content: str) -> List
-    │   ├── def parse_graphql(content: str) -> List
-    │   ├── def format_dependency(name, details)
-    │   ├── def parse_cargo_toml(content: str) -> List
-    │   ├── def parse_pyproject_toml(content: str) -> List
-    │   ├── def parse_lean(
-    │   │       lean_content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_cs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_tex(tex_content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_go(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_swift(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_bash(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_d_dot_ts(
-    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_angular_app_module(
-    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_angular_routes(
-    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_angular_spec(
-    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_environment_ts(
-    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_dot_env(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_requirements_txt(content: str) -> List
-    │   ├── def parse_json_schema(content: str) -> List
-    │   ├── def parse_package_json(content: str) -> List
-    │   ├── def parse_makefile(content: str) -> List
-    │   ├── def parse_sql(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def is_openapi_yml(ymls: Tuple) -> bool
-    │   ├── def is_k8s_yml(ymls: Tuple) -> bool
-    │   ├── def is_ansible_yml(ymls: Tuple) -> bool
-    │   ├── def is_github_yml(ymls: Tuple) -> bool
-    │   ├── def parse_github_yml(ymls: Tuple) -> List
-    │   ├── def parse_k8s(ymls: Tuple) -> List
-    │   ├── def parse_ansible(ymls: Tuple) -> List
-    │   ├── def parse_openapi_yml(ymls: Tuple) -> List
-    │   ├── def parse_yml(content: str) -> List
-    │   ├── def parse_db(db_path: str) -> List
-    │   ├── def dedent_components(
-    │   │       components: List, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_cbl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_java(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_jl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_kt(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_lua(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_objective_c(
-    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT
-    │   │   ) -> List
-    │   ├── def parse_ocaml(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_apl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_perl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_php(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_ps1(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_matlab(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_scala(content: str, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_tf(content: str, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_md(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   ├── def parse_txt(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
-    │   └── def parse_markers(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List
+    │   ├── @lru_cache                                                                                                          
+    │   │   def _replace_symbol(match: re.Match) -> str                                                                         
+    │   └── def replace_isabelle_symbols(content: str) -> str                                                                   
+    ├── 📄 parse_file.py (27,040 tokens, 2,959 lines)
+    │   ├── BUG: HTML tree doesn't look awesome (yet)                                                                           
+    │   ├── TODO: Fix HTML in TreePlus (How?)                                                                                   
+    │   ├── BUG: this repeatedly finds tags, need to avoid repeating ourselves                                                  
+    │   ├── TODO: gather requirements for C namespace visualization                                                             
+    │   ├── TODO: update parse_objective_c to avoid fixed unrolling                                                             
+    │   ├── TODO: update parse_ocaml to avoid forced unrolling                                                                  
+    │   ├── TODO: fix parse_apl to avoid forced unrolling                                                                       
+    │   ├── TODO: fix parse_perl to avoid forced unrolling                                                                      
+    │   ├── def head(n: int, content: str) -> str                                                                               
+    │   ├── @lru_cache(maxsize=None)                                                                                            
+    │   │   def read_file(                                                                                                      
+    │   │       file_path: str,                                                                                                 
+    │   │       raise_exceptions: bool = False,                                                                                 
+    │   │       n_lines: Optional[int] = None,                                                                                  
+    │   │   ) -> str                                                                                                            
+    │   ├── def parse_file(                                                                                                     
+    │   │       file_path: Union[str, Path],                                                                                    
+    │   │       content: Optional[str] = None,                                                                                  
+    │   │       regex_timeout: Optional[float] = None,                                                                          
+    │   │       syntax: bool = False,                                                                                           
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_metal(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                               
+    │   ├── def parse_wgsl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                
+    │   ├── def extract_groups(match: regex.Match, named_only: bool = False) -> dict                                            
+    │   ├── def parse_html(content: str) -> List[str]                                                                           
+    │   ├── def parse_jsonl(content: str) -> List[str]                                                                          
+    │   ├── def process_tag(tag, components) -> Optional[str]                                                                   
+    │   ├── def components_from_html(content: str) -> List[str]                                                                 
+    │   ├── def prettify_tr(component: str) -> str                                                                              
+    │   ├── def assemble_tensorflow_flag(                                                                                       
+    │   │       flag_type: str, flag: str, description: Optional[List[str]] = None                                              
+    │   │   ) -> str                                                                                                            
+    │   ├── def parse_tensorflow_flags(                                                                                         
+    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                         
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_rst(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   ├── def parse_c(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                   
+    │   ├── @lru_cache                                                                                                          
+    │   │   def is_binary_string(data: bytes) -> bool                                                                           
+    │   ├── @lru_cache                                                                                                          
+    │   │   def is_binary(file_path: str) -> bool                                                                               
+    │   ├── def clean_isabelle_text(content: str) -> str                                                                        
+    │   ├── def parse_isabelle(                                                                                                 
+    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                         
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_fortran(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                             
+    │   ├── def remove_c_comments(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> str                               
+    │   ├── def parse_ts(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                  
+    │   ├── def remove_py_comments(                                                                                             
+    │   │       input_string: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                    
+    │   │   ) -> str                                                                                                            
+    │   ├── def remove_docstrings(source, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> str                                     
+    │   ├── def parse_py(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                  
+    │   ├── def parse_rb(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                  
+    │   ├── def parse_fsharp(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                              
+    │   ├── def parse_tcl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   ├── def parse_erl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   ├── def parse_rs(                                                                                                       
+    │   │       content: str,                                                                                                   
+    │   │       *,                                                                                                              
+    │   │       timeout: float = DEFAULT_REGEX_TIMEOUT,                                                                         
+    │   │       syntax: bool = False,                                                                                           
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def escape(                                                                                                         
+    │   │       markup: str,                                                                                                    
+    │   │   ) -> str                                                                                                            
+    │   ├──     def escape_backslashes(match: regex.Match) -> str                                                               
+    │   ├── def parse_csv(content: str, max_leaves=11) -> List[str]                                                             
+    │   ├── def parse_mathematica(                                                                                              
+    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                         
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_r(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                   
+    │   ├── def parse_zig(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   ├── def parse_hs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                  
+    │   ├── def parse_lisp(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                
+    │   ├── def parse_capnp(content: str) -> List[str]                                                                          
+    │   ├── def parse_grpc(content: str) -> List[str]                                                                           
+    │   ├── def parse_openrpc_json(content: str) -> List[str]                                                                   
+    │   ├── def parse_json_rpc(content: str) -> List[str]                                                                       
+    │   ├── def parse_graphql(content: str) -> List[str]                                                                        
+    │   ├── def format_dependency(name, details)                                                                                
+    │   ├── def parse_cargo_toml(content: str) -> List[str]                                                                     
+    │   ├── def parse_pyproject_toml(content: str) -> List[str]                                                                 
+    │   ├── def parse_lean(                                                                                                     
+    │   │       lean_content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                    
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_cs(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                  
+    │   ├── def parse_tex(tex_content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                             
+    │   ├── def parse_go(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                  
+    │   ├── def parse_swift(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                               
+    │   ├── def parse_bash(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                
+    │   ├── def parse_d_dot_ts(                                                                                                 
+    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                         
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_angular_app_module(                                                                                       
+    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                         
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_angular_routes(                                                                                           
+    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                         
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_angular_spec(                                                                                             
+    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                         
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_environment_ts(                                                                                           
+    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                         
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_dot_env(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                             
+    │   ├── def parse_requirements_txt(content: str) -> List[str]                                                               
+    │   ├── def parse_json_schema(content: str) -> List[str]                                                                    
+    │   ├── def parse_package_json(content: str) -> List[str]                                                                   
+    │   ├── def parse_makefile(content: str) -> List[str]                                                                       
+    │   ├── def parse_sql(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   ├── def is_openapi_yml(ymls: Tuple[dict]) -> bool                                                                       
+    │   ├── def is_k8s_yml(ymls: Tuple[dict]) -> bool                                                                           
+    │   ├── def is_ansible_yml(ymls: Tuple[dict]) -> bool                                                                       
+    │   ├── def is_github_yml(ymls: Tuple[dict]) -> bool                                                                        
+    │   ├── def parse_github_yml(ymls: Tuple[dict]) -> List[str]                                                                
+    │   ├── def parse_k8s(ymls: Tuple[dict]) -> List[str]                                                                       
+    │   ├── def parse_ansible(ymls: Tuple[dict]) -> List[str]                                                                   
+    │   ├── def parse_openapi_yml(ymls: Tuple[dict]) -> List[str]                                                               
+    │   ├── def parse_yml(content: str) -> List[str]                                                                            
+    │   ├── def parse_db(db_path: str) -> List[str]                                                                             
+    │   ├── def dedent_components(                                                                                              
+    │   │       components: List[str], *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_cbl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   ├── def parse_java(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                
+    │   ├── def parse_jl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                  
+    │   ├── def parse_kt(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                  
+    │   ├── def parse_lua(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   ├── def parse_objective_c(                                                                                              
+    │   │       content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT                                                         
+    │   │   ) -> List[str]                                                                                                      
+    │   ├── def parse_ocaml(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                               
+    │   ├── def parse_apl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   ├── def parse_perl(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                
+    │   ├── def parse_php(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   ├── def parse_ps1(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   ├── def parse_matlab(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                              
+    │   ├── def parse_scala(content: str, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                  
+    │   ├── def parse_tf(content: str, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                     
+    │   ├── def parse_md(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                  
+    │   ├── def parse_txt(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                                 
+    │   └── def parse_markers(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]                             
     ├── 📁 scripts (1 folder, 1 file) 
     │   └── 📄 alias_tree_plus.sh (241 tokens, 30 lines)
-    │       ├── add_alias()
-    │       └── create_conda_env()
+    │       ├── add_alias()                                                                                                     
+    │       └── create_conda_env()                                                                                              
     ├── 📄 version.py (12 tokens, 1 line)
-    │   └── __version__ = "1.0.78"
+    │   └── __version__ = "1.0.79"                                                                                              
     └── 📄 web.py (2,409 tokens, 321 lines)
-        ├── TODO: re-enable tree plus web actions
-        ├── NOTE: no point in the answers since there's no content
-        ├── def create_url(kind: Action, query: str) -> str
-        ├── def create_link(kind: Action, query: str) -> str
-        ├── def create_wikipedia_url(subterm: str) -> str
-        ├── def create_wikipedia_search_url(subterm: str) -> str
-        ├── def create_google_search_url(subterm: str) -> str
-        ├── def create_stack_overflow_search_url(subterm: str) -> str
-        ├── def create_wikipedia_search_link(
-        │       subterm: str,
-        │       prefix: str = "",
-        │       suffix: str = "",
-        │       link_style: str = LINK_STYLE,
-        │   ) -> str
-        ├── def create_google_search_link(
-        │       subterm: str,
-        │       prefix: str = "",
-        │       suffix: str = "",
-        │       link_style: str = LINK_STYLE,
-        │   ) -> str
-        ├── def create_stack_overflow_search_link(
-        │       subterm: str,
-        │       prefix: str = "",
-        │       suffix: str = "",
-        │       link_style: str = LINK_STYLE,
-        │   ) -> str
-        ├── def search_stack_overflow(
-        │       *,
-        │       titled: Optional = None,
-        │       tagged: Optional = None,
-        │       answered: Optional = True,
-        │   ) -> Tuple[Tuple[dict, Tuple], ...]
-        ├── def table_from_df(
-        │       results: Tuple[Dict, ...],
-        │       title: Optional = None,
-        │       show_lines: bool = True,
-        │   ) -> Table
-        ├── def articles_from_hacker_news(
-        │       max_depth: int = 2,
-        │       current_depth: int = 0,
-        │       n_articles: int = 3,
-        │       sleep_time: float = 0.00,
-        │   ) -> Articles
-        ├── def hacker_news_article_from_id(
-        │       article_id: int,
-        │       depth: int,
-        │       current_depth: int,
-        │       n: int,
-        │       sleep_time: float,
-        │   ) -> Tuple[HList, Tuple[HList, ...]]
-        └── def fetch_kids(
-                article_id: int,
-                kid_ids: List,
-                depth: int,
-                current_depth: int,
-                n: int,
-                sleep_time: float,
-            ) -> Tuple[HList, ...]
+        ├── TODO: re-enable tree plus web actions                                                                               
+        ├── NOTE: no point in the answers since there's no content                                                              
+        ├── def create_url(kind: Action, query: str) -> str                                                                     
+        ├── def create_link(kind: Action, query: str) -> str                                                                    
+        ├── def create_wikipedia_url(subterm: str) -> str                                                                       
+        ├── def create_wikipedia_search_url(subterm: str) -> str                                                                
+        ├── def create_google_search_url(subterm: str) -> str                                                                   
+        ├── def create_stack_overflow_search_url(subterm: str) -> str                                                           
+        ├── def create_wikipedia_search_link(                                                                                   
+        │       subterm: str,                                                                                                   
+        │       prefix: str = "",                                                                                               
+        │       suffix: str = "",                                                                                               
+        │       link_style: str = LINK_STYLE,                                                                                   
+        │   ) -> str                                                                                                            
+        ├── def create_google_search_link(                                                                                      
+        │       subterm: str,                                                                                                   
+        │       prefix: str = "",                                                                                               
+        │       suffix: str = "",                                                                                               
+        │       link_style: str = LINK_STYLE,                                                                                   
+        │   ) -> str                                                                                                            
+        ├── def create_stack_overflow_search_link(                                                                              
+        │       subterm: str,                                                                                                   
+        │       prefix: str = "",                                                                                               
+        │       suffix: str = "",                                                                                               
+        │       link_style: str = LINK_STYLE,                                                                                   
+        │   ) -> str                                                                                                            
+        ├── def search_stack_overflow(                                                                                          
+        │       *,                                                                                                              
+        │       titled: Optional[str] = None,                                                                                   
+        │       tagged: Optional[str] = None,                                                                                   
+        │       answered: Optional[bool] = True,                                                                                
+        │   ) -> Tuple[Tuple[dict, Tuple[dict, ...]], ...]                                                                      
+        ├── def table_from_df(                                                                                                  
+        │       results: Tuple[Dict[str, str], ...],                                                                            
+        │       title: Optional[str] = None,                                                                                    
+        │       show_lines: bool = True,                                                                                        
+        │   ) -> Table                                                                                                          
+        ├── def articles_from_hacker_news(                                                                                      
+        │       max_depth: int = 2,                                                                                             
+        │       current_depth: int = 0,                                                                                         
+        │       n_articles: int = 3,                                                                                            
+        │       sleep_time: float = 0.00,                                                                                       
+        │   ) -> Articles                                                                                                       
+        ├── def hacker_news_article_from_id(                                                                                    
+        │       article_id: int,                                                                                                
+        │       depth: int,                                                                                                     
+        │       current_depth: int,                                                                                             
+        │       n: int,                                                                                                         
+        │       sleep_time: float,                                                                                              
+        │   ) -> Tuple[HList, Tuple[HList, ...]]                                                                                
+        └── def fetch_kids(                                                                                                     
+                article_id: int,                                                                                                
+                kid_ids: List[int],                                                                                             
+                depth: int,                                                                                                     
+                current_depth: int,                                                                                             
+                n: int,                                                                                                         
+                sleep_time: float,                                                                                              
+            ) -> Tuple[HList, ...]                                                                                              
 
-tree_plus v(1.0.78) ignore=('tests',) globs=() syntax=False paths=()
-7 folder(s), 28 file(s), 13,462 line(s), 118,950 token(s) in 0.22 second(s).
+tree_plus v(1.0.79) ignore=('tests',) globs=() syntax=True paths=()
+7 folder(s), 28 file(s), 13,470 line(s), 118,975 token(s) in 0.49 second(s).
 
 ```
 <!-- t1-end -->
@@ -996,7 +996,7 @@ python -m tree_plus_cli -s -c -i group_todo tests/more_languages
 │   ├── 📄 mathematica_test.nb (133 tokens, 21 lines)
 │   ├── 📄 matlab_test.m (48 tokens, 12 lines)
 │   ├── 📄 RTest.R (367 tokens, 46 lines)
-│   ├── 📄 rust_test.rs (1,248 tokens, 239 lines)
+│   ├── 📄 rust_test.rs (1,368 tokens, 259 lines)
 │   ├── 📄 test.zig (397 tokens, 60 lines)
 │   ├── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │   ├── 📄 test_tcl_tk.tcl (54 tokens, 16 lines)
@@ -1048,8 +1048,8 @@ python -m tree_plus_cli -s -c -i group_todo tests/more_languages
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
 
-tree_plus v(1.0.78) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
-9 folder(s), 87 file(s), 7,366 line(s), 69,533 token(s) in 0.14 second(s).
+tree_plus v(1.0.79) ignore=('group_todo',) globs=() concise=True paths=('tests/more_languages',)
+9 folder(s), 87 file(s), 7,386 line(s), 69,653 token(s) in 0.14 second(s).
 
 ```
 <!-- t6-end -->
@@ -1060,22 +1060,22 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 📁 more_languages (9 folders, 87 files) 
 ├── 📁 group1 (1 folder, 11 files) 
 │   ├── 📄 addamt.cobol (441 tokens, 40 lines)
-│   │   ├── IDENTIFICATION DIVISION.
-│   │   ├── PROGRAM-ID.
-│   │   │              ADDAMT.
-│   │   ├── DATA DIVISION.
-│   │   ├── WORKING-STORAGE SECTION.
-│   │   ├── 01  KEYED-INPUT.
-│   │   ├──     05  CUST-NO-IN.
-│   │   ├──     05  AMT1-IN.
-│   │   ├──     05  AMT2-IN.
-│   │   ├──     05  AMT3-IN.
-│   │   ├── 01  DISPLAYED-OUTPUT.
-│   │   ├──     05  CUST-NO-OUT.
-│   │   ├──     05  TOTAL-OUT.
-│   │   ├── 01  MORE-DATA.
-│   │   ├── PROCEDURE DIVISION.
-│   │   └── 100-MAIN.
+│   │   ├── IDENTIFICATION DIVISION.                                                                                            
+│   │   ├── PROGRAM-ID.                                                                                                         
+│   │   │              ADDAMT.                                                                                                  
+│   │   ├── DATA DIVISION.                                                                                                      
+│   │   ├── WORKING-STORAGE SECTION.                                                                                            
+│   │   ├── 01  KEYED-INPUT.                                                                                                    
+│   │   ├──     05  CUST-NO-IN.                                                                                                 
+│   │   ├──     05  AMT1-IN.                                                                                                    
+│   │   ├──     05  AMT2-IN.                                                                                                    
+│   │   ├──     05  AMT3-IN.                                                                                                    
+│   │   ├── 01  DISPLAYED-OUTPUT.                                                                                               
+│   │   ├──     05  CUST-NO-OUT.                                                                                                
+│   │   ├──     05  TOTAL-OUT.                                                                                                  
+│   │   ├── 01  MORE-DATA.                                                                                                      
+│   │   ├── PROCEDURE DIVISION.                                                                                                 
+│   │   └── 100-MAIN.                                                                                                           
 │   ├── 📄 CUSTOMER-INVOICE.CBL (412 tokens, 60 lines)
 │   │   ├── IDENTIFICATION DIVISION.
 │   │   ├── PROGRAM-ID. CUSTOMER-INVOICE.
@@ -1113,173 +1113,173 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├── 1100-UPDATE-CUSTOMER-BALANCE.
 │   │   └── END PROGRAM CUSTOMER-INVOICE.
 │   ├── 📄 JavaTest.java (578 tokens, 86 lines)
-│   │   ├── abstract class LivingBeing
-│   │   ├──     abstract void breathe()
-│   │   ├── interface Communicator
-│   │   ├──     String communicate()
-│   │   ├── @Log
-│   │   ├── @Getter
-│   │   ├── @Setter
-│   │   ├── class Person extends LivingBeing implements Communicator
-│   │   ├──     Person(String name, int age)
-│   │   ├──     @Override
-│   │   ├──     void breathe()
-│   │   ├──     @Override
-│   │   ├──     public String communicate()
-│   │   ├──     void greet()
-│   │   ├──     String personalizedGreeting(String greeting, Optional<Boolean> includeAge)
-│   │   ├── @Singleton
-│   │   ├── @RestController
-│   │   ├── @SpringBootApplication
-│   │   ├── public class Example
-│   │   ├──     @Inject
-│   │   ├──     public Example(Person person)
-│   │   ├──     @RequestMapping("/greet")
-│   │   ├──     String home(@RequestParam(value = "name", defaultValue = "World") String name,
-│   │   │                   @RequestParam(value = "age", defaultValue = "30") int age)
-│   │   └──     public static void main(String[] args)
+│   │   ├── abstract class LivingBeing                                                                                          
+│   │   ├──     abstract void breathe()                                                                                         
+│   │   ├── interface Communicator                                                                                              
+│   │   ├──     String communicate()                                                                                            
+│   │   ├── @Log                                                                                                                
+│   │   ├── @Getter                                                                                                             
+│   │   ├── @Setter                                                                                                             
+│   │   ├── class Person extends LivingBeing implements Communicator                                                            
+│   │   ├──     Person(String name, int age)                                                                                    
+│   │   ├──     @Override                                                                                                       
+│   │   ├──     void breathe()                                                                                                  
+│   │   ├──     @Override                                                                                                       
+│   │   ├──     public String communicate()                                                                                     
+│   │   ├──     void greet()                                                                                                    
+│   │   ├──     String personalizedGreeting(String greeting, Optional<Boolean> includeAge)                                      
+│   │   ├── @Singleton                                                                                                          
+│   │   ├── @RestController                                                                                                     
+│   │   ├── @SpringBootApplication                                                                                              
+│   │   ├── public class Example                                                                                                
+│   │   ├──     @Inject                                                                                                         
+│   │   ├──     public Example(Person person)                                                                                   
+│   │   ├──     @RequestMapping("/greet")                                                                                       
+│   │   ├──     String home(@RequestParam(value = "name", defaultValue = "World") String name,                                  
+│   │   │                   @RequestParam(value = "age", defaultValue = "30") int age)                                          
+│   │   └──     public static void main(String[] args)                                                                          
 │   ├── 📄 JuliaTest.jl (381 tokens, 63 lines)
-│   │   ├── module JuliaTest_EdgeCase
-│   │   ├── struct Location
-│   │   │       name::String 
-│   │   │       lat::Float32
-│   │   │       lon::Float32
-│   │   │   end
-│   │   ├── mutable struct mPerson
-│   │   │       name::String
-│   │   │       age::Int
-│   │   │   end
-│   │   ├── Base.@kwdef mutable struct Param
-│   │   │       Δt::Float64 = 0.1
-│   │   │       n::Int64
-│   │   │       m::Int64
-│   │   │   end
-│   │   ├──     sic(x,y)
-│   │   ├── welcome(l::Location)
-│   │   ├── ∑(α, Ω)
-│   │   ├── function noob()
-│   │   │   end
-│   │   ├── function ye_olde(hello::String, world::Location)
-│   │   │   end
-│   │   ├── function multiline_greet(
-│   │   │           p::mPerson, 
-│   │   │           greeting::String
-│   │   │       )
-│   │   │   end
-│   │   ├── function julia_is_awesome(prob::DiffEqBase.AbstractDAEProblem{uType, duType, tType,
-│   │   │           isinplace};
-│   │   │       kwargs...) where {uType, duType, tType, isinplace}
-│   │   │   end
-│   │   └── end
+│   │   ├── module JuliaTest_EdgeCase                                                                                           
+│   │   ├── struct Location                                                                                                     
+│   │   │       name::String                                                                                                    
+│   │   │       lat::Float32                                                                                                    
+│   │   │       lon::Float32                                                                                                    
+│   │   │   end                                                                                                                 
+│   │   ├── mutable struct mPerson                                                                                              
+│   │   │       name::String                                                                                                    
+│   │   │       age::Int                                                                                                        
+│   │   │   end                                                                                                                 
+│   │   ├── Base.@kwdef mutable struct Param                                                                                    
+│   │   │       Δt::Float64 = 0.1                                                                                               
+│   │   │       n::Int64                                                                                                        
+│   │   │       m::Int64                                                                                                        
+│   │   │   end                                                                                                                 
+│   │   ├──     sic(x,y)                                                                                                        
+│   │   ├── welcome(l::Location)                                                                                                
+│   │   ├── ∑(α, Ω)                                                                                                             
+│   │   ├── function noob()                                                                                                     
+│   │   │   end                                                                                                                 
+│   │   ├── function ye_olde(hello::String, world::Location)                                                                    
+│   │   │   end                                                                                                                 
+│   │   ├── function multiline_greet(                                                                                           
+│   │   │           p::mPerson,                                                                                                 
+│   │   │           greeting::String                                                                                            
+│   │   │       )                                                                                                               
+│   │   │   end                                                                                                                 
+│   │   ├── function julia_is_awesome(prob::DiffEqBase.AbstractDAEProblem{uType, duType, tType,                                 
+│   │   │           isinplace};                                                                                                 
+│   │   │       kwargs...) where {uType, duType, tType, isinplace}                                                              
+│   │   │   end                                                                                                                 
+│   │   └── end                                                                                                                 
 │   ├── 📄 KotlinTest.kt (974 tokens, 171 lines)
-│   │   ├── data class Person(val name: String)
-│   │   ├── fun greet(person: Person)
-│   │   ├── fun <T> processItems(items: List<T>, processor: (T) -> Unit)
-│   │   ├── interface Source<out T>
-│   │   ├──     fun nextT(): T
-│   │   ├── fun MutableList<Int>.swap(index1: Int, index2: Int)
-│   │   ├── fun Any?.toString(): String
-│   │   ├── tailrec fun findFixPoint(x: Double = 1.0): Double
-│   │   ├── class GenericRepository<T>
-│   │   ├──     fun getItem(id: Int): T?
-│   │   ├── sealed interface Error
-│   │   ├── sealed class IOError(): Error
-│   │   ├── object Runner
-│   │   ├──     inline fun <reified S: SomeClass<T>, T> run() : T
-│   │   ├── infix fun Int.shl(x: Int): Int
-│   │   ├── class MyStringCollection
-│   │   ├──     infix fun add(s: String)
-│   │   ├──     fun build()
-│   │   ├── open class Base(p: Int)
-│   │   ├── class Derived(p: Int) : Base(p)
-│   │   ├── open class Shape
-│   │   ├──     open fun draw()
-│   │   ├──     fun fill()
-│   │   ├──     open fun edge(case: Int)
-│   │   ├── interface Thingy
-│   │   ├──     fun edge()
-│   │   ├── class Circle() : Shape(), Thingy
-│   │   ├──     override fun draw()
-│   │   ├──     final override fun edge(case: Int)
-│   │   ├── interface Base
-│   │   ├──     fun print()
-│   │   ├── class BaseImpl(val x: Int) : Base
-│   │   ├──     override fun print()
-│   │   ├── internal class Derived(b: Base) : Base by b
-│   │   ├── class Person constructor(firstName: String)
-│   │   ├── class People(
-│   │   │       firstNames: Array<String>,
-│   │   │       ages: Array<Int>(42),
-│   │   │   )
-│   │   ├──     fun edgeCases(): Boolean
-│   │   ├── class Alien public @Inject constructor(
-│   │   │       val firstName: String,
-│   │   │       val lastName: String,
-│   │   │       var age: Int,
-│   │   │       val pets: MutableList<Pet> = mutableListOf(),
-│   │   │   )
-│   │   ├──     fun objectOriented(): String
-│   │   ├──  enum class IntArithmetics : BinaryOperator<Int>, IntBinaryOperator
-│   │   ├──     PLUS {
-│   │   │           override fun apply(t: Int, u: Int): Int
-│   │   ├──     TIMES {
-│   │   │           override fun apply(t: Int, u: Int): Int
-│   │   ├──     override fun applyAsInt(t: Int, u: Int)
-│   │   ├── fun reformat(
-│   │   │       str: String,
-│   │   │       normalizeCase: Boolean = true,
-│   │   │       upperCaseFirstLetter: Boolean = true,
-│   │   │       divideByCamelHumps: Boolean = false,
-│   │   │       wordSeparator: Char = ' ',
-│   │   │   )
-│   │   ├── operator fun Point.unaryMinus()
-│   │   ├── abstract class Polygon
-│   │   └──     abstract fun draw()
+│   │   ├── data class Person(val name: String)                                                                                 
+│   │   ├── fun greet(person: Person)                                                                                           
+│   │   ├── fun <T> processItems(items: List<T>, processor: (T) -> Unit)                                                        
+│   │   ├── interface Source<out T>                                                                                             
+│   │   ├──     fun nextT(): T                                                                                                  
+│   │   ├── fun MutableList<Int>.swap(index1: Int, index2: Int)                                                                 
+│   │   ├── fun Any?.toString(): String                                                                                         
+│   │   ├── tailrec fun findFixPoint(x: Double = 1.0): Double                                                                   
+│   │   ├── class GenericRepository<T>                                                                                          
+│   │   ├──     fun getItem(id: Int): T?                                                                                        
+│   │   ├── sealed interface Error                                                                                              
+│   │   ├── sealed class IOError(): Error                                                                                       
+│   │   ├── object Runner                                                                                                       
+│   │   ├──     inline fun <reified S: SomeClass<T>, T> run() : T                                                               
+│   │   ├── infix fun Int.shl(x: Int): Int                                                                                      
+│   │   ├── class MyStringCollection                                                                                            
+│   │   ├──     infix fun add(s: String)                                                                                        
+│   │   ├──     fun build()                                                                                                     
+│   │   ├── open class Base(p: Int)                                                                                             
+│   │   ├── class Derived(p: Int) : Base(p)                                                                                     
+│   │   ├── open class Shape                                                                                                    
+│   │   ├──     open fun draw()                                                                                                 
+│   │   ├──     fun fill()                                                                                                      
+│   │   ├──     open fun edge(case: Int)                                                                                        
+│   │   ├── interface Thingy                                                                                                    
+│   │   ├──     fun edge()                                                                                                      
+│   │   ├── class Circle() : Shape(), Thingy                                                                                    
+│   │   ├──     override fun draw()                                                                                             
+│   │   ├──     final override fun edge(case: Int)                                                                              
+│   │   ├── interface Base                                                                                                      
+│   │   ├──     fun print()                                                                                                     
+│   │   ├── class BaseImpl(val x: Int) : Base                                                                                   
+│   │   ├──     override fun print()                                                                                            
+│   │   ├── internal class Derived(b: Base) : Base by b                                                                         
+│   │   ├── class Person constructor(firstName: String)                                                                         
+│   │   ├── class People(                                                                                                       
+│   │   │       firstNames: Array<String>,                                                                                      
+│   │   │       ages: Array<Int>(42),                                                                                           
+│   │   │   )                                                                                                                   
+│   │   ├──     fun edgeCases(): Boolean                                                                                        
+│   │   ├── class Alien public @Inject constructor(                                                                             
+│   │   │       val firstName: String,                                                                                          
+│   │   │       val lastName: String,                                                                                           
+│   │   │       var age: Int,                                                                                                   
+│   │   │       val pets: MutableList<Pet> = mutableListOf(),                                                                   
+│   │   │   )                                                                                                                   
+│   │   ├──     fun objectOriented(): String                                                                                    
+│   │   ├──  enum class IntArithmetics : BinaryOperator<Int>, IntBinaryOperator                                                 
+│   │   ├──     PLUS {                                                                                                          
+│   │   │           override fun apply(t: Int, u: Int): Int                                                                     
+│   │   ├──     TIMES {                                                                                                         
+│   │   │           override fun apply(t: Int, u: Int): Int                                                                     
+│   │   ├──     override fun applyAsInt(t: Int, u: Int)                                                                         
+│   │   ├── fun reformat(                                                                                                       
+│   │   │       str: String,                                                                                                    
+│   │   │       normalizeCase: Boolean = true,                                                                                  
+│   │   │       upperCaseFirstLetter: Boolean = true,                                                                           
+│   │   │       divideByCamelHumps: Boolean = false,                                                                            
+│   │   │       wordSeparator: Char = ' ',                                                                                      
+│   │   │   )                                                                                                                   
+│   │   ├── operator fun Point.unaryMinus()                                                                                     
+│   │   ├── abstract class Polygon                                                                                              
+│   │   └──     abstract fun draw()                                                                                             
 │   ├── 📄 lesson.cbl (635 tokens, 78 lines)
-│   │   ├── IDENTIFICATION DIVISION.
-│   │   ├── PROGRAM-ID.    CBL0002.
-│   │   ├── AUTHOR.        Otto B. Fun.
-│   │   ├── ENVIRONMENT DIVISION.
-│   │   ├── INPUT-OUTPUT SECTION.
-│   │   ├── FILE-CONTROL.
-│   │   ├──     SELECT PRINT-LINE.
-│   │   ├──     SELECT ACCT-REC.
-│   │   ├── DATA DIVISION.
-│   │   ├── FILE SECTION.
-│   │   ├── FD  PRINT-LINE.
-│   │   ├── 01  PRINT-REC.
-│   │   ├──     05  ACCT-NO-O.
-│   │   ├──     05  ACCT-LIMIT-O.
-│   │   ├──     05  ACCT-BALANCE-O.
-│   │   ├──     05  LAST-NAME-O.
-│   │   ├──     05  FIRST-NAME-O.
-│   │   ├──     05  COMMENTS-O.
-│   │   ├── FD  ACCT-REC.
-│   │   ├── 01  ACCT-FIELDS.
-│   │   ├──     05  ACCT-NO.
-│   │   ├──     05  ACCT-LIMIT.
-│   │   ├──     05  ACCT-BALANCE.
-│   │   ├──     05  LAST-NAME.
-│   │   ├──     05  FIRST-NAME.
-│   │   ├──     05  CLIENT-ADDR.
-│   │   ├──         10  STREET-ADDR.
-│   │   ├──         10  CITY-COUNTY.
-│   │   ├──         10  USA-STATE.
-│   │   ├──     05  RESERVED.
-│   │   ├──     05  COMMENTS.
-│   │   ├── WORKING-STORAGE SECTION.
-│   │   ├── 01 FLAGS.
-│   │   ├──   05 LASTREC.
-│   │   ├── PROCEDURE DIVISION.
-│   │   ├── OPEN-FILES.
-│   │   ├── READ-NEXT-RECORD.
-│   │   ├── CLOSE-STOP.
-│   │   ├── READ-RECORD.
-│   │   └── WRITE-RECORD.
+│   │   ├── IDENTIFICATION DIVISION.                                                                                            
+│   │   ├── PROGRAM-ID.    CBL0002.                                                                                             
+│   │   ├── AUTHOR.        Otto B. Fun.                                                                                         
+│   │   ├── ENVIRONMENT DIVISION.                                                                                               
+│   │   ├── INPUT-OUTPUT SECTION.                                                                                               
+│   │   ├── FILE-CONTROL.                                                                                                       
+│   │   ├──     SELECT PRINT-LINE.                                                                                              
+│   │   ├──     SELECT ACCT-REC.                                                                                                
+│   │   ├── DATA DIVISION.                                                                                                      
+│   │   ├── FILE SECTION.                                                                                                       
+│   │   ├── FD  PRINT-LINE.                                                                                                     
+│   │   ├── 01  PRINT-REC.                                                                                                      
+│   │   ├──     05  ACCT-NO-O.                                                                                                  
+│   │   ├──     05  ACCT-LIMIT-O.                                                                                               
+│   │   ├──     05  ACCT-BALANCE-O.                                                                                             
+│   │   ├──     05  LAST-NAME-O.                                                                                                
+│   │   ├──     05  FIRST-NAME-O.                                                                                               
+│   │   ├──     05  COMMENTS-O.                                                                                                 
+│   │   ├── FD  ACCT-REC.                                                                                                       
+│   │   ├── 01  ACCT-FIELDS.                                                                                                    
+│   │   ├──     05  ACCT-NO.                                                                                                    
+│   │   ├──     05  ACCT-LIMIT.                                                                                                 
+│   │   ├──     05  ACCT-BALANCE.                                                                                               
+│   │   ├──     05  LAST-NAME.                                                                                                  
+│   │   ├──     05  FIRST-NAME.                                                                                                 
+│   │   ├──     05  CLIENT-ADDR.                                                                                                
+│   │   ├──         10  STREET-ADDR.                                                                                            
+│   │   ├──         10  CITY-COUNTY.                                                                                            
+│   │   ├──         10  USA-STATE.                                                                                              
+│   │   ├──     05  RESERVED.                                                                                                   
+│   │   ├──     05  COMMENTS.                                                                                                   
+│   │   ├── WORKING-STORAGE SECTION.                                                                                            
+│   │   ├── 01 FLAGS.                                                                                                           
+│   │   ├──   05 LASTREC.                                                                                                       
+│   │   ├── PROCEDURE DIVISION.                                                                                                 
+│   │   ├── OPEN-FILES.                                                                                                         
+│   │   ├── READ-NEXT-RECORD.                                                                                                   
+│   │   ├── CLOSE-STOP.                                                                                                         
+│   │   ├── READ-RECORD.                                                                                                        
+│   │   └── WRITE-RECORD.                                                                                                       
 │   ├── 📄 LuaTest.lua (83 tokens, 16 lines)
-│   │   ├── function HelloWorld.new
-│   │   ├── function HelloWorld.greet
-│   │   └── function say_hello
+│   │   ├── function HelloWorld.new                                                                                             
+│   │   ├── function HelloWorld.greet                                                                                           
+│   │   └── function say_hello                                                                                                  
 │   ├── 📄 ObjectiveCTest.m (62 tokens, 16 lines)
 │   │   ├── @interface HelloWorld
 │   │   ├── @interface HelloWorld -> (void) sayHello
@@ -1292,270 +1292,270 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├── class hello -> method say_hello
 │   │   └── let main ()
 │   ├── 📄 test.js (757 tokens, 154 lines)
-│   │   ├── class MyClass
-│   │   ├──   myMethod()
-│   │   ├──   async asyncMethod(a, b)
-│   │   ├──   methodWithDefaultParameters(a = 5, b = 10)
-│   │   ├──   multilineMethod(
-│   │   │       c,
-│   │   │       d
-│   │   │     )
-│   │   ├──   multilineMethodWithDefaults(
-│   │   │       t = "tree",
-│   │   │       p = "plus"
-│   │   │     )
-│   │   ├── function myFunction(param1, param2)
-│   │   ├── function multilineFunction(
-│   │   │     param1,
-│   │   │     param2
-│   │   │   )
-│   │   ├── const arrowFunction = () =>
-│   │   ├── const parametricArrow = (a, b) =>
-│   │   ├── function ()
-│   │   ├── function outerFunction(outerParam)
-│   │   ├──   function innerFunction(innerParam)
-│   │   ├──   innerFunction("inner")
-│   │   ├── const myObject = {
-│   │   ├──   myMethod: function (stuff)
-│   │   ├── let myArrowObject = {
-│   │   ├──   myArrow: ({
-│   │   │       a,
-│   │   │       b,
-│   │   │       c,
-│   │   │     }) =>
-│   │   ├── const myAsyncArrowFunction = async () =>
-│   │   ├── function functionWithRestParameters(...args)
-│   │   ├── const namedFunctionExpression = function myNamedFunction()
-│   │   ├── const multilineArrowFunction = (
-│   │   │     a,
-│   │   │     b
-│   │   │   ) =>
-│   │   ├── function functionReturningFunction()
-│   │   ├──   return function ()
-│   │   ├── function destructuringOnMultipleLines({
-│   │   │     a,
-│   │   │     b,
-│   │   │   })
-│   │   ├── const arrowFunctionWithDestructuring = ({ a, b }) =>
-│   │   ├── const multilineDestructuringArrow = ({
-│   │   │     a,
-│   │   │     b,
-│   │   │   }) =>
-│   │   ├── async function asyncFunctionWithErrorHandling()
-│   │   ├── class Car
-│   │   ├──   constructor(brand)
-│   │   ├──   present()
-│   │   ├── class Model extends Car
-│   │   ├──   constructor(brand, mod)
-│   │   ├──     super(brand)
-│   │   └──   show()
+│   │   ├── class MyClass                                                                                                       
+│   │   ├──   myMethod()                                                                                                        
+│   │   ├──   async asyncMethod(a, b)                                                                                           
+│   │   ├──   methodWithDefaultParameters(a = 5, b = 10)                                                                        
+│   │   ├──   multilineMethod(                                                                                                  
+│   │   │       c,                                                                                                              
+│   │   │       d                                                                                                               
+│   │   │     )                                                                                                                 
+│   │   ├──   multilineMethodWithDefaults(                                                                                      
+│   │   │       t = "tree",                                                                                                     
+│   │   │       p = "plus"                                                                                                      
+│   │   │     )                                                                                                                 
+│   │   ├── function myFunction(param1, param2)                                                                                 
+│   │   ├── function multilineFunction(                                                                                         
+│   │   │     param1,                                                                                                           
+│   │   │     param2                                                                                                            
+│   │   │   )                                                                                                                   
+│   │   ├── const arrowFunction = () =>                                                                                         
+│   │   ├── const parametricArrow = (a, b) =>                                                                                   
+│   │   ├── function ()                                                                                                         
+│   │   ├── function outerFunction(outerParam)                                                                                  
+│   │   ├──   function innerFunction(innerParam)                                                                                
+│   │   ├──   innerFunction("inner")                                                                                            
+│   │   ├── const myObject = {                                                                                                  
+│   │   ├──   myMethod: function (stuff)                                                                                        
+│   │   ├── let myArrowObject = {                                                                                               
+│   │   ├──   myArrow: ({                                                                                                       
+│   │   │       a,                                                                                                              
+│   │   │       b,                                                                                                              
+│   │   │       c,                                                                                                              
+│   │   │     }) =>                                                                                                             
+│   │   ├── const myAsyncArrowFunction = async () =>                                                                            
+│   │   ├── function functionWithRestParameters(...args)                                                                        
+│   │   ├── const namedFunctionExpression = function myNamedFunction()                                                          
+│   │   ├── const multilineArrowFunction = (                                                                                    
+│   │   │     a,                                                                                                                
+│   │   │     b                                                                                                                 
+│   │   │   ) =>                                                                                                                
+│   │   ├── function functionReturningFunction()                                                                                
+│   │   ├──   return function ()                                                                                                
+│   │   ├── function destructuringOnMultipleLines({                                                                             
+│   │   │     a,                                                                                                                
+│   │   │     b,                                                                                                                
+│   │   │   })                                                                                                                  
+│   │   ├── const arrowFunctionWithDestructuring = ({ a, b }) =>                                                                
+│   │   ├── const multilineDestructuringArrow = ({                                                                              
+│   │   │     a,                                                                                                                
+│   │   │     b,                                                                                                                
+│   │   │   }) =>                                                                                                               
+│   │   ├── async function asyncFunctionWithErrorHandling()                                                                     
+│   │   ├── class Car                                                                                                           
+│   │   ├──   constructor(brand)                                                                                                
+│   │   ├──   present()                                                                                                         
+│   │   ├── class Model extends Car                                                                                             
+│   │   ├──   constructor(brand, mod)                                                                                           
+│   │   ├──     super(brand)                                                                                                    
+│   │   └──   show()                                                                                                            
 │   └── 📄 test.ts (832 tokens, 165 lines)
-│       ├── type MyType
-│       ├── interface MyInterface
-│       ├── class TsClass
-│       ├──   myMethod()
-│       ├──   myMethodWithArgs(param1: string, param2: number): void
-│       ├──   static myStaticMethod<T>(param: T): T
-│       ├──   multilineMethod(
-│       │       c: number,
-│       │       d: number
-│       │     ): number
-│       ├──   multilineMethodWithDefaults(
-│       │       t: string = "tree",
-│       │       p: string = "plus"
-│       │     ): string
-│       ├── export class AdvancedComponent implements MyInterface
-│       ├──   async myAsyncMethod(
-│       │       a: string,
-│       │       b: number,
-│       │       c: string
-│       │     ): Promise<void>
-│       ├──   genericMethod<T, U>(
-│       │       arg1: T,
-│       │       arg2: U
-│       │     ): [T, U]
-│       ├── export class TicketsComponent implements MyInterface
-│       ├──   async myAsyncMethod({ a, b, c }: { a: String; b: Number; c: String })
-│       ├── function tsFunction()
-│       ├── function tsFunctionSigned(
-│       │     param1: number,
-│       │     param2: number
-│       │   ): void
-│       ├── export default async function tsFunctionComplicated<A, B, C>({
-│       │     a = 1 | 2,
-│       │     b = "bob",
-│       │     c = async () => "charlie",
-│       │   }: {
-│       │     a: number;
-│       │     b: string;
-│       │     c: () => Promise<string>;
-│       │   }): Promise<string>
-│       ├──   return("Standalone function with parameters")
-│       ├── const tsArrowFunctionSigned = ({
-│       │     a,
-│       │     b,
-│       │   }: {
-│       │     a: number;
-│       │     b: string;
-│       │   }) =>
-│       ├── export const tsComplicatedArrow = async ({
-│       │     a = 1 | 2,
-│       │     b = "bob",
-│       │     c = async () => "charlie",
-│       │   }: {
-│       │     a: number;
-│       │     b: string;
-│       │     c: () => Promise<string>;
-│       │   }): Promise<string> =>
-│       ├── const arrowFunction = () =>
-│       ├── const arrow = (a: String, b: Number) =>
-│       ├── const asyncArrowFunction = async () =>
-│       ├── const asyncArrow = async (a: String, b: Number) =>
-│       ├── let weirdArrow = () =>
-│       ├── const asyncPromiseArrow = async (): Promise<void> =>
-│       ├── let myWeirdArrowSigned = (x: number): number =>
-│       ├── class Person
-│       ├──   constructor(private firstName: string, private lastName: string)
-│       ├──   getFullName(): string
-│       ├──   describe(): string
-│       ├── class Employee extends Person
-│       ├──   constructor(
-│       │       firstName: string,
-│       │       lastName: string,
-│       │       private jobTitle: string
-│       │     )
-│       ├──     super(firstName, lastName)
-│       ├──   describe(): string
-│       ├── interface Shape
-│       └── interface Square extends Shape
+│       ├── type MyType                                                                                                         
+│       ├── interface MyInterface                                                                                               
+│       ├── class TsClass                                                                                                       
+│       ├──   myMethod()                                                                                                        
+│       ├──   myMethodWithArgs(param1: string, param2: number): void                                                            
+│       ├──   static myStaticMethod<T>(param: T): T                                                                             
+│       ├──   multilineMethod(                                                                                                  
+│       │       c: number,                                                                                                      
+│       │       d: number                                                                                                       
+│       │     ): number                                                                                                         
+│       ├──   multilineMethodWithDefaults(                                                                                      
+│       │       t: string = "tree",                                                                                             
+│       │       p: string = "plus"                                                                                              
+│       │     ): string                                                                                                         
+│       ├── export class AdvancedComponent implements MyInterface                                                               
+│       ├──   async myAsyncMethod(                                                                                              
+│       │       a: string,                                                                                                      
+│       │       b: number,                                                                                                      
+│       │       c: string                                                                                                       
+│       │     ): Promise<void>                                                                                                  
+│       ├──   genericMethod<T, U>(                                                                                              
+│       │       arg1: T,                                                                                                        
+│       │       arg2: U                                                                                                         
+│       │     ): [T, U]                                                                                                         
+│       ├── export class TicketsComponent implements MyInterface                                                                
+│       ├──   async myAsyncMethod({ a, b, c }: { a: String; b: Number; c: String })                                             
+│       ├── function tsFunction()                                                                                               
+│       ├── function tsFunctionSigned(                                                                                          
+│       │     param1: number,                                                                                                   
+│       │     param2: number                                                                                                    
+│       │   ): void                                                                                                             
+│       ├── export default async function tsFunctionComplicated<A, B, C>({                                                      
+│       │     a = 1 | 2,                                                                                                        
+│       │     b = "bob",                                                                                                        
+│       │     c = async () => "charlie",                                                                                        
+│       │   }: {                                                                                                                
+│       │     a: number;                                                                                                        
+│       │     b: string;                                                                                                        
+│       │     c: () => Promise<string>;                                                                                         
+│       │   }): Promise<string>                                                                                                 
+│       ├──   return("Standalone function with parameters")                                                                     
+│       ├── const tsArrowFunctionSigned = ({                                                                                    
+│       │     a,                                                                                                                
+│       │     b,                                                                                                                
+│       │   }: {                                                                                                                
+│       │     a: number;                                                                                                        
+│       │     b: string;                                                                                                        
+│       │   }) =>                                                                                                               
+│       ├── export const tsComplicatedArrow = async ({                                                                          
+│       │     a = 1 | 2,                                                                                                        
+│       │     b = "bob",                                                                                                        
+│       │     c = async () => "charlie",                                                                                        
+│       │   }: {                                                                                                                
+│       │     a: number;                                                                                                        
+│       │     b: string;                                                                                                        
+│       │     c: () => Promise<string>;                                                                                         
+│       │   }): Promise<string> =>                                                                                              
+│       ├── const arrowFunction = () =>                                                                                         
+│       ├── const arrow = (a: String, b: Number) =>                                                                             
+│       ├── const asyncArrowFunction = async () =>                                                                              
+│       ├── const asyncArrow = async (a: String, b: Number) =>                                                                  
+│       ├── let weirdArrow = () =>                                                                                              
+│       ├── const asyncPromiseArrow = async (): Promise<void> =>                                                                
+│       ├── let myWeirdArrowSigned = (x: number): number =>                                                                     
+│       ├── class Person                                                                                                        
+│       ├──   constructor(private firstName: string, private lastName: string)                                                  
+│       ├──   getFullName(): string                                                                                             
+│       ├──   describe(): string                                                                                                
+│       ├── class Employee extends Person                                                                                       
+│       ├──   constructor(                                                                                                      
+│       │       firstName: string,                                                                                              
+│       │       lastName: string,                                                                                               
+│       │       private jobTitle: string                                                                                        
+│       │     )                                                                                                                 
+│       ├──     super(firstName, lastName)                                                                                      
+│       ├──   describe(): string                                                                                                
+│       ├── interface Shape                                                                                                     
+│       └── interface Square extends Shape                                                                                      
 ├── 📁 group2 (1 folder, 8 files) 
 │   ├── 📄 apl_test.apl (28 tokens, 5 lines)
-│   │   ├── :Namespace HelloWorld
-│   │   ├── :Namespace HelloWorld -> hello ← 'Hello, World!'
-│   │   └── :Namespace HelloWorld -> plus ← {⍺+⍵}
+│   │   ├── :Namespace HelloWorld                                                                                               
+│   │   ├── :Namespace HelloWorld -> hello ← 'Hello, World!'                                                                    
+│   │   └── :Namespace HelloWorld -> plus ← {⍺+⍵}                                                                               
 │   ├── 📄 c_test.c (837 tokens, 142 lines)
-│   │   ├── struct Point
-│   │   ├──     int x;
-│   │   ├──     int y;
-│   │   ├── struct Point getOrigin()
-│   │   ├── float mul_two_floats(float x1, float x2)
-│   │   ├── enum days
-│   │   ├──     SUN,
-│   │   ├──     MON,
-│   │   ├──     TUE,
-│   │   ├──     WED,
-│   │   ├──     THU,
-│   │   ├──     FRI,
-│   │   ├──     SAT
-│   │   ├── long add_two_longs(long x1, long x2)
-│   │   ├── double multiplyByTwo(double num)
-│   │   ├── char getFirstCharacter(char *str)
-│   │   ├── void greet(Person p)
-│   │   ├── typedef struct
-│   │   ├──     char name[50];
-│   │   ├── } Person;
-│   │   ├── int main()
-│   │   ├── int* getArrayStart(int arr[], int size)
-│   │   ├── long complexFunctionWithMultipleArguments(
-│   │   │       int param1,
-│   │   │       double param2,
-│   │   │       char *param3,
-│   │   │       struct Point point
-│   │   │   )
-│   │   ├── keyPattern *ACLKeyPatternCreate(sds pattern, int flags)
-│   │   ├── sds sdsCatPatternString(sds base, keyPattern *pat)
-│   │   ├── static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)
-│   │   ├──     while((ln = listNext(&li)))
-│   │   ├── static struct config
-│   │   ├──     aeEventLoop *el;
-│   │   ├──     cliConnInfo conn_info;
-│   │   ├──     const char *hostsocket;
-│   │   ├──     int tls;
-│   │   ├──     struct cliSSLconfig sslconfig;
-│   │   └── } config;
+│   │   ├── struct Point                                                                                                        
+│   │   ├──     int x;                                                                                                          
+│   │   ├──     int y;                                                                                                          
+│   │   ├── struct Point getOrigin()                                                                                            
+│   │   ├── float mul_two_floats(float x1, float x2)                                                                            
+│   │   ├── enum days                                                                                                           
+│   │   ├──     SUN,                                                                                                            
+│   │   ├──     MON,                                                                                                            
+│   │   ├──     TUE,                                                                                                            
+│   │   ├──     WED,                                                                                                            
+│   │   ├──     THU,                                                                                                            
+│   │   ├──     FRI,                                                                                                            
+│   │   ├──     SAT                                                                                                             
+│   │   ├── long add_two_longs(long x1, long x2)                                                                                
+│   │   ├── double multiplyByTwo(double num)                                                                                    
+│   │   ├── char getFirstCharacter(char *str)                                                                                   
+│   │   ├── void greet(Person p)                                                                                                
+│   │   ├── typedef struct                                                                                                      
+│   │   ├──     char name[50];                                                                                                  
+│   │   ├── } Person;                                                                                                           
+│   │   ├── int main()                                                                                                          
+│   │   ├── int* getArrayStart(int arr[], int size)                                                                             
+│   │   ├── long complexFunctionWithMultipleArguments(                                                                          
+│   │   │       int param1,                                                                                                     
+│   │   │       double param2,                                                                                                  
+│   │   │       char *param3,                                                                                                   
+│   │   │       struct Point point                                                                                              
+│   │   │   )                                                                                                                   
+│   │   ├── keyPattern *ACLKeyPatternCreate(sds pattern, int flags)                                                             
+│   │   ├── sds sdsCatPatternString(sds base, keyPattern *pat)                                                                  
+│   │   ├── static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)         
+│   │   ├──     while((ln = listNext(&li)))                                                                                     
+│   │   ├── static struct config                                                                                                
+│   │   ├──     aeEventLoop *el;                                                                                                
+│   │   ├──     cliConnInfo conn_info;                                                                                          
+│   │   ├──     const char *hostsocket;                                                                                         
+│   │   ├──     int tls;                                                                                                        
+│   │   ├──     struct cliSSLconfig sslconfig;                                                                                  
+│   │   └── } config;                                                                                                           
 │   ├── 📄 go_test.go (179 tokens, 46 lines)
-│   │   ├── type Greeting struct
-│   │   ├── func (g Greeting) sayHello()
-│   │   ├── func createGreeting(m string) Greeting
-│   │   ├── type SomethingLong struct
-│   │   ├── func (s *SomethingLong) WithAReasonableName(
-│   │   │     ctx context.Context,
-│   │   │     param1 string,
-│   │   │     param2 int,
-│   │   │     param3 mapinterface{},
-│   │   │     callback func(int) error,
-│   │   │   ) (resultType, error)
-│   │   ├── type resultType struct
-│   │   └── func main()
+│   │   ├── type Greeting struct                                                                                                
+│   │   ├── func (g Greeting) sayHello()                                                                                        
+│   │   ├── func createGreeting(m string) Greeting                                                                              
+│   │   ├── type SomethingLong struct                                                                                           
+│   │   ├── func (s *SomethingLong) WithAReasonableName(                                                                        
+│   │   │       ctx context.Context,                                                                                            
+│   │   │       param1 string,                                                                                                  
+│   │   │       param2 int,                                                                                                     
+│   │   │       param3 map[string]interface{},                                                                                  
+│   │   │       callback func(int) error,                                                                                       
+│   │   │   ) (resultType, error)                                                                                               
+│   │   ├── type resultType struct                                                                                              
+│   │   └── func main()                                                                                                         
 │   ├── 📄 PerlTest.pl (63 tokens, 20 lines)
-│   │   ├── package PerlTest
-│   │   ├── package PerlTest -> sub new
-│   │   ├── package PerlTest -> sub hello
-│   │   └── package PerlTest -> sub say_hello
+│   │   ├── package PerlTest                                                                                                    
+│   │   ├── package PerlTest -> sub new                                                                                         
+│   │   ├── package PerlTest -> sub hello                                                                                       
+│   │   └── package PerlTest -> sub say_hello                                                                                   
 │   ├── 📄 PhpTest.php (70 tokens, 19 lines)
-│   │   ├── class HelloWorld
-│   │   ├── class HelloWorld -> function sayHello
-│   │   ├── function greet
-│   │   ├── class Person
-│   │   └── class Person -> function __construct
+│   │   ├── class HelloWorld                                                                                                    
+│   │   ├── class HelloWorld -> function sayHello                                                                               
+│   │   ├── function greet                                                                                                      
+│   │   ├── class Person                                                                                                        
+│   │   └── class Person -> function __construct                                                                                
 │   ├── 📄 PowershellTest.ps1 (459 tokens, 89 lines)
-│   │   ├── function Say-Nothing()
-│   │   ├── class Person
-│   │   ├──     Person($name)
-│   │   ├──     Greet()
-│   │   ├──     GreetMany($times)
-│   │   ├──     GreetWithDetails($greeting, $times)
-│   │   ├──     GreetMultiline(
-│   │   │           $greeting,
-│   │   │           $times
-│   │   │       )
-│   │   ├──     NoReturn($times)
-│   │   ├──     NoReturnNoArgs()
-│   │   ├── function Say-Hello([Person]$person)
-│   │   ├── function Multi-Hello([Person]$personA, [Person]$personB)
-│   │   ├── function Switch-Item
-│   │   ├──   param ($on)
-│   │   ├── function Get-SmallFiles
-│   │   ├──   param (
-│   │   │         [PSDefaultValue(Help = '100')]
-│   │   │         $Size = 100)
-│   │   ├── function Get-User
-│   │   ├──   [CmdletBinding(DefaultParameterSetName="ID")]
-│   │   ├──   [OutputType("System.Int32", ParameterSetName="ID")]
-│   │   ├──   [OutputType([String], ParameterSetName="Name")]
-│   │   ├──   Param (
-│   │   │       
-│   │   │       [Int[]]
-│   │   │       $UserID,
-│   │   │       
-│   │   │       [String[]]
-│   │   │       $UserName)
-│   │   ├── filter Get-ErrorLog ($Message)
-│   │   └── function global:MultilineSignature(
-│   │         $param1,
-│   │         $param2,
-│   │         [Parameter(Mandatory=$true)]
-│   │         $param3
-│   │       )
+│   │   ├── function Say-Nothing()                                                                                              
+│   │   ├── class Person                                                                                                        
+│   │   ├──     Person([string]$name)                                                                                           
+│   │   ├──     [string]Greet()                                                                                                 
+│   │   ├──     [string]GreetMany([int]$times)                                                                                  
+│   │   ├──     [string]GreetWithDetails([string]$greeting, [int]$times)                                                        
+│   │   ├──     [string]GreetMultiline(                                                                                         
+│   │   │           [string]$greeting,                                                                                          
+│   │   │           [int]$times                                                                                                 
+│   │   │       )                                                                                                               
+│   │   ├──     NoReturn([int]$times)                                                                                           
+│   │   ├──     NoReturnNoArgs()                                                                                                
+│   │   ├── function Say-Hello([Person]$person)                                                                                 
+│   │   ├── function Multi-Hello([Person]$personA, [Person]$personB)                                                            
+│   │   ├── function Switch-Item                                                                                                
+│   │   ├──   param ([switch]$on)                                                                                               
+│   │   ├── function Get-SmallFiles                                                                                             
+│   │   ├──   param (                                                                                                           
+│   │   │         [PSDefaultValue(Help = '100')]                                                                                
+│   │   │         $Size = 100)                                                                                                  
+│   │   ├── function Get-User                                                                                                   
+│   │   ├──   [CmdletBinding(DefaultParameterSetName="ID")]                                                                     
+│   │   ├──   [OutputType("System.Int32", ParameterSetName="ID")]                                                               
+│   │   ├──   [OutputType([String], ParameterSetName="Name")]                                                                   
+│   │   ├──   Param (                                                                                                           
+│   │   │       [parameter(Mandatory=$true, ParameterSetName="ID")]                                                             
+│   │   │       [Int[]]                                                                                                         
+│   │   │       $UserID,                                                                                                        
+│   │   │       [parameter(Mandatory=$true, ParameterSetName="Name")]                                                           
+│   │   │       [String[]]                                                                                                      
+│   │   │       $UserName)                                                                                                      
+│   │   ├── filter Get-ErrorLog ([switch]$Message)                                                                              
+│   │   └── function global:MultilineSignature(                                                                                 
+│   │         [string]$param1,                                                                                                  
+│   │         [int]$param2,                                                                                                     
+│   │         [Parameter(Mandatory=$true)]                                                                                      
+│   │         [string]$param3                                                                                                   
+│   │       )                                                                                                                   
 │   ├── 📄 ScalaTest.scala (171 tokens, 40 lines)
-│   │   ├── def sumOfSquares(x: Int, y: Int): Int
-│   │   ├── trait Bark
-│   │   ├──   def bark: String
-│   │   ├── case class Person(name: String)
-│   │   ├── class GenericClass[T](
-│   │   │       val data: T,
-│   │   │       val count: Int
-│   │   │   )
-│   │   ├──   def getData: T
-│   │   ├── object HelloWorld
-│   │   ├──   def greet(person: Person): Unit
-│   │   ├──   def main(args: Array[String]): Unit
-│   │   ├── def complexFunction(
-│   │   │       a: Int,
-│   │   │       b: String,
-│   │   │       c: Float
-│   │   │   ): (Int, String) Option
-│   │   └── def sumOfSquaresShort(x: Int, y: Int): Int
+│   │   ├── def sumOfSquares(x: Int, y: Int): Int                                                                               
+│   │   ├── trait Bark                                                                                                          
+│   │   ├──   def bark: String                                                                                                  
+│   │   ├── case class Person(name: String)                                                                                     
+│   │   ├── class GenericClass[T](                                                                                              
+│   │   │       val data: T,                                                                                                    
+│   │   │       val count: Int                                                                                                  
+│   │   │   )                                                                                                                   
+│   │   ├──   def getData: T                                                                                                    
+│   │   ├── object HelloWorld                                                                                                   
+│   │   ├──   def greet(person: Person): Unit                                                                                   
+│   │   ├──   def main(args: Array[String]): Unit                                                                               
+│   │   ├── def complexFunction(                                                                                                
+│   │   │       a: Int,                                                                                                         
+│   │   │       b: String,                                                                                                      
+│   │   │       c: Float                                                                                                        
+│   │   │   ): (Int, String) Option                                                                                             
+│   │   └── def sumOfSquaresShort(x: Int, y: Int): Int                                                                          
 │   └── 📄 test.csv (0 tokens, 0 lines)
 │       ├── Name
 │       ├── Age
@@ -1564,288 +1564,288 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │       └── Email
 ├── 📁 group3 (1 folder, 16 files) 
 │   ├── 📄 bash_test.sh (127 tokens, 22 lines)
-│   │   ├── echo_hello_world()
-│   │   ├── function fun_echo_hello_world()
-│   │   ├── export SECRET
-│   │   ├── alias md='make debug'
-│   │   ├── add_alias()
-│   │   └── create_conda_env()
+│   │   ├── echo_hello_world()                                                                                                  
+│   │   ├── function fun_echo_hello_world()                                                                                     
+│   │   ├── export SECRET                                                                                                       
+│   │   ├── alias md='make debug'                                                                                               
+│   │   ├── add_alias()                                                                                                         
+│   │   └── create_conda_env()                                                                                                  
 │   ├── 📄 cpp_test.cpp (1,670 tokens, 259 lines)
-│   │   ├── class Person
-│   │   ├──     std::string name;
-│   │   ├── public:
-│   │   ├──     Person(std::string n) : name(n)
-│   │   ├──     void greet()
-│   │   ├── void globalGreet()
-│   │   ├── int main()
-│   │   ├── void printMessage(const std::string &message)
-│   │   ├── template<typename T>
-│   │   │   void printVector(const std::vector<T>& vec)
-│   │   ├── struct Point
-│   │   ├──     int x, y;
-│   │   ├──     Point(int x, int y) : x(x), y(y)
-│   │   ├── class Animal
-│   │   ├── public:
-│   │   ├──     Animal(const std::string &name) : name(name)
-│   │   ├──     virtual void speak() const
-│   │   ├──     virtual ~Animal()
-│   │   ├── protected:
-│   │   ├──     std::string name;
-│   │   ├── class Dog : public Animal
-│   │   ├── public:
-│   │   ├──     Dog(const std::string &name) : Animal(name)
-│   │   ├──     void speak() const override
-│   │   ├── class Cat : public Animal
-│   │   ├── public:
-│   │   ├──     Cat(const std::string &name) : Animal(name)
-│   │   ├──     void speak() const override
-│   │   ├── nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
-│   │   │                                int batch_size, int max_seq_length, float dropout,
-│   │   │                                bool bidirectional, bool cudnn_allow_tf32,
-│   │   │              int workspace_size, int reserve_space_size)
-│   │   ├── int main()
-│   │   ├── enum ECarTypes
-│   │   ├──   Sedan,
-│   │   ├──   Hatchback,
-│   │   ├──   SUV,
-│   │   ├──   Wagon
-│   │   ├── ECarTypes GetPreferredCarType()
-│   │   ├── enum ECarTypes : uint8_t
-│   │   ├──   Sedan,
-│   │   ├──   Hatchback,
-│   │   ├──   SUV = 254,
-│   │   ├──   Hybrid
-│   │   ├── enum class ECarTypes : uint8_t
-│   │   ├──   Sedan,
-│   │   ├──   Hatchback,
-│   │   ├──   SUV = 254,
-│   │   ├──   Hybrid
-│   │   ├── void myFunction(string fname, int age)
-│   │   ├── template <typename T> T cos(T)
-│   │   ├── template <typename T> T sin(T)
-│   │   ├── template <typename T> T sqrt(T)
-│   │   ├── template<typename T> struct VLEN
-│   │   ├── template<typename T> class arr
-│   │   ├──   private:
-│   │   ├──     static T *ralloc(size_t num)
-│   │   ├──     static void dealloc(T *ptr)
-│   │   ├──     static T *ralloc(size_t num)
-│   │   ├──     static void dealloc(T *ptr)
-│   │   ├──   public:
-│   │   ├──     arr() : p(0), sz(0)
-│   │   ├──     arr(size_t n) : p(ralloc(n)), sz(n)
-│   │   ├──     arr(arr &&other)
-│   │   │         : p(other.p), sz(other.sz)
-│   │   ├──     ~arr()
-│   │   ├──     void resize(size_t n)
-│   │   ├──     T &operator[](size_t idx)
-│   │   ├──     T *data()
-│   │   ├──     size_t size() const
-│   │   ├── class Buffer
-│   │   ├──  private:
-│   │   ├──   void* ptr_;
-│   │   └── std::tuple<array, array, array> quantize(
-│   │           const array& w,
-│   │           int group_size,
-│   │           int bits,
-│   │           StreamOrDevice s)
+│   │   ├── class Person                                                                                                        
+│   │   ├──     std::string name;                                                                                               
+│   │   ├── public:                                                                                                             
+│   │   ├──     Person(std::string n) : name(n)                                                                                 
+│   │   ├──     void greet()                                                                                                    
+│   │   ├── void globalGreet()                                                                                                  
+│   │   ├── int main()                                                                                                          
+│   │   ├── void printMessage(const std::string &message)                                                                       
+│   │   ├── template<typename T>                                                                                                
+│   │   │   void printVector(const std::vector<T>& vec)                                                                         
+│   │   ├── struct Point                                                                                                        
+│   │   ├──     int x, y;                                                                                                       
+│   │   ├──     Point(int x, int y) : x(x), y(y)                                                                                
+│   │   ├── class Animal                                                                                                        
+│   │   ├── public:                                                                                                             
+│   │   ├──     Animal(const std::string &name) : name(name)                                                                    
+│   │   ├──     virtual void speak() const                                                                                      
+│   │   ├──     virtual ~Animal()                                                                                               
+│   │   ├── protected:                                                                                                          
+│   │   ├──     std::string name;                                                                                               
+│   │   ├── class Dog : public Animal                                                                                           
+│   │   ├── public:                                                                                                             
+│   │   ├──     Dog(const std::string &name) : Animal(name)                                                                     
+│   │   ├──     void speak() const override                                                                                     
+│   │   ├── class Cat : public Animal                                                                                           
+│   │   ├── public:                                                                                                             
+│   │   ├──     Cat(const std::string &name) : Animal(name)                                                                     
+│   │   ├──     void speak() const override                                                                                     
+│   │   ├── nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,                                       
+│   │   │                                int batch_size, int max_seq_length, float dropout,                                     
+│   │   │                                bool bidirectional, bool cudnn_allow_tf32,                                             
+│   │   │                    int workspace_size, int reserve_space_size)                                                        
+│   │   ├── int main()                                                                                                          
+│   │   ├── enum ECarTypes                                                                                                      
+│   │   ├──   Sedan,                                                                                                            
+│   │   ├──   Hatchback,                                                                                                        
+│   │   ├──   SUV,                                                                                                              
+│   │   ├──   Wagon                                                                                                             
+│   │   ├── ECarTypes GetPreferredCarType()                                                                                     
+│   │   ├── enum ECarTypes : uint8_t                                                                                            
+│   │   ├──   Sedan,                                                                                                            
+│   │   ├──   Hatchback,                                                                                                        
+│   │   ├──   SUV = 254,                                                                                                        
+│   │   ├──   Hybrid                                                                                                            
+│   │   ├── enum class ECarTypes : uint8_t                                                                                      
+│   │   ├──   Sedan,                                                                                                            
+│   │   ├──   Hatchback,                                                                                                        
+│   │   ├──   SUV = 254,                                                                                                        
+│   │   ├──   Hybrid                                                                                                            
+│   │   ├── void myFunction(string fname, int age)                                                                              
+│   │   ├── template <typename T> T cos(T)                                                                                      
+│   │   ├── template <typename T> T sin(T)                                                                                      
+│   │   ├── template <typename T> T sqrt(T)                                                                                     
+│   │   ├── template<typename T> struct VLEN                                                                                    
+│   │   ├── template<typename T> class arr                                                                                      
+│   │   ├──   private:                                                                                                          
+│   │   ├──     static T *ralloc(size_t num)                                                                                    
+│   │   ├──     static void dealloc(T *ptr)                                                                                     
+│   │   ├──     static T *ralloc(size_t num)                                                                                    
+│   │   ├──     static void dealloc(T *ptr)                                                                                     
+│   │   ├──   public:                                                                                                           
+│   │   ├──     arr() : p(0), sz(0)                                                                                             
+│   │   ├──     arr(size_t n) : p(ralloc(n)), sz(n)                                                                             
+│   │   ├──     arr(arr &&other)                                                                                                
+│   │   │         : p(other.p), sz(other.sz)                                                                                    
+│   │   ├──     ~arr()                                                                                                          
+│   │   ├──     void resize(size_t n)                                                                                           
+│   │   ├──     T &operator[](size_t idx)                                                                                       
+│   │   ├──     T *data()                                                                                                       
+│   │   ├──     size_t size() const                                                                                             
+│   │   ├── class Buffer                                                                                                        
+│   │   ├──  private:                                                                                                           
+│   │   ├──   void* ptr_;                                                                                                       
+│   │   └── std::tuple<array, array, array> quantize(                                                                           
+│   │           const array& w,                                                                                                 
+│   │           int group_size,                                                                                                 
+│   │           int bits,                                                                                                       
+│   │           StreamOrDevice s)                                                                                               
 │   ├── 📄 csharp_test.cs (957 tokens, 146 lines)
-│   │   ├── public interface IExcelTemplate
-│   │   ├──     void LoadTemplate(string templateFilePath)
-│   │   ├──     void LoadData(Dictionary<string, string> data)
-│   │   ├──     void ModifyCell(string cellName, string value)
-│   │   ├──     void SaveToFile(string filePath)
-│   │   ├── public interface IGreet
-│   │   ├──     void Greet()
-│   │   ├── public enum WeekDays
-│   │   ├── public delegate void DisplayMessage(string message)
-│   │   ├── public struct Address
-│   │   ├── public static class HelperFunctions
-│   │   ├──     public static void PrintMessage(string message)
-│   │   ├──     public static int AddNumbers(int a, int b)
-│   │   ├── namespace HelloWorldApp
-│   │   ├──     class Person : IGreet
-│   │   ├──         public Person(string name, int age)
-│   │   ├──         public void Greet()
-│   │   ├──     class HelloWorld
-│   │   ├──         static void Main(string[] args)
-│   │   ├── namespace TemplateToExcelServer.Template
-│   │   ├──     public interface ITemplateObject
-│   │   ├──         string[,] GetContent()
-│   │   ├──         string[] GetContentArray()
-│   │   ├──         string[] GetFormat()
-│   │   ├──         int? GetFormatLength()
-│   │   ├──         TemplateObject SetContent(string[,] Content)
-│   │   ├──         TemplateObject SetContentArray(string[] value)
-│   │   ├──         TemplateObject SetFormat(string[] Header)
-│   │   ├──         TemplateObject SetNameOfReport(
-│   │   │               ReadOnlyMemory<byte> ReportName,
-│   │   │               int[] EdgeCase)
-│   │   ├──         TemplateObject SetSheetName(ReadOnlyMemory<byte> SheetName)
-│   │   ├── public class BankAccount(string accountID, string owner)
-│   │   ├──     public override string ToString() =>
-│   │   ├── var IncrementBy = (int source, int increment = 1) =>
-│   │   ├── Func<int, int, int> add = (x, y) =>
-│   │   ├── button.Click += (sender, args) =>
-│   │   ├── public Func<int, int> GetMultiplier(int factor)
-│   │   ├── public void Method(
-│   │   │           int param1,
-│   │   │           int param2,
-│   │   │           int param3,
-│   │   │           int param4,
-│   │   │           int param5,
-│   │   │           int param6,
-│   │   │       )
-│   │   ├── System.Net.ServicePointManager.ServerCertificateValidationCallback +=
-│   │   │       (se, cert, chain, sslerror) =>
-│   │   ├── class ServerCertificateValidation
-│   │   ├──     public bool OnRemoteCertificateValidation(
-│   │   │           object se,
-│   │   │           X509Certificate cert,
-│   │   │           X509Chain chain,
-│   │   │           SslPolicyErrors sslerror
-│   │   │       )
-│   │   ├── s_downloadButton.Clicked += async (o, e) =>
-│   │   ├── [HttpGet, Route("DotNetCount")]
-│   │   └── static public async Task<int> GetDotNetCount(string URL)
+│   │   ├── public interface IExcelTemplate                                                                                     
+│   │   ├──     void LoadTemplate(string templateFilePath)                                                                      
+│   │   ├──     void LoadData(Dictionary<string, string> data)                                                                  
+│   │   ├──     void ModifyCell(string cellName, string value)                                                                  
+│   │   ├──     void SaveToFile(string filePath)                                                                                
+│   │   ├── public interface IGreet                                                                                             
+│   │   ├──     void Greet()                                                                                                    
+│   │   ├── public enum WeekDays                                                                                                
+│   │   ├── public delegate void DisplayMessage(string message)                                                                 
+│   │   ├── public struct Address                                                                                               
+│   │   ├── public static class HelperFunctions                                                                                 
+│   │   ├──     public static void PrintMessage(string message)                                                                 
+│   │   ├──     public static int AddNumbers(int a, int b)                                                                      
+│   │   ├── namespace HelloWorldApp                                                                                             
+│   │   ├──     class Person : IGreet                                                                                           
+│   │   ├──         public Person(string name, int age)                                                                         
+│   │   ├──         public void Greet()                                                                                         
+│   │   ├──     class HelloWorld                                                                                                
+│   │   ├──         static void Main(string[] args)                                                                             
+│   │   ├── namespace TemplateToExcelServer.Template                                                                            
+│   │   ├──     public interface ITemplateObject                                                                                
+│   │   ├──         string[,] GetContent()                                                                                      
+│   │   ├──         string[] GetContentArray()                                                                                  
+│   │   ├──         string[] GetFormat()                                                                                        
+│   │   ├──         int? GetFormatLength()                                                                                      
+│   │   ├──         TemplateObject SetContent(string[,] Content)                                                                
+│   │   ├──         TemplateObject SetContentArray(string[] value)                                                              
+│   │   ├──         TemplateObject SetFormat(string[] Header)                                                                   
+│   │   ├──         TemplateObject SetNameOfReport(                                                                             
+│   │   │               ReadOnlyMemory<byte> ReportName,                                                                        
+│   │   │               int[] EdgeCase)                                                                                         
+│   │   ├──         TemplateObject SetSheetName(ReadOnlyMemory<byte> SheetName)                                                 
+│   │   ├── public class BankAccount(string accountID, string owner)                                                            
+│   │   ├──     public override string ToString() =>                                                                            
+│   │   ├── var IncrementBy = (int source, int increment = 1) =>                                                                
+│   │   ├── Func<int, int, int> add = (x, y) =>                                                                                 
+│   │   ├── button.Click += (sender, args) =>                                                                                   
+│   │   ├── public Func<int, int> GetMultiplier(int factor)                                                                     
+│   │   ├── public void Method(                                                                                                 
+│   │   │           int param1,                                                                                                 
+│   │   │           int param2,                                                                                                 
+│   │   │           int param3,                                                                                                 
+│   │   │           int param4,                                                                                                 
+│   │   │           int param5,                                                                                                 
+│   │   │           int param6,                                                                                                 
+│   │   │       )                                                                                                               
+│   │   ├── System.Net.ServicePointManager.ServerCertificateValidationCallback +=                                               
+│   │   │       (se, cert, chain, sslerror) =>                                                                                  
+│   │   ├── class ServerCertificateValidation                                                                                   
+│   │   ├──     public bool OnRemoteCertificateValidation(                                                                      
+│   │   │           object se,                                                                                                  
+│   │   │           X509Certificate cert,                                                                                       
+│   │   │           X509Chain chain,                                                                                            
+│   │   │           SslPolicyErrors sslerror                                                                                    
+│   │   │       )                                                                                                               
+│   │   ├── s_downloadButton.Clicked += async (o, e) =>                                                                         
+│   │   ├── [HttpGet, Route("DotNetCount")]                                                                                     
+│   │   └── static public async Task<int> GetDotNetCount(string URL)                                                            
 │   ├── 📄 hallucination.tex (1,633 tokens, 126 lines)
-│   │   ├── Harnessing the Master Algorithm: Strategies for AI LLMs to Mitigate Hallucinations
-│   │   ├── Hallucinated Pedro Domingos et al.
-│   │   ├── Christmas Eve 2023
-│   │   ├── 1 Introduction
-│   │   ├── 2 Representation in LLMs
-│   │   ├──   2.1 Current Representational Models
-│   │   ├──   2.2 Incorporating Cognitive Structures
-│   │   ├──   2.3 Conceptual Diagrams of Advanced Representational Models
-│   │   ├── 3 Evaluation Strategies
-│   │   ├──   3.1 Existing Evaluation Metrics for LLMs
-│   │   ├──   3.2 Integrating Contextual and Ethical Considerations
-│   │   ├──   3.3 Case Studies: Evaluation in Practice
-│   │   ├── 4 Optimization Techniques
-│   │   ├──   4.1 Continuous Learning Models
-│   │   ├──   4.2 Adaptive Algorithms for Real-time Adjustments
-│   │   ├──   4.3 Performance Metrics Pre- and Post-Optimization
-│   │   ├── 5 Interdisciplinary Insights
-│   │   ├──   5.1 Cognitive Science and AI: A Symbiotic Relationship
-│   │   ├──   5.2 Learning from Human Cognitive Processes
-│   │   ├── 6 Challenges and Future Directions
-│   │   ├──   6.1 Addressing Current Limitations
-│   │   ├──   6.2 The Road Ahead: Ethical and Practical Considerations
-│   │   ├── 7 Conclusion
-│   │   ├──   7.1 Summarizing Key Findings
-│   │   └──   7.2 The Next Steps in AI Development
+│   │   ├── Harnessing the Master Algorithm: Strategies for AI LLMs to Mitigate Hallucinations                                  
+│   │   ├── Hallucinated Pedro Domingos et al.                                                                                  
+│   │   ├── Christmas Eve 2023                                                                                                  
+│   │   ├── 1 Introduction                                                                                                      
+│   │   ├── 2 Representation in LLMs                                                                                            
+│   │   ├──   2.1 Current Representational Models                                                                               
+│   │   ├──   2.2 Incorporating Cognitive Structures                                                                            
+│   │   ├──   2.3 Conceptual Diagrams of Advanced Representational Models                                                       
+│   │   ├── 3 Evaluation Strategies                                                                                             
+│   │   ├──   3.1 Existing Evaluation Metrics for LLMs                                                                          
+│   │   ├──   3.2 Integrating Contextual and Ethical Considerations                                                             
+│   │   ├──   3.3 Case Studies: Evaluation in Practice                                                                          
+│   │   ├── 4 Optimization Techniques                                                                                           
+│   │   ├──   4.1 Continuous Learning Models                                                                                    
+│   │   ├──   4.2 Adaptive Algorithms for Real-time Adjustments                                                                 
+│   │   ├──   4.3 Performance Metrics Pre- and Post-Optimization                                                                
+│   │   ├── 5 Interdisciplinary Insights                                                                                        
+│   │   ├──   5.1 Cognitive Science and AI: A Symbiotic Relationship                                                            
+│   │   ├──   5.2 Learning from Human Cognitive Processes                                                                       
+│   │   ├── 6 Challenges and Future Directions                                                                                  
+│   │   ├──   6.1 Addressing Current Limitations                                                                                
+│   │   ├──   6.2 The Road Ahead: Ethical and Practical Considerations                                                          
+│   │   ├── 7 Conclusion                                                                                                        
+│   │   ├──   7.1 Summarizing Key Findings                                                                                      
+│   │   └──   7.2 The Next Steps in AI Development                                                                              
 │   ├── 📄 ruby_test.rb (138 tokens, 37 lines)
-│   │   ├── module Greeter
-│   │   ├──   def self.say_hello
-│   │   ├── class HelloWorld
-│   │   ├──   def say_hello
-│   │   ├── class Human
-│   │   ├──   def self.bar
-│   │   ├──   def self.bar=(value)
-│   │   ├── class Doctor < Human
-│   │   └──   def brachial_plexus(
-│   │             roots,
-│   │             trunks,
-│   │             divisions: true,
-│   │             cords: [],
-│   │             branches: Time.now
-│   │           )
+│   │   ├── module Greeter                                                                                                      
+│   │   ├──   def self.say_hello                                                                                                
+│   │   ├── class HelloWorld                                                                                                    
+│   │   ├──   def say_hello                                                                                                     
+│   │   ├── class Human                                                                                                         
+│   │   ├──   def self.bar                                                                                                      
+│   │   ├──   def self.bar=(value)                                                                                              
+│   │   ├── class Doctor < Human                                                                                                
+│   │   └──   def brachial_plexus(                                                                                              
+│   │             roots,                                                                                                        
+│   │             trunks,                                                                                                       
+│   │             divisions: true,                                                                                              
+│   │             cords: [],                                                                                                    
+│   │             branches: Time.now                                                                                            
+│   │           )                                                                                                               
 │   ├── 📄 swift_test.swift (469 tokens, 110 lines)
-│   │   ├── class Person
-│   │   ├──     init(name: String)
-│   │   ├──     func greet()
-│   │   ├──     func yEdgeCase(
-│   │   │           fname: String, 
-│   │   │           lname: String, 
-│   │   │           age: Int,
-│   │   │           address: String, 
-│   │   │           phoneNumber: String
-│   │   │       )
-│   │   ├── func globalGreet()
-│   │   ├── struct Point
-│   │   ├── protocol Animal
-│   │   ├──     func speak()
-│   │   ├── struct Dog: Animal
-│   │   ├── class Cat: Animal
-│   │   ├──     init(name: String)
-│   │   ├──     func speak()
-│   │   ├── enum CarType
-│   │   ├── func getPreferredCarType() -> CarType
-│   │   ├── enum CarType: UInt8
-│   │   ├── enum class CarType: UInt8
-│   │   ├── func myFunction(fname: String, age: Int)
-│   │   └── func myFunctionWithMultipleParameters(
-│   │           fname: String, 
-│   │           lname: String, 
-│   │           age: Int, 
-│   │           address: String, 
-│   │           phoneNumber: String
-│   │       )
+│   │   ├── class Person                                                                                                        
+│   │   ├──     init(name: String)                                                                                              
+│   │   ├──     func greet()                                                                                                    
+│   │   ├──     func yEdgeCase(                                                                                                 
+│   │   │           fname: String,                                                                                              
+│   │   │           lname: String,                                                                                              
+│   │   │           age: Int,                                                                                                   
+│   │   │           address: String,                                                                                            
+│   │   │           phoneNumber: String                                                                                         
+│   │   │       )                                                                                                               
+│   │   ├── func globalGreet()                                                                                                  
+│   │   ├── struct Point                                                                                                        
+│   │   ├── protocol Animal                                                                                                     
+│   │   ├──     func speak()                                                                                                    
+│   │   ├── struct Dog: Animal                                                                                                  
+│   │   ├── class Cat: Animal                                                                                                   
+│   │   ├──     init(name: String)                                                                                              
+│   │   ├──     func speak()                                                                                                    
+│   │   ├── enum CarType                                                                                                        
+│   │   ├── func getPreferredCarType() -> CarType                                                                               
+│   │   ├── enum CarType: UInt8                                                                                                 
+│   │   ├── enum class CarType: UInt8                                                                                           
+│   │   ├── func myFunction(fname: String, age: Int)                                                                            
+│   │   └── func myFunctionWithMultipleParameters(                                                                              
+│   │           fname: String,                                                                                                  
+│   │           lname: String,                                                                                                  
+│   │           age: Int,                                                                                                       
+│   │           address: String,                                                                                                
+│   │           phoneNumber: String                                                                                             
+│   │       )                                                                                                                   
 │   ├── 📄 test.lean (289 tokens, 42 lines)
-│   │   ├── # Advanced Topics in Group Theory
-│   │   ├── section GroupDynamics
-│   │   ├── lemma group_stability (G : Type*) [Group G] (H : Subgroup G)
-│   │   ├── theorem subgroup_closure {G : Type*} [Group G] (S : Set G)
-│   │   ├── axiom group_homomorphism_preservation {G H : Type*} [Group G] [Group H] (f : G → H)
-│   │   ├── end GroupDynamics
-│   │   ├── section ConstructiveApproach
-│   │   ├── lemma finite_group_order (G : Type*) [Group G] [Fintype G]
-│   │   ├── lemma complex_lemma {X Y : Type*} [SomeClass X] [AnotherClass Y]
-│   │   │     (f : X → Y) (g : Y → X)
-│   │   └── end ConstructiveApproach
+│   │   ├── # Advanced Topics in Group Theory                                                                                   
+│   │   ├── section GroupDynamics                                                                                               
+│   │   ├── lemma group_stability (G : Type*) [Group G] (H : Subgroup G)                                                        
+│   │   ├── theorem subgroup_closure {G : Type*} [Group G] (S : Set G)                                                          
+│   │   ├── axiom group_homomorphism_preservation {G H : Type*} [Group G] [Group H] (f : G → H)                                 
+│   │   ├── end GroupDynamics                                                                                                   
+│   │   ├── section ConstructiveApproach                                                                                        
+│   │   ├── lemma finite_group_order (G : Type*) [Group G] [Fintype G]                                                          
+│   │   ├── lemma complex_lemma {X Y : Type*} [SomeClass X] [AnotherClass Y]                                                    
+│   │   │     (f : X → Y) (g : Y → X)                                                                                           
+│   │   └── end ConstructiveApproach                                                                                            
 │   ├── 📄 test.capnp (117 tokens, 30 lines)
-│   │   ├── struct Employee
-│   │   ├──   id @0 :Int32
-│   │   ├──   name @1 :Text
-│   │   ├──   role @2 :Text
-│   │   ├──   skills @3 :List(Skill)
-│   │   ├──   struct Skill
-│   │   ├──     name @0 :Text
-│   │   ├──     level @1 :Level
-│   │   ├──     enum Level
-│   │   ├──       beginner @0
-│   │   ├──       intermediate @1
-│   │   ├──       expert @2
-│   │   ├──   status :union
-│   │   ├──     active @4 :Void
-│   │   ├──     onLeave @5 :Void
-│   │   ├──     retired @6 :Void
-│   │   ├── struct Company
-│   │   └──   employees @0 :List(Employee)
+│   │   ├── struct Employee                                                                                                     
+│   │   ├──   id @0 :Int32                                                                                                      
+│   │   ├──   name @1 :Text                                                                                                     
+│   │   ├──   role @2 :Text                                                                                                     
+│   │   ├──   skills @3 :List(Skill)                                                                                            
+│   │   ├──   struct Skill                                                                                                      
+│   │   ├──     name @0 :Text                                                                                                   
+│   │   ├──     level @1 :Level                                                                                                 
+│   │   ├──     enum Level                                                                                                      
+│   │   ├──       beginner @0                                                                                                   
+│   │   ├──       intermediate @1                                                                                               
+│   │   ├──       expert @2                                                                                                     
+│   │   ├──   status :union                                                                                                     
+│   │   ├──     active @4 :Void                                                                                                 
+│   │   ├──     onLeave @5 :Void                                                                                                
+│   │   ├──     retired @6 :Void                                                                                                
+│   │   ├── struct Company                                                                                                      
+│   │   └──   employees @0 :List(Employee)                                                                                      
 │   ├── 📄 test.graphql (66 tokens, 21 lines)
-│   │   ├── type Query
-│   │   ├──     getBooks: [Book]
-│   │   ├──     getAuthors: [Author]
-│   │   ├── type Mutation
-│   │   ├──     addBook(title: String, author: String): Book
-│   │   ├──     removeBook(id: ID): Book
-│   │   ├── type Book
-│   │   ├──     id: ID
-│   │   ├──     title: String
-│   │   ├──     author: Author
-│   │   ├── type Author
-│   │   ├──     id: ID
-│   │   ├──     name: String
-│   │   └──     books: [Book]
+│   │   ├── type Query                                                                                                          
+│   │   ├──     getBooks: [Book]                                                                                                
+│   │   ├──     getAuthors: [Author]                                                                                            
+│   │   ├── type Mutation                                                                                                       
+│   │   ├──     addBook(title: String, author: String): Book                                                                    
+│   │   ├──     removeBook(id: ID): Book                                                                                        
+│   │   ├── type Book                                                                                                           
+│   │   ├──     id: ID                                                                                                          
+│   │   ├──     title: String                                                                                                   
+│   │   ├──     author: Author                                                                                                  
+│   │   ├── type Author                                                                                                         
+│   │   ├──     id: ID                                                                                                          
+│   │   ├──     name: String                                                                                                    
+│   │   └──     books: [Book]                                                                                                   
 │   ├── 📄 test.proto (142 tokens, 34 lines)
-│   │   ├── syntax = "proto3"
-│   │   ├── service EmployeeService
-│   │   ├──     rpc GetEmployee(EmployeeId) returns (EmployeeInfo)
-│   │   ├──     rpc AddEmployee(EmployeeData) returns (EmployeeInfo)
-│   │   ├──     rpc UpdateEmployee(EmployeeUpdate) returns (EmployeeInfo)
-│   │   ├── message EmployeeId
-│   │   ├──     int32 id = 1
-│   │   ├── message EmployeeInfo
-│   │   ├──     int32 id = 1
-│   │   ├──     string name = 2
-│   │   ├──     string role = 3
-│   │   ├── message EmployeeData
-│   │   ├──     string name = 1
-│   │   ├──     string role = 2
-│   │   ├── message EmployeeUpdate
-│   │   ├──     int32 id = 1
-│   │   ├──     string name = 2
-│   │   └──     string role = 3
+│   │   ├── syntax = "proto3"                                                                                                   
+│   │   ├── service EmployeeService                                                                                             
+│   │   ├──     rpc GetEmployee(EmployeeId) returns (EmployeeInfo)                                                              
+│   │   ├──     rpc AddEmployee(EmployeeData) returns (EmployeeInfo)                                                            
+│   │   ├──     rpc UpdateEmployee(EmployeeUpdate) returns (EmployeeInfo)                                                       
+│   │   ├── message EmployeeId                                                                                                  
+│   │   ├──     int32 id = 1                                                                                                    
+│   │   ├── message EmployeeInfo                                                                                                
+│   │   ├──     int32 id = 1                                                                                                    
+│   │   ├──     string name = 2                                                                                                 
+│   │   ├──     string role = 3                                                                                                 
+│   │   ├── message EmployeeData                                                                                                
+│   │   ├──     string name = 1                                                                                                 
+│   │   ├──     string role = 2                                                                                                 
+│   │   ├── message EmployeeUpdate                                                                                              
+│   │   ├──     int32 id = 1                                                                                                    
+│   │   ├──     string name = 2                                                                                                 
+│   │   └──     string role = 3                                                                                                 
 │   ├── 📄 test.sqlite (0 tokens, 0 lines)
 │   │   ├── students table:
 │   │   ├──    id integer primary key
@@ -1856,13 +1856,13 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├──    title text not null
 │   │   └──    credits integer not null
 │   ├── 📄 test_Cargo.toml (119 tokens, 18 lines)
-│   │   ├── name: test_cargo
-│   │   ├── version: 0.1.0
-│   │   ├── description: A test Cargo.toml
-│   │   ├── license: MIT OR Apache-2.0
-│   │   ├── dependencies:
-│   │   ├──   clap 4.4
-│   │   └──   sqlx 0.7 (features: runtime-tokio, tls-rustls)
+│   │   ├── name: test_cargo                                                                                                    
+│   │   ├── version: 0.1.0                                                                                                      
+│   │   ├── description: A test Cargo.toml                                                                                      
+│   │   ├── license: MIT OR Apache-2.0                                                                                          
+│   │   ├── dependencies:                                                                                                       
+│   │   ├──   clap 4.4                                                                                                          
+│   │   └──   sqlx 0.7 (features: runtime-tokio, tls-rustls)                                                                    
 │   ├── 📄 test_json_rpc_2_0.json (26 tokens, 6 lines)
 │   │   ├── jsonrpc: 2.0
 │   │   ├── method: subtract
@@ -1871,17 +1871,17 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├──     subtrahend: 23
 │   │   └── id: 1
 │   ├── 📄 test_openapi.yaml (753 tokens, 92 lines)
-│   │   ├── openapi: 3.0.1
-│   │   ├──     title: TODO Plugin
-│   │   ├──     description: A plugin to create and manage TODO lists using ChatGPT.
-│   │   ├──     version: v1
-│   │   ├── servers:
-│   │   ├──     - url: PLUGIN_HOSTNAME
-│   │   ├── paths:
-│   │   ├──     '/todos/{username}':
-│   │   ├──         GET (getTodos): Get the list of todos
-│   │   ├──         POST (addTodo): Add a todo to the list
-│   │   └──         DELETE (deleteTodo): Delete a todo from the list
+│   │   ├── openapi: 3.0.1                                                                                                      
+│   │   ├──     title: TODO Plugin                                                                                              
+│   │   ├──     description: A plugin to create and manage TODO lists using ChatGPT.                                            
+│   │   ├──     version: v1                                                                                                     
+│   │   ├── servers:                                                                                                            
+│   │   ├──     - url: PLUGIN_HOSTNAME                                                                                          
+│   │   ├── paths:                                                                                                              
+│   │   ├──     '/todos/{username}':                                                                                            
+│   │   ├──         GET (getTodos): Get the list of todos                                                                       
+│   │   ├──         POST (addTodo): Add a todo to the list                                                                      
+│   │   └──         DELETE (deleteTodo): Delete a todo from the list                                                            
 │   ├── 📄 test_openrpc.json (225 tokens, 44 lines)
 │   │   ├── openrpc: 1.2.1
 │   │   ├── info:
@@ -1893,188 +1893,200 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├──             - limit: integer
 │   │   └──         result: pets = An array of pets
 │   └── 📄 test_pyproject.toml (304 tokens, 39 lines)
-│       ├── name: tree_plus
-│       ├── version: 1.0.8
-│       ├── description: A `tree` util enhanced with tokens, lines, and components.
-│       ├── License :: OSI Approved :: Apache Software License
-│       ├── License :: OSI Approved :: MIT License
-│       ├── dependencies:
-│       ├──     tiktoken
-│       ├──     PyYAML
-│       ├──     click
-│       ├──     rich
-│       └──     tomli
+│       ├── name: tree_plus                                                                                                     
+│       ├── version: 1.0.8                                                                                                      
+│       ├── description: A `tree` util enhanced with tokens, lines, and components.                                             
+│       ├── License :: OSI Approved :: Apache Software License                                                                  
+│       ├── License :: OSI Approved :: MIT License                                                                              
+│       ├── dependencies:                                                                                                       
+│       ├──     tiktoken                                                                                                        
+│       ├──     PyYAML                                                                                                          
+│       ├──     click                                                                                                           
+│       ├──     rich                                                                                                            
+│       └──     tomli                                                                                                           
 ├── 📁 group4 (1 folder, 10 files) 
 │   ├── 📄 erl_test.erl (480 tokens, 68 lines)
-│   │   ├── -module(erl_test).
-│   │   ├── -record(person).
-│   │   ├── -type ra_peer_status().
-│   │   ├── -type ra_membership().
-│   │   ├── -opaque my_opaq_type().
-│   │   ├── -type orddict(Key, Val).
-│   │   ├── -type edge(
-│   │   │           Cases,
-│   │   │           Pwn,
-│   │   │       ).
-│   │   ├── -spec guarded(X) -> X when X :: tuple().
-│   │   ├── -spec edge_case(
-│   │   │           {integer(), any()} | 
-│   │   │       ) -> processed, integer(), any()} | [{item, any()}].
-│   │   ├── -spec complex_function({integer(), any()} | ) -> 
-│   │   │       {processed, integer(), any()} | [{item, any()}].
-│   │   ├── -spec list_manipulation() -> .
-│   │   ├── -spec overload(T1, T2) -> T3
-│   │   │           ; (T4, T5) -> T6.
-│   │   ├── -spec multiguard({X, integer()}) -> X when X :: atom()
-│   │   │           ; ([Y]) -> Y when Y :: number().
-│   │   ├── -record(multiline).
-│   │   └── -record(maybe_undefined).
+│   │   ├── -module(erl_test).                                                                                                  
+│   │   ├── -record(person).                                                                                                    
+│   │   ├── -type ra_peer_status().                                                                                             
+│   │   ├── -type ra_membership().                                                                                              
+│   │   ├── -opaque my_opaq_type().                                                                                             
+│   │   ├── -type orddict(Key, Val).                                                                                            
+│   │   ├── -type edge(                                                                                                         
+│   │   │           Cases,                                                                                                      
+│   │   │           Pwn,                                                                                                        
+│   │   │       ).                                                                                                              
+│   │   ├── -spec guarded(X) -> X when X :: tuple().                                                                            
+│   │   ├── -spec edge_case(                                                                                                    
+│   │   │           {integer(), any()} | [any()]                                                                                
+│   │   │       ) -> processed, integer(), any()} | [{item, any()}].                                                            
+│   │   ├── -spec complex_function({integer(), any()} | [any()]) ->                                                             
+│   │   │       {processed, integer(), any()} | [{item, any()}].                                                                
+│   │   ├── -spec list_manipulation([integer()]) -> [integer()].                                                                
+│   │   ├── -spec overload(T1, T2) -> T3                                                                                        
+│   │   │           ; (T4, T5) -> T6.                                                                                           
+│   │   ├── -spec multiguard({X, integer()}) -> X when X :: atom()                                                              
+│   │   │           ; ([Y]) -> Y when Y :: number().                                                                            
+│   │   ├── -record(multiline).                                                                                                 
+│   │   └── -record(maybe_undefined).                                                                                           
 │   ├── 📄 haskell_test.hs (414 tokens, 41 lines)
-│   │   ├── data Person
-│   │   ├── greet :: Person -> String
-│   │   └── resolveVariables ::
-│   │         forall m fragments.
-│   │         (MonadError QErr m, Traversable fragments) =>
-│   │         Options.BackwardsCompatibleNullInNonNullableVariables ->
-│   │         [G.VariableDefinition] ->
-│   │         GH.VariableValues ->
-│   │         [G.Directive G.Name] ->
-│   │         G.SelectionSet fragments G.Name ->
-│   │         m
-│   │           ( [G.Directive Variable],
-│   │             G.SelectionSet fragments Variable
-│   │           )
+│   │   ├── data Person                                                                                                         
+│   │   ├── greet :: Person -> String                                                                                           
+│   │   └── resolveVariables ::                                                                                                 
+│   │         forall m fragments.                                                                                               
+│   │         (MonadError QErr m, Traversable fragments) =>                                                                     
+│   │         Options.BackwardsCompatibleNullInNonNullableVariables ->                                                          
+│   │         [G.VariableDefinition] ->                                                                                         
+│   │         GH.VariableValues ->                                                                                              
+│   │         [G.Directive G.Name] ->                                                                                           
+│   │         G.SelectionSet fragments G.Name ->                                                                                
+│   │         m                                                                                                                 
+│   │           ( [G.Directive Variable],                                                                                       
+│   │             G.SelectionSet fragments Variable                                                                             
+│   │           )                                                                                                               
 │   ├── 📄 mathematica_test.nb (133 tokens, 21 lines)
-│   │   ├── person
-│   │   ├── sayHello[]
-│   │   └── sumList
+│   │   ├── person[name_]                                                                                                       
+│   │   ├── sayHello[]                                                                                                          
+│   │   └── sumList[list_List]                                                                                                  
 │   ├── 📄 matlab_test.m (48 tokens, 12 lines)
 │   │   ├── classdef HelloWorld -> function greet
 │   │   └── function loneFun
 │   ├── 📄 RTest.R (367 tokens, 46 lines)
-│   │   ├── class(person)
-│   │   ├── greet.Person <- function
-│   │   ├── ensure_between = function
-│   │   └── run_intermediate_annealing_process = function
-│   ├── 📄 rust_test.rs (1,248 tokens, 239 lines)
-│   │   ├── fn at_beginning<'a>(&'a str)
-│   │   ├── pub enum Days<E: EdgeCase> {
-│   │   │       #[default]
-│   │   │       Sun,
-│   │   │       Mon,
-│   │   │       #[error("edge case {idx}, expected at least {} and at most {}", .limits.lo, .limits.hi)]
-│   │   │       Tue,
-│   │   │       Wed,
-│   │   │       Thu(i16, bool),
-│   │   │       Fri { day: u8 },
-│   │   │       Sat {
-│   │   │           urday: String,
-│   │   │           edge_case: E,
-│   │   │       },
-│   │   │   }
-│   │   ├── struct Point
-│   │   ├── impl Point
-│   │   ├──     fn get_origin() -> Point
-│   │   ├── struct Person
-│   │   ├── impl Person
-│   │   ├──     fn greet(&self)
-│   │   ├── fn add_two_longs(x1: i64, x2: i64) -> i64
-│   │   ├── fn add_two_longs_longer(
-│   │   │       x1: i64,
-│   │   │       x2: i64,
-│   │   │   ) -> i64
-│   │   ├── const fn multiply_by_two(num: f64) -> f64
-│   │   ├── fn get_first_character(s: &str) -> Option<char>
-│   │   ├── trait Drawable
-│   │   ├──     fn draw(&self)
-│   │   ├── impl Drawable for Point
-│   │   ├──     fn draw(&self)
-│   │   ├── fn with_generic<D: Drawable>(d: D)
-│   │   ├── fn with_generic<D>(d: D)
-│   │   │   where 
-│   │   │       D: Drawable
-│   │   ├── fn main()
-│   │   ├── pub struct VisibleStruct
-│   │   ├── mod my_module
-│   │   ├──     pub struct AlsoVisibleStruct<T>(T, T)
-│   │   ├── macro_rules! say_hello
-│   │   ├── #
-│   │   │   macro_rules! hello_tree_plus
-│   │   ├── pub mod lib
-│   │   ├──     pub mod interfaces
-│   │   ├──     mod engine
-│   │   ├── pub fn flow<S1, S2, S3, S4, E, T, L>(
-│   │   │       source: S1,
-│   │   │       extractor: E,
-│   │   │       inbox: S2,
-│   │   │       transformer: T,
-│   │   │       outbox: S3,
-│   │   │       loader: L,
-│   │   │       sink: &mut S4,
-│   │   │   ) -> Result<(), Box<dyn Error>>
-│   │   │   where
-│   │   │       S1: Extractable,
-│   │   │       S2: Extractable + Loadable,
-│   │   │       S3: Extractable + Loadable,
-│   │   │       S4: Loadable,
-│   │   │       E: Extractor<S1, S2>,
-│   │   │       T: Transformer<S2, S3>,
-│   │   │       L: Loader<S3, S4>
-│   │   ├── trait Container
-│   │   ├──     fn items(&self) -> impl Iterator<Item = Widget>
-│   │   ├── trait HttpService
-│   │   ├──     async fn fetch(&self, url: Url) -> HtmlBody
-│   │   ├── struct Pair<T, U>
-│   │   ├── trait Transformer<T>
-│   │   ├──     fn transform(&self, input: T) -> T
-│   │   ├── impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
-│   │   ├──     fn transform(&self, input: T) -> T
-│   │   ├── fn main()
-│   │   ├── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
-│   │   │   where
-│   │   │       Bion: Cool
-│   │   ├── #
-│   │   │   macro_rules! unit
-│   │   ├──             fn insert(
-│   │   │                   &mut self,
-│   │   │                   key: (),
-│   │   │                   value: $unit_dtype,
-│   │   │               ) -> Result<Option<$unit_dtype>, ETLError>
-│   │   ├── pub async fn handle_get_axum_route(
-│   │   │       Session { maybe_claims }: Session,
-│   │   │       Path(RouteParams {
-│   │   │           alpha,
-│   │   │           bravo,
-│   │   │           charlie,
-│   │   │           edge_case
-│   │   │       }): Path<RouteParams>,
-│   │   │   ) -> ServerResult<Response>
-│   │   ├── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>
-│   │   └── pub async fn handle_post_yeet(
-│   │           State(auth_backend): State<AuthBackend>,
-│   │           Session { maybe_claims }: Session,
-│   │           Form(yeet_form): Form<YeetForm>,
-│   │       ) -> Result<Response, AuthError>
+│   │   ├── class(person)                                                                                                       
+│   │   ├── greet.Person <- function                                                                                            
+│   │   ├── ensure_between = function                                                                                           
+│   │   └── run_intermediate_annealing_process = function                                                                       
+│   ├── 📄 rust_test.rs (1,368 tokens, 259 lines)
+│   │   ├── fn at_beginning<'a>(&'a str)                                                                                        
+│   │   ├── pub enum Days<E: EdgeCase> {                                                                                        
+│   │   │       #[default]                                                                                                      
+│   │   │       Sun,                                                                                                            
+│   │   │       Mon,                                                                                                            
+│   │   │       #[error("edge case {idx}, expected at least {} and at most {}", .limits.lo, .limits.hi)]                        
+│   │   │       Tue,                                                                                                            
+│   │   │       Wed,                                                                                                            
+│   │   │       Thu(i16, bool),                                                                                                 
+│   │   │       Fri { day: u8 },                                                                                                
+│   │   │       Sat {                                                                                                           
+│   │   │           urday: String,                                                                                              
+│   │   │           edge_case: E,                                                                                               
+│   │   │       },                                                                                                              
+│   │   │   }                                                                                                                   
+│   │   ├── struct Point                                                                                                        
+│   │   ├── impl Point                                                                                                          
+│   │   ├──     fn get_origin() -> Point                                                                                        
+│   │   ├── struct Person                                                                                                       
+│   │   ├── impl Person                                                                                                         
+│   │   ├──     fn greet(&self)                                                                                                 
+│   │   ├── fn add_two_longs(x1: i64, x2: i64) -> i64                                                                           
+│   │   ├── fn add_two_longs_longer(                                                                                            
+│   │   │       x1: i64,                                                                                                        
+│   │   │       x2: i64,                                                                                                        
+│   │   │   ) -> i64                                                                                                            
+│   │   ├── const fn multiply_by_two(num: f64) -> f64                                                                           
+│   │   ├── fn get_first_character(s: &str) -> Option<char>                                                                     
+│   │   ├── trait Drawable                                                                                                      
+│   │   ├──     fn draw(&self)                                                                                                  
+│   │   ├── impl Drawable for Point                                                                                             
+│   │   ├──     fn draw(&self)                                                                                                  
+│   │   ├── fn with_generic<D: Drawable>(d: D)                                                                                  
+│   │   ├── fn with_generic<D>(d: D)                                                                                            
+│   │   │   where                                                                                                               
+│   │   │       D: Drawable                                                                                                     
+│   │   ├── fn main()                                                                                                           
+│   │   ├── pub struct VisibleStruct                                                                                            
+│   │   ├── mod my_module                                                                                                       
+│   │   ├──     pub struct AlsoVisibleStruct<T>(T, T)                                                                           
+│   │   ├── macro_rules! say_hello                                                                                              
+│   │   ├── #[macro_export]                                                                                                     
+│   │   │   macro_rules! hello_tree_plus                                                                                        
+│   │   ├── pub mod lib                                                                                                         
+│   │   ├──     pub mod interfaces                                                                                              
+│   │   ├──     mod engine                                                                                                      
+│   │   ├── pub fn flow<S1, S2, S3, S4, E, T, L>(                                                                               
+│   │   │       source: S1,                                                                                                     
+│   │   │       extractor: E,                                                                                                   
+│   │   │       inbox: S2,                                                                                                      
+│   │   │       transformer: T,                                                                                                 
+│   │   │       outbox: S3,                                                                                                     
+│   │   │       loader: L,                                                                                                      
+│   │   │       sink: &mut S4,                                                                                                  
+│   │   │   ) -> Result<(), Box<dyn Error>>                                                                                     
+│   │   │   where                                                                                                               
+│   │   │       S1: Extractable,                                                                                                
+│   │   │       S2: Extractable + Loadable,                                                                                     
+│   │   │       S3: Extractable + Loadable,                                                                                     
+│   │   │       S4: Loadable,                                                                                                   
+│   │   │       E: Extractor<S1, S2>,                                                                                           
+│   │   │       T: Transformer<S2, S3>,                                                                                         
+│   │   │       L: Loader<S3, S4>                                                                                               
+│   │   ├── trait Container                                                                                                     
+│   │   ├──     fn items(&self) -> impl Iterator<Item = Widget>                                                                 
+│   │   ├── trait HttpService                                                                                                   
+│   │   ├──     async fn fetch(&self, url: Url) -> HtmlBody                                                                     
+│   │   ├── struct Pair<T, U>                                                                                                   
+│   │   ├── trait Transformer<T>                                                                                                
+│   │   ├──     fn transform(&self, input: T) -> T                                                                              
+│   │   ├── impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>                                             
+│   │   ├──     fn transform(&self, input: T) -> T                                                                              
+│   │   ├── fn main()                                                                                                           
+│   │   ├── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)>                       
+│   │   │   where                                                                                                               
+│   │   │       Bion: Cool                                                                                                      
+│   │   ├── #[macro_export]                                                                                                     
+│   │   │   macro_rules! unit                                                                                                   
+│   │   ├──             fn insert(                                                                                              
+│   │   │                   &mut self,                                                                                          
+│   │   │                   key: (),                                                                                            
+│   │   │                   value: $unit_dtype,                                                                                 
+│   │   │               ) -> Result<Option<$unit_dtype>, ETLError>                                                              
+│   │   ├── pub async fn handle_get_axum_route(                                                                                 
+│   │   │       Session { maybe_claims }: Session,                                                                              
+│   │   │       Path(RouteParams {                                                                                              
+│   │   │           alpha,                                                                                                      
+│   │   │           bravo,                                                                                                      
+│   │   │           charlie,                                                                                                    
+│   │   │           edge_case                                                                                                   
+│   │   │       }): Path<RouteParams>,                                                                                          
+│   │   │   ) -> ServerResult<Response>                                                                                         
+│   │   ├── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>                                                           
+│   │   ├── pub async fn handle_post_yeet(                                                                                      
+│   │   │       State(auth_backend): State<AuthBackend>,                                                                        
+│   │   │       Session { maybe_claims }: Session,                                                                              
+│   │   │       Form(yeet_form): Form<YeetForm>,                                                                                
+│   │   │   ) -> Result<Response, AuthError>                                                                                    
+│   │   └── pub async fn handle_get_thingy(                                                                                     
+│   │           session: Session,                                                                                               
+│   │           State(ApiBackend {                                                                                              
+│   │               page_cache,                                                                                                 
+│   │               auth_backend,                                                                                               
+│   │               library_sql,                                                                                                
+│   │               some_data_cache,                                                                                            
+│   │               metadata_cache,                                                                                             
+│   │               thingy_client,                                                                                              
+│   │               ..                                                                                                          
+│   │           }): State<ApiBackend>,                                                                                          
+│   │       ) -> ServerResult<Response>                                                                                         
 │   ├── 📄 test.zig (397 tokens, 60 lines)
-│   │   ├── pub fn add(a: i32, b: i32) i32
-│   │   ├── test "add function"
-│   │   ├── const BunBuildOptions = struct
-│   │   ├──     pub fn updateRuntime(this: *BunBuildOptions) anyerror!void
-│   │   ├──     pub fn step(this: BunBuildOptions, b: anytype) *std.build.OptionsStep
-│   │   └── pub fn sgemv(
-│   │           order: Order,
-│   │           trans: Trans,
-│   │           m: usize,
-│   │           n: usize,
-│   │           alpha: f32,
-│   │           a: []const f32,
-│   │           lda: usize,
-│   │           x: []const f32,
-│   │           x_add: usize,
-│   │           beta: f32,
-│   │           y: []f32,
-│   │           y_add: usize,
-│   │       ) void
+│   │   ├── pub fn add(a: i32, b: i32) i32                                                                                      
+│   │   ├── test "add function"                                                                                                 
+│   │   ├── const BunBuildOptions = struct                                                                                      
+│   │   ├──     pub fn updateRuntime(this: *BunBuildOptions) anyerror!void                                                      
+│   │   ├──     pub fn step(this: BunBuildOptions, b: anytype) *std.build.OptionsStep                                           
+│   │   └── pub fn sgemv(                                                                                                       
+│   │           order: Order,                                                                                                   
+│   │           trans: Trans,                                                                                                   
+│   │           m: usize,                                                                                                       
+│   │           n: usize,                                                                                                       
+│   │           alpha: f32,                                                                                                     
+│   │           a: []const f32,                                                                                                 
+│   │           lda: usize,                                                                                                     
+│   │           x: []const f32,                                                                                                 
+│   │           x_add: usize,                                                                                                   
+│   │           beta: f32,                                                                                                      
+│   │           y: []f32,                                                                                                       
+│   │           y_add: usize,                                                                                                   
+│   │       ) void                                                                                                              
 │   ├── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │   │   ├── module TestFSharp
 │   │   ├── type Person = {
@@ -2089,86 +2101,86 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   │       : (int * string) option =
 │   │   └── type Result<'T> =
 │   ├── 📄 test_tcl_tk.tcl (54 tokens, 16 lines)
-│   │   ├── proc sayHello {}
-│   │   ├── proc arrg { input }
-│   │   └── proc multiLine {
-│   │           x,
-│   │           y
-│   │       }
+│   │   ├── proc sayHello {}                                                                                                    
+│   │   ├── proc arrg { input }                                                                                                 
+│   │   └── proc multiLine {                                                                                                    
+│   │           x,                                                                                                              
+│   │           y                                                                                                               
+│   │       }                                                                                                                   
 │   └── 📄 tf_test.tf (202 tokens, 38 lines)
-│       ├── provider "aws"
-│       ├── resource "aws_instance" "example"
-│       ├── data "aws_ami" "ubuntu"
-│       ├── variable "instance_type"
-│       ├── output "instance_public_ip"
-│       ├── locals
-│       └── module "vpc"
+│       ├── provider "aws"                                                                                                      
+│       ├── resource "aws_instance" "example"                                                                                   
+│       ├── data "aws_ami" "ubuntu"                                                                                             
+│       ├── variable "instance_type"                                                                                            
+│       ├── output "instance_public_ip"                                                                                         
+│       ├── locals                                                                                                              
+│       └── module "vpc"                                                                                                        
 ├── 📁 group5 (1 folder, 19 files) 
 │   ├── 📄 ansible_test.yml (55 tokens, 14 lines)
 │   │   ├── Install package
 │   │   ├── Start service
 │   │   └── Create user
 │   ├── 📄 app-routing.module.ts (287 tokens, 28 lines)
-│   │   ├── const routes: Routes = [
-│   │   │       { path: '', redirectTo: 'login', pathMatch: 'full' },
-│   │   │       { path: '*', redirectTo: 'login' },
-│   │   │       { path: 'home', component: HomeComponent },
-│   │   │       { path: 'login', component: LoginComponent },
-│   │   │       { path: 'register', component: RegisterComponent },
-│   │   │       { path: 'events', component: EventsComponent },
-│   │   │       { path: 'invites', component: InvitesComponent },
-│   │   │       { path: 'rewards', component: RewardsComponent },
-│   │   │       { path: 'profile', component: ProfileComponent },
-│   │   │   ];
-│   │   └── export class AppRoutingModule
+│   │   ├── const routes: Routes = [                                                                                            
+│   │   │       { path: '', redirectTo: 'login', pathMatch: 'full' },                                                           
+│   │   │       { path: '*', redirectTo: 'login' },                                                                             
+│   │   │       { path: 'home', component: HomeComponent },                                                                     
+│   │   │       { path: 'login', component: LoginComponent },                                                                   
+│   │   │       { path: 'register', component: RegisterComponent },                                                             
+│   │   │       { path: 'events', component: EventsComponent },                                                                 
+│   │   │       { path: 'invites', component: InvitesComponent },                                                               
+│   │   │       { path: 'rewards', component: RewardsComponent },                                                               
+│   │   │       { path: 'profile', component: ProfileComponent },                                                               
+│   │   │   ];                                                                                                                  
+│   │   └── export class AppRoutingModule                                                                                       
 │   ├── 📄 app.component.spec.ts (410 tokens, 47 lines)
-│   │   ├── describe 'AppComponent'
-│   │   ├──     it should create the app
-│   │   ├──     it should welcome the user
-│   │   ├──     it should welcome 'Jimbo'
-│   │   └──     it should request login if not logged in
+│   │   ├── describe 'AppComponent'                                                                                             
+│   │   ├──     it should create the app                                                                                        
+│   │   ├──     it should welcome the user                                                                                      
+│   │   ├──     it should welcome 'Jimbo'                                                                                       
+│   │   └──     it should request login if not logged in                                                                        
 │   ├── 📄 app.component.ts (271 tokens, 45 lines)
-│   │   ├── export class AppComponent
-│   │   ├──   constructor(
-│   │   │       private http: HttpClient,
-│   │   │       private loginService: LoginService,
-│   │   │       private stripeService: StripeService
-│   │   │     )
-│   │   ├──   constructor(private loginService: LoginService)
-│   │   ├──   checkSession()
-│   │   ├──   async goToEvent(event_id: string)
-│   │   └──   valInvitedBy(event: any, event_id: string)
+│   │   ├── export class AppComponent                                                                                           
+│   │   ├──   constructor(                                                                                                      
+│   │   │       private http: HttpClient,                                                                                       
+│   │   │       private loginService: LoginService,                                                                             
+│   │   │       private stripeService: StripeService                                                                            
+│   │   │     )                                                                                                                 
+│   │   ├──   constructor(private loginService: LoginService)                                                                   
+│   │   ├──   checkSession()                                                                                                    
+│   │   ├──   async goToEvent(event_id: string)                                                                                 
+│   │   └──   valInvitedBy(event: any, event_id: string)                                                                        
 │   ├── 📄 app.module.ts (374 tokens, 43 lines)
-│   │   ├── @NgModule({
-│   │   │       declarations: [
-│   │   │           AppComponent,
-│   │   │           HomeComponent,
-│   │   │           LoginComponent,
-│   │   │           RegisterComponent,
-│   │   │           EventsComponent,
-│   │   │           InvitesComponent,
-│   │   │           RewardsComponent,
-│   │   │           ProfileComponent
-│   │   └── export class AppModule
+│   │   ├── @NgModule({                                                                                                         
+│   │   │       declarations: [                                                                                                 
+│   │   │           AppComponent,                                                                                               
+│   │   │           HomeComponent,                                                                                              
+│   │   │           LoginComponent,                                                                                             
+│   │   │           RegisterComponent,                                                                                          
+│   │   │           EventsComponent,                                                                                            
+│   │   │           InvitesComponent,                                                                                           
+│   │   │           RewardsComponent,                                                                                           
+│   │   │           ProfileComponent                                                                                            
+│   │   └── export class AppModule                                                                                              
 │   ├── 📄 checkbox_test.md (191 tokens, 29 lines)
-│   │   ├── # My Checkbox Test
-│   │   ├── ## My No Parens Test
-│   │   ├── ## My Empty href Test
-│   │   ├── ## My other url Test [Q&A]
-│   │   ├── ## My other other url Test [Q&A]
-│   │   ├── ## My 2nd other url Test [Q&A]
-│   │   ├── ## My 3rd other url Test [Q&A]
-│   │   ├── - [ ] Task 1
-│   │   ├──     - [ ] No Space Task 1.1
-│   │   ├──     - [ ] Two Spaces Task 1.2
-│   │   ├──         - [ ] Subtask 1.2.1
-│   │   ├── - [ ] Task 2
-│   │   ├── -  Task 3
-│   │   ├──     - [ ] Subtask 3.1
-│   │   ├── -  Task 6
-│   │   ├──     -  Subtask 6.1
-│   │   ├──         - [ ] Handle edge cases
-│   │   └── # My Codeblock Test
+│   │   ├── # My Checkbox Test                                                                                                  
+│   │   ├── ## My No Parens Test                                                                                                
+│   │   ├── ## My Empty href Test                                                                                               
+│   │   ├── ## My other url Test [Q&A]                                                                                          
+│   │   ├── ## My other other url Test [Q&A]                                                                                    
+│   │   ├── ## My 2nd other url Test [Q&A]                                                                                      
+│   │   ├── ## My 3rd other url Test [Q&A]                                                                                      
+│   │   ├── - [ ] Task 1                                                                                                        
+│   │   ├──     - [ ] No Space Task 1.1                                                                                         
+│   │   ├──     - [ ] Two Spaces Task 1.2                                                                                       
+│   │   ├──         - [ ] Subtask 1.2.1                                                                                         
+│   │   ├── - [ ] Task 2                                                                                                        
+│   │   ├── - [x] Task 3                                                                                                        
+│   │   ├──     - [ ] Subtask 3.1                                                                                               
+│   │   ├── - [x] Task 6                                                                                                        
+│   │   ├──     - [x] Subtask 6.1                                                                                               
+│   │   ├──         - [ ] Handle edge cases                                                                                     
+│   │   └── # My Codeblock Test                                                                                                 
 │   ├── 📄 checkbox_test.txt (257 tokens, 33 lines)
 │   │   ├── - [ ] fix phone number format +1
 │   │   ├── - [ ] add forgot password
@@ -2179,19 +2191,19 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├── - [ ] CTA refer 2 people to get instant lower price
 │   │   └── - [ ] form to send referrals
 │   ├── 📄 environment.test.ts (197 tokens, 19 lines)
-│   │   ├── environment:
-│   │   ├──    production
-│   │   ├──    cognitoUserPoolId
-│   │   ├──    cognitoAppClientId
-│   │   └──    apiurl
+│   │   ├── environment:                                                                                                        
+│   │   ├──    production                                                                                                       
+│   │   ├──    cognitoUserPoolId                                                                                                
+│   │   ├──    cognitoAppClientId                                                                                               
+│   │   └──    apiurl                                                                                                           
 │   ├── 📄 hello_world.pyi (22 tokens, 3 lines)
-│   │   ├── @final
-│   │   │   class dtype(Generic[_DTypeScalar_co])
-│   │   └──     names: None | tuple
+│   │   ├── @final                                                                                                              
+│   │   │   class dtype(Generic[_DTypeScalar_co])                                                                               
+│   │   └──     names: None | tuple[builtins.str, ...]                                                                          
 │   ├── 📄 k8s_test.yaml (140 tokens, 37 lines)
-│   │   ├── apps/v1.Deployment -> my-app
-│   │   ├── v1.Service -> my-service
-│   │   └── v1.ConfigMap -> my-config
+│   │   ├── apps/v1.Deployment -> my-app                                                                                        
+│   │   ├── v1.Service -> my-service                                                                                            
+│   │   └── v1.ConfigMap -> my-config                                                                                           
 │   ├── 📄 Makefile (714 tokens, 84 lines)
 │   │   ├── include dotenv/dev.env
 │   │   ├── .PHONY: dev
@@ -2213,54 +2225,54 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├── cognitojwt
 │   │   └── flask-lambda
 │   ├── 📄 rust_todo_test.rs (92 tokens, 26 lines)
-│   │   ├── TODO: This todo tests parse_todo
-│   │   ├── enum Color {
-│   │   │       Red,
-│   │   │       Blue,
-│   │   │       Green,
-│   │   │   }
-│   │   ├── struct Point
-│   │   ├── trait Drawable
-│   │   ├──     fn draw(&self)
-│   │   ├── impl Drawable for Point
-│   │   ├──     fn draw(&self)
-│   │   └── fn main()
+│   │   ├── TODO: This todo tests parse_todo                                                                                    
+│   │   ├── enum Color {                                                                                                        
+│   │   │       Red,                                                                                                            
+│   │   │       Blue,                                                                                                           
+│   │   │       Green,                                                                                                          
+│   │   │   }                                                                                                                   
+│   │   ├── struct Point                                                                                                        
+│   │   ├── trait Drawable                                                                                                      
+│   │   ├──     fn draw(&self)                                                                                                  
+│   │   ├── impl Drawable for Point                                                                                             
+│   │   ├──     fn draw(&self)                                                                                                  
+│   │   └── fn main()                                                                                                           
 │   ├── 📄 sql_test.sql (270 tokens, 51 lines)
-│   │   ├── CREATE TABLE promoters
-│   │   ├──    user_id serial PRIMARY KEY,
-│   │   ├──    type varchar(20) NOT NULL,
-│   │   ├──    username varchar(20) NOT NULL,
-│   │   ├──    password varchar(20) NOT NULL,
-│   │   ├──    email varchar(30) NOT NULL,
-│   │   ├──    phone varchar(20) NOT NULL,
-│   │   ├──    promocode varchar(20),
-│   │   ├──    info json,
-│   │   ├──    going text[],
-│   │   ├──    invites text[],
-│   │   ├──    balance integer NOT NULL,
-│   │   ├──    rewards text[],
-│   │   ├──    created timestamp
-│   │   ├── CREATE TABLE events
-│   │   ├──    event_id serial PRIMARY KEY,
-│   │   ├──    name varchar(64) NOT NULL,
-│   │   ├──    date varchar(64) NOT NULL,
-│   │   ├──    location varchar(64) NOT NULL,
-│   │   ├──    performer varchar(64) NOT NULL,
-│   │   ├──    rewards json,
-│   │   └──    created timestamp
+│   │   ├── CREATE TABLE promoters                                                                                              
+│   │   ├──    user_id serial PRIMARY KEY,                                                                                      
+│   │   ├──    type varchar(20) NOT NULL,                                                                                       
+│   │   ├──    username varchar(20) NOT NULL,                                                                                   
+│   │   ├──    password varchar(20) NOT NULL,                                                                                   
+│   │   ├──    email varchar(30) NOT NULL,                                                                                      
+│   │   ├──    phone varchar(20) NOT NULL,                                                                                      
+│   │   ├──    promocode varchar(20),                                                                                           
+│   │   ├──    info json,                                                                                                       
+│   │   ├──    going text[],                                                                                                    
+│   │   ├──    invites text[],                                                                                                  
+│   │   ├──    balance integer NOT NULL,                                                                                        
+│   │   ├──    rewards text[],                                                                                                  
+│   │   ├──    created timestamp                                                                                                
+│   │   ├── CREATE TABLE events                                                                                                 
+│   │   ├──    event_id serial PRIMARY KEY,                                                                                     
+│   │   ├──    name varchar(64) NOT NULL,                                                                                       
+│   │   ├──    date varchar(64) NOT NULL,                                                                                       
+│   │   ├──    location varchar(64) NOT NULL,                                                                                   
+│   │   ├──    performer varchar(64) NOT NULL,                                                                                  
+│   │   ├──    rewards json,                                                                                                    
+│   │   └──    created timestamp                                                                                                
 │   ├── 📄 standard-app-routing.module.ts (100 tokens, 16 lines)
-│   │   └── const routes: Routes = [
-│   │         { path: '', component: HomeComponent },
-│   │         {
-│   │           path: 'heroes',
-│   │           component: HeroesListComponent,
-│   │           children: [
-│   │             { path: ':id', component: HeroDetailComponent },
-│   │             { path: 'new', component: HeroFormComponent },
-│   │           ],
-│   │         },
-│   │         { path: '**', component: PageNotFoundComponent },
-│   │       ];
+│   │   └── const routes: Routes = [                                                                                            
+│   │         { path: '', component: HomeComponent },                                                                           
+│   │         {                                                                                                                 
+│   │           path: 'heroes',                                                                                                 
+│   │           component: HeroesListComponent,                                                                                 
+│   │           children: [                                                                                                     
+│   │             { path: ':id', component: HeroDetailComponent },                                                              
+│   │             { path: 'new', component: HeroFormComponent },                                                                
+│   │           ],                                                                                                              
+│   │         },                                                                                                                
+│   │         { path: '**', component: PageNotFoundComponent },                                                                 
+│   │       ];                                                                                                                  
 │   ├── 📄 test.env (190 tokens, 25 lines)
 │   │   ├── PROMO_PATH
 │   │   ├── PRODUCTION
@@ -2297,289 +2309,289 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├──     watch: 'ng build --watch --configuration development'
 │   │   └──     test: 'ng test'
 │   └── 📄 tickets.component.ts (7,160 tokens, 903 lines)
-│       ├── interface EnrichedTicket extends Ticket
-│       ├── interface SpinConfig
-│       ├── interface RotationState
-│       ├── interface SpeakInput
-│       ├── const formatSpeakInput = (input: SpeakInput): string =>
-│       ├── function hourToSpeech(hour: number, minute: number, period: string): string
-│       ├── export class TicketsComponent implements AfterViewInit
-│       ├──   speak(input: SpeakInput)
-│       ├──   speakEvent(ticket: EnrichedTicket): void
-│       ├──   formatEvent(ticket: EnrichedTicket): string
-│       ├──   speakVenue(ticket: EnrichedTicket): void
-│       ├──   formatDate(date: Date, oneLiner: boolean = false): string
-│       ├──   formatDateForSpeech(date: Date): string
-│       ├──   async spinQRCode(
-│       │       event: PointerEvent,
-│       │       config: SpinConfig = DEFAULT_SPIN_CONFIG
-│       │     )
-│       ├──   private animateRotation(
-│       │       imgElement: HTMLElement,
-│       │       targetRotation: number,
-│       │       config: SpinConfig,
-│       │       cleanup: () => void
-│       │     )
-│       ├──     const animate = (currentTime: number) =>
-│       ├──         requestAnimationFrame(animate)
-│       ├──         cleanup()
-│       ├──     requestAnimationFrame(animate)
-│       ├──   private getNext90Degree(currentRotation: number): number
-│       ├──   private getCurrentRotation(matrix: string): number
-│       ├──   ngAfterViewInit()
-│       ├──       const mouseEnterListener = () =>
-│       ├──       const mouseLeaveListener = () =>
-│       ├──   ngOnDestroy()
-│       ├──   toggleColumn(event: MatOptionSelectionChange, column: string)
-│       ├──   adjustColumns(event?: Event)
-│       ├──   onResize(event: Event)
-│       ├──   async ngOnInit()
-│       ├──   async loadTickets(): Promise<void>
-│       ├──   onDateRangeChange(
-│       │       type: "start" | "end",
-│       │       event: MatDatepickerInputEvent<Date>
-│       │     )
-│       ├──   applyFilter(column: string): void
-│       ├──   formatDateForComparison(date: Date): string
-│       ├──   constructor(private renderer: Renderer2)
-│       ├──   onFilterChange(event: Event, column: string)
-│       ├──   onLatitudeChange(event: Event)
-│       ├──   onLongitudeChange(event: Event)
-│       ├──   onRadiusChange(event: Event)
-│       ├──   sortData(sort: Sort): void
-│       ├──   onRowClick(event: Event, row: any)
-│       ├── function isDate(value: Date | undefined | null): value is Date
-│       ├── function isNonNullNumber(value: number | null): value is number
-│       ├── function hasLocation(
-│       │     ticket: any
-│       │   ): ticket is
-│       ├── const create_faker_ticket = async () =>
-│       ├── function compare(a: number | string, b: number | string, isAsc: boolean)
-│       ├── function compare_dates(a: Date, b: Date, isAsc: boolean)
-│       ├── async function mockMoreTickets(): Promise<Ticket[]>
-│       ├── const mockTickets = async () =>
-│       └── const renderQRCode = async (text: String): Promise<string> =>
+│       ├── interface EnrichedTicket extends Ticket                                                                             
+│       ├── interface SpinConfig                                                                                                
+│       ├── interface RotationState                                                                                             
+│       ├── interface SpeakInput                                                                                                
+│       ├── const formatSpeakInput = (input: SpeakInput): string =>                                                             
+│       ├── function hourToSpeech(hour: number, minute: number, period: string): string                                         
+│       ├── export class TicketsComponent implements AfterViewInit                                                              
+│       ├──   speak(input: SpeakInput)                                                                                          
+│       ├──   speakEvent(ticket: EnrichedTicket): void                                                                          
+│       ├──   formatEvent(ticket: EnrichedTicket): string                                                                       
+│       ├──   speakVenue(ticket: EnrichedTicket): void                                                                          
+│       ├──   formatDate(date: Date, oneLiner: boolean = false): string                                                         
+│       ├──   formatDateForSpeech(date: Date): string                                                                           
+│       ├──   async spinQRCode(                                                                                                 
+│       │       event: PointerEvent,                                                                                            
+│       │       config: SpinConfig = DEFAULT_SPIN_CONFIG                                                                        
+│       │     )                                                                                                                 
+│       ├──   private animateRotation(                                                                                          
+│       │       imgElement: HTMLElement,                                                                                        
+│       │       targetRotation: number,                                                                                         
+│       │       config: SpinConfig,                                                                                             
+│       │       cleanup: () => void                                                                                             
+│       │     )                                                                                                                 
+│       ├──     const animate = (currentTime: number) =>                                                                        
+│       ├──         requestAnimationFrame(animate)                                                                              
+│       ├──         cleanup()                                                                                                   
+│       ├──     requestAnimationFrame(animate)                                                                                  
+│       ├──   private getNext90Degree(currentRotation: number): number                                                          
+│       ├──   private getCurrentRotation(matrix: string): number                                                                
+│       ├──   ngAfterViewInit()                                                                                                 
+│       ├──       const mouseEnterListener = () =>                                                                              
+│       ├──       const mouseLeaveListener = () =>                                                                              
+│       ├──   ngOnDestroy()                                                                                                     
+│       ├──   toggleColumn(event: MatOptionSelectionChange, column: string)                                                     
+│       ├──   adjustColumns(event?: Event)                                                                                      
+│       ├──   onResize(event: Event)                                                                                            
+│       ├──   async ngOnInit()                                                                                                  
+│       ├──   async loadTickets(): Promise<void>                                                                                
+│       ├──   onDateRangeChange(                                                                                                
+│       │       type: "start" | "end",                                                                                          
+│       │       event: MatDatepickerInputEvent<Date>                                                                            
+│       │     )                                                                                                                 
+│       ├──   applyFilter(column: string): void                                                                                 
+│       ├──   formatDateForComparison(date: Date): string                                                                       
+│       ├──   constructor(private renderer: Renderer2)                                                                          
+│       ├──   onFilterChange(event: Event, column: string)                                                                      
+│       ├──   onLatitudeChange(event: Event)                                                                                    
+│       ├──   onLongitudeChange(event: Event)                                                                                   
+│       ├──   onRadiusChange(event: Event)                                                                                      
+│       ├──   sortData(sort: Sort): void                                                                                        
+│       ├──   onRowClick(event: Event, row: any)                                                                                
+│       ├── function isDate(value: Date | undefined | null): value is Date                                                      
+│       ├── function isNonNullNumber(value: number | null): value is number                                                     
+│       ├── function hasLocation(                                                                                               
+│       │     ticket: any                                                                                                       
+│       │   ): ticket is                                                                                                        
+│       ├── const create_faker_ticket = async () =>                                                                             
+│       ├── function compare(a: number | string, b: number | string, isAsc: boolean)                                            
+│       ├── function compare_dates(a: Date, b: Date, isAsc: boolean)                                                            
+│       ├── async function mockMoreTickets(): Promise<Ticket[]>                                                                 
+│       ├── const mockTickets = async () =>                                                                                     
+│       └── const renderQRCode = async (text: String): Promise<string> =>                                                       
 ├── 📁 group6 (1 folder, 14 files) 
 │   ├── 📄 catastrophic.c (5,339 tokens, 754 lines)
-│   │   ├── TODO: technically we should use a proper parser
-│   │   ├── struct Point
-│   │   ├──     int x;
-│   │   ├──     int y;
-│   │   ├── struct Point getOrigin()
-│   │   ├── float mul_two_floats(float x1, float x2)
-│   │   ├── enum days
-│   │   ├──     SUN,
-│   │   ├──     MON,
-│   │   ├──     TUE,
-│   │   ├──     WED,
-│   │   ├──     THU,
-│   │   ├──     FRI,
-│   │   ├──     SAT
-│   │   ├── enum worker_pool_flags
-│   │   ├──         POOL_BH                 = 1 << 0,
-│   │   ├──         POOL_MANAGER_ACTIVE     = 1 << 1,
-│   │   ├──         POOL_DISASSOCIATED      = 1 << 2,
-│   │   ├──         POOL_BH_DRAINING        = 1 << 3,
-│   │   ├── enum worker_flags
-│   │   ├──         WORKER_DIE              = 1 << 1,
-│   │   ├──         WORKER_IDLE             = 1 << 2,
-│   │   ├──         WORKER_PREP             = 1 << 3,
-│   │   ├──         WORKER_CPU_INTENSIVE    = 1 << 6,
-│   │   ├──         WORKER_UNBOUND          = 1 << 7,
-│   │   ├──         WORKER_REBOUND          = 1 << 8,
-│   │   ├──         WORKER_NOT_RUNNING      = WORKER_PREP | WORKER_CPU_INTENSIVE |
-│   │   │                                     WORKER_UNBOUND | WORKER_REBOUND,
-│   │   ├── struct worker_pool
-│   │   ├──   raw_spinlock_t    lock;
-│   │   ├──   int      cpu;
-│   │   ├──   int      node;
-│   │   ├──   int      id;
-│   │   ├──   unsigned int    flags;
-│   │   ├──   unsigned long    watchdog_ts;
-│   │   ├──   bool      cpu_stall;
-│   │   ├──   int      nr_running;
-│   │   ├──   struct list_head  worklist;
-│   │   ├──   int      nr_workers;
-│   │   ├──   int      nr_idle;
-│   │   ├──   struct list_head  idle_list;
-│   │   ├──   struct timer_list  idle_timer;
-│   │   ├──   struct work_struct      idle_cull_work;
-│   │   ├──   struct timer_list  mayday_timer;
-│   │   ├──   struct worker    *manager;
-│   │   ├──   struct list_head  workers;
-│   │   ├──   struct ida    worker_ida;
-│   │   ├──   struct workqueue_attrs  *attrs;
-│   │   ├──   struct hlist_node  hash_node;
-│   │   ├──   int      refcnt;
-│   │   ├──   struct rcu_head    rcu;
-│   │   ├── long add_two_longs(long x1, long x2)
-│   │   ├── double multiplyByTwo(double num)
-│   │   ├── char getFirstCharacter(char *str)
-│   │   ├── void greet(Person p)
-│   │   ├── typedef struct
-│   │   ├──     char name[50];
-│   │   ├── } Person;
-│   │   ├── typedef struct PersonA
-│   │   ├──     char name[50];
-│   │   ├── } PersonB;
-│   │   ├── int main()
-│   │   ├── int* getArrayStart(int arr[], int size)
-│   │   ├── long complexFunctionWithMultipleArguments(
-│   │   │       int param1,
-│   │   │       double param2,
-│   │   │       char *param3,
-│   │   │       struct Point point
-│   │   │   )
-│   │   ├── keyPattern *ACLKeyPatternCreate(sds pattern, int flags)
-│   │   ├── sds sdsCatPatternString(sds base, keyPattern *pat)
-│   │   ├── static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)
-│   │   ├──     while((ln = listNext(&li)))
-│   │   ├── static struct config
-│   │   ├──     aeEventLoop *el;
-│   │   ├──     cliConnInfo conn_info;
-│   │   ├──     const char *hostsocket;
-│   │   ├──     int tls;
-│   │   ├──     struct cliSSLconfig sslconfig;
-│   │   ├── } config;
-│   │   ├── class Person
-│   │   ├──     std::string name;
-│   │   ├── public:
-│   │   ├──     Person(std::string n) : name(n)
-│   │   ├──     void greet()
-│   │   ├── void globalGreet()
-│   │   ├── int main()
-│   │   ├── void printMessage(const std::string &message)
-│   │   ├── template<typename T>
-│   │   │   void printVector(const std::vector<T>& vec)
-│   │   ├── struct foo
-│   │   ├──     char x;
-│   │   ├──     struct foo_in
-│   │   ├──           char* y;
-│   │   ├──           short z;
-│   │   ├──     } inner;
-│   │   ├── struct Point
-│   │   ├──     int x, y;
-│   │   ├──     Point(int x, int y) : x(x), y(y)
-│   │   ├── class Animal
-│   │   ├──   public:
-│   │   ├──     Animal(const std::string &name) : name(name)
-│   │   ├──     virtual void speak() const
-│   │   ├──     virtual ~Animal()
-│   │   ├── protected:
-│   │   ├──     std::string name;
-│   │   ├── class Dog : public Animal
-│   │   ├──   public:
-│   │   ├──     Dog(const std::string &name) : Animal(name)
-│   │   ├──     void speak() const override
-│   │   ├── class Cat : public Animal
-│   │   ├──   public:
-│   │   ├──     Cat(const std::string &name) : Animal(name)
-│   │   ├──     void speak() const override
-│   │   ├── class CatDog: public Animal, public Cat, public Dog
-│   │   ├──   public:
-│   │   ├──       CatDog(const std::string &name) : Animal(name)
-│   │   ├──       int meow_bark()
-│   │   ├── nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,
-│   │   │                                int batch_size, int max_seq_length, float dropout,
-│   │   │                                bool bidirectional, bool cudnn_allow_tf32,
-│   │   │              int workspace_size, int reserve_space_size)
-│   │   ├── int main()
-│   │   ├── enum ECarTypes
-│   │   ├──   Sedan,
-│   │   ├──   Hatchback,
-│   │   ├──   SUV,
-│   │   ├──   Wagon
-│   │   ├── ECarTypes GetPreferredCarType()
-│   │   ├── enum ECarTypes : uint8_t
-│   │   ├──   Sedan,
-│   │   ├──   Hatchback,
-│   │   ├──   SUV = 254,
-│   │   ├──   Hybrid
-│   │   ├── enum class ECarTypes : uint8_t
-│   │   ├──   Sedan,
-│   │   ├──   Hatchback,
-│   │   ├──   SUV = 254,
-│   │   ├──   Hybrid
-│   │   ├── void myFunction(string fname, int age)
-│   │   ├── template <typename T> T cos(T)
-│   │   ├── template <typename T> T sin(T)
-│   │   ├── template <typename T> T sqrt(T)
-│   │   ├── template<typename T> struct VLEN
-│   │   ├── template<typename T> class arr
-│   │   ├──   private:
-│   │   ├──     static T *ralloc(size_t num)
-│   │   ├──     static void dealloc(T *ptr)
-│   │   ├──     static T *ralloc(size_t num)
-│   │   ├──     static void dealloc(T *ptr)
-│   │   ├──   public:
-│   │   ├──     arr() : p(0), sz(0)
-│   │   ├──     arr(size_t n) : p(ralloc(n)), sz(n)
-│   │   ├──     arr(arr &&other)
-│   │   │         : p(other.p), sz(other.sz)
-│   │   ├──     ~arr()
-│   │   ├──     void resize(size_t n)
-│   │   ├──     T &operator[](size_t idx)
-│   │   ├──     T *data()
-│   │   ├──     size_t size() const
-│   │   ├── class Buffer
-│   │   ├──  private:
-│   │   ├──   void* ptr_;
-│   │   ├── std::tuple<array, array, array> quantize(
-│   │   │       const array& w,
-│   │   │       int group_size,
-│   │   │       int bits,
-│   │   │       StreamOrDevice s)
-│   │   ├── #define PY_SSIZE_T_CLEAN
-│   │   ├── #define PLATFORM_IS_X86
-│   │   ├── #define PLATFORM_WINDOWS
-│   │   ├── #define GETCPUID(a, b, c, d, a_inp, c_inp)
-│   │   ├── static int GetXCR0EAX()
-│   │   ├── #define GETCPUID(a, b, c, d, a_inp, c_inp)
-│   │   ├── static int GetXCR0EAX()
-│   │   ├──   asm("XGETBV" : "=a"(eax), "=d"(edx) : "c"(0))
-│   │   ├── static void ReportMissingCpuFeature(const char* name)
-│   │   ├── static PyObject *CheckCpuFeatures(PyObject *self, PyObject *args)
-│   │   ├── static PyObject *CheckCpuFeatures(PyObject *self, PyObject *args)
-│   │   ├── static PyMethodDef cpu_feature_guard_methods[]
-│   │   ├── static struct PyModuleDef cpu_feature_guard_module
-│   │   ├── #define EXPORT_SYMBOL __declspec(dllexport)
-│   │   ├── #define EXPORT_SYMBOL __attribute__ ((visibility("default")))
-│   │   ├── EXPORT_SYMBOL PyMODINIT_FUNC PyInit_cpu_feature_guard(void)
-│   │   ├── typedef struct
-│   │   ├──     GPT2Config config;
-│   │   ├──     ParameterTensors params;
-│   │   ├──     size_t param_sizes[NUM_PARAMETER_TENSORS];
-│   │   ├──     float* params_memory;
-│   │   ├──     size_t num_parameters;
-│   │   ├──     ParameterTensors grads;
-│   │   ├──     float* grads_memory;
-│   │   ├──     float* m_memory;
-│   │   ├──     float* v_memory;
-│   │   ├──     ActivationTensors acts;
-│   │   ├──     size_t act_sizes[NUM_ACTIVATION_TENSORS];
-│   │   ├──     float* acts_memory;
-│   │   ├──     size_t num_activations;
-│   │   ├──     ActivationTensors grads_acts;
-│   │   ├──     float* grads_acts_memory;
-│   │   ├──     int batch_size;
-│   │   ├──     int seq_len;
-│   │   ├──     int* inputs;
-│   │   ├──     int* targets;
-│   │   ├──     float mean_loss;
-│   │   └── } GPT2;
+│   │   ├── TODO: technically we should use a proper parser                                                                     
+│   │   ├── struct Point                                                                                                        
+│   │   ├──     int x;                                                                                                          
+│   │   ├──     int y;                                                                                                          
+│   │   ├── struct Point getOrigin()                                                                                            
+│   │   ├── float mul_two_floats(float x1, float x2)                                                                            
+│   │   ├── enum days                                                                                                           
+│   │   ├──     SUN,                                                                                                            
+│   │   ├──     MON,                                                                                                            
+│   │   ├──     TUE,                                                                                                            
+│   │   ├──     WED,                                                                                                            
+│   │   ├──     THU,                                                                                                            
+│   │   ├──     FRI,                                                                                                            
+│   │   ├──     SAT                                                                                                             
+│   │   ├── enum worker_pool_flags                                                                                              
+│   │   ├──         POOL_BH                 = 1 << 0,                                                                           
+│   │   ├──         POOL_MANAGER_ACTIVE     = 1 << 1,                                                                           
+│   │   ├──         POOL_DISASSOCIATED      = 1 << 2,                                                                           
+│   │   ├──         POOL_BH_DRAINING        = 1 << 3,                                                                           
+│   │   ├── enum worker_flags                                                                                                   
+│   │   ├──         WORKER_DIE              = 1 << 1,                                                                           
+│   │   ├──         WORKER_IDLE             = 1 << 2,                                                                           
+│   │   ├──         WORKER_PREP             = 1 << 3,                                                                           
+│   │   ├──         WORKER_CPU_INTENSIVE    = 1 << 6,                                                                           
+│   │   ├──         WORKER_UNBOUND          = 1 << 7,                                                                           
+│   │   ├──         WORKER_REBOUND          = 1 << 8,                                                                           
+│   │   ├──         WORKER_NOT_RUNNING      = WORKER_PREP | WORKER_CPU_INTENSIVE |                                              
+│   │   │                                     WORKER_UNBOUND | WORKER_REBOUND,                                                  
+│   │   ├── struct worker_pool                                                                                                  
+│   │   ├──   raw_spinlock_t    lock;                                                                                           
+│   │   ├──   int      cpu;                                                                                                     
+│   │   ├──   int      node;                                                                                                    
+│   │   ├──   int      id;                                                                                                      
+│   │   ├──   unsigned int    flags;                                                                                            
+│   │   ├──   unsigned long    watchdog_ts;                                                                                     
+│   │   ├──   bool      cpu_stall;                                                                                              
+│   │   ├──   int      nr_running;                                                                                              
+│   │   ├──   struct list_head  worklist;                                                                                       
+│   │   ├──   int      nr_workers;                                                                                              
+│   │   ├──   int      nr_idle;                                                                                                 
+│   │   ├──   struct list_head  idle_list;                                                                                      
+│   │   ├──   struct timer_list  idle_timer;                                                                                    
+│   │   ├──   struct work_struct      idle_cull_work;                                                                           
+│   │   ├──   struct timer_list  mayday_timer;                                                                                  
+│   │   ├──   struct worker    *manager;                                                                                        
+│   │   ├──   struct list_head  workers;                                                                                        
+│   │   ├──   struct ida    worker_ida;                                                                                         
+│   │   ├──   struct workqueue_attrs  *attrs;                                                                                   
+│   │   ├──   struct hlist_node  hash_node;                                                                                     
+│   │   ├──   int      refcnt;                                                                                                  
+│   │   ├──   struct rcu_head    rcu;                                                                                           
+│   │   ├── long add_two_longs(long x1, long x2)                                                                                
+│   │   ├── double multiplyByTwo(double num)                                                                                    
+│   │   ├── char getFirstCharacter(char *str)                                                                                   
+│   │   ├── void greet(Person p)                                                                                                
+│   │   ├── typedef struct                                                                                                      
+│   │   ├──     char name[50];                                                                                                  
+│   │   ├── } Person;                                                                                                           
+│   │   ├── typedef struct PersonA                                                                                              
+│   │   ├──     char name[50];                                                                                                  
+│   │   ├── } PersonB;                                                                                                          
+│   │   ├── int main()                                                                                                          
+│   │   ├── int* getArrayStart(int arr[], int size)                                                                             
+│   │   ├── long complexFunctionWithMultipleArguments(                                                                          
+│   │   │       int param1,                                                                                                     
+│   │   │       double param2,                                                                                                  
+│   │   │       char *param3,                                                                                                   
+│   │   │       struct Point point                                                                                              
+│   │   │   )                                                                                                                   
+│   │   ├── keyPattern *ACLKeyPatternCreate(sds pattern, int flags)                                                             
+│   │   ├── sds sdsCatPatternString(sds base, keyPattern *pat)                                                                  
+│   │   ├── static int ACLCheckChannelAgainstList(list *reference, const char *channel, int channellen, int is_pattern)         
+│   │   ├──     while((ln = listNext(&li)))                                                                                     
+│   │   ├── static struct config                                                                                                
+│   │   ├──     aeEventLoop *el;                                                                                                
+│   │   ├──     cliConnInfo conn_info;                                                                                          
+│   │   ├──     const char *hostsocket;                                                                                         
+│   │   ├──     int tls;                                                                                                        
+│   │   ├──     struct cliSSLconfig sslconfig;                                                                                  
+│   │   ├── } config;                                                                                                           
+│   │   ├── class Person                                                                                                        
+│   │   ├──     std::string name;                                                                                               
+│   │   ├── public:                                                                                                             
+│   │   ├──     Person(std::string n) : name(n)                                                                                 
+│   │   ├──     void greet()                                                                                                    
+│   │   ├── void globalGreet()                                                                                                  
+│   │   ├── int main()                                                                                                          
+│   │   ├── void printMessage(const std::string &message)                                                                       
+│   │   ├── template<typename T>                                                                                                
+│   │   │   void printVector(const std::vector<T>& vec)                                                                         
+│   │   ├── struct foo                                                                                                          
+│   │   ├──     char x;                                                                                                         
+│   │   ├──     struct foo_in                                                                                                   
+│   │   ├──           char* y;                                                                                                  
+│   │   ├──           short z;                                                                                                  
+│   │   ├──     } inner;                                                                                                        
+│   │   ├── struct Point                                                                                                        
+│   │   ├──     int x, y;                                                                                                       
+│   │   ├──     Point(int x, int y) : x(x), y(y)                                                                                
+│   │   ├── class Animal                                                                                                        
+│   │   ├──   public:                                                                                                           
+│   │   ├──     Animal(const std::string &name) : name(name)                                                                    
+│   │   ├──     virtual void speak() const                                                                                      
+│   │   ├──     virtual ~Animal()                                                                                               
+│   │   ├── protected:                                                                                                          
+│   │   ├──     std::string name;                                                                                               
+│   │   ├── class Dog : public Animal                                                                                           
+│   │   ├──   public:                                                                                                           
+│   │   ├──     Dog(const std::string &name) : Animal(name)                                                                     
+│   │   ├──     void speak() const override                                                                                     
+│   │   ├── class Cat : public Animal                                                                                           
+│   │   ├──   public:                                                                                                           
+│   │   ├──     Cat(const std::string &name) : Animal(name)                                                                     
+│   │   ├──     void speak() const override                                                                                     
+│   │   ├── class CatDog: public Animal, public Cat, public Dog                                                                 
+│   │   ├──   public:                                                                                                           
+│   │   ├──       CatDog(const std::string &name) : Animal(name)                                                                
+│   │   ├──       int meow_bark()                                                                                               
+│   │   ├── nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int num_layers,                                       
+│   │   │                                int batch_size, int max_seq_length, float dropout,                                     
+│   │   │                                bool bidirectional, bool cudnn_allow_tf32,                                             
+│   │   │                    int workspace_size, int reserve_space_size)                                                        
+│   │   ├── int main()                                                                                                          
+│   │   ├── enum ECarTypes                                                                                                      
+│   │   ├──   Sedan,                                                                                                            
+│   │   ├──   Hatchback,                                                                                                        
+│   │   ├──   SUV,                                                                                                              
+│   │   ├──   Wagon                                                                                                             
+│   │   ├── ECarTypes GetPreferredCarType()                                                                                     
+│   │   ├── enum ECarTypes : uint8_t                                                                                            
+│   │   ├──   Sedan,                                                                                                            
+│   │   ├──   Hatchback,                                                                                                        
+│   │   ├──   SUV = 254,                                                                                                        
+│   │   ├──   Hybrid                                                                                                            
+│   │   ├── enum class ECarTypes : uint8_t                                                                                      
+│   │   ├──   Sedan,                                                                                                            
+│   │   ├──   Hatchback,                                                                                                        
+│   │   ├──   SUV = 254,                                                                                                        
+│   │   ├──   Hybrid                                                                                                            
+│   │   ├── void myFunction(string fname, int age)                                                                              
+│   │   ├── template <typename T> T cos(T)                                                                                      
+│   │   ├── template <typename T> T sin(T)                                                                                      
+│   │   ├── template <typename T> T sqrt(T)                                                                                     
+│   │   ├── template<typename T> struct VLEN                                                                                    
+│   │   ├── template<typename T> class arr                                                                                      
+│   │   ├──   private:                                                                                                          
+│   │   ├──     static T *ralloc(size_t num)                                                                                    
+│   │   ├──     static void dealloc(T *ptr)                                                                                     
+│   │   ├──     static T *ralloc(size_t num)                                                                                    
+│   │   ├──     static void dealloc(T *ptr)                                                                                     
+│   │   ├──   public:                                                                                                           
+│   │   ├──     arr() : p(0), sz(0)                                                                                             
+│   │   ├──     arr(size_t n) : p(ralloc(n)), sz(n)                                                                             
+│   │   ├──     arr(arr &&other)                                                                                                
+│   │   │         : p(other.p), sz(other.sz)                                                                                    
+│   │   ├──     ~arr()                                                                                                          
+│   │   ├──     void resize(size_t n)                                                                                           
+│   │   ├──     T &operator[](size_t idx)                                                                                       
+│   │   ├──     T *data()                                                                                                       
+│   │   ├──     size_t size() const                                                                                             
+│   │   ├── class Buffer                                                                                                        
+│   │   ├──  private:                                                                                                           
+│   │   ├──   void* ptr_;                                                                                                       
+│   │   ├── std::tuple<array, array, array> quantize(                                                                           
+│   │   │       const array& w,                                                                                                 
+│   │   │       int group_size,                                                                                                 
+│   │   │       int bits,                                                                                                       
+│   │   │       StreamOrDevice s)                                                                                               
+│   │   ├── #define PY_SSIZE_T_CLEAN                                                                                            
+│   │   ├── #define PLATFORM_IS_X86                                                                                             
+│   │   ├── #define PLATFORM_WINDOWS                                                                                            
+│   │   ├── #define GETCPUID(a, b, c, d, a_inp, c_inp)                                                                          
+│   │   ├── static int GetXCR0EAX()                                                                                             
+│   │   ├── #define GETCPUID(a, b, c, d, a_inp, c_inp)                                                                          
+│   │   ├── static int GetXCR0EAX()                                                                                             
+│   │   ├──   asm("XGETBV" : "=a"(eax), "=d"(edx) : "c"(0))                                                                     
+│   │   ├── static void ReportMissingCpuFeature(const char* name)                                                               
+│   │   ├── static PyObject *CheckCpuFeatures(PyObject *self, PyObject *args)                                                   
+│   │   ├── static PyObject *CheckCpuFeatures(PyObject *self, PyObject *args)                                                   
+│   │   ├── static PyMethodDef cpu_feature_guard_methods[]                                                                      
+│   │   ├── static struct PyModuleDef cpu_feature_guard_module                                                                  
+│   │   ├── #define EXPORT_SYMBOL __declspec(dllexport)                                                                         
+│   │   ├── #define EXPORT_SYMBOL __attribute__ ((visibility("default")))                                                       
+│   │   ├── EXPORT_SYMBOL PyMODINIT_FUNC PyInit_cpu_feature_guard(void)                                                         
+│   │   ├── typedef struct                                                                                                      
+│   │   ├──     GPT2Config config;                                                                                              
+│   │   ├──     ParameterTensors params;                                                                                        
+│   │   ├──     size_t param_sizes[NUM_PARAMETER_TENSORS];                                                                      
+│   │   ├──     float* params_memory;                                                                                           
+│   │   ├──     size_t num_parameters;                                                                                          
+│   │   ├──     ParameterTensors grads;                                                                                         
+│   │   ├──     float* grads_memory;                                                                                            
+│   │   ├──     float* m_memory;                                                                                                
+│   │   ├──     float* v_memory;                                                                                                
+│   │   ├──     ActivationTensors acts;                                                                                         
+│   │   ├──     size_t act_sizes[NUM_ACTIVATION_TENSORS];                                                                       
+│   │   ├──     float* acts_memory;                                                                                             
+│   │   ├──     size_t num_activations;                                                                                         
+│   │   ├──     ActivationTensors grads_acts;                                                                                   
+│   │   ├──     float* grads_acts_memory;                                                                                       
+│   │   ├──     int batch_size;                                                                                                 
+│   │   ├──     int seq_len;                                                                                                    
+│   │   ├──     int* inputs;                                                                                                    
+│   │   ├──     int* targets;                                                                                                   
+│   │   ├──     float mean_loss;                                                                                                
+│   │   └── } GPT2;                                                                                                             
 │   ├── 📄 cpp_examples_impl.cc (60 tokens, 10 lines)
-│   │   ├── PYBIND11_MODULE(cpp_examples, m)
-│   │   └──     m.def("add", &add<int>, "An example function to add two numbers.")
+│   │   ├── PYBIND11_MODULE(cpp_examples, m)                                                                                    
+│   │   └──     m.def("add", &add<int>, "An example function to add two numbers.")                                              
 │   ├── 📄 cpp_examples_impl.cu (37 tokens, 10 lines)
-│   │   ├── template <typename T>
-│   │   │   T add(T a, T b)
-│   │   └── template <>
-│   │       int add<int>(int a, int b)
+│   │   ├── template <typename T>                                                                                               
+│   │   │   T add(T a, T b)                                                                                                     
+│   │   └── template <>                                                                                                         
+│   │       int add<int>(int a, int b)                                                                                          
 │   ├── 📄 cpp_examples_impl.h (22 tokens, 6 lines)
-│   │   ├── template <typename T>
-│   │   │   T add(T a, T b)
-│   │   └── template <>
-│   │       int add<int>(int, int)
+│   │   ├── template <typename T>                                                                                               
+│   │   │   T add(T a, T b)                                                                                                     
+│   │   └── template <>                                                                                                         
+│   │       int add<int>(int, int)                                                                                              
 │   ├── 📄 edge_case.hpp (426 tokens, 28 lines)
 │   ├── 📄 fractal.thy (1,712 tokens, 147 lines)
 │   │   ├── Title:      fractal.thy
@@ -2647,256 +2659,237 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   │     shows   "(λn. fps_nth F n - g n) ∈ O(λn. 1 / r ^ n)" (is "(λn. ?c n - _) ∈ O(_)")
 │   │   └── end
 │   ├── 📄 Microsoft.PowerShell_profile.ps1 (3,346 tokens, 497 lines)
-│   │   ├── function Log($message)
-│   │   ├── function Remove-ChocolateyFromPath
-│   │   ├── function Show-Profiles
-│   │   ├── function Show-Path
-│   │   ├── function Show-Error($err)
-│   │   ├── function Get-ScoopPackagePath
-│   │   ├──   param(
-│   │   │       [Parameter(Mandatory = $true)]
-│   │   │       $PackageName)
-│   │   ├── function Check-Command
-│   │   ├──   param(
-│   │   │       [Parameter(Mandatory = $true)]
-│   │   │       $Name)
-│   │   ├── function Add-ToPath
-│   │   ├──   param(
-│   │   │       [Parameter(Mandatory = $true)]
-│   │   │       $PathToAdd)
-│   │   ├── function Install-Scoop
-│   │   ├── function Scoop-Install
-│   │   ├──   param(
-│   │   │       [Parameter(Mandatory = $true)]
-│   │   │       $Name,
-│   │   │       $PathToAdd)
-│   │   ├── function Start-CondaEnv
-│   │   ├── function Install-PipPackage
-│   │   ├──   param(
-│   │   │           [Parameter(Mandatory = $true)]
-│   │   │       $PackageName)
-│   │   ├── function Install-VSBuildTools
-│   │   ├── function Install-Crate
-│   │   ├──   param(
-│   │   │           [Parameter(Mandatory = $true)]
-│   │   │       $CrateName)
-│   │   ├── function Get-ScoopVersion
-│   │   ├── function Get-Version
-│   │   ├──     param(
-│   │   │           [Parameter(Mandatory = $true)]
-│   │   │           $ExecutablePath,
-│   │   │           $ExecutableName)
-│   │   ├── function Show-Requirements
-│   │   ├──   function Measure-Status
-│   │   ├──     param(
-│   │   │         [Parameter(Mandatory = $true)]
-│   │   │         $Name)
-│   │   ├── function Find-Profile
-│   │   ├── function Edit-Profile
-│   │   ├── function Set-Profile
-│   │   └── function Show-Profile
+│   │   ├── function Log($message)                                                                                              
+│   │   ├── function Remove-ChocolateyFromPath                                                                                  
+│   │   ├── function Show-Profiles                                                                                              
+│   │   ├── function Show-Path                                                                                                  
+│   │   ├── function Show-Error($err)                                                                                           
+│   │   ├── function Get-ScoopPackagePath                                                                                       
+│   │   ├──     param(                                                                                                          
+│   │   │           [Parameter(Mandatory = $true)]                                                                              
+│   │   │           [string]$PackageName)                                                                                       
+│   │   ├── function Check-Command                                                                                              
+│   │   ├──     param(                                                                                                          
+│   │   │           [Parameter(Mandatory = $true)]                                                                              
+│   │   │           [string]$Name)                                                                                              
+│   │   ├── function Add-ToPath                                                                                                 
+│   │   ├──     param(                                                                                                          
+│   │   │           [Parameter(Mandatory = $true)]                                                                              
+│   │   │           [string]$PathToAdd)                                                                                         
+│   │   ├── function Install-Scoop                                                                                              
+│   │   ├── function Scoop-Install                                                                                              
+│   │   ├──     param(                                                                                                          
+│   │   │           [Parameter(Mandatory = $true)]                                                                              
+│   │   │           [string]$Name,                                                                                              
+│   │   │           [string]$PathToAdd)                                                                                         
+│   │   ├── function Start-CondaEnv                                                                                             
+│   │   ├── function Install-PipPackage                                                                                         
+│   │   ├──     param(                                                                                                          
+│   │   │           [Parameter(Mandatory = $true)]                                                                              
+│   │   │           [string]$PackageName)                                                                                       
+│   │   ├── function Install-VSBuildTools                                                                                       
+│   │   ├── function Install-Crate                                                                                              
+│   │   ├──     param(                                                                                                          
+│   │   │           [Parameter(Mandatory = $true)]                                                                              
+│   │   │           [string]$CrateName)                                                                                         
+│   │   ├── function Get-ScoopVersion                                                                                           
+│   │   ├── function Get-Version                                                                                                
+│   │   ├──     param(                                                                                                          
+│   │   │           [Parameter(Mandatory = $true)]                                                                              
+│   │   │           [string]$ExecutablePath,                                                                                    
+│   │   │           [string]$ExecutableName)                                                                                    
+│   │   ├── function Show-Requirements                                                                                          
+│   │   ├──     function Measure-Status                                                                                         
+│   │   ├──         param(                                                                                                      
+│   │   │               [Parameter(Mandatory = $true)]                                                                          
+│   │   │               [string]$Name)                                                                                          
+│   │   ├── function Find-Profile                                                                                               
+│   │   ├── function Edit-Profile                                                                                               
+│   │   ├── function Set-Profile                                                                                                
+│   │   └── function Show-Profile                                                                                               
 │   ├── 📄 python_complex_class.py (10 tokens, 2 lines)
-│   │   └── class Box(Space[NDArray[Any]])
+│   │   └── class Box(Space[NDArray[Any]])                                                                                      
 │   ├── 📄 ramda__cloneRegExp.js (173 tokens, 9 lines)
-│   │   └── export default function _cloneRegExp(pattern)
+│   │   └── export default function _cloneRegExp(pattern)                                                                       
 │   ├── 📄 ramda_prop.js (646 tokens, 85 lines)
-│   │   ├── /**
-│   │   │    * Returns a function that when supplied an object returns the indicated
-│   │   │    * property of that object, if it exists.
-│   │   │    * @category Object
-│   │   │    * @typedefn Idx = String | Int | Symbol
-│   │   │    * @sig Idx -> {s: a} -> a | Undefined
-│   │   │    * @param {String|Number} p The property name or array index
-│   │   │    * @param {Object} obj The object to query
-│   │   │    * @return {*} The value at `obj.p`.
-│   │   │    */
-│   │   │   var prop = _curry2(function prop(p, obj)
-│   │   ├── /**
-│   │   │    * Solves equations of the form a * x = b
-│   │   │    * @param {{
-│   │   │    *  z: number
-│   │   │    * }} x
-│   │   │    */
-│   │   │   function foo(x)
-│   │   ├── /**
-│   │   │    * Deconstructs an array field from the input documents to output a document for each element.
-│   │   │    * Each output document is the input document with the value of the array field replaced by the element.
-│   │   │    * @category Object
-│   │   │    * @sig String -> {k: } -> [{k: v}]
-│   │   │    * @param {String} key The key to determine which property of the object should be unwound.
-│   │   │    * @param {Object} object The object containing the list to unwind at the property named by the key.
-│   │   │    * @return {List} A list of new objects, each having the given key associated to an item from the unwound list.
-│   │   │    */
-│   │   │   var unwind = _curry2(function(key, object)
-│   │   └──   return _map(function(item)
+│   │   ├── /**                                                                                                                 
+│   │   │    * Returns a function that when supplied an object returns the indicated                                            
+│   │   │    * property of that object, if it exists.                                                                           
+│   │   │    * @category Object                                                                                                 
+│   │   │    * @typedefn Idx = String | Int | Symbol                                                                            
+│   │   │    * @sig Idx -> {s: a} -> a | Undefined                                                                              
+│   │   │    * @param {String|Number} p The property name or array index                                                        
+│   │   │    * @param {Object} obj The object to query                                                                          
+│   │   │    * @return {*} The value at `obj.p`.                                                                                
+│   │   │    */                                                                                                                 
+│   │   │   var prop = _curry2(function prop(p, obj)                                                                            
+│   │   ├── /**                                                                                                                 
+│   │   │    * Solves equations of the form a * x = b                                                                           
+│   │   │    * @param {{                                                                                                        
+│   │   │    *  z: number                                                                                                       
+│   │   │    * }} x                                                                                                             
+│   │   │    */                                                                                                                 
+│   │   │   function foo(x)                                                                                                     
+│   │   ├── /**                                                                                                                 
+│   │   │    * Deconstructs an array field from the input documents to output a document for each element.                      
+│   │   │    * Each output document is the input document with the value of the array field replaced by the element.            
+│   │   │    * @category Object                                                                                                 
+│   │   │    * @sig String -> {k: [v]} -> [{k: v}]                                                                              
+│   │   │    * @param {String} key The key to determine which property of the object should be unwound.                         
+│   │   │    * @param {Object} object The object containing the list to unwind at the property named by the key.                
+│   │   │    * @return {List} A list of new objects, each having the given key associated to an item from the unwound list.     
+│   │   │    */                                                                                                                 
+│   │   │   var unwind = _curry2(function(key, object)                                                                          
+│   │   └──   return _map(function(item)                                                                                        
 │   ├── 📄 tensorflow_flags.h (7,628 tokens, 668 lines)
-│   │   ├── TF_DECLARE_FLAG('test_only_experiment_1')
-│   │   ├── TF_DECLARE_FLAG('test_only_experiment_2')
-│   │   ├── TF_DECLARE_FLAG('enable_nested_function_shape_inference'):
-│   │   │     Allow ops such as tf.cond to invoke the ShapeRefiner on their nested functions.
-│   │   ├── TF_DECLARE_FLAG('enable_quantized_dtypes_training'):
-│   │   │     Set quantized dtypes, like tf.qint8, to be trainable.
-│   │   ├── TF_DECLARE_FLAG('graph_building_optimization'):
-│   │   │     Optimize graph building for faster tf.function tracing.
-│   │   ├── TF_DECLARE_FLAG('saved_model_fingerprinting'):
-│   │   │     Add fingerprint to SavedModels.
-│   │   ├── TF_DECLARE_FLAG('more_stack_traces'):
-│   │   │     Enable experimental code that preserves and propagates graph node stack traces in C++.
-│   │   ├── TF_DECLARE_FLAG('publish_function_graphs'):
-│   │   │     Enables the publication of partitioned function graphs via StatsPublisherInterface. Disabling this flag can reduce
-│   │   │   memory consumption.
-│   │   ├── TF_DECLARE_FLAG('enable_aggressive_constant_replication'):
-│   │   │     Replicate constants across CPU devices and even for local CPUs within the same task if available.
-│   │   ├── TF_DECLARE_FLAG('enable_colocation_key_propagation_in_while_op_lowering'):
-│   │   │     If true, colocation key attributes for the ops will be propagated during while op lowering to switch/merge ops.
-│   │   ├── Flag('tf_xla_auto_jit'):
-│   │   │     Control compilation of operators into XLA computations on CPU and GPU devices.  0 = use ConfigProto setting; -1 = 
-│   │   │   off; 1 = on for things very likely to be improved; 2 = on for everything; (experimental) fusible = only for 
-│   │   │   Tensorflow operations that XLA knows how to fuse. If set to single-gpu(<N>) then this resolves to <N> for single-GPU
-│   │   │   graphs (graphs that have at least one node placed on a GPU and no more than one GPU is in use through the entire 
-│   │   │   graph) and 0 otherwise.  Experimental.
-│   │   ├── Flag('tf_xla_min_cluster_size'):
-│   │   │     Minimum number of operators in an XLA compilation. Ignored for operators placed on an XLA device or operators 
-│   │   │   explicitly marked for compilation.
-│   │   ├── Flag('tf_xla_max_cluster_size'):
-│   │   │     Maximum number of operators in an XLA compilation.
-│   │   ├── Flag('tf_xla_cluster_exclude_ops'):
-│   │   │     (experimental) Exclude the operations from auto-clustering. If multiple, separate them with commas. Where, 
-│   │   │   Some_other_ops.
-│   │   ├── Flag('tf_xla_clustering_debug'):
-│   │   │     Dump graphs during XLA compilation.
-│   │   ├── Flag('tf_xla_cpu_global_jit'):
-│   │   │     Enables global JIT compilation for CPU via SessionOptions.
-│   │   ├── Flag('tf_xla_clustering_fuel'):
-│   │   │     Places an artificial limit on the number of ops marked as eligible for clustering.
-│   │   ├── Flag('tf_xla_disable_deadness_safety_checks_for_debugging'):
-│   │   │     Disable deadness related safety checks when clustering (this is unsound).
-│   │   ├── Flag('tf_xla_disable_resource_variable_safety_checks_for_debugging'):
-│   │   │     Disable resource variables related safety checks when clustering (this is unsound).
-│   │   ├── Flag('tf_xla_deterministic_cluster_names'):
-│   │   │     Causes the function names assigned by auto clustering to be deterministic from run to run.
-│   │   ├── Flag('tf_xla_persistent_cache_directory'):
-│   │   │     If non-empty, JIT-compiled executables are saved to and loaded from the specified file system directory path. 
-│   │   │   Empty by default.
-│   │   ├── Flag('tf_xla_persistent_cache_device_types'):
-│   │   │     If non-empty, the persistent cache will only be used for the specified devices (comma separated). Each device type
-│   │   │   should be able to be converted to.
-│   │   ├── Flag('tf_xla_persistent_cache_read_only'):
-│   │   │     If true, the persistent cache will be read-only.
-│   │   ├── Flag('tf_xla_disable_strict_signature_checks'):
-│   │   │     If true, entires loaded into the XLA compile cache will not have their signatures checked strictly. Defaults to 
-│   │   │   false.
-│   │   ├── Flag('tf_xla_persistent_cache_prefix'):
-│   │   │     Specifies the persistance cache prefix. Default is.
-│   │   ├── Flag('tf_xla_sparse_core_disable_table_stacking'):
-│   │   │     Disable table stacking for all the tables passed to the SparseCore mid level API.
-│   │   ├── Flag('tf_xla_sparse_core_minibatch_max_division_level'):
-│   │   │     Max level of division to split input data into minibatches.
-│   │   ├── Flag('tf_xla_sparse_core_stacking_mem_limit_bytes'):
-│   │   │     If non-zero, limits the size of the activations for a given table to be below these many bytes.
-│   │   ├── Flag('tf_xla_sparse_core_stacking_table_shard_limit_bytes'):
-│   │   │     If non-zero, limits the size of any table shard to be below these many bytes.
-│   │   ├── Flag('always_specialize')
-│   │   ├── Flag('cost_driven_async_parallel_for')
-│   │   ├── Flag('enable_crash_reproducer')
-│   │   ├── Flag('log_query_of_death')
-│   │   ├── Flag('vectorize')
-│   │   ├── Flag('tf_xla_enable_lazy_compilation')
-│   │   ├── Flag('tf_xla_print_cluster_outputs'):
-│   │   │     If true then insert Print nodes to print out values produced by XLA clusters.
-│   │   ├── Flag('tf_xla_check_cluster_input_numerics'):
-│   │   │     If true then insert CheckNumerics nodes to check all cluster inputs.
-│   │   ├── Flag('tf_xla_check_cluster_output_numerics'):
-│   │   │     If true then insert CheckNumerics nodes to check all cluster outputs.
-│   │   ├── Flag('tf_xla_disable_constant_folding'):
-│   │   │     If true then disables constant folding on TF graph before XLA compilation.
-│   │   ├── Flag('tf_xla_disable_full_embedding_pipelining'):
-│   │   │     If true then disables full embedding pipelining and instead use strict SparseCore / TensorCore sequencing.
-│   │   ├── Flag('tf_xla_embedding_parallel_iterations'):
-│   │   │     If >0 then use this many parallel iterations in embedding_pipelining and embedding_sequency. By default, use the 
-│   │   │   parallel_iterations on the original model WhileOp.
-│   │   ├── Flag('tf_xla_compile_on_demand'):
-│   │   │     Switch a device into 'on-demand' mode, where instead of autoclustering ops are compiled one by one just-in-time.
-│   │   ├── Flag('tf_xla_enable_xla_devices'):
-│   │   │     Generate XLA_* devices, where placing a computation on such a device forces compilation by XLA. Deprecated.
-│   │   ├── Flag('tf_xla_always_defer_compilation')
-│   │   ├── Flag('tf_xla_async_compilation'):
-│   │   │     When lazy compilation is enabled, asynchronous compilation starts the cluster compilation in the background, and 
-│   │   │   the fallback path is executed until the compilation has finished.
-│   │   ├── Flag('tf_xla_use_device_api_for_xla_launch'):
-│   │   │     If true, uses Device API (PjRt) for single device compilation and execution of functions marked for JIT 
-│   │   │   compilation i.e. jit_compile=True. Defaults to false.
-│   │   ├── Flag('tf_xla_use_device_api_for_compile_on_demand'):
-│   │   │     If true, uses Device API (PjRt) for compiling and executing ops one by one in 'on-demand' mode. Defaults to false.
-│   │   ├── Flag('tf_xla_use_device_api_for_auto_jit'):
-│   │   │     If true, uses Device API (PjRt) for compilation and execution when auto-clustering is enabled. Defaults to false.
-│   │   ├── Flag('tf_xla_use_device_api'):
-│   │   │     If true, uses Device API (PjRt) for compilation and execution of ops one-by-one in 'on-demand' mode, for functions
-│   │   │   marked for JIT compilation, or when auto-clustering is enabled. Defaults to false.
-│   │   ├── Flag('tf_xla_enable_device_api_for_gpu'):
-│   │   │     If true, uses Device API (PjRt) for TF GPU device. This is a helper flag so that individual tests can turn on PjRt
-│   │   │   for GPU specifically.
-│   │   ├── Flag('tf_xla_call_module_disabled_checks'):
-│   │   │     A comma-sepated list of directives specifying the safety checks to be skipped when compiling XlaCallModuleOp. See 
-│   │   │   the op documentation for the recognized values.
-│   │   ├── Flag('tf_mlir_enable_mlir_bridge'):
-│   │   │     Enables experimental MLIR-Based TensorFlow Compiler Bridge.
-│   │   ├── Flag('tf_mlir_enable_merge_control_flow_pass'):
-│   │   │     Enables MergeControlFlow pass for MLIR-Based TensorFlow Compiler Bridge.
-│   │   ├── Flag('tf_mlir_enable_convert_control_to_data_outputs_pass'):
-│   │   │     Enables MLIR-Based TensorFlow Compiler Bridge.
-│   │   ├── Flag('tf_mlir_enable_strict_clusters'):
-│   │   │     Do not allow clusters that have cyclic control dependencies.
-│   │   ├── Flag('tf_mlir_enable_multiple_local_cpu_devices'):
-│   │   │     Enable multiple local CPU devices. CPU ops which are outside compiled inside the tpu cluster will also be 
-│   │   │   replicated across multiple cpu devices.
-│   │   ├── Flag('tf_dump_graphs_in_tfg'):
-│   │   │     When tf_dump_graphs_in_tfg is true, graphs after transformations are dumped in MLIR TFG dialect and not in 
-│   │   │   GraphDef.
-│   │   ├── Flag('tf_mlir_enable_generic_outside_compilation'):
-│   │   │     Enables OutsideCompilation passes for MLIR-Based TensorFlow Generic Compiler Bridge.
-│   │   ├── Flag('tf_mlir_enable_tpu_variable_runtime_reformatting_pass'):
-│   │   │     Enables TPUVariableRuntimeReformatting pass for MLIR-Based TensorFlow Compiler Bridge. This enables weight update 
-│   │   │   sharding and creates TPUReshardVariables ops.
-│   │   ├── TF_PY_DECLARE_FLAG('test_only_experiment_1')
-│   │   ├── TF_PY_DECLARE_FLAG('test_only_experiment_2')
-│   │   ├── TF_PY_DECLARE_FLAG('enable_nested_function_shape_inference')
-│   │   ├── TF_PY_DECLARE_FLAG('enable_quantized_dtypes_training')
-│   │   ├── TF_PY_DECLARE_FLAG('graph_building_optimization')
-│   │   ├── TF_PY_DECLARE_FLAG('op_building_optimization')
-│   │   ├── TF_PY_DECLARE_FLAG('saved_model_fingerprinting')
-│   │   ├── TF_PY_DECLARE_FLAG('tf_shape_default_int64')
-│   │   ├── TF_PY_DECLARE_FLAG('more_stack_traces')
-│   │   ├── TF_PY_DECLARE_FLAG('publish_function_graphs')
-│   │   ├── TF_PY_DECLARE_FLAG('enable_aggressive_constant_replication')
-│   │   ├── TF_PY_DECLARE_FLAG('enable_colocation_key_propagation_in_while_op_lowering')
-│   │   ├── #define TENSORFLOW_CORE_CONFIG_FLAG_DEFS_H_
-│   │   ├── class Flags
-│   │   ├──  public:
-│   │   ├── bool SetterForXlaAutoJitFlag(const string& value)
-│   │   ├── bool SetterForXlaCallModuleDisabledChecks(const string& value)
-│   │   ├── void AppendMarkForCompilationPassFlagsInternal(std::vector<Flag>* flag_list)
-│   │   ├── void AllocateAndParseJitRtFlags()
-│   │   ├── void AllocateAndParseFlags()
-│   │   ├── void ResetFlags()
-│   │   ├── bool SetXlaAutoJitFlagFromFlagString(const string& value)
-│   │   ├── BuildXlaOpsPassFlags* GetBuildXlaOpsPassFlags()
-│   │   ├── MarkForCompilationPassFlags* GetMarkForCompilationPassFlags()
-│   │   ├── XlaSparseCoreFlags* GetXlaSparseCoreFlags()
-│   │   ├── XlaDeviceFlags* GetXlaDeviceFlags()
-│   │   ├── XlaOpsCommonFlags* GetXlaOpsCommonFlags()
-│   │   ├── XlaCallModuleFlags* GetXlaCallModuleFlags()
-│   │   ├── MlirCommonFlags* GetMlirCommonFlags()
-│   │   ├── void ResetJitCompilerFlags()
-│   │   ├── const JitRtFlags& GetJitRtFlags()
-│   │   ├── ConfigProto::Experimental::MlirBridgeRollout GetMlirBridgeRolloutState(
-│   │   │       std::optional<const ConfigProto> config_proto)
-│   │   ├── void AppendMarkForCompilationPassFlags(std::vector<Flag>* flag_list)
-│   │   ├── void DisableXlaCompilation()
-│   │   ├── void EnableXlaCompilation()
-│   │   ├── bool FailOnXlaCompilation()
-│   │   ├── #define TF_PY_DECLARE_FLAG(flag_name)
-│   │   └── PYBIND11_MODULE(flags_pybind, m)
+│   │   ├── TF_DECLARE_FLAG('test_only_experiment_1')                                                                           
+│   │   ├── TF_DECLARE_FLAG('test_only_experiment_2')                                                                           
+│   │   ├── TF_DECLARE_FLAG('enable_nested_function_shape_inference'):                                                          
+│   │   │       Allow ops such as tf.cond to invoke the ShapeRefiner on their nested functions.                                 
+│   │   ├── TF_DECLARE_FLAG('enable_quantized_dtypes_training'):                                                                
+│   │   │       Set quantized dtypes, like tf.qint8, to be trainable.                                                           
+│   │   ├── TF_DECLARE_FLAG('graph_building_optimization'):                                                                     
+│   │   │       Optimize graph building for faster tf.function tracing.                                                         
+│   │   ├── TF_DECLARE_FLAG('saved_model_fingerprinting'):                                                                      
+│   │   │       Add fingerprint to SavedModels.                                                                                 
+│   │   ├── TF_DECLARE_FLAG('more_stack_traces'):                                                                               
+│   │   │       Enable experimental code that preserves and propagates graph node stack traces in C++.                          
+│   │   ├── TF_DECLARE_FLAG('publish_function_graphs'):                                                                         
+│   │   │       Enables the publication of partitioned function graphs via StatsPublisherInterface. Disabling this flag can redu
+│   │   ├── TF_DECLARE_FLAG('enable_aggressive_constant_replication'):                                                          
+│   │   │       Replicate constants across CPU devices and even for local CPUs within the same task if available.               
+│   │   ├── TF_DECLARE_FLAG('enable_colocation_key_propagation_in_while_op_lowering'):                                          
+│   │   │       If true, colocation key attributes for the ops will be propagated during while op lowering to switch/merge ops. 
+│   │   ├── Flag('tf_xla_auto_jit'):                                                                                            
+│   │   │       Control compilation of operators into XLA computations on CPU and GPU devices.  0 = use ConfigProto setting; -1 
+│   │   ├── Flag('tf_xla_min_cluster_size'):                                                                                    
+│   │   │       Minimum number of operators in an XLA compilation. Ignored for operators placed on an XLA device or operators ex
+│   │   ├── Flag('tf_xla_max_cluster_size'):                                                                                    
+│   │   │       Maximum number of operators in an XLA compilation.                                                              
+│   │   ├── Flag('tf_xla_cluster_exclude_ops'):                                                                                 
+│   │   │       (experimental) Exclude the operations from auto-clustering. If multiple, separate them with commas. Where, Some_
+│   │   ├── Flag('tf_xla_clustering_debug'):                                                                                    
+│   │   │       Dump graphs during XLA compilation.                                                                             
+│   │   ├── Flag('tf_xla_cpu_global_jit'):                                                                                      
+│   │   │       Enables global JIT compilation for CPU via SessionOptions.                                                      
+│   │   ├── Flag('tf_xla_clustering_fuel'):                                                                                     
+│   │   │       Places an artificial limit on the number of ops marked as eligible for clustering.                              
+│   │   ├── Flag('tf_xla_disable_deadness_safety_checks_for_debugging'):                                                        
+│   │   │       Disable deadness related safety checks when clustering (this is unsound).                                       
+│   │   ├── Flag('tf_xla_disable_resource_variable_safety_checks_for_debugging'):                                               
+│   │   │       Disable resource variables related safety checks when clustering (this is unsound).                             
+│   │   ├── Flag('tf_xla_deterministic_cluster_names'):                                                                         
+│   │   │       Causes the function names assigned by auto clustering to be deterministic from run to run.                      
+│   │   ├── Flag('tf_xla_persistent_cache_directory'):                                                                          
+│   │   │       If non-empty, JIT-compiled executables are saved to and loaded from the specified file system directory path. Em
+│   │   ├── Flag('tf_xla_persistent_cache_device_types'):                                                                       
+│   │   │       If non-empty, the persistent cache will only be used for the specified devices (comma separated). Each device ty
+│   │   ├── Flag('tf_xla_persistent_cache_read_only'):                                                                          
+│   │   │       If true, the persistent cache will be read-only.                                                                
+│   │   ├── Flag('tf_xla_disable_strict_signature_checks'):                                                                     
+│   │   │       If true, entires loaded into the XLA compile cache will not have their signatures checked strictly. Defaults to 
+│   │   ├── Flag('tf_xla_persistent_cache_prefix'):                                                                             
+│   │   │       Specifies the persistance cache prefix. Default is.                                                             
+│   │   ├── Flag('tf_xla_sparse_core_disable_table_stacking'):                                                                  
+│   │   │       Disable table stacking for all the tables passed to the SparseCore mid level API.                               
+│   │   ├── Flag('tf_xla_sparse_core_minibatch_max_division_level'):                                                            
+│   │   │       Max level of division to split input data into minibatches.                                                     
+│   │   ├── Flag('tf_xla_sparse_core_stacking_mem_limit_bytes'):                                                                
+│   │   │       If non-zero, limits the size of the activations for a given table to be below these many bytes.                 
+│   │   ├── Flag('tf_xla_sparse_core_stacking_table_shard_limit_bytes'):                                                        
+│   │   │       If non-zero, limits the size of any table shard to be below these many bytes.                                   
+│   │   ├── Flag('always_specialize')                                                                                           
+│   │   ├── Flag('cost_driven_async_parallel_for')                                                                              
+│   │   ├── Flag('enable_crash_reproducer')                                                                                     
+│   │   ├── Flag('log_query_of_death')                                                                                          
+│   │   ├── Flag('vectorize')                                                                                                   
+│   │   ├── Flag('tf_xla_enable_lazy_compilation')                                                                              
+│   │   ├── Flag('tf_xla_print_cluster_outputs'):                                                                               
+│   │   │       If true then insert Print nodes to print out values produced by XLA clusters.                                   
+│   │   ├── Flag('tf_xla_check_cluster_input_numerics'):                                                                        
+│   │   │       If true then insert CheckNumerics nodes to check all cluster inputs.                                            
+│   │   ├── Flag('tf_xla_check_cluster_output_numerics'):                                                                       
+│   │   │       If true then insert CheckNumerics nodes to check all cluster outputs.                                           
+│   │   ├── Flag('tf_xla_disable_constant_folding'):                                                                            
+│   │   │       If true then disables constant folding on TF graph before XLA compilation.                                      
+│   │   ├── Flag('tf_xla_disable_full_embedding_pipelining'):                                                                   
+│   │   │       If true then disables full embedding pipelining and instead use strict SparseCore / TensorCore sequencing.      
+│   │   ├── Flag('tf_xla_embedding_parallel_iterations'):                                                                       
+│   │   │       If >0 then use this many parallel iterations in embedding_pipelining and embedding_sequency. By default, use the
+│   │   ├── Flag('tf_xla_compile_on_demand'):                                                                                   
+│   │   │       Switch a device into 'on-demand' mode, where instead of autoclustering ops are compiled one by one just-in-time.
+│   │   ├── Flag('tf_xla_enable_xla_devices'):                                                                                  
+│   │   │       Generate XLA_* devices, where placing a computation on such a device forces compilation by XLA. Deprecated.     
+│   │   ├── Flag('tf_xla_always_defer_compilation')                                                                             
+│   │   ├── Flag('tf_xla_async_compilation'):                                                                                   
+│   │   │       When lazy compilation is enabled, asynchronous compilation starts the cluster compilation in the background, and
+│   │   ├── Flag('tf_xla_use_device_api_for_xla_launch'):                                                                       
+│   │   │       If true, uses Device API (PjRt) for single device compilation and execution of functions marked for JIT compilat
+│   │   ├── Flag('tf_xla_use_device_api_for_compile_on_demand'):                                                                
+│   │   │       If true, uses Device API (PjRt) for compiling and executing ops one by one in 'on-demand' mode. Defaults to fals
+│   │   ├── Flag('tf_xla_use_device_api_for_auto_jit'):                                                                         
+│   │   │       If true, uses Device API (PjRt) for compilation and execution when auto-clustering is enabled. Defaults to false
+│   │   ├── Flag('tf_xla_use_device_api'):                                                                                      
+│   │   │       If true, uses Device API (PjRt) for compilation and execution of ops one-by-one in 'on-demand' mode, for functio
+│   │   ├── Flag('tf_xla_enable_device_api_for_gpu'):                                                                           
+│   │   │       If true, uses Device API (PjRt) for TF GPU device. This is a helper flag so that individual tests can turn on Pj
+│   │   ├── Flag('tf_xla_call_module_disabled_checks'):                                                                         
+│   │   │       A comma-sepated list of directives specifying the safety checks to be skipped when compiling XlaCallModuleOp. Se
+│   │   ├── Flag('tf_mlir_enable_mlir_bridge'):                                                                                 
+│   │   │       Enables experimental MLIR-Based TensorFlow Compiler Bridge.                                                     
+│   │   ├── Flag('tf_mlir_enable_merge_control_flow_pass'):                                                                     
+│   │   │       Enables MergeControlFlow pass for MLIR-Based TensorFlow Compiler Bridge.                                        
+│   │   ├── Flag('tf_mlir_enable_convert_control_to_data_outputs_pass'):                                                        
+│   │   │       Enables MLIR-Based TensorFlow Compiler Bridge.                                                                  
+│   │   ├── Flag('tf_mlir_enable_strict_clusters'):                                                                             
+│   │   │       Do not allow clusters that have cyclic control dependencies.                                                    
+│   │   ├── Flag('tf_mlir_enable_multiple_local_cpu_devices'):                                                                  
+│   │   │       Enable multiple local CPU devices. CPU ops which are outside compiled inside the tpu cluster will also be replic
+│   │   ├── Flag('tf_dump_graphs_in_tfg'):                                                                                      
+│   │   │       When tf_dump_graphs_in_tfg is true, graphs after transformations are dumped in MLIR TFG dialect and not in Graph
+│   │   ├── Flag('tf_mlir_enable_generic_outside_compilation'):                                                                 
+│   │   │       Enables OutsideCompilation passes for MLIR-Based TensorFlow Generic Compiler Bridge.                            
+│   │   ├── Flag('tf_mlir_enable_tpu_variable_runtime_reformatting_pass'):                                                      
+│   │   │       Enables TPUVariableRuntimeReformatting pass for MLIR-Based TensorFlow Compiler Bridge. This enables weight updat
+│   │   ├── TF_PY_DECLARE_FLAG('test_only_experiment_1')                                                                        
+│   │   ├── TF_PY_DECLARE_FLAG('test_only_experiment_2')                                                                        
+│   │   ├── TF_PY_DECLARE_FLAG('enable_nested_function_shape_inference')                                                        
+│   │   ├── TF_PY_DECLARE_FLAG('enable_quantized_dtypes_training')                                                              
+│   │   ├── TF_PY_DECLARE_FLAG('graph_building_optimization')                                                                   
+│   │   ├── TF_PY_DECLARE_FLAG('op_building_optimization')                                                                      
+│   │   ├── TF_PY_DECLARE_FLAG('saved_model_fingerprinting')                                                                    
+│   │   ├── TF_PY_DECLARE_FLAG('tf_shape_default_int64')                                                                        
+│   │   ├── TF_PY_DECLARE_FLAG('more_stack_traces')                                                                             
+│   │   ├── TF_PY_DECLARE_FLAG('publish_function_graphs')                                                                       
+│   │   ├── TF_PY_DECLARE_FLAG('enable_aggressive_constant_replication')                                                        
+│   │   ├── TF_PY_DECLARE_FLAG('enable_colocation_key_propagation_in_while_op_lowering')                                        
+│   │   ├── #define TENSORFLOW_CORE_CONFIG_FLAG_DEFS_H_                                                                         
+│   │   ├── class Flags                                                                                                         
+│   │   ├──  public:                                                                                                            
+│   │   ├── bool SetterForXlaAutoJitFlag(const string& value)                                                                   
+│   │   ├── bool SetterForXlaCallModuleDisabledChecks(const string& value)                                                      
+│   │   ├── void AppendMarkForCompilationPassFlagsInternal(std::vector<Flag>* flag_list)                                        
+│   │   ├── void AllocateAndParseJitRtFlags()                                                                                   
+│   │   ├── void AllocateAndParseFlags()                                                                                        
+│   │   ├── void ResetFlags()                                                                                                   
+│   │   ├── bool SetXlaAutoJitFlagFromFlagString(const string& value)                                                           
+│   │   ├── BuildXlaOpsPassFlags* GetBuildXlaOpsPassFlags()                                                                     
+│   │   ├── MarkForCompilationPassFlags* GetMarkForCompilationPassFlags()                                                       
+│   │   ├── XlaSparseCoreFlags* GetXlaSparseCoreFlags()                                                                         
+│   │   ├── XlaDeviceFlags* GetXlaDeviceFlags()                                                                                 
+│   │   ├── XlaOpsCommonFlags* GetXlaOpsCommonFlags()                                                                           
+│   │   ├── XlaCallModuleFlags* GetXlaCallModuleFlags()                                                                         
+│   │   ├── MlirCommonFlags* GetMlirCommonFlags()                                                                               
+│   │   ├── void ResetJitCompilerFlags()                                                                                        
+│   │   ├── const JitRtFlags& GetJitRtFlags()                                                                                   
+│   │   ├── ConfigProto::Experimental::MlirBridgeRollout GetMlirBridgeRolloutState(                                             
+│   │   │       std::optional<const ConfigProto> config_proto)                                                                  
+│   │   ├── void AppendMarkForCompilationPassFlags(std::vector<Flag>* flag_list)                                                
+│   │   ├── void DisableXlaCompilation()                                                                                        
+│   │   ├── void EnableXlaCompilation()                                                                                         
+│   │   ├── bool FailOnXlaCompilation()                                                                                         
+│   │   ├── #define TF_PY_DECLARE_FLAG(flag_name)                                                                               
+│   │   └── PYBIND11_MODULE(flags_pybind, m)                                                                                    
 │   ├── 📄 test.f (181 tokens, 30 lines)
 │   │   ├── MODULE basic_mod
 │   │   ├──     TYPE :: person
@@ -2914,8 +2907,8 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   └── PROGRAM HelloFortran
 │   │       END PROGRAM HelloFortran
 │   ├── 📄 torch.rst (60 tokens, 8 lines)
-│   │   ├── # libtorch (C++-only)
-│   │   └── - Building libtorch using Python
+│   │   ├── # libtorch (C++-only)                                                                                               
+│   │   └── - Building libtorch using Python                                                                                    
 │   └── 📄 yc.html (9,063 tokens, 169 lines)
 ├── 📁 group7 (1 folder, 5 files) 
 │   ├── 📄 absurdly_huge.jsonl (8,347 tokens, 126 lines)
@@ -2929,142 +2922,142 @@ python -m tree_plus_cli -s -i group_todo tests/more_languages
 │   │   ├── Products: list
 │   │   └── EdgeCasesMissed: None
 │   ├── 📄 angular_crud.ts (1,192 tokens, 148 lines)
-│   │   ├── interface DBCommand<T = any>
-│   │   ├── export class IndexedDbService
-│   │   ├──     constructor()
-│   │   ├──     async create_connection({ db_name = 'client_db', table_name }: DBCommand)
-│   │   ├──                 upgrade(db)
-│   │   ├──     async create_model({ db_name, table_name, model }: DBCommand)
-│   │   ├──         verify_matching({ table_name, model })
-│   │   ├──     async read_key({ db_name, table_name, key }: DBCommand)
-│   │   ├──     async update_model({ db_name, table_name, model }: DBCommand)
-│   │   ├──         verify_matching({ table_name, model })
-│   │   ├──     async delete_key({ db_name, table_name, key }: DBCommand)
-│   │   ├──     async list_table({
-│   │   │           db_name,
-│   │   │           table_name,
-│   │   │           where,
-│   │   │       }: DBCommand & { where?: { : string | number } })
-│   │   └──     async search_table(criteria: SearchCriteria)
+│   │   ├── interface DBCommand<T = any>                                                                                        
+│   │   ├── export class IndexedDbService                                                                                       
+│   │   ├──     constructor()                                                                                                   
+│   │   ├──     async create_connection({ db_name = 'client_db', table_name }: DBCommand)                                       
+│   │   ├──                 upgrade(db)                                                                                         
+│   │   ├──     async create_model({ db_name, table_name, model }: DBCommand)                                                   
+│   │   ├──         verify_matching({ table_name, model })                                                                      
+│   │   ├──     async read_key({ db_name, table_name, key }: DBCommand)                                                         
+│   │   ├──     async update_model({ db_name, table_name, model }: DBCommand)                                                   
+│   │   ├──         verify_matching({ table_name, model })                                                                      
+│   │   ├──     async delete_key({ db_name, table_name, key }: DBCommand)                                                       
+│   │   ├──     async list_table({                                                                                              
+│   │   │           db_name,                                                                                                    
+│   │   │           table_name,                                                                                                 
+│   │   │           where,                                                                                                      
+│   │   │       }: DBCommand & { where?: { [key: string]: string | number } })                                                  
+│   │   └──     async search_table(criteria: SearchCriteria)                                                                    
 │   ├── 📄 structure.py (400 tokens, 92 lines)
-│   │   ├── @runtime_checkable
-│   │   │   class DataClass(Protocol)
-│   │   ├──     __dataclass_fields__: dict
-│   │   ├── class MyInteger(Enum)
-│   │   ├──     ONE = 1
-│   │   ├──     TWO = 2
-│   │   ├──     THREE = 42
-│   │   ├── class MyString(Enum)
-│   │   ├──     AAA1 = "aaa"
-│   │   ├──     BB_B = """edge
-│   │   │   case"""
-│   │   ├── @dataclass(frozen=True, slots=True, kw_only=True)
-│   │   │   class Tool
-│   │   ├──     name: str
-│   │   ├──     description: str
-│   │   ├──     input_model: DataClass
-│   │   ├──     output_model: DataClass
-│   │   ├──     def execute(self, *args, **kwargs)
-│   │   ├──     @property
-│   │   │       def edge_case(self) -> str
-│   │   ├──     def should_still_see_me(self, x: bool = True) -> "Tool"
-│   │   ├── @dataclass
-│   │   │   class MyInput[T]
-│   │   ├──     name: str
-│   │   ├──     rank: MyInteger
-│   │   ├──     serial_n: int
-│   │   ├── @dataclass
-│   │   │   class Thingy
-│   │   ├──     is_edge_case: bool
-│   │   ├── @dataclass
-│   │   │   class MyOutput
-│   │   ├──     orders: str
-│   │   ├── class MyTools(Enum)
-│   │   ├──     TOOL_A = Tool(
-│   │   │           name="complicated",
-│   │   │           description="edge case!",
-│   │   │           input_model=MyInput[Thingy],
-│   │   │           output_model=MyOutput,
-│   │   │       )
-│   │   ├──     TOOL_B = Tool(
-│   │   │           name="""super
-│   │   │   complicated
-│   │   │   """,
-│   │   │           description="edge case!",
-│   │   │           input_model=MyInput,
-│   │   │           output_model=MyOutput,
-│   │   │       )
-│   │   ├── @final
-│   │   │   class dtype(Generic[_DTypeScalar_co])
-│   │   └──     names: None | tuple
+│   │   ├── @runtime_checkable                                                                                                  
+│   │   │   class DataClass(Protocol)                                                                                           
+│   │   ├──     __dataclass_fields__: dict                                                                                      
+│   │   ├── class MyInteger(Enum)                                                                                               
+│   │   ├──     ONE = 1                                                                                                         
+│   │   ├──     TWO = 2                                                                                                         
+│   │   ├──     THREE = 42                                                                                                      
+│   │   ├── class MyString(Enum)                                                                                                
+│   │   ├──     AAA1 = "aaa"                                                                                                    
+│   │   ├──     BB_B = """edge                                                                                                  
+│   │   │   case"""                                                                                                             
+│   │   ├── @dataclass(frozen=True, slots=True, kw_only=True)                                                                   
+│   │   │   class Tool                                                                                                          
+│   │   ├──     name: str                                                                                                       
+│   │   ├──     description: str                                                                                                
+│   │   ├──     input_model: DataClass                                                                                          
+│   │   ├──     output_model: DataClass                                                                                         
+│   │   ├──     def execute(self, *args, **kwargs)                                                                              
+│   │   ├──     @property                                                                                                       
+│   │   │       def edge_case(self) -> str                                                                                      
+│   │   ├──     def should_still_see_me(self, x: bool = True) -> "Tool"                                                         
+│   │   ├── @dataclass                                                                                                          
+│   │   │   class MyInput[T]                                                                                                    
+│   │   ├──     name: str                                                                                                       
+│   │   ├──     rank: MyInteger                                                                                                 
+│   │   ├──     serial_n: int                                                                                                   
+│   │   ├── @dataclass                                                                                                          
+│   │   │   class Thingy                                                                                                        
+│   │   ├──     is_edge_case: bool                                                                                              
+│   │   ├── @dataclass                                                                                                          
+│   │   │   class MyOutput                                                                                                      
+│   │   ├──     orders: str                                                                                                     
+│   │   ├── class MyTools(Enum)                                                                                                 
+│   │   ├──     TOOL_A = Tool(                                                                                                  
+│   │   │           name="complicated",                                                                                         
+│   │   │           description="edge case!",                                                                                   
+│   │   │           input_model=MyInput[Thingy],                                                                                
+│   │   │           output_model=MyOutput,                                                                                      
+│   │   │       )                                                                                                               
+│   │   ├──     TOOL_B = Tool(                                                                                                  
+│   │   │           name="""super                                                                                               
+│   │   │   complicated                                                                                                         
+│   │   │   """,                                                                                                                
+│   │   │           description="edge case!",                                                                                   
+│   │   │           input_model=MyInput,                                                                                        
+│   │   │           output_model=MyOutput,                                                                                      
+│   │   │       )                                                                                                               
+│   │   ├── @final                                                                                                              
+│   │   │   class dtype(Generic[_DTypeScalar_co])                                                                               
+│   │   └──     names: None | tuple[builtins.str, ...]                                                                          
 │   ├── 📄 test.wgsl (528 tokens, 87 lines)
-│   │   ├── alias MyVec = vec4<f32>
-│   │   ├── alias AnotherVec = vec2<f32>
-│   │   ├── struct VertexInput
-│   │   ├── struct VertexOutput
-│   │   ├── struct MyUniforms
-│   │   ├── @group(0) @binding(0) var<uniform> u_mvp: mat4x4<f32>
-│   │   ├── @group(0) @binding(1) var<uniform> u_color: MyVec
-│   │   ├── @group(1) @binding(0) var my_texture: texture_2d<f32>
-│   │   ├── @group(1) @binding(1) var my_sampler: sampler
-│   │   ├── @vertex
-│   │   │   fn vs_main(in: VertexInput) -> VertexOutput
-│   │   ├── @fragment
-│   │   │   fn fs_main(in: VertexOutput) -> @location(0) vec4<f32>
-│   │   ├── @compute @workgroup_size(8, 8, 1)
-│   │   │   fn cs_main(@builtin(global_invocation_id) global_id: vec3<u32>)
-│   │   ├── fn helper_function(val: f32) -> f32
-│   │   ├── struct AnotherStruct
-│   │   └── @compute
-│   │       @workgroup_size(8, 8, 1)
-│   │       fn multi_line_edge_case(
-│   │           @builtin(global_invocation_id)
-│   │           globalId       : vec3<u32>,
-│   │           @group(1)
-│   │           @binding(0)
-│   │           srcTexture     : texture_2d<f32>,
-│   │           @group(1)
-│   │           @binding(1)
-│   │           srcSampler     : sampler,
-│   │           @group(0)
-│   │           @binding(0)
-│   │           uniformsPtr    : ptr<uniform, MyUniforms>,
-│   │           storageBuffer  : ptr<storage, array<vec4<f32>, 64>, read_write>,
-│   │       )
+│   │   ├── alias MyVec = vec4<f32>                                                                                             
+│   │   ├── alias AnotherVec = vec2<f32>                                                                                        
+│   │   ├── struct VertexInput                                                                                                  
+│   │   ├── struct VertexOutput                                                                                                 
+│   │   ├── struct MyUniforms                                                                                                   
+│   │   ├── @group(0) @binding(0) var<uniform> u_mvp: mat4x4<f32>                                                               
+│   │   ├── @group(0) @binding(1) var<uniform> u_color: MyVec                                                                   
+│   │   ├── @group(1) @binding(0) var my_texture: texture_2d<f32>                                                               
+│   │   ├── @group(1) @binding(1) var my_sampler: sampler                                                                       
+│   │   ├── @vertex                                                                                                             
+│   │   │   fn vs_main(in: VertexInput) -> VertexOutput                                                                         
+│   │   ├── @fragment                                                                                                           
+│   │   │   fn fs_main(in: VertexOutput) -> @location(0) vec4<f32>                                                              
+│   │   ├── @compute @workgroup_size(8, 8, 1)                                                                                   
+│   │   │   fn cs_main(@builtin(global_invocation_id) global_id: vec3<u32>)                                                     
+│   │   ├── fn helper_function(val: f32) -> f32                                                                                 
+│   │   ├── struct AnotherStruct                                                                                                
+│   │   └── @compute                                                                                                            
+│   │       @workgroup_size(8, 8, 1)                                                                                            
+│   │       fn multi_line_edge_case(                                                                                            
+│   │           @builtin(global_invocation_id)                                                                                  
+│   │           globalId       : vec3<u32>,                                                                                     
+│   │           @group(1)                                                                                                       
+│   │           @binding(0)                                                                                                     
+│   │           srcTexture     : texture_2d<f32>,                                                                               
+│   │           @group(1)                                                                                                       
+│   │           @binding(1)                                                                                                     
+│   │           srcSampler     : sampler,                                                                                       
+│   │           @group(0)                                                                                                       
+│   │           @binding(0)                                                                                                     
+│   │           uniformsPtr    : ptr<uniform, MyUniforms>,                                                                      
+│   │           storageBuffer  : ptr<storage, array<vec4<f32>, 64>, read_write>,                                                
+│   │       )                                                                                                                   
 │   └── 📄 test.metal (272 tokens, 34 lines)
-│       ├── struct MyData
-│       ├── kernel void myKernel(device MyData* data [],
-│       │                        uint id [])
-│       ├── float myHelperFunction(float x, float y)
-│       ├── vertex float4 vertexShader(const device packed_float3* vertex_array [],
-│       │                              unsigned int vid [])
-│       ├── fragment half4 fragmentShader(float4 P [])
-│       └── float3 computeNormalMap(ColorInOut in, texture2d<float> normalMapTexture)
+│       ├── struct MyData                                                                                                       
+│       ├── kernel void myKernel(device MyData* data [[buffer(0)]],                                                             
+│       │                        uint id [[thread_position_in_grid]])                                                           
+│       ├── float myHelperFunction(float x, float y)                                                                            
+│       ├── vertex float4 vertexShader(const device packed_float3* vertex_array [[buffer(0)]],                                  
+│       │                              unsigned int vid [[vertex_id]])                                                          
+│       ├── fragment half4 fragmentShader(float4 P [[position]])                                                                
+│       └── float3 computeNormalMap(ColorInOut in, texture2d<float> normalMapTexture)                                           
 └── 📁 group_lisp (1 folder, 4 files) 
     ├── 📄 clojure_test.clj (682 tokens, 85 lines)
-    │   ├── defprotocol P
-    │   ├── defrecord Person
-    │   ├── defn -main
-    │   ├── ns bion.likes_trees
-    │   ├── def repo-url
-    │   ├── defn config
-    │   ├── defmacro with-os
-    │   └── defrecord SetFullElement
+    │   ├── defprotocol P                                                                                                       
+    │   ├── defrecord Person                                                                                                    
+    │   ├── defn -main                                                                                                          
+    │   ├── ns bion.likes_trees                                                                                                 
+    │   ├── def repo-url                                                                                                        
+    │   ├── defn config                                                                                                         
+    │   ├── defmacro with-os                                                                                                    
+    │   └── defrecord SetFullElement                                                                                            
     ├── 📄 LispTest.lisp (25 tokens, 6 lines)
-    │   ├── defstruct person
-    │   └── defun greet
+    │   ├── defstruct person                                                                                                    
+    │   └── defun greet                                                                                                         
     ├── 📄 racket_struct.rkt (14 tokens, 1 line)
-    │   └── struct point
+    │   └── struct point                                                                                                        
     └── 📄 test_scheme.scm (360 tokens, 44 lines)
-        ├── define topological-sort
-        ├──   define table
-        ├──   define queue
-        ├──   define result
-        ├──   define set-up
-        └──   define traverse
+        ├── define topological-sort                                                                                             
+        ├──   define table                                                                                                      
+        ├──   define queue                                                                                                      
+        ├──   define result                                                                                                     
+        ├──   define set-up                                                                                                     
+        └──   define traverse                                                                                                   
 
-tree_plus v(1.0.78) ignore=('group_todo',) globs=() syntax=False paths=('tests/more_languages',)
-9 folder(s), 87 file(s), 7,366 line(s), 69,533 token(s) in 0.54 second(s).
+tree_plus v(1.0.79) ignore=('group_todo',) globs=() syntax=True paths=('tests/more_languages',)
+9 folder(s), 87 file(s), 7,386 line(s), 69,653 token(s) in 2.15 second(s).
 
 ```
 <!-- t2-end -->
@@ -3076,317 +3069,329 @@ python -m tree_plus_cli -s -g "*.*s" -i group_todo tests/more_languages
 📁 more_languages (7 folders, 17 files) 
 ├── 📁 group1 (1 folder, 2 files) 
 │   ├── 📄 test.js (757 tokens, 154 lines)
-│   │   ├── class MyClass
-│   │   ├──   myMethod()
-│   │   ├──   async asyncMethod(a, b)
-│   │   ├──   methodWithDefaultParameters(a = 5, b = 10)
-│   │   ├──   multilineMethod(
-│   │   │       c,
-│   │   │       d
-│   │   │     )
-│   │   ├──   multilineMethodWithDefaults(
-│   │   │       t = "tree",
-│   │   │       p = "plus"
-│   │   │     )
-│   │   ├── function myFunction(param1, param2)
-│   │   ├── function multilineFunction(
-│   │   │     param1,
-│   │   │     param2
-│   │   │   )
-│   │   ├── const arrowFunction = () =>
-│   │   ├── const parametricArrow = (a, b) =>
-│   │   ├── function ()
-│   │   ├── function outerFunction(outerParam)
-│   │   ├──   function innerFunction(innerParam)
-│   │   ├──   innerFunction("inner")
-│   │   ├── const myObject = {
-│   │   ├──   myMethod: function (stuff)
-│   │   ├── let myArrowObject = {
-│   │   ├──   myArrow: ({
-│   │   │       a,
-│   │   │       b,
-│   │   │       c,
-│   │   │     }) =>
-│   │   ├── const myAsyncArrowFunction = async () =>
-│   │   ├── function functionWithRestParameters(...args)
-│   │   ├── const namedFunctionExpression = function myNamedFunction()
-│   │   ├── const multilineArrowFunction = (
-│   │   │     a,
-│   │   │     b
-│   │   │   ) =>
-│   │   ├── function functionReturningFunction()
-│   │   ├──   return function ()
-│   │   ├── function destructuringOnMultipleLines({
-│   │   │     a,
-│   │   │     b,
-│   │   │   })
-│   │   ├── const arrowFunctionWithDestructuring = ({ a, b }) =>
-│   │   ├── const multilineDestructuringArrow = ({
-│   │   │     a,
-│   │   │     b,
-│   │   │   }) =>
-│   │   ├── async function asyncFunctionWithErrorHandling()
-│   │   ├── class Car
-│   │   ├──   constructor(brand)
-│   │   ├──   present()
-│   │   ├── class Model extends Car
-│   │   ├──   constructor(brand, mod)
-│   │   ├──     super(brand)
-│   │   └──   show()
+│   │   ├── class MyClass                                                                                                       
+│   │   ├──   myMethod()                                                                                                        
+│   │   ├──   async asyncMethod(a, b)                                                                                           
+│   │   ├──   methodWithDefaultParameters(a = 5, b = 10)                                                                        
+│   │   ├──   multilineMethod(                                                                                                  
+│   │   │       c,                                                                                                              
+│   │   │       d                                                                                                               
+│   │   │     )                                                                                                                 
+│   │   ├──   multilineMethodWithDefaults(                                                                                      
+│   │   │       t = "tree",                                                                                                     
+│   │   │       p = "plus"                                                                                                      
+│   │   │     )                                                                                                                 
+│   │   ├── function myFunction(param1, param2)                                                                                 
+│   │   ├── function multilineFunction(                                                                                         
+│   │   │     param1,                                                                                                           
+│   │   │     param2                                                                                                            
+│   │   │   )                                                                                                                   
+│   │   ├── const arrowFunction = () =>                                                                                         
+│   │   ├── const parametricArrow = (a, b) =>                                                                                   
+│   │   ├── function ()                                                                                                         
+│   │   ├── function outerFunction(outerParam)                                                                                  
+│   │   ├──   function innerFunction(innerParam)                                                                                
+│   │   ├──   innerFunction("inner")                                                                                            
+│   │   ├── const myObject = {                                                                                                  
+│   │   ├──   myMethod: function (stuff)                                                                                        
+│   │   ├── let myArrowObject = {                                                                                               
+│   │   ├──   myArrow: ({                                                                                                       
+│   │   │       a,                                                                                                              
+│   │   │       b,                                                                                                              
+│   │   │       c,                                                                                                              
+│   │   │     }) =>                                                                                                             
+│   │   ├── const myAsyncArrowFunction = async () =>                                                                            
+│   │   ├── function functionWithRestParameters(...args)                                                                        
+│   │   ├── const namedFunctionExpression = function myNamedFunction()                                                          
+│   │   ├── const multilineArrowFunction = (                                                                                    
+│   │   │     a,                                                                                                                
+│   │   │     b                                                                                                                 
+│   │   │   ) =>                                                                                                                
+│   │   ├── function functionReturningFunction()                                                                                
+│   │   ├──   return function ()                                                                                                
+│   │   ├── function destructuringOnMultipleLines({                                                                             
+│   │   │     a,                                                                                                                
+│   │   │     b,                                                                                                                
+│   │   │   })                                                                                                                  
+│   │   ├── const arrowFunctionWithDestructuring = ({ a, b }) =>                                                                
+│   │   ├── const multilineDestructuringArrow = ({                                                                              
+│   │   │     a,                                                                                                                
+│   │   │     b,                                                                                                                
+│   │   │   }) =>                                                                                                               
+│   │   ├── async function asyncFunctionWithErrorHandling()                                                                     
+│   │   ├── class Car                                                                                                           
+│   │   ├──   constructor(brand)                                                                                                
+│   │   ├──   present()                                                                                                         
+│   │   ├── class Model extends Car                                                                                             
+│   │   ├──   constructor(brand, mod)                                                                                           
+│   │   ├──     super(brand)                                                                                                    
+│   │   └──   show()                                                                                                            
 │   └── 📄 test.ts (832 tokens, 165 lines)
-│       ├── type MyType
-│       ├── interface MyInterface
-│       ├── class TsClass
-│       ├──   myMethod()
-│       ├──   myMethodWithArgs(param1: string, param2: number): void
-│       ├──   static myStaticMethod<T>(param: T): T
-│       ├──   multilineMethod(
-│       │       c: number,
-│       │       d: number
-│       │     ): number
-│       ├──   multilineMethodWithDefaults(
-│       │       t: string = "tree",
-│       │       p: string = "plus"
-│       │     ): string
-│       ├── export class AdvancedComponent implements MyInterface
-│       ├──   async myAsyncMethod(
-│       │       a: string,
-│       │       b: number,
-│       │       c: string
-│       │     ): Promise<void>
-│       ├──   genericMethod<T, U>(
-│       │       arg1: T,
-│       │       arg2: U
-│       │     ): [T, U]
-│       ├── export class TicketsComponent implements MyInterface
-│       ├──   async myAsyncMethod({ a, b, c }: { a: String; b: Number; c: String })
-│       ├── function tsFunction()
-│       ├── function tsFunctionSigned(
-│       │     param1: number,
-│       │     param2: number
-│       │   ): void
-│       ├── export default async function tsFunctionComplicated<A, B, C>({
-│       │     a = 1 | 2,
-│       │     b = "bob",
-│       │     c = async () => "charlie",
-│       │   }: {
-│       │     a: number;
-│       │     b: string;
-│       │     c: () => Promise<string>;
-│       │   }): Promise<string>
-│       ├──   return("Standalone function with parameters")
-│       ├── const tsArrowFunctionSigned = ({
-│       │     a,
-│       │     b,
-│       │   }: {
-│       │     a: number;
-│       │     b: string;
-│       │   }) =>
-│       ├── export const tsComplicatedArrow = async ({
-│       │     a = 1 | 2,
-│       │     b = "bob",
-│       │     c = async () => "charlie",
-│       │   }: {
-│       │     a: number;
-│       │     b: string;
-│       │     c: () => Promise<string>;
-│       │   }): Promise<string> =>
-│       ├── const arrowFunction = () =>
-│       ├── const arrow = (a: String, b: Number) =>
-│       ├── const asyncArrowFunction = async () =>
-│       ├── const asyncArrow = async (a: String, b: Number) =>
-│       ├── let weirdArrow = () =>
-│       ├── const asyncPromiseArrow = async (): Promise<void> =>
-│       ├── let myWeirdArrowSigned = (x: number): number =>
-│       ├── class Person
-│       ├──   constructor(private firstName: string, private lastName: string)
-│       ├──   getFullName(): string
-│       ├──   describe(): string
-│       ├── class Employee extends Person
-│       ├──   constructor(
-│       │       firstName: string,
-│       │       lastName: string,
-│       │       private jobTitle: string
-│       │     )
-│       ├──     super(firstName, lastName)
-│       ├──   describe(): string
-│       ├── interface Shape
-│       └── interface Square extends Shape
+│       ├── type MyType                                                                                                         
+│       ├── interface MyInterface                                                                                               
+│       ├── class TsClass                                                                                                       
+│       ├──   myMethod()                                                                                                        
+│       ├──   myMethodWithArgs(param1: string, param2: number): void                                                            
+│       ├──   static myStaticMethod<T>(param: T): T                                                                             
+│       ├──   multilineMethod(                                                                                                  
+│       │       c: number,                                                                                                      
+│       │       d: number                                                                                                       
+│       │     ): number                                                                                                         
+│       ├──   multilineMethodWithDefaults(                                                                                      
+│       │       t: string = "tree",                                                                                             
+│       │       p: string = "plus"                                                                                              
+│       │     ): string                                                                                                         
+│       ├── export class AdvancedComponent implements MyInterface                                                               
+│       ├──   async myAsyncMethod(                                                                                              
+│       │       a: string,                                                                                                      
+│       │       b: number,                                                                                                      
+│       │       c: string                                                                                                       
+│       │     ): Promise<void>                                                                                                  
+│       ├──   genericMethod<T, U>(                                                                                              
+│       │       arg1: T,                                                                                                        
+│       │       arg2: U                                                                                                         
+│       │     ): [T, U]                                                                                                         
+│       ├── export class TicketsComponent implements MyInterface                                                                
+│       ├──   async myAsyncMethod({ a, b, c }: { a: String; b: Number; c: String })                                             
+│       ├── function tsFunction()                                                                                               
+│       ├── function tsFunctionSigned(                                                                                          
+│       │     param1: number,                                                                                                   
+│       │     param2: number                                                                                                    
+│       │   ): void                                                                                                             
+│       ├── export default async function tsFunctionComplicated<A, B, C>({                                                      
+│       │     a = 1 | 2,                                                                                                        
+│       │     b = "bob",                                                                                                        
+│       │     c = async () => "charlie",                                                                                        
+│       │   }: {                                                                                                                
+│       │     a: number;                                                                                                        
+│       │     b: string;                                                                                                        
+│       │     c: () => Promise<string>;                                                                                         
+│       │   }): Promise<string>                                                                                                 
+│       ├──   return("Standalone function with parameters")                                                                     
+│       ├── const tsArrowFunctionSigned = ({                                                                                    
+│       │     a,                                                                                                                
+│       │     b,                                                                                                                
+│       │   }: {                                                                                                                
+│       │     a: number;                                                                                                        
+│       │     b: string;                                                                                                        
+│       │   }) =>                                                                                                               
+│       ├── export const tsComplicatedArrow = async ({                                                                          
+│       │     a = 1 | 2,                                                                                                        
+│       │     b = "bob",                                                                                                        
+│       │     c = async () => "charlie",                                                                                        
+│       │   }: {                                                                                                                
+│       │     a: number;                                                                                                        
+│       │     b: string;                                                                                                        
+│       │     c: () => Promise<string>;                                                                                         
+│       │   }): Promise<string> =>                                                                                              
+│       ├── const arrowFunction = () =>                                                                                         
+│       ├── const arrow = (a: String, b: Number) =>                                                                             
+│       ├── const asyncArrowFunction = async () =>                                                                              
+│       ├── const asyncArrow = async (a: String, b: Number) =>                                                                  
+│       ├── let weirdArrow = () =>                                                                                              
+│       ├── const asyncPromiseArrow = async (): Promise<void> =>                                                                
+│       ├── let myWeirdArrowSigned = (x: number): number =>                                                                     
+│       ├── class Person                                                                                                        
+│       ├──   constructor(private firstName: string, private lastName: string)                                                  
+│       ├──   getFullName(): string                                                                                             
+│       ├──   describe(): string                                                                                                
+│       ├── class Employee extends Person                                                                                       
+│       ├──   constructor(                                                                                                      
+│       │       firstName: string,                                                                                              
+│       │       lastName: string,                                                                                               
+│       │       private jobTitle: string                                                                                        
+│       │     )                                                                                                                 
+│       ├──     super(firstName, lastName)                                                                                      
+│       ├──   describe(): string                                                                                                
+│       ├── interface Shape                                                                                                     
+│       └── interface Square extends Shape                                                                                      
 ├── 📁 group3 (1 folder, 1 file) 
 │   └── 📄 csharp_test.cs (957 tokens, 146 lines)
-│       ├── public interface IExcelTemplate
-│       ├──     void LoadTemplate(string templateFilePath)
-│       ├──     void LoadData(Dictionary<string, string> data)
-│       ├──     void ModifyCell(string cellName, string value)
-│       ├──     void SaveToFile(string filePath)
-│       ├── public interface IGreet
-│       ├──     void Greet()
-│       ├── public enum WeekDays
-│       ├── public delegate void DisplayMessage(string message)
-│       ├── public struct Address
-│       ├── public static class HelperFunctions
-│       ├──     public static void PrintMessage(string message)
-│       ├──     public static int AddNumbers(int a, int b)
-│       ├── namespace HelloWorldApp
-│       ├──     class Person : IGreet
-│       ├──         public Person(string name, int age)
-│       ├──         public void Greet()
-│       ├──     class HelloWorld
-│       ├──         static void Main(string[] args)
-│       ├── namespace TemplateToExcelServer.Template
-│       ├──     public interface ITemplateObject
-│       ├──         string[,] GetContent()
-│       ├──         string[] GetContentArray()
-│       ├──         string[] GetFormat()
-│       ├──         int? GetFormatLength()
-│       ├──         TemplateObject SetContent(string[,] Content)
-│       ├──         TemplateObject SetContentArray(string[] value)
-│       ├──         TemplateObject SetFormat(string[] Header)
-│       ├──         TemplateObject SetNameOfReport(
-│       │               ReadOnlyMemory<byte> ReportName,
-│       │               int[] EdgeCase)
-│       ├──         TemplateObject SetSheetName(ReadOnlyMemory<byte> SheetName)
-│       ├── public class BankAccount(string accountID, string owner)
-│       ├──     public override string ToString() =>
-│       ├── var IncrementBy = (int source, int increment = 1) =>
-│       ├── Func<int, int, int> add = (x, y) =>
-│       ├── button.Click += (sender, args) =>
-│       ├── public Func<int, int> GetMultiplier(int factor)
-│       ├── public void Method(
-│       │           int param1,
-│       │           int param2,
-│       │           int param3,
-│       │           int param4,
-│       │           int param5,
-│       │           int param6,
-│       │       )
-│       ├── System.Net.ServicePointManager.ServerCertificateValidationCallback +=
-│       │       (se, cert, chain, sslerror) =>
-│       ├── class ServerCertificateValidation
-│       ├──     public bool OnRemoteCertificateValidation(
-│       │           object se,
-│       │           X509Certificate cert,
-│       │           X509Chain chain,
-│       │           SslPolicyErrors sslerror
-│       │       )
-│       ├── s_downloadButton.Clicked += async (o, e) =>
-│       ├── [HttpGet, Route("DotNetCount")]
-│       └── static public async Task<int> GetDotNetCount(string URL)
+│       ├── public interface IExcelTemplate                                                                                     
+│       ├──     void LoadTemplate(string templateFilePath)                                                                      
+│       ├──     void LoadData(Dictionary<string, string> data)                                                                  
+│       ├──     void ModifyCell(string cellName, string value)                                                                  
+│       ├──     void SaveToFile(string filePath)                                                                                
+│       ├── public interface IGreet                                                                                             
+│       ├──     void Greet()                                                                                                    
+│       ├── public enum WeekDays                                                                                                
+│       ├── public delegate void DisplayMessage(string message)                                                                 
+│       ├── public struct Address                                                                                               
+│       ├── public static class HelperFunctions                                                                                 
+│       ├──     public static void PrintMessage(string message)                                                                 
+│       ├──     public static int AddNumbers(int a, int b)                                                                      
+│       ├── namespace HelloWorldApp                                                                                             
+│       ├──     class Person : IGreet                                                                                           
+│       ├──         public Person(string name, int age)                                                                         
+│       ├──         public void Greet()                                                                                         
+│       ├──     class HelloWorld                                                                                                
+│       ├──         static void Main(string[] args)                                                                             
+│       ├── namespace TemplateToExcelServer.Template                                                                            
+│       ├──     public interface ITemplateObject                                                                                
+│       ├──         string[,] GetContent()                                                                                      
+│       ├──         string[] GetContentArray()                                                                                  
+│       ├──         string[] GetFormat()                                                                                        
+│       ├──         int? GetFormatLength()                                                                                      
+│       ├──         TemplateObject SetContent(string[,] Content)                                                                
+│       ├──         TemplateObject SetContentArray(string[] value)                                                              
+│       ├──         TemplateObject SetFormat(string[] Header)                                                                   
+│       ├──         TemplateObject SetNameOfReport(                                                                             
+│       │               ReadOnlyMemory<byte> ReportName,                                                                        
+│       │               int[] EdgeCase)                                                                                         
+│       ├──         TemplateObject SetSheetName(ReadOnlyMemory<byte> SheetName)                                                 
+│       ├── public class BankAccount(string accountID, string owner)                                                            
+│       ├──     public override string ToString() =>                                                                            
+│       ├── var IncrementBy = (int source, int increment = 1) =>                                                                
+│       ├── Func<int, int, int> add = (x, y) =>                                                                                 
+│       ├── button.Click += (sender, args) =>                                                                                   
+│       ├── public Func<int, int> GetMultiplier(int factor)                                                                     
+│       ├── public void Method(                                                                                                 
+│       │           int param1,                                                                                                 
+│       │           int param2,                                                                                                 
+│       │           int param3,                                                                                                 
+│       │           int param4,                                                                                                 
+│       │           int param5,                                                                                                 
+│       │           int param6,                                                                                                 
+│       │       )                                                                                                               
+│       ├── System.Net.ServicePointManager.ServerCertificateValidationCallback +=                                               
+│       │       (se, cert, chain, sslerror) =>                                                                                  
+│       ├── class ServerCertificateValidation                                                                                   
+│       ├──     public bool OnRemoteCertificateValidation(                                                                      
+│       │           object se,                                                                                                  
+│       │           X509Certificate cert,                                                                                       
+│       │           X509Chain chain,                                                                                            
+│       │           SslPolicyErrors sslerror                                                                                    
+│       │       )                                                                                                               
+│       ├── s_downloadButton.Clicked += async (o, e) =>                                                                         
+│       ├── [HttpGet, Route("DotNetCount")]                                                                                     
+│       └── static public async Task<int> GetDotNetCount(string URL)                                                            
 ├── 📁 group4 (1 folder, 3 files) 
 │   ├── 📄 haskell_test.hs (414 tokens, 41 lines)
-│   │   ├── data Person
-│   │   ├── greet :: Person -> String
-│   │   └── resolveVariables ::
-│   │         forall m fragments.
-│   │         (MonadError QErr m, Traversable fragments) =>
-│   │         Options.BackwardsCompatibleNullInNonNullableVariables ->
-│   │         [G.VariableDefinition] ->
-│   │         GH.VariableValues ->
-│   │         [G.Directive G.Name] ->
-│   │         G.SelectionSet fragments G.Name ->
-│   │         m
-│   │           ( [G.Directive Variable],
-│   │             G.SelectionSet fragments Variable
-│   │           )
-│   ├── 📄 rust_test.rs (1,248 tokens, 239 lines)
-│   │   ├── fn at_beginning<'a>(&'a str)
-│   │   ├── pub enum Days<E: EdgeCase> {
-│   │   │       #[default]
-│   │   │       Sun,
-│   │   │       Mon,
-│   │   │       #[error("edge case {idx}, expected at least {} and at most {}", .limits.lo, .limits.hi)]
-│   │   │       Tue,
-│   │   │       Wed,
-│   │   │       Thu(i16, bool),
-│   │   │       Fri { day: u8 },
-│   │   │       Sat {
-│   │   │           urday: String,
-│   │   │           edge_case: E,
-│   │   │       },
-│   │   │   }
-│   │   ├── struct Point
-│   │   ├── impl Point
-│   │   ├──     fn get_origin() -> Point
-│   │   ├── struct Person
-│   │   ├── impl Person
-│   │   ├──     fn greet(&self)
-│   │   ├── fn add_two_longs(x1: i64, x2: i64) -> i64
-│   │   ├── fn add_two_longs_longer(
-│   │   │       x1: i64,
-│   │   │       x2: i64,
-│   │   │   ) -> i64
-│   │   ├── const fn multiply_by_two(num: f64) -> f64
-│   │   ├── fn get_first_character(s: &str) -> Option<char>
-│   │   ├── trait Drawable
-│   │   ├──     fn draw(&self)
-│   │   ├── impl Drawable for Point
-│   │   ├──     fn draw(&self)
-│   │   ├── fn with_generic<D: Drawable>(d: D)
-│   │   ├── fn with_generic<D>(d: D)
-│   │   │   where 
-│   │   │       D: Drawable
-│   │   ├── fn main()
-│   │   ├── pub struct VisibleStruct
-│   │   ├── mod my_module
-│   │   ├──     pub struct AlsoVisibleStruct<T>(T, T)
-│   │   ├── macro_rules! say_hello
-│   │   ├── #
-│   │   │   macro_rules! hello_tree_plus
-│   │   ├── pub mod lib
-│   │   ├──     pub mod interfaces
-│   │   ├──     mod engine
-│   │   ├── pub fn flow<S1, S2, S3, S4, E, T, L>(
-│   │   │       source: S1,
-│   │   │       extractor: E,
-│   │   │       inbox: S2,
-│   │   │       transformer: T,
-│   │   │       outbox: S3,
-│   │   │       loader: L,
-│   │   │       sink: &mut S4,
-│   │   │   ) -> Result<(), Box<dyn Error>>
-│   │   │   where
-│   │   │       S1: Extractable,
-│   │   │       S2: Extractable + Loadable,
-│   │   │       S3: Extractable + Loadable,
-│   │   │       S4: Loadable,
-│   │   │       E: Extractor<S1, S2>,
-│   │   │       T: Transformer<S2, S3>,
-│   │   │       L: Loader<S3, S4>
-│   │   ├── trait Container
-│   │   ├──     fn items(&self) -> impl Iterator<Item = Widget>
-│   │   ├── trait HttpService
-│   │   ├──     async fn fetch(&self, url: Url) -> HtmlBody
-│   │   ├── struct Pair<T, U>
-│   │   ├── trait Transformer<T>
-│   │   ├──     fn transform(&self, input: T) -> T
-│   │   ├── impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
-│   │   ├──     fn transform(&self, input: T) -> T
-│   │   ├── fn main()
-│   │   ├── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)> 
-│   │   │   where
-│   │   │       Bion: Cool
-│   │   ├── #
-│   │   │   macro_rules! unit
-│   │   ├──             fn insert(
-│   │   │                   &mut self,
-│   │   │                   key: (),
-│   │   │                   value: $unit_dtype,
-│   │   │               ) -> Result<Option<$unit_dtype>, ETLError>
-│   │   ├── pub async fn handle_get_axum_route(
-│   │   │       Session { maybe_claims }: Session,
-│   │   │       Path(RouteParams {
-│   │   │           alpha,
-│   │   │           bravo,
-│   │   │           charlie,
-│   │   │           edge_case
-│   │   │       }): Path<RouteParams>,
-│   │   │   ) -> ServerResult<Response>
-│   │   ├── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>
-│   │   └── pub async fn handle_post_yeet(
-│   │           State(auth_backend): State<AuthBackend>,
-│   │           Session { maybe_claims }: Session,
-│   │           Form(yeet_form): Form<YeetForm>,
-│   │       ) -> Result<Response, AuthError>
+│   │   ├── data Person                                                                                                         
+│   │   ├── greet :: Person -> String                                                                                           
+│   │   └── resolveVariables ::                                                                                                 
+│   │         forall m fragments.                                                                                               
+│   │         (MonadError QErr m, Traversable fragments) =>                                                                     
+│   │         Options.BackwardsCompatibleNullInNonNullableVariables ->                                                          
+│   │         [G.VariableDefinition] ->                                                                                         
+│   │         GH.VariableValues ->                                                                                              
+│   │         [G.Directive G.Name] ->                                                                                           
+│   │         G.SelectionSet fragments G.Name ->                                                                                
+│   │         m                                                                                                                 
+│   │           ( [G.Directive Variable],                                                                                       
+│   │             G.SelectionSet fragments Variable                                                                             
+│   │           )                                                                                                               
+│   ├── 📄 rust_test.rs (1,368 tokens, 259 lines)
+│   │   ├── fn at_beginning<'a>(&'a str)                                                                                        
+│   │   ├── pub enum Days<E: EdgeCase> {                                                                                        
+│   │   │       #[default]                                                                                                      
+│   │   │       Sun,                                                                                                            
+│   │   │       Mon,                                                                                                            
+│   │   │       #[error("edge case {idx}, expected at least {} and at most {}", .limits.lo, .limits.hi)]                        
+│   │   │       Tue,                                                                                                            
+│   │   │       Wed,                                                                                                            
+│   │   │       Thu(i16, bool),                                                                                                 
+│   │   │       Fri { day: u8 },                                                                                                
+│   │   │       Sat {                                                                                                           
+│   │   │           urday: String,                                                                                              
+│   │   │           edge_case: E,                                                                                               
+│   │   │       },                                                                                                              
+│   │   │   }                                                                                                                   
+│   │   ├── struct Point                                                                                                        
+│   │   ├── impl Point                                                                                                          
+│   │   ├──     fn get_origin() -> Point                                                                                        
+│   │   ├── struct Person                                                                                                       
+│   │   ├── impl Person                                                                                                         
+│   │   ├──     fn greet(&self)                                                                                                 
+│   │   ├── fn add_two_longs(x1: i64, x2: i64) -> i64                                                                           
+│   │   ├── fn add_two_longs_longer(                                                                                            
+│   │   │       x1: i64,                                                                                                        
+│   │   │       x2: i64,                                                                                                        
+│   │   │   ) -> i64                                                                                                            
+│   │   ├── const fn multiply_by_two(num: f64) -> f64                                                                           
+│   │   ├── fn get_first_character(s: &str) -> Option<char>                                                                     
+│   │   ├── trait Drawable                                                                                                      
+│   │   ├──     fn draw(&self)                                                                                                  
+│   │   ├── impl Drawable for Point                                                                                             
+│   │   ├──     fn draw(&self)                                                                                                  
+│   │   ├── fn with_generic<D: Drawable>(d: D)                                                                                  
+│   │   ├── fn with_generic<D>(d: D)                                                                                            
+│   │   │   where                                                                                                               
+│   │   │       D: Drawable                                                                                                     
+│   │   ├── fn main()                                                                                                           
+│   │   ├── pub struct VisibleStruct                                                                                            
+│   │   ├── mod my_module                                                                                                       
+│   │   ├──     pub struct AlsoVisibleStruct<T>(T, T)                                                                           
+│   │   ├── macro_rules! say_hello                                                                                              
+│   │   ├── #[macro_export]                                                                                                     
+│   │   │   macro_rules! hello_tree_plus                                                                                        
+│   │   ├── pub mod lib                                                                                                         
+│   │   ├──     pub mod interfaces                                                                                              
+│   │   ├──     mod engine                                                                                                      
+│   │   ├── pub fn flow<S1, S2, S3, S4, E, T, L>(                                                                               
+│   │   │       source: S1,                                                                                                     
+│   │   │       extractor: E,                                                                                                   
+│   │   │       inbox: S2,                                                                                                      
+│   │   │       transformer: T,                                                                                                 
+│   │   │       outbox: S3,                                                                                                     
+│   │   │       loader: L,                                                                                                      
+│   │   │       sink: &mut S4,                                                                                                  
+│   │   │   ) -> Result<(), Box<dyn Error>>                                                                                     
+│   │   │   where                                                                                                               
+│   │   │       S1: Extractable,                                                                                                
+│   │   │       S2: Extractable + Loadable,                                                                                     
+│   │   │       S3: Extractable + Loadable,                                                                                     
+│   │   │       S4: Loadable,                                                                                                   
+│   │   │       E: Extractor<S1, S2>,                                                                                           
+│   │   │       T: Transformer<S2, S3>,                                                                                         
+│   │   │       L: Loader<S3, S4>                                                                                               
+│   │   ├── trait Container                                                                                                     
+│   │   ├──     fn items(&self) -> impl Iterator<Item = Widget>                                                                 
+│   │   ├── trait HttpService                                                                                                   
+│   │   ├──     async fn fetch(&self, url: Url) -> HtmlBody                                                                     
+│   │   ├── struct Pair<T, U>                                                                                                   
+│   │   ├── trait Transformer<T>                                                                                                
+│   │   ├──     fn transform(&self, input: T) -> T                                                                              
+│   │   ├── impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>                                             
+│   │   ├──     fn transform(&self, input: T) -> T                                                                              
+│   │   ├── fn main()                                                                                                           
+│   │   ├── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>, (StatusCode, String)>                       
+│   │   │   where                                                                                                               
+│   │   │       Bion: Cool                                                                                                      
+│   │   ├── #[macro_export]                                                                                                     
+│   │   │   macro_rules! unit                                                                                                   
+│   │   ├──             fn insert(                                                                                              
+│   │   │                   &mut self,                                                                                          
+│   │   │                   key: (),                                                                                            
+│   │   │                   value: $unit_dtype,                                                                                 
+│   │   │               ) -> Result<Option<$unit_dtype>, ETLError>                                                              
+│   │   ├── pub async fn handle_get_axum_route(                                                                                 
+│   │   │       Session { maybe_claims }: Session,                                                                              
+│   │   │       Path(RouteParams {                                                                                              
+│   │   │           alpha,                                                                                                      
+│   │   │           bravo,                                                                                                      
+│   │   │           charlie,                                                                                                    
+│   │   │           edge_case                                                                                                   
+│   │   │       }): Path<RouteParams>,                                                                                          
+│   │   │   ) -> ServerResult<Response>                                                                                         
+│   │   ├── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>                                                           
+│   │   ├── pub async fn handle_post_yeet(                                                                                      
+│   │   │       State(auth_backend): State<AuthBackend>,                                                                        
+│   │   │       Session { maybe_claims }: Session,                                                                              
+│   │   │       Form(yeet_form): Form<YeetForm>,                                                                                
+│   │   │   ) -> Result<Response, AuthError>                                                                                    
+│   │   └── pub async fn handle_get_thingy(                                                                                     
+│   │           session: Session,                                                                                               
+│   │           State(ApiBackend {                                                                                              
+│   │               page_cache,                                                                                                 
+│   │               auth_backend,                                                                                               
+│   │               library_sql,                                                                                                
+│   │               some_data_cache,                                                                                            
+│   │               metadata_cache,                                                                                             
+│   │               thingy_client,                                                                                              
+│   │               ..                                                                                                          
+│   │           }): State<ApiBackend>,                                                                                          
+│   │       ) -> ServerResult<Response>                                                                                         
 │   └── 📄 test_fsharp.fs (92 tokens, 27 lines)
 │       ├── module TestFSharp
 │       ├── type Person = {
@@ -3402,197 +3407,197 @@ python -m tree_plus_cli -s -g "*.*s" -i group_todo tests/more_languages
 │       └── type Result<'T> =
 ├── 📁 group5 (1 folder, 8 files) 
 │   ├── 📄 app-routing.module.ts (287 tokens, 28 lines)
-│   │   ├── const routes: Routes = [
-│   │   │       { path: '', redirectTo: 'login', pathMatch: 'full' },
-│   │   │       { path: '*', redirectTo: 'login' },
-│   │   │       { path: 'home', component: HomeComponent },
-│   │   │       { path: 'login', component: LoginComponent },
-│   │   │       { path: 'register', component: RegisterComponent },
-│   │   │       { path: 'events', component: EventsComponent },
-│   │   │       { path: 'invites', component: InvitesComponent },
-│   │   │       { path: 'rewards', component: RewardsComponent },
-│   │   │       { path: 'profile', component: ProfileComponent },
-│   │   │   ];
-│   │   └── export class AppRoutingModule
+│   │   ├── const routes: Routes = [                                                                                            
+│   │   │       { path: '', redirectTo: 'login', pathMatch: 'full' },                                                           
+│   │   │       { path: '*', redirectTo: 'login' },                                                                             
+│   │   │       { path: 'home', component: HomeComponent },                                                                     
+│   │   │       { path: 'login', component: LoginComponent },                                                                   
+│   │   │       { path: 'register', component: RegisterComponent },                                                             
+│   │   │       { path: 'events', component: EventsComponent },                                                                 
+│   │   │       { path: 'invites', component: InvitesComponent },                                                               
+│   │   │       { path: 'rewards', component: RewardsComponent },                                                               
+│   │   │       { path: 'profile', component: ProfileComponent },                                                               
+│   │   │   ];                                                                                                                  
+│   │   └── export class AppRoutingModule                                                                                       
 │   ├── 📄 app.component.spec.ts (410 tokens, 47 lines)
-│   │   ├── describe 'AppComponent'
-│   │   ├──     it should create the app
-│   │   ├──     it should welcome the user
-│   │   ├──     it should welcome 'Jimbo'
-│   │   └──     it should request login if not logged in
+│   │   ├── describe 'AppComponent'                                                                                             
+│   │   ├──     it should create the app                                                                                        
+│   │   ├──     it should welcome the user                                                                                      
+│   │   ├──     it should welcome 'Jimbo'                                                                                       
+│   │   └──     it should request login if not logged in                                                                        
 │   ├── 📄 app.component.ts (271 tokens, 45 lines)
-│   │   ├── export class AppComponent
-│   │   ├──   constructor(
-│   │   │       private http: HttpClient,
-│   │   │       private loginService: LoginService,
-│   │   │       private stripeService: StripeService
-│   │   │     )
-│   │   ├──   constructor(private loginService: LoginService)
-│   │   ├──   checkSession()
-│   │   ├──   async goToEvent(event_id: string)
-│   │   └──   valInvitedBy(event: any, event_id: string)
+│   │   ├── export class AppComponent                                                                                           
+│   │   ├──   constructor(                                                                                                      
+│   │   │       private http: HttpClient,                                                                                       
+│   │   │       private loginService: LoginService,                                                                             
+│   │   │       private stripeService: StripeService                                                                            
+│   │   │     )                                                                                                                 
+│   │   ├──   constructor(private loginService: LoginService)                                                                   
+│   │   ├──   checkSession()                                                                                                    
+│   │   ├──   async goToEvent(event_id: string)                                                                                 
+│   │   └──   valInvitedBy(event: any, event_id: string)                                                                        
 │   ├── 📄 app.module.ts (374 tokens, 43 lines)
-│   │   ├── @NgModule({
-│   │   │       declarations: [
-│   │   │           AppComponent,
-│   │   │           HomeComponent,
-│   │   │           LoginComponent,
-│   │   │           RegisterComponent,
-│   │   │           EventsComponent,
-│   │   │           InvitesComponent,
-│   │   │           RewardsComponent,
-│   │   │           ProfileComponent
-│   │   └── export class AppModule
+│   │   ├── @NgModule({                                                                                                         
+│   │   │       declarations: [                                                                                                 
+│   │   │           AppComponent,                                                                                               
+│   │   │           HomeComponent,                                                                                              
+│   │   │           LoginComponent,                                                                                             
+│   │   │           RegisterComponent,                                                                                          
+│   │   │           EventsComponent,                                                                                            
+│   │   │           InvitesComponent,                                                                                           
+│   │   │           RewardsComponent,                                                                                           
+│   │   │           ProfileComponent                                                                                            
+│   │   └── export class AppModule                                                                                              
 │   ├── 📄 environment.test.ts (197 tokens, 19 lines)
-│   │   ├── environment:
-│   │   ├──    production
-│   │   ├──    cognitoUserPoolId
-│   │   ├──    cognitoAppClientId
-│   │   └──    apiurl
+│   │   ├── environment:                                                                                                        
+│   │   ├──    production                                                                                                       
+│   │   ├──    cognitoUserPoolId                                                                                                
+│   │   ├──    cognitoAppClientId                                                                                               
+│   │   └──    apiurl                                                                                                           
 │   ├── 📄 rust_todo_test.rs (92 tokens, 26 lines)
-│   │   ├── TODO: This todo tests parse_todo
-│   │   ├── enum Color {
-│   │   │       Red,
-│   │   │       Blue,
-│   │   │       Green,
-│   │   │   }
-│   │   ├── struct Point
-│   │   ├── trait Drawable
-│   │   ├──     fn draw(&self)
-│   │   ├── impl Drawable for Point
-│   │   ├──     fn draw(&self)
-│   │   └── fn main()
+│   │   ├── TODO: This todo tests parse_todo                                                                                    
+│   │   ├── enum Color {                                                                                                        
+│   │   │       Red,                                                                                                            
+│   │   │       Blue,                                                                                                           
+│   │   │       Green,                                                                                                          
+│   │   │   }                                                                                                                   
+│   │   ├── struct Point                                                                                                        
+│   │   ├── trait Drawable                                                                                                      
+│   │   ├──     fn draw(&self)                                                                                                  
+│   │   ├── impl Drawable for Point                                                                                             
+│   │   ├──     fn draw(&self)                                                                                                  
+│   │   └── fn main()                                                                                                           
 │   ├── 📄 standard-app-routing.module.ts (100 tokens, 16 lines)
-│   │   └── const routes: Routes = [
-│   │         { path: '', component: HomeComponent },
-│   │         {
-│   │           path: 'heroes',
-│   │           component: HeroesListComponent,
-│   │           children: [
-│   │             { path: ':id', component: HeroDetailComponent },
-│   │             { path: 'new', component: HeroFormComponent },
-│   │           ],
-│   │         },
-│   │         { path: '**', component: PageNotFoundComponent },
-│   │       ];
+│   │   └── const routes: Routes = [                                                                                            
+│   │         { path: '', component: HomeComponent },                                                                           
+│   │         {                                                                                                                 
+│   │           path: 'heroes',                                                                                                 
+│   │           component: HeroesListComponent,                                                                                 
+│   │           children: [                                                                                                     
+│   │             { path: ':id', component: HeroDetailComponent },                                                              
+│   │             { path: 'new', component: HeroFormComponent },                                                                
+│   │           ],                                                                                                              
+│   │         },                                                                                                                
+│   │         { path: '**', component: PageNotFoundComponent },                                                                 
+│   │       ];                                                                                                                  
 │   └── 📄 tickets.component.ts (7,160 tokens, 903 lines)
-│       ├── interface EnrichedTicket extends Ticket
-│       ├── interface SpinConfig
-│       ├── interface RotationState
-│       ├── interface SpeakInput
-│       ├── const formatSpeakInput = (input: SpeakInput): string =>
-│       ├── function hourToSpeech(hour: number, minute: number, period: string): string
-│       ├── export class TicketsComponent implements AfterViewInit
-│       ├──   speak(input: SpeakInput)
-│       ├──   speakEvent(ticket: EnrichedTicket): void
-│       ├──   formatEvent(ticket: EnrichedTicket): string
-│       ├──   speakVenue(ticket: EnrichedTicket): void
-│       ├──   formatDate(date: Date, oneLiner: boolean = false): string
-│       ├──   formatDateForSpeech(date: Date): string
-│       ├──   async spinQRCode(
-│       │       event: PointerEvent,
-│       │       config: SpinConfig = DEFAULT_SPIN_CONFIG
-│       │     )
-│       ├──   private animateRotation(
-│       │       imgElement: HTMLElement,
-│       │       targetRotation: number,
-│       │       config: SpinConfig,
-│       │       cleanup: () => void
-│       │     )
-│       ├──     const animate = (currentTime: number) =>
-│       ├──         requestAnimationFrame(animate)
-│       ├──         cleanup()
-│       ├──     requestAnimationFrame(animate)
-│       ├──   private getNext90Degree(currentRotation: number): number
-│       ├──   private getCurrentRotation(matrix: string): number
-│       ├──   ngAfterViewInit()
-│       ├──       const mouseEnterListener = () =>
-│       ├──       const mouseLeaveListener = () =>
-│       ├──   ngOnDestroy()
-│       ├──   toggleColumn(event: MatOptionSelectionChange, column: string)
-│       ├──   adjustColumns(event?: Event)
-│       ├──   onResize(event: Event)
-│       ├──   async ngOnInit()
-│       ├──   async loadTickets(): Promise<void>
-│       ├──   onDateRangeChange(
-│       │       type: "start" | "end",
-│       │       event: MatDatepickerInputEvent<Date>
-│       │     )
-│       ├──   applyFilter(column: string): void
-│       ├──   formatDateForComparison(date: Date): string
-│       ├──   constructor(private renderer: Renderer2)
-│       ├──   onFilterChange(event: Event, column: string)
-│       ├──   onLatitudeChange(event: Event)
-│       ├──   onLongitudeChange(event: Event)
-│       ├──   onRadiusChange(event: Event)
-│       ├──   sortData(sort: Sort): void
-│       ├──   onRowClick(event: Event, row: any)
-│       ├── function isDate(value: Date | undefined | null): value is Date
-│       ├── function isNonNullNumber(value: number | null): value is number
-│       ├── function hasLocation(
-│       │     ticket: any
-│       │   ): ticket is
-│       ├── const create_faker_ticket = async () =>
-│       ├── function compare(a: number | string, b: number | string, isAsc: boolean)
-│       ├── function compare_dates(a: Date, b: Date, isAsc: boolean)
-│       ├── async function mockMoreTickets(): Promise<Ticket[]>
-│       ├── const mockTickets = async () =>
-│       └── const renderQRCode = async (text: String): Promise<string> =>
+│       ├── interface EnrichedTicket extends Ticket                                                                             
+│       ├── interface SpinConfig                                                                                                
+│       ├── interface RotationState                                                                                             
+│       ├── interface SpeakInput                                                                                                
+│       ├── const formatSpeakInput = (input: SpeakInput): string =>                                                             
+│       ├── function hourToSpeech(hour: number, minute: number, period: string): string                                         
+│       ├── export class TicketsComponent implements AfterViewInit                                                              
+│       ├──   speak(input: SpeakInput)                                                                                          
+│       ├──   speakEvent(ticket: EnrichedTicket): void                                                                          
+│       ├──   formatEvent(ticket: EnrichedTicket): string                                                                       
+│       ├──   speakVenue(ticket: EnrichedTicket): void                                                                          
+│       ├──   formatDate(date: Date, oneLiner: boolean = false): string                                                         
+│       ├──   formatDateForSpeech(date: Date): string                                                                           
+│       ├──   async spinQRCode(                                                                                                 
+│       │       event: PointerEvent,                                                                                            
+│       │       config: SpinConfig = DEFAULT_SPIN_CONFIG                                                                        
+│       │     )                                                                                                                 
+│       ├──   private animateRotation(                                                                                          
+│       │       imgElement: HTMLElement,                                                                                        
+│       │       targetRotation: number,                                                                                         
+│       │       config: SpinConfig,                                                                                             
+│       │       cleanup: () => void                                                                                             
+│       │     )                                                                                                                 
+│       ├──     const animate = (currentTime: number) =>                                                                        
+│       ├──         requestAnimationFrame(animate)                                                                              
+│       ├──         cleanup()                                                                                                   
+│       ├──     requestAnimationFrame(animate)                                                                                  
+│       ├──   private getNext90Degree(currentRotation: number): number                                                          
+│       ├──   private getCurrentRotation(matrix: string): number                                                                
+│       ├──   ngAfterViewInit()                                                                                                 
+│       ├──       const mouseEnterListener = () =>                                                                              
+│       ├──       const mouseLeaveListener = () =>                                                                              
+│       ├──   ngOnDestroy()                                                                                                     
+│       ├──   toggleColumn(event: MatOptionSelectionChange, column: string)                                                     
+│       ├──   adjustColumns(event?: Event)                                                                                      
+│       ├──   onResize(event: Event)                                                                                            
+│       ├──   async ngOnInit()                                                                                                  
+│       ├──   async loadTickets(): Promise<void>                                                                                
+│       ├──   onDateRangeChange(                                                                                                
+│       │       type: "start" | "end",                                                                                          
+│       │       event: MatDatepickerInputEvent<Date>                                                                            
+│       │     )                                                                                                                 
+│       ├──   applyFilter(column: string): void                                                                                 
+│       ├──   formatDateForComparison(date: Date): string                                                                       
+│       ├──   constructor(private renderer: Renderer2)                                                                          
+│       ├──   onFilterChange(event: Event, column: string)                                                                      
+│       ├──   onLatitudeChange(event: Event)                                                                                    
+│       ├──   onLongitudeChange(event: Event)                                                                                   
+│       ├──   onRadiusChange(event: Event)                                                                                      
+│       ├──   sortData(sort: Sort): void                                                                                        
+│       ├──   onRowClick(event: Event, row: any)                                                                                
+│       ├── function isDate(value: Date | undefined | null): value is Date                                                      
+│       ├── function isNonNullNumber(value: number | null): value is number                                                     
+│       ├── function hasLocation(                                                                                               
+│       │     ticket: any                                                                                                       
+│       │   ): ticket is                                                                                                        
+│       ├── const create_faker_ticket = async () =>                                                                             
+│       ├── function compare(a: number | string, b: number | string, isAsc: boolean)                                            
+│       ├── function compare_dates(a: Date, b: Date, isAsc: boolean)                                                            
+│       ├── async function mockMoreTickets(): Promise<Ticket[]>                                                                 
+│       ├── const mockTickets = async () =>                                                                                     
+│       └── const renderQRCode = async (text: String): Promise<string> =>                                                       
 ├── 📁 group6 (1 folder, 2 files) 
 │   ├── 📄 ramda__cloneRegExp.js (173 tokens, 9 lines)
-│   │   └── export default function _cloneRegExp(pattern)
+│   │   └── export default function _cloneRegExp(pattern)                                                                       
 │   └── 📄 ramda_prop.js (646 tokens, 85 lines)
-│       ├── /**
-│       │    * Returns a function that when supplied an object returns the indicated
-│       │    * property of that object, if it exists.
-│       │    * @category Object
-│       │    * @typedefn Idx = String | Int | Symbol
-│       │    * @sig Idx -> {s: a} -> a | Undefined
-│       │    * @param {String|Number} p The property name or array index
-│       │    * @param {Object} obj The object to query
-│       │    * @return {*} The value at `obj.p`.
-│       │    */
-│       │   var prop = _curry2(function prop(p, obj)
-│       ├── /**
-│       │    * Solves equations of the form a * x = b
-│       │    * @param {{
-│       │    *  z: number
-│       │    * }} x
-│       │    */
-│       │   function foo(x)
-│       ├── /**
-│       │    * Deconstructs an array field from the input documents to output a document for each element.
-│       │    * Each output document is the input document with the value of the array field replaced by the element.
-│       │    * @category Object
-│       │    * @sig String -> {k: } -> [{k: v}]
-│       │    * @param {String} key The key to determine which property of the object should be unwound.
-│       │    * @param {Object} object The object containing the list to unwind at the property named by the key.
-│       │    * @return {List} A list of new objects, each having the given key associated to an item from the unwound list.
-│       │    */
-│       │   var unwind = _curry2(function(key, object)
-│       └──   return _map(function(item)
+│       ├── /**                                                                                                                 
+│       │    * Returns a function that when supplied an object returns the indicated                                            
+│       │    * property of that object, if it exists.                                                                           
+│       │    * @category Object                                                                                                 
+│       │    * @typedefn Idx = String | Int | Symbol                                                                            
+│       │    * @sig Idx -> {s: a} -> a | Undefined                                                                              
+│       │    * @param {String|Number} p The property name or array index                                                        
+│       │    * @param {Object} obj The object to query                                                                          
+│       │    * @return {*} The value at `obj.p`.                                                                                
+│       │    */                                                                                                                 
+│       │   var prop = _curry2(function prop(p, obj)                                                                            
+│       ├── /**                                                                                                                 
+│       │    * Solves equations of the form a * x = b                                                                           
+│       │    * @param {{                                                                                                        
+│       │    *  z: number                                                                                                       
+│       │    * }} x                                                                                                             
+│       │    */                                                                                                                 
+│       │   function foo(x)                                                                                                     
+│       ├── /**                                                                                                                 
+│       │    * Deconstructs an array field from the input documents to output a document for each element.                      
+│       │    * Each output document is the input document with the value of the array field replaced by the element.            
+│       │    * @category Object                                                                                                 
+│       │    * @sig String -> {k: [v]} -> [{k: v}]                                                                              
+│       │    * @param {String} key The key to determine which property of the object should be unwound.                         
+│       │    * @param {Object} object The object containing the list to unwind at the property named by the key.                
+│       │    * @return {List} A list of new objects, each having the given key associated to an item from the unwound list.     
+│       │    */                                                                                                                 
+│       │   var unwind = _curry2(function(key, object)                                                                          
+│       └──   return _map(function(item)                                                                                        
 └── 📁 group7 (1 folder, 1 file) 
     └── 📄 angular_crud.ts (1,192 tokens, 148 lines)
-        ├── interface DBCommand<T = any>
-        ├── export class IndexedDbService
-        ├──     constructor()
-        ├──     async create_connection({ db_name = 'client_db', table_name }: DBCommand)
-        ├──                 upgrade(db)
-        ├──     async create_model({ db_name, table_name, model }: DBCommand)
-        ├──         verify_matching({ table_name, model })
-        ├──     async read_key({ db_name, table_name, key }: DBCommand)
-        ├──     async update_model({ db_name, table_name, model }: DBCommand)
-        ├──         verify_matching({ table_name, model })
-        ├──     async delete_key({ db_name, table_name, key }: DBCommand)
-        ├──     async list_table({
-        │           db_name,
-        │           table_name,
-        │           where,
-        │       }: DBCommand & { where?: { : string | number } })
-        └──     async search_table(criteria: SearchCriteria)
+        ├── interface DBCommand<T = any>                                                                                        
+        ├── export class IndexedDbService                                                                                       
+        ├──     constructor()                                                                                                   
+        ├──     async create_connection({ db_name = 'client_db', table_name }: DBCommand)                                       
+        ├──                 upgrade(db)                                                                                         
+        ├──     async create_model({ db_name, table_name, model }: DBCommand)                                                   
+        ├──         verify_matching({ table_name, model })                                                                      
+        ├──     async read_key({ db_name, table_name, key }: DBCommand)                                                         
+        ├──     async update_model({ db_name, table_name, model }: DBCommand)                                                   
+        ├──         verify_matching({ table_name, model })                                                                      
+        ├──     async delete_key({ db_name, table_name, key }: DBCommand)                                                       
+        ├──     async list_table({                                                                                              
+        │           db_name,                                                                                                    
+        │           table_name,                                                                                                 
+        │           where,                                                                                                      
+        │       }: DBCommand & { where?: { [key: string]: string | number } })                                                  
+        └──     async search_table(criteria: SearchCriteria)                                                                    
 
-tree_plus v(1.0.78) ignore=('group_todo',) globs=('*.*s',) syntax=False paths=('tests/more_languages',)
-7 folder(s), 17 file(s), 2,141 line(s), 15,202 token(s) in 0.15 second(s).
+tree_plus v(1.0.79) ignore=('group_todo',) globs=('*.*s',) syntax=True paths=('tests/more_languages',)
+7 folder(s), 17 file(s), 2,161 line(s), 15,322 token(s) in 0.47 second(s).
 
 ```
 <!-- t3-end -->
@@ -3609,67 +3614,65 @@ Help me **add to** and **priorize** this list of languages to support!
 python -m tree_plus_cli -s tests/more_languages/group_todo
 📁 group_todo (1 folder, 12 files) 
 ├── 📄 AAPLShaders.metal (5,780 tokens, 566 lines)
-│   ├── struct LightingParameters
-│   ├── float Geometry(float Ndotv, float alphaG)
-│   ├── float3 computeNormalMap(ColorInOut in, texture2d<float> normalMapTexture)
-│   ├── float3 computeDiffuse(LightingParameters parameters)
-│   ├── float Distribution(float NdotH, float roughness)
-│   ├── float3 computeSpecular(LightingParameters parameters)
-│   ├── float4 equirectangularSample(float3 direction, sampler s, texture2d<float> image)
-│   ├── LightingParameters calculateParameters(ColorInOut in,
-│   │                                          AAPLCameraData cameraData,
-│   │                                          constant AAPLLightData& lightData,
-│   │                                          texture2d<float>   baseColorMap,
-│   │                                          texture2d<float>   normalMap,
-│   │                                          texture2d<float>   metallicMap,
-│   │                                          texture2d<float>   roughnessMap,
-│   │                                          texture2d<float>   ambientOcclusionMap,
-│   │                                          texture2d<float>   skydomeMap)
-│   ├── struct SkyboxVertex
-│   ├── struct SkyboxV2F
-│   ├── vertex SkyboxV2F skyboxVertex(SkyboxVertex in [],
-│   │                                    constant AAPLCameraData& cameraData [])
-│   ├── fragment float4 skyboxFragment(SkyboxV2F v [], texture2d<float> skytexture [])
-│   ├── vertex ColorInOut vertexShader(Vertex in [],
-│   │                                  constant AAPLInstanceTransform& instanceTransform [[ 
-│   │   buffer(BufferIndexInstanceTransforms) ]],
-│   │                                  constant AAPLCameraData& cameraData [[ buffer(BufferIndexCameraData) ]])
-│   ├── float2 calculateScreenCoord( float3 ndcpos )
-│   ├── fragment float4 fragmentShader(
-│   │                       ColorInOut                  in                    [],
-│   │                       constant AAPLCameraData&    cameraData            [[ buffer(BufferIndexCameraData) ]],
-│   │                       constant AAPLLightData&     lightData             [[ buffer(BufferIndexLightData) ]],
-│   │                       constant AAPLSubmeshKeypath&submeshKeypath        [[ buffer(BufferIndexSubmeshKeypath)]],
-│   │                       constant Scene*             pScene                [[ buffer(SceneIndex)]],
-│   │                       texture2d<float>            skydomeMap            [[ texture(AAPLSkyDomeTexture) ]],
-│   │                       texture2d<float>            rtReflections         [[ texture(AAPLTextureIndexReflections), 
-│   │   function_constant(is_raytracing_enabled)]])
-│   ├── fragment float4 reflectionShader(ColorInOut in [],
-│   │                                    texture2d<float> rtReflections [])
-│   ├── struct ThinGBufferOut
-│   ├── fragment ThinGBufferOut gBufferFragmentShader(ColorInOut in [])
-│   ├── kernel void rtReflection(
-│   │                texture2d< float, access::write >      outImage                [],
-│   │                texture2d< float >                     positions               [],
-│   │                texture2d< float >                     directions              [],
-│   │                texture2d< float >                     skydomeMap              [],
-│   │                constant AAPLInstanceTransform*        instanceTransforms      [],
-│   │                constant AAPLCameraData&               cameraData              [],
-│   │                constant AAPLLightData&                lightData               [],
-│   │                constant Scene*                        pScene                  [],
-│   │                instance_acceleration_structure        accelerationStructure   [],
-│   │                uint2 tid [])
-│   ├── else if ( intersection.type == raytracing::intersection_type::none )
-│   ├── struct VertexInOut
-│   ├── vertex VertexInOut vertexPassthrough( uint vid [] )
-│   ├── fragment float4 fragmentPassthrough( VertexInOut in [], texture2d< float > tin )
-│   ├── fragment float4 fragmentBloomThreshold( VertexInOut in [],
-│   │                                          texture2d< float > tin [],
-│   │                                          constant float* threshold [] )
-│   └── fragment float4 fragmentPostprocessMerge( VertexInOut in [],
-│                                                constant float& exposure [],
-│                                                texture2d< float > texture0 [],
-│                                                texture2d< float > texture1 [])
+│   ├── struct LightingParameters                                                                                               
+│   ├── float Geometry(float Ndotv, float alphaG)                                                                               
+│   ├── float3 computeNormalMap(ColorInOut in, texture2d<float> normalMapTexture)                                               
+│   ├── float3 computeDiffuse(LightingParameters parameters)                                                                    
+│   ├── float Distribution(float NdotH, float roughness)                                                                        
+│   ├── float3 computeSpecular(LightingParameters parameters)                                                                   
+│   ├── float4 equirectangularSample(float3 direction, sampler s, texture2d<float> image)                                       
+│   ├── LightingParameters calculateParameters(ColorInOut in,                                                                   
+│   │                                          AAPLCameraData cameraData,                                                       
+│   │                                          constant AAPLLightData& lightData,                                               
+│   │                                          texture2d<float>   baseColorMap,                                                 
+│   │                                          texture2d<float>   normalMap,                                                    
+│   │                                          texture2d<float>   metallicMap,                                                  
+│   │                                          texture2d<float>   roughnessMap,                                                 
+│   │                                          texture2d<float>   ambientOcclusionMap,                                          
+│   │                                          texture2d<float>   skydomeMap)                                                   
+│   ├── struct SkyboxVertex                                                                                                     
+│   ├── struct SkyboxV2F                                                                                                        
+│   ├── vertex SkyboxV2F skyboxVertex(SkyboxVertex in [[stage_in]],                                                             
+│   │                                    constant AAPLCameraData& cameraData [[buffer(BufferIndexCameraData)]])                 
+│   ├── fragment float4 skyboxFragment(SkyboxV2F v [[stage_in]], texture2d<float> skytexture [[texture(0)]])                    
+│   ├── vertex ColorInOut vertexShader(Vertex in [[stage_in]],                                                                  
+│   │                                  constant AAPLInstanceTransform& instanceTransform [[ buffer(BufferIndexInstanceTransforms
+│   │                                  constant AAPLCameraData& cameraData [[ buffer(BufferIndexCameraData) ]])                 
+│   ├── float2 calculateScreenCoord( float3 ndcpos )                                                                            
+│   ├── fragment float4 fragmentShader(                                                                                         
+│   │                       ColorInOut                  in                    [[stage_in]],                                     
+│   │                       constant AAPLCameraData&    cameraData            [[ buffer(BufferIndexCameraData) ]],              
+│   │                       constant AAPLLightData&     lightData             [[ buffer(BufferIndexLightData) ]],               
+│   │                       constant AAPLSubmeshKeypath&submeshKeypath        [[ buffer(BufferIndexSubmeshKeypath)]],           
+│   │                       constant Scene*             pScene                [[ buffer(SceneIndex)]],                          
+│   │                       texture2d<float>            skydomeMap            [[ texture(AAPLSkyDomeTexture) ]],                
+│   │                       texture2d<float>            rtReflections         [[ texture(AAPLTextureIndexReflections), function_
+│   ├── fragment float4 reflectionShader(ColorInOut in [[stage_in]],                                                            
+│   │                                    texture2d<float> rtReflections [[texture(AAPLTextureIndexReflections)]])               
+│   ├── struct ThinGBufferOut                                                                                                   
+│   ├── fragment ThinGBufferOut gBufferFragmentShader(ColorInOut in [[stage_in]])                                               
+│   ├── kernel void rtReflection(                                                                                               
+│   │                texture2d< float, access::write >      outImage                [[texture(OutImageIndex)]],                 
+│   │                texture2d< float >                     positions               [[texture(ThinGBufferPositionIndex)]],      
+│   │                texture2d< float >                     directions              [[texture(ThinGBufferDirectionIndex)]],     
+│   │                texture2d< float >                     skydomeMap              [[texture(AAPLSkyDomeTexture)]],            
+│   │                constant AAPLInstanceTransform*        instanceTransforms      [[buffer(BufferIndexInstanceTransforms)]],  
+│   │                constant AAPLCameraData&               cameraData              [[buffer(BufferIndexCameraData)]],          
+│   │                constant AAPLLightData&                lightData               [[buffer(BufferIndexLightData)]],           
+│   │                constant Scene*                        pScene                  [[buffer(SceneIndex)]],                     
+│   │                instance_acceleration_structure        accelerationStructure   [[buffer(AccelerationStructureIndex)]],     
+│   │                uint2 tid [[thread_position_in_grid]])                                                                     
+│   ├── else if ( intersection.type == raytracing::intersection_type::none )                                                    
+│   ├── struct VertexInOut                                                                                                      
+│   ├── vertex VertexInOut vertexPassthrough( uint vid [[vertex_id]] )                                                          
+│   ├── fragment float4 fragmentPassthrough( VertexInOut in [[stage_in]], texture2d< float > tin )                              
+│   ├── fragment float4 fragmentBloomThreshold( VertexInOut in [[stage_in]],                                                    
+│   │                                          texture2d< float > tin [[texture(0)]],                                           
+│   │                                          constant float* threshold [[buffer(0)]] )                                        
+│   └── fragment float4 fragmentPostprocessMerge( VertexInOut in [[stage_in]],                                                  
+│                                                constant float& exposure [[buffer(0)]],                                        
+│                                                texture2d< float > texture0 [[texture(0)]],                                    
+│                                                texture2d< float > texture1 [[texture(1)]])                                    
 ├── 📄 crystal_test.cr (48 tokens, 15 lines)
 ├── 📄 dart_test.dart (108 tokens, 24 lines)
 ├── 📄 elixir_test.exs (39 tokens, 10 lines)
@@ -3681,14 +3684,14 @@ python -m tree_plus_cli -s tests/more_languages/group_todo
 ├── 📄 testTypings.d.ts (158 tokens, 23 lines)
 ├── 📄 vba_test.bas (67 tokens, 16 lines)
 └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
-    ├── @binding(0) @group(0) var<uniform> frame : u32
-    ├── @vertex
-    │   fn vtx_main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f
-    └── @fragment
-        fn frag_main() -> @location(0) vec4f
+    ├── @binding(0) @group(0) var<uniform> frame : u32                                                                          
+    ├── @vertex                                                                                                                 
+    │   fn vtx_main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f                                      
+    └── @fragment                                                                                                               
+        fn frag_main() -> @location(0) vec4f                                                                                    
 
-tree_plus v(1.0.78) ignore=() globs=() syntax=False paths=('tests/more_languages/group_todo',)
-1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.05 second(s).
+tree_plus v(1.0.79) ignore=() globs=() syntax=True paths=('tests/more_languages/group_todo',)
+1 folder(s), 12 file(s), 872 line(s), 7,740 token(s) in 0.10 second(s).
 
 ```
 <!-- t4-end -->
