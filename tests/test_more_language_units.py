@@ -1319,6 +1319,18 @@ macro_rules! unit""",
     Session { maybe_claims }: Session,
     Form(yeet_form): Form<YeetForm>,
 ) -> Result<Response, AuthError>""",
+                """pub async fn handle_get_thingy(
+    session: Session,
+    State(ApiBackend {
+        page_cache,
+        auth_backend,
+        library_sql,
+        some_data_cache,
+        metadata_cache,
+        thingy_client,
+        ..
+    }): State<ApiBackend>,
+) -> ServerResult<Response>""",
             ],
         ),
         (

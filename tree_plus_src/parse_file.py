@@ -1211,7 +1211,7 @@ def parse_rs(
 
     combined_pattern = regex.compile(
         # functions
-        r"^(?P<function>\s*(?P<maybe_pub>pub\s+?)?(?P<maybe_async_or_const>(?:async|const)\s+)?(?P<fn>fn)\s+(?P<fn_name>\w+)(?P<generics><[^>]*?>)?(?P<argument_start>\()(?P<arguments>[&\w,':[\]()<>${}\/\s]+?)?(?P<argument_end>\)(?!:))[\s\S]*?)(?P<end>(?:;\s)|(?:{))|"
+        r"^(?P<function>\s*(?P<maybe_pub>pub\s+?)?(?P<maybe_async_or_const>(?:async|const)\s+)?(?P<fn>fn)\s+(?P<fn_name>\w+)(?P<generics><[^>]*?>)?(?P<argument_start>\()(?P<arguments>[&\w,\.':[\]()<>${}\/\s]+?)?(?P<argument_end>\)(?!:))[\s\S]*?)(?P<end>(?:;\s)|(?:{))|"
         # structs and impls with generics
         r"\n(?P<struct_impl>(?: *((?:pub\s+)?struct)|impl)[^{;]*?) ?[{;]|"
         # enum with variants
@@ -2806,7 +2806,9 @@ def parse_tf(content: str, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     return [f"{match[0]} {match[1]}" if match[1] else match[0] for match in matches]
 
 
-markdown_languages = {ext.lstrip('.') for ext in MARKDOWN_EXTENSIONS}
+markdown_languages = {ext.lstrip(".") for ext in MARKDOWN_EXTENSIONS}
+
+
 def parse_md(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[str]:
     in_code_block = False
     lines = content.splitlines()
@@ -2849,11 +2851,13 @@ def parse_md(content: str, *, timeout: float = DEFAULT_REGEX_TIMEOUT) -> List[st
             else:
                 lang = stripped_line[3:].strip()
                 code_block_stack.append(lang)
-            
+
             continue
 
         # A block is opaque if its language is NOT in our derived set of markdown languages
-        in_opaque_block = code_block_stack and code_block_stack[-1] not in markdown_languages
+        in_opaque_block = (
+            code_block_stack and code_block_stack[-1] not in markdown_languages
+        )
 
         if in_opaque_block:
             continue

@@ -53,3 +53,6 @@ tests/readme_updates/renamed_dry_run_README.md
 tests/version_increments/renamed_dry_run_version.py
 
 .mcp_server.pid
+
+# using uv sometimes we get a build folder
+build/

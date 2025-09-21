@@ -238,3 +238,23 @@ pub async fn handle_post_yeet(
 ) -> Result<Response, AuthError> {
     println!("yeet yeet!")
 }
+
+/// GET /handle_get_thingy -> `/handle_get_thingy/{THINGY_NAME}`
+///
+/// # Errors
+/// - if tree_plus regex doesn't match on the .. in destructuring
+#[instrument(skip_all)]
+pub async fn handle_get_thingy(
+    session: Session,
+    State(ApiBackend {
+        page_cache,
+        auth_backend,
+        library_sql,
+        some_data_cache,
+        metadata_cache,
+        thingy_client,
+        ..
+    }): State<ApiBackend>,
+) -> ServerResult<Response> {
+    todo!("test thy shit");
+}
