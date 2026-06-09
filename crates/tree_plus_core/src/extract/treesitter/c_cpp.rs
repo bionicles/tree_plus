@@ -220,17 +220,15 @@ impl<'a> CExtractor<'a> {
             return;
         };
         match type_node.kind() {
-            "struct_specifier" | "union_specifier" | "class_specifier" => {
-                if type_node.child_by_field_name("body").is_some() {
-                    self.emit_record(type_node, Some(node.start_byte()));
-                    self.emit_closer(type_node, node);
-                }
+            "struct_specifier" | "union_specifier" | "class_specifier"
+                if type_node.child_by_field_name("body").is_some() =>
+            {
+                self.emit_record(type_node, Some(node.start_byte()));
+                self.emit_closer(type_node, node);
             }
-            "enum_specifier" => {
-                if type_node.child_by_field_name("body").is_some() {
-                    self.emit_enum(type_node);
-                    self.emit_closer(type_node, node);
-                }
+            "enum_specifier" if type_node.child_by_field_name("body").is_some() => {
+                self.emit_enum(type_node);
+                self.emit_closer(type_node, node);
             }
             _ => {}
         }
@@ -256,18 +254,16 @@ impl<'a> CExtractor<'a> {
             }
         }
         match type_node.kind() {
-            "struct_specifier" | "union_specifier" | "class_specifier" => {
-                if type_node.child_by_field_name("body").is_some() {
-                    let start = line_start(self.content, node.start_byte());
-                    self.emit_record(type_node, Some(start));
-                    self.emit_closer(type_node, node);
-                }
+            "struct_specifier" | "union_specifier" | "class_specifier"
+                if type_node.child_by_field_name("body").is_some() =>
+            {
+                let start = line_start(self.content, node.start_byte());
+                self.emit_record(type_node, Some(start));
+                self.emit_closer(type_node, node);
             }
-            "enum_specifier" => {
-                if type_node.child_by_field_name("body").is_some() {
-                    self.emit_enum(type_node);
-                    self.emit_closer(type_node, node);
-                }
+            "enum_specifier" if type_node.child_by_field_name("body").is_some() => {
+                self.emit_enum(type_node);
+                self.emit_closer(type_node, node);
             }
             _ => {}
         }
