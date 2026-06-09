@@ -5,6 +5,7 @@
 //! regex-based components; golden parity tests in tests/ enforce this.
 
 pub mod c_cpp;
+pub mod go;
 pub mod python;
 pub mod rust;
 pub mod typescript;

@@ -109,7 +109,7 @@ const MARKDOWN_EXTENSIONS: &[&str] = &[".md", ".markdown", ".mdx", ".mdc"];
 /// Rust port version 1. Files still get TODO/BUG/NOTE markers; component
 /// extraction is tracked in docs/language-roadmap.md.
 const DEFERRED_EXTENSIONS: &[&str] = &[
-    ".php", ".kt", ".swift", ".go", ".sh", ".ps1", ".zig", ".rb", ".sql", ".graphql", ".cs", ".jl",
+    ".php", ".kt", ".swift", ".sh", ".ps1", ".zig", ".rb", ".sql", ".graphql", ".cs", ".jl",
     ".scala", ".java", ".pl", ".hs", ".fs", ".lisp", ".clj", ".scm", ".el", ".rkt", ".erl", ".hrl",
     ".capnp", ".proto", ".tex", ".lean", ".f", ".for", ".f77", ".f90", ".f95", ".f03", ".f08",
     ".tf", ".thy", ".lua", ".tcl", ".m", ".r", ".nb", ".wl", ".matlab", ".ml", ".cbl", ".cobol",
@@ -206,6 +206,7 @@ fn try_extract_components(path: &Path, syntax: bool) -> ExtractResult {
         ".yml" | ".yaml" => data::extract_yml(&content)?,
         e if C_EXTENSIONS.contains(&e) => treesitter::c_cpp::extract(&content, e)?,
         ".rs" => treesitter::rust::extract(&content, syntax)?,
+        ".go" => treesitter::go::extract(&content)?,
         ".jsonl" => data::extract_jsonl(&content)?,
         ".env" => simple::dot_env(&content),
         ".txt" => {

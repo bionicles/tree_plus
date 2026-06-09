@@ -1,9 +1,10 @@
 # Language Roadmap (Rust Port)
 
-Version-1 implements: Rust, Python, JavaScript, TypeScript, C, C++, Markdown
-(+ RST), JSON (package.json / schema / RPC / OpenRPC), JSONL, YAML, TOML
-(Cargo/pyproject), CSV, Makefile/Justfile, .env, requirements.txt, SQLite,
-and TODO/BUG/NOTE markers everywhere except `.md`/`.txt` (legacy rule).
+Version-1 implements: Rust, Python, JavaScript, TypeScript, C, C++, Go,
+Markdown (+ RST), JSON (package.json / schema / RPC / OpenRPC), JSONL, YAML,
+TOML (Cargo/pyproject), CSV, Makefile/Justfile, .env, requirements.txt,
+SQLite, and TODO/BUG/NOTE markers everywhere except `.md`/`.txt` (legacy
+rule).
 
 Everything below is recognized by the legacy Python implementation and
 **deferred**: files keep counts and markers, but emit no components. Legacy
@@ -14,7 +15,6 @@ availability → suggested path → missing tests.
 
 | Language | Extensions | Legacy extractor | TS grammar? | Suggested path | Missing tests |
 |---|---|---|---|---|---|
-| Go | .go | parse_go | yes (tree-sitter-go) | tree-sitter formatter | port golden `go_test.go` |
 | Java | .java | parse_java | yes | tree-sitter formatter | port golden `JavaTest.java` |
 | Kotlin | .kt | parse_kt | yes (community) | tree-sitter formatter | port golden `KotlinTest.kt` |
 | Swift | .swift | parse_swift | yes (community) | tree-sitter formatter | port golden `swift_test.swift` |
@@ -59,6 +59,6 @@ highlighting, tiktoken tokenizers — see docs/rust-port-differences.md.
 
 ## Suggested order of attack
 
-1. Go, Java, Kotlin, C#, Ruby, Bash (mature grammars, heavily used).
+1. Java, Kotlin, C#, Ruby, Bash (mature grammars, heavily used).
 2. SQL/GraphQL/Protobuf/requirements-style line formats (cheap regex ports).
 3. The long tail, prioritized by user demand.

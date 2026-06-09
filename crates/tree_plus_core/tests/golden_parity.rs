@@ -29,6 +29,7 @@ fn in_v1_scope(path: &str) -> bool {
         ".py",
         ".pyi",
         ".rs",
+        ".go",
         ".js",
         ".jsx",
         ".ts",

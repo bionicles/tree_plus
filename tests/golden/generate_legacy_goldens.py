@@ -50,7 +50,7 @@ def sanitize(p: Path) -> str:
 
 
 DEFERRED_PARSERS = [
-    "parse_php", "parse_kt", "parse_swift", "parse_go", "parse_bash",
+    "parse_php", "parse_kt", "parse_swift", "parse_bash",
     "parse_ps1", "parse_zig", "parse_rb", "parse_sql", "parse_graphql",
     "parse_cs", "parse_jl", "parse_scala", "parse_java", "parse_perl",
     "parse_hs", "parse_fsharp", "parse_lisp", "parse_erl", "parse_capnp",

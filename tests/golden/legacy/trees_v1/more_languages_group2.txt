@@ -42,6 +42,19 @@
 │   ├──     struct cliSSLconfig sslconfig;
 │   └── } config;
 ├── 📄 go_test.go (179 tokens, 46 lines)
+│   ├── type Greeting struct
+│   ├── func (g Greeting) sayHello()
+│   ├── func createGreeting(m string) Greeting
+│   ├── type SomethingLong struct
+│   ├── func (s *SomethingLong) WithAReasonableName(
+│   │           ctx context.Context,
+│   │           param1 string,
+│   │           param2 int,
+│   │           param3 map[string]interface{},
+│   │           callback func(int) error,
+│   │   ) (resultType, error)
+│   ├── type resultType struct
+│   └── func main()
 ├── 📄 PerlTest.pl (63 tokens, 20 lines)
 ├── 📄 PhpTest.php (70 tokens, 19 lines)
 ├── 📄 PowershellTest.ps1 (459 tokens, 89 lines)
