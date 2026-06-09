@@ -57,7 +57,7 @@ pub fn extract(content: &str) -> ExtractResult {
         pending_decorators: Vec::new(),
         in_class: false,
     };
-    extractor.visit(tree.root_node());
+    extractor.run(tree.root_node());
     Ok(extractor.components)
 }
 
@@ -99,33 +99,40 @@ impl<'a> PyExtractor<'a> {
         }
     }
 
-    fn visit(&mut self, node: Node<'a>) {
-        match node.kind() {
-            "decorated_definition" => {
-                let mut cursor = node.walk();
-                for child in node.named_children(&mut cursor) {
-                    if child.kind() == "decorator" {
-                        self.collect_decorator(child);
-                    } else {
-                        self.visit(child);
+    /// Depth-first via an explicit stack: AST depth is input-controlled
+    /// (deeply nested expressions), and extraction runs on small
+    /// worker-thread stacks.
+    fn run(&mut self, root: Node<'a>) {
+        let mut stack = vec![root];
+        while let Some(node) = stack.pop() {
+            match node.kind() {
+                "decorated_definition" => {
+                    // decorators collect now; the definition pops next
+                    let mut cursor = node.walk();
+                    let mut deferred: Vec<Node<'a>> = Vec::new();
+                    for child in node.named_children(&mut cursor) {
+                        if child.kind() == "decorator" {
+                            self.collect_decorator(child);
+                        } else {
+                            deferred.push(child);
+                        }
+                    }
+                    stack.extend(deferred.into_iter().rev());
+                }
+                "function_definition" => self.handle_function(node, &mut stack),
+                "class_definition" => self.handle_class(node, &mut stack),
+                "expression_statement" => {
+                    let mut cursor = node.walk();
+                    for child in node.named_children(&mut cursor) {
+                        if child.kind() == "assignment" {
+                            self.handle_assignment(child);
+                        }
                     }
                 }
-            }
-            "function_definition" => self.handle_function(node),
-            "class_definition" => self.handle_class(node),
-            "expression_statement" => {
-                let mut cursor = node.walk();
-                for child in node.named_children(&mut cursor) {
-                    if child.kind() == "assignment" {
-                        self.handle_assignment(child);
-                    }
-                }
-            }
-            // expressions cannot contain statements; recursion elsewhere is safe
-            _ => {
-                let mut cursor = node.walk();
-                for child in node.named_children(&mut cursor) {
-                    self.visit(child);
+                _ => {
+                    let mut cursor = node.walk();
+                    let children: Vec<Node<'a>> = node.named_children(&mut cursor).collect();
+                    stack.extend(children.into_iter().rev());
                 }
             }
         }
@@ -153,7 +160,7 @@ impl<'a> PyExtractor<'a> {
             .push(self.content[indent_start..node.end_byte()].to_string());
     }
 
-    fn handle_function(&mut self, node: Node<'a>) {
+    fn handle_function(&mut self, node: Node<'a>, stack: &mut Vec<Node<'a>>) {
         let body = node.child_by_field_name("body");
         let is_async = node.child(0).map(|c| c.kind() == "async").unwrap_or(false);
         if !is_async {
@@ -163,7 +170,7 @@ impl<'a> PyExtractor<'a> {
             }
         }
         if let Some(body) = body {
-            self.visit(body);
+            stack.push(body);
         }
     }
 
@@ -208,14 +215,14 @@ impl<'a> PyExtractor<'a> {
         Some(cleaned)
     }
 
-    fn handle_class(&mut self, node: Node<'a>) {
+    fn handle_class(&mut self, node: Node<'a>, stack: &mut Vec<Node<'a>>) {
         let body = node.child_by_field_name("body");
         if let Some(component) = self.build_class_signature(node) {
             self.emit_with_decorators(component);
             self.in_class = true;
         }
         if let Some(body) = body {
-            self.visit(body);
+            stack.push(body);
         }
     }
 

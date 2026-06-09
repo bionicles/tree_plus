@@ -100,53 +100,56 @@ pub fn extract(content: &str, syntax: bool) -> ExtractResult {
     Ok(components)
 }
 
-fn visit(node: Node<'_>, content: &str, syntax: bool, out: &mut Vec<String>) {
-    let mut cursor = node.walk();
-    for child in node.named_children(&mut cursor) {
-        match child.kind() {
+/// Depth-first via an explicit stack: AST depth is input-controlled, and
+/// deep expression nesting must not overflow small worker-thread stacks.
+fn visit(root: Node<'_>, content: &str, syntax: bool, out: &mut Vec<String>) {
+    let mut stack = vec![root];
+    while let Some(node) = stack.pop() {
+        match node.kind() {
             "function_item" | "function_signature_item" => {
-                if let Some(c) = format_fn(child, content) {
+                if let Some(c) = format_fn(node, content) {
                     out.push(c);
                 }
                 // nested items inside fn bodies still match
-                visit(child, content, syntax, out);
+                descend(node, &mut stack);
             }
             "struct_item" => {
-                if let Some(c) = format_struct_impl(child, content, false) {
+                if let Some(c) = format_struct_impl(node, content, false) {
                     out.push(c);
                 }
             }
             "impl_item" => {
-                if let Some(c) = format_struct_impl(child, content, true) {
+                if let Some(c) = format_struct_impl(node, content, true) {
                     out.push(c);
                 }
-                visit(child, content, syntax, out);
+                descend(node, &mut stack);
             }
             "enum_item" => {
-                if let Some(c) = format_enum(child, content, syntax) {
+                if let Some(c) = format_enum(node, content, syntax) {
                     out.push(c);
                 }
             }
-            "trait_item" => {
-                if let Some(c) = format_trait_mod(child, content) {
+            "trait_item" | "mod_item" => {
+                if let Some(c) = format_trait_mod(node, content) {
                     out.push(c);
                 }
-                visit(child, content, syntax, out);
-            }
-            "mod_item" => {
-                if let Some(c) = format_trait_mod(child, content) {
-                    out.push(c);
-                }
-                visit(child, content, syntax, out);
+                descend(node, &mut stack);
             }
             "macro_definition" => {
-                if let Some(c) = format_macro(child, content) {
+                if let Some(c) = format_macro(node, content) {
                     out.push(c);
                 }
             }
-            _ => visit(child, content, syntax, out),
+            _ => descend(node, &mut stack),
         }
     }
+}
+
+/// Push `node`'s named children so they pop in source order.
+fn descend<'t>(node: Node<'t>, stack: &mut Vec<Node<'t>>) {
+    let mut cursor = node.walk();
+    let children: Vec<Node<'t>> = node.named_children(&mut cursor).collect();
+    stack.extend(children.into_iter().rev());
 }
 
 /// Start of the line containing `byte` (offset just after the previous `\n`).

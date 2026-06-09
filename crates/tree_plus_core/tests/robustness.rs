@@ -84,3 +84,60 @@ fn invalid_utf8_yields_no_components() {
     let path = write_temp("invalid.py", &[0xC3, 0x28, b'\n', b'd', b'e', b'f', b' ']);
     assert!(extract_components(&path, false).is_empty());
 }
+
+/// Deep ASTs must not overflow small (rayon-sized) thread stacks.
+///
+/// Regression: arch/x86/kernel/cpu/microcode/intel-ucode-defs.h in
+/// torvalds/linux is a headerless initializer-list fragment; tree-sitter
+/// parses it as a deeply nested ERROR tree, and the recursive extractor
+/// walk aborted with a stack overflow inside the rayon pool.
+#[test]
+fn deep_nesting_never_overflows_worker_stacks() {
+    let cases: Vec<(&str, String)> = vec![
+        (
+            "h",
+            "{ .flags = X86_CPU_ID_FLAG_ENTRY_VALID, .vendor = 1, .family = 0x6 },\n".repeat(5_000),
+        ),
+        (
+            "c",
+            format!("int x = {}1{};\n", "(".repeat(20_000), ")".repeat(20_000)),
+        ),
+        (
+            "py",
+            format!("x = {}{}\n", "[".repeat(20_000), "]".repeat(20_000)),
+        ),
+        (
+            "rs",
+            format!(
+                "fn f() {{ let x = {}1{}; }}\n",
+                "(".repeat(20_000),
+                ")".repeat(20_000)
+            ),
+        ),
+        (
+            "ts",
+            format!("const x = {}{};\n", "[".repeat(20_000), "]".repeat(20_000)),
+        ),
+        (
+            "go",
+            format!(
+                "func f() {{\n\tx := {}1{}\n}}\n",
+                "(".repeat(20_000),
+                ")".repeat(20_000)
+            ),
+        ),
+    ];
+    for (ext, content) in cases {
+        let path = write_temp(&format!("deep.{ext}"), content.as_bytes());
+        // rayon workers default to 2 MiB stacks; use a harsher 512 KiB
+        let handle = std::thread::Builder::new()
+            .stack_size(512 * 1024)
+            .spawn(move || {
+                let _ = extract_components(&path, false); // must not abort
+            })
+            .unwrap();
+        handle
+            .join()
+            .unwrap_or_else(|_| panic!("deep .{ext} input crashed the extractor"));
+    }
+}

@@ -31,9 +31,35 @@ hyperfine './target/release/tree_plus /path/to/repo > /dev/null' \
           'python tree_plus_cli.py /path/to/repo > /dev/null'
 ```
 
-A Linux-kernel-sized tree was not available locally; the command above is
-the reproducible benchmark for one (also:
-`TREE_PLUS_BENCH_PATH=/path/to/linux cargo bench -p tree_plus_core`).
+## Linux kernel (torvalds/linux @ ~6.15, 101,136 files, 44.77M lines)
+
+Single runs (`/usr/bin/time -v`), page cache warm:
+
+| Invocation | Rust wall | Peak RSS | Notes |
+|---|---|---|---|
+| `tprs -c linux` | 0.50 s | 178 MB | 6,285 folders, 101,136 files, 44.77M lines, 409.2M tokens |
+| `tprs linux` | 12.4 s | 1.5 GB | full extraction; 8.42M-line render (598 MB of output) |
+| `tprs linux/kernel` | 0.23 s | — | 711 files, 553,855 lines; Python: 12.6 s → **~56×** |
+
+Counts (lines, tokens) agree byte-for-byte with the legacy Python CLI on
+`linux/kernel`. Peak RSS on the full run is dominated by the final render
+string (~600 MB) plus the assembled tree, not by extraction.
+
+The kernel run also surfaced two stack-overflow bugs, both fixed:
+
+1. Extractor visitors recursed on AST depth.
+   `arch/x86/kernel/cpu/microcode/intel-ucode-defs.h` is a headerless
+   initializer-list fragment that tree-sitter parses as a deeply nested
+   ERROR tree; the recursive walk blew rayon's 2 MiB worker stacks. All
+   tree-sitter extractors now traverse with explicit heap stacks
+   (regression test: `deep_nesting_never_overflows_worker_stacks`).
+2. Rayon work-stealing nests `from_folder` frames on a worker while it
+   waits in `join`, leaving too little headroom for tree-sitter's C
+   frames on big trees (`drivers/` segfaulted). Extraction now runs in a
+   dedicated pool with 16 MiB worker stacks.
+
+Also reproducible via
+`TREE_PLUS_BENCH_PATH=/path/to/linux cargo bench -p tree_plus_core`.
 
 ## Single-file extraction latency (criterion, mean)
 

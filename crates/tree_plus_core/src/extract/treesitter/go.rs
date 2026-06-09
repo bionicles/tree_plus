@@ -31,25 +31,31 @@ fn line_start(content: &str, byte: usize) -> usize {
     content[..byte].rfind('\n').map(|i| i + 1).unwrap_or(0)
 }
 
-fn visit(node: Node<'_>, content: &str, out: &mut Vec<String>) {
-    let mut cursor = node.walk();
-    for child in node.named_children(&mut cursor) {
-        match child.kind() {
+/// Depth-first via an explicit stack: AST depth is input-controlled, and
+/// deep expression nesting must not overflow small worker-thread stacks.
+fn visit(root: Node<'_>, content: &str, out: &mut Vec<String>) {
+    let mut stack = vec![root];
+    while let Some(node) = stack.pop() {
+        match node.kind() {
             "type_declaration" => {
-                let mut tcursor = child.walk();
-                for spec in child.named_children(&mut tcursor) {
+                let mut tcursor = node.walk();
+                for spec in node.named_children(&mut tcursor) {
                     if spec.kind() == "type_spec" {
                         emit_type_spec(spec, content, out);
                     }
                 }
             }
             "function_declaration" | "method_declaration" => {
-                emit_func(child, content, out);
-                if let Some(body) = child.child_by_field_name("body") {
-                    visit(body, content, out);
+                emit_func(node, content, out);
+                if let Some(body) = node.child_by_field_name("body") {
+                    stack.push(body);
                 }
             }
-            _ => visit(child, content, out),
+            _ => {
+                let mut cursor = node.walk();
+                let children: Vec<Node<'_>> = node.named_children(&mut cursor).collect();
+                stack.extend(children.into_iter().rev());
+            }
         }
     }
 }

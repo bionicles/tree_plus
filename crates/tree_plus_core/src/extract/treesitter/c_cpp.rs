@@ -46,7 +46,7 @@ pub fn extract(content: &str, ext: &str) -> ExtractResult {
         components: Vec::new(),
         suppress_plain_fields: 0,
     };
-    extractor.visit(tree.root_node());
+    extractor.run(tree.root_node());
     Ok(extractor.components)
 }
 
@@ -70,6 +70,25 @@ fn line_start(content: &str, byte: usize) -> usize {
     content[..byte].rfind('\n').map(|i| i + 1).unwrap_or(0)
 }
 
+/// Deferred traversal work. AST depth is input-controlled (deeply nested
+/// ERROR trees from headerless initializer fragments overflow the small
+/// rayon worker stacks), so descents go through an explicit heap stack
+/// instead of recursion. Ordering is LIFO: push follow-up work (closers,
+/// suppression ends) before the subtree visit that must precede it.
+enum Work<'a> {
+    Visit(Node<'a>),
+    Closer { type_node: Node<'a>, decl: Node<'a> },
+    SalvageFnDecl(Node<'a>),
+    EndSuppress,
+}
+
+/// Push `node`'s named children so they pop in source order.
+fn push_children_rev<'a>(node: Node<'a>, stack: &mut Vec<Work<'a>>) {
+    let mut cursor = node.walk();
+    let children: Vec<Node<'a>> = node.named_children(&mut cursor).collect();
+    stack.extend(children.into_iter().rev().map(Work::Visit));
+}
+
 impl<'a> CExtractor<'a> {
     fn slice_clean(&self, from: usize, to: usize) -> String {
         // legacy parse_c ran on comment-stripped content
@@ -79,12 +98,24 @@ impl<'a> CExtractor<'a> {
             .to_string()
     }
 
-    fn visit(&mut self, node: Node<'a>) {
+    fn run(&mut self, root: Node<'a>) {
+        let mut stack = vec![Work::Visit(root)];
+        while let Some(work) = stack.pop() {
+            match work {
+                Work::Visit(node) => self.visit(node, &mut stack),
+                Work::Closer { type_node, decl } => self.emit_closer(type_node, decl),
+                Work::SalvageFnDecl(child) => self.salvage_fn_declarator(child),
+                Work::EndSuppress => self.suppress_plain_fields -= 1,
+            }
+        }
+    }
+
+    fn visit(&mut self, node: Node<'a>, stack: &mut Vec<Work<'a>>) {
         match node.kind() {
             "function_definition" => {
                 if let Some(body) = node.child_by_field_name("body") {
                     self.emit_function_definition(node, body);
-                    self.visit(body);
+                    stack.push(Work::Visit(body));
                 } else if let Some(declarator) = find_function_declarator(node) {
                     // `= default;` / `= delete;` members have no body node
                     let start = line_start(self.content, node.start_byte());
@@ -96,22 +127,22 @@ impl<'a> CExtractor<'a> {
                 }
             }
             "ERROR" => {
-                self.salvage_error_region(node);
+                self.salvage_error_region(node, stack);
             }
             "struct_specifier" | "class_specifier" | "union_specifier" => {
-                self.emit_record(node, None);
+                self.emit_record(node, None, stack);
             }
             "enum_specifier" => {
                 self.emit_enum(node);
             }
             "type_definition" => {
-                self.emit_type_definition(node);
+                self.emit_type_definition(node, stack);
             }
             "declaration" => {
-                self.emit_declaration(node);
+                self.emit_declaration(node, stack);
             }
             "field_declaration" => {
-                self.emit_field(node);
+                self.emit_field(node, stack);
             }
             "access_specifier" => {
                 // includes the trailing ':' in the slice
@@ -136,7 +167,7 @@ impl<'a> CExtractor<'a> {
                 }
             }
             "template_declaration" => {
-                self.emit_template(node);
+                self.emit_template(node, stack);
             }
             "expression_statement" => {
                 // legacy pybind noise: ` *\w+.def("...` captured to first `;`
@@ -153,30 +184,26 @@ impl<'a> CExtractor<'a> {
                         }
                     }
                 }
-                let mut cursor = node.walk();
-                for child in node.named_children(&mut cursor) {
-                    self.visit(child);
-                }
+                push_children_rev(node, stack);
             }
             "while_statement" | "for_statement" | "if_statement" | "switch_statement" => {
                 self.maybe_emit_control_noise(node);
-                let mut cursor = node.walk();
-                for child in node.named_children(&mut cursor) {
-                    self.visit(child);
-                }
+                push_children_rev(node, stack);
             }
             _ => {
-                let mut cursor = node.walk();
-                for child in node.named_children(&mut cursor) {
-                    self.visit(child);
-                }
+                push_children_rev(node, stack);
             }
         }
     }
 
     /// struct/class/union with a body: label + fields (+ optional closer).
     /// `prefix_start` overrides the slice start (e.g. `typedef `/`static `).
-    fn emit_record(&mut self, node: Node<'a>, prefix_start: Option<usize>) {
+    fn emit_record(
+        &mut self,
+        node: Node<'a>,
+        prefix_start: Option<usize>,
+        stack: &mut Vec<Work<'a>>,
+    ) {
         let Some(body) = node.child_by_field_name("body") else {
             return; // bare type references are not components
         };
@@ -185,7 +212,7 @@ impl<'a> CExtractor<'a> {
         if !label.is_empty() {
             self.components.push(label);
         }
-        self.visit(body);
+        stack.push(Work::Visit(body));
     }
 
     fn emit_enum(&mut self, node: Node<'a>) {
@@ -215,7 +242,7 @@ impl<'a> CExtractor<'a> {
     }
 
     /// `typedef struct {...} Name;` -> "typedef struct", fields, "} Name;".
-    fn emit_type_definition(&mut self, node: Node<'a>) {
+    fn emit_type_definition(&mut self, node: Node<'a>, stack: &mut Vec<Work<'a>>) {
         let Some(type_node) = node.child_by_field_name("type") else {
             return;
         };
@@ -223,8 +250,12 @@ impl<'a> CExtractor<'a> {
             "struct_specifier" | "union_specifier" | "class_specifier"
                 if type_node.child_by_field_name("body").is_some() =>
             {
-                self.emit_record(type_node, Some(node.start_byte()));
-                self.emit_closer(type_node, node);
+                // closer pops after the record's deferred body visit
+                stack.push(Work::Closer {
+                    type_node,
+                    decl: node,
+                });
+                self.emit_record(type_node, Some(node.start_byte()), stack);
             }
             "enum_specifier" if type_node.child_by_field_name("body").is_some() => {
                 self.emit_enum(type_node);
@@ -235,7 +266,7 @@ impl<'a> CExtractor<'a> {
     }
 
     /// `static struct config {...} config;` and similar declarations.
-    fn emit_declaration(&mut self, node: Node<'a>) {
+    fn emit_declaration(&mut self, node: Node<'a>, stack: &mut Vec<Work<'a>>) {
         let Some(type_node) = node.child_by_field_name("type") else {
             return;
         };
@@ -258,8 +289,11 @@ impl<'a> CExtractor<'a> {
                 if type_node.child_by_field_name("body").is_some() =>
             {
                 let start = line_start(self.content, node.start_byte());
-                self.emit_record(type_node, Some(start));
-                self.emit_closer(type_node, node);
+                stack.push(Work::Closer {
+                    type_node,
+                    decl: node,
+                });
+                self.emit_record(type_node, Some(start), stack);
             }
             "enum_specifier" if type_node.child_by_field_name("body").is_some() => {
                 self.emit_enum(type_node);
@@ -329,7 +363,7 @@ impl<'a> CExtractor<'a> {
         Some(text.trim_end_matches(';').trim_end().to_string())
     }
 
-    fn emit_field(&mut self, node: Node<'a>) {
+    fn emit_field(&mut self, node: Node<'a>, stack: &mut Vec<Work<'a>>) {
         // legacy field patterns require an indented member starting its line
         let fstart = line_start(self.content, node.start_byte());
         let indent = &self.content[fstart..node.start_byte()];
@@ -343,8 +377,12 @@ impl<'a> CExtractor<'a> {
                 "struct_specifier" | "union_specifier" | "enum_specifier" | "class_specifier"
             ) && type_node.child_by_field_name("body").is_some()
             {
-                self.visit(type_node);
-                self.emit_closer(type_node, node); // e.g. `} inner;`
+                // closer (e.g. `} inner;`) pops after the nested record
+                stack.push(Work::Closer {
+                    type_node,
+                    decl: node,
+                });
+                stack.push(Work::Visit(type_node));
                 return;
             }
         }
@@ -378,7 +416,7 @@ impl<'a> CExtractor<'a> {
 
     /// Partial recovery inside ERROR regions: invalid syntax must still
     /// yield the obvious components instead of nothing.
-    fn salvage_error_region(&mut self, node: Node<'a>) {
+    fn salvage_error_region(&mut self, node: Node<'a>, stack: &mut Vec<Work<'a>>) {
         static RECORD_HEADER_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^[ \t]*((?:class|struct) \w+[^\n{;]*)").unwrap());
         let text = &self.content[node.byte_range()];
@@ -387,21 +425,30 @@ impl<'a> CExtractor<'a> {
                 self.components.push(m.as_str().trim_end().to_string());
             }
         }
-        // ordered pass: salvage loose function declarators, recurse the rest
+        // ordered pass: salvage loose function declarators, descend the rest
         let mut cursor = node.walk();
-        for child in node.named_children(&mut cursor) {
-            if child.kind() == "function_declarator" {
-                let start = line_start(self.content, child.start_byte());
-                let candidate = self.slice_clean(start, child.end_byte());
-                if FUNCTION_FORM_RE.is_match(&candidate) {
-                    let after = &self.content[child.end_byte()..];
-                    let mut chars = after.chars();
-                    if chars.next().is_some_and(char::is_whitespace) && chars.next() == Some('{') {
-                        self.components.push(candidate);
-                    }
+        let work: Vec<Work<'a>> = node
+            .named_children(&mut cursor)
+            .map(|child| {
+                if child.kind() == "function_declarator" {
+                    Work::SalvageFnDecl(child)
+                } else {
+                    Work::Visit(child)
                 }
-            } else {
-                self.visit(child);
+            })
+            .collect();
+        stack.extend(work.into_iter().rev());
+    }
+
+    /// A loose `function_declarator` found inside an ERROR region.
+    fn salvage_fn_declarator(&mut self, child: Node<'a>) {
+        let start = line_start(self.content, child.start_byte());
+        let candidate = self.slice_clean(start, child.end_byte());
+        if FUNCTION_FORM_RE.is_match(&candidate) {
+            let after = &self.content[child.end_byte()..];
+            let mut chars = after.chars();
+            if chars.next().is_some_and(char::is_whitespace) && chars.next() == Some('{') {
+                self.components.push(candidate);
             }
         }
     }
@@ -454,7 +501,7 @@ impl<'a> CExtractor<'a> {
             .push(self.slice_clean(start, cond.end_byte()).replace('\t', "  "));
     }
 
-    fn emit_template(&mut self, node: Node<'a>) {
+    fn emit_template(&mut self, node: Node<'a>, stack: &mut Vec<Work<'a>>) {
         // slice from `template` through the inner declaration's signature
         let start = line_start(self.content, node.start_byte());
         let mut cursor = node.walk();
@@ -464,7 +511,7 @@ impl<'a> CExtractor<'a> {
                     if let Some(body) = child.child_by_field_name("body") {
                         let text = self.slice_clean(start, body.start_byte());
                         self.components.push(text);
-                        self.visit(body);
+                        stack.push(Work::Visit(body));
                     }
                     return;
                 }
@@ -483,9 +530,10 @@ impl<'a> CExtractor<'a> {
                     if let Some(body) = child.child_by_field_name("body") {
                         let text = self.slice_clean(start, body.start_byte());
                         self.components.push(text);
+                        // suppression spans exactly the deferred body visit
                         self.suppress_plain_fields += 1;
-                        self.visit(body);
-                        self.suppress_plain_fields -= 1;
+                        stack.push(Work::EndSuppress);
+                        stack.push(Work::Visit(body));
                     } else {
                         let text = self.slice_clean(start, child.end_byte());
                         self.components.push(text);

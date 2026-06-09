@@ -14,8 +14,26 @@ use crate::ignore::{
 use crate::model::{Category, TreePlus};
 use crate::sort::os_sort_key;
 
+/// Dedicated rayon pool with large worker stacks. Work-stealing nests
+/// `from_folder` frames on a single worker while it waits in `join`, and
+/// tree-sitter's C parser needs headroom below that; rayon's default 2 MiB
+/// worker stacks segfault on big trees (e.g. torvalds/linux `drivers/`).
+fn pool() -> &'static rayon::ThreadPool {
+    static POOL: std::sync::LazyLock<rayon::ThreadPool> = std::sync::LazyLock::new(|| {
+        rayon::ThreadPoolBuilder::new()
+            .stack_size(16 * 1024 * 1024)
+            .build()
+            .expect("build worker pool")
+    });
+    &POOL
+}
+
 /// Build a `TreePlus` from seed path/glob strings (legacy `from_seeds`).
 pub fn from_seeds(seeds: &[String], config: &TreePlusConfig) -> TreePlus {
+    pool().install(|| from_seeds_inner(seeds, config))
+}
+
+fn from_seeds_inner(seeds: &[String], config: &TreePlusConfig) -> TreePlus {
     let mut seeds: Vec<String> = if seeds.is_empty() {
         vec![std::env::current_dir()
             .map(|p| p.to_string_lossy().into_owned())

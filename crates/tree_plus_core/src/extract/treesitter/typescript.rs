@@ -51,13 +51,20 @@ pub fn extract(content: &str, tsx: bool) -> ExtractResult {
         content,
         components: Vec::new(),
     };
-    extractor.visit(tree.root_node());
+    extractor.run(tree.root_node());
     Ok(extractor.components)
 }
 
 struct TsExtractor<'a> {
     content: &'a str,
     components: Vec<String>,
+}
+
+/// Push `node`'s named children so they pop in source order.
+fn push_children_rev<'t>(node: Node<'t>, stack: &mut Vec<Node<'t>>) {
+    let mut cursor = node.walk();
+    let children: Vec<Node<'t>> = node.named_children(&mut cursor).collect();
+    stack.extend(children.into_iter().rev());
 }
 
 fn line_start(content: &str, byte: usize) -> usize {
@@ -121,12 +128,22 @@ impl<'a> TsExtractor<'a> {
             .to_string()
     }
 
-    fn visit(&mut self, node: Node<'a>) {
+    /// Depth-first via an explicit stack: AST depth is input-controlled
+    /// (deeply nested expressions), and extraction runs on small
+    /// worker-thread stacks.
+    fn run(&mut self, root: Node<'a>) {
+        let mut stack = vec![root];
+        while let Some(node) = stack.pop() {
+            self.visit(node, &mut stack);
+        }
+    }
+
+    fn visit(&mut self, node: Node<'a>, stack: &mut Vec<Node<'a>>) {
         match node.kind() {
             "class_declaration" | "abstract_class_declaration" => {
                 self.emit_class_like(node);
                 if let Some(body) = node.child_by_field_name("body") {
-                    self.visit(body);
+                    stack.push(body);
                 }
             }
             "interface_declaration" => {
@@ -144,7 +161,7 @@ impl<'a> TsExtractor<'a> {
             "function_declaration" | "generator_function_declaration" => {
                 self.emit_function(node);
                 if let Some(body) = node.child_by_field_name("body") {
-                    self.visit(body);
+                    stack.push(body);
                 }
             }
             "function_expression" | "generator_function" => {
@@ -152,13 +169,13 @@ impl<'a> TsExtractor<'a> {
                     self.emit_function(node);
                 }
                 if let Some(body) = node.child_by_field_name("body") {
-                    self.visit(body);
+                    stack.push(body);
                 }
             }
             "method_definition" | "method_signature" | "abstract_method_signature" => {
                 self.emit_signature_to_params_or_return(node);
                 if let Some(body) = node.child_by_field_name("body") {
-                    self.visit(body);
+                    stack.push(body);
                 }
             }
             "arrow_function" => {
@@ -166,7 +183,7 @@ impl<'a> TsExtractor<'a> {
                     self.emit_arrow(node);
                 }
                 if let Some(body) = node.child_by_field_name("body") {
-                    self.visit(body);
+                    stack.push(body);
                 }
             }
             "expression_statement" => {
@@ -177,10 +194,7 @@ impl<'a> TsExtractor<'a> {
                 {
                     self.maybe_emit_bare_call(node, call);
                 }
-                let mut cursor = node.walk();
-                for child in node.named_children(&mut cursor) {
-                    self.visit(child);
-                }
+                push_children_rev(node, stack);
             }
             "variable_declarator" => {
                 // object scope: `const name = {` when the object holds functions
@@ -192,14 +206,11 @@ impl<'a> TsExtractor<'a> {
                         self.components
                             .push(self.content[start..=brace].trim_end().to_string());
                     }
-                    self.visit(value);
+                    stack.push(value);
                 }
             }
             _ => {
-                let mut cursor = node.walk();
-                for child in node.named_children(&mut cursor) {
-                    self.visit(child);
-                }
+                push_children_rev(node, stack);
             }
         }
     }
