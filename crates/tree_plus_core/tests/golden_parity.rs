@@ -28,6 +28,9 @@ fn in_v1_scope(path: &str) -> bool {
     const V1_EXTS: &[&str] = &[
         ".py",
         ".pyi",
+        ".java",
+        ".kt",
+        ".swift",
         ".rs",
         ".go",
         ".js",

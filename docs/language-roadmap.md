@@ -1,6 +1,7 @@
 # Language Roadmap (Rust Port)
 
 Version-1 implements: Rust, Python, JavaScript, TypeScript, C, C++, Go,
+Java, Kotlin, Swift,
 Markdown (+ RST), JSON (package.json / schema / RPC / OpenRPC), JSONL, YAML,
 TOML (Cargo/pyproject), CSV, Makefile/Justfile, .env, requirements.txt,
 SQLite, and TODO/BUG/NOTE markers everywhere except `.md`/`.txt` (legacy
@@ -15,9 +16,6 @@ availability → suggested path → missing tests.
 
 | Language | Extensions | Legacy extractor | TS grammar? | Suggested path | Missing tests |
 |---|---|---|---|---|---|
-| Java | .java | parse_java | yes | tree-sitter formatter | port golden `JavaTest.java` |
-| Kotlin | .kt | parse_kt | yes (community) | tree-sitter formatter | port golden `KotlinTest.kt` |
-| Swift | .swift | parse_swift | yes (community) | tree-sitter formatter | port golden `swift_test.swift` |
 | C# | .cs | parse_cs | yes | tree-sitter formatter | port golden `csharp_test.cs` |
 | PHP | .php | parse_php | yes | tree-sitter formatter | port golden `php_test.php` |
 | Ruby | .rb | parse_rb | yes | tree-sitter formatter | port golden `ruby_test.rb` |
@@ -59,6 +57,16 @@ highlighting, tiktoken tokenizers — see docs/rust-port-differences.md.
 
 ## Suggested order of attack
 
-1. Java, Kotlin, C#, Ruby, Bash (mature grammars, heavily used).
+1. C#, Ruby, Bash (mature grammars, heavily used).
 2. SQL/GraphQL/Protobuf/requirements-style line formats (cheap regex ports).
 3. The long tail, prioritized by user demand.
+
+## Implementation notes
+
+- Java and Swift use tree-sitter formatters (`treesitter/java.rs`,
+  `treesitter/swift.rs`).
+- Kotlin is a procedural line scanner (`extract/kotlin.rs`): the community
+  grammar (tree-sitter-kotlin-ng) cannot recover from the deliberately
+  invalid constructs in the acceptance fixture — one ERROR node swallows
+  the rest of the file — while the legacy pattern is line-anchored and
+  keeps going.

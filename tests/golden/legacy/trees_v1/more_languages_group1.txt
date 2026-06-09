@@ -2,8 +2,99 @@
 ├── 📄 addamt.cobol (441 tokens, 40 lines)
 ├── 📄 CUSTOMER-INVOICE.CBL (412 tokens, 60 lines)
 ├── 📄 JavaTest.java (578 tokens, 86 lines)
+│   ├── abstract class LivingBeing
+│   ├──     abstract void breathe()
+│   ├── interface Communicator
+│   ├──     String communicate()
+│   ├── @Log
+│   ├── @Getter
+│   ├── @Setter
+│   ├── class Person extends LivingBeing implements Communicator
+│   ├──     Person(String name, int age)
+│   ├──     @Override
+│   ├──     void breathe()
+│   ├──     @Override
+│   ├──     public String communicate()
+│   ├──     void greet()
+│   ├──     String personalizedGreeting(String greeting, Optional<Boolean>
+│   │   includeAge)
+│   ├── @Singleton
+│   ├── @RestController
+│   ├── @SpringBootApplication
+│   ├── public class Example
+│   ├──     @Inject
+│   ├──     public Example(Person person)
+│   ├──     @RequestMapping("/greet")
+│   ├──     String home(@RequestParam(value = "name", defaultValue = "World")
+│   │   String name,
+│   │                   @RequestParam(value = "age", defaultValue = "30") int
+│   │   age)
+│   └──     public static void main(String[] args)
 ├── 📄 JuliaTest.jl (381 tokens, 63 lines)
 ├── 📄 KotlinTest.kt (974 tokens, 171 lines)
+│   ├── data class Person(val name: String)
+│   ├── fun greet(person: Person)
+│   ├── fun <T> processItems(items: List<T>, processor: (T) -> Unit)
+│   ├── interface Source<out T>
+│   ├──     fun nextT(): T
+│   ├── fun MutableList<Int>.swap(index1: Int, index2: Int)
+│   ├── fun Any?.toString(): String
+│   ├── tailrec fun findFixPoint(x: Double = 1.0): Double
+│   ├── class GenericRepository<T>
+│   ├──     fun getItem(id: Int): T?
+│   ├── sealed interface Error
+│   ├── sealed class IOError(): Error
+│   ├── object Runner
+│   ├──     inline fun <reified S: SomeClass<T>, T> run() : T
+│   ├── infix fun Int.shl(x: Int): Int
+│   ├── class MyStringCollection
+│   ├──     infix fun add(s: String)
+│   ├──     fun build()
+│   ├── open class Base(p: Int)
+│   ├── class Derived(p: Int) : Base(p)
+│   ├── open class Shape
+│   ├──     open fun draw()
+│   ├──     fun fill()
+│   ├──     open fun edge(case: Int)
+│   ├── interface Thingy
+│   ├──     fun edge()
+│   ├── class Circle() : Shape(), Thingy
+│   ├──     override fun draw()
+│   ├──     final override fun edge(case: Int)
+│   ├── interface Base
+│   ├──     fun print()
+│   ├── class BaseImpl(val x: Int) : Base
+│   ├──     override fun print()
+│   ├── internal class Derived(b: Base) : Base by b
+│   ├── class Person constructor(firstName: String)
+│   ├── class People(
+│   │       firstNames: Array<String>,
+│   │       ages: Array<Int>(42),
+│   │   )
+│   ├──     fun edgeCases(): Boolean
+│   ├── class Alien public @Inject constructor(
+│   │       val firstName: String,
+│   │       val lastName: String,
+│   │       var age: Int,
+│   │       val pets: MutableList<Pet> = mutableListOf(),
+│   │   )
+│   ├──     fun objectOriented(): String
+│   ├──  enum class IntArithmetics : BinaryOperator<Int>, IntBinaryOperator
+│   ├──     PLUS {
+│   │           override fun apply(t: Int, u: Int): Int
+│   ├──     TIMES {
+│   │           override fun apply(t: Int, u: Int): Int
+│   ├──     override fun applyAsInt(t: Int, u: Int)
+│   ├── fun reformat(
+│   │       str: String,
+│   │       normalizeCase: Boolean = true,
+│   │       upperCaseFirstLetter: Boolean = true,
+│   │       divideByCamelHumps: Boolean = false,
+│   │       wordSeparator: Char = ' ',
+│   │   )
+│   ├── operator fun Point.unaryMinus()
+│   ├── abstract class Polygon
+│   └──     abstract fun draw()
 ├── 📄 lesson.cbl (635 tokens, 78 lines)
 ├── 📄 LuaTest.lua (83 tokens, 16 lines)
 ├── 📄 ObjectiveCTest.m (62 tokens, 16 lines)

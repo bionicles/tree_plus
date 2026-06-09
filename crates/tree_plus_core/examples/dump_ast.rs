@@ -23,6 +23,9 @@ fn main() {
         ".py" => tree_sitter_python::LANGUAGE.into(),
         ".rs" => tree_sitter_rust::LANGUAGE.into(),
         ".js" | ".ts" => tree_sitter_typescript::LANGUAGE_TYPESCRIPT.into(),
+        ".go" => tree_sitter_go::LANGUAGE.into(),
+        ".java" => tree_sitter_java::LANGUAGE.into(),
+        ".swift" => tree_sitter_swift::LANGUAGE.into(),
         other => panic!("no grammar for {other}"),
     };
     let mut parser = tree_sitter::Parser::new();
