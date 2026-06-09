@@ -167,6 +167,59 @@ pub fn environment_ts(content: &str) -> Vec<String> {
     }
 }
 
+/// Legacy `parse_sql`: `CREATE TABLE name (body);` statements, with the
+/// body lines re-emitted under a 3-space indent.
+pub fn sql(content: &str) -> Vec<String> {
+    static CREATE_TABLE_RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"(?s)CREATE TABLE (\w+) \((.*?)\);").unwrap());
+    let mut components = Vec::new();
+    for caps in CREATE_TABLE_RE.captures_iter(content) {
+        components.push(format!("CREATE TABLE {}", &caps[1]));
+        for line in caps[2].trim().split('\n') {
+            components.push(format!("   {}", line.trim()));
+        }
+    }
+    components
+}
+
+/// Legacy `parse_graphql`: type/enum headers without the brace, all other
+/// non-comment lines indented; bare `}` lines skipped.
+pub fn graphql(content: &str) -> Vec<String> {
+    let mut components = Vec::new();
+    for line in content.lines() {
+        let line = line.trim();
+        if line == "}" {
+            continue;
+        }
+        if line.starts_with("type") || line.starts_with("enum") {
+            components.push(line.trim_end_matches([' ', '{']).to_string());
+        } else if !line.is_empty() && !line.starts_with('#') {
+            components.push(format!("    {line}"));
+        }
+    }
+    components
+}
+
+/// Legacy `parse_grpc` (protobuf): syntax/service/message/rpc lines plus
+/// `=`-bearing field lines (field numbers kept, `;`-tail dropped).
+pub fn protobuf(content: &str) -> Vec<String> {
+    let mut components = Vec::new();
+    for line in content.split('\n') {
+        let line = line.trim();
+        if line.starts_with("syntax") {
+            components.push(line.trim_end_matches(';').to_string());
+        } else if line.starts_with("service") || line.starts_with("message") {
+            components.push(line.trim_end_matches(['{', ' ']).to_string());
+        } else if line.starts_with("rpc") {
+            components.push(format!("    {}", line.trim_end_matches([' ', '{', '}'])));
+        } else if !line.is_empty() && !line.starts_with("//") && line.contains('=') {
+            let field_info = line.split(';').next().unwrap_or(line);
+            components.push(format!("    {field_info}"));
+        }
+    }
+    components
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

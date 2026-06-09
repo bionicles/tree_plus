@@ -88,7 +88,39 @@
 ├── 📄 test.lean (289 tokens, 42 lines)
 ├── 📄 test.capnp (117 tokens, 30 lines)
 ├── 📄 test.graphql (66 tokens, 21 lines)
+│   ├── type Query
+│   ├──     getBooks: [Book]
+│   ├──     getAuthors: [Author]
+│   ├── type Mutation
+│   ├──     addBook(title: String, author: String): Book
+│   ├──     removeBook(id: ID): Book
+│   ├── type Book
+│   ├──     id: ID
+│   ├──     title: String
+│   ├──     author: Author
+│   ├── type Author
+│   ├──     id: ID
+│   ├──     name: String
+│   └──     books: [Book]
 ├── 📄 test.proto (142 tokens, 34 lines)
+│   ├── syntax = "proto3"
+│   ├── service EmployeeService
+│   ├──     rpc GetEmployee(EmployeeId) returns (EmployeeInfo)
+│   ├──     rpc AddEmployee(EmployeeData) returns (EmployeeInfo)
+│   ├──     rpc UpdateEmployee(EmployeeUpdate) returns (EmployeeInfo)
+│   ├── message EmployeeId
+│   ├──     int32 id = 1
+│   ├── message EmployeeInfo
+│   ├──     int32 id = 1
+│   ├──     string name = 2
+│   ├──     string role = 3
+│   ├── message EmployeeData
+│   ├──     string name = 1
+│   ├──     string role = 2
+│   ├── message EmployeeUpdate
+│   ├──     int32 id = 1
+│   ├──     string name = 2
+│   └──     string role = 3
 ├── 📄 test.sqlite (0 tokens, 0 lines)
 │   ├── students table:
 │   ├──    id integer primary key

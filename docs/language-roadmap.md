@@ -1,7 +1,8 @@
 # Language Roadmap (Rust Port)
 
 Version-1 implements: Rust, Python, JavaScript, TypeScript, C, C++, Go,
-Markdown (+ RST), JSON (package.json / schema / RPC / OpenRPC), JSONL, YAML,
+Markdown (+ RST), SQL, GraphQL, Protobuf,
+JSON (package.json / schema / RPC / OpenRPC), JSONL, YAML,
 TOML (Cargo/pyproject), CSV, Makefile/Justfile, .env, requirements.txt,
 SQLite, and TODO/BUG/NOTE markers everywhere except `.md`/`.txt` (legacy
 rule).
@@ -40,9 +41,6 @@ availability → suggested path → missing tests.
 | COBOL | .cbl .cobol | parse_cbl | no maintained | regex port (division/para lines) | port group1 goldens |
 | Fortran | .f .f90 ... | parse_fortran | yes (community) | regex port | port golden `fortran_test.f90` |
 | APL | .apl | parse_apl | no | regex port | port golden `apl_test.apl` |
-| SQL | .sql | parse_sql | yes (community) | regex port (CREATE TABLE) | port golden `sql_test.sql` |
-| GraphQL | .graphql | parse_graphql | yes (community) | line port (trivial) | port golden `graphql_test.graphql` |
-| Protobuf | .proto | parse_grpc | yes (community) | line/regex port | port golden `proto_test.proto` |
 | Cap'n Proto | .capnp | parse_capnp | no | regex port | port golden `capnp_test.capnp` |
 | LaTeX | .tex | parse_tex | yes (community) | regex port (sections) | port golden `tex_test.tex` |
 | Lean | .lean | parse_lean | community | regex port | port golden `lean_test.lean` |
@@ -60,5 +58,4 @@ highlighting, tiktoken tokenizers — see docs/rust-port-differences.md.
 ## Suggested order of attack
 
 1. Java, Kotlin, C#, Ruby, Bash (mature grammars, heavily used).
-2. SQL/GraphQL/Protobuf/requirements-style line formats (cheap regex ports).
 3. The long tail, prioritized by user demand.
