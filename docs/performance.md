@@ -41,9 +41,17 @@ Single runs (`/usr/bin/time -v`), page cache warm:
 | `tprs linux` | 12.4 s | 1.5 GB | full extraction; 8.42M-line render (598 MB of output) |
 | `tprs linux/kernel` | 0.23 s | — | 711 files, 553,855 lines; Python: 12.6 s → **~56×** |
 
-Counts (lines, tokens) agree byte-for-byte with the legacy Python CLI on
-`linux/kernel`. Peak RSS on the full run is dominated by the final render
-string (~600 MB) plus the assembled tree, not by extraction.
+The legacy Python CLI on the full tree: **10 min 2 s, 6.7 GB RSS** — and
+its render timed out internally, so it printed only the stats footer,
+while the Rust run includes the full 8.42M-line render. End-to-end that
+is **~48×** faster with ~4.5× less memory.
+
+Counts agree byte-for-byte with the legacy CLI on `linux/kernel`. On the
+full tree they drift by 0.0005% (Python +208 lines, Rust +6,373 tokens of
+409M) from a handful of invalid-UTF-8 kernel fixtures, consistent with
+the documented decoding differences. Peak RSS on the Rust run is
+dominated by the final render string (~600 MB) plus the assembled tree,
+not by extraction.
 
 The kernel run also surfaced two stack-overflow bugs, both fixed:
 
