@@ -76,3 +76,10 @@ cargo install --path crates/tree_plus_cli                   # both binaries
     in trees with correct counts and TODO/BUG/NOTE markers, but no language
     components. The legacy goldens for those languages are kept as the
     contract for future ports (`tests/golden/legacy/components/`).
+
+13. **`--json` flag (Rust-port addition).** `tprs --json <paths>` emits the
+    tree as a JSON document instead of rendering it (no footer): nested
+    objects with `category`, `name`, aggregated `n_folders`/`n_files`/
+    `n_lines`/`n_tokens`, `components` on file nodes, and `subtrees` on
+    container nodes. The legacy CLI had no structured output (it was a
+    TODO in issue #7).

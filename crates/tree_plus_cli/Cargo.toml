@@ -19,3 +19,4 @@ path = "src/main.rs"
 tree_plus_core = { path = "../tree_plus_core" }
 clap.workspace = true
 terminal_size = "0.4"
+serde_json = { workspace = true }
