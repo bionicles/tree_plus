@@ -1,0 +1,11 @@
+{
+ "path": "tests/more_languages/group3/bash_test.sh",
+ "components": [
+  "echo_hello_world()",
+  "function fun_echo_hello_world()",
+  "export SECRET",
+  "alias md='make debug'",
+  "add_alias()",
+  "create_conda_env()"
+ ]
+}

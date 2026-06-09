@@ -1,0 +1,16 @@
+{
+ "path": "tests/more_languages/group3/test_pyproject.toml",
+ "components": [
+  "name: tree_plus",
+  "version: 1.0.8",
+  "description: A `tree` util enhanced with tokens, lines, and components.",
+  "License :: OSI Approved :: Apache Software License",
+  "License :: OSI Approved :: MIT License",
+  "dependencies:",
+  "    tiktoken",
+  "    PyYAML",
+  "    click",
+  "    rich",
+  "    tomli"
+ ]
+}

@@ -56,3 +56,5 @@ tests/version_increments/renamed_dry_run_version.py
 
 # using uv sometimes we get a build folder
 build/
+# Rust workspace
+/target/

@@ -1,0 +1,23 @@
+{
+ "path": "tests/more_languages/group3/swift_test.swift",
+ "components": [
+  "class Person",
+  "    init(name: String)",
+  "    func greet()",
+  "    func yEdgeCase(\n        fname: String, \n        lname: String, \n        age: Int,\n        address: String, \n        phoneNumber: String\n    )",
+  "func globalGreet()",
+  "struct Point",
+  "protocol Animal",
+  "    func speak()",
+  "struct Dog: Animal",
+  "class Cat: Animal",
+  "    init(name: String)",
+  "    func speak()",
+  "enum CarType",
+  "func getPreferredCarType() -> CarType",
+  "enum CarType: UInt8",
+  "enum class CarType: UInt8",
+  "func myFunction(fname: String, age: Int)",
+  "func myFunctionWithMultipleParameters(\n    fname: String, \n    lname: String, \n    age: Int, \n    address: String, \n    phoneNumber: String\n)"
+ ]
+}

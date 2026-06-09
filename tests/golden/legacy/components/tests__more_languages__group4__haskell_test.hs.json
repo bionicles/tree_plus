@@ -1,0 +1,8 @@
+{
+ "path": "tests/more_languages/group4/haskell_test.hs",
+ "components": [
+  "data Person",
+  "greet :: Person -> String",
+  "resolveVariables ::\n  forall m fragments.\n  (MonadError QErr m, Traversable fragments) =>\n  Options.BackwardsCompatibleNullInNonNullableVariables ->\n  [G.VariableDefinition] ->\n  GH.VariableValues ->\n  [G.Directive G.Name] ->\n  G.SelectionSet fragments G.Name ->\n  m\n    ( [G.Directive Variable],\n      G.SelectionSet fragments Variable\n    )"
+ ]
+}

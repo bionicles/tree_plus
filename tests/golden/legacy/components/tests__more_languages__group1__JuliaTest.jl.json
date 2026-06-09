@@ -1,0 +1,17 @@
+{
+ "path": "tests/more_languages/group1/JuliaTest.jl",
+ "components": [
+  "module JuliaTest_EdgeCase",
+  "struct Location\n    name::String \n    lat::Float32\n    lon::Float32\nend",
+  "mutable struct mPerson\n    name::String\n    age::Int\nend",
+  "Base.@kwdef mutable struct Param\n    Δt::Float64 = 0.1\n    n::Int64\n    m::Int64\nend",
+  "    sic(x,y)",
+  "welcome(l::Location)",
+  "∑(α, Ω)",
+  "function noob()\nend",
+  "function ye_olde(hello::String, world::Location)\nend",
+  "function multiline_greet(\n        p::mPerson, \n        greeting::String\n    )\nend",
+  "function julia_is_awesome(prob::DiffEqBase.AbstractDAEProblem{uType, duType, tType,\n        isinplace};\n    kwargs...) where {uType, duType, tType, isinplace}\nend",
+  "end"
+ ]
+}

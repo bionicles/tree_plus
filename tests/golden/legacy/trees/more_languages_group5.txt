@@ -1,0 +1,257 @@
+📁 group5 (1 folder, 19 files)
+├── 📄 ansible_test.yml (55 tokens, 14 lines)
+│   ├── Install package
+│   ├── Start service
+│   └── Create user
+├── 📄 app-routing.module.ts (287 tokens, 28 lines)
+│   ├── const routes: Routes = [
+│   │       { path: '', redirectTo: 'login', pathMatch: 'full' },
+│   │       { path: '*', redirectTo: 'login' },
+│   │       { path: 'home', component: HomeComponent },
+│   │       { path: 'login', component: LoginComponent },
+│   │       { path: 'register', component: RegisterComponent },
+│   │       { path: 'events', component: EventsComponent },
+│   │       { path: 'invites', component: InvitesComponent },
+│   │       { path: 'rewards', component: RewardsComponent },
+│   │       { path: 'profile', component: ProfileComponent },
+│   │   ];
+│   └── export class AppRoutingModule
+├── 📄 app.component.spec.ts (410 tokens, 47 lines)
+│   ├── describe 'AppComponent'
+│   ├──     it should create the app
+│   ├──     it should welcome the user
+│   ├──     it should welcome 'Jimbo'
+│   └──     it should request login if not logged in
+├── 📄 app.component.ts (271 tokens, 45 lines)
+│   ├── export class AppComponent
+│   ├──   constructor(
+│   │       private http: HttpClient,
+│   │       private loginService: LoginService,
+│   │       private stripeService: StripeService
+│   │     )
+│   ├──   constructor(private loginService: LoginService)
+│   ├──   checkSession()
+│   ├──   async goToEvent(event_id: string)
+│   └──   valInvitedBy(event: any, event_id: string)
+├── 📄 app.module.ts (374 tokens, 43 lines)
+│   ├── @NgModule({
+│   │       declarations: [
+│   │           AppComponent,
+│   │           HomeComponent,
+│   │           LoginComponent,
+│   │           RegisterComponent,
+│   │           EventsComponent,
+│   │           InvitesComponent,
+│   │           RewardsComponent,
+│   │           ProfileComponent
+│   └── export class AppModule
+├── 📄 checkbox_test.md (191 tokens, 29 lines)
+│   ├── # My Checkbox Test
+│   ├── ## My No Parens Test
+│   ├── ## My Empty href Test
+│   ├── ## My other url Test [Q&A]
+│   ├── ## My other other url Test [Q&A]
+│   ├── ## My 2nd other url Test [Q&A]
+│   ├── ## My 3rd other url Test [Q&A]
+│   ├── - [ ] Task 1
+│   ├──     - [ ] No Space Task 1.1
+│   ├──     - [ ] Two Spaces Task 1.2
+│   ├──         - [ ] Subtask 1.2.1
+│   ├── - [ ] Task 2
+│   ├── - [x] Task 3
+│   ├──     - [ ] Subtask 3.1
+│   ├── - [x] Task 6
+│   ├──     - [x] Subtask 6.1
+│   ├──         - [ ] Handle edge cases
+│   └── # My Codeblock Test
+├── 📄 checkbox_test.txt (257 tokens, 33 lines)
+│   ├── - [ ] fix phone number format +1
+│   ├── - [ ] add forgot password
+│   ├── - [ ] ? add email verification
+│   ├── - [ ] store token the right way
+│   ├── - [ ] test nesting of checkboxes
+│   ├── - [ ] user can use option to buy ticket at 2-referred price
+│   ├── - [ ] CTA refer 2 people to get instant lower price
+│   └── - [ ] form to send referrals
+├── 📄 environment.test.ts (197 tokens, 19 lines)
+│   ├── environment:
+│   ├──    production
+│   ├──    cognitoUserPoolId
+│   ├──    cognitoAppClientId
+│   └──    apiurl
+├── 📄 hello_world.pyi (22 tokens, 3 lines)
+│   ├── @final
+│   │   class dtype(Generic[_DTypeScalar_co])
+│   └──     names: None | tuple[builtins.str, ...]
+├── 📄 k8s_test.yaml (140 tokens, 37 lines)
+│   ├── apps/v1.Deployment -> my-app
+│   ├── v1.Service -> my-service
+│   └── v1.ConfigMap -> my-config
+├── 📄 Makefile (714 tokens, 84 lines)
+│   ├── include dotenv/dev.env
+│   ├── .PHONY: dev
+│   ├── dev
+│   ├── services-down
+│   ├── services-stop: services-down
+│   ├── define CHECK_POSTGRES
+│   ├── damage-report
+│   ├── tail-logs
+│   └── cloud
+├── 📄 requirements_test.txt (29 tokens, 10 lines)
+│   ├── psycopg2-binary
+│   ├── pytest
+│   ├── coverage
+│   ├── flask[async]
+│   ├── flask_cors
+│   ├── stripe
+│   ├── pyjwt[crypto]
+│   ├── cognitojwt[async]
+│   └── flask-lambda
+├── 📄 rust_todo_test.rs (92 tokens, 26 lines)
+│   ├── TODO: This todo tests parse_todo
+│   ├── enum Color {
+│   │       Red,
+│   │       Blue,
+│   │       Green,
+│   │   }
+│   ├── struct Point
+│   ├── trait Drawable
+│   ├──     fn draw(&self)
+│   ├── impl Drawable for Point
+│   ├──     fn draw(&self)
+│   └── fn main()
+├── 📄 sql_test.sql (270 tokens, 51 lines)
+│   ├── CREATE TABLE promoters
+│   ├──    user_id serial PRIMARY KEY,
+│   ├──    type varchar(20) NOT NULL,
+│   ├──    username varchar(20) NOT NULL,
+│   ├──    password varchar(20) NOT NULL,
+│   ├──    email varchar(30) NOT NULL,
+│   ├──    phone varchar(20) NOT NULL,
+│   ├──    promocode varchar(20),
+│   ├──    info json,
+│   ├──    going text[],
+│   ├──    invites text[],
+│   ├──    balance integer NOT NULL,
+│   ├──    rewards text[],
+│   ├──    created timestamp
+│   ├── CREATE TABLE events
+│   ├──    event_id serial PRIMARY KEY,
+│   ├──    name varchar(64) NOT NULL,
+│   ├──    date varchar(64) NOT NULL,
+│   ├──    location varchar(64) NOT NULL,
+│   ├──    performer varchar(64) NOT NULL,
+│   ├──    rewards json,
+│   └──    created timestamp
+├── 📄 standard-app-routing.module.ts (100 tokens, 16 lines)
+│   └── const routes: Routes = [
+│         { path: '', component: HomeComponent },
+│         {
+│           path: 'heroes',
+│           component: HeroesListComponent,
+│           children: [
+│             { path: ':id', component: HeroDetailComponent },
+│             { path: 'new', component: HeroFormComponent },
+│           ],
+│         },
+│         { path: '**', component: PageNotFoundComponent },
+│       ];
+├── 📄 test.env (190 tokens, 25 lines)
+│   ├── PROMO_PATH
+│   ├── PRODUCTION
+│   ├── SQL_SCHEMA_PATH
+│   ├── DB_LOGS
+│   ├── DB_LOG
+│   ├── PGPASSWORD
+│   ├── PGDATABASE
+│   ├── PGHOST
+│   ├── PGPORT
+│   ├── PGUSER
+│   ├── SERVER_LOG
+│   ├── SERVER_LOGS
+│   ├── API_URL
+│   ├── APP_LOGS
+│   ├── APP_LOG
+│   ├── APP_URL
+│   ├── COGNITO_USER_POOL_ID
+│   ├── COGNITO_APP_CLIENT_ID
+│   ├── AWS_REGION
+│   └── STRIPE_SECRET_KEY
+├── 📄 testJsonSchema.json (421 tokens, 48 lines)
+│   ├── $schema: http://json-schema.org/draft-07/schema#
+│   ├── type: object
+│   ├── title: random_test
+│   └── description: A promoter's activites related to events
+├── 📄 testPackage.json (349 tokens, 43 lines)
+│   ├── name: 'promo-app'
+│   ├── version: 0.0.0
+│   ├── scripts:
+│   ├──     ng: 'ng'
+│   ├──     start: 'ng serve'
+│   ├──     build: 'ng build'
+│   ├──     watch: 'ng build --watch --configuration development'
+│   └──     test: 'ng test'
+└── 📄 tickets.component.ts (7,160 tokens, 903 lines)
+    ├── interface EnrichedTicket extends Ticket
+    ├── interface SpinConfig
+    ├── interface RotationState
+    ├── interface SpeakInput
+    ├── const formatSpeakInput = (input: SpeakInput): string =>
+    ├── function hourToSpeech(hour: number, minute: number, period: string):
+    │   string
+    ├── export class TicketsComponent implements AfterViewInit
+    ├──   speak(input: SpeakInput)
+    ├──   speakEvent(ticket: EnrichedTicket): void
+    ├──   formatEvent(ticket: EnrichedTicket): string
+    ├──   speakVenue(ticket: EnrichedTicket): void
+    ├──   formatDate(date: Date, oneLiner: boolean = false): string
+    ├──   formatDateForSpeech(date: Date): string
+    ├──   async spinQRCode(
+    │       event: PointerEvent,
+    │       config: SpinConfig = DEFAULT_SPIN_CONFIG
+    │     )
+    ├──   private animateRotation(
+    │       imgElement: HTMLElement,
+    │       targetRotation: number,
+    │       config: SpinConfig,
+    │       cleanup: () => void
+    │     )
+    ├──     const animate = (currentTime: number) =>
+    ├──         requestAnimationFrame(animate)
+    ├──         cleanup()
+    ├──     requestAnimationFrame(animate)
+    ├──   private getNext90Degree(currentRotation: number): number
+    ├──   private getCurrentRotation(matrix: string): number
+    ├──   ngAfterViewInit()
+    ├──       const mouseEnterListener = () =>
+    ├──       const mouseLeaveListener = () =>
+    ├──   ngOnDestroy()
+    ├──   toggleColumn(event: MatOptionSelectionChange, column: string)
+    ├──   adjustColumns(event?: Event)
+    ├──   onResize(event: Event)
+    ├──   async ngOnInit()
+    ├──   async loadTickets(): Promise<void>
+    ├──   onDateRangeChange(
+    │       type: "start" | "end",
+    │       event: MatDatepickerInputEvent<Date>
+    │     )
+    ├──   applyFilter(column: string): void
+    ├──   formatDateForComparison(date: Date): string
+    ├──   constructor(private renderer: Renderer2)
+    ├──   onFilterChange(event: Event, column: string)
+    ├──   onLatitudeChange(event: Event)
+    ├──   onLongitudeChange(event: Event)
+    ├──   onRadiusChange(event: Event)
+    ├──   sortData(sort: Sort): void
+    ├──   onRowClick(event: Event, row: any)
+    ├── function isDate(value: Date | undefined | null): value is Date
+    ├── function isNonNullNumber(value: number | null): value is number
+    ├── function hasLocation(
+    │     ticket: any
+    │   ): ticket is
+    ├── const create_faker_ticket = async () =>
+    ├── function compare(a: number | string, b: number | string, isAsc: boolean)
+    ├── function compare_dates(a: Date, b: Date, isAsc: boolean)
+    ├── async function mockMoreTickets(): Promise<Ticket[]>
+    ├── const mockTickets = async () =>
+    └── const renderQRCode = async (text: String): Promise<string> =>

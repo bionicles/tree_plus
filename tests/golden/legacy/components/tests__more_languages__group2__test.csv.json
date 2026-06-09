@@ -1,0 +1,10 @@
+{
+ "path": "tests/more_languages/group2/test.csv",
+ "components": [
+  "Name",
+  "Age",
+  "Country",
+  "City",
+  "Email"
+ ]
+}

@@ -1,0 +1,13 @@
+{
+ "path": "tests/more_languages/group_lisp/clojure_test.clj",
+ "components": [
+  "defprotocol P",
+  "defrecord Person",
+  "defn -main",
+  "ns bion.likes_trees",
+  "def repo-url",
+  "defn config",
+  "defmacro with-os",
+  "defrecord SetFullElement"
+ ]
+}

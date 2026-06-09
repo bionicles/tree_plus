@@ -1,0 +1,12 @@
+{
+ "path": "tests/more_languages/group3/test_Cargo.toml",
+ "components": [
+  "name: test_cargo",
+  "version: 0.1.0",
+  "description: A test Cargo.toml",
+  "license: MIT OR Apache-2.0",
+  "dependencies:",
+  "  clap 4.4",
+  "  sqlx 0.7 (features: runtime-tokio, tls-rustls)"
+ ]
+}

@@ -1,0 +1,9 @@
+{
+ "path": "tests/more_languages/group1/OcamlTest.ml",
+ "components": [
+  "type color",
+  "class hello",
+  "class hello -> method say_hello",
+  "let main ()"
+ ]
+}

@@ -1,0 +1,374 @@
+📁 group1 (1 folder, 11 files)
+├── 📄 addamt.cobol (441 tokens, 40 lines)
+│   ├── IDENTIFICATION DIVISION.
+│   ├── PROGRAM-ID.
+│   │              ADDAMT.
+│   ├── DATA DIVISION.
+│   ├── WORKING-STORAGE SECTION.
+│   ├── 01  KEYED-INPUT.
+│   ├──     05  CUST-NO-IN.
+│   ├──     05  AMT1-IN.
+│   ├──     05  AMT2-IN.
+│   ├──     05  AMT3-IN.
+│   ├── 01  DISPLAYED-OUTPUT.
+│   ├──     05  CUST-NO-OUT.
+│   ├──     05  TOTAL-OUT.
+│   ├── 01  MORE-DATA.
+│   ├── PROCEDURE DIVISION.
+│   └── 100-MAIN.
+├── 📄 CUSTOMER-INVOICE.CBL (412 tokens, 60 lines)
+│   ├── IDENTIFICATION DIVISION.
+│   ├── PROGRAM-ID. CUSTOMER-INVOICE.
+│   ├── AUTHOR. JANE DOE.
+│   ├── DATE. 2023-12-30.
+│   ├──   DATE-COMPILED. 06/30/10.
+│   ├──     DATE-WRITTEN. 12/34/56.
+│   ├── ENVIRONMENT DIVISION.
+│   ├── INPUT-OUTPUT SECTION.
+│   ├── FILE-CONTROL.
+│   ├──     SELECT CUSTOMER-FILE.
+│   ├──     SELECT INVOICE-FILE.
+│   ├──     SELECT REPORT-FILE.
+│   ├── DATA DIVISION.
+│   ├── FILE SECTION.
+│   ├── FD CUSTOMER-FILE.
+│   ├── 01 CUSTOMER-RECORD.
+│   ├──    05 CUSTOMER-ID.
+│   ├──    05 CUSTOMER-NAME.
+│   ├──    05 CUSTOMER-BALANCE.
+│   ├── FD INVOICE-FILE.
+│   ├── 01 INVOICE-RECORD.
+│   ├──    05 INVOICE-ID.
+│   ├──    05 CUSTOMER-ID.
+│   ├──    05 INVOICE-AMOUNT.
+│   ├── FD REPORT-FILE.
+│   ├── 01 REPORT-RECORD.
+│   ├── WORKING-STORAGE SECTION.
+│   ├── 01 WS-CUSTOMER-FOUND.
+│   ├── 01 WS-END-OF-FILE.
+│   ├── 01 WS-TOTAL-BALANCE.
+│   ├── PROCEDURE DIVISION.
+│   ├── 0000-MAIN-ROUTINE.
+│   ├── 1000-PROCESS-RECORDS.
+│   ├── 1100-UPDATE-CUSTOMER-BALANCE.
+│   └── END PROGRAM CUSTOMER-INVOICE.
+├── 📄 JavaTest.java (578 tokens, 86 lines)
+│   ├── abstract class LivingBeing
+│   ├──     abstract void breathe()
+│   ├── interface Communicator
+│   ├──     String communicate()
+│   ├── @Log
+│   ├── @Getter
+│   ├── @Setter
+│   ├── class Person extends LivingBeing implements Communicator
+│   ├──     Person(String name, int age)
+│   ├──     @Override
+│   ├──     void breathe()
+│   ├──     @Override
+│   ├──     public String communicate()
+│   ├──     void greet()
+│   ├──     String personalizedGreeting(String greeting, Optional<Boolean>
+│   │   includeAge)
+│   ├── @Singleton
+│   ├── @RestController
+│   ├── @SpringBootApplication
+│   ├── public class Example
+│   ├──     @Inject
+│   ├──     public Example(Person person)
+│   ├──     @RequestMapping("/greet")
+│   ├──     String home(@RequestParam(value = "name", defaultValue = "World")
+│   │   String name,
+│   │                   @RequestParam(value = "age", defaultValue = "30") int
+│   │   age)
+│   └──     public static void main(String[] args)
+├── 📄 JuliaTest.jl (381 tokens, 63 lines)
+│   ├── module JuliaTest_EdgeCase
+│   ├── struct Location
+│   │       name::String
+│   │       lat::Float32
+│   │       lon::Float32
+│   │   end
+│   ├── mutable struct mPerson
+│   │       name::String
+│   │       age::Int
+│   │   end
+│   ├── Base.@kwdef mutable struct Param
+│   │       Δt::Float64 = 0.1
+│   │       n::Int64
+│   │       m::Int64
+│   │   end
+│   ├──     sic(x,y)
+│   ├── welcome(l::Location)
+│   ├── ∑(α, Ω)
+│   ├── function noob()
+│   │   end
+│   ├── function ye_olde(hello::String, world::Location)
+│   │   end
+│   ├── function multiline_greet(
+│   │           p::mPerson,
+│   │           greeting::String
+│   │       )
+│   │   end
+│   ├── function julia_is_awesome(prob::DiffEqBase.AbstractDAEProblem{uType,
+│   │   duType, tType,
+│   │           isinplace};
+│   │       kwargs...) where {uType, duType, tType, isinplace}
+│   │   end
+│   └── end
+├── 📄 KotlinTest.kt (974 tokens, 171 lines)
+│   ├── data class Person(val name: String)
+│   ├── fun greet(person: Person)
+│   ├── fun <T> processItems(items: List<T>, processor: (T) -> Unit)
+│   ├── interface Source<out T>
+│   ├──     fun nextT(): T
+│   ├── fun MutableList<Int>.swap(index1: Int, index2: Int)
+│   ├── fun Any?.toString(): String
+│   ├── tailrec fun findFixPoint(x: Double = 1.0): Double
+│   ├── class GenericRepository<T>
+│   ├──     fun getItem(id: Int): T?
+│   ├── sealed interface Error
+│   ├── sealed class IOError(): Error
+│   ├── object Runner
+│   ├──     inline fun <reified S: SomeClass<T>, T> run() : T
+│   ├── infix fun Int.shl(x: Int): Int
+│   ├── class MyStringCollection
+│   ├──     infix fun add(s: String)
+│   ├──     fun build()
+│   ├── open class Base(p: Int)
+│   ├── class Derived(p: Int) : Base(p)
+│   ├── open class Shape
+│   ├──     open fun draw()
+│   ├──     fun fill()
+│   ├──     open fun edge(case: Int)
+│   ├── interface Thingy
+│   ├──     fun edge()
+│   ├── class Circle() : Shape(), Thingy
+│   ├──     override fun draw()
+│   ├──     final override fun edge(case: Int)
+│   ├── interface Base
+│   ├──     fun print()
+│   ├── class BaseImpl(val x: Int) : Base
+│   ├──     override fun print()
+│   ├── internal class Derived(b: Base) : Base by b
+│   ├── class Person constructor(firstName: String)
+│   ├── class People(
+│   │       firstNames: Array<String>,
+│   │       ages: Array<Int>(42),
+│   │   )
+│   ├──     fun edgeCases(): Boolean
+│   ├── class Alien public @Inject constructor(
+│   │       val firstName: String,
+│   │       val lastName: String,
+│   │       var age: Int,
+│   │       val pets: MutableList<Pet> = mutableListOf(),
+│   │   )
+│   ├──     fun objectOriented(): String
+│   ├──  enum class IntArithmetics : BinaryOperator<Int>, IntBinaryOperator
+│   ├──     PLUS {
+│   │           override fun apply(t: Int, u: Int): Int
+│   ├──     TIMES {
+│   │           override fun apply(t: Int, u: Int): Int
+│   ├──     override fun applyAsInt(t: Int, u: Int)
+│   ├── fun reformat(
+│   │       str: String,
+│   │       normalizeCase: Boolean = true,
+│   │       upperCaseFirstLetter: Boolean = true,
+│   │       divideByCamelHumps: Boolean = false,
+│   │       wordSeparator: Char = ' ',
+│   │   )
+│   ├── operator fun Point.unaryMinus()
+│   ├── abstract class Polygon
+│   └──     abstract fun draw()
+├── 📄 lesson.cbl (635 tokens, 78 lines)
+│   ├── IDENTIFICATION DIVISION.
+│   ├── PROGRAM-ID.    CBL0002.
+│   ├── AUTHOR.        Otto B. Fun.
+│   ├── ENVIRONMENT DIVISION.
+│   ├── INPUT-OUTPUT SECTION.
+│   ├── FILE-CONTROL.
+│   ├──     SELECT PRINT-LINE.
+│   ├──     SELECT ACCT-REC.
+│   ├── DATA DIVISION.
+│   ├── FILE SECTION.
+│   ├── FD  PRINT-LINE.
+│   ├── 01  PRINT-REC.
+│   ├──     05  ACCT-NO-O.
+│   ├──     05  ACCT-LIMIT-O.
+│   ├──     05  ACCT-BALANCE-O.
+│   ├──     05  LAST-NAME-O.
+│   ├──     05  FIRST-NAME-O.
+│   ├──     05  COMMENTS-O.
+│   ├── FD  ACCT-REC.
+│   ├── 01  ACCT-FIELDS.
+│   ├──     05  ACCT-NO.
+│   ├──     05  ACCT-LIMIT.
+│   ├──     05  ACCT-BALANCE.
+│   ├──     05  LAST-NAME.
+│   ├──     05  FIRST-NAME.
+│   ├──     05  CLIENT-ADDR.
+│   ├──         10  STREET-ADDR.
+│   ├──         10  CITY-COUNTY.
+│   ├──         10  USA-STATE.
+│   ├──     05  RESERVED.
+│   ├──     05  COMMENTS.
+│   ├── WORKING-STORAGE SECTION.
+│   ├── 01 FLAGS.
+│   ├──   05 LASTREC.
+│   ├── PROCEDURE DIVISION.
+│   ├── OPEN-FILES.
+│   ├── READ-NEXT-RECORD.
+│   ├── CLOSE-STOP.
+│   ├── READ-RECORD.
+│   └── WRITE-RECORD.
+├── 📄 LuaTest.lua (83 tokens, 16 lines)
+│   ├── function HelloWorld.new
+│   ├── function HelloWorld.greet
+│   └── function say_hello
+├── 📄 ObjectiveCTest.m (62 tokens, 16 lines)
+│   ├── @interface HelloWorld
+│   ├── @interface HelloWorld -> (void) sayHello
+│   ├── @implementation HelloWorld
+│   ├── @implementation HelloWorld -> (void) sayHello
+│   └── void sayHelloWorld()
+├── 📄 OcamlTest.ml (49 tokens, 12 lines)
+│   ├── type color
+│   ├── class hello
+│   ├── class hello -> method say_hello
+│   └── let main ()
+├── 📄 test.js (757 tokens, 154 lines)
+│   ├── class MyClass
+│   ├──   myMethod()
+│   ├──   async asyncMethod(a, b)
+│   ├──   methodWithDefaultParameters(a = 5, b = 10)
+│   ├──   multilineMethod(
+│   │       c,
+│   │       d
+│   │     )
+│   ├──   multilineMethodWithDefaults(
+│   │       t = "tree",
+│   │       p = "plus"
+│   │     )
+│   ├── function myFunction(param1, param2)
+│   ├── function multilineFunction(
+│   │     param1,
+│   │     param2
+│   │   )
+│   ├── const arrowFunction = () =>
+│   ├── const parametricArrow = (a, b) =>
+│   ├── function ()
+│   ├── function outerFunction(outerParam)
+│   ├──   function innerFunction(innerParam)
+│   ├──   innerFunction("inner")
+│   ├── const myObject = {
+│   ├──   myMethod: function (stuff)
+│   ├── let myArrowObject = {
+│   ├──   myArrow: ({
+│   │       a,
+│   │       b,
+│   │       c,
+│   │     }) =>
+│   ├── const myAsyncArrowFunction = async () =>
+│   ├── function functionWithRestParameters(...args)
+│   ├── const namedFunctionExpression = function myNamedFunction()
+│   ├── const multilineArrowFunction = (
+│   │     a,
+│   │     b
+│   │   ) =>
+│   ├── function functionReturningFunction()
+│   ├──   return function ()
+│   ├── function destructuringOnMultipleLines({
+│   │     a,
+│   │     b,
+│   │   })
+│   ├── const arrowFunctionWithDestructuring = ({ a, b }) =>
+│   ├── const multilineDestructuringArrow = ({
+│   │     a,
+│   │     b,
+│   │   }) =>
+│   ├── async function asyncFunctionWithErrorHandling()
+│   ├── class Car
+│   ├──   constructor(brand)
+│   ├──   present()
+│   ├── class Model extends Car
+│   ├──   constructor(brand, mod)
+│   ├──     super(brand)
+│   └──   show()
+└── 📄 test.ts (832 tokens, 165 lines)
+    ├── type MyType
+    ├── interface MyInterface
+    ├── class TsClass
+    ├──   myMethod()
+    ├──   myMethodWithArgs(param1: string, param2: number): void
+    ├──   static myStaticMethod<T>(param: T): T
+    ├──   multilineMethod(
+    │       c: number,
+    │       d: number
+    │     ): number
+    ├──   multilineMethodWithDefaults(
+    │       t: string = "tree",
+    │       p: string = "plus"
+    │     ): string
+    ├── export class AdvancedComponent implements MyInterface
+    ├──   async myAsyncMethod(
+    │       a: string,
+    │       b: number,
+    │       c: string
+    │     ): Promise<void>
+    ├──   genericMethod<T, U>(
+    │       arg1: T,
+    │       arg2: U
+    │     ): [T, U]
+    ├── export class TicketsComponent implements MyInterface
+    ├──   async myAsyncMethod({ a, b, c }: { a: String; b: Number; c: String })
+    ├── function tsFunction()
+    ├── function tsFunctionSigned(
+    │     param1: number,
+    │     param2: number
+    │   ): void
+    ├── export default async function tsFunctionComplicated<A, B, C>({
+    │     a = 1 | 2,
+    │     b = "bob",
+    │     c = async () => "charlie",
+    │   }: {
+    │     a: number;
+    │     b: string;
+    │     c: () => Promise<string>;
+    │   }): Promise<string>
+    ├──   return("Standalone function with parameters")
+    ├── const tsArrowFunctionSigned = ({
+    │     a,
+    │     b,
+    │   }: {
+    │     a: number;
+    │     b: string;
+    │   }) =>
+    ├── export const tsComplicatedArrow = async ({
+    │     a = 1 | 2,
+    │     b = "bob",
+    │     c = async () => "charlie",
+    │   }: {
+    │     a: number;
+    │     b: string;
+    │     c: () => Promise<string>;
+    │   }): Promise<string> =>
+    ├── const arrowFunction = () =>
+    ├── const arrow = (a: String, b: Number) =>
+    ├── const asyncArrowFunction = async () =>
+    ├── const asyncArrow = async (a: String, b: Number) =>
+    ├── let weirdArrow = () =>
+    ├── const asyncPromiseArrow = async (): Promise<void> =>
+    ├── let myWeirdArrowSigned = (x: number): number =>
+    ├── class Person
+    ├──   constructor(private firstName: string, private lastName: string)
+    ├──   getFullName(): string
+    ├──   describe(): string
+    ├── class Employee extends Person
+    ├──   constructor(
+    │       firstName: string,
+    │       lastName: string,
+    │       private jobTitle: string
+    │     )
+    ├──     super(firstName, lastName)
+    ├──   describe(): string
+    ├── interface Shape
+    └── interface Square extends Shape

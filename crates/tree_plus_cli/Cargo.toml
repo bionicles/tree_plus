@@ -1,0 +1,21 @@
+[package]
+name = "tree_plus_cli"
+description = "A `tree` util enhanced with tokens, lines, and components."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "tree_plus"
+path = "src/main.rs"
+
+# alias to avoid PATH collision with the Python tree_plus entry point
+[[bin]]
+name = "tprs"
+path = "src/main.rs"
+
+[dependencies]
+tree_plus_core = { path = "../tree_plus_core" }
+clap.workspace = true
+terminal_size = "0.4"

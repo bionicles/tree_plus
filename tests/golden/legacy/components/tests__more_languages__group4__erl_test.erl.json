@@ -1,0 +1,20 @@
+{
+ "path": "tests/more_languages/group4/erl_test.erl",
+ "components": [
+  "-module(erl_test).",
+  "-record(person).",
+  "-type ra_peer_status().",
+  "-type ra_membership().",
+  "-opaque my_opaq_type().",
+  "-type orddict(Key, Val).",
+  "-type edge(\n        Cases,\n        Pwn,\n    ).",
+  "-spec guarded(X) -> X when X :: tuple().",
+  "-spec edge_case(\n        {integer(), any()} | [any()]\n    ) -> processed, integer(), any()} | [{item, any()}].",
+  "-spec complex_function({integer(), any()} | [any()]) -> \n    {processed, integer(), any()} | [{item, any()}].",
+  "-spec list_manipulation([integer()]) -> [integer()].",
+  "-spec overload(T1, T2) -> T3\n        ; (T4, T5) -> T6.",
+  "-spec multiguard({X, integer()}) -> X when X :: atom()\n        ; ([Y]) -> Y when Y :: number().",
+  "-record(multiline).",
+  "-record(maybe_undefined)."
+ ]
+}

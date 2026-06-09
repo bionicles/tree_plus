@@ -1,0 +1,20 @@
+{
+ "path": "tests/more_languages/group1/addamt.cobol",
+ "components": [
+  "IDENTIFICATION DIVISION.",
+  "PROGRAM-ID.\n           ADDAMT.",
+  "DATA DIVISION.",
+  "WORKING-STORAGE SECTION.",
+  "01  KEYED-INPUT.",
+  "    05  CUST-NO-IN.",
+  "    05  AMT1-IN.",
+  "    05  AMT2-IN.",
+  "    05  AMT3-IN.",
+  "01  DISPLAYED-OUTPUT.",
+  "    05  CUST-NO-OUT.",
+  "    05  TOTAL-OUT.",
+  "01  MORE-DATA.",
+  "PROCEDURE DIVISION.",
+  "100-MAIN."
+ ]
+}

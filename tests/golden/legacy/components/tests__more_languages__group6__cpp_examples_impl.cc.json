@@ -1,0 +1,7 @@
+{
+ "path": "tests/more_languages/group6/cpp_examples_impl.cc",
+ "components": [
+  "PYBIND11_MODULE(cpp_examples, m)",
+  "    m.def(\"add\", &add<int>, \"An example function to add two numbers.\")"
+ ]
+}

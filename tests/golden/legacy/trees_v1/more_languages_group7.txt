@@ -1,0 +1,83 @@
+📁 group7 (1 folder, 5 files)
+├── 📄 absurdly_huge.jsonl (8,347 tokens, 126 lines)
+│   ├── SMILES: str
+│   ├── Yield: float
+│   ├── Temperature: int
+│   ├── Pressure: float
+│   ├── Solvent: str
+│   ├── Success: bool
+│   ├── Reaction_Conditions: dict
+│   ├── Products: list
+│   └── EdgeCasesMissed: None
+├── 📄 angular_crud.ts (1,192 tokens, 148 lines)
+│   ├── interface DBCommand<T = any>
+│   ├── export class IndexedDbService
+│   ├──     constructor()
+│   ├──     async create_connection({ db_name = 'client_db', table_name }:
+│   │   DBCommand)
+│   ├──                 upgrade(db)
+│   ├──     async create_model({ db_name, table_name, model }: DBCommand)
+│   ├──         verify_matching({ table_name, model })
+│   ├──     async read_key({ db_name, table_name, key }: DBCommand)
+│   ├──     async update_model({ db_name, table_name, model }: DBCommand)
+│   ├──         verify_matching({ table_name, model })
+│   ├──     async delete_key({ db_name, table_name, key }: DBCommand)
+│   ├──     async list_table({
+│   │           db_name,
+│   │           table_name,
+│   │           where,
+│   │       }: DBCommand & { where?: { [key: string]: string | number } })
+│   └──     async search_table(criteria: SearchCriteria)
+├── 📄 structure.py (400 tokens, 92 lines)
+│   ├── @runtime_checkable
+│   │   class DataClass(Protocol)
+│   ├──     __dataclass_fields__: dict
+│   ├── class MyInteger(Enum)
+│   ├──     ONE = 1
+│   ├──     TWO = 2
+│   ├──     THREE = 42
+│   ├── class MyString(Enum)
+│   ├──     AAA1 = "aaa"
+│   ├──     BB_B = """edge
+│   │   case"""
+│   ├── @dataclass(frozen=True, slots=True, kw_only=True)
+│   │   class Tool
+│   ├──     name: str
+│   ├──     description: str
+│   ├──     input_model: DataClass
+│   ├──     output_model: DataClass
+│   ├──     def execute(self, *args, **kwargs)
+│   ├──     @property
+│   │       def edge_case(self) -> str
+│   ├──     def should_still_see_me(self, x: bool = True) -> "Tool"
+│   ├── @dataclass
+│   │   class MyInput[T]
+│   ├──     name: str
+│   ├──     rank: MyInteger
+│   ├──     serial_n: int
+│   ├── @dataclass
+│   │   class Thingy
+│   ├──     is_edge_case: bool
+│   ├── @dataclass
+│   │   class MyOutput
+│   ├──     orders: str
+│   ├── class MyTools(Enum)
+│   ├──     TOOL_A = Tool(
+│   │           name="complicated",
+│   │           description="edge case!",
+│   │           input_model=MyInput[Thingy],
+│   │           output_model=MyOutput,
+│   │       )
+│   ├──     TOOL_B = Tool(
+│   │           name="""super
+│   │   complicated
+│   │   """,
+│   │           description="edge case!",
+│   │           input_model=MyInput,
+│   │           output_model=MyOutput,
+│   │       )
+│   ├── @final
+│   │   class dtype(Generic[_DTypeScalar_co])
+│   └──     names: None | tuple[builtins.str, ...]
+├── 📄 test.wgsl (528 tokens, 87 lines)
+└── 📄 test.metal (272 tokens, 34 lines)

@@ -1,0 +1,8 @@
+{
+ "path": "tests/more_languages/group_todo/wgsl_test.wgsl",
+ "components": [
+  "@binding(0) @group(0) var<uniform> frame : u32",
+  "@vertex\nfn vtx_main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f",
+  "@fragment\nfn frag_main() -> @location(0) vec4f"
+ ]
+}

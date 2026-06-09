@@ -1,0 +1,8 @@
+{
+ "path": "tests/more_languages/group2/apl_test.apl",
+ "components": [
+  ":Namespace HelloWorld",
+  ":Namespace HelloWorld -> hello ← 'Hello, World!'",
+  ":Namespace HelloWorld -> plus ← {⍺+⍵}"
+ ]
+}

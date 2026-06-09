@@ -1,0 +1,12 @@
+{
+ "path": "tests/more_languages/group4/tf_test.tf",
+ "components": [
+  "provider \"aws\"",
+  "resource \"aws_instance\" \"example\"",
+  "data \"aws_ami\" \"ubuntu\"",
+  "variable \"instance_type\"",
+  "output \"instance_public_ip\"",
+  "locals",
+  "module \"vpc\""
+ ]
+}

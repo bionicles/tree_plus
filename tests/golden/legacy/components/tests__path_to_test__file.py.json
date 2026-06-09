@@ -1,0 +1,6 @@
+{
+ "path": "tests/path_to_test/file.py",
+ "components": [
+  "def hello_world()"
+ ]
+}

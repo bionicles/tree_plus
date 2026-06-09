@@ -1,0 +1,346 @@
+📁 group3 (1 folder, 16 files)
+├── 📄 bash_test.sh (127 tokens, 22 lines)
+│   ├── echo_hello_world()
+│   ├── function fun_echo_hello_world()
+│   ├── export SECRET
+│   ├── alias md='make debug'
+│   ├── add_alias()
+│   └── create_conda_env()
+├── 📄 cpp_test.cpp (1,670 tokens, 259 lines)
+│   ├── class Person
+│   ├──     std::string name;
+│   ├── public:
+│   ├──     Person(std::string n) : name(n)
+│   ├──     void greet()
+│   ├── void globalGreet()
+│   ├── int main()
+│   ├── void printMessage(const std::string &message)
+│   ├── template<typename T>
+│   │   void printVector(const std::vector<T>& vec)
+│   ├── struct Point
+│   ├──     int x, y;
+│   ├──     Point(int x, int y) : x(x), y(y)
+│   ├── class Animal
+│   ├── public:
+│   ├──     Animal(const std::string &name) : name(name)
+│   ├──     virtual void speak() const
+│   ├──     virtual ~Animal()
+│   ├── protected:
+│   ├──     std::string name;
+│   ├── class Dog : public Animal
+│   ├── public:
+│   ├──     Dog(const std::string &name) : Animal(name)
+│   ├──     void speak() const override
+│   ├── class Cat : public Animal
+│   ├── public:
+│   ├──     Cat(const std::string &name) : Animal(name)
+│   ├──     void speak() const override
+│   ├── nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int
+│   │   num_layers,
+│   │                                int batch_size, int max_seq_length, float
+│   │   dropout,
+│   │                                bool bidirectional, bool cudnn_allow_tf32,
+│   │                                int workspace_size, int reserve_space_size)
+│   ├── int main()
+│   ├── enum ECarTypes
+│   ├──   Sedan,
+│   ├──   Hatchback,
+│   ├──   SUV,
+│   ├──   Wagon
+│   ├── ECarTypes GetPreferredCarType()
+│   ├── enum ECarTypes : uint8_t
+│   ├──   Sedan,
+│   ├──   Hatchback,
+│   ├──   SUV = 254,
+│   ├──   Hybrid
+│   ├── enum class ECarTypes : uint8_t
+│   ├──   Sedan,
+│   ├──   Hatchback,
+│   ├──   SUV = 254,
+│   ├──   Hybrid
+│   ├── void myFunction(string fname, int age)
+│   ├── template <typename T> T cos(T)
+│   ├── template <typename T> T sin(T)
+│   ├── template <typename T> T sqrt(T)
+│   ├── template<typename T> struct VLEN
+│   ├── template<typename T> class arr
+│   ├──   private:
+│   ├──     static T *ralloc(size_t num)
+│   ├──     static void dealloc(T *ptr)
+│   ├──     static T *ralloc(size_t num)
+│   ├──     static void dealloc(T *ptr)
+│   ├──   public:
+│   ├──     arr() : p(0), sz(0)
+│   ├──     arr(size_t n) : p(ralloc(n)), sz(n)
+│   ├──     arr(arr &&other)
+│   │         : p(other.p), sz(other.sz)
+│   ├──     ~arr()
+│   ├──     void resize(size_t n)
+│   ├──     T &operator[](size_t idx)
+│   ├──     T *data()
+│   ├──     size_t size() const
+│   ├── class Buffer
+│   ├──  private:
+│   ├──   void* ptr_;
+│   └── std::tuple<array, array, array> quantize(
+│           const array& w,
+│           int group_size,
+│           int bits,
+│           StreamOrDevice s)
+├── 📄 csharp_test.cs (957 tokens, 146 lines)
+│   ├── public interface IExcelTemplate
+│   ├──     void LoadTemplate(string templateFilePath)
+│   ├──     void LoadData(Dictionary<string, string> data)
+│   ├──     void ModifyCell(string cellName, string value)
+│   ├──     void SaveToFile(string filePath)
+│   ├── public interface IGreet
+│   ├──     void Greet()
+│   ├── public enum WeekDays
+│   ├── public delegate void DisplayMessage(string message)
+│   ├── public struct Address
+│   ├── public static class HelperFunctions
+│   ├──     public static void PrintMessage(string message)
+│   ├──     public static int AddNumbers(int a, int b)
+│   ├── namespace HelloWorldApp
+│   ├──     class Person : IGreet
+│   ├──         public Person(string name, int age)
+│   ├──         public void Greet()
+│   ├──     class HelloWorld
+│   ├──         static void Main(string[] args)
+│   ├── namespace TemplateToExcelServer.Template
+│   ├──     public interface ITemplateObject
+│   ├──         string[,] GetContent()
+│   ├──         string[] GetContentArray()
+│   ├──         string[] GetFormat()
+│   ├──         int? GetFormatLength()
+│   ├──         TemplateObject SetContent(string[,] Content)
+│   ├──         TemplateObject SetContentArray(string[] value)
+│   ├──         TemplateObject SetFormat(string[] Header)
+│   ├──         TemplateObject SetNameOfReport(
+│   │               ReadOnlyMemory<byte> ReportName,
+│   │               int[] EdgeCase)
+│   ├──         TemplateObject SetSheetName(ReadOnlyMemory<byte> SheetName)
+│   ├── public class BankAccount(string accountID, string owner)
+│   ├──     public override string ToString() =>
+│   ├── var IncrementBy = (int source, int increment = 1) =>
+│   ├── Func<int, int, int> add = (x, y) =>
+│   ├── button.Click += (sender, args) =>
+│   ├── public Func<int, int> GetMultiplier(int factor)
+│   ├── public void Method(
+│   │           int param1,
+│   │           int param2,
+│   │           int param3,
+│   │           int param4,
+│   │           int param5,
+│   │           int param6,
+│   │       )
+│   ├── System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+│   │       (se, cert, chain, sslerror) =>
+│   ├── class ServerCertificateValidation
+│   ├──     public bool OnRemoteCertificateValidation(
+│   │           object se,
+│   │           X509Certificate cert,
+│   │           X509Chain chain,
+│   │           SslPolicyErrors sslerror
+│   │       )
+│   ├── s_downloadButton.Clicked += async (o, e) =>
+│   ├── [HttpGet, Route("DotNetCount")]
+│   └── static public async Task<int> GetDotNetCount(string URL)
+├── 📄 hallucination.tex (1,633 tokens, 126 lines)
+│   ├── Harnessing the Master Algorithm: Strategies for AI LLMs to Mitigate
+│   │   Hallucinations
+│   ├── Hallucinated Pedro Domingos et al.
+│   ├── Christmas Eve 2023
+│   ├── 1 Introduction
+│   ├── 2 Representation in LLMs
+│   ├──   2.1 Current Representational Models
+│   ├──   2.2 Incorporating Cognitive Structures
+│   ├──   2.3 Conceptual Diagrams of Advanced Representational Models
+│   ├── 3 Evaluation Strategies
+│   ├──   3.1 Existing Evaluation Metrics for LLMs
+│   ├──   3.2 Integrating Contextual and Ethical Considerations
+│   ├──   3.3 Case Studies: Evaluation in Practice
+│   ├── 4 Optimization Techniques
+│   ├──   4.1 Continuous Learning Models
+│   ├──   4.2 Adaptive Algorithms for Real-time Adjustments
+│   ├──   4.3 Performance Metrics Pre- and Post-Optimization
+│   ├── 5 Interdisciplinary Insights
+│   ├──   5.1 Cognitive Science and AI: A Symbiotic Relationship
+│   ├──   5.2 Learning from Human Cognitive Processes
+│   ├── 6 Challenges and Future Directions
+│   ├──   6.1 Addressing Current Limitations
+│   ├──   6.2 The Road Ahead: Ethical and Practical Considerations
+│   ├── 7 Conclusion
+│   ├──   7.1 Summarizing Key Findings
+│   └──   7.2 The Next Steps in AI Development
+├── 📄 ruby_test.rb (138 tokens, 37 lines)
+│   ├── module Greeter
+│   ├──   def self.say_hello
+│   ├── class HelloWorld
+│   ├──   def say_hello
+│   ├── class Human
+│   ├──   def self.bar
+│   ├──   def self.bar=(value)
+│   ├── class Doctor < Human
+│   └──   def brachial_plexus(
+│             roots,
+│             trunks,
+│             divisions: true,
+│             cords: [],
+│             branches: Time.now
+│           )
+├── 📄 swift_test.swift (469 tokens, 110 lines)
+│   ├── class Person
+│   ├──     init(name: String)
+│   ├──     func greet()
+│   ├──     func yEdgeCase(
+│   │           fname: String,
+│   │           lname: String,
+│   │           age: Int,
+│   │           address: String,
+│   │           phoneNumber: String
+│   │       )
+│   ├── func globalGreet()
+│   ├── struct Point
+│   ├── protocol Animal
+│   ├──     func speak()
+│   ├── struct Dog: Animal
+│   ├── class Cat: Animal
+│   ├──     init(name: String)
+│   ├──     func speak()
+│   ├── enum CarType
+│   ├── func getPreferredCarType() -> CarType
+│   ├── enum CarType: UInt8
+│   ├── enum class CarType: UInt8
+│   ├── func myFunction(fname: String, age: Int)
+│   └── func myFunctionWithMultipleParameters(
+│           fname: String,
+│           lname: String,
+│           age: Int,
+│           address: String,
+│           phoneNumber: String
+│       )
+├── 📄 test.lean (289 tokens, 42 lines)
+│   ├── # Advanced Topics in Group Theory
+│   ├── section GroupDynamics
+│   ├── lemma group_stability (G : Type*) [Group G] (H : Subgroup G)
+│   ├── theorem subgroup_closure {G : Type*} [Group G] (S : Set G)
+│   ├── axiom group_homomorphism_preservation {G H : Type*} [Group G] [Group H]
+│   │   (f : G → H)
+│   ├── end GroupDynamics
+│   ├── section ConstructiveApproach
+│   ├── lemma finite_group_order (G : Type*) [Group G] [Fintype G]
+│   ├── lemma complex_lemma {X Y : Type*} [SomeClass X] [AnotherClass Y]
+│   │     (f : X → Y) (g : Y → X)
+│   └── end ConstructiveApproach
+├── 📄 test.capnp (117 tokens, 30 lines)
+│   ├── struct Employee
+│   ├──   id @0 :Int32
+│   ├──   name @1 :Text
+│   ├──   role @2 :Text
+│   ├──   skills @3 :List(Skill)
+│   ├──   struct Skill
+│   ├──     name @0 :Text
+│   ├──     level @1 :Level
+│   ├──     enum Level
+│   ├──       beginner @0
+│   ├──       intermediate @1
+│   ├──       expert @2
+│   ├──   status :union
+│   ├──     active @4 :Void
+│   ├──     onLeave @5 :Void
+│   ├──     retired @6 :Void
+│   ├── struct Company
+│   └──   employees @0 :List(Employee)
+├── 📄 test.graphql (66 tokens, 21 lines)
+│   ├── type Query
+│   ├──     getBooks: [Book]
+│   ├──     getAuthors: [Author]
+│   ├── type Mutation
+│   ├──     addBook(title: String, author: String): Book
+│   ├──     removeBook(id: ID): Book
+│   ├── type Book
+│   ├──     id: ID
+│   ├──     title: String
+│   ├──     author: Author
+│   ├── type Author
+│   ├──     id: ID
+│   ├──     name: String
+│   └──     books: [Book]
+├── 📄 test.proto (142 tokens, 34 lines)
+│   ├── syntax = "proto3"
+│   ├── service EmployeeService
+│   ├──     rpc GetEmployee(EmployeeId) returns (EmployeeInfo)
+│   ├──     rpc AddEmployee(EmployeeData) returns (EmployeeInfo)
+│   ├──     rpc UpdateEmployee(EmployeeUpdate) returns (EmployeeInfo)
+│   ├── message EmployeeId
+│   ├──     int32 id = 1
+│   ├── message EmployeeInfo
+│   ├──     int32 id = 1
+│   ├──     string name = 2
+│   ├──     string role = 3
+│   ├── message EmployeeData
+│   ├──     string name = 1
+│   ├──     string role = 2
+│   ├── message EmployeeUpdate
+│   ├──     int32 id = 1
+│   ├──     string name = 2
+│   └──     string role = 3
+├── 📄 test.sqlite (0 tokens, 0 lines)
+│   ├── students table:
+│   ├──    id integer primary key
+│   ├──    name text not null
+│   ├──    age integer not null
+│   ├── courses table:
+│   ├──    id integer primary key
+│   ├──    title text not null
+│   └──    credits integer not null
+├── 📄 test_Cargo.toml (119 tokens, 18 lines)
+│   ├── name: test_cargo
+│   ├── version: 0.1.0
+│   ├── description: A test Cargo.toml
+│   ├── license: MIT OR Apache-2.0
+│   ├── dependencies:
+│   ├──   clap 4.4
+│   └──   sqlx 0.7 (features: runtime-tokio, tls-rustls)
+├── 📄 test_json_rpc_2_0.json (26 tokens, 6 lines)
+│   ├── jsonrpc: 2.0
+│   ├── method: subtract
+│   ├── params:
+│   ├──     minuend: 42
+│   ├──     subtrahend: 23
+│   └── id: 1
+├── 📄 test_openapi.yaml (753 tokens, 92 lines)
+│   ├── openapi: 3.0.1
+│   ├──     title: TODO Plugin
+│   ├──     description: A plugin to create and manage TODO lists using ChatGPT.
+│   ├──     version: v1
+│   ├── servers:
+│   ├──     - url: PLUGIN_HOSTNAME
+│   ├── paths:
+│   ├──     '/todos/{username}':
+│   ├──         GET (getTodos): Get the list of todos
+│   ├──         POST (addTodo): Add a todo to the list
+│   └──         DELETE (deleteTodo): Delete a todo from the list
+├── 📄 test_openrpc.json (225 tokens, 44 lines)
+│   ├── openrpc: 1.2.1
+│   ├── info:
+│   ├──     title: Demo Petstore
+│   ├──     version: 1.0.0
+│   ├── methods:
+│   ├──     listPets: List all pets
+│   ├──         params:
+│   ├──             - limit: integer
+│   └──         result: pets = An array of pets
+└── 📄 test_pyproject.toml (304 tokens, 39 lines)
+    ├── name: tree_plus
+    ├── version: 1.0.8
+    ├── description: A `tree` util enhanced with tokens, lines, and components.
+    ├── License :: OSI Approved :: Apache Software License
+    ├── License :: OSI Approved :: MIT License
+    ├── dependencies:
+    ├──     tiktoken
+    ├──     PyYAML
+    ├──     click
+    ├──     rich
+    └──     tomli

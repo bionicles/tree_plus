@@ -1,0 +1,11 @@
+{
+ "path": "tests/more_languages/group7/test.metal",
+ "components": [
+  "struct MyData",
+  "kernel void myKernel(device MyData* data [[buffer(0)]],\n                     uint id [[thread_position_in_grid]])",
+  "float myHelperFunction(float x, float y)",
+  "vertex float4 vertexShader(const device packed_float3* vertex_array [[buffer(0)]],\n                           unsigned int vid [[vertex_id]])",
+  "fragment half4 fragmentShader(float4 P [[position]])",
+  "float3 computeNormalMap(ColorInOut in, texture2d<float> normalMapTexture)"
+ ]
+}

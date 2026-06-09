@@ -1,0 +1,13 @@
+{
+ "path": "tests/more_languages/group3/test.sqlite",
+ "components": [
+  "students table:",
+  "   id integer primary key",
+  "   name text not null",
+  "   age integer not null",
+  "courses table:",
+  "   id integer primary key",
+  "   title text not null",
+  "   credits integer not null"
+ ]
+}

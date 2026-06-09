@@ -1,0 +1,7 @@
+{
+ "path": "tests/more_languages/group_lisp/LispTest.lisp",
+ "components": [
+  "defstruct person",
+  "defun greet"
+ ]
+}

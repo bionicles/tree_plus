@@ -1,0 +1,7 @@
+{
+ "path": "tests/more_languages/group4/matlab_test.m",
+ "components": [
+  "classdef HelloWorld -> function greet",
+  "function loneFun"
+ ]
+}

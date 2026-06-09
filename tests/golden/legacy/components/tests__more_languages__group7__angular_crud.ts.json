@@ -1,0 +1,18 @@
+{
+ "path": "tests/more_languages/group7/angular_crud.ts",
+ "components": [
+  "interface DBCommand<T = any>",
+  "export class IndexedDbService",
+  "    constructor()",
+  "    async create_connection({ db_name = 'client_db', table_name }: DBCommand)",
+  "                upgrade(db)",
+  "    async create_model({ db_name, table_name, model }: DBCommand)",
+  "        verify_matching({ table_name, model })",
+  "    async read_key({ db_name, table_name, key }: DBCommand)",
+  "    async update_model({ db_name, table_name, model }: DBCommand)",
+  "        verify_matching({ table_name, model })",
+  "    async delete_key({ db_name, table_name, key }: DBCommand)",
+  "    async list_table({\n        db_name,\n        table_name,\n        where,\n    }: DBCommand & { where?: { [key: string]: string | number } })",
+  "    async search_table(criteria: SearchCriteria)"
+ ]
+}

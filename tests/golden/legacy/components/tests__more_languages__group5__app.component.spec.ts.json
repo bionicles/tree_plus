@@ -1,0 +1,10 @@
+{
+ "path": "tests/more_languages/group5/app.component.spec.ts",
+ "components": [
+  "describe 'AppComponent'",
+  "    it should create the app",
+  "    it should welcome the user",
+  "    it should welcome 'Jimbo'",
+  "    it should request login if not logged in"
+ ]
+}

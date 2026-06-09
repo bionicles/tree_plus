@@ -1,0 +1,300 @@
+📁 group6 (1 folder, 14 files)
+├── 📄 catastrophic.c (5,339 tokens, 754 lines)
+│   ├── TODO: technically we should use a proper parser
+│   ├── struct Point
+│   ├──     int x;
+│   ├──     int y;
+│   ├── struct Point getOrigin()
+│   ├── float mul_two_floats(float x1, float x2)
+│   ├── enum days
+│   ├──     SUN,
+│   ├──     MON,
+│   ├──     TUE,
+│   ├──     WED,
+│   ├──     THU,
+│   ├──     FRI,
+│   ├──     SAT
+│   ├── enum worker_pool_flags
+│   ├──         POOL_BH                 = 1 << 0,
+│   ├──         POOL_MANAGER_ACTIVE     = 1 << 1,
+│   ├──         POOL_DISASSOCIATED      = 1 << 2,
+│   ├──         POOL_BH_DRAINING        = 1 << 3,
+│   ├── enum worker_flags
+│   ├──         WORKER_DIE              = 1 << 1,
+│   ├──         WORKER_IDLE             = 1 << 2,
+│   ├──         WORKER_PREP             = 1 << 3,
+│   ├──         WORKER_CPU_INTENSIVE    = 1 << 6,
+│   ├──         WORKER_UNBOUND          = 1 << 7,
+│   ├──         WORKER_REBOUND          = 1 << 8,
+│   ├──         WORKER_NOT_RUNNING      = WORKER_PREP | WORKER_CPU_INTENSIVE |
+│   │                                     WORKER_UNBOUND | WORKER_REBOUND,
+│   ├── struct worker_pool
+│   ├──   raw_spinlock_t    lock;
+│   ├──   int      cpu;
+│   ├──   int      node;
+│   ├──   int      id;
+│   ├──   unsigned int    flags;
+│   ├──   unsigned long    watchdog_ts;
+│   ├──   bool      cpu_stall;
+│   ├──   int      nr_running;
+│   ├──   struct list_head  worklist;
+│   ├──   int      nr_workers;
+│   ├──   int      nr_idle;
+│   ├──   struct list_head  idle_list;
+│   ├──   struct timer_list  idle_timer;
+│   ├──   struct work_struct      idle_cull_work;
+│   ├──   struct timer_list  mayday_timer;
+│   ├──   struct worker    *manager;
+│   ├──   struct list_head  workers;
+│   ├──   struct ida    worker_ida;
+│   ├──   struct workqueue_attrs  *attrs;
+│   ├──   struct hlist_node  hash_node;
+│   ├──   int      refcnt;
+│   ├──   struct rcu_head    rcu;
+│   ├── long add_two_longs(long x1, long x2)
+│   ├── double multiplyByTwo(double num)
+│   ├── char getFirstCharacter(char *str)
+│   ├── void greet(Person p)
+│   ├── typedef struct
+│   ├──     char name[50];
+│   ├── } Person;
+│   ├── typedef struct PersonA
+│   ├──     char name[50];
+│   ├── } PersonB;
+│   ├── int main()
+│   ├── int* getArrayStart(int arr[], int size)
+│   ├── long complexFunctionWithMultipleArguments(
+│   │       int param1,
+│   │       double param2,
+│   │       char *param3,
+│   │       struct Point point
+│   │   )
+│   ├── keyPattern *ACLKeyPatternCreate(sds pattern, int flags)
+│   ├── sds sdsCatPatternString(sds base, keyPattern *pat)
+│   ├── static int ACLCheckChannelAgainstList(list *reference, const char
+│   │   *channel, int channellen, int is_pattern)
+│   ├──     while((ln = listNext(&li)))
+│   ├── static struct config
+│   ├──     aeEventLoop *el;
+│   ├──     cliConnInfo conn_info;
+│   ├──     const char *hostsocket;
+│   ├──     int tls;
+│   ├──     struct cliSSLconfig sslconfig;
+│   ├── } config;
+│   ├── class Person
+│   ├──     std::string name;
+│   ├── public:
+│   ├──     Person(std::string n) : name(n)
+│   ├──     void greet()
+│   ├── void globalGreet()
+│   ├── int main()
+│   ├── void printMessage(const std::string &message)
+│   ├── template<typename T>
+│   │   void printVector(const std::vector<T>& vec)
+│   ├── struct foo
+│   ├──     char x;
+│   ├──     struct foo_in
+│   ├──           char* y;
+│   ├──           short z;
+│   ├──     } inner;
+│   ├── struct Point
+│   ├──     int x, y;
+│   ├──     Point(int x, int y) : x(x), y(y)
+│   ├── class Animal
+│   ├──   public:
+│   ├──     Animal(const std::string &name) : name(name)
+│   ├──     virtual void speak() const
+│   ├──     virtual ~Animal()
+│   ├── protected:
+│   ├──     std::string name;
+│   ├── class Dog : public Animal
+│   ├──   public:
+│   ├──     Dog(const std::string &name) : Animal(name)
+│   ├──     void speak() const override
+│   ├── class Cat : public Animal
+│   ├──   public:
+│   ├──     Cat(const std::string &name) : Animal(name)
+│   ├──     void speak() const override
+│   ├── class CatDog: public Animal, public Cat, public Dog
+│   ├──   public:
+│   ├──       CatDog(const std::string &name) : Animal(name)
+│   ├──       int meow_bark()
+│   ├── nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int
+│   │   num_layers,
+│   │                                int batch_size, int max_seq_length, float
+│   │   dropout,
+│   │                                bool bidirectional, bool cudnn_allow_tf32,
+│   │                                int workspace_size, int reserve_space_size)
+│   ├── int main()
+│   ├── enum ECarTypes
+│   ├──   Sedan,
+│   ├──   Hatchback,
+│   ├──   SUV,
+│   ├──   Wagon
+│   ├── ECarTypes GetPreferredCarType()
+│   ├── enum ECarTypes : uint8_t
+│   ├──   Sedan,
+│   ├──   Hatchback,
+│   ├──   SUV = 254,
+│   ├──   Hybrid
+│   ├── enum class ECarTypes : uint8_t
+│   ├──   Sedan,
+│   ├──   Hatchback,
+│   ├──   SUV = 254,
+│   ├──   Hybrid
+│   ├── void myFunction(string fname, int age)
+│   ├── template <typename T> T cos(T)
+│   ├── template <typename T> T sin(T)
+│   ├── template <typename T> T sqrt(T)
+│   ├── template<typename T> struct VLEN
+│   ├── template<typename T> class arr
+│   ├──   private:
+│   ├──     static T *ralloc(size_t num)
+│   ├──     static void dealloc(T *ptr)
+│   ├──     static T *ralloc(size_t num)
+│   ├──     static void dealloc(T *ptr)
+│   ├──   public:
+│   ├──     arr() : p(0), sz(0)
+│   ├──     arr(size_t n) : p(ralloc(n)), sz(n)
+│   ├──     arr(arr &&other)
+│   │         : p(other.p), sz(other.sz)
+│   ├──     ~arr()
+│   ├──     void resize(size_t n)
+│   ├──     T &operator[](size_t idx)
+│   ├──     T *data()
+│   ├──     size_t size() const
+│   ├── class Buffer
+│   ├──  private:
+│   ├──   void* ptr_;
+│   ├── std::tuple<array, array, array> quantize(
+│   │       const array& w,
+│   │       int group_size,
+│   │       int bits,
+│   │       StreamOrDevice s)
+│   ├── #define PY_SSIZE_T_CLEAN
+│   ├── #define PLATFORM_IS_X86
+│   ├── #define PLATFORM_WINDOWS
+│   ├── #define GETCPUID(a, b, c, d, a_inp, c_inp)
+│   ├── static int GetXCR0EAX()
+│   ├── #define GETCPUID(a, b, c, d, a_inp, c_inp)
+│   ├── static int GetXCR0EAX()
+│   ├──   asm("XGETBV" : "=a"(eax), "=d"(edx) : "c"(0))
+│   ├── static void ReportMissingCpuFeature(const char* name)
+│   ├── static PyObject *CheckCpuFeatures(PyObject *self, PyObject *args)
+│   ├── static PyObject *CheckCpuFeatures(PyObject *self, PyObject *args)
+│   ├── static PyMethodDef cpu_feature_guard_methods[]
+│   ├── static struct PyModuleDef cpu_feature_guard_module
+│   ├── #define EXPORT_SYMBOL __declspec(dllexport)
+│   ├── #define EXPORT_SYMBOL __attribute__ ((visibility("default")))
+│   ├── EXPORT_SYMBOL PyMODINIT_FUNC PyInit_cpu_feature_guard(void)
+│   ├── typedef struct
+│   ├──     GPT2Config config;
+│   ├──     ParameterTensors params;
+│   ├──     size_t param_sizes[NUM_PARAMETER_TENSORS];
+│   ├──     float* params_memory;
+│   ├──     size_t num_parameters;
+│   ├──     ParameterTensors grads;
+│   ├──     float* grads_memory;
+│   ├──     float* m_memory;
+│   ├──     float* v_memory;
+│   ├──     ActivationTensors acts;
+│   ├──     size_t act_sizes[NUM_ACTIVATION_TENSORS];
+│   ├──     float* acts_memory;
+│   ├──     size_t num_activations;
+│   ├──     ActivationTensors grads_acts;
+│   ├──     float* grads_acts_memory;
+│   ├──     int batch_size;
+│   ├──     int seq_len;
+│   ├──     int* inputs;
+│   ├──     int* targets;
+│   ├──     float mean_loss;
+│   └── } GPT2;
+├── 📄 cpp_examples_impl.cc (60 tokens, 10 lines)
+│   ├── PYBIND11_MODULE(cpp_examples, m)
+│   └──     m.def("add", &add<int>, "An example function to add two numbers.")
+├── 📄 cpp_examples_impl.cu (37 tokens, 10 lines)
+│   ├── template <typename T>
+│   │   T add(T a, T b)
+│   └── template <>
+│       int add<int>(int a, int b)
+├── 📄 cpp_examples_impl.h (22 tokens, 6 lines)
+│   ├── template <typename T>
+│   │   T add(T a, T b)
+│   └── template <>
+│       int add<int>(int, int)
+├── 📄 edge_case.hpp (426 tokens, 28 lines)
+├── 📄 fractal.thy (1,712 tokens, 147 lines)
+├── 📄 Microsoft.PowerShell_profile.ps1 (3,346 tokens, 497 lines)
+├── 📄 python_complex_class.py (10 tokens, 2 lines)
+│   └── class Box(Space[NDArray[Any]])
+├── 📄 ramda__cloneRegExp.js (173 tokens, 9 lines)
+│   └── export default function _cloneRegExp(pattern)
+├── 📄 ramda_prop.js (646 tokens, 85 lines)
+│   ├── /**
+│   │    * Returns a function that when supplied an object returns the indicated
+│   │    * property of that object, if it exists.
+│   │    * @category Object
+│   │    * @typedefn Idx = String | Int | Symbol
+│   │    * @sig Idx -> {s: a} -> a | Undefined
+│   │    * @param {String|Number} p The property name or array index
+│   │    * @param {Object} obj The object to query
+│   │    * @return {*} The value at `obj.p`.
+│   │    */
+│   │   var prop = _curry2(function prop(p, obj)
+│   ├── /**
+│   │    * Solves equations of the form a * x = b
+│   │    * @param {{
+│   │    *  z: number
+│   │    * }} x
+│   │    */
+│   │   function foo(x)
+│   ├── /**
+│   │    * Deconstructs an array field from the input documents to output a
+│   │   document for each element.
+│   │    * Each output document is the input document with the value of the
+│   │   array field replaced by the element.
+│   │    * @category Object
+│   │    * @sig String -> {k: [v]} -> [{k: v}]
+│   │    * @param {String} key The key to determine which property of the object
+│   │   should be unwound.
+│   │    * @param {Object} object The object containing the list to unwind at
+│   │   the property named by the key.
+│   │    * @return {List} A list of new objects, each having the given key
+│   │   associated to an item from the unwound list.
+│   │    */
+│   │   var unwind = _curry2(function(key, object)
+│   └──   return _map(function(item)
+├── 📄 tensorflow_flags.h (7,628 tokens, 668 lines)
+│   ├── #define TENSORFLOW_CORE_CONFIG_FLAG_DEFS_H_
+│   ├── class Flags
+│   ├──  public:
+│   ├── bool SetterForXlaAutoJitFlag(const string& value)
+│   ├── bool SetterForXlaCallModuleDisabledChecks(const string& value)
+│   ├── void AppendMarkForCompilationPassFlagsInternal(std::vector<Flag>*
+│   │   flag_list)
+│   ├── void AllocateAndParseJitRtFlags()
+│   ├── void AllocateAndParseFlags()
+│   ├── void ResetFlags()
+│   ├── bool SetXlaAutoJitFlagFromFlagString(const string& value)
+│   ├── BuildXlaOpsPassFlags* GetBuildXlaOpsPassFlags()
+│   ├── MarkForCompilationPassFlags* GetMarkForCompilationPassFlags()
+│   ├── XlaSparseCoreFlags* GetXlaSparseCoreFlags()
+│   ├── XlaDeviceFlags* GetXlaDeviceFlags()
+│   ├── XlaOpsCommonFlags* GetXlaOpsCommonFlags()
+│   ├── XlaCallModuleFlags* GetXlaCallModuleFlags()
+│   ├── MlirCommonFlags* GetMlirCommonFlags()
+│   ├── void ResetJitCompilerFlags()
+│   ├── const JitRtFlags& GetJitRtFlags()
+│   ├── ConfigProto::Experimental::MlirBridgeRollout GetMlirBridgeRolloutState(
+│   │       std::optional<const ConfigProto> config_proto)
+│   ├── void AppendMarkForCompilationPassFlags(std::vector<Flag>* flag_list)
+│   ├── void DisableXlaCompilation()
+│   ├── void EnableXlaCompilation()
+│   ├── bool FailOnXlaCompilation()
+│   ├── #define TF_PY_DECLARE_FLAG(flag_name)
+│   └── PYBIND11_MODULE(flags_pybind, m)
+├── 📄 test.f (181 tokens, 30 lines)
+├── 📄 torch.rst (60 tokens, 8 lines)
+│   ├── # libtorch (C++-only)
+│   └── - Building libtorch using Python
+└── 📄 yc.html (9,063 tokens, 169 lines)

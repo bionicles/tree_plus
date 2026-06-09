@@ -1,0 +1,214 @@
+📁 group4 (1 folder, 10 files)
+├── 📄 erl_test.erl (480 tokens, 68 lines)
+│   ├── -module(erl_test).
+│   ├── -record(person).
+│   ├── -type ra_peer_status().
+│   ├── -type ra_membership().
+│   ├── -opaque my_opaq_type().
+│   ├── -type orddict(Key, Val).
+│   ├── -type edge(
+│   │           Cases,
+│   │           Pwn,
+│   │       ).
+│   ├── -spec guarded(X) -> X when X :: tuple().
+│   ├── -spec edge_case(
+│   │           {integer(), any()} | [any()]
+│   │       ) -> processed, integer(), any()} | [{item, any()}].
+│   ├── -spec complex_function({integer(), any()} | [any()]) ->
+│   │       {processed, integer(), any()} | [{item, any()}].
+│   ├── -spec list_manipulation([integer()]) -> [integer()].
+│   ├── -spec overload(T1, T2) -> T3
+│   │           ; (T4, T5) -> T6.
+│   ├── -spec multiguard({X, integer()}) -> X when X :: atom()
+│   │           ; ([Y]) -> Y when Y :: number().
+│   ├── -record(multiline).
+│   └── -record(maybe_undefined).
+├── 📄 haskell_test.hs (414 tokens, 41 lines)
+│   ├── data Person
+│   ├── greet :: Person -> String
+│   └── resolveVariables ::
+│         forall m fragments.
+│         (MonadError QErr m, Traversable fragments) =>
+│         Options.BackwardsCompatibleNullInNonNullableVariables ->
+│         [G.VariableDefinition] ->
+│         GH.VariableValues ->
+│         [G.Directive G.Name] ->
+│         G.SelectionSet fragments G.Name ->
+│         m
+│           ( [G.Directive Variable],
+│             G.SelectionSet fragments Variable
+│           )
+├── 📄 mathematica_test.nb (133 tokens, 21 lines)
+│   ├── person[name_]
+│   ├── sayHello[]
+│   └── sumList[list_List]
+├── 📄 matlab_test.m (48 tokens, 12 lines)
+│   ├── classdef HelloWorld -> function greet
+│   └── function loneFun
+├── 📄 RTest.R (367 tokens, 46 lines)
+│   ├── class(person)
+│   ├── greet.Person <- function
+│   ├── ensure_between = function
+│   └── run_intermediate_annealing_process = function
+├── 📄 rust_test.rs (1,368 tokens, 259 lines)
+│   ├── fn at_beginning<'a>(&'a str)
+│   ├── pub enum Days<E: EdgeCase> {
+│   │       #\[default]
+│   │       Sun,
+│   │       Mon,
+│   │       #\[error("edge case {idx}, expected at least {} and at most {}",
+│   │   .limits.lo, .limits.hi)]
+│   │       Tue,
+│   │       Wed,
+│   │       Thu(i16, bool),
+│   │       Fri { day: u8 },
+│   │       Sat {
+│   │           urday: String,
+│   │           edge_case: E,
+│   │       },
+│   │   }
+│   ├── struct Point
+│   ├── impl Point
+│   ├──     fn get_origin() -> Point
+│   ├── struct Person
+│   ├── impl Person
+│   ├──     fn greet(&self)
+│   ├── fn add_two_longs(x1: i64, x2: i64) -> i64
+│   ├── fn add_two_longs_longer(
+│   │       x1: i64,
+│   │       x2: i64,
+│   │   ) -> i64
+│   ├── const fn multiply_by_two(num: f64) -> f64
+│   ├── fn get_first_character(s: &str) -> Option<char>
+│   ├── trait Drawable
+│   ├──     fn draw(&self)
+│   ├── impl Drawable for Point
+│   ├──     fn draw(&self)
+│   ├── fn with_generic<D: Drawable>(d: D)
+│   ├── fn with_generic<D>(d: D)
+│   │   where
+│   │       D: Drawable
+│   ├── fn main()
+│   ├── pub struct VisibleStruct
+│   ├── mod my_module
+│   ├──     pub struct AlsoVisibleStruct<T>(T, T)
+│   ├── macro_rules! say_hello
+│   ├── #[macro_export]
+│   │   macro_rules! hello_tree_plus
+│   ├── pub mod lib
+│   ├──     pub mod interfaces
+│   ├──     mod engine
+│   ├── pub fn flow<S1, S2, S3, S4, E, T, L>(
+│   │       source: S1,
+│   │       extractor: E,
+│   │       inbox: S2,
+│   │       transformer: T,
+│   │       outbox: S3,
+│   │       loader: L,
+│   │       sink: &mut S4,
+│   │   ) -> Result<(), Box<dyn Error>>
+│   │   where
+│   │       S1: Extractable,
+│   │       S2: Extractable + Loadable,
+│   │       S3: Extractable + Loadable,
+│   │       S4: Loadable,
+│   │       E: Extractor<S1, S2>,
+│   │       T: Transformer<S2, S3>,
+│   │       L: Loader<S3, S4>
+│   ├── trait Container
+│   ├──     fn items(&self) -> impl Iterator<Item = Widget>
+│   ├── trait HttpService
+│   ├──     async fn fetch(&self, url: Url) -> HtmlBody
+│   ├── struct Pair<T, U>
+│   ├── trait Transformer<T>
+│   ├──     fn transform(&self, input: T) -> T
+│   ├── impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
+│   ├──     fn transform(&self, input: T) -> T
+│   ├── fn main()
+│   ├── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>,
+│   │   (StatusCode, String)>
+│   │   where
+│   │       Bion: Cool
+│   ├── #[macro_export]
+│   │   macro_rules! unit
+│   ├──             fn insert(
+│   │                   &mut self,
+│   │                   key: (),
+│   │                   value: $unit_dtype,
+│   │               ) -> Result<Option<$unit_dtype>, ETLError>
+│   ├── pub async fn handle_get_axum_route(
+│   │       Session { maybe_claims }: Session,
+│   │       Path(RouteParams {
+│   │           alpha,
+│   │           bravo,
+│   │           charlie,
+│   │           edge_case
+│   │       }): Path<RouteParams>,
+│   │   ) -> ServerResult<Response>
+│   ├── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>
+│   ├── pub async fn handle_post_yeet(
+│   │       State(auth_backend): State<AuthBackend>,
+│   │       Session { maybe_claims }: Session,
+│   │       Form(yeet_form): Form<YeetForm>,
+│   │   ) -> Result<Response, AuthError>
+│   └── pub async fn handle_get_thingy(
+│           session: Session,
+│           State(ApiBackend {
+│               page_cache,
+│               auth_backend,
+│               library_sql,
+│               some_data_cache,
+│               metadata_cache,
+│               thingy_client,
+│               ..
+│           }): State<ApiBackend>,
+│       ) -> ServerResult<Response>
+├── 📄 test.zig (397 tokens, 60 lines)
+│   ├── pub fn add(a: i32, b: i32) i32
+│   ├── test "add function"
+│   ├── const BunBuildOptions = struct
+│   ├──     pub fn updateRuntime(this: *BunBuildOptions) anyerror!void
+│   ├──     pub fn step(this: BunBuildOptions, b: anytype)
+│   │   *std.build.OptionsStep
+│   └── pub fn sgemv(
+│           order: Order,
+│           trans: Trans,
+│           m: usize,
+│           n: usize,
+│           alpha: f32,
+│           a: []const f32,
+│           lda: usize,
+│           x: []const f32,
+│           x_add: usize,
+│           beta: f32,
+│           y: []f32,
+│           y_add: usize,
+│       ) void
+├── 📄 test_fsharp.fs (92 tokens, 27 lines)
+│   ├── module TestFSharp
+│   ├── type Person = {
+│   ├── let add x y =
+│   ├── let multiply
+│   │       (x: int)
+│   │       (y: int): int =
+│   ├── let complexFunction
+│   │       (a: int)
+│   │       (b: string)
+│   │       (c: float)
+│   │       : (int * string) option =
+│   └── type Result<'T> =
+├── 📄 test_tcl_tk.tcl (54 tokens, 16 lines)
+│   ├── proc sayHello {}
+│   ├── proc arrg { input }
+│   └── proc multiLine {
+│           x,
+│           y
+│       }
+└── 📄 tf_test.tf (202 tokens, 38 lines)
+    ├── provider "aws"
+    ├── resource "aws_instance" "example"
+    ├── data "aws_ami" "ubuntu"
+    ├── variable "instance_type"
+    ├── output "instance_public_ip"
+    ├── locals
+    └── module "vpc"

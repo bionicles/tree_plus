@@ -1,0 +1,10 @@
+📁 dot_dot (2 folders, 4 files)
+├── 📄 my_test_file.py (7 tokens, 2 lines)
+│   └── def dot_dot_dot()
+└── 📁 nested_dir (1 folder, 3 files)
+    ├── 📄 .env.test (4 tokens, 0 lines)
+    │   └── DEBUG_TREE_PLUS
+    ├── 📄 pytest.ini (20 tokens, 4 lines)
+    └── 📄 test_tp_dotdot.py (362 tokens, 52 lines)
+        ├── def ignore_tokens_lines_test(text: str) -> str
+        └── def test_tree_plus_dotdot()

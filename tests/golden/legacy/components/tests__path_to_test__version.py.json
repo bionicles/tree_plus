@@ -1,0 +1,6 @@
+{
+ "path": "tests/path_to_test/version.py",
+ "components": [
+  "__version__ = \"1.2.3\""
+ ]
+}

@@ -1,0 +1,67 @@
+📁 group2 (1 folder, 8 files)
+├── 📄 apl_test.apl (28 tokens, 5 lines)
+├── 📄 c_test.c (837 tokens, 142 lines)
+│   ├── struct Point
+│   ├──     int x;
+│   ├──     int y;
+│   ├── struct Point getOrigin()
+│   ├── float mul_two_floats(float x1, float x2)
+│   ├── enum days
+│   ├──     SUN,
+│   ├──     MON,
+│   ├──     TUE,
+│   ├──     WED,
+│   ├──     THU,
+│   ├──     FRI,
+│   ├──     SAT
+│   ├── long add_two_longs(long x1, long x2)
+│   ├── double multiplyByTwo(double num)
+│   ├── char getFirstCharacter(char *str)
+│   ├── void greet(Person p)
+│   ├── typedef struct
+│   ├──     char name[50];
+│   ├── } Person;
+│   ├── int main()
+│   ├── int* getArrayStart(int arr[], int size)
+│   ├── long complexFunctionWithMultipleArguments(
+│   │       int param1,
+│   │       double param2,
+│   │       char *param3,
+│   │       struct Point point
+│   │   )
+│   ├── keyPattern *ACLKeyPatternCreate(sds pattern, int flags)
+│   ├── sds sdsCatPatternString(sds base, keyPattern *pat)
+│   ├── static int ACLCheckChannelAgainstList(list *reference, const char
+│   │   *channel, int channellen, int is_pattern)
+│   ├──     while((ln = listNext(&li)))
+│   ├── static struct config
+│   ├──     aeEventLoop *el;
+│   ├──     cliConnInfo conn_info;
+│   ├──     const char *hostsocket;
+│   ├──     int tls;
+│   ├──     struct cliSSLconfig sslconfig;
+│   └── } config;
+├── 📄 go_test.go (179 tokens, 46 lines)
+│   ├── type Greeting struct
+│   ├── func (g Greeting) sayHello()
+│   ├── func createGreeting(m string) Greeting
+│   ├── type SomethingLong struct
+│   ├── func (s *SomethingLong) WithAReasonableName(
+│   │           ctx context.Context,
+│   │           param1 string,
+│   │           param2 int,
+│   │           param3 map[string]interface{},
+│   │           callback func(int) error,
+│   │   ) (resultType, error)
+│   ├── type resultType struct
+│   └── func main()
+├── 📄 PerlTest.pl (63 tokens, 20 lines)
+├── 📄 PhpTest.php (70 tokens, 19 lines)
+├── 📄 PowershellTest.ps1 (459 tokens, 89 lines)
+├── 📄 ScalaTest.scala (171 tokens, 40 lines)
+└── 📄 test.csv (0 tokens, 0 lines)
+    ├── Name
+    ├── Age
+    ├── Country
+    ├── City
+    └── Email

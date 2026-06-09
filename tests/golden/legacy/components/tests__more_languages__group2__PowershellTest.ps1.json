@@ -1,0 +1,27 @@
+{
+ "path": "tests/more_languages/group2/PowershellTest.ps1",
+ "components": [
+  "function Say-Nothing()",
+  "class Person",
+  "    Person([string]$name)",
+  "    [string]Greet()",
+  "    [string]GreetMany([int]$times)",
+  "    [string]GreetWithDetails([string]$greeting, [int]$times)",
+  "    [string]GreetMultiline(\n        [string]$greeting,\n        [int]$times\n    )",
+  "    NoReturn([int]$times)",
+  "    NoReturnNoArgs()",
+  "function Say-Hello([Person]$person)",
+  "function Multi-Hello([Person]$personA, [Person]$personB)",
+  "function Switch-Item",
+  "  param ([switch]$on)",
+  "function Get-SmallFiles",
+  "  param (\n      [PSDefaultValue(Help = '100')]\n      $Size = 100)",
+  "function Get-User",
+  "  [CmdletBinding(DefaultParameterSetName=\"ID\")]",
+  "  [OutputType(\"System.Int32\", ParameterSetName=\"ID\")]",
+  "  [OutputType([String], ParameterSetName=\"Name\")]",
+  "  Param (\n    [parameter(Mandatory=$true, ParameterSetName=\"ID\")]\n    [Int[]]\n    $UserID,\n    [parameter(Mandatory=$true, ParameterSetName=\"Name\")]\n    [String[]]\n    $UserName)",
+  "filter Get-ErrorLog ([switch]$Message)",
+  "function global:MultilineSignature(\n  [string]$param1,\n  [int]$param2,\n  [Parameter(Mandatory=$true)]\n  [string]$param3\n)"
+ ]
+}

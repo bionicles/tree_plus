@@ -1,0 +1,16 @@
+{
+ "path": "tests/more_languages/group3/test_openapi.yaml",
+ "components": [
+  "openapi: 3.0.1",
+  "    title: TODO Plugin",
+  "    description: A plugin to create and manage TODO lists using ChatGPT.",
+  "    version: v1",
+  "servers:",
+  "    - url: PLUGIN_HOSTNAME",
+  "paths:",
+  "    '/todos/{username}':",
+  "        GET (getTodos): Get the list of todos",
+  "        POST (addTodo): Add a todo to the list",
+  "        DELETE (deleteTodo): Delete a todo from the list"
+ ]
+}

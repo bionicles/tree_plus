@@ -1,0 +1,7 @@
+{
+ "path": "tests/more_languages/group5/app-routing.module.ts",
+ "components": [
+  "const routes: Routes = [\n    { path: '', redirectTo: 'login', pathMatch: 'full' },\n    { path: '*', redirectTo: 'login' },\n    { path: 'home', component: HomeComponent },\n    { path: 'login', component: LoginComponent },\n    { path: 'register', component: RegisterComponent },\n    { path: 'events', component: EventsComponent },\n    { path: 'invites', component: InvitesComponent },\n    { path: 'rewards', component: RewardsComponent },\n    { path: 'profile', component: ProfileComponent },\n];",
+  "export class AppRoutingModule"
+ ]
+}

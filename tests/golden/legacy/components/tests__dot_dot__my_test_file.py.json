@@ -1,0 +1,6 @@
+{
+ "path": "tests/dot_dot/my_test_file.py",
+ "components": [
+  "def dot_dot_dot()"
+ ]
+}

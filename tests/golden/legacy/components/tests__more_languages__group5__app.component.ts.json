@@ -1,0 +1,11 @@
+{
+ "path": "tests/more_languages/group5/app.component.ts",
+ "components": [
+  "export class AppComponent",
+  "  constructor(\n    private http: HttpClient,\n    private loginService: LoginService,\n    private stripeService: StripeService\n  )",
+  "  constructor(private loginService: LoginService)",
+  "  checkSession()",
+  "  async goToEvent(event_id: string)",
+  "  valInvitedBy(event: any, event_id: string)"
+ ]
+}

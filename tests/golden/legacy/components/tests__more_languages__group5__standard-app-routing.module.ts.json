@@ -1,0 +1,6 @@
+{
+ "path": "tests/more_languages/group5/standard-app-routing.module.ts",
+ "components": [
+  "const routes: Routes = [\n  { path: '', component: HomeComponent },\n  {\n    path: 'heroes',\n    component: HeroesListComponent,\n    children: [\n      { path: ':id', component: HeroDetailComponent },\n      { path: 'new', component: HeroFormComponent },\n    ],\n  },\n  { path: '**', component: PageNotFoundComponent },\n];"
+ ]
+}

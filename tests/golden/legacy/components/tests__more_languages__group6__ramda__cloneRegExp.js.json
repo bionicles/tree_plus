@@ -1,0 +1,6 @@
+{
+ "path": "tests/more_languages/group6/ramda__cloneRegExp.js",
+ "components": [
+  "export default function _cloneRegExp(pattern)"
+ ]
+}

@@ -1,0 +1,149 @@
+📁 group3 (1 folder, 16 files)
+├── 📄 bash_test.sh (127 tokens, 22 lines)
+├── 📄 cpp_test.cpp (1,670 tokens, 259 lines)
+│   ├── class Person
+│   ├──     std::string name;
+│   ├── public:
+│   ├──     Person(std::string n) : name(n)
+│   ├──     void greet()
+│   ├── void globalGreet()
+│   ├── int main()
+│   ├── void printMessage(const std::string &message)
+│   ├── template<typename T>
+│   │   void printVector(const std::vector<T>& vec)
+│   ├── struct Point
+│   ├──     int x, y;
+│   ├──     Point(int x, int y) : x(x), y(y)
+│   ├── class Animal
+│   ├── public:
+│   ├──     Animal(const std::string &name) : name(name)
+│   ├──     virtual void speak() const
+│   ├──     virtual ~Animal()
+│   ├── protected:
+│   ├──     std::string name;
+│   ├── class Dog : public Animal
+│   ├── public:
+│   ├──     Dog(const std::string &name) : Animal(name)
+│   ├──     void speak() const override
+│   ├── class Cat : public Animal
+│   ├── public:
+│   ├──     Cat(const std::string &name) : Animal(name)
+│   ├──     void speak() const override
+│   ├── nb::bytes BuildRnnDescriptor(int input_size, int hidden_size, int
+│   │   num_layers,
+│   │                                int batch_size, int max_seq_length, float
+│   │   dropout,
+│   │                                bool bidirectional, bool cudnn_allow_tf32,
+│   │                                int workspace_size, int reserve_space_size)
+│   ├── int main()
+│   ├── enum ECarTypes
+│   ├──   Sedan,
+│   ├──   Hatchback,
+│   ├──   SUV,
+│   ├──   Wagon
+│   ├── ECarTypes GetPreferredCarType()
+│   ├── enum ECarTypes : uint8_t
+│   ├──   Sedan,
+│   ├──   Hatchback,
+│   ├──   SUV = 254,
+│   ├──   Hybrid
+│   ├── enum class ECarTypes : uint8_t
+│   ├──   Sedan,
+│   ├──   Hatchback,
+│   ├──   SUV = 254,
+│   ├──   Hybrid
+│   ├── void myFunction(string fname, int age)
+│   ├── template <typename T> T cos(T)
+│   ├── template <typename T> T sin(T)
+│   ├── template <typename T> T sqrt(T)
+│   ├── template<typename T> struct VLEN
+│   ├── template<typename T> class arr
+│   ├──   private:
+│   ├──     static T *ralloc(size_t num)
+│   ├──     static void dealloc(T *ptr)
+│   ├──     static T *ralloc(size_t num)
+│   ├──     static void dealloc(T *ptr)
+│   ├──   public:
+│   ├──     arr() : p(0), sz(0)
+│   ├──     arr(size_t n) : p(ralloc(n)), sz(n)
+│   ├──     arr(arr &&other)
+│   │         : p(other.p), sz(other.sz)
+│   ├──     ~arr()
+│   ├──     void resize(size_t n)
+│   ├──     T &operator[](size_t idx)
+│   ├──     T *data()
+│   ├──     size_t size() const
+│   ├── class Buffer
+│   ├──  private:
+│   ├──   void* ptr_;
+│   └── std::tuple<array, array, array> quantize(
+│           const array& w,
+│           int group_size,
+│           int bits,
+│           StreamOrDevice s)
+├── 📄 csharp_test.cs (957 tokens, 146 lines)
+├── 📄 hallucination.tex (1,633 tokens, 126 lines)
+├── 📄 ruby_test.rb (138 tokens, 37 lines)
+├── 📄 swift_test.swift (469 tokens, 110 lines)
+├── 📄 test.lean (289 tokens, 42 lines)
+├── 📄 test.capnp (117 tokens, 30 lines)
+├── 📄 test.graphql (66 tokens, 21 lines)
+├── 📄 test.proto (142 tokens, 34 lines)
+├── 📄 test.sqlite (0 tokens, 0 lines)
+│   ├── students table:
+│   ├──    id integer primary key
+│   ├──    name text not null
+│   ├──    age integer not null
+│   ├── courses table:
+│   ├──    id integer primary key
+│   ├──    title text not null
+│   └──    credits integer not null
+├── 📄 test_Cargo.toml (119 tokens, 18 lines)
+│   ├── name: test_cargo
+│   ├── version: 0.1.0
+│   ├── description: A test Cargo.toml
+│   ├── license: MIT OR Apache-2.0
+│   ├── dependencies:
+│   ├──   clap 4.4
+│   └──   sqlx 0.7 (features: runtime-tokio, tls-rustls)
+├── 📄 test_json_rpc_2_0.json (26 tokens, 6 lines)
+│   ├── jsonrpc: 2.0
+│   ├── method: subtract
+│   ├── params:
+│   ├──     minuend: 42
+│   ├──     subtrahend: 23
+│   └── id: 1
+├── 📄 test_openapi.yaml (753 tokens, 92 lines)
+│   ├── openapi: 3.0.1
+│   ├──     title: TODO Plugin
+│   ├──     description: A plugin to create and manage TODO lists using ChatGPT.
+│   ├──     version: v1
+│   ├── servers:
+│   ├──     - url: PLUGIN_HOSTNAME
+│   ├── paths:
+│   ├──     '/todos/{username}':
+│   ├──         GET (getTodos): Get the list of todos
+│   ├──         POST (addTodo): Add a todo to the list
+│   └──         DELETE (deleteTodo): Delete a todo from the list
+├── 📄 test_openrpc.json (225 tokens, 44 lines)
+│   ├── openrpc: 1.2.1
+│   ├── info:
+│   ├──     title: Demo Petstore
+│   ├──     version: 1.0.0
+│   ├── methods:
+│   ├──     listPets: List all pets
+│   ├──         params:
+│   ├──             - limit: integer
+│   └──         result: pets = An array of pets
+└── 📄 test_pyproject.toml (304 tokens, 39 lines)
+    ├── name: tree_plus
+    ├── version: 1.0.8
+    ├── description: A `tree` util enhanced with tokens, lines, and components.
+    ├── License :: OSI Approved :: Apache Software License
+    ├── License :: OSI Approved :: MIT License
+    ├── dependencies:
+    ├──     tiktoken
+    ├──     PyYAML
+    ├──     click
+    ├──     rich
+    └──     tomli

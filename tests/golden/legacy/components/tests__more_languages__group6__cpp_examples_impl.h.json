@@ -1,0 +1,7 @@
+{
+ "path": "tests/more_languages/group6/cpp_examples_impl.h",
+ "components": [
+  "template <typename T>\nT add(T a, T b)",
+  "template <>\nint add<int>(int, int)"
+ ]
+}
