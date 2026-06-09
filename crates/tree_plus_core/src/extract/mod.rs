@@ -6,6 +6,7 @@
 //! `tree_plus_src/parse_file.py` because legacy behavior depends on them.
 
 pub mod data;
+pub mod kotlin;
 pub mod markdown;
 pub mod markers;
 pub mod simple;
@@ -109,11 +110,11 @@ const MARKDOWN_EXTENSIONS: &[&str] = &[".md", ".markdown", ".mdx", ".mdc"];
 /// Rust port version 1. Files still get TODO/BUG/NOTE markers; component
 /// extraction is tracked in docs/language-roadmap.md.
 const DEFERRED_EXTENSIONS: &[&str] = &[
-    ".php", ".kt", ".swift", ".sh", ".ps1", ".zig", ".rb", ".sql", ".graphql", ".cs", ".jl",
-    ".scala", ".java", ".pl", ".hs", ".fs", ".lisp", ".clj", ".scm", ".el", ".rkt", ".erl", ".hrl",
-    ".capnp", ".proto", ".tex", ".lean", ".f", ".for", ".f77", ".f90", ".f95", ".f03", ".f08",
-    ".tf", ".thy", ".lua", ".tcl", ".m", ".r", ".nb", ".wl", ".matlab", ".ml", ".cbl", ".cobol",
-    ".apl", ".metal", ".wgsl", ".html",
+    ".php", ".sh", ".ps1", ".zig", ".rb", ".sql", ".graphql", ".cs", ".jl", ".scala", ".pl", ".hs",
+    ".fs", ".lisp", ".clj", ".scm", ".el", ".rkt", ".erl", ".hrl", ".capnp", ".proto", ".tex",
+    ".lean", ".f", ".for", ".f77", ".f90", ".f95", ".f03", ".f08", ".tf", ".thy", ".lua", ".tcl",
+    ".m", ".r", ".nb", ".wl", ".matlab", ".ml", ".cbl", ".cobol", ".apl", ".metal", ".wgsl",
+    ".html",
 ];
 
 /// Whether this extension is deferred (legacy support, no Rust port yet).
@@ -207,6 +208,9 @@ fn try_extract_components(path: &Path, syntax: bool) -> ExtractResult {
         e if C_EXTENSIONS.contains(&e) => treesitter::c_cpp::extract(&content, e)?,
         ".rs" => treesitter::rust::extract(&content, syntax)?,
         ".go" => treesitter::go::extract(&content)?,
+        ".java" => treesitter::java::extract(&content)?,
+        ".kt" => kotlin::extract(&content),
+        ".swift" => treesitter::swift::extract(&content)?,
         ".jsonl" => data::extract_jsonl(&content)?,
         ".env" => simple::dot_env(&content),
         ".txt" => {

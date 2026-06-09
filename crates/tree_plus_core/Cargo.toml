@@ -28,6 +28,8 @@ tree-sitter-c.workspace = true
 tree-sitter-cpp.workspace = true
 rusqlite = { workspace = true, optional = true }
 tree-sitter-go.workspace = true
+tree-sitter-java.workspace = true
+tree-sitter-swift.workspace = true
 
 [dev-dependencies]
 criterion.workspace = true

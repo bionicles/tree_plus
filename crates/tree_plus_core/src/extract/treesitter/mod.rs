@@ -6,8 +6,10 @@
 
 pub mod c_cpp;
 pub mod go;
+pub mod java;
 pub mod python;
 pub mod rust;
+pub mod swift;
 pub mod typescript;
 
 use std::cell::RefCell;
