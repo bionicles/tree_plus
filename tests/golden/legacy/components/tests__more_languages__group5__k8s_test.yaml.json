@@ -1,0 +1,8 @@
+{
+ "path": "tests/more_languages/group5/k8s_test.yaml",
+ "components": [
+  "apps/v1.Deployment -> my-app",
+  "v1.Service -> my-service",
+  "v1.ConfigMap -> my-config"
+ ]
+}

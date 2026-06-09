@@ -1,0 +1,14 @@
+{
+ "path": "tests/more_languages/group5/requirements_test.txt",
+ "components": [
+  "psycopg2-binary",
+  "pytest",
+  "coverage",
+  "flask[async]",
+  "flask_cors",
+  "stripe",
+  "pyjwt[crypto]",
+  "cognitojwt[async]",
+  "flask-lambda"
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "path": "tests/more_languages/group1/LuaTest.lua",
+ "components": [
+  "function HelloWorld.new",
+  "function HelloWorld.greet",
+  "function say_hello"
+ ]
+}

@@ -1,0 +1,51 @@
+📁 path_to_test (1 folder, 6 files)
+├── 📄 class_method_type.py (525 tokens, 101 lines)
+│   ├── T = TypeVar("T")
+│   ├── def parse_py(contents: str) -> List[str]
+│   ├── class MyClass
+│   ├──     @staticmethod
+│   │       def physical_element_aval(dtype) -> core.ShapedArray
+│   ├──     def my_method(self)
+│   ├──     @staticmethod
+│   │       def my_typed_method(obj: dict) -> int
+│   ├──     def my_multiline_signature_method(
+│   │           self,
+│   │           alice: str = None,
+│   │           bob: int = None,
+│   │       ) -> tuple
+│   ├── @lru_cache(maxsize=None)
+│   │   def my_multiline_signature_function(
+│   │       tree: tuple = (),
+│   │       plus: str = "+",
+│   │   ) -> tuple
+│   ├── class LogLevelEnum(str, Enum)
+│   ├──     CRITICAL = "CRITICAL"
+│   ├──     GREETING = "GREETING"
+│   ├──     WARNING = "WARNING"
+│   ├──     ERROR = "ERROR"
+│   ├──     DEBUG = "DEBUG"
+│   ├──     INFO = "INFO"
+│   ├──     OFF = "OFF"
+│   ├── class Thingy(BaseModel)
+│   ├──     metric: float
+│   ├── @dataclass
+│   │   class TestDataclass
+│   ├──     tree: str
+│   ├── A = TypeVar("A", str, bytes)
+│   ├── def omega_yikes(file: str, expected: List[str]) -> bool
+│   ├── def ice[T](args: Iterable[T] = ())
+│   ├── class list[T]
+│   ├──     def __getitem__(self, index: int, /) -> T
+│   ├──     @classmethod
+│   │       def from_code(cls, toolbox, code: bytes, score=None) -> "Thingy"
+│   ├──     @classmethod
+│   │       def from_str(cls, toolbox, string: str, score=None) -> "Thingy"
+│   └── class Router(hk.Module)
+├── 📄 empty.py (0 tokens, 0 lines)
+├── 📄 file.md (11 tokens, 2 lines)
+│   └── # Hello, world!
+├── 📄 file.py (18 tokens, 3 lines)
+│   └── def hello_world()
+├── 📄 file.txt (10 tokens, 2 lines)
+└── 📄 version.py (13 tokens, 2 lines)
+    └── __version__ = "1.2.3"

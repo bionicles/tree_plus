@@ -1,0 +1,30 @@
+{
+ "path": "tests/more_languages/group_todo/AAPLShaders.metal",
+ "components": [
+  "struct LightingParameters",
+  "float Geometry(float Ndotv, float alphaG)",
+  "float3 computeNormalMap(ColorInOut in, texture2d<float> normalMapTexture)",
+  "float3 computeDiffuse(LightingParameters parameters)",
+  "float Distribution(float NdotH, float roughness)",
+  "float3 computeSpecular(LightingParameters parameters)",
+  "float4 equirectangularSample(float3 direction, sampler s, texture2d<float> image)",
+  "LightingParameters calculateParameters(ColorInOut in,\n                                       AAPLCameraData cameraData,\n                                       constant AAPLLightData& lightData,\n                                       texture2d<float>   baseColorMap,\n                                       texture2d<float>   normalMap,\n                                       texture2d<float>   metallicMap,\n                                       texture2d<float>   roughnessMap,\n                                       texture2d<float>   ambientOcclusionMap,\n                                       texture2d<float>   skydomeMap)",
+  "struct SkyboxVertex",
+  "struct SkyboxV2F",
+  "vertex SkyboxV2F skyboxVertex(SkyboxVertex in [[stage_in]],\n                                 constant AAPLCameraData& cameraData [[buffer(BufferIndexCameraData)]])",
+  "fragment float4 skyboxFragment(SkyboxV2F v [[stage_in]], texture2d<float> skytexture [[texture(0)]])",
+  "vertex ColorInOut vertexShader(Vertex in [[stage_in]],\n                               constant AAPLInstanceTransform& instanceTransform [[ buffer(BufferIndexInstanceTransforms) ]],\n                               constant AAPLCameraData& cameraData [[ buffer(BufferIndexCameraData) ]])",
+  "float2 calculateScreenCoord( float3 ndcpos )",
+  "fragment float4 fragmentShader(\n                    ColorInOut                  in                    [[stage_in]],\n                    constant AAPLCameraData&    cameraData            [[ buffer(BufferIndexCameraData) ]],\n                    constant AAPLLightData&     lightData             [[ buffer(BufferIndexLightData) ]],\n                    constant AAPLSubmeshKeypath&submeshKeypath        [[ buffer(BufferIndexSubmeshKeypath)]],\n                    constant Scene*             pScene                [[ buffer(SceneIndex)]],\n                    texture2d<float>            skydomeMap            [[ texture(AAPLSkyDomeTexture) ]],\n                    texture2d<float>            rtReflections         [[ texture(AAPLTextureIndexReflections), function_constant(is_raytracing_enabled)]])",
+  "fragment float4 reflectionShader(ColorInOut in [[stage_in]],\n                                 texture2d<float> rtReflections [[texture(AAPLTextureIndexReflections)]])",
+  "struct ThinGBufferOut",
+  "fragment ThinGBufferOut gBufferFragmentShader(ColorInOut in [[stage_in]])",
+  "kernel void rtReflection(\n             texture2d< float, access::write >      outImage                [[texture(OutImageIndex)]],\n             texture2d< float >                     positions               [[texture(ThinGBufferPositionIndex)]],\n             texture2d< float >                     directions              [[texture(ThinGBufferDirectionIndex)]],\n             texture2d< float >                     skydomeMap              [[texture(AAPLSkyDomeTexture)]],\n             constant AAPLInstanceTransform*        instanceTransforms      [[buffer(BufferIndexInstanceTransforms)]],\n             constant AAPLCameraData&               cameraData              [[buffer(BufferIndexCameraData)]],\n             constant AAPLLightData&                lightData               [[buffer(BufferIndexLightData)]],\n             constant Scene*                        pScene                  [[buffer(SceneIndex)]],\n             instance_acceleration_structure        accelerationStructure   [[buffer(AccelerationStructureIndex)]],\n             uint2 tid [[thread_position_in_grid]])",
+  "else if ( intersection.type == raytracing::intersection_type::none )",
+  "struct VertexInOut",
+  "vertex VertexInOut vertexPassthrough( uint vid [[vertex_id]] )",
+  "fragment float4 fragmentPassthrough( VertexInOut in [[stage_in]], texture2d< float > tin )",
+  "fragment float4 fragmentBloomThreshold( VertexInOut in [[stage_in]],\n                                       texture2d< float > tin [[texture(0)]],\n                                       constant float* threshold [[buffer(0)]] )",
+  "fragment float4 fragmentPostprocessMerge( VertexInOut in [[stage_in]],\n                                         constant float& exposure [[buffer(0)]],\n                                         texture2d< float > texture0 [[texture(0)]],\n                                         texture2d< float > texture1 [[texture(1)]])"
+ ]
+}

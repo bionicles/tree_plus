@@ -1,0 +1,8 @@
+{
+ "path": "tests/more_languages/group5/ansible_test.yml",
+ "components": [
+  "Install package",
+  "Start service",
+  "Create user"
+ ]
+}

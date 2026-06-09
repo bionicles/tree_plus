@@ -1,0 +1,14 @@
+{
+ "path": "tests/more_languages/group3/ruby_test.rb",
+ "components": [
+  "module Greeter",
+  "  def self.say_hello",
+  "class HelloWorld",
+  "  def say_hello",
+  "class Human",
+  "  def self.bar",
+  "  def self.bar=(value)",
+  "class Doctor < Human",
+  "  def brachial_plexus(\n      roots,\n      trunks,\n      divisions: true,\n      cords: [],\n      branches: Time.now\n    )"
+ ]
+}

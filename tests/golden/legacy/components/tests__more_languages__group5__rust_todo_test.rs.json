@@ -1,0 +1,13 @@
+{
+ "path": "tests/more_languages/group5/rust_todo_test.rs",
+ "components": [
+  "TODO: This todo tests parse_todo",
+  "enum Color {\n    Red,\n    Blue,\n    Green,\n}",
+  "struct Point",
+  "trait Drawable",
+  "    fn draw(&self)",
+  "impl Drawable for Point",
+  "    fn draw(&self)",
+  "fn main()"
+ ]
+}

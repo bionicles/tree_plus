@@ -1,0 +1,699 @@
+📁 tree_plus (44 folders, 439 files)
+├── 📄 .env.test (4 tokens, 0 lines)
+├── 📁 .github (2 folders, 3 files)
+│   ├── 📄 dependabot.yml (128 tokens, 11 lines)
+│   └── 📁 workflows (1 folder, 2 files)
+│       ├── 📄 microsoft.yml (284 tokens, 40 lines)
+│       └── 📄 unix.yml (713 tokens, 92 lines)
+├── 📄 .gitignore (219 tokens, 57 lines)
+├── 📄 .mcp_server.pid (2 tokens, 1 line)
+├── 📄 Cargo.toml (206 tokens, 29 lines)
+├── 📄 claude-fable-5-rust-rewrite-goal.md (3,394 tokens, 434 lines)
+├── 📁 coverage (1 folder, 1 file)
+│   └── 📄 lcov.info (17,359 tokens, 2,180 lines)
+├── 📁 crates (11 folders, 27 files)
+│   ├── 📁 tree_plus_cli (3 folders, 3 files)
+│   │   ├── 📄 Cargo.toml (86 tokens, 15 lines)
+│   │   ├── 📁 src (1 folder, 1 file)
+│   │   │   └── 📄 main.rs (1,332 tokens, 174 lines)
+│   │   └── 📁 tests (1 folder, 1 file)
+│   │       └── 📄 cli.rs (701 tokens, 92 lines)
+│   └── 📁 tree_plus_core (7 folders, 24 files)
+│       ├── 📁 benches (1 folder, 1 file)
+│       │   └── 📄 tree_plus_bench.rs (608 tokens, 78 lines)
+│       ├── 📄 Cargo.toml (228 tokens, 36 lines)
+│       ├── 📁 examples (1 folder, 2 files)
+│       │   ├── 📄 dump_ast.rs (516 tokens, 55 lines)
+│       │   └── 📄 extract.rs (129 tokens, 16 lines)
+│       ├── 📁 src (3 folders, 18 files)
+│       │   ├── 📄 config.rs (304 tokens, 39 lines)
+│       │   ├── 📄 count.rs (1,346 tokens, 203 lines)
+│       │   ├── 📁 extract (2 folders, 10 files)
+│       │   │   ├── 📄 data.rs (5,115 tokens, 582 lines)
+│       │   │   ├── 📄 markdown.rs (1,531 tokens, 180 lines)
+│       │   │   ├── 📄 markers.rs (438 tokens, 60 lines)
+│       │   │   ├── 📄 mod.rs (2,520 tokens, 277 lines)
+│       │   │   ├── 📄 simple.rs (1,629 tokens, 216 lines)
+│       │   │   └── 📁 treesitter (1 folder, 5 files)
+│       │   │       ├── 📄 c_cpp.rs (5,979 tokens, 591 lines)
+│       │   │       ├── 📄 mod.rs (488 tokens, 66 lines)
+│       │   │       ├── 📄 python.rs (3,487 tokens, 346 lines)
+│       │   │       ├── 📄 rust.rs (2,785 tokens, 312 lines)
+│       │   │       └── 📄 typescript.rs (3,897 tokens, 420 lines)
+│       │   ├── 📄 ignore.rs (2,144 tokens, 307 lines)
+│       │   ├── 📄 lib.rs (222 tokens, 29 lines)
+│       │   ├── 📄 model.rs (928 tokens, 125 lines)
+│       │   ├── 📄 render.rs (2,741 tokens, 347 lines)
+│       │   ├── 📄 sort.rs (1,693 tokens, 214 lines)
+│       │   └── 📄 walk.rs (2,245 tokens, 260 lines)
+│       └── 📁 tests (1 folder, 2 files)
+│           ├── 📄 golden_parity.rs (1,809 tokens, 243 lines)
+│           └── 📄 robustness.rs (743 tokens, 86 lines)
+├── 📁 docs (1 folder, 4 files)
+│   ├── 📄 architecture.md (1,392 tokens, 113 lines)
+│   ├── 📄 language-roadmap.md (1,262 tokens, 64 lines)
+│   ├── 📄 performance.md (690 tokens, 64 lines)
+│   └── 📄 rust-port-differences.md (922 tokens, 67 lines)
+├── 📄 LICENSE (2,744 tokens, 81 lines)
+├── 📄 Makefile (801 tokens, 121 lines)
+├── 📄 nodemon.json (112 tokens, 24 lines)
+├── 📄 pyproject.toml (366 tokens, 51 lines)
+├── 📄 pytest.ini (20 tokens, 4 lines)
+├── 📄 README.md (99,851 tokens, 3,708 lines)
+├── 📁 tests (25 folders, 378 files)
+│   ├── 📄 .env.test (4 tokens, 0 lines)
+│   ├── 📄 build_absurdly_huge_jsonl.py (506 tokens, 65 lines)
+│   ├── 📁 dot_dot (2 folders, 4 files)
+│   │   ├── 📄 my_test_file.py (7 tokens, 2 lines)
+│   │   └── 📁 nested_dir (1 folder, 3 files)
+│   │       ├── 📄 .env.test (4 tokens, 0 lines)
+│   │       ├── 📄 pytest.ini (20 tokens, 4 lines)
+│   │       └── 📄 test_tp_dotdot.py (362 tokens, 52 lines)
+│   ├── 📁 empty_folder (2 folders, 0 files)
+│   │   └── 📁 is_empty (1 folder, 0 files)
+│   ├── 📁 folder_with_evil_logging (1 folder, 1 file)
+│   │   └── 📄 logging.py (11 tokens, 0 lines)
+│   ├── 📁 golden (6 folders, 246 files)
+│   │   ├── 📄 diff_components.py (417 tokens, 59 lines)
+│   │   ├── 📄 generate_legacy_goldens.py (1,499 tokens, 156 lines)
+│   │   └── 📁 legacy (5 folders, 244 files)
+│   │       ├── 📁 components (1 folder, 109 files)
+│   │       │   ├── 📄 tests__dot_dot__my_test_file.py.json (21 tokens, 5 lines)
+│   │       │   ├── 📄 tests__dot_dot__nested_dir__.env.test.json (22 tokens, 5
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__dot_dot__nested_dir__pytest.ini.json (17 tokens, 3
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__dot_dot__nested_dir__test_tp_dotdot.py.json (40
+│   │       │   │   tokens, 6 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__addamt.cobol.json (110
+│   │       │   │   tokens, 19 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__CUSTOMER-INVOICE.CBL.json
+│   │       │   │   (251 tokens, 39 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__JavaTest.java.json (236
+│   │       │   │   tokens, 28 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__JuliaTest.jl.json (189
+│   │       │   │   tokens, 16 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__KotlinTest.kt.json (533
+│   │       │   │   tokens, 51 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__lesson.cbl.json (259
+│   │       │   │   tokens, 44 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__LuaTest.lua.json (39
+│   │       │   │   tokens, 7 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__ObjectiveCTest.m.json (65
+│   │       │   │   tokens, 9 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__OcamlTest.ml.json (40
+│   │       │   │   tokens, 8 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__test.js.json (355 tokens,
+│   │       │   │   39 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__test.ts.json (541 tokens,
+│   │       │   │   40 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__apl_test.apl.json (49
+│   │       │   │   tokens, 7 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__c_test.c.json (290 tokens,
+│   │       │   │   38 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__go_test.go.json (111
+│   │       │   │   tokens, 11 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__PerlTest.pl.json (50
+│   │       │   │   tokens, 8 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__PhpTest.php.json (54
+│   │       │   │   tokens, 9 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__PowershellTest.ps1.json
+│   │       │   │   (315 tokens, 26 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__ScalaTest.scala.json (134
+│   │       │   │   tokens, 15 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__test.csv.json (31 tokens,
+│   │       │   │   9 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__bash_test.sh.json (55
+│   │       │   │   tokens, 10 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__cpp_test.cpp.json (591
+│   │       │   │   tokens, 73 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__csharp_test.cs.json (592
+│   │       │   │   tokens, 47 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__hallucination.tex.json
+│   │       │   │   (299 tokens, 29 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__ruby_test.rb.json (96
+│   │       │   │   tokens, 13 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__swift_test.swift.json (200
+│   │       │   │   tokens, 22 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test.lean.json (151
+│   │       │   │   tokens, 14 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test.capnp.json (124
+│   │       │   │   tokens, 22 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test.graphql.json (102
+│   │       │   │   tokens, 18 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test.proto.json (159
+│   │       │   │   tokens, 22 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test.sqlite.json (73
+│   │       │   │   tokens, 12 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test_Cargo.toml.json (69
+│   │       │   │   tokens, 11 lines)
+│   │       │   ├── 📄
+│   │       │   │   tests__more_languages__group3__test_json_rpc_2_0.json.json
+│   │       │   │   (48 tokens, 10 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test_openapi.yaml.json
+│   │       │   │   (120 tokens, 15 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test_openrpc.json.json (78
+│   │       │   │   tokens, 13 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test_pyproject.toml.json
+│   │       │   │   (99 tokens, 15 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__erl_test.erl.json (212
+│   │       │   │   tokens, 19 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__haskell_test.hs.json (121
+│   │       │   │   tokens, 7 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__mathematica_test.nb.json
+│   │       │   │   (35 tokens, 7 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__matlab_test.m.json (35
+│   │       │   │   tokens, 6 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__RTest.R.json (50 tokens, 8
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__more_languages__group4__rust_test.rs.json (775
+│   │       │   │   tokens, 49 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__test.zig.json (139 tokens,
+│   │       │   │   10 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__test_fsharp.fs.json (80
+│   │       │   │   tokens, 10 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__test_tcl_tk.tcl.json (41
+│   │       │   │   tokens, 7 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__tf_test.tf.json (67
+│   │       │   │   tokens, 11 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__ansible_test.yml.json (34
+│   │       │   │   tokens, 7 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__app-routing.module.ts.json
+│   │       │   │   (157 tokens, 6 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__app.component.ts.json (104
+│   │       │   │   tokens, 10 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__app.component.spec.ts.json
+│   │       │   │   (67 tokens, 9 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__app.module.ts.json (87
+│   │       │   │   tokens, 6 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__checkbox_test.md.json (146
+│   │       │   │   tokens, 22 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__checkbox_test.txt.json
+│   │       │   │   (104 tokens, 12 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__environment.test.ts.json
+│   │       │   │   (46 tokens, 9 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__hello_world.pyi.json (44
+│   │       │   │   tokens, 6 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__k8s_test.yaml.json (42
+│   │       │   │   tokens, 7 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__Makefile.json (62 tokens,
+│   │       │   │   13 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__requirements_test.txt.json
+│   │       │   │   (59 tokens, 13 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__rust_todo_test.rs.json (75
+│   │       │   │   tokens, 12 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__sql_test.sql.json (190
+│   │       │   │   tokens, 26 lines)
+│   │       │   ├── 📄
+│   │       │   │   tests__more_languages__group5__standard-app-routing.module.t
+│   │       │   │   s.json (106 tokens, 5 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__test.env.json (98 tokens,
+│   │       │   │   24 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__testJsonSchema.json.json
+│   │       │   │   (59 tokens, 8 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__testPackage.json.json (74
+│   │       │   │   tokens, 12 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__tickets.component.ts.json
+│   │       │   │   (647 tokens, 53 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__catastrophic.c.json (1,677
+│   │       │   │   tokens, 195 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__cpp_examples_impl.cc.json
+│   │       │   │   (50 tokens, 6 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__cpp_examples_impl.cu.json
+│   │       │   │   (43 tokens, 6 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__cpp_examples_impl.h.json
+│   │       │   │   (41 tokens, 6 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__edge_case.hpp.json (18
+│   │       │   │   tokens, 3 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__fractal.thy.json (816
+│   │       │   │   tokens, 29 lines)
+│   │       │   ├── 📄
+│   │       │   │   tests__more_languages__group6__Microsoft.PowerShell_profile.
+│   │       │   │   ps1.json (354 tokens, 34 lines)
+│   │       │   ├── 📄
+│   │       │   │   tests__more_languages__group6__python_complex_class.py.json
+│   │       │   │   (30 tokens, 5 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__ramda__cloneRegExp.js.json
+│   │       │   │   (33 tokens, 5 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__ramda_prop.js.json (317
+│   │       │   │   tokens, 8 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__tensorflow_flags.h.json
+│   │       │   │   (2,584 tokens, 101 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__test.f.json (112 tokens,
+│   │       │   │   10 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__torch.rst.json (34 tokens,
+│   │       │   │   6 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__yc.html.json (17 tokens, 3
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__more_languages__group7__absurdly_huge.jsonl.json
+│   │       │   │   (68 tokens, 13 lines)
+│   │       │   ├── 📄 tests__more_languages__group7__angular_crud.ts.json (217
+│   │       │   │   tokens, 17 lines)
+│   │       │   ├── 📄 tests__more_languages__group7__structure.py.json (338
+│   │       │   │   tokens, 34 lines)
+│   │       │   ├── 📄 tests__more_languages__group7__test.wgsl.json (288
+│   │       │   │   tokens, 19 lines)
+│   │       │   ├── 📄 tests__more_languages__group7__test.metal.json (135
+│   │       │   │   tokens, 10 lines)
+│   │       │   ├── 📄 tests__more_languages__group_lisp__clojure_test.clj.json
+│   │       │   │   (63 tokens, 12 lines)
+│   │       │   ├── 📄 tests__more_languages__group_lisp__LispTest.lisp.json (29
+│   │       │   │   tokens, 6 lines)
+│   │       │   ├── 📄 tests__more_languages__group_lisp__racket_struct.rkt.json
+│   │       │   │   (25 tokens, 5 lines)
+│   │       │   ├── 📄 tests__more_languages__group_lisp__test_scheme.scm.json
+│   │       │   │   (54 tokens, 10 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__AAPLShaders.metal.json
+│   │       │   │   (1,202 tokens, 29 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__crystal_test.cr.json
+│   │       │   │   (20 tokens, 3 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__dart_test.dart.json
+│   │       │   │   (20 tokens, 3 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__elixir_test.exs.json
+│   │       │   │   (20 tokens, 3 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__forward.frag.json (19
+│   │       │   │   tokens, 3 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__forward.vert.json (19
+│   │       │   │   tokens, 3 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__nodemon.json.json (19
+│   │       │   │   tokens, 3 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__sas_test.sas.json (19
+│   │       │   │   tokens, 3 lines)
+│   │       │   ├── 📄
+│   │       │   │   tests__more_languages__group_todo__test_setup_py.test.json
+│   │       │   │   (21 tokens, 3 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__testTypings.d.ts.json
+│   │       │   │   (20 tokens, 3 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__vba_test.bas.json (19
+│   │       │   │   tokens, 3 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__wgsl_test.wgsl.json
+│   │       │   │   (70 tokens, 7 lines)
+│   │       │   ├── 📄 tests__path_to_test__class_method_type.py.json (340
+│   │       │   │   tokens, 32 lines)
+│   │       │   ├── 📄 tests__path_to_test__empty.py.json (15 tokens, 3 lines)
+│   │       │   ├── 📄 tests__path_to_test__file.md.json (20 tokens, 5 lines)
+│   │       │   ├── 📄 tests__path_to_test__file.py.json (21 tokens, 5 lines)
+│   │       │   ├── 📄 tests__path_to_test__file.txt.json (15 tokens, 3 lines)
+│   │       │   └── 📄 tests__path_to_test__version.py.json (23 tokens, 5 lines)
+│   │       ├── 📁 counts (1 folder, 109 files)
+│   │       │   ├── 📄 tests__dot_dot__my_test_file.py.json (20 tokens, 0 lines)
+│   │       │   ├── 📄 tests__dot_dot__nested_dir__.env.test.json (21 tokens, 0
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__dot_dot__nested_dir__pytest.ini.json (22 tokens, 0
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__dot_dot__nested_dir__test_tp_dotdot.py.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__addamt.cobol.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__CUSTOMER-INVOICE.CBL.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__JavaTest.java.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__JuliaTest.jl.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__KotlinTest.kt.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__lesson.cbl.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__LuaTest.lua.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__ObjectiveCTest.m.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__OcamlTest.ml.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group1__test.js.json (22 tokens, 0
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__more_languages__group1__test.ts.json (22 tokens, 0
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__more_languages__group2__apl_test.apl.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__c_test.c.json (23 tokens,
+│   │       │   │   0 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__go_test.go.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__PerlTest.pl.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__PhpTest.php.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__PowershellTest.ps1.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__ScalaTest.scala.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group2__test.csv.json (15 tokens,
+│   │       │   │   0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__bash_test.sh.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__cpp_test.cpp.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__csharp_test.cs.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__hallucination.tex.json (25
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__ruby_test.rb.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__swift_test.swift.json (25
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test.lean.json (23 tokens,
+│   │       │   │   0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test.capnp.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test.graphql.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test.proto.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test.sqlite.json (16
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test_Cargo.toml.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄
+│   │       │   │   tests__more_languages__group3__test_json_rpc_2_0.json.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test_openapi.yaml.json (25
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test_openrpc.json.json (25
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group3__test_pyproject.toml.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__erl_test.erl.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__haskell_test.hs.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__mathematica_test.nb.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__matlab_test.m.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__RTest.R.json (22 tokens, 0
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__more_languages__group4__rust_test.rs.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__test.zig.json (22 tokens,
+│   │       │   │   0 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__test_fsharp.fs.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__test_tcl_tk.tcl.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group4__tf_test.tf.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__ansible_test.yml.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__app-routing.module.ts.json
+│   │       │   │   (26 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__app.component.ts.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__app.component.spec.ts.json
+│   │       │   │   (26 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__app.module.ts.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__checkbox_test.md.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__checkbox_test.txt.json (25
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__environment.test.ts.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__hello_world.pyi.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__k8s_test.yaml.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__Makefile.json (22 tokens,
+│   │       │   │   0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__requirements_test.txt.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__rust_todo_test.rs.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__sql_test.sql.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄
+│   │       │   │   tests__more_languages__group5__standard-app-routing.module.t
+│   │       │   │   s.json (28 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__test.env.json (22 tokens,
+│   │       │   │   0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__testJsonSchema.json.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__testPackage.json.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group5__tickets.component.ts.json
+│   │       │   │   (26 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__catastrophic.c.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__cpp_examples_impl.cc.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__cpp_examples_impl.cu.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__cpp_examples_impl.h.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__edge_case.hpp.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__fractal.thy.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄
+│   │       │   │   tests__more_languages__group6__Microsoft.PowerShell_profile.
+│   │       │   │   ps1.json (29 tokens, 0 lines)
+│   │       │   ├── 📄
+│   │       │   │   tests__more_languages__group6__python_complex_class.py.json
+│   │       │   │   (26 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__ramda__cloneRegExp.js.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__ramda_prop.js.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__tensorflow_flags.h.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__test.f.json (22 tokens, 0
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__more_languages__group6__torch.rst.json (22 tokens,
+│   │       │   │   0 lines)
+│   │       │   ├── 📄 tests__more_languages__group6__yc.html.json (23 tokens, 0
+│   │       │   │   lines)
+│   │       │   ├── 📄 tests__more_languages__group7__absurdly_huge.jsonl.json
+│   │       │   │   (26 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group7__angular_crud.ts.json (25
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group7__structure.py.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group7__test.wgsl.json (23 tokens,
+│   │       │   │   0 lines)
+│   │       │   ├── 📄 tests__more_languages__group7__test.metal.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_lisp__clojure_test.clj.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_lisp__LispTest.lisp.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_lisp__racket_struct.rkt.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_lisp__test_scheme.scm.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__AAPLShaders.metal.json
+│   │       │   │   (26 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__crystal_test.cr.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__dart_test.dart.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__elixir_test.exs.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__forward.frag.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__forward.vert.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__nodemon.json.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__sas_test.sas.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄
+│   │       │   │   tests__more_languages__group_todo__test_setup_py.test.json
+│   │       │   │   (26 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__testTypings.d.ts.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__vba_test.bas.json (24
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__more_languages__group_todo__wgsl_test.wgsl.json
+│   │       │   │   (25 tokens, 0 lines)
+│   │       │   ├── 📄 tests__path_to_test__class_method_type.py.json (23
+│   │       │   │   tokens, 0 lines)
+│   │       │   ├── 📄 tests__path_to_test__empty.py.json (19 tokens, 0 lines)
+│   │       │   ├── 📄 tests__path_to_test__file.md.json (19 tokens, 0 lines)
+│   │       │   ├── 📄 tests__path_to_test__file.py.json (19 tokens, 0 lines)
+│   │       │   ├── 📄 tests__path_to_test__file.txt.json (20 tokens, 0 lines)
+│   │       │   └── 📄 tests__path_to_test__version.py.json (20 tokens, 0 lines)
+│   │       ├── 📁 trees (1 folder, 13 files)
+│   │       │   ├── 📄 dot_dot.txt (99 tokens, 10 lines)
+│   │       │   ├── 📄 more_languages.txt (22,977 tokens, 2,225 lines)
+│   │       │   ├── 📄 more_languages_group1.txt (2,909 tokens, 374 lines)
+│   │       │   ├── 📄 more_languages_group2.txt (1,111 tokens, 135 lines)
+│   │       │   ├── 📄 more_languages_group3.txt (3,035 tokens, 346 lines)
+│   │       │   ├── 📄 more_languages_group4.txt (1,737 tokens, 214 lines)
+│   │       │   ├── 📄 more_languages_group5.txt (2,288 tokens, 257 lines)
+│   │       │   ├── 📄 more_languages_group6.txt (6,838 tokens, 615 lines)
+│   │       │   ├── 📄 more_languages_group7.txt (1,148 tokens, 126 lines)
+│   │       │   ├── 📄 more_languages_group_lisp.txt (155 tokens, 22 lines)
+│   │       │   ├── 📄 more_languages_group_todo.txt (1,491 tokens, 111 lines)
+│   │       │   ├── 📄 multi_seed.txt (3,789 tokens, 427 lines)
+│   │       │   └── 📄 path_to_test.txt (445 tokens, 51 lines)
+│   │       └── 📁 trees_v1 (1 folder, 13 files)
+│   │           ├── 📄 dot_dot.txt (99 tokens, 10 lines)
+│   │           ├── 📄 more_languages.txt (10,782 tokens, 1,122 lines)
+│   │           ├── 📄 more_languages_group1.txt (1,130 tokens, 146 lines)
+│   │           ├── 📄 more_languages_group2.txt (415 tokens, 54 lines)
+│   │           ├── 📄 more_languages_group3.txt (1,240 tokens, 149 lines)
+│   │           ├── 📄 more_languages_group4.txt (1,020 tokens, 123 lines)
+│   │           ├── 📄 more_languages_group5.txt (2,099 tokens, 235 lines)
+│   │           ├── 📄 more_languages_group6.txt (2,821 tokens, 300 lines)
+│   │           ├── 📄 more_languages_group7.txt (705 tokens, 83 lines)
+│   │           ├── 📄 more_languages_group_lisp.txt (52 tokens, 5 lines)
+│   │           ├── 📄 more_languages_group_todo.txt (140 tokens, 13 lines)
+│   │           ├── 📄 multi_seed.txt (1,783 tokens, 199 lines)
+│   │           └── 📄 path_to_test.txt (445 tokens, 51 lines)
+│   ├── 📁 more_languages (10 folders, 99 files)
+│   │   ├── 📁 group1 (1 folder, 11 files)
+│   │   │   ├── 📄 addamt.cobol (441 tokens, 40 lines)
+│   │   │   ├── 📄 CUSTOMER-INVOICE.CBL (412 tokens, 60 lines)
+│   │   │   ├── 📄 JavaTest.java (578 tokens, 86 lines)
+│   │   │   ├── 📄 JuliaTest.jl (381 tokens, 63 lines)
+│   │   │   ├── 📄 KotlinTest.kt (974 tokens, 171 lines)
+│   │   │   ├── 📄 lesson.cbl (635 tokens, 78 lines)
+│   │   │   ├── 📄 LuaTest.lua (83 tokens, 16 lines)
+│   │   │   ├── 📄 ObjectiveCTest.m (62 tokens, 16 lines)
+│   │   │   ├── 📄 OcamlTest.ml (49 tokens, 12 lines)
+│   │   │   ├── 📄 test.js (757 tokens, 154 lines)
+│   │   │   └── 📄 test.ts (832 tokens, 165 lines)
+│   │   ├── 📁 group2 (1 folder, 8 files)
+│   │   │   ├── 📄 apl_test.apl (28 tokens, 5 lines)
+│   │   │   ├── 📄 c_test.c (837 tokens, 142 lines)
+│   │   │   ├── 📄 go_test.go (179 tokens, 46 lines)
+│   │   │   ├── 📄 PerlTest.pl (63 tokens, 20 lines)
+│   │   │   ├── 📄 PhpTest.php (70 tokens, 19 lines)
+│   │   │   ├── 📄 PowershellTest.ps1 (459 tokens, 89 lines)
+│   │   │   ├── 📄 ScalaTest.scala (171 tokens, 40 lines)
+│   │   │   └── 📄 test.csv (0 tokens, 0 lines)
+│   │   ├── 📁 group3 (1 folder, 16 files)
+│   │   │   ├── 📄 bash_test.sh (127 tokens, 22 lines)
+│   │   │   ├── 📄 cpp_test.cpp (1,670 tokens, 259 lines)
+│   │   │   ├── 📄 csharp_test.cs (957 tokens, 146 lines)
+│   │   │   ├── 📄 hallucination.tex (1,633 tokens, 126 lines)
+│   │   │   ├── 📄 ruby_test.rb (138 tokens, 37 lines)
+│   │   │   ├── 📄 swift_test.swift (469 tokens, 110 lines)
+│   │   │   ├── 📄 test.lean (289 tokens, 42 lines)
+│   │   │   ├── 📄 test.capnp (117 tokens, 30 lines)
+│   │   │   ├── 📄 test.graphql (66 tokens, 21 lines)
+│   │   │   ├── 📄 test.proto (142 tokens, 34 lines)
+│   │   │   ├── 📄 test.sqlite (0 tokens, 0 lines)
+│   │   │   ├── 📄 test_Cargo.toml (119 tokens, 18 lines)
+│   │   │   ├── 📄 test_json_rpc_2_0.json (26 tokens, 6 lines)
+│   │   │   ├── 📄 test_openapi.yaml (753 tokens, 92 lines)
+│   │   │   ├── 📄 test_openrpc.json (225 tokens, 44 lines)
+│   │   │   └── 📄 test_pyproject.toml (304 tokens, 39 lines)
+│   │   ├── 📁 group4 (1 folder, 10 files)
+│   │   │   ├── 📄 erl_test.erl (480 tokens, 68 lines)
+│   │   │   ├── 📄 haskell_test.hs (414 tokens, 41 lines)
+│   │   │   ├── 📄 mathematica_test.nb (133 tokens, 21 lines)
+│   │   │   ├── 📄 matlab_test.m (48 tokens, 12 lines)
+│   │   │   ├── 📄 RTest.R (367 tokens, 46 lines)
+│   │   │   ├── 📄 rust_test.rs (1,368 tokens, 259 lines)
+│   │   │   ├── 📄 test.zig (397 tokens, 60 lines)
+│   │   │   ├── 📄 test_fsharp.fs (92 tokens, 27 lines)
+│   │   │   ├── 📄 test_tcl_tk.tcl (54 tokens, 16 lines)
+│   │   │   └── 📄 tf_test.tf (202 tokens, 38 lines)
+│   │   ├── 📁 group5 (1 folder, 19 files)
+│   │   │   ├── 📄 ansible_test.yml (55 tokens, 14 lines)
+│   │   │   ├── 📄 app-routing.module.ts (287 tokens, 28 lines)
+│   │   │   ├── 📄 app.component.spec.ts (410 tokens, 47 lines)
+│   │   │   ├── 📄 app.component.ts (271 tokens, 45 lines)
+│   │   │   ├── 📄 app.module.ts (374 tokens, 43 lines)
+│   │   │   ├── 📄 checkbox_test.md (191 tokens, 29 lines)
+│   │   │   ├── 📄 checkbox_test.txt (257 tokens, 33 lines)
+│   │   │   ├── 📄 environment.test.ts (197 tokens, 19 lines)
+│   │   │   ├── 📄 hello_world.pyi (22 tokens, 3 lines)
+│   │   │   ├── 📄 k8s_test.yaml (140 tokens, 37 lines)
+│   │   │   ├── 📄 Makefile (714 tokens, 84 lines)
+│   │   │   ├── 📄 requirements_test.txt (29 tokens, 10 lines)
+│   │   │   ├── 📄 rust_todo_test.rs (92 tokens, 26 lines)
+│   │   │   ├── 📄 sql_test.sql (270 tokens, 51 lines)
+│   │   │   ├── 📄 standard-app-routing.module.ts (100 tokens, 16 lines)
+│   │   │   ├── 📄 test.env (190 tokens, 25 lines)
+│   │   │   ├── 📄 testJsonSchema.json (421 tokens, 48 lines)
+│   │   │   ├── 📄 testPackage.json (349 tokens, 43 lines)
+│   │   │   └── 📄 tickets.component.ts (7,160 tokens, 903 lines)
+│   │   ├── 📁 group6 (1 folder, 14 files)
+│   │   │   ├── 📄 catastrophic.c (5,339 tokens, 754 lines)
+│   │   │   ├── 📄 cpp_examples_impl.cc (60 tokens, 10 lines)
+│   │   │   ├── 📄 cpp_examples_impl.cu (37 tokens, 10 lines)
+│   │   │   ├── 📄 cpp_examples_impl.h (22 tokens, 6 lines)
+│   │   │   ├── 📄 edge_case.hpp (426 tokens, 28 lines)
+│   │   │   ├── 📄 fractal.thy (1,712 tokens, 147 lines)
+│   │   │   ├── 📄 Microsoft.PowerShell_profile.ps1 (3,346 tokens, 497 lines)
+│   │   │   ├── 📄 python_complex_class.py (10 tokens, 2 lines)
+│   │   │   ├── 📄 ramda__cloneRegExp.js (173 tokens, 9 lines)
+│   │   │   ├── 📄 ramda_prop.js (646 tokens, 85 lines)
+│   │   │   ├── 📄 tensorflow_flags.h (7,628 tokens, 668 lines)
+│   │   │   ├── 📄 test.f (181 tokens, 30 lines)
+│   │   │   ├── 📄 torch.rst (60 tokens, 8 lines)
+│   │   │   └── 📄 yc.html (9,063 tokens, 169 lines)
+│   │   ├── 📁 group7 (1 folder, 5 files)
+│   │   │   ├── 📄 absurdly_huge.jsonl (8,347 tokens, 126 lines)
+│   │   │   ├── 📄 angular_crud.ts (1,192 tokens, 148 lines)
+│   │   │   ├── 📄 structure.py (400 tokens, 92 lines)
+│   │   │   ├── 📄 test.wgsl (528 tokens, 87 lines)
+│   │   │   └── 📄 test.metal (272 tokens, 34 lines)
+│   │   ├── 📁 group_lisp (1 folder, 4 files)
+│   │   │   ├── 📄 clojure_test.clj (682 tokens, 85 lines)
+│   │   │   ├── 📄 LispTest.lisp (25 tokens, 6 lines)
+│   │   │   ├── 📄 racket_struct.rkt (14 tokens, 1 line)
+│   │   │   └── 📄 test_scheme.scm (360 tokens, 44 lines)
+│   │   └── 📁 group_todo (1 folder, 12 files)
+│   │       ├── 📄 AAPLShaders.metal (5,780 tokens, 566 lines)
+│   │       ├── 📄 crystal_test.cr (48 tokens, 15 lines)
+│   │       ├── 📄 dart_test.dart (108 tokens, 24 lines)
+│   │       ├── 📄 elixir_test.exs (39 tokens, 10 lines)
+│   │       ├── 📄 forward.frag (739 tokens, 87 lines)
+│   │       ├── 📄 forward.vert (359 tokens, 48 lines)
+│   │       ├── 📄 nodemon.json (118 tokens, 20 lines)
+│   │       ├── 📄 sas_test.sas (97 tokens, 22 lines)
+│   │       ├── 📄 test_setup_py.test (133 tokens, 24 lines)
+│   │       ├── 📄 testTypings.d.ts (158 tokens, 23 lines)
+│   │       ├── 📄 vba_test.bas (67 tokens, 16 lines)
+│   │       └── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
+│   ├── 📁 path_to_test (1 folder, 6 files)
+│   │   ├── 📄 class_method_type.py (525 tokens, 101 lines)
+│   │   ├── 📄 empty.py (0 tokens, 0 lines)
+│   │   ├── 📄 file.md (11 tokens, 2 lines)
+│   │   ├── 📄 file.py (18 tokens, 3 lines)
+│   │   ├── 📄 file.txt (10 tokens, 2 lines)
+│   │   └── 📄 version.py (13 tokens, 2 lines)
+│   ├── 📄 pytest.ini (20 tokens, 4 lines)
+│   ├── 📁 readme_updates (1 folder, 6 files)
+│   │   ├── 📄 .gitkeep (0 tokens, 0 lines)
+│   │   ├── 📄 medium_README_sink.md (37,636 tokens, 3,733 lines)
+│   │   ├── 📄 medium_README_source.md (149 tokens, 48 lines)
+│   │   ├── 📄 mini_README_sink.md (7,833 tokens, 785 lines)
+│   │   ├── 📄 mini_README_source.md (27 tokens, 8 lines)
+│   │   └── 📄 renamed_dry_run_README.md (38,153 tokens, 3,705 lines)
+│   ├── 📄 tensorflow_expectation.py (2,554 tokens, 97 lines)
+│   ├── 📄 test_cli.py (2,218 tokens, 252 lines)
+│   ├── 📄 test_deploy.py (2,045 tokens, 225 lines)
+│   ├── 📄 test_dotenv.py (45 tokens, 10 lines)
+│   ├── 📄 test_e2e.py (3,630 tokens, 429 lines)
+│   ├── 📄 test_engine.py (3,869 tokens, 424 lines)
+│   ├── 📄 test_more_language_units.py (24,414 tokens, 2,559 lines)
+│   ├── 📄 test_programs.py (509 tokens, 88 lines)
+│   ├── 📄 test_units.py (1,914 tokens, 261 lines)
+│   ├── 📄 test_web.py (42 tokens, 6 lines)
+│   └── 📁 version_increments (1 folder, 3 files)
+│       ├── 📄 renamed_dry_run_version.py (12 tokens, 1 line)
+│       ├── 📄 test_sink_version.py (12 tokens, 1 line)
+│       └── 📄 test_source_version.py (12 tokens, 2 lines)
+├── 📄 tree_plus_cli.py (2,283 tokens, 331 lines)
+├── 📁 tree_plus_programs (1 folder, 4 files)
+│   ├── 📄 hello_tree_plus.py (545 tokens, 80 lines)
+│   ├── 📄 rewrite.py (4,017 tokens, 471 lines)
+│   ├── 📄 stub_tests.py (1,348 tokens, 180 lines)
+│   └── 📄 test_stub_tests.py (79 tokens, 20 lines)
+└── 📁 tree_plus_src (2 folders, 10 files)
+    ├── 📄 count_tokens_lines.py (1,323 tokens, 209 lines)
+    ├── 📄 debug.py (186 tokens, 39 lines)
+    ├── 📄 deploy.py (2,058 tokens, 230 lines)
+    ├── 📄 engine.py (12,042 tokens, 1,438 lines)
+    ├── 📄 ignore.py (2,342 tokens, 332 lines)
+    ├── 📄 isabelle_symbols.py (2,146 tokens, 462 lines)
+    ├── 📄 parse_file.py (27,040 tokens, 2,959 lines)
+    ├── 📁 scripts (1 folder, 1 file)
+    │   └── 📄 alias_tree_plus.sh (241 tokens, 30 lines)
+    ├── 📄 version.py (12 tokens, 1 line)
+    └── 📄 web.py (2,409 tokens, 321 lines)

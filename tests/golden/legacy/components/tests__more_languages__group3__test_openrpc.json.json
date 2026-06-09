@@ -1,0 +1,14 @@
+{
+ "path": "tests/more_languages/group3/test_openrpc.json",
+ "components": [
+  "openrpc: 1.2.1",
+  "info:",
+  "    title: Demo Petstore",
+  "    version: 1.0.0",
+  "methods:",
+  "    listPets: List all pets",
+  "        params:",
+  "            - limit: integer",
+  "        result: pets = An array of pets"
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "path": "tests/more_languages/group4/test_tcl_tk.tcl",
+ "components": [
+  "proc sayHello {}",
+  "proc arrg { input }",
+  "proc multiLine {\n    x,\n    y\n}"
+ ]
+}

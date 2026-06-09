@@ -1,0 +1,14 @@
+{
+ "path": "tests/more_languages/group7/absurdly_huge.jsonl",
+ "components": [
+  "SMILES: str",
+  "Yield: float",
+  "Temperature: int",
+  "Pressure: float",
+  "Solvent: str",
+  "Success: bool",
+  "Reaction_Conditions: dict",
+  "Products: list",
+  "EdgeCasesMissed: None"
+ ]
+}

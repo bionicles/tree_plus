@@ -1,0 +1,20 @@
+{
+ "path": "tests/more_languages/group7/test.wgsl",
+ "components": [
+  "alias MyVec = vec4<f32>",
+  "alias AnotherVec = vec2<f32>",
+  "struct VertexInput",
+  "struct VertexOutput",
+  "struct MyUniforms",
+  "@group(0) @binding(0) var<uniform> u_mvp: mat4x4<f32>",
+  "@group(0) @binding(1) var<uniform> u_color: MyVec",
+  "@group(1) @binding(0) var my_texture: texture_2d<f32>",
+  "@group(1) @binding(1) var my_sampler: sampler",
+  "@vertex\nfn vs_main(in: VertexInput) -> VertexOutput",
+  "@fragment\nfn fs_main(in: VertexOutput) -> @location(0) vec4<f32>",
+  "@compute @workgroup_size(8, 8, 1)\nfn cs_main(@builtin(global_invocation_id) global_id: vec3<u32>)",
+  "fn helper_function(val: f32) -> f32",
+  "struct AnotherStruct",
+  "@compute\n@workgroup_size(8, 8, 1)\nfn multi_line_edge_case(\n    @builtin(global_invocation_id)\n    globalId       : vec3<u32>,\n    @group(1)\n    @binding(0)\n    srcTexture     : texture_2d<f32>,\n    @group(1)\n    @binding(1)\n    srcSampler     : sampler,\n    @group(0)\n    @binding(0)\n    uniformsPtr    : ptr<uniform, MyUniforms>,\n    storageBuffer  : ptr<storage, array<vec4<f32>, 64>, read_write>,\n)"
+ ]
+}

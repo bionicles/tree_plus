@@ -1,0 +1,7 @@
+{
+ "path": "tests/more_languages/group6/torch.rst",
+ "components": [
+  "# libtorch (C++-only)",
+  "- Building libtorch using Python"
+ ]
+}

@@ -1,0 +1,11 @@
+{
+ "path": "tests/more_languages/group6/test.f",
+ "components": [
+  "MODULE basic_mod",
+  "    TYPE :: person\n        CHARACTER(LEN=50) :: name\n        INTEGER :: age\n    END TYPE person",
+  "    SUBROUTINE short_hello(happy, path)\n    END SUBROUTINE short_hello",
+  "    SUBROUTINE long_hello(\n        p,\n        message\n    )\n    END SUBROUTINE long_hello",
+  "END MODULE basic_mod",
+  "PROGRAM HelloFortran\nEND PROGRAM HelloFortran"
+ ]
+}

@@ -1,0 +1,7 @@
+{
+ "path": "tests/dot_dot/nested_dir/test_tp_dotdot.py",
+ "components": [
+  "def ignore_tokens_lines_test(text: str) -> str",
+  "def test_tree_plus_dotdot()"
+ ]
+}

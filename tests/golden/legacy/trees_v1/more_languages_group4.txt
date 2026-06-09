@@ -1,0 +1,123 @@
+📁 group4 (1 folder, 10 files)
+├── 📄 erl_test.erl (480 tokens, 68 lines)
+├── 📄 haskell_test.hs (414 tokens, 41 lines)
+├── 📄 mathematica_test.nb (133 tokens, 21 lines)
+├── 📄 matlab_test.m (48 tokens, 12 lines)
+├── 📄 RTest.R (367 tokens, 46 lines)
+├── 📄 rust_test.rs (1,368 tokens, 259 lines)
+│   ├── fn at_beginning<'a>(&'a str)
+│   ├── pub enum Days<E: EdgeCase> {
+│   │       #\[default]
+│   │       Sun,
+│   │       Mon,
+│   │       #\[error("edge case {idx}, expected at least {} and at most {}",
+│   │   .limits.lo, .limits.hi)]
+│   │       Tue,
+│   │       Wed,
+│   │       Thu(i16, bool),
+│   │       Fri { day: u8 },
+│   │       Sat {
+│   │           urday: String,
+│   │           edge_case: E,
+│   │       },
+│   │   }
+│   ├── struct Point
+│   ├── impl Point
+│   ├──     fn get_origin() -> Point
+│   ├── struct Person
+│   ├── impl Person
+│   ├──     fn greet(&self)
+│   ├── fn add_two_longs(x1: i64, x2: i64) -> i64
+│   ├── fn add_two_longs_longer(
+│   │       x1: i64,
+│   │       x2: i64,
+│   │   ) -> i64
+│   ├── const fn multiply_by_two(num: f64) -> f64
+│   ├── fn get_first_character(s: &str) -> Option<char>
+│   ├── trait Drawable
+│   ├──     fn draw(&self)
+│   ├── impl Drawable for Point
+│   ├──     fn draw(&self)
+│   ├── fn with_generic<D: Drawable>(d: D)
+│   ├── fn with_generic<D>(d: D)
+│   │   where
+│   │       D: Drawable
+│   ├── fn main()
+│   ├── pub struct VisibleStruct
+│   ├── mod my_module
+│   ├──     pub struct AlsoVisibleStruct<T>(T, T)
+│   ├── macro_rules! say_hello
+│   ├── #[macro_export]
+│   │   macro_rules! hello_tree_plus
+│   ├── pub mod lib
+│   ├──     pub mod interfaces
+│   ├──     mod engine
+│   ├── pub fn flow<S1, S2, S3, S4, E, T, L>(
+│   │       source: S1,
+│   │       extractor: E,
+│   │       inbox: S2,
+│   │       transformer: T,
+│   │       outbox: S3,
+│   │       loader: L,
+│   │       sink: &mut S4,
+│   │   ) -> Result<(), Box<dyn Error>>
+│   │   where
+│   │       S1: Extractable,
+│   │       S2: Extractable + Loadable,
+│   │       S3: Extractable + Loadable,
+│   │       S4: Loadable,
+│   │       E: Extractor<S1, S2>,
+│   │       T: Transformer<S2, S3>,
+│   │       L: Loader<S3, S4>
+│   ├── trait Container
+│   ├──     fn items(&self) -> impl Iterator<Item = Widget>
+│   ├── trait HttpService
+│   ├──     async fn fetch(&self, url: Url) -> HtmlBody
+│   ├── struct Pair<T, U>
+│   ├── trait Transformer<T>
+│   ├──     fn transform(&self, input: T) -> T
+│   ├── impl<T: std::ops::Add<Output = T> + Copy> Transformer<T> for Pair<T, T>
+│   ├──     fn transform(&self, input: T) -> T
+│   ├── fn main()
+│   ├── async fn handle_get(State(pool): State<PgPool>) -> Result<Html<String>,
+│   │   (StatusCode, String)>
+│   │   where
+│   │       Bion: Cool
+│   ├── #[macro_export]
+│   │   macro_rules! unit
+│   ├──             fn insert(
+│   │                   &mut self,
+│   │                   key: (),
+│   │                   value: $unit_dtype,
+│   │               ) -> Result<Option<$unit_dtype>, ETLError>
+│   ├── pub async fn handle_get_axum_route(
+│   │       Session { maybe_claims }: Session,
+│   │       Path(RouteParams {
+│   │           alpha,
+│   │           bravo,
+│   │           charlie,
+│   │           edge_case
+│   │       }): Path<RouteParams>,
+│   │   ) -> ServerResult<Response>
+│   ├── fn encode_pipeline(cmds: &[Cmd], atomic: bool) -> Vec<u8>
+│   ├── pub async fn handle_post_yeet(
+│   │       State(auth_backend): State<AuthBackend>,
+│   │       Session { maybe_claims }: Session,
+│   │       Form(yeet_form): Form<YeetForm>,
+│   │   ) -> Result<Response, AuthError>
+│   └── pub async fn handle_get_thingy(
+│           session: Session,
+│           State(ApiBackend {
+│               page_cache,
+│               auth_backend,
+│               library_sql,
+│               some_data_cache,
+│               metadata_cache,
+│               thingy_client,
+│               ..
+│           }): State<ApiBackend>,
+│       ) -> ServerResult<Response>
+├── 📄 test.zig (397 tokens, 60 lines)
+├── 📄 test_fsharp.fs (92 tokens, 27 lines)
+├── 📄 test_tcl_tk.tcl (54 tokens, 16 lines)
+└── 📄 tf_test.tf (202 tokens, 38 lines)

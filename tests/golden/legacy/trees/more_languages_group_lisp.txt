@@ -1,0 +1,22 @@
+📁 group_lisp (1 folder, 4 files)
+├── 📄 clojure_test.clj (682 tokens, 85 lines)
+│   ├── defprotocol P
+│   ├── defrecord Person
+│   ├── defn -main
+│   ├── ns bion.likes_trees
+│   ├── def repo-url
+│   ├── defn config
+│   ├── defmacro with-os
+│   └── defrecord SetFullElement
+├── 📄 LispTest.lisp (25 tokens, 6 lines)
+│   ├── defstruct person
+│   └── defun greet
+├── 📄 racket_struct.rkt (14 tokens, 1 line)
+│   └── struct point
+└── 📄 test_scheme.scm (360 tokens, 44 lines)
+    ├── define topological-sort
+    ├──   define table
+    ├──   define queue
+    ├──   define result
+    ├──   define set-up
+    └──   define traverse

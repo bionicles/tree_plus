@@ -1,0 +1,9 @@
+{
+ "path": "tests/more_languages/group6/ramda_prop.js",
+ "components": [
+  "/**\n * Returns a function that when supplied an object returns the indicated\n * property of that object, if it exists.\n * @category Object\n * @typedefn Idx = String | Int | Symbol\n * @sig Idx -> {s: a} -> a | Undefined\n * @param {String|Number} p The property name or array index\n * @param {Object} obj The object to query\n * @return {*} The value at `obj.p`.\n */\nvar prop = _curry2(function prop(p, obj)",
+  "/**\n * Solves equations of the form a * x = b\n * @param {{\n *  z: number\n * }} x\n */\nfunction foo(x)",
+  "/**\n * Deconstructs an array field from the input documents to output a document for each element.\n * Each output document is the input document with the value of the array field replaced by the element.\n * @category Object\n * @sig String -> {k: [v]} -> [{k: v}]\n * @param {String} key The key to determine which property of the object should be unwound.\n * @param {Object} object The object containing the list to unwind at the property named by the key.\n * @return {List} A list of new objects, each having the given key associated to an item from the unwound list.\n */\nvar unwind = _curry2(function(key, object)",
+  "  return _map(function(item)"
+ ]
+}

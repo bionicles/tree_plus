@@ -1,0 +1,11 @@
+{
+ "path": "tests/more_languages/group4/test_fsharp.fs",
+ "components": [
+  "module TestFSharp",
+  "type Person = {",
+  "let add x y =",
+  "let multiply \n    (x: int) \n    (y: int): int =",
+  "let complexFunction\n    (a: int)\n    (b: string)\n    (c: float)\n    : (int * string) option =",
+  "type Result<'T> ="
+ ]
+}

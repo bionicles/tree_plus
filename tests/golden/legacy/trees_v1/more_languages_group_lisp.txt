@@ -1,0 +1,5 @@
+📁 group_lisp (1 folder, 4 files)
+├── 📄 clojure_test.clj (682 tokens, 85 lines)
+├── 📄 LispTest.lisp (25 tokens, 6 lines)
+├── 📄 racket_struct.rkt (14 tokens, 1 line)
+└── 📄 test_scheme.scm (360 tokens, 44 lines)

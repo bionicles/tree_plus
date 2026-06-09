@@ -1,0 +1,12 @@
+{
+ "path": "tests/more_languages/group2/go_test.go",
+ "components": [
+  "type Greeting struct",
+  "func (g Greeting) sayHello()",
+  "func createGreeting(m string) Greeting",
+  "type SomethingLong struct",
+  "func (s *SomethingLong) WithAReasonableName(\n\tctx context.Context,\n\tparam1 string,\n\tparam2 int,\n\tparam3 map[string]interface{},\n\tcallback func(int) error,\n) (resultType, error)",
+  "type resultType struct",
+  "func main()"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "path": "tests/more_languages/group2/ScalaTest.scala",
+ "components": [
+  "def sumOfSquares(x: Int, y: Int): Int",
+  "trait Bark",
+  "  def bark: String",
+  "case class Person(name: String)",
+  "class GenericClass[T](\n    val data: T,\n    val count: Int\n)",
+  "  def getData: T",
+  "object HelloWorld",
+  "  def greet(person: Person): Unit",
+  "  def main(args: Array[String]): Unit",
+  "def complexFunction(\n    a: Int,\n    b: String,\n    c: Float\n): (Int, String) Option",
+  "def sumOfSquaresShort(x: Int, y: Int): Int"
+ ]
+}

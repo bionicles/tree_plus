@@ -1,0 +1,11 @@
+{
+ "path": "tests/more_languages/group_lisp/test_scheme.scm",
+ "components": [
+  "define topological-sort",
+  "  define table",
+  "  define queue",
+  "  define result",
+  "  define set-up",
+  "  define traverse"
+ ]
+}

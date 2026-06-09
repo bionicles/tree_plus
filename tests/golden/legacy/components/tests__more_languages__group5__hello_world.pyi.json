@@ -1,0 +1,7 @@
+{
+ "path": "tests/more_languages/group5/hello_world.pyi",
+ "components": [
+  "@final\nclass dtype(Generic[_DTypeScalar_co])",
+  "    names: None | tuple[builtins.str, ...]"
+ ]
+}

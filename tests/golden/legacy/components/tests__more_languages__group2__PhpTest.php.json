@@ -1,0 +1,10 @@
+{
+ "path": "tests/more_languages/group2/PhpTest.php",
+ "components": [
+  "class HelloWorld",
+  "class HelloWorld -> function sayHello",
+  "function greet",
+  "class Person",
+  "class Person -> function __construct"
+ ]
+}

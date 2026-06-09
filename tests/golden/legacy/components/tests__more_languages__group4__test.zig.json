@@ -1,0 +1,11 @@
+{
+ "path": "tests/more_languages/group4/test.zig",
+ "components": [
+  "pub fn add(a: i32, b: i32) i32",
+  "test \"add function\"",
+  "const BunBuildOptions = struct",
+  "    pub fn updateRuntime(this: *BunBuildOptions) anyerror!void",
+  "    pub fn step(this: BunBuildOptions, b: anytype) *std.build.OptionsStep",
+  "pub fn sgemv(\n    order: Order,\n    trans: Trans,\n    m: usize,\n    n: usize,\n    alpha: f32,\n    a: []const f32,\n    lda: usize,\n    x: []const f32,\n    x_add: usize,\n    beta: f32,\n    y: []f32,\n    y_add: usize,\n) void"
+ ]
+}

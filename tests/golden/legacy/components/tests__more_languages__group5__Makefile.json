@@ -1,0 +1,14 @@
+{
+ "path": "tests/more_languages/group5/Makefile",
+ "components": [
+  "include dotenv/dev.env",
+  ".PHONY: dev",
+  "dev",
+  "services-down",
+  "services-stop: services-down",
+  "define CHECK_POSTGRES",
+  "damage-report",
+  "tail-logs",
+  "cloud"
+ ]
+}

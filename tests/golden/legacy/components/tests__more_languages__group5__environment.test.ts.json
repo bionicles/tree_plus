@@ -1,0 +1,10 @@
+{
+ "path": "tests/more_languages/group5/environment.test.ts",
+ "components": [
+  "environment:",
+  "   production",
+  "   cognitoUserPoolId",
+  "   cognitoAppClientId",
+  "   apiurl"
+ ]
+}

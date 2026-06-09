@@ -1,0 +1,111 @@
+📁 group_todo (1 folder, 12 files)
+├── 📄 AAPLShaders.metal (5,780 tokens, 566 lines)
+│   ├── struct LightingParameters
+│   ├── float Geometry(float Ndotv, float alphaG)
+│   ├── float3 computeNormalMap(ColorInOut in, texture2d<float>
+│   │   normalMapTexture)
+│   ├── float3 computeDiffuse(LightingParameters parameters)
+│   ├── float Distribution(float NdotH, float roughness)
+│   ├── float3 computeSpecular(LightingParameters parameters)
+│   ├── float4 equirectangularSample(float3 direction, sampler s,
+│   │   texture2d<float> image)
+│   ├── LightingParameters calculateParameters(ColorInOut in,
+│   │                                          AAPLCameraData cameraData,
+│   │                                          constant AAPLLightData&
+│   │   lightData,
+│   │                                          texture2d<float>   baseColorMap,
+│   │                                          texture2d<float>   normalMap,
+│   │                                          texture2d<float>   metallicMap,
+│   │                                          texture2d<float>   roughnessMap,
+│   │                                          texture2d<float>
+│   │   ambientOcclusionMap,
+│   │                                          texture2d<float>   skydomeMap)
+│   ├── struct SkyboxVertex
+│   ├── struct SkyboxV2F
+│   ├── vertex SkyboxV2F skyboxVertex(SkyboxVertex in [[stage_in]],
+│   │                                    constant AAPLCameraData& cameraData
+│   │   [[buffer(BufferIndexCameraData)]])
+│   ├── fragment float4 skyboxFragment(SkyboxV2F v [[stage_in]],
+│   │   texture2d<float> skytexture [[texture(0)]])
+│   ├── vertex ColorInOut vertexShader(Vertex in [[stage_in]],
+│   │                                  constant AAPLInstanceTransform&
+│   │   instanceTransform [[ buffer(BufferIndexInstanceTransforms) ]],
+│   │                                  constant AAPLCameraData& cameraData [[
+│   │   buffer(BufferIndexCameraData) ]])
+│   ├── float2 calculateScreenCoord( float3 ndcpos )
+│   ├── fragment float4 fragmentShader(
+│   │                       ColorInOut                  in
+│   │   [[stage_in]],
+│   │                       constant AAPLCameraData&    cameraData            [[
+│   │   buffer(BufferIndexCameraData) ]],
+│   │                       constant AAPLLightData&     lightData             [[
+│   │   buffer(BufferIndexLightData) ]],
+│   │                       constant AAPLSubmeshKeypath&submeshKeypath        [[
+│   │   buffer(BufferIndexSubmeshKeypath)]],
+│   │                       constant Scene*             pScene                [[
+│   │   buffer(SceneIndex)]],
+│   │                       texture2d<float>            skydomeMap            [[
+│   │   texture(AAPLSkyDomeTexture) ]],
+│   │                       texture2d<float>            rtReflections         [[
+│   │   texture(AAPLTextureIndexReflections),
+│   │   function_constant(is_raytracing_enabled)]])
+│   ├── fragment float4 reflectionShader(ColorInOut in [[stage_in]],
+│   │                                    texture2d<float> rtReflections
+│   │   [[texture(AAPLTextureIndexReflections)]])
+│   ├── struct ThinGBufferOut
+│   ├── fragment ThinGBufferOut gBufferFragmentShader(ColorInOut in
+│   │   [[stage_in]])
+│   ├── kernel void rtReflection(
+│   │                texture2d< float, access::write >      outImage
+│   │   [[texture(OutImageIndex)]],
+│   │                texture2d< float >                     positions
+│   │   [[texture(ThinGBufferPositionIndex)]],
+│   │                texture2d< float >                     directions
+│   │   [[texture(ThinGBufferDirectionIndex)]],
+│   │                texture2d< float >                     skydomeMap
+│   │   [[texture(AAPLSkyDomeTexture)]],
+│   │                constant AAPLInstanceTransform*        instanceTransforms
+│   │   [[buffer(BufferIndexInstanceTransforms)]],
+│   │                constant AAPLCameraData&               cameraData
+│   │   [[buffer(BufferIndexCameraData)]],
+│   │                constant AAPLLightData&                lightData
+│   │   [[buffer(BufferIndexLightData)]],
+│   │                constant Scene*                        pScene
+│   │   [[buffer(SceneIndex)]],
+│   │                instance_acceleration_structure
+│   │   accelerationStructure   [[buffer(AccelerationStructureIndex)]],
+│   │                uint2 tid [[thread_position_in_grid]])
+│   ├── else if ( intersection.type == raytracing::intersection_type::none )
+│   ├── struct VertexInOut
+│   ├── vertex VertexInOut vertexPassthrough( uint vid [[vertex_id]] )
+│   ├── fragment float4 fragmentPassthrough( VertexInOut in [[stage_in]],
+│   │   texture2d< float > tin )
+│   ├── fragment float4 fragmentBloomThreshold( VertexInOut in [[stage_in]],
+│   │                                          texture2d< float > tin
+│   │   [[texture(0)]],
+│   │                                          constant float* threshold
+│   │   [[buffer(0)]] )
+│   └── fragment float4 fragmentPostprocessMerge( VertexInOut in [[stage_in]],
+│                                                constant float& exposure
+│       [[buffer(0)]],
+│                                                texture2d< float > texture0
+│       [[texture(0)]],
+│                                                texture2d< float > texture1
+│       [[texture(1)]])
+├── 📄 crystal_test.cr (48 tokens, 15 lines)
+├── 📄 dart_test.dart (108 tokens, 24 lines)
+├── 📄 elixir_test.exs (39 tokens, 10 lines)
+├── 📄 forward.frag (739 tokens, 87 lines)
+├── 📄 forward.vert (359 tokens, 48 lines)
+├── 📄 nodemon.json (118 tokens, 20 lines)
+├── 📄 sas_test.sas (97 tokens, 22 lines)
+├── 📄 test_setup_py.test (133 tokens, 24 lines)
+├── 📄 testTypings.d.ts (158 tokens, 23 lines)
+├── 📄 vba_test.bas (67 tokens, 16 lines)
+└── 📄 wgsl_test.wgsl (94 tokens, 17 lines)
+    ├── @binding(0) @group(0) var<uniform> frame : u32
+    ├── @vertex
+    │   fn vtx_main(@builtin(vertex_index) vertex_index : u32) ->
+    │   @builtin(position) vec4f
+    └── @fragment
+        fn frag_main() -> @location(0) vec4f

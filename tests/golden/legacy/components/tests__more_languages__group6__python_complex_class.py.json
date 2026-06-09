@@ -1,0 +1,6 @@
+{
+ "path": "tests/more_languages/group6/python_complex_class.py",
+ "components": [
+  "class Box(Space[NDArray[Any]])"
+ ]
+}

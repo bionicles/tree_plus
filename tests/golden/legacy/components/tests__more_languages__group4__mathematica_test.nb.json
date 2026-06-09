@@ -1,0 +1,8 @@
+{
+ "path": "tests/more_languages/group4/mathematica_test.nb",
+ "components": [
+  "person[name_]",
+  "sayHello[]",
+  "sumList[list_List]"
+ ]
+}

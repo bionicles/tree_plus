@@ -1,0 +1,7 @@
+{
+ "path": "tests/more_languages/group5/app.module.ts",
+ "components": [
+  "@NgModule({\n    declarations: [\n        AppComponent,\n        HomeComponent,\n        LoginComponent,\n        RegisterComponent,\n        EventsComponent,\n        InvitesComponent,\n        RewardsComponent,\n        ProfileComponent",
+  "export class AppModule"
+ ]
+}

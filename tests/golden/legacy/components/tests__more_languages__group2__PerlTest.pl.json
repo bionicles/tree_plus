@@ -1,0 +1,9 @@
+{
+ "path": "tests/more_languages/group2/PerlTest.pl",
+ "components": [
+  "package PerlTest",
+  "package PerlTest -> sub new",
+  "package PerlTest -> sub hello",
+  "package PerlTest -> sub say_hello"
+ ]
+}

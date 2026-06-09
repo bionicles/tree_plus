@@ -1,0 +1,30 @@
+{
+ "path": "tests/more_languages/group6/fractal.thy",
+ "components": [
+  "Title:      fractal.thy",
+  "Author:     Isabelle/HOL Contributors!",
+  "Author:     edge cases r us",
+  "theory Simplified_Ring",
+  "section ‹Basic Algebraic Structures›",
+  "class everything = nothing + itself",
+  "subsection ‹Monoids›",
+  "definition ring_hom :: \"[('a, 'm) ring_scheme, ('b, 'n) ring_scheme] => ('a => 'b) set\"",
+  "fun example_fun :: \"nat ⇒ nat\"",
+  "locale monoid =\n  fixes G (structure)\n  assumes m_closed: \"⟦x ∈ carrier G; y ∈ carrier G⟧ ⟹  x ⊗ y ∈ carrier G\"\n    and m_assoc: \"⟦x ∈ carrier G; y ∈ carrier G; z ∈ carrier G⟧ ⟹  (x ⊗ y) ⊗ z = x ⊗ (y ⊗ z)\"\n    and one_closed: \"𝟭 ∈ carrier G\"\n    and l_one: \"x ∈ carrier G ⟹  𝟭 ⊗ x = x\"\n    and r_one: \"x ∈ carrier G ⟹  x ⊗ 𝟭 = x\"",
+  "subsection ‹Groups›",
+  "locale group = monoid +\n  assumes Units_closed: \"x ∈ Units G ⟹  x ∈ carrier G\"\n    and l_inv_ex: \"x ∈ carrier G ⟹  ∃ y ∈ carrier G. y ⊗ x = 𝟭\"\n    and r_inv_ex: \"x ∈ carrier G ⟹  ∃ y ∈ carrier G. x ⊗ y = 𝟭\"",
+  "subsection ‹Rings›",
+  "locale ring = abelian_group R + monoid R +\n  assumes l_distr: \"⟦x ∈ carrier R; y ∈ carrier R; z ∈ carrier R⟧ ⟹  (x ⊕ y) ⊗ z = x ⊗ z ⊕ y ⊗ z\"\n    and r_distr: \"⟦x ∈ carrier R; y ∈ carrier R; z ∈ carrier R⟧ ⟹  z ⊗ (x ⊕ y) = z ⊗ x ⊕ z ⊗ y\"",
+  "locale commutative_ring = ring +\n  assumes m_commutative: \"⟦x ∈ carrier R; y ∈ carrier R⟧ ⟹  x ⊗ y = y ⊗ x\"",
+  "locale domain = commutative_ring +\n  assumes no_zero_divisors: \"⟦a ⊗ b = 𝟬; a ∈ carrier R; b ∈ carrier R⟧ ⟹  a = 𝟬 ∨ b = 𝟬\"",
+  "locale field = domain +\n  assumes inv_ex: \"x ∈ carrier R - {𝟬} ⟹  inv x ∈ carrier R\"",
+  "subsection ‹Morphisms›",
+  "lemma example_lemma: \"example_fun n = n\"",
+  "qualified lemma gcd_0:\n  \"gcd a 0 = normalize a\"",
+  "lemma abelian_monoidI:\n  fixes R (structure)\n      and f :: \"'edge::{} ⇒ 'case::{}\"\n  assumes \"⋀x y. ⟦ x ∈ carrier R; y ∈ carrier R ⟧ ⟹  x ⊕ y ∈ carrier R\"\n      and \"𝟬 ∈ carrier R\"\n      and \"⋀x y z. ⟦ x ∈ carrier R; y ∈ carrier R; z ∈ carrier R ⟧ ⟹  (x ⊕ y) ⊕ z = x ⊕ (y ⊕ z)\"\n  shows \"abelian_monoid R\"",
+  "lemma euclidean_size_gcd_le1 [simp]:\n  assumes \"a ≠ 0\"\n  shows \"euclidean_size (gcd a b) ≤ euclidean_size a\"",
+  "theorem Residue_theorem:\n  fixes S pts::\"complex set\" and f::\"complex ⇒ complex\"\n    and g::\"real ⇒ complex\"\n  assumes \"open S\" \"connected S\" \"finite pts\" and\n          holo:\"f holomorphic_on S-pts\" and\n          \"valid_path g\" and\n          loop:\"pathfinish g = pathstart g\" and\n          \"path_image g ⊆ S-pts\" and\n          homo:\"∀z. (z ∉ S) ⟶  winding_number g z  = 0\"\n  shows \"contour_integral g f = 2 * pi * 𝗂 *(∑p ∈ pts. winding_number g p * residue f p)\"",
+  "corollary fps_coeff_residues_bigo':\n  fixes f :: \"complex ⇒ complex\" and r :: real\n  assumes exp: \"f has_fps_expansion F\"\n  assumes \"open A\" \"connected A\" \"cball 0 r ⊆ A\" \"r > 0\" \n  assumes \"f holomorphic_on A - S\" \"S ⊆ ball 0 r\" \"finite S\" \"0 ∉ S\"\n  assumes \"eventually (λn. g n = -(∑z ∈ S. residue (λz. f z / z ^ Suc n) z)) sequentially\"\n             (is \"eventually (λn. _ = -?g' n) _\")\n  shows   \"(λn. fps_nth F n - g n) ∈ O(λn. 1 / r ^ n)\" (is \"(λn. ?c n - _) ∈ O(_)\")",
+  "end"
+ ]
+}

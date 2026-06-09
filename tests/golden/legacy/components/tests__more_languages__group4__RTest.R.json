@@ -1,0 +1,9 @@
+{
+ "path": "tests/more_languages/group4/RTest.R",
+ "components": [
+  "class(person)",
+  "greet.Person <- function",
+  "ensure_between = function",
+  "run_intermediate_annealing_process = function"
+ ]
+}

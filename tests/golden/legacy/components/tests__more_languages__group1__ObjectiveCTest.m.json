@@ -1,0 +1,10 @@
+{
+ "path": "tests/more_languages/group1/ObjectiveCTest.m",
+ "components": [
+  "@interface HelloWorld",
+  "@interface HelloWorld -> (void) sayHello",
+  "@implementation HelloWorld",
+  "@implementation HelloWorld -> (void) sayHello",
+  "void sayHelloWorld()"
+ ]
+}
