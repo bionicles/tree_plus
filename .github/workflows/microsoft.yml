@@ -3,8 +3,22 @@ name: Microsoft
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'crates/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'Justfile'
+      - 'docs/**'
+      - '.github/workflows/rust.yml'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'crates/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'Justfile'
+      - 'docs/**'
+      - '.github/workflows/rust.yml'
 
 jobs:
   build:
