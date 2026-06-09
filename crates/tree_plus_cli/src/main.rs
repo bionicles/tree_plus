@@ -50,6 +50,11 @@ struct Cli {
     #[arg(short = 'c', long = "concise")]
     concise: bool,
 
+    /// Emit the tree as JSON instead of rendering it (machine-readable;
+    /// no footer). File nodes carry components; counts are aggregated.
+    #[arg(short = 'j', long = "json")]
+    json: bool,
+
     /// A shorthand for tiktoken with the 'gpt-4o' tokenizer (unsupported in
     /// the Rust port: errors explicitly).
     #[arg(short = 't', long = "tiktoken")]
@@ -111,6 +116,12 @@ fn main() {
     let _ = cli.syntax; // plain-text output; highlighting deferred
 
     let root = from_seeds(&cli.paths, &config);
+
+    if cli.json {
+        let json = serde_json::to_string_pretty(&root.to_json()).expect("serialize tree");
+        println!("{json}");
+        return;
+    }
 
     let width = terminal_width();
     print!("{}", render_to_string(&root, width));

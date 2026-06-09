@@ -14,6 +14,18 @@ pub enum Category {
     Component,
 }
 
+impl Category {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Category::Root => "root",
+            Category::Glob => "glob",
+            Category::Folder => "folder",
+            Category::File => "file",
+            Category::Component => "component",
+        }
+    }
+}
+
 /// A node in the tree_plus tree.
 ///
 /// `components` holds the extracted display labels for FILE nodes
@@ -70,6 +82,33 @@ impl TreePlus {
     /// Total token count (legacy `n_tokens`).
     pub fn n_tokens(&self) -> u64 {
         self.token_count + self.subtrees.iter().map(TreePlus::n_tokens).sum::<u64>()
+    }
+
+    /// Structured representation for `--json` output. File nodes carry
+    /// their own counts and components; folder/root counts are the
+    /// aggregates so consumers don't have to re-derive them.
+    pub fn to_json(&self) -> serde_json::Value {
+        let mut obj = serde_json::Map::new();
+        obj.insert("category".into(), self.category.as_str().into());
+        obj.insert("name".into(), self.name.clone().into());
+        obj.insert("n_folders".into(), self.n_folders().into());
+        obj.insert("n_files".into(), self.n_files().into());
+        obj.insert("n_lines".into(), self.n_lines().into());
+        obj.insert("n_tokens".into(), self.n_tokens().into());
+        if self.is_file() {
+            obj.insert("components".into(), self.components.clone().into());
+        }
+        if !self.is_file() {
+            obj.insert(
+                "subtrees".into(),
+                self.subtrees
+                    .iter()
+                    .map(TreePlus::to_json)
+                    .collect::<Vec<_>>()
+                    .into(),
+            );
+        }
+        serde_json::Value::Object(obj)
     }
 
     /// Legacy `stats()` string, e.g. `1 folder(s), 6 file(s), 1,234 line(s), 5,678 token(s)`.
