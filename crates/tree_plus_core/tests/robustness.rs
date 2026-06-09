@@ -28,7 +28,7 @@ impl Rng {
 
 const EXTENSIONS: &[&str] = &[
     "py", "rs", "ts", "tsx", "js", "c", "cpp", "h", "md", "json", "jsonl", "yml", "toml", "csv",
-    "txt", "env", "rst",
+    "txt", "env", "rst", "sql", "graphql", "proto",
 ];
 
 fn write_temp(name: &str, bytes: &[u8]) -> PathBuf {
